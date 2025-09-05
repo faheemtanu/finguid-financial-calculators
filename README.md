@@ -171,4 +171,4 @@ SEO Goals
 •	International expansion ready
  
 Built with 💙 for Americans' financial success
-© 2025 USA Financial Calculators. Made with dedication in India 🇮🇳
+© 2025 USA Financial Calculators.
