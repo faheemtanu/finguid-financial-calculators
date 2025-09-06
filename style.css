@@ -4927,3 +4927,17 @@ select.form-control {
     gap: var(--space-8);
 }
 ```
+/* Remove email link from footer */
+.footer a[href^="mailto:"] {
+    display: none !important;
+}
+
+a[href="mailto:contactus@finguid.com"] {
+    display: none !important;
+}
+
+/* Hide any email icons */
+.footer .fa-envelope {
+    display: none !important;
+}
+
