@@ -5933,3 +5933,12 @@ select.form-control {
     margin-top: 0;
     margin-bottom: 20px;
 }
+.intro {
+  display: flex;              /* make container a flexbox */
+  justify-content: center;    /* center horizontally */
+  text-align: center;         /* center multiline text */
+  padding: 2rem 1rem;         /* optional spacing */
+}
+.intro-text {
+  max-width: 600px;           /* optional: constrain line length */
+}
