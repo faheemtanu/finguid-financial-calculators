@@ -624,3 +624,438 @@ select.form-control {
   .section-header h2, .about h2 { font-size: var(--font-size-2xl); }
   .calculator-card, .about-feature { padding: var(--space-24); }
 }
+/*
+ * =================================================================================
+ * USA FINANCIAL CALCULATORS - AI-ENHANCED PLATFORM
+ * MASTER STYLESHEET
+ *
+ * This stylesheet is built according to the 8-Pillar "Friendly" Architecture
+ * outlined in the project's master implementation guide.
+ *
+ * - User-Friendly: Token-based design system, dark mode, accessibility.
+ * - SEO/Performance-Friendly: Mobile-first, clean, efficient CSS.
+ * - AI/Partner/Mobile-Friendly: Semantic, themeable, and responsive.
+ * =================================================================================
+ */
+
+/* ===== VARIABLES & DESIGN TOKENS (DESIGN SYSTEM) ===== */
+:root {
+  /* COLORS: Primitives */
+  --color-teal-100: #f0f9ff;
+  --color-teal-500: #0d9488;
+  --color-teal-600: #0f766e;
+  --color-teal-700: #115e59;
+  --color-slate-100: #f1f5f9;
+  --color-slate-300: #cbd5e1;
+  --color-slate-500: #64748b;
+  --color-slate-700: #334155;
+  --color-slate-900: #0f172a;
+  --color-white: #ffffff;
+
+  /* COLORS: Semantic Tokens (Light Mode) */
+  --color-background: var(--color-slate-100);
+  --color-surface: var(--color-white);
+  --color-text-primary: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-border: var(--color-slate-300);
+  --color-text-on-primary: var(--color-white);
+
+  /* TYPOGRAPHY */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.6;
+
+  /* SPACING */
+  --space-xs: 0.25rem;  /* 4px */
+  --space-sm: 0.5rem;   /* 8px */
+  --space-md: 1rem;     /* 16px */
+  --space-lg: 1.5rem;   /* 24px */
+  --space-xl: 2.5rem;   /* 40px */
+  --space-xxl: 4rem;    /* 64px */
+
+  /* BORDERS & SHADOWS */
+  --radius-base: 8px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
+  /* TRANSITIONS */
+  --transition-base: 250ms ease-in-out;
+}
+
+/* ===== DARK MODE THEME ===== */
+[data-theme="dark"] {
+  --color-background: var(--color-slate-900);
+  --color-surface: var(--color-slate-700);
+  --color-text-primary: var(--color-slate-100);
+  --color-text-secondary: var(--color-slate-300);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: #14b8a6; /* A slightly brighter teal for dark mode hover */
+  --color-border: var(--color-slate-500);
+  --color-text-on-primary: var(--color-white);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-background: var(--color-slate-900);
+    --color-surface: var(--color-slate-700);
+    --color-text-primary: var(--color-slate-100);
+    --color-text-secondary: var(--color-slate-300);
+    --color-primary: var(--color-teal-500);
+    --color-primary-hover: #14b8a6;
+    --color-border: var(--color-slate-500);
+    --color-text-on-primary: var(--color-white);
+  }
+}
+
+/* ===== RESET & BASE STYLES ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+/* ===== ACCESSIBILITY ===== */
+/* For screen readers only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Show focus outline only for keyboard users */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-base);
+}
+
+/* ===== LAYOUT & HELPERS ===== */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.section-header p {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== HEADER & NAVIGATION ===== */
+.header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--space-xxl);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.nav-brand .fa-calculator {
+  color: var(--color-primary);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  list-style: none;
+}
+
+.nav-link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-base);
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+}
+
+/* ===== COMPONENTS ===== */
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-base);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn--secondary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.btn--icon {
+  padding: var(--space-sm);
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.25rem;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn--lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* Cards */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  transition: all var(--transition-base);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.card__icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto var(--space-md);
+  border-radius: var(--radius-base);
+  background-color: var(--color-teal-100);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+}
+
+[data-theme="dark"] .card__icon {
+    background-color: var(--color-slate-900);
+}
+
+.card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.card__body {
+  color: var(--color-text-secondary);
+  flex-grow: 1;
+}
+
+.card__footer {
+  margin-top: var(--space-lg);
+}
+
+/* FAQ Accordion (for AI and Voice Search) */
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  margin-bottom: var(--space-md);
+  overflow: hidden;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-md);
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+}
+
+.faq-question .fa-chevron-down {
+  transition: transform var(--transition-base);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 300ms ease-in-out, padding 300ms ease-in-out;
+}
+
+.faq-answer p {
+  padding: 0 var(--space-md) var(--space-md);
+  color: var(--color-text-secondary);
+}
+
+.faq-item.active .faq-question .fa-chevron-down {
+  transform: rotate(180deg);
+}
+
+.faq-item.active .faq-answer {
+  max-height: 200px; /* Adjust as needed */
+}
+
+
+/* ===== PAGE-SPECIFIC SECTIONS ===== */
+
+/* Hero Section */
+.hero {
+  background-color: var(--color-surface);
+  padding: var(--space-xxl) 0;
+  text-align: center;
+}
+
+.hero__content {
+  max-width: 800px;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+}
+
+.hero__description {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+}
+
+/* Calculators Section */
+.calculators-section,
+.faq-section {
+    padding: var(--space-xxl) 0;
+}
+
+.calculator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-xl) 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.footer p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+
+/* ===== RESPONSIVE DESIGN (MOBILE-FIRST) ===== */
+
+/* Tablet */
+@media (min-width: 768px) {
+  .hero h1 {
+    font-size: 4rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .section-header h2 {
+        font-size: 3rem;
+    }
+}
