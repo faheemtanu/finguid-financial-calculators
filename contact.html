@@ -78,7 +78,7 @@
                     <!-- Left Side - Contact Information -->
                     <div class="contact-info">
                         
-                        <!-- Service Area Card (Keeping this) -->
+                        <!-- Service Area Card -->
                         <div class="contact-card">
                             <div class="contact-icon">
                                 <i class="fas fa-globe"></i>
@@ -116,14 +116,14 @@
 
                     </div>
                     
-                    <!-- Right Side - Contact Form -->
+                    <!-- Right Side - Contact Form with Basin Integration -->
                     <div class="contact-form-section">
                         <div class="form-header">
                             <h2>Send Us a Message</h2>
                             <p>Fill out the form below and we'll get back to you soon</p>
                         </div>
                         
-                        <!-- Message Display -->
+                        <!-- Success/Error Message Display -->
                         <div class="message-container" id="message-container" style="display: none;">
                             <div class="alert" id="alert-message">
                                 <i class="fas fa-info-circle"></i>
@@ -134,7 +134,13 @@
                             </div>
                         </div>
                         
-                        <form class="contact-form" id="contact-form">
+                        <!-- BASIN CONTACT FORM - Replace YOUR_BASIN_ENDPOINT with your actual Basin endpoint -->
+                        <form action="https://usebasin.com/f/YOUR_BASIN_ENDPOINT" method="POST" class="contact-form" id="contact-form">
+                            <!-- Hidden fields for Basin -->
+                            <input type="hidden" name="_subject" value="New Contact Form Submission from FinGuid">
+                            <input type="hidden" name="_redirect" value="https://finguid.com/contact.html?success=true">
+                            <input type="hidden" name="_gotcha" style="display:none !important">
+                            
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="firstName" class="form-label">
@@ -196,7 +202,7 @@
                             
                             <div class="form-group">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" id="newsletter" name="newsletter">
+                                    <input type="checkbox" id="newsletter" name="newsletter" value="yes">
                                     <span>I'd like to receive updates about new calculators and features</span>
                                 </label>
                             </div>
@@ -205,10 +211,10 @@
                                 <i class="fas fa-paper-plane"></i> Send Message
                             </button>
                             
-                            <!-- Note about email functionality -->
-                            <div class="form-note">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Note: This is a demo form. To enable email functionality, integrate with a backend service like Formspree or Netlify Forms.</span>
+                            <!-- Updated note about Basin -->
+                            <div class="form-note basin-note">
+                                <i class="fas fa-check-circle"></i>
+                                <span>✅ Email powered by Basin - 1000 emails/month free! Messages sent to contactus@finguid.com</span>
                             </div>
                         </form>
                     </div>
@@ -313,51 +319,39 @@
 
     <!-- JavaScript -->
     <script>
-        // Contact Form Handler
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Check for success parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            showMessage('success', '🎉 Thank you! Your message has been sent successfully via Basin. We\'ll get back to you within 24 hours at contactus@finguid.com');
             
-            // Get form data
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // Show loading state
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitBtn.disabled = true;
-            
-            // Simulate form submission (replace with actual form handler)
-            setTimeout(() => {
-                showMessage('success', 'Your message has been received! However, to receive actual emails, you need to integrate a backend service like Netlify Forms, Formspree, or a custom server.');
-                this.reset();
-                updateCharCount();
-                
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
-        });
+            // Clear the URL parameter for clean URLs
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
         
         // Character counter for message field
         const messageField = document.getElementById('message');
         const charCount = document.getElementById('char-count');
         
         function updateCharCount() {
-            const count = messageField.value.length;
-            charCount.textContent = count;
-            
-            if (count > 900) {
-                charCount.style.color = '#f59e0b';
-            } else if (count > 1000) {
-                charCount.style.color = '#ef4444';
-                messageField.value = messageField.value.substring(0, 1000);
-            } else {
-                charCount.style.color = '#6b7280';
+            if (messageField && charCount) {
+                const count = messageField.value.length;
+                charCount.textContent = count;
+                
+                if (count > 900) {
+                    charCount.style.color = '#f59e0b';
+                } else if (count > 1000) {
+                    charCount.style.color = '#ef4444';
+                    messageField.value = messageField.value.substring(0, 1000);
+                } else {
+                    charCount.style.color = '#6b7280';
+                }
             }
         }
         
-        messageField.addEventListener('input', updateCharCount);
+        if (messageField) {
+            messageField.addEventListener('input', updateCharCount);
+            updateCharCount(); // Initialize
+        }
         
         // Show message function
         function showMessage(type, text) {
@@ -365,20 +359,24 @@
             const alertMessage = document.getElementById('alert-message');
             const alertText = document.getElementById('alert-text');
             
-            alertMessage.className = `alert alert-${type}`;
-            alertText.textContent = text;
-            messageContainer.style.display = 'block';
-            
-            // Scroll to message
-            messageContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Hide after 8 seconds
-            setTimeout(() => {
-                messageContainer.style.display = 'none';
-            }, 8000);
+            if (messageContainer && alertMessage && alertText) {
+                alertMessage.className = `alert alert-${type}`;
+                alertText.textContent = text;
+                messageContainer.style.display = 'block';
+                
+                // Scroll to message
+                messageContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Auto-hide success messages after 8 seconds
+                if (type === 'success') {
+                    setTimeout(() => {
+                        messageContainer.style.display = 'none';
+                    }, 8000);
+                }
+            }
         }
         
-        // FAQ Toggle
+        // FAQ Toggle functionality
         document.querySelectorAll('.faq-question').forEach(question => {
             question.addEventListener('click', function() {
                 const faqItem = this.parentElement;
@@ -401,24 +399,31 @@
             document.getElementById('nav-menu').classList.toggle('active');
         });
         
-        // Form validation
+        // Form validation with visual feedback
         document.querySelectorAll('.form-input, .form-control').forEach(input => {
             input.addEventListener('blur', function() {
                 if (this.hasAttribute('required') && !this.value.trim()) {
                     this.classList.add('invalid');
-                } else {
+                    this.classList.remove('valid');
+                } else if (this.value.trim()) {
                     this.classList.remove('invalid');
                     this.classList.add('valid');
                 }
             });
             
             input.addEventListener('input', function() {
-                this.classList.remove('invalid', 'valid');
+                if (this.classList.contains('invalid') || this.classList.contains('valid')) {
+                    // Re-validate on input
+                    if (this.hasAttribute('required') && !this.value.trim()) {
+                        this.classList.add('invalid');
+                        this.classList.remove('valid');
+                    } else if (this.value.trim()) {
+                        this.classList.remove('invalid');
+                        this.classList.add('valid');
+                    }
+                }
             });
         });
-        
-        // Initialize character count
-        updateCharCount();
     </script>
 </body>
 </html>
