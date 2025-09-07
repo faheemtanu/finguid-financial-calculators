@@ -5,37 +5,357 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mortgage Calculator | FinGuid - AI Financial Calculators</title>
     <meta name="description" content="Free AI-enhanced mortgage calculator with state-specific tax rates, PMI calculations, and amortization schedule. Calculate your exact monthly payment.">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="mortgage-calculator.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
+    
+    <!-- Styles to match finguid.com -->
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --accent: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #334155;
+            background: #f1f5f9;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header styles to match finguid.com */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Calculator styles */
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .calculator-header h1 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .calculator-header p {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        @media (min-width: 992px) {
+            .calculator-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .calculator-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .calculator-card h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .input-note {
+            font-size: 14px;
+            color: var(--secondary);
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+        }
+        
+        .calculate-btn {
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .result {
+            background: #f0f9ff;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .result-placeholder {
+            text-align: center;
+            color: var(--secondary);
+            padding: 30px 0;
+        }
+        
+        .result-placeholder i {
+            font-size: 3rem;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+        
+        .result-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .result-main {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .monthly-payment {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 5px;
+        }
+        
+        .result-label {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+        
+        .result-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .ai-insight {
+            background: #fffbeb;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin-top: 20px;
+        }
+        
+        .ai-insight h3 {
+            color: #b45309;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Footer styles to match finguid.com */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="container">
-            <nav class="nav">
-                <div class="logo">
-                    <a href="index.html"><i class="fas fa-calculator"></i> FinGuid</a>
-                </div>
-                <div class="nav-links">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-calculator"></i>
+                    <span>FinGuid</span>
+                </a>
+                <nav class="nav-links">
                     <a href="index.html">Home</a>
                     <a href="calculators.html">Calculators</a>
                     <a href="blog.html">Blog</a>
                     <a href="contact.html">Contact</a>
-                </div>
-            </nav>
+                </nav>
+            </div>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="container">
-        <div class="breadcrumb">
-            <a href="index.html">Home</a> &gt; <a href="calculators.html">Calculators</a> &gt; Mortgage Calculator
-        </div>
-
         <section class="calculator-header">
             <h1><i class="fas fa-home"></i> Mortgage Calculator</h1>
             <p>Calculate your monthly mortgage payment with taxes, insurance, and PMI. Get a detailed amortization schedule.</p>
@@ -51,11 +371,8 @@
                         <input type="number" id="homePrice" placeholder="300,000" min="10000" step="1000" required>
                     </div>
                     <div class="form-group">
-                        <label for="downPayment">Down Payment ($ or %)</label>
-                        <div class="input-with-toggle">
-                            <input type="number" id="downPayment" placeholder="60,000" min="0" step="1000" required>
-                            <button type="button" id="toggleDownPayment" class="toggle-btn">$</button>
-                        </div>
+                        <label for="downPayment">Down Payment ($)</label>
+                        <input type="number" id="downPayment" placeholder="60,000" min="0" step="1000" required>
                     </div>
                     <div class="form-group">
                         <label for="loanTerm">Loan Term (Years)</label>
@@ -71,7 +388,7 @@
                         <input type="number" id="interestRate" placeholder="6.5" min="0.1" max="20" step="0.01" required>
                     </div>
                     <div class="form-group">
-                        <label for="state">State</label>
+                        <label for="state">Select your state</label>
                         <select id="state" required>
                             <option value="">Select your state</option>
                             <!-- States will be populated by JavaScript -->
@@ -94,13 +411,6 @@
                         <input type="checkbox" id="pmiRequired">
                         <label for="pmiRequired">I need PMI (down payment less than 20%)</label>
                     </div>
-                    <div id="pmiSection" class="hidden">
-                        <div class="form-group">
-                            <label for="pmiRate">PMI Rate (%)</label>
-                            <input type="number" id="pmiRate" placeholder="0.5" min="0.1" max="2" step="0.01">
-                            <span class="input-note">Will be auto-filled based on loan details</span>
-                        </div>
-                    </div>
                     <button type="submit" class="calculate-btn">
                         <i class="fas fa-calculator"></i> Calculate Payment
                     </button>
@@ -118,52 +428,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Amortization Schedule -->
-        <section class="amortization-section hidden" id="amortizationSection">
-            <h2><i class="fas fa-calendar-alt"></i> Amortization Schedule</h2>
-            <div class="table-container">
-                <table id="amortizationTable">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Principal</th>
-                            <th>Interest</th>
-                            <th>Total Interest</th>
-                            <th>Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Will be populated by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="chart-container">
-                <canvas id="amortizationChart"></canvas>
-            </div>
-        </section>
-
-        <!-- Related Content -->
-        <section class="related-content">
-            <h2>Related Calculators</h2>
-            <div class="related-calculators">
-                <a href="refinance-calculator.html" class="related-calculator">
-                    <i class="fas fa-exchange-alt"></i>
-                    <h3>Refinance Calculator</h3>
-                    <p>See if refinancing makes sense for you</p>
-                </a>
-                <a href="affordability-calculator.html" class="related-calculator">
-                    <i class="fas fa-piggy-bank"></i>
-                    <h3>Affordability Calculator</h3>
-                    <p>Find out how much house you can afford</p>
-                </a>
-                <a href="rent-vs-buy-calculator.html" class="related-calculator">
-                    <i class="fas fa-home"></i>
-                    <h3>Rent vs Buy Calculator</h3>
-                    <p>Compare renting vs buying a home</p>
-                </a>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->
@@ -181,14 +445,10 @@
                     <a href="investment-calculator.html">Investment Calculator</a>
                 </div>
                 <div class="footer-section">
-                    <h3>Resources</h3>
-                    <a href="blog.html">Blog</a>
-                    <a href="faq.html">FAQ</a>
-                    <a href="privacy-policy.html">Privacy Policy</a>
-                </div>
-                <div class="footer-section">
                     <h3>Connect</h3>
                     <a href="contact.html">Contact Us</a>
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-facebook"></i></a>
@@ -203,7 +463,180 @@
     </footer>
 
     <!-- JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="mortgage-calculator.js"></script>
+    <script>
+        // State tax rates data
+        const stateTaxRates = {
+            "Alabama": 0.41, "Alaska": 1.04, "Arizona": 0.62, "Arkansas": 0.62, 
+            "California": 0.76, "Colorado": 0.51, "Connecticut": 1.70, "Delaware": 0.57,
+            "Florida": 0.89, "Georgia": 0.92, "Hawaii": 0.28, "Idaho": 0.69,
+            "Illinois": 2.08, "Indiana": 0.85, "Iowa": 1.50, "Kansas": 1.29,
+            "Kentucky": 0.82, "Louisiana": 0.55, "Maine": 1.27, "Maryland": 1.09,
+            "Massachusetts": 1.17, "Michigan": 1.44, "Minnesota": 1.11, "Mississippi": 0.81,
+            "Missouri": 0.97, "Montana": 0.83, "Nebraska": 1.65, "Nevada": 0.60,
+            "New Hampshire": 2.05, "New Jersey": 2.21, "New Mexico": 0.80, "New York": 1.40,
+            "North Carolina": 0.84, "North Dakota": 0.99, "Ohio": 1.56, "Oklahoma": 0.90,
+            "Oregon": 0.97, "Pennsylvania": 1.51, "Rhode Island": 1.53, "South Carolina": 0.57,
+            "South Dakota": 1.22, "Tennessee": 0.71, "Texas": 1.60, "Utah": 0.63,
+            "Vermont": 1.86, "Virginia": 0.82, "Washington": 0.93, "West Virginia": 0.58,
+            "Wisconsin": 1.73, "Wyoming": 0.61, "District of Columbia": 0.56
+        };
+
+        // Populate state dropdown on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const stateSelect = document.getElementById('state');
+            
+            // Add states to dropdown
+            for (const state in stateTaxRates) {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            }
+            
+            // Add event listener to auto-fill property tax based on state
+            stateSelect.addEventListener('change', function() {
+                const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
+                if (homePrice > 0 && this.value) {
+                    const taxRate = stateTaxRates[this.value];
+                    const annualPropertyTax = (homePrice * taxRate) / 100;
+                    document.getElementById('propertyTax').value = Math.round(annualPropertyTax);
+                }
+            });
+            
+            // Also update property tax when home price changes
+            document.getElementById('homePrice').addEventListener('input', function() {
+                const state = document.getElementById('state').value;
+                const homePrice = parseFloat(this.value) || 0;
+                if (homePrice > 0 && state) {
+                    const taxRate = stateTaxRates[state];
+                    const annualPropertyTax = (homePrice * taxRate) / 100;
+                    document.getElementById('propertyTax').value = Math.round(annualPropertyTax);
+                }
+            });
+            
+            // Form submission
+            const mortgageForm = document.getElementById('mortgageForm');
+            mortgageForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                calculateMortgage();
+            });
+        });
+
+        // Mortgage calculation function
+        function calculateMortgage() {
+            // Get input values
+            const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
+            const downPayment = parseFloat(document.getElementById('downPayment').value) || 0;
+            const loanTerm = parseInt(document.getElementById('loanTerm').value) || 30;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
+            const insurance = parseFloat(document.getElementById('homeInsurance').value) || 0;
+            const hoa = parseFloat(document.getElementById('hoaFees').value) || 0;
+            const needsPmi = document.getElementById('pmiRequired').checked;
+            
+            // Calculate loan amount
+            const loanAmount = homePrice - downPayment;
+            
+            // Calculate monthly principal and interest
+            const monthlyRate = interestRate / 100 / 12;
+            const numberOfPayments = loanTerm * 12;
+            const monthlyPrincipalAndInterest = loanAmount * 
+                (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+            
+            // Calculate PMI if needed
+            let monthlyPmi = 0;
+            if (needsPmi && downPayment / homePrice < 0.2) {
+                // PMI is typically 0.5% to 1% of loan amount annually
+                monthlyPmi = (loanAmount * 0.005) / 12;
+            }
+            
+            // Calculate other monthly costs
+            const monthlyPropertyTax = propertyTax / 12;
+            const monthlyInsurance = insurance / 12;
+            
+            // Calculate total monthly payment
+            const totalMonthlyPayment = monthlyPrincipalAndInterest + monthlyPropertyTax + 
+                                      monthlyInsurance + hoa + monthlyPmi;
+            
+            // Calculate total costs over loan term
+            const totalPrincipalAndInterest = monthlyPrincipalAndInterest * numberOfPayments;
+            const totalInterest = totalPrincipalAndInterest - loanAmount;
+            const totalPropertyTax = propertyTax * loanTerm;
+            const totalInsurance = insurance * loanTerm;
+            const totalHoa = hoa * numberOfPayments;
+            const totalPmi = monthlyPmi * (needsPmi ? numberOfPayments : 0);
+            const totalCost = totalPrincipalAndInterest + totalPropertyTax + 
+                             totalInsurance + totalHoa + totalPmi;
+            
+            // Display results
+            const resultElement = document.getElementById('mortgageResult');
+            resultElement.innerHTML = `
+                <div class="result-summary">
+                    <div class="result-main">
+                        <div class="monthly-payment">$${totalMonthlyPayment.toFixed(2)}</div>
+                        <div class="result-label">Total Monthly Payment</div>
+                    </div>
+                    
+                    <div class="result-breakdown">
+                        <div class="breakdown-item">
+                            <span>Principal & Interest:</span>
+                            <span>$${monthlyPrincipalAndInterest.toFixed(2)}</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Property Tax:</span>
+                            <span>$${monthlyPropertyTax.toFixed(2)}</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Home Insurance:</span>
+                            <span>$${monthlyInsurance.toFixed(2)}</span>
+                        </div>
+                        ${hoa > 0 ? `
+                        <div class="breakdown-item">
+                            <span>HOA Fees:</span>
+                            <span>$${hoa.toFixed(2)}</span>
+                        </div>
+                        ` : ''}
+                        ${monthlyPmi > 0 ? `
+                        <div class="breakdown-item">
+                            <span>PMI:</span>
+                            <span>$${monthlyPmi.toFixed(2)}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="ai-insight">
+                        <h3><i class="fas fa-robot"></i> AI Insight</h3>
+                        <p>${generateAiInsight(homePrice, downPayment, loanTerm, interestRate, loanAmount)}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Generate AI insight based on user inputs
+        function generateAiInsight(homePrice, downPayment, loanTerm, interestRate, loanAmount) {
+            const loanToValue = loanAmount / homePrice;
+            let insights = [];
+            
+            if (loanToValue > 0.8) {
+                insights.push("Consider making additional principal payments to reach 20% equity faster and remove PMI.");
+            }
+            
+            if (interestRate > 6) {
+                insights.push("Current rates are relatively high. You might want to consider an ARM loan or look for refinancing opportunities when rates drop.");
+            }
+            
+            if (loanTerm === 30) {
+                insights.push("A 30-year term gives you lower monthly payments but you'll pay more interest over time. Consider a 15-year term if you can afford higher payments.");
+            }
+            
+            if (downPayment / homePrice < 0.2) {
+                insights.push("With less than 20% down, you're paying PMI. Consider increasing your down payment to eliminate this cost.");
+            }
+            
+            return insights.length > 0 ? insights.join(' ') : 
+                "Your mortgage terms look reasonable. Consider making bi-weekly payments to pay off your loan faster and save on interest.";
+        }
+    </script>
 </body>
 </html>
