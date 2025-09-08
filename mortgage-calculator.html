@@ -34,7 +34,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
   <header class="header">
     <nav class="nav container">
       <div class="logo"><i class="fas fa-calculator"></i> FinGuid</div>
@@ -47,7 +46,6 @@
     </nav>
   </header>
 
-  <!-- Mortgage Calculator -->
   <main class="mortgage-container container" id="calculators">
     <section class="calculator-header">
       <h1><i class="fas fa-home"></i> Mortgage Calculator</h1>
@@ -57,7 +55,6 @@
     <form id="mortgageForm" class="calculator-grid">
       <div class="calculator-card">
         <h2>Loan Details</h2>
-
         <div class="form-group">
           <label for="homePrice">Home Price</label>
           <div class="input-with-prefix">
@@ -65,16 +62,13 @@
             <input type="number" id="homePrice" name="homePrice" placeholder="400,000" min="50000" step="1000" required />
           </div>
         </div>
-
         <div class="form-group">
           <label for="downPayment">Down Payment</label>
           <div class="input-with-prefix">
             <span class="input-prefix">$</span>
             <input type="number" id="downPayment" name="downPayment" placeholder="80,000" min="0" step="1000" required />
           </div>
-          <small>Switch between dollar amount and percentage with the “%” button (future enhancement).</small>
         </div>
-
         <div class="form-group">
           <label for="loanTerm">Loan Term</label>
           <select id="loanTerm" name="loanTerm" required>
@@ -84,22 +78,18 @@
             <option value="30" selected>30 years</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="interestRate">Interest Rate (%)</label>
           <input type="number" id="interestRate" name="interestRate" placeholder="6.75" min="0.1" max="15" step="0.01" required />
         </div>
 
         <h3>Location & Taxes</h3>
-
         <div class="form-group">
           <label for="state">State</label>
           <select id="state" name="state" required>
             <option value="">Select State</option>
-            <!-- Populated by script -->
           </select>
         </div>
-
         <div class="form-group">
           <label for="propertyTax">Annual Property Tax ($)</label>
           <div class="input-with-prefix">
@@ -107,7 +97,6 @@
             <input type="number" id="propertyTax" name="propertyTax" placeholder="4,800" min="0" step="100" />
           </div>
         </div>
-
         <div class="form-group">
           <label for="homeInsurance">Annual Home Insurance ($)</label>
           <div class="input-with-prefix">
@@ -115,7 +104,6 @@
             <input type="number" id="homeInsurance" name="homeInsurance" placeholder="1,200" min="0" step="50" />
           </div>
         </div>
-
         <div class="form-group">
           <label for="hoaFees">Monthly HOA Fees (Optional)</label>
           <div class="input-with-prefix">
@@ -128,7 +116,6 @@
           <input type="checkbox" id="pmiRequired" name="pmiRequired" />
           <label for="pmiRequired">PMI Required (auto for down payment < 20%)</label>
         </div>
-
         <div id="pmiSection" class="form-group hidden">
           <label for="pmiRate">PMI Rate (%)</label>
           <input type="number" id="pmiRate" name="pmiRate" placeholder="0.50" min="0.1" max="2" step="0.01" />
@@ -165,7 +152,7 @@
               <th>Ending Balance</th>
             </tr>
           </thead>
-          <tbody><!-- Filled by JS --></tbody>
+          <tbody></tbody>
         </table>
       </div>
     </section>
@@ -192,17 +179,14 @@
     </section>
   </main>
 
-  <!-- Core mortgage logic -->
   <script src="mortgage-calculator.js"></script>
 
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'GA_MEASUREMENT_ID');
-
     function trackCalculatorUse() {
       gtag('event', 'calculator_use', {
         event_category: 'Calculator',
@@ -212,34 +196,34 @@
     }
   </script>
 
-  <!-- Populate state dropdown -->
   <script>
-    const states = [
-      { code: "AL", name: "Alabama" },{ code: "AK", name: "Alaska" },{ code: "AZ", name: "Arizona" },
-      { code: "AR", name: "Arkansas" },{ code: "CA", name: "California" },{ code: "CO", name: "Colorado" },
-      { code: "CT", name: "Connecticut" },{ code: "DE", name: "Delaware" },{ code: "FL", name: "Florida" },
-      { code: "GA", name: "Georgia" },{ code: "HI", name: "Hawaii" },{ code: "ID", name: "Idaho" },
-      { code: "IL", name: "Illinois" },{ code: "IN", name: "Indiana" },{ code: "IA", name: "Iowa" },
-      { code: "KS", name: "Kansas" },{ code: "KY", name: "Kentucky" },{ code: "LA", name: "Louisiana" },
-      { code: "ME", name: "Maine" },{ code: "MD", name: "Maryland" },{ code: "MA", name: "Massachusetts" },
-      { code: "MI", name: "Michigan" },{ code: "MN", name: "Minnesota" },{ code: "MS", name: "Mississippi" },
-      { code: "MO", name: "Missouri" },{ code: "MT", name: "Montana" },{ code: "NE", name: "Nebraska" },
-      { code: "NV", name: "Nevada" },{ code: "NH", name: "New Hampshire" },{ code: "NJ", name: "New Jersey" },
-      { code: "NM", name: "New Mexico" },{ code: "NY", name: "New York" },{ code: "NC", name: "North Carolina" },
-      { code: "ND", name: "North Dakota" },{ code: "OH", name: "Ohio" },{ code: "OK", name: "Oklahoma" },
-      { code: "OR", name: "Oregon" },{ code: "PA", name: "Pennsylvania" },{ code: "RI", name: "Rhode Island" },
-      { code: "SC", name: "South Carolina" },{ code: "SD", name: "South Dakota" },{ code: "TN", name: "Tennessee" },
-      { code: "TX", name: "Texas" },{ code: "UT", name: "Utah" },{ code: "VT", name: "Vermont" },
-      { code: "VA", name: "Virginia" },{ code: "WA", name: "Washington" },{ code: "WV", name: "West Virginia" },
-      { code: "WI", name: "Wisconsin" },{ code: "WY", name: "Wyoming" }
-    ];
-
-    const stateSelect = document.getElementById('state');
-    states.forEach(s => {
-      const opt = document.createElement('option');
-      opt.value = s.code;
-      opt.textContent = s.name;
-      stateSelect.appendChild(opt);
+    document.addEventListener('DOMContentLoaded', function() {
+      const states = [
+        { code: "AL", name: "Alabama" },{ code: "AK", name: "Alaska" },{ code: "AZ", name: "Arizona" },
+        { code: "AR", name: "Arkansas" },{ code: "CA", name: "California" },{ code: "CO", name: "Colorado" },
+        { code: "CT", name: "Connecticut" },{ code: "DE", name: "Delaware" },{ code: "FL", name: "Florida" },
+        { code: "GA", name: "Georgia" },{ code: "HI", name: "Hawaii" },{ code: "ID", name: "Idaho" },
+        { code: "IL", name: "Illinois" },{ code: "IN", name: "Indiana" },{ code: "IA", name: "Iowa" },
+        { code: "KS", name: "Kansas" },{ code: "KY", name: "Kentucky" },{ code: "LA", name: "Louisiana" },
+        { code: "ME", name: "Maine" },{ code: "MD", name: "Maryland" },{ code: "MA", name: "Massachusetts" },
+        { code: "MI", name: "Michigan" },{ code: "MN", name: "Minnesota" },{ code: "MS", name: "Mississippi" },
+        { code: "MO", name: "Missouri" },{ code: "MT", name: "Montana" },{ code: "NE", name: "Nebraska" },
+        { code: "NV", name: "Nevada" },{ code: "NH", name: "New Hampshire" },{ code: "NJ", name: "New Jersey" },
+        { code: "NM", name: "New Mexico" },{ code: "NY", name: "New York" },{ code: "NC", name: "North Carolina" },
+        { code: "ND", name: "North Dakota" },{ code: "OH", name: "Ohio" },{ code: "OK", name: "Oklahoma" },
+        { code: "OR", name: "Oregon" },{ code: "PA", name: "Pennsylvania" },{ code: "RI", name: "Rhode Island" },
+        { code: "SC", name: "South Carolina" },{ code: "SD", name: "South Dakota" },{ code: "TN", name: "Tennessee" },
+        { code: "TX", name: "Texas" },{ code: "UT", name: "Utah" },{ code: "VT", name: "Vermont" },
+        { code: "VA", name: "Virginia" },{ code: "WA", name: "Washington" },{ code: "WV", name: "West Virginia" },
+        { code: "WI", name: "Wisconsin" },{ code: "WY", name: "Wyoming" }
+      ];
+      const select = document.getElementById('state');
+      states.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.code;
+        opt.textContent = s.name;
+        select.appendChild(opt);
+      });
     });
   </script>
 </body>
