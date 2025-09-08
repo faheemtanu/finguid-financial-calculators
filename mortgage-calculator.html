@@ -6,171 +6,225 @@
     <title>Finguid - Advanced Mortgage Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Design System CSS */
+        /* Design System Integration */
         :root {
-          /* Primitive Color Tokens */
-          --color-white: rgba(255, 255, 255, 1);
-          --color-black: rgba(0, 0, 0, 1);
-          --color-cream-50: rgba(252, 252, 249, 1);
-          --color-cream-100: rgba(255, 255, 253, 1);
-          --color-gray-200: rgba(245, 245, 245, 1);
-          --color-gray-300: rgba(167, 169, 169, 1);
-          --color-gray-400: rgba(119, 124, 124, 1);
-          --color-slate-500: rgba(98, 108, 113, 1);
-          --color-brown-600: rgba(94, 82, 64, 1);
-          --color-charcoal-700: rgba(31, 33, 33, 1);
-          --color-charcoal-800: rgba(38, 40, 40, 1);
-          --color-slate-900: rgba(19, 52, 59, 1);
-          --color-teal-300: rgba(50, 184, 198, 1);
-          --color-teal-400: rgba(45, 166, 178, 1);
-          --color-teal-500: rgba(33, 128, 141, 1);
-          --color-teal-600: rgba(29, 116, 128, 1);
-          --color-teal-700: rgba(26, 104, 115, 1);
-          --color-teal-800: rgba(41, 150, 161, 1);
-          --color-red-400: rgba(255, 84, 89, 1);
-          --color-red-500: rgba(192, 21, 47, 1);
-          --color-orange-400: rgba(230, 129, 97, 1);
-          --color-orange-500: rgba(168, 75, 47, 1);
+            /* Primitive Color Tokens */
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-teal-800: rgba(41, 150, 161, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
 
-          /* RGB versions for opacity control */
-          --color-brown-600-rgb: 94, 82, 64;
-          --color-teal-500-rgb: 33, 128, 141;
-          --color-slate-900-rgb: 19, 52, 59;
-          --color-slate-500-rgb: 98, 108, 113;
-          --color-red-500-rgb: 192, 21, 47;
-          --color-red-400-rgb: 255, 84, 89;
-          --color-orange-500-rgb: 168, 75, 47;
-          --color-orange-400-rgb: 230, 129, 97;
+            /* RGB versions for opacity control */
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+            --color-red-500-rgb: 192, 21, 47;
+            --color-red-400-rgb: 255, 84, 89;
+            --color-orange-500-rgb: 168, 75, 47;
+            --color-orange-400-rgb: 230, 129, 97;
 
-          /* Background color tokens (Light Mode) */
-          --color-bg-1: rgba(59, 130, 246, 0.08); /* Light blue */
-          --color-bg-2: rgba(245, 158, 11, 0.08); /* Light yellow */
-          --color-bg-3: rgba(34, 197, 94, 极速赛车开奖结果记录*/
-          --color-bg-4: rgba(239, 68, 68, 0.08); /* Light red */
-          --color-bg-5: rgba(147, 51, 234, 0.08); /* Light purple */
-          --color-bg-6: rgba(249, 115, 22, 0.08); /* Light orange */
-          --color-bg-极速赛车开奖结果记录*/
-          --color-bg-8: rgba(6, 182, 212, 0.08); /* Light cyan */
+            /* Background color tokens (Light Mode) */
+            --color-bg-1: rgba(59, 130, 246, 0.08);
+            --color-bg-2: rgba(245, 158, 11, 0.08);
+            --color-bg-3: rgba(34, 197, 94, 0.08);
+            --color-bg-4: rgba(239, 68, 68, 0.08);
+            --color-bg-5: rgba(147, 51, 234, 0.08);
+            --color-bg-6: rgba(249, 115, 22, 0.08);
+            --color-bg-7: rgba(236, 72, 153, 0.08);
+            --color-bg-8: rgba(6, 182, 212, 0.08);
 
-          /* Semantic Color Tokens (Light Mode) */
-          --color-background: var(--color-cream-50);
-          --color-surface: var(--color-cream-100);
-          --极速赛车开奖结果记录*/
-          --color-text-secondary: var(--color-slate-500);
-          --color-primary: var(--color-teal-500);
-          --color-primary-hover: var(--color-teal-600);
-          --color-primary-active: var(--color-teal-700);
-          --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-          --color-secondary-hover: rgba(var(--color-brown-600极速赛车开奖结果记录*/
-          --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-          --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-          --color-btn-primary-text: var(--color-cream-50);
-          --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-          --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-          --color-error: var(--color-red-500);
-          --color-success: var(--color-teal-500);
-          --color-warning: var(--color-orange-500);
-          --color-info: var(--color-slate-500);
-          --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
-          --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+            /* Semantic Color Tokens (Light Mode) */
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-btn-primary-text: var(--color-cream-50);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-error: var(--color-red-500);
+            --color-success: var(--color-teal-500);
+            --color-warning: var(--color-orange-500);
+            --color-info: var(--color-slate-500);
+            --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+            --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
 
-          /* Common style patterns */
-          --focus-ring: 0 0 0 3px var(--color-focus极速赛车开奖结果记录*/
-          --focus-outline: 2px solid var(--color-primary);
-          --status-bg极速赛车开奖结果记录*/
-          --status-border-opacity: 0.25;
-          --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline极速赛车开奖结果记录*/
-          --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='极速赛车开奖结果记录*/
+            /* Common style patterns */
+            --focus-ring: 0 0 0 3px var(--color-focus-ring);
+            --focus-outline: 2px solid var(--color-primary);
+            --status-bg-opacity: 0.15;
+            --status-border-opacity: 0.25;
+            --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 
-          /* RGB versions for opacity control */
-          --color-success-rgb: 33, 128, 141;
-          --color-error-rgb: 192, 21, 47;
-          --color-warning-rgb: 168, 75, 47;
-          --color-info-rgb: 98, 108, 113;
+            /* RGB versions for opacity control */
+            --color-success-rgb: 33, 128, 141;
+            --color-error-rgb: 192, 21, 47;
+            --color-warning-rgb: 168, 75, 47;
+            --color-info-rgb: 98, 108, 113;
 
-          /* Typography */
-          --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
-            BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
-            Monaco, Consolas, monospace;
-          --font-size-xs: 11px;
-          --font-size-sm: 12px;
-          --font-size-base: 14px;
-          --font-size-md: 14px;
-          --font-size-lg: 16px;
-          --font-size-xl: 18px;
-          --font-size-2xl: 20px;
-          --font-size-3xl: 24极速赛车开奖结果记录*/
-          --font-size-4xl: 30px;
-          --font-weight-normal: 400;
-          --font-weight-medium: 500;
-          --font-weight-semibold: 550;
-          --font-weight-bold: 600;
-          --line-height-tight: 1.2;
-          --line-height-normal: 1.5;
-          --letter-spacing-tight: -0.01em;
+            /* Typography */
+            --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --font-size-xs: 11px;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-md: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-size-4xl: 30px;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+            --line-height-tight: 1.2;
+            --line-height-normal: 1.5;
+            --letter-spacing-tight: -0.01em;
 
-          /* Spacing */
-          --space-0: 0;
-          --space-1: 1px;
-          --space-2: 2px;
-          --space-4: 4px;
-          --space-6极速赛车开奖结果记录*/
-          --space-8: 8px;
-          --space-10: 10px;
-          --space-12: 12px;
-          --space-16: 16px;
-          --space-20: 20px;
-          --space-24: 24px;
-          --space-32: 32px;
+            /* Spacing */
+            --space-0: 0;
+            --space-1: 1px;
+            --space-2: 2px;
+            --space-4: 4px;
+            --space-6: 6px;
+            --space-8: 8px;
+            --space-10: 10px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
 
-          /* Border Radius */
-          --radius-sm: 6px;
-          --radius-base: 8px;
-          --radius-md: 10px;
-          --radius-lg: 12px;
-          --radius-full: 9999px;
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-base: 8px;
+            --radius-md: 10px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
 
-          /* Shadows */
-          --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
-          --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-          --shadow-md: 0 4px 6px -1极速赛车开奖结果记录*/
-            0 2px 4px -1px rgba(0, 0, 0, 极速赛车开奖结果记录*/
-          --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
-            0 4px 6px -2px rgba(0, 0, 0, 0.02);
-          --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 
-          /* Animation */
-          --duration-fast: 150ms;
-          --duration-normal: 250ms;
-          --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+            /* Animation */
+            --duration-fast: 150ms;
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
 
-          /* Layout */
-          --container-sm: 640px;
-          --container-md: 768px;
-          --container-lg: 1024px;
-          --container-xl: 1280px;
+            /* Layout */
+            --container-sm: 640px;
+            --container-md: 768px;
+            --container-lg: 1024px;
+            --container-xl: 1280px;
         }
 
         /* Dark mode colors */
         @media (prefers-color-scheme: dark) {
-          :root {
-            /* RGB versions for opacity control (Dark Mode) */
+            :root {
+                /* RGB versions for opacity control (Dark Mode) */
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-200-rgb: 245, 245, 245;
+
+                /* Background color tokens (Dark Mode) */
+                --color-bg-1: rgba(29, 78, 216, 0.15);
+                --color-bg-2: rgba(180, 83, 9, 0.15);
+                --color-bg-3: rgba(21, 128, 61, 0.15);
+                --color-bg-4: rgba(185, 28, 28, 0.15);
+                --color-bg-5: rgba(107, 33, 168, 极速赛车开奖结果记录*/
+                --color-bg-6: rgba(194, 65, 12, 0.15);
+                --color-bg-7: rgba(190, 24, 93, 0.15);
+                --color-b极速赛车开奖结果记录*/
+                
+                /* Semantic Color Tokens (Dark Mode) */
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-primary-active: var(--color-teal-800);
+                --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+                --color-secondary极速赛车开奖结果记录*/
+                --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-error: var(--color-red-400);
+                --color-success: var(--color-teal-300);
+                --color-warning: var(--color-orange-400);
+                --color-info: var(--color-gray-300);
+                --color-focus-ring: rgba(var(--极速赛车开奖结果记录*/
+                --color-btn-primary-text: var(--color-slate-900);
+                --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+                --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+                --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+                --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+                --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+                --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+                /* Common style patterns - updated for dark mode */
+                --focus-ring: 0 0 0 3px var(--color-focus-ring);
+                --focus-outline: 2px solid var(--color-primary);
+                --status-bg-opacity: 0.15;
+                --status-border-opacity: 0.25;
+                --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 极速赛车开奖结果记录*/
+                --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3极速赛车开奖结果记录*/
+
+                /* RGB versions for dark mode */
+                --color-success-rgb: var(--color-teal-300-rgb);
+                --color-error-rgb: var(--color-red-400-rgb);
+                --color-warning-rgb: var(--color-orange-400-rgb);
+                --color-info-rgb: var(--color-gray-300-rgb);
+            }
+        }
+
+        /* Data attribute for manual theme switching */
+        [data-color-scheme="dark"] {
+            /* RGB versions for opacity control (dark mode) */
             --color-gray-400-rgb: 119, 124, 124;
-            --color-teal-300-rgb: 50, 184, 198;
+            --color-teal-300极速赛车开奖结果记录*/
             --color-gray-300-rgb: 167, 169, 169;
             --color-gray-200-rgb: 245, 245, 245;
 
-            /* Background color tokens (Dark Mode) */
-            --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
-            --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
-            --color-b极速赛车开奖结果记录*/
-            --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
-            --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
-            --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
-            --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
-            --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+            /* Colorful background palette - Dark Mode */
+            --color-bg-1: rgba(29, 78, 216, 0.15);
+            --color-bg-2: rgba(180, 83, 9, 0.15);
+            --color-bg-3: rgba(21, 128, 61, 0.15);
+            --color-bg-4: rgba(185, 28, 28, 0.15);
+            --color-bg-5: rgba(107, 33, 168, 0.15);
+            --color-bg-6: rgba(194, 65, 12, 0.15);
+            --color-bg-7: rgba(190, 24, 93, 0.15);
+            --color-bg-8: rgba(8, 145, 178, 0.15);
             
             /* Semantic Color Tokens (Dark Mode) */
             --color-background: var(--color-charcoal-700);
@@ -178,570 +232,75 @@
             --color-text: var(--color-gray-200);
             --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
             --color-primary: var(--color-teal-300);
-            --color-primary-hover: var(--color-teal-400);
+            --color-primary-hover: var(--color-te极速赛车开奖结果记录*/
             --color-primary-active: var(--color-teal-800);
             --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
             --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
             --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
-            --color-border: rgba(var(--color-gray-400极速赛车开奖结果记录*/
-            --color-error: var(--极速赛车开奖结果记录*/
+            --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+            --极速赛车开奖结果记录*/
             --color-success: var(--color-teal-300);
             --color-warning: var(--color-orange-400);
             --color-info: var(--color-gray-300);
             --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
             --color-btn-primary-text: var(--color-slate-900);
-            --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+            --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
             --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
-            --shadow-inset-sm: inset 0 1px极速赛车开奖结果记录*/
-              inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-            --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+            --shadow-inset极速赛车开奖结果记录*/
+                inset 0 -1px 极速赛车开奖结果记录*/
             --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
             --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
 
             /* Common style patterns - updated for dark mode */
-            --focus-ring: 0 0 0 3px var(--color-focus-ring);
+            --focus-ring: 0 0 0 3极速赛车开奖结果记录*/
             --focus-outline: 2px solid var(--color-primary);
             --status-bg-opacity: 0.15;
             --status-border-opacity: 0.25;
-            --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='极速赛车开奖结果记录*/
-            --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 极速赛车开奖结果记录*/
+            --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 极速赛车开奖结果记录*/
+            --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 
             /* RGB versions for dark mode */
-            --color-success极速赛车开奖结果记录*/
+            --color-success-rgb: var(--color-teal-300-rgb);
             --color-error-rgb: var(--color-red-400-rgb);
             --color-warning-rgb: var(--color-orange-400-rgb);
             --color-info-rgb: var(--color-gray-300-rgb);
-          }
-        }
-
-        /* Data attribute for manual theme switching */
-        [data-color-scheme="dark"] {
-          /* RGB versions for opacity control (dark mode) */
-          --color-gray-400-rgb: 119, 124, 124;
-          --color-teal-300-rgb: 50, 184, 198;
-          --color-gray-300-rgb: 167, 169, 169;
-          --color-gray-200-rgb: 245, 245, 245;
-
-          /* Colorful background palette - Dark Mode */
-          --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
-          --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
-          --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
-          --color-bg-4: rgba(极速赛车开奖结果记录*/
-          --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
-          --极速赛车开奖结果记录*/
-          --color-bg-7: rgba(190, 24, 93, 极速赛车开奖结果记录*/
-          --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
-          
-          /* Semantic Color Tokens (Dark Mode) */
-          --color-background: var(--color-charcoal-700);
-          --color-surface: var(--color-charcoal-800);
-          --color-text: var(--color-gray-200);
-          --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-          --color-primary: var(--color-teal-300);
-          --color-primary-hover: var(--color-teal-400);
-          --color-primary-active: var(--color-teal-800);
-          --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
-          --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-          --color-secondary-active: rgba(var(--极速赛车开奖结果记录*/
-          --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-          --color-error: var(--color-red-400);
-          --color-success: var(--color-teal-300);
-          --color-warning: var(--color-orange-400);
-          --color-info: var(--color-gray-300);
-          --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
-          --color-btn-primary-text: var(--color-slate-900);
-          --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
-          --color-card-border-in极速赛车开奖结果记录*/
-          --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-          --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-          --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
-
-          /* Common style patterns - updated for dark mode */
-          --focus-ring: 0 0 0 3px var(--color-focus-ring);
-          --focus-outline: 2px solid var(--color-primary);
-          --status-bg-opacity: 0.15;
-          --status-border-opacity: 0.25;
-          --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 极速赛车开奖结果记录*/
-          --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5极速赛车开奖结果记录*/
-
-          /* RGB versions for dark mode */
-          --color-success-rgb: var(--color-teal-300-rgb);
-          --color-error-rgb: var(--color-red-400-r极速赛车开奖结果记录*/
-          --color-warning-rgb: var(--color-orange-400-rgb);
-          --color-info-rgb: var(--color-gray-300-rgb);
         }
 
         [data-color-scheme="light"] {
-          /* RGB versions for opacity control (light mode) */
-          --color-brown-600-rgb: 94, 82, 64;
-          --color-teal-500-rgb: 33, 128, 141;
-          --color-slate-900-rgb: 19, 52, 59;
-          
-          /* Semantic Color Tokens (Light Mode) */
-          --极速赛车开奖结果记录*/
-          --color-surface: var(--color-cream-100);
-          --color-text: var(--color-slate-900);
-          --color-text-secondary: var(--color-slate-500);
-          --color-primary: var(--color-teal-500);
-          --color-primary-hover: var(--color-teal-600);
-          --color-primary-active: var(--color-teal-700);
-          --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-          --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-          --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-          --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-          --color-btn-primary-text: var(--color-cream-50);
-          --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-          --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.极速赛车开奖结果记录*/
-          --color-error: var(--color-red-500);
-          --color-success: var(--color-teal-500);
-          --color-warning: var(--color-orange-500);
-          --color-info: var(--color-slate-500);
-          --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+            /* RGB versions for opacity control (light mode) */
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            
+            /* Semantic Color Tokens (Light Mode) */
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-secondary-active: rgba(var(--color-brown-600-rgb), 极速赛车开奖结果记录*/
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-btn-primary-text: var(--color-cream-50);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-error: var(--color-red-500);
+            --color-success: var(--color-teal-500);
+            --color-warning: var(--color-orange-500);
+            --color-info: var(--color-slate-500);
+            --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
 
-          /* RGB versions for light mode */
-          --color-success-rgb: var(--color-teal-500-rgb);
-          --color-error-rgb: var(--color-red-500-rgb);
-          --color-warning-rgb: var(--color-orange-500-rgb);
-          --color-info-rgb: var(--color-slate-500-rgb);
+            /* RGB versions for light mode */
+            --color-success-rgb: var(--color-teal-500-rgb);
+            --color-error-rgb: var(--color-red-500-rgb);
+            --color-warning-rgb: var(--color-orange-500-rgb);
+            --color-info-rgb: var(--极速赛车开奖结果记录*/
         }
 
         /* Base styles */
-        html {
-          font-size: var(--font-size-base);
-          font-family: var(--font-family-base);
-          line-height: var(--line-height-normal);
-          color: var(--color-text);
-          background-color: var(--color-background);
-          -webkit-font-smoothing: antialiased;
-          box-sizing: border-box;
-        }
-
-        body {
-          margin: 0;
-          padding: 0;
-        }
-
-        *,
-        *::before,
-        *::after {
-          box-sizing: inherit;
-        }
-
-        /* Typography */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-          margin: 0;
-          font-weight: var(--font-weight-semibold);
-          line-height: var(--line-height-tight);
-          color: var(--color-text);
-          letter-spacing: var(--letter-spacing-tight);
-        }
-
-        h1 {
-          font-size: var(--font-size-4xl);
-        }
-        h2 {
-          font-size: var(--font-size-3xl);
-        }
-        h3 {
-          font-size: var(--font-size-2xl);
-        }
-        h4 {
-          font-size: var(--font-size-xl);
-        }
-        h极速赛车开奖结果记录*/
-        h6 {
-          font-size: var(--font-size-md);
-        }
-
-        p {
-          margin: 0 0 var(--space-16) 0;
-        }
-
-        a {
-          color: var(--color-primary);
-          text-decoration: none;
-          transition: color var(--duration-fast) var(--ease-standard);
-        }
-
-        a:hover {
-          color:极速赛车开奖结果记录*/
-        }
-
-        code,
-        pre {
-          font-family: var(--font-family-mono);
-          font-size: calc(var(--font-size-base) * 0.95);
-          background-color: var(--color-secondary);
-          border-radius: var(--radius-sm);
-        }
-
-        code {
-          padding: var(--space-1) var(--space-4);
-        }
-
-        pre {
-          padding: var(--space-16);
-          margin: var(--space-16) 0;
-          overflow: auto;
-          border: 1px solid var(--color-border);
-        }
-
-        pre code {
-          background: none;
-          padding: 0;
-        }
-
-        /* Buttons */
-        .btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: var(--space-8) var(--space极速赛车开奖结果记录*/
-          border-radius: var(--radius-base);
-          font-size: var(--font-size-base);
-          font-weight: 500;
-          line-height: 1.5;
-          cursor: pointer;
-          transition: all var(--duration-normal) var(--ease-standard);
-          border: none;
-          text-decoration: none;
-          position: relative;
-        }
-
-        .btn:focus-visible {
-          outline: none;
-          box-shadow: var(--focus-ring);
-        }
-
-        .btn--primary {
-          background: var(--color-primary);
-          color: var(--color-btn-primary-text);
-        }
-
-        .btn--primary:hover {
-          background: var(--color-primary-hover);
-        }
-
-        .btn--primary:active {
-          background: var(--color-primary-active);
-        }
-
-        .btn--secondary {
-          background: var(--color-secondary);
-          color: var(--color-text);
-        }
-
-        .btn--secondary:hover {
-          background: var(--color-secondary-hover);
-        }
-
-        .btn--secondary:active {
-          background: var(--color-secondary-active);
-        }
-
-        .btn--outline {
-          background: transparent;
-          border: 1px solid var(--color-border);
-          color: var(--color-text);
-        }
-
-        .btn--outline:hover {
-          background: var(--color-secondary);
-        }
-
-        .btn--sm {
-          padding: var(--space-4) var(--space-12);
-          font-size: var(--font-size-sm);
-          border-radius: var(--radius-sm);
-        }
-
-        .btn--lg {
-          padding: var(--space-10) var(--space-20);
-          font-size: var(--font-size-lg);
-          border-radius: var(--radius-md);
-        }
-
-        .btn--full-width {
-          width: 100%;
-        }
-
-        .btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        /* Form elements */
-        .form-control {
-          display: block;
-          width: 100%;
-          padding: var(--space-8) var(--space-12);
-          font-size: var(--font-size-md);
-          line-height: 1.5;
-          color: var(--color-text);
-          background-color: var(--color-surface);
-          border: 1px solid var(--color-border);
-          border-radius: var(--radius-base);
-          transition: border-color var(--duration-fast) var(--ease-standard),
-            box-shadow var(--duration-fast) var(--ease-standard);
-        }
-
-        textarea.form-control {
-          font-family: var(--font-family-base);
-          font-size: var(--font-size-base);
-        }
-
-        select.form-control {
-          padding: var(--space-8) var(--space-12);
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance极速赛车开奖结果记录*/
-          background-image: var(--select-caret-light);
-          background-repeat: no-repeat;
-          background-position: right var(--space-12) center;
-          background-size: 16px;
-          padding-right: var(--极速赛车开奖结果记录*/
-        }
-
-        /* Add a dark mode specific caret */
-        @media (prefers-color-scheme: dark) {
-          select.form-control {
-            background-image: var(--select-caret-dark);
-          }
-        }
-
-        /* Also handle data-color-scheme */
-        [data-color-scheme="dark"] select.form-control {
-          background-image: var(--select-caret-dark);
-        }
-
-        [data极速赛车开奖结果记录*/
-          background-image: var(--select-caret-light);
-        }
-
-        .form-control:focus {
-          border-color: var(--color-primary);
-          outline: var(--focus-outline);
-        }
-
-        .form-label {
-          display: block;
-          margin-bottom: var(--space-8);
-          font-weight: var(--font-weight-medium);
-          font-size: var(--font-size-sm);
-        }
-
-        .form-group {
-          margin-bottom: var(--space-16);
-        }
-
-        /* Card component */
-        .card {
-          background-color: var(--color-surface);
-          border-radius: var(--radius-lg);
-          border: 1px solid var(--color-card-border);
-          box-shadow: var(--shadow-sm);
-          overflow: hidden;
-          transition: box-shadow var(--duration-normal) var(--ease-standard);
-        }
-
-        .card:hover {
-          box-shadow: var(--shadow-md);
-        }
-
-        .card__body {
-          padding: var(--space-16);
-        }
-
-        .card__header,
-        .card__footer {
-          padding: var(--space-16);
-          border-bottom: 1极速赛车开奖结果记录*/
-        }
-
-        /* Status indicators - simplified with CSS variables */
-        .status {
-          display: inline-flex;
-          align-items: center;
-          padding: var(--space-6) var(--space-12);
-          border-radius: var(--radius-full);
-          font-weight: var(--font-weight-medium);
-          font-size: var(--font-size-sm);
-        }
-
-        .status--success {
-          background-color: rgba(
-            var(--color-success-rgb, 33, 128, 141),
-            var(--status-bg-opacity)
-          );
-          color: var(--color-success);
-          border: 1px solid
-            rgba(var(--color-success-rgb, 33, 128, 141), var(--status-border-opacity));
-        }
-
-        .status--error {
-          background-color: rgba(
-            var(--color-error-rgb, 192, 21, 47),
-           极速赛车开奖结果记录*/
-          color: var(--color-error);
-          border: 1px solid
-            rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
-        }
-
-        .status--warning {
-          background-color: rgba(
-            var(--color-warning-rgb, 168, 75, 47),
-            var(--status-bg-opacity)
-          );
-          color: var(--color-warning);
-          border: 1px solid
-            rgba(var(--color-warning-rgb, 168, 75, 47), var(--status-border-opacity));
-        }
-
-        .status--info {
-          background-color: rgba(
-            var(--color-info-r极速赛车开奖结果记录*/
-            var(--status-bg-opacity)
-          );
-          color: var(--color-info);
-          border: 极速赛车开奖结果记录*/
-            rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
-        }
-
-        /* Container layout */
-        .container {
-          width: 100%;
-          margin-right: auto;
-          margin-left: auto;
-          padding-right: var(--space-16);
-          padding-left: var(--space-16);
-        }
-
-        @media (min-width: 640px) {
-          .container {
-            max-width: var(--container-sm);
-          }
-        }
-        @media (min-width: 768px) {
-          .container {
-            max-width: var(--container-md);
-          }
-        }
-        @media (min-width: 1024极速赛车开奖结果记录*/
-          .container {
-            max-width: var(--container-lg);
-          }
-        }
-        @media (min-width: 1280px) {
-          .container {
-            max-width: var(--container-xl);
-          }
-        }
-
-        /* Utility classes */
-        .flex {
-          display: flex;
-        }
-        .flex-col {
-          flex-direction: column;
-        }
-        .items-center {
-          align-items: center;
-        }
-        .justify-center {
-          justify-content: center;
-        }
-        .justify-between {
-          justify-content: space-between;
-        }
-        .gap-4 {
-          gap: var(--space-4);
-        }
-        .gap-8 {
-          gap: var(--space-8);
-        }
-        .gap-16 {
-          gap: var(--space-16);
-        }
-
-        .m-0 {
-          margin: 0;
-        }
-        .mt-8 {
-          margin-top: var(--space-8);
-        }
-        .mb-8 {
-          margin-bottom: var(--space-8);
-        }
-        .mx-8 {
-          margin-left: var(--space-8);
-          margin-right: var(--space-8);
-        }
-        .my-8 {
-          margin-top: var(--space-8);
-          margin-bottom: var(--space-8);
-        }
-
-        .p-0 {
-          padding: 0;
-        }
-        .py-8 {
-          padding-top: var(--space-8);
-          padding-bottom: var(--space-8);
-        }
-        .px-极速赛车开奖结果记录*/
-        .py-16 {
-          padding-top: var(--space-16);
-          padding-bottom: var(--space-16);
-        }
-        .px-16 {
-          padding-left: var(--space-16);
-          padding-right: var(--space-16);
-        }
-
-        .block {
-          display: block;
-        }
-        .hidden {
-          display: none;
-        }
-
-        /* Accessibility */
-        .sr-only {
-          position: absolute;
-          width: 1px;
-          height: 1极速赛车开奖结果记录*/
-          padding: 0;
-          margin: -1px;
-          overflow: hidden;
-          clip: rect(0, 0, 0, 0);
-          white-space: now极速赛车开奖结果记录*/
-          border-width: 0;
-        }
-
-        :focus-visible {
-          outline: var(--focus-outline);
-          outline-offset: 2px;
-        }
-
-        /* Dark mode specifics */
-        [data-color-scheme="dark"] .btn--极速赛车开奖结果记录*/
-          border: 1px solid var(--color-border-secondary);
-        }
-
-        @font-face {
-          font-family: 'FKGroteskNeue';
-          src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
-            format('woff2');
-        }
-
-        /* END PERPLEXITY DESIGN SYSTEM */
-        /* ===== RESET AND BASE STYLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -808,7 +367,7 @@
         }
 
         .brand-text {
-            background: linear-gradient(135deg, var(--极速赛车开奖结果记录*/
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -818,6 +377,7 @@
             display: flex;
             gap: var(--space-32);
             align-items: center;
+            list-style: none;
         }
 
         .nav-link {
@@ -858,864 +418,25 @@
             width: 25px;
             height: 3px;
             background: var(--color-primary);
-            margin: 3极速赛车开奖结果记录*/
+            margin: 3px 0;
             transition: var(--duration-normal);
         }
 
-        /* ===== HERO SECTION ===== */
-        .hero {
-            background: linear-gradient(135deg, var(--color-background) 0%, var(--color-secondary) 100%);
-            padding: 120px 0 var(--space-32);
-            text-align: center;
+        /* Main content area */
+        .main-content {
+            padding-top: calc(70px + var(--space-32));
+            padding-bottom: var(--space-32);
         }
 
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero-title {
-            font-size: var(--font-size-4xl);
-            font-weight: var(--font-weight-bold);
-            margin-bottom: var(--space-24);
-            color: var(--color-text);
-            line-height: var(--line-height-tight);
-        }
-
-        .highlight {
-            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-cl极速赛车开奖结果记录*/
-            display: block;
-            margin-top: var(--space-8);
-        }
-
-        .hero-description {
-            font-size: var(--font-size-lg);
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-32);
-            line-height: var(--极速赛车开奖极速赛车开奖结果记录*/
-        }
-
-        .hero-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: var(--space-24);
-            margin-bottom: var(--space-32);
-        }
-
-        .feature {
-            display:极速赛车开奖结果记录*/
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-8);
-            padding: var(--space-16);
-            background: var(--color-surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            transition: transform var(--duration-normal) var(--ease-standard);
-        }
-
-        .feature:hover {
-            transform: translateY(-2px);
-        }
-
-        .feature i {
-            color: var(--color-primary);
-            font-size: var(--font-size-lg);
-        }
-
-        .feature span {
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text);
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: var(--space-16);
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-8);
-            padding: var(--space-16) var(--space-32);
-            border-radius: var(--radius-base);
-            text-decoration: none;
-            font-weight: var(--font-weight-semibold);
-            font-size: var(--font-size-lg);
-            transition: all var(--duration-normal) var(--ease-standard);
-            border: 2px solid transparent;
-        }
-
-        .cta-button.primary {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-        }
-
-        .cta-button.primary:hover {
-            background: var(--color-primary-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .cta-button.secondary {
-            background: transparent;
-            color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-
-        .极速赛车开奖结果记录*/
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            transform: translateY(-2px);
-        }
-
-        /* ===== CALCULATORS PREVIEW SECTION ===== */
-        .calculators-preview {
-            padding: var(--space-32) 0;
-            background: var(--color-surface);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: var(--space-32);
-        }
-
-        .section-header h2 {
-            font-size: var(--font-size-3xl);
-            font-weight: var(--font-weight-bold);
-            color:极速赛车开奖结果记录*/
-            margin-bottom: var(--space-16);
-        }
-
-        .section-header p {
-            font-size: var(--font-size-lg);
-            color: var(--color-text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: var(--space-32);
-        }
-
-        .calculator-card {
-            background: var(--color-surface);
-            border-radius: var(--radius-lg);
-            padding: var(--space-32);
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--color-card-border);
-            transition: all var(--duration-normal) var(--ease-standard);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .calculator-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .calculator-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-        }
-
-        .card-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: var(--space-24);
-        }
-
-        .card-icon i {
-            font-size: var(--font-size-xl);
-            color: var(--color-btn-primary-text);
-        }
-
-        .calculator-card h3 {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text);
-            margin-bottom: var(--space-16);
-        }
-
-        .calculator-card p {
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-24);
-            line-height: var(--line-height-normal);
-        }
-
-        .card-features {
-            list-style: none;
-            margin-bottom: var(--space-32);
-        }
-
-        .card-features li {
-            display: flex;
-            align-items: center;
-            gap: var(--space-8);
-            margin-bottom: var(--space-8);
-            color: var(--color-text);
-        }
-
-        .card-features i {
-            color: var(--color-success);
-            font-size: var(--font-size-sm);
-        }
-
-        .card-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-8);
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            padding: var(--space-极速赛车开奖结果记录*/
-            border-radius: var(--radius-base);
-            text-decoration: none;
-            font-weight:极速赛车开奖结果记录*/
-            transition: all var(--duration-normal) var(--ease-standard);
-            border: none;
-            cursor: pointer;
-            font-size: var(--font-size-base);
-        }
-
-        .card-button:hover {
-            background: var(--color-primary-hover);
-            transform: translateX(2px);
-        }
-
-        /* ===== ABOUT SECTION ===== */
-        .about {
-            padding: var(--space-32) 0;
-            background: var(--color-background);
-        }
-
-        .about-content {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .about h2 {
+        .page-title {
             font-size: var(--font-size-3xl);
             font-weight: var(--font-weight-bold);
             color: var(--color-text);
-            margin-bottom: var(--space-24);
+            margin-bottom: var(--space-16);
             text-align: center;
         }
 
-        .about p {
-            font-size: var(--font-size-lg);
-            color: var(--color-text-secondary);
-            text-align: center;
-            margin-bottom: var(--space极速赛车开奖结果记录*/
-            line-height: var(--line-height-normal);
-        }
-
-        .about极速赛车开奖结果记录*/
-            display: grid;
-            grid-template-column极速赛车开奖结果记录*/
-            gap: var(--space-32);
-        }
-
-        .about-feature {
-            display: flex;
-            gap: var(--space-16);
-            padding: var(--space-32);
-            background: var(--color-surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-            border-radius: var(--radius-base);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .feature-icon i {
-            color: var(--color-btn-primary-text);
-            font-size: var(--font-size-lg);
-极速赛车开奖结果记录*/
-
-        .feature-content h4 {
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text);
-            margin-bottom: var(--space-8);
-        }
-
-        .feature-content p {
-            color: var(--color-text-secondary);
-            margin: 0;
-            text-align: left;
-            font-size: var(--font-size-base);
-        }
-
-        /* ===== NEWSLETTER SECTION ===== */
-        .newsletter {
-            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-            padding: var(--space-32) 0;
-            text-align: center;
-        }
-
-        .newsletter-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .newsletter-text h3 {
-            font-size: var(--font-size-2xl);
-            font-weight: var(--font-weight-bold);
-            color: var(--color-btn-primary极速赛车开奖结果记录*/
-            margin-bottom: var(--space-8);
-        }
-
-        .newsletter-text p {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: var(--space-32);
-            font-size: var(--font-size-lg);
-        }
-
-        .newsletter-form {
-            display: flex;
-            gap: var(--space-16);
-           极速赛车开奖结果记录*/
-            margin: 0 auto;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            padding: var(--space-16);
-            border: none;
-            border-radius: var(--radius-base);
-            font-size: var(--font-size-base);
-            outline: none;
-            background-color: var(--color-surface);
-            color: var(--color-text);
-        }
-
-        .newsletter-form button {
-            background: var(--color-warning);
-            color: var(--color-text);
-            border: none;
-            padding: var(--space-16) var(--space-24);
-            border-radius: var(--radius-base);
-            font-weight: var(--font-weight-semibold);
-            cursor: pointer;
-            transition: all var(--duration-normal) var(--ease-standard);
-            white-space: nowrap;
-        }
-
-        .newsletter-form button:hover {
-            background: rgba(var(--color-warning-rgb), 0.8);
-            transform: translateY(-1px);
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            background: var(--color-charcoal-700);
-            color: var(--color-gray-200);
-            padding: var(--space-32) 0 var(--space-16);
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-32);
-            margin-bottom: var(--space-32);
-        }
-
-        .footer-section h4 {
-            color: var(--color-white);
-            font-weight: var(--font-weight-semibold);
-            margin-bottom: var(--space-16);
-            font-size: var(--font-size-lg);
-        }
-
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-bold);
-            color: var(--color-teal-300);
-            margin-bottom: var(--space-16);
-        }
-
-        .footer-brand i {
-            margin-right: var(--space-8);
-            font-size: var(--font-size-xl);
-        }
-
-        .footer-section p {
-            color: var(--color-gray-300);
-            line-height: var(--line-height-normal);
-            margin-bottom: var(--space-16);
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: var(--space-8);
-        }
-
-        .footer-section ul li a {
-            color: var(--color-gray-200);
-            text-decoration: none;
-            transition: color var(--duration-normal) var(--ease-standard);
-        }
-
-        .footer-section ul极速赛车开奖结果记录*/
-            color: var(--color-teal-300);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid var(--color-slate极速赛车开奖结果记录*/
-            padding-top: var(--space-32);
-            text-align: center;
-            color: var(--color-gray-300);
-        }
-
-        /* ===== RESPONSIVE DESIGN ===== */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-            
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 70px;
-                flex-direction: column;
-                background-color: var(--color-surface);
-                width: 100%;
-                text-align: center;
-                transition: var(--duration-normal);
-                box-shadow: var(--shadow-sm);
-                padding: var(--space-32) 0;
-            }
-            
-            .nav-menu.active {
-                left: 0;
-            }
-            
-            .hero-title {
-                font-size: var(--font-size-3xl);
-            }
-            
-            .hero-cta {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .newsletter-form {
-                flex-direction: column;
-            }
-            
-            .newsletter-form input,
-            .newsletter-form button {
-                width: 100%;
-            }
-            
-            .about-features {
-                grid-template-columns: 1极速赛车开奖结果记录*/
-            }
-            
-            .about-feature {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .feature-icon {
-                align-self: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 var(--space-16);
-            }
-            
-            .hero {
-                padding: 100px 0 var(--space-32);
-            }
-            
-            .hero-title {
-                font-size: var(--font-size-2xl);
-            }
-            
-            .hero-description {
-                font-size: var(--font-size-base);
-            }
-            
-            .calculator-card {
-                padding: var(--space-24);
-            }
-            
-            .section-header h2 {
-                font-size: var(--font-size-2xl);
-            }
-            
-            .about h2 {
-                font-size: var(--font-size-2xl);
-            }
-            
-            .hero-features {
-                grid-template-columns: 1fr;
-                gap: var(--space-16);
-            }
-            
-            .feature {
-                padding: var(--space-12);
-            }
-            
-            .hero-cta {
-                gap: var(--space-12);
-            }
-            
-            .cta-button {
-                padding: var(--极速赛车开奖结果记录*/
-                font-size: var(--font-size-base);
-            }
-            
-            .calculator-grid {
-                gap: var(--space-24);
-            }
-            
-            .about-features {
-                gap: var(--space-24);
-            }
-            
-            .about-feature {
-                padding: var(--space-24);
-            }
-        }
-
-        /* ===== UTILITY CLASSES ===== */
-        .text-center {
-            text-align: center;
-        }
-
-        .mb-1 { margin-bottom: var(--space-4); }
-        .mb-2 { margin-bottom: var(--space-8); }
-        .mb-3 { margin-bottom: var(--space-16); }
-        .mb-4 { margin-bottom: var(--space-24); }
-        .mb-5 { margin-bottom: var(--space-32); }
-
-        .mt-1 { margin-top: var(--极速赛车开奖结果记录*/
-        .mt-2 { margin-top: var(--space-8); }
-        .mt-3 { margin-top: var(--space-16); }
-        .mt-4 { margin-top: var(--space-24); }
-        .mt-5 { margin-top: var(--space-32); }
-
-        .font-bold { font-weight: var(--font-weight-bold); }
-        .font-semibold { font-weight: var(--font-weight-semibold); }
-        .font-medium { font-weight: var(--font-weight-medium); }
-
-        .text-blue { color: var(--color-primary); }
-        .text-gray { color: var(--color-text-secondary); }
-        .text-dark { color: var(--color-text); }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        /* ===== FOCUS STYLES FOR ACCESSIBILITY ===== */
-        button:focus,
-        input:focus,
-        a极速赛车开奖结果记录*/
-            outline: var(--focus-outline);
-            outline-offset: 2px;
-        }
-
-        button:focus-visible,
-        input:focus-visible,
-        a:focus-visible {
-            outline: none;
-            box-shadow: var(--focus-ring);
-        }
-
-        /* ===== LOADING SPINNER =极速赛车开奖结果记录*/
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20极速赛车开奖结果记录*/
-            border: 2px solid var(--color-border);
-            border-top: 2px solid var(--color-primary);
-            border-radius: var(--radius-full);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* ===== FORM STYLES ===== */
-        .form-group {
-            margin-bottom: var(--space-24);
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: var(--space-8);
-            font-weight: var(--font-weight-medium);
-            color: var(--color-text);
-            font-size: var(--font-size-sm);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: var(--space-12);
-            border: 2px solid var(--color-border);
-            border-radius: var(--radius-base);
-            font-size: var(--font-size-base);
-            transition: border-color var(--duration-normal) var(--ease-standard), 
-                        box-shadow var(--duration-normal) var(--ease-standard);
-            background-color: var(--color-surface);
-            color: var(--color-text);
-        }
-
-        .form-input:focus {
-            border-color: var(--color-primary);
-            box-shadow: var(--focus-ring);
-            outline: none;
-        }
-
-        .form-input.error {
-            border-color: var(--color-error);
-        }
-
-        .form-error {
-            color: var(--color-error);
-            font-size: var(--font-size-sm);
-            margin-top: var(--space-4);
-        }
-
-        /* ===== BUTTON STYLES ===== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-12) var(--space-24);
-            border: none;
-            border-radius: var(--radius-base);
-            font-weight: var(--font-weight-sem极速赛车开奖结果记录*/
-            font-size: var(--font-size-base);
-            text-decoration: none;
-            cursor: pointer;
-            transition: all var(--duration-normal) var(--ease-standard);
-            gap: var(--space-8);
-        }
-
-        .btn-primary {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-        }
-
-        .btn-primary:hover {
-            background: var(--color-primary-hover);
-            transform: translateY(-1px);
-           极速赛车开奖结果记录*/
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--color-primary);
-            border: 2px solid var(--color-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-        }
-
-        .btn-success {
-            background: var(--color-success);
-            color: var(--color-btn-primary-text);
-        }
-
-        .btn-success:hover {
-            background: var(--color-primary-hover);
-        }
-
-        .btn-danger {
-            background: var(--color-error);
-            color: var(--color-btn-primary-text);
-        }
-
-        .btn-danger:hover {
-            background: rgba(var(--color-error-rgb), 0.8);
-        }
-
-        .btn-disabled {
-            background: var(--color-text-secondary);
-            color: var(--color-btn-primary-text);
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        .btn-disabled:hover {
-            background: var(--color-text-secondary);
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* ===== CARD STYLES ===== */
-        .card {
-            background:极速赛车开奖结果记录*/
-            border-radius: var(--radius-lg);
-            padding: var(--space-24);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--color-card-border);
-        }
-
-        .card-header {
-            margin-bottom: var(--space-16);
-            padding-bottom: var(--space-16);
-            border-bottom: 1px solid var(--color-card-border-inner);
-        }
-
-        .card-title {
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text);
-            margin-bottom: var(--space-8);
-极速赛车开奖结果记录*/
-
-        .card-description {
-            color: var(--极速赛车开奖结果记录*/
-            font-size: var(--font-size-sm);
-        }
-
-        .card-body {
-            color: var(--color-text);
-        }
-
-        .card-footer {
-            margin-top: var(--space-16);
-            padding-top: var(--space-极速赛车开奖结果记录*/
-            border-top: 1px solid var(--color-card-border-inner);
-        }
-
-        /* ===== ALERT STYLES ===== */
-        .alert {
-            padding: var(--space-16);
-            border-radius: var(--radius-base);
-            margin-bottom: var(--space-16);
-            border-left: 4px solid;
-        }
-
-        .alert-info {
-            background: rgba(var(--color-info-rgb), var(--status-bg-opacity));
-            border-color: var(--color-info);
-            color: var(--color-info);
-        }
-
-        .alert-success {
-            background: rgba(var(--color-success-rgb), var(--status-bg-opacity));
-            border-color: var(--color-success);
-            color: var(--color-success);
-        }
-
-        .alert-warning {
-            background: rgba(var(--color-warning-rgb), var(--status-bg-opacity));
-            border-color: var(--color-warning);
-            color: var(--color-warning);
-        }
-
-        .alert-error {
-            background: rgba(var(--color-error-rgb), var(--status-bg-opacity));
-            border-color: var(--color-error);
-            color: var(--color-error);
-        }
-
-        /* ===== TOOLTIP STYLES ===== */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--color-charcoal-800);
-            color: var(--color-white);
-            padding: var(--space-8);
-            border-radius: var(--radius-sm);
-            font-size: var(--font-size-sm);
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity var(--duration-normal) var(--ease-standard);
-            z-index: 1000;
-        }
-
-        .tooltip:hover::after {
-            opacity: 1;
-        }
-
-        /* ===== PRINT STYLES ===== */
-        @media print {
-            .header,
-            .newsletter,
-            .footer {
-                display: none;
-            }
-            
-            body {
-                font-size: 12pt;
-                color: var(--color-black);
-                background: var(--color-white);
-            }
-            
-            .container {
-                max-width: none;
-                padding: 0;
-            }
-        }
-
-        /* Additional styles specific to the mortgage calculator */
+        /* Calculator layout */
         .calculator-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1768,7 +489,7 @@
         .form-input {
             width: 100%;
             padding: var(--space-12);
-            border: 2px solid var(--极速赛车开奖结果记录*/
+            border: 2px solid var(--color-border);
             border-radius: var(--radius-base);
             font-size: var(--font-size-base);
             transition: border-color var(--duration-normal) var(--ease-standard), 
@@ -1819,8 +540,24 @@
             transition: background var(--duration-normal) var(--ease-standard);
         }
         
-        .sl极速赛车开奖结果记录*/
+        .slider::-webkit-slider-thumb:hover {
             background: var(--color-primary-hover);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+            border: none;
+        }
+        
+        .slider::-moz-range-track {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: var(--color-border);
         }
         
         .toggle-advanced {
@@ -1849,6 +586,49 @@
             display: block;
         }
         
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-12) var(--space-24);
+            border: none;
+            border-radius: var(--radius-base);
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-base);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-standard);
+            gap: var(--space-8);
+        }
+        
+        .btn--primary {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+        
+        .btn--primary:hover {
+            background: var(--color-primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn--secondary {
+            background: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+        
+        .btn--secondary:hover {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+        
+        .btn--full-width {
+            width: 100%;
+        }
+        
+        /* Results section */
         .result-section {
             background: var(--color-bg-1);
             padding: var(--space-24);
@@ -1901,13 +681,13 @@
         .ai-insights {
             background: rgba(var(--color-success-rgb), var(--status-bg-opacity));
             border-left: 4px solid var(--color-success);
-            padding: var(--space-16);
+            padding:极速赛车开奖结果记录*/
             border-radius: var(--radius-base);
             margin-top: var(--space-16);
         }
         
         .ai-insights h4 {
-            color:极速赛车开奖结果记录*/
+            color: var(--color-success);
             margin-bottom: var(--space-8);
             display: flex;
             align-items: center;
@@ -1939,9 +719,9 @@
             padding: var(--space-8) var(--space-16);
             border-radius: var(--radius-base);
             cursor: pointer;
-            font-size: var(--font极速赛车开奖结果记录*/
+            font-size: var(--font-size-sm);
             color: var(--color-text-secondary);
-            transition: all var(--duration-normal) var(--极速赛车开奖结果记录*/
+            transition: all var(--duration-normal) var(--ease-standard);
         }
         
         .amortization-toggle button.active {
@@ -1957,7 +737,7 @@
         }
         
         .amortization-table th {
-            background: var(--极速赛车开奖结果记录*/
+            background: var(--color-secondary);
             padding: var(--space-12);
             text-align: left;
             font-weight: var(--font-weight-semibold);
@@ -2016,55 +796,130 @@
             .amortization-toggle {
                 flex-wrap: wrap;
             }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: var(--color-surface);
+                width: 100%;
+                text-align: center;
+                transition: var(--duration-normal);
+                box-shadow: var(--shadow-sm);
+                padding: var(--space-32) 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
         }
 
-        /* New additions for design system integration */
-        .page-title {
-            font-size: var(--font-size-3xl);
-            font-weight: var(--font-weight-bold);
-            color: var(--color-text);
-            margin-bottom: var(--space-16);
-            text-align: center;
-        }
-        
-        .main-content {
-            padding-top: calc(70px + var(--space-32));
-            padding-bottom: var(--space-32);
-        }
-        
-        .form-input:read-only {
-            background-color: rgba(var(--color-slate-500-rgb), 0.1);
-            cursor: not-allowed;
-        }
-        
-        .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--color-primary);
-            cursor: pointer;
-            border: none;
-        }
-        
-        .slider::-moz-range-track {
-            width: 100%;
-            height: 8px;
-            border-radius: 5px;
-            background: var(--color-border);
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 var(--space-16);
+            }
+            
+            .calculator-form, .calculator-results {
+                padding: var(--space-24);
+            }
+            
+            .form-section-title {
+                font-size: var(--font-size-base);
+            }
+            
+            .payment-value {
+                font-size: var(--font-size-base);
+            }
+            
+            .highlight-payment .payment-value {
+                font-size: var(--font-size-xl);
+            }
         }
 
-        /* Fix for navigation menu */
-        .nav-menu {
-            display: flex;
+        /* Footer */
+        .footer {
+            background: var(--color-charcoal-700);
+            color: var(--color-gray-200);
+            padding: var(--space-32) 0 var(--space-16);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: var(--space-32);
+            margin-bottom: var(--space-32);
+        }
+        
+        .footer-section h4 {
+            color: var(--color-white);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-16);
+            font-size: var(--font-size-lg);
+        }
+        
+        .footer-brand {
+            display: flex;
             align-items: center;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-teal-300);
+            margin-bottom: var(--space-16);
+        }
+        
+        .footer-brand i {
+            margin-right: var(--space-8);
+            font-size: var(--font-size-xl);
+        }
+        
+        .footer-section p {
+            color: var(--color-gray-300);
+            line-height: var(--line-height-normal);
+            margin-bottom: var(--space极速赛车开奖结果记录*/
+        }
+        
+        .footer-section ul {
             list-style: none;
         }
+        
+        .footer-section ul li {
+            margin-bottom: var(--space-8);
+        }
+        
+        .footer-section ul li a {
+            color: var(--color-gray-200);
+            text-decoration: none;
+            transition: color var(--duration-normal) var(--ease-standard);
+        }
+        
+        .footer-section ul li a:hover {
+            color: var(--color-teal-300);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid var(--color-slate-500);
+            padding-top: var(--space-32);
+            text-align: center;
+            color: var(--color-gray-300);
+        }
 
-        /* Fix for chart containers */
-        canvas {
-            display: block;
-            max-width: 100%;
+        /* Text center utility */
+        .text-center {
+            text-align: center;
+        }
+
+        /* Text color utilities */
+        .text-gray {
+            color: var(--color-text-secondary);
+        }
+
+        /* Margin utilities */
+        .mb-5 {
+            margin-bottom: var(--space-32);
         }
     </style>
 </head>
@@ -2081,15 +936,17 @@
                     <span></span>
                     <span></span>
                 </div>
-                <nav class="nav-menu" id="navMenu">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="calculators.html" class="nav-link">Calculators</a>
-                    <a href="resources.html" class="nav-link">Resources</a>
-                    <a href="partners.html" class="nav-link">Partners</a>
-                    <a href="contact.html" class="nav-link">Contact</a>
+                <nav>
+                    <ul class="nav-menu" id="navMenu">
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="calculators.html" class="nav-link">Calculators</a></li>
+                        <li><a href="resources.html" class="nav-link">Resources</a></li>
+                        <li><a href="partners.html" class="nav-link">Partners</a></li>
+                        <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
                 </nav>
             </div>
-        </div>
+        </极速赛车开奖结果记录*/
     </header>
 
     <main class="main-content">
@@ -2104,7 +961,7 @@
                         <div class="form-group">
                             <label for="homePrice" class="form-label">Home Price ($)</label>
                             <input type="number" id="homePrice" class="form-input" value="375000" min="0" step="1000">
-                            <div class极速赛车开奖结果记录*/
+                            <div class="slider-container">
                                 <input type="range" min="50000" max="2000000" value="375000" step="1000" class="slider" id="homePriceSlider">
                             </div>
                         </div>
@@ -2113,20 +970,20 @@
                             <label for="downPayment" class="form-label">Down Payment (%)</label>
                             <input type="number" id="downPayment" class="form-input" value="20" min="0" max="100" step="0.5">
                             <div class="slider-container">
-                                <input type="range" min="0"极速赛车开奖结果记录*/
+                                <input type="range" min="0" max="100" value="20" step="0.5" class="slider" id="downPaymentSlider">
                             </div>
                             <div id="downPaymentAmount" class="form-label" style="font-size: var(--font-size-sm);">Down Payment Amount: $75,000</div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="loanAmount" class="form-label">Loan Amount ($)</label>
+                            <label for="loanAmount" class="form-label">Loan Amount ($)</极速赛车开奖结果记录*/
                             <input type="number" id="loanAmount" class="form-input" value="300000" min="0" readonly>
                         </div>
                     </div>
                     
                     <div class="form-section">
                         <h3 class="form-section-title"><i class="fas fa-percentage"></i> Loan Details</h3>
-                        <div class="form-group">
+                        <极速赛车开奖结果记录*/
                             <label for="interestRate" class="form-label">Interest Rate (%)</label>
                             <input type="number" id="interestRate" class="form-input" value="4.5" min="0" max="20" step="0.01">
                             <div class="slider-container">
@@ -2146,18 +1003,18 @@
                     </div>
                     
                     <div class="form-section">
-                        <h3 class="form-section-title"><i class="fas fa-receipt"></i> Additional Costs</极速赛车开奖结果记录*/
+                        <h3 class="form-section-title"><i class="fas fa-receipt"></i> Additional Costs</h3>
                         <div class="form-group">
                             <label for="propertyTax" class="form-label">Annual Property Tax ($)</label>
                             <div class="input-with-suffix">
-                                <input type="number" id="propertyTax" class="form-input" value="3600" min极速赛车开奖结果记录*/
+                                <input type="number" id="propertyTax" class="form-input" value="3600" min="0">
                                 <span class="input-suffix">/year</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label for="insurance" class="form-label">Annual Home Insurance ($)</label>
-                            <div class="input-with-suffix">
+                            <div class="极速赛车开奖结果记录*/
                                 <input type="number" id="insurance" class="form-input" value="1200" min="0">
                                 <span class="input-suffix">/year</span>
                             </div>
@@ -2166,7 +1023,7 @@
                         <div class="form-group">
                             <label for="hoa" class="form-label">Monthly HOA Fees ($)</label>
                             <div class="input-with-suffix">
-                                <input type="number" id="hoa" class="form-input" value="0" min="0">
+                                <input type="number" id="hoa" class="form-input" value="0" min极速赛车开奖结果记录*/
                                 <span class="input-suffix">/month</span>
                             </div>
                         </div>
@@ -2174,9 +1031,9 @@
                         <div class="form-group">
                             <label for="pmi" class="form-label">PMI Rate (%)</label>
                             <div class="input-with-suffix">
-                                <input type="number" id="pmi" class="form-input" value="0.5" min="0" max="5" step="0.01" readonly>
+                                <input type="number" id="p极速赛车开奖结果记录*/
                                 <span class="input-suffix">/year</span>
-                            </极速赛车开奖结果记录*/
+                            </div>
                             <div id="pmiNote" class="form-label" style="font-size: var(--font-size-sm); color: var(--color-warning);">
                                 PMI applies when down payment is less than 20%
                             </div>
@@ -2188,7 +1045,7 @@
                     </button>
                     
                     <div class="advanced-options" id="advancedOptions">
-                        <极速赛车开奖结果记录*/
+                        <div class="form-group">
                             <label for="extraPayment" class="form-label">Extra Monthly Payment ($)</label>
                             <input type="number" id="extraPayment" class="form-input" value="0" min="0">
                         </div>
@@ -2204,15 +1061,15 @@
                         </div>
                     </div>
                     
-                    <button class="btn btn-primary btn-full-width" id="calculateBtn">
+                    <button class="btn btn--primary btn--full-width" id="calculateBtn">
                         <i class="fas fa-calculator"></i> Calculate Mortgage
                     </button>
                     
                     <div class="scenario-buttons">
-                        <button class="btn btn-secondary btn-full-width" id="saveScenario">
-                            <i class="fas极速赛车开奖结果记录*/
+                        <button class="btn btn--secondary btn--full-width" id="saveScenario">
+                            <i class="fas fa-save"></i> Save Scenario
                         </button>
-                        <button class="btn btn-outline btn-full-width" id="compareScenarios">
+                        <button class="btn btn--outline btn--full-width" id="compareScenarios">
                             <i class="fas fa-compare"></i> Compare Scenarios
                         </button>
                     </div>
@@ -2256,7 +1113,7 @@
                     
                     <div class="result-section">
                         <h3><i class="fas fa-calendar-alt"></i> Loan Summary</h3>
-                        <div class="payment极速赛车开奖结果记录*/
+                        <div class="payment-item">
                             <span class="payment-label">Total Loan Amount</span>
                             <span class="payment-value" id="totalLoanAmount">$300,000</span>
                         </div>
@@ -2267,9 +1124,9 @@
                         <div class="payment-item">
                             <span class="payment-label">Total Cost of Loan</span>
                             <span class="payment-value" id="totalCost">$547,220</span>
-                        </div>
+                        </极速赛车开奖结果记录*/
                         <div class="payment-item">
-                            <span class="payment-label">Payoff Date</span>
+                            <span class="payment-label">Payoff Date</极速赛车开奖结果记录*/
                             <span class="payment-value" id="payoffDate">May 2053</span>
                         </div>
                         <div class="payment-item" id="extraPaymentsSummary" style="display: none;">
@@ -2285,7 +1142,7 @@
                             <ul id="aiInsightsList">
                                 <li>Consider making an extra $100 payment monthly to shorten your loan term by 4 years</li>
                                 <li>Your debt-to-income ratio is healthy at 28%</li>
-                                <li>Refinancing could save you money if rates drop below 3.8%</li>
+                                <li>Refinancing could save you money if rates drop below 3.8%</极速赛车开奖结果记录*/
                             </ul>
                         </div>
                     </div>
@@ -2294,7 +1151,7 @@
                         <h3><i class="fas fa-calendar-alt"></i> Amortization Schedule</h3>
                         <div class="amortization-toggle">
                             <button class="active" data-view="yearly">Yearly View</button>
-                            <button data-view="month极速赛车开奖结果记录*/
+                            <button data-view="monthly">Monthly View</button>
                         </div>
                         <div class="amortization-container">
                             <div style="overflow-x: auto;">
@@ -2305,7 +1162,7 @@
                                             <th>Principal</th>
                                             <th>Interest</th>
                                             <th>Total Interest</th>
-                                            <th>Balance</极速赛车开奖结果记录*/
+                                            <th>Balance</th>
                                         </tr>
                                     </thead>
                                     <tbody id="amortizationBody">
@@ -2321,13 +1178,13 @@
                     </div>
                     
                     <div class="download-options">
-                        <button class="btn btn-primary" id="downloadPDF">
+                        <button class="btn btn--primary" id="downloadPDF">
                             <i class="fas fa-file-pdf"></i> Download PDF Report
                         </button>
-                        <button class="btn btn-secondary" id="downloadCSV">
+                        <button class="btn btn--secondary" id="downloadCSV">
                             <i class="fas fa-file-csv"></i> Download CSV
                         </button>
-                        <button class="btn btn-outline" id="printSchedule">
+                        <button class="btn btn--outline" id="printSchedule">
                             <i class="fas fa-print"></i> Print Schedule
                         </button>
                     </div>
@@ -2411,7 +1268,7 @@
                 updateLoanAmount();
             });
             
-            document.getElementById('homePriceSlider').addEventListener('input', function() {
+            document.getElementById('homePriceSlider').addEventListener('input', function极速赛车开奖结果记录*/
                 document.getElementById('homePrice').value = this.value;
                 updateLoanAmount();
             });
@@ -2433,7 +1290,7 @@
             });
             
             document.getElementById('interestRateSlider').addEventListener('input', function() {
-                document.getElementById('interest极速赛车开奖结果记录*/
+                document.getElementById('interestRate').value = this.value;
             });
             
             // Loan term change
@@ -2476,7 +1333,7 @@
                 alert('CSV download functionality would be implemented here');
             });
             
-            document.getElementById('printSchedule').addEventListener('click', function() {
+            document.getElementById极速赛车开奖结果记录*/
                 window.print();
             });
             
@@ -2520,13 +1377,13 @@
         // Main mortgage calculation function
         function calculateMortgage() {
             // Get input values
-            const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
+            const homePrice = parseFloat(document.getElementById('home极速赛车开奖结果记录*/
             const downPaymentPercent = parseFloat(document.getElementById('downPayment').value) || 0;
             const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
             const loanTerm = parseInt(document.getElementById('loanTerm').value) || 30;
             const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
             const insurance = parseFloat(document.getElementById('insurance').value) || 0;
-            const hoa = parseFloat(document.getElementById('hoa').极速赛车开奖结果记录*/
+            const hoa = parseFloat(document.getElementById('hoa').value) || 0;
             const pmiRate = parseFloat(document.getElementById('pmi').value) || 0;
             const extraPayment = parseFloat(document.getElementById('extraPayment').value) || 0;
             
@@ -2556,14 +1413,14 @@
             }
             
             // Calculate total monthly payment
-            const totalMonthlyPayment = monthlyPayment + monthlyPropertyTax + monthlyInsurance + monthlyPmi + hoa;
+            const totalMonthly极速赛车开奖结果记录*/
             
             // Update UI with results
             document.getElementById('principalInterest').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('propertyTaxResult').textContent = `$${monthlyPropertyTax.toFixed(2)}`;
             document.getElementById('insuranceResult').textContent = `$${monthlyInsurance.toFixed(2)}`;
             document.getElementById('pmiResult').textContent = `$${monthlyPmi.toFixed(2)}`;
-            document.getElementById('hoaResult').text极速赛车开奖结果记录*/
+            document.getElementById('hoaResult').textContent = `$${hoa.toFixed(2)}`;
             document.getElementById('totalPayment').textContent = `$${totalMonthlyPayment.toFixed(2)}`;
             
             // Calculate total loan cost
@@ -2613,7 +1470,8 @@
             const monthlyRate = interestRate / 100 / 12;
             const numberOfPayments = loanTerm * 12;
             const monthlyPayment = loanAmount * 
-                (monthly极速赛车开奖结果记录*/
+                (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
             
             let balance = loanAmount;
             let totalInterest = 0;
@@ -2640,7 +1498,7 @@
                     <td>${year}</td>
                     <td>$${yearPrincipal.toFixed(2)}</td>
                     <td>$${yearInterest.toFixed(2)}</td>
-                    <td>$${totalInterest.toFixed(2)}</td>
+                    <td>$${totalInterest极速赛车开奖结果记录*/
                     <td>$${balance.toFixed(2)}</td>
                 `;
                 
