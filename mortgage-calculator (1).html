@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator - AI Enhanced USA Financial Tools | FinGuid</title>
+    <meta name="description" content="Free mortgage calculator with PMI, property taxes, and insurance. Calculate your monthly payment with state-specific tax rates for all 50 US states.">
+    <meta name="keywords" content="mortgage calculator, home loan calculator, PMI calculator, property tax calculator, monthly payment calculator">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Free Mortgage Calculator with PMI & State Taxes">
+    <meta property="og:description" content="Calculate your exact monthly mortgage payment including PMI, property taxes, and insurance for all 50 US states.">
+    <meta property="og:image" content="https://finguid.com/images/mortgage-calculator-preview.png">
+    <meta property="og:url" content="https://finguid.com/mortgage-calculator.html">
+    <meta property="og:type" content="website">
+    
+    <!-- Schema Markup for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Mortgage Calculator",
+        "description": "Free mortgage calculator with PMI, property taxes, and insurance calculations",
+        "url": "https://finguid.com/mortgage-calculator.html",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "FinGuid"
+        }
+    }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Link to main stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <div class="header">
+        <div class="nav">
+            <div class="logo">
+                <i class="fas fa-calculator"></i> FinGuid
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="#calculators">Calculators</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="mortgage-container">
+        <!-- Calculator Header -->
+        <div class="calculator-header">
+            <h1><i class="fas fa-home"></i> Mortgage Calculator</h1>
+            <p>Calculate your monthly payment with PMI, taxes, insurance, and HOA fees</p>
+        </div>
+        
+        <!-- Calculator Form -->
+        <form id="mortgageForm" class="calculator-grid">
+            <!-- Input Section -->
+            <div class="calculator-card">
+                <h2>Loan Details</h2>
+                
+                <div class="form-group">
+                    <label for="homePrice">Home Price</label>
+                    <div class="input-with-prefix">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="homePrice" name="homePrice" placeholder="400,000" min="50000" max="10000000" step="1000" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="downPayment">Down Payment</label>
+                    <div class="input-with-toggle">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="downPayment" name="downPayment" placeholder="80,000" min="0" step="1000" required>
+                        <button type="button" id="toggleDownPayment" class="toggle-btn">%</button>
+                    </div>
+                    <small class="input-note">Switch between dollar amount and percentage</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loanTerm">Loan Term</label>
+                    <select id="loanTerm" name="loanTerm" required>
+                        <option value="15">15 years</option>
+                        <option value="20">20 years</option>
+                        <option value="25">25 years</option>
+                        <option value="30" selected>30 years</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="interestRate">Interest Rate (%)</label>
+                    <input type="number" id="interestRate" name="interestRate" placeholder="6.75" min="0.1" max="15" step="0.01" required>
+                </div>
+                
+                <h3>Location & Taxes</h3>
+                
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <select id="state" name="state">
+                        <option value="">Select State</option>
+                        <!-- States will be populated by JavaScript -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyTax">Annual Property Tax</label>
+                    <div class="input-with-prefix">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="propertyTax" name="propertyTax" placeholder="4,800" min="0" step="100">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="homeInsurance">Annual Home Insurance</label>
+                    <div class="input-with-prefix">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="homeInsurance" name="homeInsurance" placeholder="1,200" min="0" step="50">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hoaFees">Monthly HOA Fees (Optional)</label>
+                    <div class="input-with-prefix">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="hoaFees" name="hoaFees" placeholder="150" min="0" step="25">
+                    </div>
+                </div>
+                
+                <!-- PMI Section -->
+                <div class="checkbox-group">
+                    <input type="checkbox" id="pmiRequired" name="pmiRequired">
+                    <label for="pmiRequired">PMI Required (automatically detected for down payment < 20%)</label>
+                </div>
+                
+                <div id="pmiSection" class="form-group hidden">
+                    <label for="pmiRate">PMI Rate (%)</label>
+                    <input type="number" id="pmiRate" name="pmiRate" placeholder="0.50" min="0.1" max="2" step="0.01">
+                    <small class="input-note">Typically 0.3% to 1.5% of loan amount annually</small>
+                </div>
+                
+                <button type="submit" class="calculate-btn">
+                    <i class="fas fa-calculator"></i> Calculate Payment
+                </button>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="calculator-card">
+                <div id="mortgageResult">
+                    <div class="result-placeholder">
+                        <i class="fas fa-home"></i>
+                        <h3>Your Payment Breakdown</h3>
+                        <p>Enter your loan details to see your monthly payment breakdown and amortization schedule.</p>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        <!-- Amortization Section -->
+        <div id="amortizationSection" class="amortization-section hidden">
+            <h2>Amortization Schedule</h2>
+            <div class="table-container">
+                <table id="amortizationTable">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Beginning Balance</th>
+                            <th>Monthly Payment</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Ending Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table content will be generated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Related Calculators -->
+        <div class="related-content">
+            <h2>Related Financial Calculators</h2>
+            <div class="related-calculators">
+                <a href="refinance-calculator.html" class="related-calculator">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>Refinance Calculator</h3>
+                    <p>Calculate refinancing savings</p>
+                </a>
+                <a href="affordability-calculator.html" class="related-calculator">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3>Home Affordability</h3>
+                    <p>How much house can you afford?</p>
+                </a>
+                <a href="rent-vs-buy-calculator.html" class="related-calculator">
+                    <i class="fas fa-balance-scale"></i>
+                    <h3>Rent vs Buy</h3>
+                    <p>Compare renting versus buying</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="mortgage-calculator.js"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+        
+        // Track calculator usage
+        function trackCalculatorUse() {
+            gtag('event', 'calculator_use', {
+                'event_category': 'Calculator',
+                'event_label': 'Mortgage Calculator',
+                'value': 1
+            });
+        }
+    </script>
+</body>
+</html>

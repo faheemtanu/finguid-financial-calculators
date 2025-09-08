@@ -1,0 +1,28 @@
+# ads.txt file for FinGuid.com
+# This file authorizes digital advertising sellers for Google AdSense
+# Required for AdSense approval and ad fraud prevention
+
+# Google AdSense - Replace with your actual Publisher ID after approval
+google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+
+# Format: domain, publisher_id, relationship, certification_authority_id
+# DIRECT = Direct relationship with advertiser
+# RESELLER = Indirect relationship through another party
+
+# Instructions for setup:
+# 1. Apply for Google AdSense at https://www.google.com/adsense/
+# 2. Once approved, replace "pub-XXXXXXXXXXXXXXXX" with your actual Publisher ID
+# 3. Upload this file to your website root directory
+# 4. Verify the file is accessible at: https://your-domain.com/ads.txt
+# 5. This helps prevent ad fraud and increases ad revenue
+
+# Additional ad networks can be added here as you expand:
+# Examples for future use:
+# adsystem.com, 123456789, DIRECT
+# revcontent.com, 123456, DIRECT  
+# outbrain.com, 123456789, DIRECT
+# media.net, 123456789, RESELLER
+# indexexchange.com, 123456, RESELLER, 50b1c356f2c5c8fc
+
+# Note: Keep this file updated whenever you add new advertising partners
+# This file is crucial for programmatic advertising and revenue optimization
