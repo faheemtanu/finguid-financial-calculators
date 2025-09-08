@@ -42,8 +42,426 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Link to main stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.5rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* Main Container */
+        .mortgage-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        /* Calculator Header */
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .calculator-header h1 {
+            font-size: 2.5rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .calculator-header p {
+            font-size: 1.125rem;
+            color: #64748b;
+        }
+        
+        /* Calculator Grid */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Card Styles */
+        .calculator-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .calculator-card h2 {
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .calculator-card h3 {
+            font-size: 1.25rem;
+            color: #1e293b;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .input-with-prefix {
+            position: relative;
+        }
+        
+        .input-prefix {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+        
+        .input-with-prefix input {
+            padding-left: 2.5rem;
+        }
+        
+        .input-with-toggle {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-with-toggle .input-prefix {
+            position: static;
+            transform: none;
+            padding: 0.75rem 0.5rem 0.75rem 1rem;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-right: none;
+            border-radius: 6px 0 0 6px;
+        }
+        
+        .input-with-toggle input {
+            border-radius: 0 6px 6px 0;
+            flex: 1;
+        }
+        
+        .toggle-btn {
+            margin-left: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: #e5e7eb;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .toggle-btn:hover {
+            background: #d1d5db;
+        }
+        
+        .input-note {
+            display: block;
+            margin-top: 0.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        /* Checkbox Styles */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-group input {
+            margin-right: 0.5rem;
+        }
+        
+        /* Button Styles */
+        .calculate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* Results Section */
+        .result-placeholder {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+        }
+        
+        .result-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #d1d5db;
+        }
+        
+        .result-placeholder h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .payment-summary {
+            margin-bottom: 1.5rem;
+        }
+        
+        .payment-total {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f0f9ff;
+            border-radius: 8px;
+        }
+        
+        .payment-total .label {
+            font-size: 1rem;
+            color: #64748b;
+        }
+        
+        .payment-total .amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin: 0.5rem 0;
+        }
+        
+        .payment-total .note {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .payment-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .payment-item {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+        
+        .payment-item .label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .payment-item .value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        /* Amortization Section */
+        .amortization-section {
+            margin-top: 2rem;
+        }
+        
+        .amortization-section h2 {
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .amortization-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .amortization-table th,
+        .amortization-table td {
+            padding: 0.75rem 1rem;
+            text-align: right;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .amortization-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .amortization-table th:first-child,
+        .amortization-table td:first-child {
+            text-align: left;
+        }
+        
+        .amortization-table tr:hover {
+            background: #f8fafc;
+        }
+        
+        /* Related Calculators */
+        .related-content {
+            margin-top: 3rem;
+        }
+        
+        .related-content h2 {
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .related-calculators {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .related-calculators {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .related-calculator {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .related-calculator:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .related-calculator i {
+            font-size: 2rem;
+            color: #2563eb;
+            margin-bottom: 1rem;
+        }
+        
+        .related-calculator h3 {
+            font-size: 1.125rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .related-calculator p {
+            color: #64748b;
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation Header -->
@@ -79,7 +497,7 @@
                     <label for="homePrice">Home Price</label>
                     <div class="input-with-prefix">
                         <span class="input-prefix">$</span>
-                        <input type="number" id="homePrice" name="homePrice" placeholder="400,000" min="50000" max="10000000" step="1000" required>
+                        <input type="number" id="homePrice" name="homePrice" placeholder="400000" min="50000" max="10000000" step="1000" required>
                     </div>
                 </div>
                 
@@ -87,7 +505,7 @@
                     <label for="downPayment">Down Payment</label>
                     <div class="input-with-toggle">
                         <span class="input-prefix">$</span>
-                        <input type="number" id="downPayment" name="downPayment" placeholder="80,000" min="0" step="1000" required>
+                        <input type="number" id="downPayment" name="downPayment" placeholder="80000" min="0" step="1000" required>
                         <button type="button" id="toggleDownPayment" class="toggle-btn">%</button>
                     </div>
                     <small class="input-note">Switch between dollar amount and percentage</small>
@@ -114,7 +532,56 @@
                     <label for="state">State</label>
                     <select id="state" name="state">
                         <option value="">Select State</option>
-                        <!-- States will be populated by JavaScript -->
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                        <option value="CO">Colorado</option>
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="ID">Idaho</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IN">Indiana</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NV">Nevada</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="OH">Ohio</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="OR">Oregon</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="TX">Texas</option>
+                        <option value="UT">Utah</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WA">Washington</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="WY">Wyoming</option>
                     </select>
                 </div>
                 
@@ -122,7 +589,7 @@
                     <label for="propertyTax">Annual Property Tax</label>
                     <div class="input-with-prefix">
                         <span class="input-prefix">$</span>
-                        <input type="number" id="propertyTax" name="propertyTax" placeholder="4,800" min="0" step="100">
+                        <input type="number" id="propertyTax" name="propertyTax" placeholder="4800" min="0" step="100">
                     </div>
                 </div>
                 
@@ -130,7 +597,7 @@
                     <label for="homeInsurance">Annual Home Insurance</label>
                     <div class="input-with-prefix">
                         <span class="input-prefix">$</span>
-                        <input type="number" id="homeInsurance" name="homeInsurance" placeholder="1,200" min="0" step="50">
+                        <input type="number" id="homeInsurance" name="homeInsurance" placeholder="1200" min="0" step="50">
                     </div>
                 </div>
                 
@@ -175,7 +642,7 @@
         <div id="amortizationSection" class="amortization-section hidden">
             <h2>Amortization Schedule</h2>
             <div class="table-container">
-                <table id="amortizationTable">
+                <table class="amortization-table">
                     <thead>
                         <tr>
                             <th>Year</th>
@@ -217,7 +684,232 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="mortgage-calculator.js"></script>
+    <script>
+        // Document ready function
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle down payment between amount and percentage
+            const toggleDownPaymentBtn = document.getElementById('toggleDownPayment');
+            const downPaymentInput = document.getElementById('downPayment');
+            const homePriceInput = document.getElementById('homePrice');
+            let isPercentageMode = false;
+            
+            toggleDownPaymentBtn.addEventListener('click', function() {
+                isPercentageMode = !isPercentageMode;
+                toggleDownPaymentBtn.textContent = isPercentageMode ? '$' : '%';
+                
+                if (isPercentageMode) {
+                    // Convert to percentage
+                    const homePrice = parseFloat(homePriceInput.value) || 400000;
+                    const downPayment = parseFloat(downPaymentInput.value) || 80000;
+                    const percentage = (downPayment / homePrice) * 100;
+                    downPaymentInput.value = percentage.toFixed(1);
+                } else {
+                    // Convert to dollar amount
+                    const homePrice = parseFloat(homePriceInput.value) || 400000;
+                    const percentage = parseFloat(downPaymentInput.value) || 20;
+                    const amount = (homePrice * percentage) / 100;
+                    downPaymentInput.value = Math.round(amount);
+                }
+            });
+            
+            // Toggle PMI section based on checkbox
+            const pmiRequiredCheckbox = document.getElementById('pmiRequired');
+            const pmiSection = document.getElementById('pmiSection');
+            
+            pmiRequiredCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    pmiSection.classList.remove('hidden');
+                } else {
+                    pmiSection.classList.add('hidden');
+                }
+            });
+            
+            // Auto-detect PMI requirement based on down payment
+            homePriceInput.addEventListener('input', autoDetectPMI);
+            downPaymentInput.addEventListener('input', autoDetectPMI);
+            
+            function autoDetectPMI() {
+                const homePrice = parseFloat(homePriceInput.value) || 0;
+                let downPayment = parseFloat(downPaymentInput.value) || 0;
+                
+                if (isPercentageMode) {
+                    downPayment = (homePrice * downPayment) / 100;
+                }
+                
+                const downPaymentPercent = (downPayment / homePrice) * 100;
+                
+                if (homePrice > 0 && downPaymentPercent < 20) {
+                    pmiRequiredCheckbox.checked = true;
+                    pmiSection.classList.remove('hidden');
+                } else {
+                    pmiRequiredCheckbox.checked = false;
+                    pmiSection.classList.add('hidden');
+                }
+            }
+            
+            // Form submission
+            const mortgageForm = document.getElementById('mortgageForm');
+            const mortgageResult = document.getElementById('mortgageResult');
+            const amortizationSection = document.getElementById('amortizationSection');
+            const amortizationTableBody = document.querySelector('.amortization-table tbody');
+            
+            mortgageForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const homePrice = parseFloat(homePriceInput.value) || 400000;
+                let downPayment = parseFloat(downPaymentInput.value) || 80000;
+                const loanTerm = parseInt(document.getElementById('loanTerm').value) || 30;
+                const interestRate = parseFloat(document.getElementById('interestRate').value) || 6.75;
+                const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 4800;
+                const homeInsurance = parseFloat(document.getElementById('homeInsurance').value) || 1200;
+                const hoaFees = parseFloat(document.getElementById('hoaFees').value) || 0;
+                const pmiRate = parseFloat(document.getElementById('pmiRate').value) || 0.5;
+                const pmiRequired = pmiRequiredCheckbox.checked;
+                
+                // Convert down payment if in percentage mode
+                if (isPercentageMode) {
+                    downPayment = (homePrice * downPayment) / 100;
+                }
+                
+                // Calculate loan amount
+                const loanAmount = homePrice - downPayment;
+                
+                // Calculate monthly interest rate
+                const monthlyInterestRate = interestRate / 100 / 12;
+                
+                // Calculate number of payments
+                const numberOfPayments = loanTerm * 12;
+                
+                // Calculate monthly mortgage payment (principal + interest)
+                const monthlyMortgagePayment = loanAmount * 
+                    (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) / 
+                    (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+                
+                // Calculate PMI if needed
+                let monthlyPMI = 0;
+                if (pmiRequired && loanAmount > 0) {
+                    const pmiAnnual = loanAmount * (pmiRate / 100);
+                    monthlyPMI = pmiAnnual / 12;
+                }
+                
+                // Calculate monthly property tax and insurance
+                const monthlyPropertyTax = propertyTax / 12;
+                const monthlyHomeInsurance = homeInsurance / 12;
+                
+                // Calculate total monthly payment
+                const totalMonthlyPayment = monthlyMortgagePayment + monthlyPMI + 
+                                          monthlyPropertyTax + monthlyHomeInsurance + hoaFees;
+                
+                // Display results
+                mortgageResult.innerHTML = `
+                    <div class="payment-summary">
+                        <div class="payment-total">
+                            <div class="label">Total Monthly Payment</div>
+                            <div class="amount">$${totalMonthlyPayment.toFixed(2)}</div>
+                            <div class="note">Your estimated monthly mortgage payment</div>
+                        </div>
+                        
+                        <div class="payment-details">
+                            <div class="payment-item">
+                                <div class="label">Principal & Interest</div>
+                                <div class="value">$${monthlyMortgagePayment.toFixed(2)}</div>
+                            </div>
+                            <div class="payment-item">
+                                <div class="label">Property Taxes</div>
+                                <div class="value">$${monthlyPropertyTax.toFixed(2)}</div>
+                            </div>
+                            <div class="payment-item">
+                                <div class="label">Home Insurance</div>
+                                <div class="value">$${monthlyHomeInsurance.toFixed(2)}</div>
+                            </div>
+                            <div class="payment-item">
+                                <div class="label">PMI</div>
+                                <div class="value">$${monthlyPMI.toFixed(2)}</div>
+                            </div>
+                            ${hoaFees > 0 ? `
+                            <div class="payment-item">
+                                <div class="label">HOA Fees</div>
+                                <div class="value">$${hoaFees.toFixed(2)}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                // Generate amortization schedule
+                generateAmortizationSchedule(loanAmount, monthlyInterestRate, numberOfPayments, monthlyMortgagePayment);
+                
+                // Show amortization section
+                amortizationSection.classList.remove('hidden');
+                
+                // Track calculation event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'calculator_use', {
+                        'event_category': 'Calculator',
+                        'event_label': 'Mortgage Calculator',
+                        'value': 1
+                    });
+                }
+            });
+            
+            // Function to generate amortization schedule
+            function generateAmortizationSchedule(principal, monthlyRate, numberOfPayments, monthlyPayment) {
+                let balance = principal;
+                let yearlyData = [];
+                let year = 1;
+                let yearBeginningBalance = principal;
+                let yearTotalPrincipal = 0;
+                let yearTotalInterest = 0;
+                
+                amortizationTableBody.innerHTML = '';
+                
+                for (let month = 1; month <= numberOfPayments; month++) {
+                    const interestPayment = balance * monthlyRate;
+                    const principalPayment = monthlyPayment - interestPayment;
+                    
+                    yearTotalPrincipal += principalPayment;
+                    yearTotalInterest += interestPayment;
+                    
+                    balance -= principalPayment;
+                    
+                    // Record yearly data
+                    if (month % 12 === 0 || month === numberOfPayments) {
+                        yearlyData.push({
+                            year: year,
+                            beginningBalance: yearBeginningBalance,
+                            monthlyPayment: monthlyPayment,
+                            principal: yearTotalPrincipal,
+                            interest: yearTotalInterest,
+                            endingBalance: Math.max(0, balance)
+                        });
+                        
+                        year++;
+                        yearBeginningBalance = balance;
+                        yearTotalPrincipal = 0;
+                        yearTotalInterest = 0;
+                    }
+                }
+                
+                // Display yearly data in table
+                yearlyData.forEach(data => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${data.year}</td>
+                        <td>$${data.beginningBalance.toFixed(2)}</td>
+                        <td>$${data.monthlyPayment.toFixed(2)}</td>
+                        <td>$${data.principal.toFixed(2)}</td>
+                        <td>$${data.interest.toFixed(2)}</td>
+                        <td>$${data.endingBalance.toFixed(2)}</td>
+                    `;
+                    amortizationTableBody.appendChild(row);
+                });
+            }
+            
+            // Initialize auto PMI detection
+            autoDetectPMI();
+        });
+    </script>
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -226,15 +918,6 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'GA_MEASUREMENT_ID');
-        
-        // Track calculator usage
-        function trackCalculatorUse() {
-            gtag('event', 'calculator_use', {
-                'event_category': 'Calculator',
-                'event_label': 'Mortgage Calculator',
-                'value': 1
-            });
-        }
     </script>
 </body>
 </html>
