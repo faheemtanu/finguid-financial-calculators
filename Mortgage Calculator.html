@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mortgage Calculator | USA Financial Calculators</title>
+<meta name="description" content="Free AI-enhanced Mortgage Calculator for smarter financial decisions. Mobile-friendly, SEO optimized, AI insights included." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="header" role="banner">
+  <div class="container flex justify-between items-center">
+    <h1>
+      <a href="https://finguid.com/" aria-label="USA Financial Calculators Home" class="logo">
+        USA Financial Calculators
+      </a>
+    </h1>
+    <nav aria-label="Primary" class="nav-menu flex gap-6">
+      <a href="https://finguid.com/" class="nav-link">Home</a>
+      <a href="https://finguid.com/calculators" class="nav-link">Calculators</a>
+      <a href="https://finguid.com/resources" class="nav-link">Resources</a>
+      <a href="https://finguid.com/partners" class="nav-link">Partners</a>
+      <a href="https://finguid.com/contact" class="nav-link">Contact</a>
+    </nav>
+  </div>
+</header>
+<main class="container calc-container flex gap-10" role="main" aria-labelledby="calc-title">
+  <section class="calc-inputs flex-1" aria-label="Calculator Inputs">
+    <h2 id="calc-title">Mortgage Calculator</h2>
+    <form id="mortgage-calculator-form" onsubmit="return false;" aria-describedby="instructions">
+      <p id="instructions">Fill in the details below and click Calculate.</p>
+      <label for="loanAmount">Loan Amount ($)</label>
+      <input type="number" id="loanAmount" name="loanAmount" placeholder="300000" min="1000" class="form-input" required />
+
+      <label for="interestRate">Interest Rate (%)</label>
+      <input type="number" id="interestRate" name="interestRate" placeholder="6.5" min="0" step="0.01" class="form-input" required />
+
+      <label for="loanTerm">Loan Term (Years)</label>
+      <input type="number" id="loanTerm" name="loanTerm" placeholder="30" min="1" max="50" class="form-input" required />
+
+      <label for="propertyTax">Annual Property Tax ($)</label>
+      <input type="number" id="propertyTax" name="propertyTax" placeholder="3000" min="0" class="form-input" required />
+
+      <label for="insurance">Annual Insurance ($)</label>
+      <input type="number" id="insurance" name="insurance" placeholder="1200" min="0" class="form-input" required />
+
+      <button type="button" class="btn btn-primary calculate-btn" onclick="calculateMortgage()">Calculate</button>
+    </form>
+  </section>
+  <section class="calc-results flex-1" aria-live="polite" aria-atomic="true" aria-label="Calculation Results" id="mortgage-calculator-results">
+    <h3>Results</h3>
+    <div id="mortgage-calculator-output" class="result-output"></div>
+  </section>
+</main>
+<script>
+function calculateMortgage() {
+  const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+  const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+  const loanTermMonths = parseInt(document.getElementById('loanTerm').value) * 12;
+  const propertyTaxAnnual = parseFloat(document.getElementById('propertyTax').value);
+  const insuranceAnnual = parseFloat(document.getElementById('insurance').value);
+
+  if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTermMonths)) {
+    alert('Please fill in all required fields correctly.');
+    return;
+  }
+
+  const monthlyPrincipalInterest = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTermMonths)) / (Math.pow(1 + interestRate, loanTermMonths) - 1);
+  const monthlyPropertyTax = propertyTaxAnnual / 12;
+  const monthlyInsurance = insuranceAnnual / 12;
+  const totalMonthly = monthlyPrincipalInterest + monthlyPropertyTax + monthlyInsurance;
+
+  let resultsHtml = '';
+  resultsHtml += `<p><strong>Total Monthly Payment: </strong>$${totalMonthly.toFixed(2)}</p>`;
+  resultsHtml += `<p><strong>Principal & Interest: </strong>$${monthlyPrincipalInterest.toFixed(2)}</p>`;
+  resultsHtml += `<p><strong>Property Tax: </strong>$${monthlyPropertyTax.toFixed(2)}</p>`;
+  resultsHtml += `<p><strong>Insurance: </strong>$${monthlyInsurance.toFixed(2)}</p>`;
+
+  document.getElementById('mortgage-calculator-output').innerHTML = resultsHtml;
+}
+</script>
+</body>
+</html>
