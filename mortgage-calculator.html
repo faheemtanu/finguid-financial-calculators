@@ -5,105 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finguid - Mortgage Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #10b981;
-            --accent: #f59e0b;
-            --dark: #1f2937;
-            --light: #f9fafb;
-            --gray: #6b7280;
-            --white: #ffffff;
-            --card-bg: #f8fafc;
-        }
-        
-        body {
-            background-color: #f3f4f6;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header Styles */
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo i {
-            margin-right: 10px;
-            background: var(--primary-dark);
-            padding: 10px;
-            border-radius: 50%;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav li {
-            margin: 0 15px;
-        }
-        
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 10px 15px;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-        
-        nav a:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Main Content */
-        .main-content {
-            padding: 40px 0;
-        }
-        
-        .page-title {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--dark);
-            font-size: 32px;
-        }
-        
+        /* Additional styles specific to the mortgage calculator */
         .calculator-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
+            gap: var(--space-32);
+            margin-bottom: var(--space-32);
         }
         
         @media (max-width: 968px) {
@@ -112,50 +23,46 @@
             }
         }
         
-        .calculator-form {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .calculator-results {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
+        .calculator-form, .calculator-results {
+            background: var(--color-surface);
+            padding: var(--space-32);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-card-border);
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: var(--space-24);
         }
         
-        .form-group label {
+        .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark);
+            margin-bottom: var(--space-8);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text);
+            font-size: var(--font-size-sm);
         }
         
-        .form-group input {
+        .form-input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
+            padding: var(--space-12);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-base);
+            transition: border-color var(--duration-normal) var(--ease-standard), 
+                        box-shadow var(--duration-normal) var(--ease-standard);
+            background-color: var(--color-surface);
+            color: var(--color-text);
         }
         
-        .form-group input:focus {
+        .form-input:focus {
+            border-color: var(--color-primary);
+            box-shadow: var(--focus-ring);
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
         }
         
         .slider-container {
-            margin-top: 10px;
+            margin-top: var(--space-8);
         }
         
         .slider {
@@ -163,7 +70,7 @@
             width: 100%;
             height: 8px;
             border-radius: 5px;
-            background: #e0e0e0;
+            background: var(--color-border);
             outline: none;
         }
         
@@ -173,50 +80,23 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--color-primary);
             cursor: pointer;
-        }
-        
-        .calculate-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px 25px;
-            width: 100%;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-        
-        .calculate-btn:hover {
-            background: var(--primary-dark);
         }
         
         .result-section {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .result-section h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            background: var(--color-bg-1);
+            padding: var(--space-24);
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--color-primary);
+            margin-bottom: var(--space-24);
         }
         
         .payment-item {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
+            padding: var(--space-12) 0;
+            border-bottom: 1px solid var(--color-border);
         }
         
         .payment-item:last-child {
@@ -224,196 +104,117 @@
         }
         
         .payment-label {
-            font-weight: 500;
-            color: var(--dark);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text);
         }
         
         .payment-value {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 18px;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            font-size: var(--font-size-lg);
         }
         
         .highlight-payment {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 20px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+            padding: var(--space-24);
+            border-radius: var(--radius-lg);
             text-align: center;
-            margin-top: 20px;
+            margin-top: var(--space-24);
         }
         
         .highlight-payment .payment-label {
-            color: white;
-            font-size: 18px;
+            color: var(--color-btn-primary-text);
+            font-size: var(--font-size-lg);
         }
         
         .highlight-payment .payment-value {
-            color: white;
-            font-size: 28px;
-            margin-top: 8px;
+            color: var(--color-btn-primary-text);
+            font-size: var(--font-size-2xl);
+            margin-top: var(--space-8);
         }
         
         .ai-insights {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid var(--secondary);
-            padding: 16px;
-            border-radius: 6px;
-            margin-top: 16px;
+            background: rgba(var(--color-success-rgb), var(--status-bg-opacity));
+            border-left: 4px solid var(--color-success);
+            padding: var(--space-16);
+            border-radius: var(--radius-base);
+            margin-top: var(--space-16);
         }
         
         .ai-insights h4 {
-            color: var(--secondary);
-            margin-bottom: 8px;
+            color: var(--color-success);
+            margin-bottom: var(--space-8);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-8);
         }
         
         .ai-insights ul {
-            padding-left: 20px;
-            color: var(--dark);
+            padding-left: var(--space-20);
+            color: var(--color-text);
         }
         
         .ai-insights li {
-            margin-bottom: 8px;
+            margin-bottom: var(--space-8);
         }
         
         .amortization-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 16px;
-            font-size: 14px;
+            margin-top: var(--space-16);
+            font-size: var(--font-size-sm);
         }
         
         .amortization-table th {
-            background: var(--card-bg);
-            padding: 12px;
+            background: var(--color-bg-1);
+            padding: var(--space-12);
             text-align: left;
-            font-weight: 600;
-            color: var(--dark);
-            border-bottom: 2px solid #eee;
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text);
+            border-bottom: 2px solid var(--color-border);
         }
         
         .amortization-table td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
+            padding: var(--space-12);
+            border-bottom: 1px solid var(--color-border);
         }
         
         .amortization-table tr:hover {
-            background: var(--card-bg);
+            background: var(--color-bg-1);
         }
         
         .download-options {
             display: flex;
-            gap: 16px;
-            margin-top: 24px;
+            gap: var(--space-16);
+            margin-top: var(--space-24);
         }
         
-        .btn-download {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 16px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid var(--primary);
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-download:hover {
-            background: var(--primary-dark);
-            border-color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-        
-        .btn-download.secondary {
-            background: transparent;
-            color: var(--primary);
-        }
-        
-        .btn-download.secondary:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        /* Footer */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 40px 0 20px;
-            margin-top: 40px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-section h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .footer-bottom {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-        
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .calculator-container {
-                grid-template-columns: 1fr;
-            }
-            
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            nav li {
-                margin: 5px 0;
-            }
-            
-            .logo {
-                font-size: 20px;
-            }
-            
             .download-options {
                 flex-direction: column;
-            }
-            
-            .btn-download {
-                width: 100%;
-                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="container">
-            <div class="header-content">
-                <div class="logo">
+            <div class="navbar">
+                <a href="index.html" class="nav-brand">
                     <i class="fas fa-calculator"></i>
-                    Finguid Calculators
+                    <span class="brand-text">Finguid Calculators</span>
+                </a>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <nav>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Calculators</a></li>
-                        <li><a href="#">Resources</a></li>
-                        <li><a href="#">Partners</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="calculators.html" class="nav-link">Calculators</a>
+                    <a href="resources.html" class="nav-link">Resources</a>
+                    <a href="partners.html" class="nav-link">Partners</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
                 </nav>
             </div>
         </div>
@@ -427,50 +228,50 @@
                 <div class="calculator-form">
                     <h2>Loan Details</h2>
                     <div class="form-group">
-                        <label for="loanAmount">Loan Amount ($)</label>
-                        <input type="number" id="loanAmount" value="300000" min="0">
+                        <label for="loanAmount" class="form-label">Loan Amount ($)</label>
+                        <input type="number" id="loanAmount" class="form-input" value="300000" min="0">
                         <div class="slider-container">
                             <input type="range" min="0" max="1000000" value="300000" class="slider" id="loanAmountSlider">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="interestRate">Interest Rate (%)</label>
-                        <input type="number" id="interestRate" value="4.5" min="0" step="0.1">
+                        <label for="interestRate" class="form-label">Interest Rate (%)</label>
+                        <input type="number" id="interestRate" class="form-input" value="4.5" min="0" step="0.1">
                         <div class="slider-container">
                             <input type="range" min="0" max="10" value="4.5" step="0.1" class="slider" id="interestRateSlider">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="loanTerm">Loan Term (years)</label>
-                        <input type="number" id="loanTerm" value="30" min="1" max="40">
+                        <label for="loanTerm" class="form-label">Loan Term (years)</label>
+                        <input type="number" id="loanTerm" class="form-input" value="30" min="1" max="40">
                         <div class="slider-container">
                             <input type="range" min="1" max="40" value="30" class="slider" id="loanTermSlider">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="propertyTax">Annual Property Tax ($)</label>
-                        <input type="number" id="propertyTax" value="3600" min="0">
+                        <label for="propertyTax" class="form-label">Annual Property Tax ($)</label>
+                        <input type="number" id="propertyTax" class="form-input" value="3600" min="0">
                     </div>
                     
                     <div class="form-group">
-                        <label for="insurance">Annual Insurance ($)</label>
-                        <input type="number" id="insurance" value="1200" min="0">
+                        <label for="insurance" class="form-label">Annual Insurance ($)</label>
+                        <input type="number" id="insurance" class="form-input" value="1200" min="0">
                     </div>
                     
                     <div class="form-group">
-                        <label for="pmi">PMI (% of loan annually, if applicable)</label>
-                        <input type="number" id="pmi" value="0.5" min="0" step="0.1">
+                        <label for="pmi" class="form-label">PMI (% of loan annually, if applicable)</label>
+                        <input type="number" id="pmi" class="form-input" value="0.5" min="0" step="0.1">
                     </div>
                     
                     <div class="form-group">
-                        <label for="hoa">Monthly HOA Fees ($)</label>
-                        <input type="number" id="hoa" value="0" min="0">
+                        <label for="hoa" class="form-label">Monthly HOA Fees ($)</label>
+                        <input type="number" id="hoa" class="form-input" value="0" min="0">
                     </div>
                     
-                    <button class="calculate-btn" id="calculateBtn">
+                    <button class="btn btn-primary btn-full-width" id="calculateBtn">
                         <i class="fas fa-calculator"></i> Calculate Mortgage
                     </button>
                 </div>
@@ -537,43 +338,46 @@
                     </div>
                     
                     <div class="download-options">
-                        <a href="#" class="btn-download" id="downloadPDF">
+                        <button class="btn btn-primary" id="downloadPDF">
                             <i class="fas fa-file-pdf"></i> Download PDF Report
-                        </a>
-                        <a href="#" class="btn-download secondary" id="downloadCSV">
+                        </button>
+                        <button class="btn btn-secondary" id="downloadCSV">
                             <i class="fas fa-file-csv"></i> Download CSV
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer>
+    <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>About Finguid</h3>
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        Finguid Calculators
+                    </div>
                     <p>We provide accurate financial calculators to help you make informed decisions about your financial future.</p>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Calculator Categories</h3>
+                    <h4>Calculator Categories</h4>
                     <ul>
-                        <li><a href="#">Mortgage Calculators</a></li>
-                        <li><a href="#">Auto Loan Calculators</a></li>
-                        <li><a href="#">Investment Calculators</a></li>
-                        <li><a href="#">Retirement Calculators</a></li>
+                        <li><a href="calculators.html#mortgage">Mortgage Calculators</a></li>
+                        <li><a href="calculators.html#auto">Auto Loan Calculators</a></li>
+                        <li><a href="calculators.html#investment">Investment Calculators</a></li>
+                        <li><a href="calculators.html#retirement">Retirement Calculators</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Company</h3>
+                    <h4>Company</h4>
                     <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
@@ -586,6 +390,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+            
+            hamburger.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+            
             // Get DOM elements
             const loanAmountInput = document.getElementById('loanAmount');
             const loanAmountSlider = document.getElementById('loanAmountSlider');
@@ -612,6 +425,13 @@
             // Download buttons
             const downloadPDF = document.getElementById('downloadPDF');
             const downloadCSV = document.getElementById('downloadCSV');
+            
+            // Store calculation data for export
+            let calculationData = {
+                inputs: {},
+                results: {},
+                amortization: []
+            };
             
             // Sync sliders with input fields
             loanAmountInput.addEventListener('input', () => {
@@ -665,6 +485,17 @@
                 const pmiRate = parseFloat(pmiInput.value) / 100 || 0;
                 const hoa = parseFloat(hoaInput.value) || 0;
                 
+                // Store input data
+                calculationData.inputs = {
+                    loanAmount,
+                    interestRate: interestRate * 12 * 100, // Convert back to annual percentage
+                    loanTerm: loanTerm / 12, // Convert back to years
+                    propertyTax,
+                    insurance,
+                    pmi: pmiRate * 100, // Convert to percentage
+                    hoa
+                };
+                
                 // Calculate monthly payment (principal and interest)
                 const x = Math.pow(1 + interestRate, loanTerm);
                 const monthlyPI = (loanAmount * x * interestRate) / (x - 1);
@@ -694,6 +525,16 @@
                 hoaResultEl.textContent = formatter.format(hoa);
                 totalPaymentEl.textContent = formatter.format(totalMonthly);
                 
+                // Store result data
+                calculationData.results = {
+                    principalInterest: monthlyPI,
+                    propertyTax: monthlyTax,
+                    insurance: monthlyInsurance,
+                    pmi: pmiMonthly,
+                    hoa,
+                    totalPayment: totalMonthly
+                };
+                
                 // Generate amortization schedule
                 generateAmortizationSchedule(loanAmount, interestRate, loanTerm, monthlyPI);
                 
@@ -705,6 +546,7 @@
                 let balance = principal;
                 let totalInterest = 0;
                 let html = '';
+                calculationData.amortization = [];
                 
                 // Calculate yearly breakdown
                 for (let year = 1; year <= term / 12; year++) {
@@ -734,6 +576,15 @@
                                 <td>${formatCurrency(balance)}</td>
                             </tr>
                         `;
+                        
+                        // Store for export
+                        calculationData.amortization.push({
+                            year,
+                            principal: yearPrincipal,
+                            interest: yearInterest,
+                            totalInterest,
+                            balance
+                        });
                     }
                 }
                 
@@ -780,15 +631,129 @@
                 }).format(value);
             }
             
-            // Download functionality (placeholder - would need additional libraries for full implementation)
-            downloadPDF.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('PDF download functionality would be implemented with a library like jsPDF');
+            // PDF download functionality
+            downloadPDF.addEventListener('click', function() {
+                // Use jsPDF library
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Add title
+                doc.setFontSize(20);
+                doc.text('Mortgage Calculation Report', 105, 15, { align: 'center' });
+                
+                // Add calculation details
+                doc.setFontSize(12);
+                let yPosition = 30;
+                
+                doc.text('Loan Details:', 14, yPosition);
+                yPosition += 8;
+                doc.text(`Loan Amount: ${formatCurrency(calculationData.inputs.loanAmount)}`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`Interest Rate: ${calculationData.inputs.interestRate.toFixed(2)}%`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`Loan Term: ${calculationData.inputs.loanTerm} years`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`Property Tax: ${formatCurrency(calculationData.inputs.propertyTax)} annually`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`Insurance: ${formatCurrency(calculationData.inputs.insurance)} annually`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`PMI: ${calculationData.inputs.pmi.toFixed(2)}%`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`HOA Fees: ${formatCurrency(calculationData.inputs.hoa)} monthly`, 20, yPosition);
+                yPosition += 15;
+                
+                // Add payment breakdown
+                doc.text('Payment Breakdown:', 14, yPosition);
+                yPosition += 8;
+                doc.text(`Principal & Interest: ${formatCurrency(calculationData.results.principalInterest)}`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`Property Tax: ${formatCurrency(calculationData.results.propertyTax)}`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`Insurance: ${formatCurrency(calculationData.results.insurance)}`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`PMI: ${formatCurrency(calculationData.results.pmi)}`, 20, yPosition);
+                yPosition += 8;
+                doc.text(`HOA Fees: ${formatCurrency(calculationData.results.hoa)}`, 20, yPosition);
+                yPosition += 8;
+                doc.setFont(undefined, 'bold');
+                doc.text(`Total Monthly Payment: ${formatCurrency(calculationData.results.totalPayment)}`, 20, yPosition);
+                doc.setFont(undefined, 'normal');
+                yPosition += 15;
+                
+                // Add amortization table if there's space
+                if (yPosition < 200) {
+                    doc.text('Amortization Schedule (Yearly):', 14, yPosition);
+                    yPosition += 8;
+                    
+                    const tableColumn = ["Year", "Principal", "Interest", "Total Interest", "Balance"];
+                    const tableRows = [];
+                    
+                    calculationData.amortization.forEach(row => {
+                        const rowData = [
+                            row.year,
+                            formatCurrency(row.principal),
+                            formatCurrency(row.interest),
+                            formatCurrency(row.totalInterest),
+                            formatCurrency(row.balance)
+                        ];
+                        tableRows.push(rowData);
+                    });
+                    
+                    doc.autoTable({
+                        head: [tableColumn],
+                        body: tableRows,
+                        startY: yPosition,
+                        theme: 'grid',
+                        headStyles: { fillColor: [41, 150, 161] }
+                    });
+                }
+                
+                // Save the PDF
+                doc.save('mortgage-calculation-report.pdf');
             });
             
-            downloadCSV.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('CSV download functionality would be implemented with JavaScript');
+            // CSV download functionality
+            downloadCSV.addEventListener('click', function() {
+                // Create CSV content
+                let csvContent = "Mortgage Calculation Report\n\n";
+                
+                // Add inputs section
+                csvContent += "Loan Details:\n";
+                csvContent += `Loan Amount,${formatCurrency(calculationData.inputs.loanAmount).replace(/[$,]/g, '')}\n`;
+                csvContent += `Interest Rate,${calculationData.inputs.interestRate.toFixed(2)}%\n`;
+                csvContent += `Loan Term,${calculationData.inputs.loanTerm} years\n`;
+                csvContent += `Property Tax,${formatCurrency(calculationData.inputs.propertyTax).replace(/[$,]/g, '')}\n`;
+                csvContent += `Insurance,${formatCurrency(calculationData.inputs.insurance).replace(/[$,]/g, '')}\n`;
+                csvContent += `PMI,${calculationData.inputs.pmi.toFixed(2)}%\n`;
+                csvContent += `HOA Fees,${formatCurrency(calculationData.inputs.hoa).replace(/[$,]/g, '')}\n\n`;
+                
+                // Add results section
+                csvContent += "Payment Breakdown:\n";
+                csvContent += `Principal & Interest,${formatCurrency(calculationData.results.principalInterest).replace(/[$,]/g, '')}\n`;
+                csvContent += `Property Tax,${formatCurrency(calculationData.results.propertyTax).replace(/[$,]/g, '')}\n`;
+                csvContent += `Insurance,${formatCurrency(calculationData.results.insurance).replace(/[$,]/g, '')}\n`;
+                csvContent += `PMI,${formatCurrency(calculationData.results.pmi).replace(/[$,]/g, '')}\n`;
+                csvContent += `HOA Fees,${formatCurrency(calculationData.results.hoa).replace(/[$,]/g, '')}\n`;
+                csvContent += `Total Monthly Payment,${formatCurrency(calculationData.results.totalPayment).replace(/[$,]/g, '')}\n\n`;
+                
+                // Add amortization schedule
+                csvContent += "Amortization Schedule:\n";
+                csvContent += "Year,Principal,Interest,Total Interest,Balance\n";
+                
+                calculationData.amortization.forEach(row => {
+                    csvContent += `${row.year},${row.principal},${row.interest},${row.totalInterest},${row.balance}\n`;
+                });
+                
+                // Create download link
+                const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "mortgage-calculation-report.csv");
+                document.body.appendChild(link);
+                
+                // Trigger download
+                link.click();
+                document.body.removeChild(link);
             });
         });
     </script>
