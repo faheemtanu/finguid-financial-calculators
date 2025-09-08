@@ -61,19 +61,18 @@
 
       document.getElementById('calculateBtn').addEventListener('click', () => {
         const loan = parseFloat(document.getElementById('loanAmount').value);
-        const rate = parseFloat(document.getElementById('interestRate').value)/100/12;
-        const term = parseInt(document.getElementById('loanTerm').value)*12;
-        const insurance = parseFloat(document.getElementById('insurance').value)/12||0;
+        const rate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+        const term = parseInt(document.getElementById('loanTerm').value) * 12;
+        const insurance = parseFloat(document.getElementById('insurance').value) / 12 || 0;
 
         if (!loan || !rate || !term) {
           alert('Please fill in all fields.');
           return;
         }
-        // Monthly PI
+        // Monthly principal & interest
         const pi = (loan * rate) / (1 - Math.pow(1 + rate, -term));
         const total = pi + insurance;
-        document.getElementById('paymentOutput').textContent = 
-          `$${total.toFixed(2)}`;
+        document.getElementById('paymentOutput').textContent = `$${total.toFixed(2)}`;
         document.getElementById('result').style.display = 'block';
       });
     });
