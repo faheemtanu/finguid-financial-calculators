@@ -13,8 +13,20 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --card-bg: #f8fafc;
+        }
+        
         body {
-            background-color: #f7f9fc;
+            background-color: #f3f4f6;
             color: #333;
             line-height: 1.6;
         }
@@ -27,21 +39,20 @@
         
         /* Header Styles */
         header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 20px 0;
+            padding: 15px 0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
-        .logo-container {
+        .header-content {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
         }
         
         .logo {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -49,16 +60,14 @@
         
         .logo i {
             margin-right: 10px;
-            background: #3498db;
+            background: var(--primary-dark);
             padding: 10px;
             border-radius: 50%;
         }
         
         nav ul {
             display: flex;
-            justify-content: center;
             list-style: none;
-            flex-wrap: wrap;
         }
         
         nav li {
@@ -72,16 +81,10 @@
             padding: 10px 15px;
             border-radius: 4px;
             transition: background 0.3s;
-            display: flex;
-            align-items: center;
         }
         
         nav a:hover {
             background: rgba(255, 255, 255, 0.1);
-        }
-        
-        nav a i {
-            margin-right: 8px;
         }
         
         /* Main Content */
@@ -92,33 +95,38 @@
         .page-title {
             text-align: center;
             margin-bottom: 30px;
-            color: #2c3e50;
+            color: var(--dark);
             font-size: 32px;
         }
         
         .calculator-container {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin-bottom: 40px;
         }
         
+        @media (max-width: 968px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         .calculator-form {
-            flex: 1;
-            min-width: 300px;
-            background: white;
+            background: var(--white);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .calculator-results {
-            flex: 1;
-            min-width: 300px;
-            background: white;
+            background: var(--white);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
         }
         
         .form-group {
@@ -129,7 +137,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #2c3e50;
+            color: var(--dark);
         }
         
         .form-group input {
@@ -142,8 +150,8 @@
         
         .form-group input:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
         }
         
         .slider-container {
@@ -165,12 +173,12 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #3498db;
+            background: var(--primary);
             cursor: pointer;
         }
         
         .calculate-btn {
-            background: #3498db;
+            background: var(--primary);
             color: white;
             border: none;
             padding: 14px 25px;
@@ -184,65 +192,168 @@
         }
         
         .calculate-btn:hover {
-            background: #2980b9;
+            background: var(--primary-dark);
         }
         
-        .result-item {
+        .result-section {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .result-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .payment-item {
             display: flex;
             justify-content: space-between;
-            padding: 15px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #eee;
         }
         
-        .result-item:last-child {
+        .payment-item:last-child {
             border-bottom: none;
         }
         
-        .result-label {
+        .payment-label {
             font-weight: 500;
-            color: #2c3e50;
+            color: var(--dark);
         }
         
-        .result-value {
+        .payment-value {
             font-weight: 700;
-            color: #3498db;
+            color: var(--primary);
             font-size: 18px;
         }
         
-        .result-highlight {
-            background: #f8f9fa;
+        .highlight-payment {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             padding: 20px;
             border-radius: 8px;
-            margin-top: 20px;
             text-align: center;
+            margin-top: 20px;
         }
         
-        .result-highlight .result-value {
+        .highlight-payment .payment-label {
+            color: white;
+            font-size: 18px;
+        }
+        
+        .highlight-payment .payment-value {
+            color: white;
             font-size: 28px;
-            color: #2c3e50;
+            margin-top: 8px;
+        }
+        
+        .ai-insights {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 16px;
+        }
+        
+        .ai-insights h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-insights ul {
+            padding-left: 20px;
+            color: var(--dark);
+        }
+        
+        .ai-insights li {
+            margin-bottom: 8px;
+        }
+        
+        .amortization-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+        
+        .amortization-table th {
+            background: var(--card-bg);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid #eee;
+        }
+        
+        .amortization-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .amortization-table tr:hover {
+            background: var(--card-bg);
+        }
+        
+        .download-options {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-download:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-download.secondary {
+            background: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-download.secondary:hover {
+            background: var(--primary);
+            color: white;
         }
         
         /* Footer */
         footer {
-            background: #2c3e50;
+            background: var(--dark);
             color: white;
-            padding: 40px 0;
-            text-align: center;
+            padding: 40px 0 20px;
+            margin-top: 40px;
         }
         
         .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .footer-section {
-            flex: 1;
-            min-width: 250px;
-            margin-bottom: 20px;
-            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
         }
         
         .footer-section h3 {
@@ -254,12 +365,13 @@
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
         }
         
         /* Responsive Design */
         @media (max-width: 768px) {
             .calculator-container {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
             
             nav ul {
@@ -272,7 +384,16 @@
             }
             
             .logo {
-                font-size: 24px;
+                font-size: 20px;
+            }
+            
+            .download-options {
+                flex-direction: column;
+            }
+            
+            .btn-download {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -280,21 +401,21 @@
 <body>
     <header>
         <div class="container">
-            <div class="logo-container">
+            <div class="header-content">
                 <div class="logo">
                     <i class="fas fa-calculator"></i>
                     Finguid Calculators
                 </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Calculators</a></li>
+                        <li><a href="#">Resources</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-calculator"></i> Calculators</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Resources</a></li>
-                    <li><a href="#"><i class="fas fa-blog"></i> Blog</a></li>
-                    <li><a href="#"><i class="fas fa-phone"></i> Contact</a></li>
-                </ul>
-            </nav>
         </div>
     </header>
 
@@ -329,34 +450,99 @@
                         </div>
                     </div>
                     
-                    <button class="calculate-btn" id="calculateBtn">Calculate Mortgage</button>
+                    <div class="form-group">
+                        <label for="propertyTax">Annual Property Tax ($)</label>
+                        <input type="number" id="propertyTax" value="3600" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="insurance">Annual Insurance ($)</label>
+                        <input type="number" id="insurance" value="1200" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pmi">PMI (% of loan annually, if applicable)</label>
+                        <input type="number" id="pmi" value="0.5" min="0" step="0.1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hoa">Monthly HOA Fees ($)</label>
+                        <input type="number" id="hoa" value="0" min="0">
+                    </div>
+                    
+                    <button class="calculate-btn" id="calculateBtn">
+                        <i class="fas fa-calculator"></i> Calculate Mortgage
+                    </button>
                 </div>
                 
                 <div class="calculator-results">
-                    <h2>Payment Summary</h2>
-                    <div class="result-item">
-                        <span class="result-label">Monthly Payment</span>
-                        <span class="result-value" id="monthlyPayment">$1,520.06</span>
+                    <div class="result-section">
+                        <h3><i class="fas fa-receipt"></i> Payment Breakdown</h3>
+                        <div class="payment-item">
+                            <span class="payment-label">Principal & Interest</span>
+                            <span class="payment-value" id="principalInterest">$1,520.06</span>
+                        </div>
+                        <div class="payment-item">
+                            <span class="payment-label">Property Tax</span>
+                            <span class="payment-value" id="propertyTaxResult">$300.00</span>
+                        </div>
+                        <div class="payment-item">
+                            <span class="payment-label">Home Insurance</span>
+                            <span class="payment-value" id="insuranceResult">$100.00</span>
+                        </div>
+                        <div class="payment-item">
+                            <span class="payment-label">PMI</span>
+                            <span class="payment-value" id="pmiResult">$0.00</span>
+                        </div>
+                        <div class="payment-item">
+                            <span class="payment-label">HOA Fees</span>
+                            <span class="payment-value" id="hoaResult">$0.00</span>
+                        </div>
+                        <div class="highlight-payment">
+                            <div class="payment-label">Your Monthly Payment</div>
+                            <div class="payment-value" id="totalPayment">$1,920.06</div>
+                        </div>
                     </div>
                     
-                    <div class="result-item">
-                        <span class="result-label">Total Interest Paid</span>
-                        <span class="result-value" id="totalInterest">$247,220.60</span>
+                    <div class="result-section">
+                        <h3><i class="fas fa-robot"></i> AI-Powered Insights</h3>
+                        <div class="ai-insights">
+                            <h4><i class="fas fa-lightbulb"></i> Smart Recommendations</h4>
+                            <ul id="aiInsightsList">
+                                <li>Consider making an extra $100 payment monthly to shorten your loan term by 4 years</li>
+                                <li>Your debt-to-income ratio is healthy at 28%</li>
+                                <li>Refinancing could save you money if rates drop below 3.8%</li>
+                            </ul>
+                        </div>
                     </div>
                     
-                    <div class="result-item">
-                        <span class="result-label">Total Payment</span>
-                        <span class="result-value" id="totalPayment">$547,220.60</span>
+                    <div class="result-section">
+                        <h3><i class="fas fa-calendar-alt"></i> Amortization Schedule</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="amortization-table">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Principal</th>
+                                        <th>Interest</th>
+                                        <th>Total Interest</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="amortizationBody">
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     
-                    <div class="result-item">
-                        <span class="result-label">Payoff Date</span>
-                        <span class="result-value" id="payoffDate">May 2053</span>
-                    </div>
-                    
-                    <div class="result-highlight">
-                        <div class="result-label">Your monthly payment</div>
-                        <div class="result-value" id="highlightPayment">$1,520.06</div>
+                    <div class="download-options">
+                        <a href="#" class="btn-download" id="downloadPDF">
+                            <i class="fas fa-file-pdf"></i> Download PDF Report
+                        </a>
+                        <a href="#" class="btn-download secondary" id="downloadCSV">
+                            <i class="fas fa-file-csv"></i> Download CSV
+                        </a>
                     </div>
                 </div>
             </div>
@@ -364,31 +550,37 @@
     </main>
 
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About Finguid</h3>
-                <p>We provide financial calculators and resources to help you make informed decisions.</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Finguid</h3>
+                    <p>We provide accurate financial calculators to help you make informed decisions about your financial future.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Calculator Categories</h3>
+                    <ul>
+                        <li><a href="#">Mortgage Calculators</a></li>
+                        <li><a href="#">Auto Loan Calculators</a></li>
+                        <li><a href="#">Investment Calculators</a></li>
+                        <li><a href="#">Retirement Calculators</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
             </div>
             
-            <div class="footer-section">
-                <h3>Contact Us</h3>
-                <p>Email: info@finguid.com</p>
-                <p>Phone: (555) 123-4567</p>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Finguid Calculators. All rights reserved.</p>
             </div>
-            
-            <div class="footer-section">
-                <h3>Follow Us</h3>
-                <p>
-                    <i class="fab fa-facebook"></i> &nbsp;
-                    <i class="fab fa-twitter"></i> &nbsp;
-                    <i class="fab fa-instagram"></i> &nbsp;
-                    <i class="fab fa-linkedin"></i>
-                </p>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2023 Finguid Calculators. All rights reserved.</p>
         </div>
     </footer>
 
@@ -401,7 +593,25 @@
             const interestRateSlider = document.getElementById('interestRateSlider');
             const loanTermInput = document.getElementById('loanTerm');
             const loanTermSlider = document.getElementById('loanTermSlider');
+            const propertyTaxInput = document.getElementById('propertyTax');
+            const insuranceInput = document.getElementById('insurance');
+            const pmiInput = document.getElementById('pmi');
+            const hoaInput = document.getElementById('hoa');
             const calculateBtn = document.getElementById('calculateBtn');
+            
+            // Result elements
+            const principalInterestEl = document.getElementById('principalInterest');
+            const propertyTaxResultEl = document.getElementById('propertyTaxResult');
+            const insuranceResultEl = document.getElementById('insuranceResult');
+            const pmiResultEl = document.getElementById('pmiResult');
+            const hoaResultEl = document.getElementById('hoaResult');
+            const totalPaymentEl = document.getElementById('totalPayment');
+            const aiInsightsListEl = document.getElementById('aiInsightsList');
+            const amortizationBodyEl = document.getElementById('amortizationBody');
+            
+            // Download buttons
+            const downloadPDF = document.getElementById('downloadPDF');
+            const downloadCSV = document.getElementById('downloadCSV');
             
             // Sync sliders with input fields
             loanAmountInput.addEventListener('input', () => {
@@ -434,6 +644,12 @@
                 calculateMortgage();
             });
             
+            // Update on other input changes
+            propertyTaxInput.addEventListener('input', calculateMortgage);
+            insuranceInput.addEventListener('input', calculateMortgage);
+            pmiInput.addEventListener('input', calculateMortgage);
+            hoaInput.addEventListener('input', calculateMortgage);
+            
             calculateBtn.addEventListener('click', calculateMortgage);
             
             // Initial calculation
@@ -444,20 +660,24 @@
                 const loanAmount = parseFloat(loanAmountInput.value);
                 const interestRate = parseFloat(interestRateInput.value) / 100 / 12; // Monthly interest rate
                 const loanTerm = parseFloat(loanTermInput.value) * 12; // Months
+                const propertyTax = parseFloat(propertyTaxInput.value) || 0;
+                const insurance = parseFloat(insuranceInput.value) || 0;
+                const pmiRate = parseFloat(pmiInput.value) / 100 || 0;
+                const hoa = parseFloat(hoaInput.value) || 0;
                 
-                // Calculate monthly payment
+                // Calculate monthly payment (principal and interest)
                 const x = Math.pow(1 + interestRate, loanTerm);
-                const monthlyPayment = (loanAmount * x * interestRate) / (x - 1);
+                const monthlyPI = (loanAmount * x * interestRate) / (x - 1);
                 
-                // Calculate total values
-                const totalPayment = monthlyPayment * loanTerm;
-                const totalInterest = totalPayment - loanAmount;
+                // Calculate PMI if down payment is less than 20%
+                const pmiMonthly = loanAmount > 0 && pmiRate > 0 ? (loanAmount * pmiRate) / 12 : 0;
                 
-                // Calculate payoff date
-                const currentDate = new Date();
-                const payoffDate = new Date(currentDate.setMonth(currentDate.getMonth() + loanTerm));
-                const options = { year: 'numeric', month: 'long' };
-                const formattedPayoffDate = payoffDate.toLocaleDateString('en-US', options);
+                // Calculate additional monthly costs
+                const monthlyTax = propertyTax / 12;
+                const monthlyInsurance = insurance / 12;
+                
+                // Calculate total monthly payment
+                const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + pmiMonthly + hoa;
                 
                 // Format numbers as currency
                 const formatter = new Intl.NumberFormat('en-US', {
@@ -467,12 +687,109 @@
                 });
                 
                 // Update the UI with calculated values
-                document.getElementById('monthlyPayment').textContent = formatter.format(monthlyPayment);
-                document.getElementById('totalInterest').textContent = formatter.format(totalInterest);
-                document.getElementById('totalPayment').textContent = formatter.format(totalPayment);
-                document.getElementById('payoffDate').textContent = formattedPayoffDate;
-                document.getElementById('highlightPayment').textContent = formatter.format(monthlyPayment);
+                principalInterestEl.textContent = formatter.format(monthlyPI);
+                propertyTaxResultEl.textContent = formatter.format(monthlyTax);
+                insuranceResultEl.textContent = formatter.format(monthlyInsurance);
+                pmiResultEl.textContent = formatter.format(pmiMonthly);
+                hoaResultEl.textContent = formatter.format(hoa);
+                totalPaymentEl.textContent = formatter.format(totalMonthly);
+                
+                // Generate amortization schedule
+                generateAmortizationSchedule(loanAmount, interestRate, loanTerm, monthlyPI);
+                
+                // Generate AI insights
+                generateAIInsights(loanAmount, interestRate, loanTerm, monthlyPI, totalMonthly);
             }
+            
+            function generateAmortizationSchedule(principal, monthlyRate, term, monthlyPayment) {
+                let balance = principal;
+                let totalInterest = 0;
+                let html = '';
+                
+                // Calculate yearly breakdown
+                for (let year = 1; year <= term / 12; year++) {
+                    let yearPrincipal = 0;
+                    let yearInterest = 0;
+                    
+                    for (let month = 1; month <= 12; month++) {
+                        if (balance <= 0) break;
+                        
+                        const interestPayment = balance * monthlyRate;
+                        const principalPayment = monthlyPayment - interestPayment;
+                        
+                        yearPrincipal += principalPayment;
+                        yearInterest += interestPayment;
+                        totalInterest += interestPayment;
+                        
+                        balance -= principalPayment;
+                    }
+                    
+                    if (yearPrincipal > 0) {
+                        html += `
+                            <tr>
+                                <td>${year}</td>
+                                <td>${formatCurrency(yearPrincipal)}</td>
+                                <td>${formatCurrency(yearInterest)}</td>
+                                <td>${formatCurrency(totalInterest)}</td>
+                                <td>${formatCurrency(balance)}</td>
+                            </tr>
+                        `;
+                    }
+                }
+                
+                amortizationBodyEl.innerHTML = html;
+            }
+            
+            function generateAIInsights(loanAmount, interestRate, loanTerm, monthlyPI, totalMonthly) {
+                const insights = [];
+                
+                // Generate insights based on loan parameters
+                if (interestRate * 12 > 0.05) {
+                    insights.push("Consider refinancing if rates drop below " + (interestRate * 12 - 0.01).toFixed(2) + "% to save on interest");
+                }
+                
+                if (loanTerm > 360) {
+                    insights.push("A 15-year mortgage could save you significant interest but increase monthly payments");
+                }
+                
+                const totalCost = monthlyPI * loanTerm;
+                const totalInterest = totalCost - loanAmount;
+                insights.push("You'll pay " + formatCurrency(totalInterest) + " in interest over the loan term");
+                
+                // Debt-to-income ratio insight (assuming $6000 monthly income for example)
+                const estimatedIncome = 6000;
+                const dti = (totalMonthly / estimatedIncome) * 100;
+                insights.push("Your estimated debt-to-income ratio is " + dti.toFixed(0) + "% " + 
+                             (dti > 43 ? "(above recommended level)" : "(within healthy range)"));
+                
+                // Update AI insights list
+                aiInsightsListEl.innerHTML = '';
+                insights.forEach(insight => {
+                    const li = document.createElement('li');
+                    li.textContent = insight;
+                    aiInsightsListEl.appendChild(li);
+                });
+            }
+            
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(value);
+            }
+            
+            // Download functionality (placeholder - would need additional libraries for full implementation)
+            downloadPDF.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('PDF download functionality would be implemented with a library like jsPDF');
+            });
+            
+            downloadCSV.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('CSV download functionality would be implemented with JavaScript');
+            });
         });
     </script>
 </body>
