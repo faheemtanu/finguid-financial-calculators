@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <style>
         :root {
-            /* Finguid Color Palette */
+            /* Finguid Color Palette (Based on finguid.com) */
             --teal: #2a9d8f;
             --teal-light: #8ab6b0;
             --teal-dark: #1d7a6e;
@@ -19,6 +19,10 @@
             --charcoal: #264653;
             --orange: #e9c46a;
             --red: #e76f51;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
             
             /* Typography */
             --font-primary: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -58,15 +62,15 @@
 
         body {
             font-family: var(--font-primary);
-            background-color: var(--cream);
+            background-color: var(--light-gray);
             color: var(--charcoal);
             line-height: 1.6;
         }
 
         /* Header Styles */
         header {
-            background-color: var(--charcoal);
-            color: white;
+            background-color: var(--white);
+            color: var(--charcoal);
             padding: var(--space-md) var(--space-xl);
             box-shadow: var(--shadow-md);
             position: sticky;
@@ -102,7 +106,7 @@
         }
 
         nav a {
-            color: white;
+            color: var(--charcoal);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
@@ -110,7 +114,7 @@
         }
 
         nav a:hover {
-            color: var(--teal-light);
+            color: var(--teal);
         }
 
         /* Main Content */
@@ -129,12 +133,12 @@
         .calculator-title h1 {
             font-size: var(--font-size-3xl);
             margin-bottom: var(--space-sm);
-            color: var(--teal-dark);
+            color: var(--teal);
         }
 
         .calculator-title p {
             font-size: var(--font-size-lg);
-            color: var(--teal-dark);
+            color: var(--dark-gray);
             max-width: 800px;
             margin: 0 auto;
         }
@@ -153,7 +157,7 @@
 
         /* Card Styles */
         .card {
-            background: white;
+            background: var(--white);
             border-radius: var(--border-radius-lg);
             padding: var(--space-xl);
             box-shadow: var(--shadow-md);
@@ -173,7 +177,7 @@
         }
 
         .card-header h2 {
-            color: var(--teal-dark);
+            color: var(--teal);
             font-size: var(--font-size-xl);
             display: flex;
             align-items: center;
@@ -199,8 +203,8 @@
         .input-group {
             display: flex;
             align-items: center;
-            background: white;
-            border: 1px solid var(--teal-light);
+            background: var(--white);
+            border: 1px solid var(--medium-gray);
             border-radius: var(--border-radius-md);
             overflow: hidden;
             transition: border-color 0.3s;
@@ -217,12 +221,13 @@
             border: none;
             outline: none;
             font-size: var(--font-size-md);
+            background: var(--white);
         }
 
         .input-group .prefix {
             padding: var(--space-md);
             background: var(--teal-light);
-            color: white;
+            color: var(--white);
             font-weight: 500;
         }
 
@@ -235,14 +240,14 @@
             justify-content: space-between;
             margin-top: var(--space-xs);
             font-size: var(--font-size-sm);
-            color: var(--teal-dark);
+            color: var(--dark-gray);
         }
 
         input[type="range"] {
             width: 100%;
             height: 8px;
             -webkit-appearance: none;
-            background: var(--teal-light);
+            background: var(--medium-gray);
             border-radius: var(--border-radius-sm);
             outline: none;
         }
@@ -254,7 +259,7 @@
             border-radius: 50%;
             background: var(--teal);
             cursor: pointer;
-            border: 2px solid white;
+            border: 2px solid var(--white);
             box-shadow: var(--shadow-sm);
             transition: background 0.3s, transform 0.3s;
         }
@@ -267,11 +272,11 @@
         select {
             width: 100%;
             padding: var(--space-md);
-            border: 1px solid var(--teal-light);
+            border: 1px solid var(--medium-gray);
             border-radius: var(--border-radius-md);
             font-size: var(--font-size-md);
             outline: none;
-            background: white;
+            background: var(--white);
             transition: border-color 0.3s;
         }
 
@@ -287,13 +292,13 @@
             gap: var(--space-md);
             margin-top: var(--space-lg);
             padding: var(--space-md);
-            background: var(--cream);
+            background: var(--light-gray);
             border-radius: var(--border-radius-md);
         }
 
         .voice-btn {
             background: var(--teal);
-            color: white;
+            color: var(--white);
             border: none;
             border-radius: 50%;
             width: 40px;
@@ -312,7 +317,7 @@
 
         .voice-status {
             font-size: var(--font-size-sm);
-            color: var(--teal-dark);
+            color: var(--dark-gray);
         }
 
         /* Results Section */
@@ -329,7 +334,7 @@
 
         .result-label {
             font-size: var(--font-size-sm);
-            color: var(--teal-dark);
+            color: var(--dark-gray);
             display: flex;
             align-items: center;
             gap: var(--space-sm);
@@ -392,12 +397,12 @@
         .amortization-table td {
             padding: var(--space-sm);
             text-align: right;
-            border-bottom: 1px solid var(--teal-light);
+            border-bottom: 1px solid var(--medium-gray);
         }
 
         .amortization-table th {
             background: var(--teal-light);
-            color: white;
+            color: var(--white);
         }
 
         .amortization-table tr:last-child td {
@@ -408,13 +413,13 @@
             max-height: 300px;
             overflow-y: auto;
             margin-top: var(--space-md);
-            border: 1px solid var(--teal-light);
+            border: 1px solid var(--medium-gray);
             border-radius: var(--border-radius-md);
         }
 
         /* AI Insights */
         .insights-container {
-            background: var(--cream);
+            background: var(--light-gray);
             padding: var(--space-md);
             border-radius: var(--border-radius-md);
             margin-top: var(--space-lg);
@@ -425,7 +430,7 @@
             gap: var(--space-md);
             margin-bottom: var(--space-md);
             padding-bottom: var(--space-md);
-            border-bottom: 1px solid var(--teal-light);
+            border-bottom: 1px solid var(--medium-gray);
         }
 
         .insight-item:last-child {
@@ -442,7 +447,7 @@
         .insight-content h3 {
             font-size: var(--font-size-md);
             margin-bottom: var(--space-xs);
-            color: var(--teal-dark);
+            color: var(--teal);
         }
 
         .insight-content p {
@@ -462,8 +467,8 @@
             align-items: center;
             gap: var(--space-sm);
             padding: var(--space-sm) var(--space-md);
-            background: white;
-            border: 1px solid var(--teal-light);
+            background: var(--white);
+            border: 1px solid var(--medium-gray);
             border-radius: var(--border-radius-md);
             color: var(--teal);
             font-size: var(--font-size-sm);
@@ -472,14 +477,14 @@
         }
 
         .share-btn:hover {
-            background: var(--teal-light);
-            color: white;
+            background: var(--teal);
+            color: var(--white);
         }
 
         /* Footer Styles */
         footer {
             background-color: var(--charcoal);
-            color: white;
+            color: var(--white);
             padding: var(--space-xl);
             margin-top: var(--space-2xl);
         }
@@ -530,7 +535,7 @@
         }
 
         .footer-column a {
-            color: white;
+            color: var(--white);
             text-decoration: none;
             transition: color 0.3s;
             font-size: var(--font-size-sm);
@@ -538,6 +543,29 @@
 
         .footer-column a:hover {
             color: var(--teal-light);
+        }
+
+        .social-links {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--teal);
+            transform: translateY(-3px);
         }
 
         .copyright {
@@ -553,7 +581,7 @@
             display: inline-block;
             padding: var(--space-md) var(--space-lg);
             background: var(--teal);
-            color: white;
+            color: var(--white);
             border: none;
             border-radius: var(--border-radius-md);
             font-size: var(--font-size-md);
@@ -580,7 +608,7 @@
             height: 20px;
             border: 3px solid rgba(255,255,255,.3);
             border-radius: 50%;
-            border-top-color: white;
+            border-top-color: var(--white);
             animation: spin 1s ease-in-out infinite;
         }
         
@@ -595,13 +623,13 @@
             }
             
             body {
-                background: white;
-                color: black;
+                background: var(--white);
+                color: var(--charcoal);
             }
             
             .card {
                 box-shadow: none;
-                border: 1px solid #ccc;
+                border: 1px solid var(--medium-gray);
             }
         }
     </style>
@@ -611,15 +639,15 @@
         <div class="header-container">
             <div class="logo">
                 <i class="fas fa-calculator"></i>
-                <span>USA Financial Calculators</span>
+                <span>Finguid</span>
             </div>
             <nav>
                 <ul>
-                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-calculator"></i> Calculators</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Resources</a></li>
-                    <li><a href="#"><i class="fas fa-handshake"></i> Partners</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="https://finguid.com/"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="https://finguid.com/calculators"><i class="fas fa-calculator"></i> Calculators</a></li>
+                    <li><a href="https://finguid.com/resources"><i class="fas fa-book"></i> Resources</a></li>
+                    <li><a href="https://finguid.com/partners"><i class="fas fa-handshake"></i> Partners</a></li>
+                    <li><a href="https://finguid.com/contact"><i class="fas fa-envelope"></i> Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -917,41 +945,47 @@
     <footer>
         <div class="footer-container">
             <div class="footer-column">
-                <h3>USA Financial Calculators</h3>
+                <h3>Finguid</h3>
                 <p>Building the world's first AI-enhanced financial calculator platform specifically designed for Americans. Make smarter financial decisions with our intelligent tools.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
             </div>
             <div class="footer-column">
                 <h3>Calculators</h3>
                 <ul>
-                    <li><a href="#">Mortgage Calculator</a></li>
-                    <li><a href="#">Auto Loan Calculator</a></li>
-                    <li><a href="#">Investment Calculator</a></li>
-                    <li><a href="#">Credit Card Calculator</a></li>
-                    <li><a href="#">All Calculators</a></li>
+                    <li><a href="https://finguid.com/calculators/mortgage">Mortgage Calculator</a></li>
+                    <li><a href="https://finguid.com/calculators/auto-loan">Auto Loan Calculator</a></li>
+                    <li><a href="https://finguid.com/calculators/investment">Investment Calculator</a></li>
+                    <li><a href="https://finguid.com/calculators/credit-card">Credit Card Calculator</a></li>
+                    <li><a href="https://finguid.com/calculators">All Calculators</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h3>Resources</h3>
                 <ul>
-                    <li><a href="#">Financial Blog</a></li>
-                    <li><a href="#">How-to Guides</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">All Resources</a></li>
+                    <li><a href="https://finguid.com/resources/blog">Financial Blog</a></li>
+                    <li><a href="https://finguid.com/resources/guides">How-to Guides</a></li>
+                    <li><a href="https://finguid.com/resources/faq">FAQ</a></li>
+                    <li><a href="https://finguid.com/resources">All Resources</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h3>Company</h3>
                 <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Partner Program</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="https://finguid.com/about">About Us</a></li>
+                    <li><a href="https://finguid.com/contact">Contact Us</a></li>
+                    <li><a href="https://finguid.com/partners">Partner Program</a></li>
+                    <li><a href="https://finguid.com/privacy">Privacy Policy</a></li>
+                    <li><a href="https://finguid.com/terms">Terms of Service</a></li>
                 </ul>
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2025 USA Financial Calculators (Finguid.com). All rights reserved. Built with ❤️ for Americans' financial success.</p>
+            <p>&copy; 2025 Finguid. All rights reserved. Built with ❤️ for Americans' financial success.</p>
         </div>
     </footer>
 
