@@ -1,83 +1,736 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-color-scheme="light">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mortgage Calculator | USA Financial Calculators</title>
-<meta name="description" content="Free AI-enhanced Mortgage Calculator for smarter financial decisions. Mobile-friendly, SEO optimized, AI insights included." />
-<link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Mortgage Calculator | Finguid Financial Calculators</title>
+    <meta name="description" content="Free AI-enhanced Mortgage Calculator with state-specific data, voice control, and intelligent financial insights. Make smarter home buying decisions.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-<header class="header" role="banner">
-  <div class="container flex justify-between items-center">
-    <h1>
-      <a href="https://finguid.com/" aria-label="USA Financial Calculators Home" class="logo">
-        USA Financial Calculators
-      </a>
-    </h1>
-    <nav aria-label="Primary" class="nav-menu flex gap-6">
-      <a href="https://finguid.com/" class="nav-link">Home</a>
-      <a href="https://finguid.com/calculators" class="nav-link">Calculators</a>
-      <a href="https://finguid.com/resources" class="nav-link">Resources</a>
-      <a href="https://finguid.com/partners" class="nav-link">Partners</a>
-      <a href="https://finguid.com/contact" class="nav-link">Contact</a>
-    </nav>
-  </div>
-</header>
-<main class="container calc-container flex gap-10" role="main" aria-labelledby="calc-title">
-  <section class="calc-inputs flex-1" aria-label="Calculator Inputs">
-    <h2 id="calc-title">Mortgage Calculator</h2>
-    <form id="mortgage-calculator-form" onsubmit="return false;" aria-describedby="instructions">
-      <p id="instructions">Fill in the details below and click Calculate.</p>
-      <label for="loanAmount">Loan Amount ($)</label>
-      <input type="number" id="loanAmount" name="loanAmount" placeholder="300000" min="1000" class="form-input" required />
+    <!-- Connection Status Indicator -->
+    <div id="connection-status" class="connection-status hidden" role="alert"></div>
+    
+    <!-- Header -->
+    <header class="header" role="banner">
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <a href="https://finguid.com/" class="nav-brand" aria-label="Finguid Financial Calculators Home">
+                    <i class="fas fa-calculator" aria-hidden="true"></i>
+                    <span class="brand-text">Finguid</span>
+                </a>
+                
+                <div class="nav-menu-wrapper">
+                    <ul class="nav-menu" id="navMenu" role="menubar">
+                        <li role="none">
+                            <a href="https://finguid.com/" class="nav-link" role="menuitem">Home</a>
+                        </li>
+                        <li role="none">
+                            <a href="https://finguid.com/calculators" class="nav-link" role="menuitem">Calculators</a>
+                        </li>
+                        <li role="none">
+                            <a href="https://finguid.com/resources" class="nav-link" role="menuitem">Resources</a>
+                        </li>
+                        <li role="none">
+                            <a href="https://finguid.com/partners" class="nav-link" role="menuitem">Partners</a>
+                        </li>
+                        <li role="none">
+                            <a href="https://finguid.com/contact" class="nav-link" role="menuitem">Contact</a>
+                        </li>
+                    </ul>
+                    
+                    <button class="hamburger" id="hamburgerBtn" aria-expanded="false" aria-controls="navMenu" aria-label="Toggle navigation menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-      <label for="interestRate">Interest Rate (%)</label>
-      <input type="number" id="interestRate" name="interestRate" placeholder="6.5" min="0" step="0.01" class="form-input" required />
+    <!-- Main Content -->
+    <main id="main-content" role="main" class="calculators-page">
+        <!-- Hero Section -->
+        <section class="calculators-hero" role="banner">
+            <div class="container">
+                <div class="hero-content text-center">
+                    <h1 class="hero-title">
+                        Advanced Mortgage Calculator
+                    </h1>
+                    <p class="hero-description">
+                        AI-powered mortgage calculator with state-specific data, voice control, and personalized financial insights to help you make smarter home buying decisions.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-      <label for="loanTerm">Loan Term (Years)</label>
-      <input type="number" id="loanTerm" name="loanTerm" placeholder="30" min="1" max="50" class="form-input" required />
+        <!-- Calculator Section -->
+        <section class="calculator-section">
+            <div class="container">
+                <div class="calculator-grid" style="grid-template-columns: 1fr 1fr; gap: 32px;">
+                    <!-- Input Card -->
+                    <div class="calculator-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Loan Details</h2>
+                            <p class="card-description">Enter your mortgage information to calculate your monthly payments</p>
+                        </div>
+                        
+                        <div class="card-body">
+                            <form id="mortgage-calculator-form">
+                                <div class="form-group">
+                                    <label for="homePrice" class="form-label">Home Price ($)</label>
+                                    <input type="number" id="homePrice" name="homePrice" placeholder="500,000" min="50000" step="1000" class="form-input" required>
+                                    <div class="slider-container">
+                                        <input type="range" min="50000" max="2000000" value="500000" class="slider" id="homePriceSlider">
+                                    </div>
+                                </div>
 
-      <label for="propertyTax">Annual Property Tax ($)</label>
-      <input type="number" id="propertyTax" name="propertyTax" placeholder="3000" min="0" class="form-input" required />
+                                <div class="form-group">
+                                    <label for="downPayment" class="form-label">Down Payment</label>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                        <div>
+                                            <input type="number" id="downPayment" name="downPayment" placeholder="100,000" min="0" step="1000" class="form-input" required>
+                                        </div>
+                                        <div>
+                                            <input type="number" id="downPaymentPercent" name="downPaymentPercent" placeholder="20" min="0" max="100" step="0.5" class="form-input" required>
+                                        </div>
+                                    </div>
+                                    <div class="slider-container">
+                                        <input type="range" min="0" max="50" value="20" class="slider" id="downPaymentSlider">
+                                    </div>
+                                </div>
 
-      <label for="insurance">Annual Insurance ($)</label>
-      <input type="number" id="insurance" name="insurance" placeholder="1200" min="0" class="form-input" required />
+                                <div class="form-group">
+                                    <label for="loanTerm" class="form-label">Loan Term (Years)</label>
+                                    <select id="loanTerm" name="loanTerm" class="form-control" required>
+                                        <option value="30">30 years</option>
+                                        <option value="20">20 years</option>
+                                        <option value="15">15 years</option>
+                                        <option value="10">10 years</option>
+                                    </select>
+                                </div>
 
-      <button type="button" class="btn btn-primary calculate-btn" onclick="calculateMortgage()">Calculate</button>
-    </form>
-  </section>
-  <section class="calc-results flex-1" aria-live="polite" aria-atomic="true" aria-label="Calculation Results" id="mortgage-calculator-results">
-    <h3>Results</h3>
-    <div id="mortgage-calculator-output" class="result-output"></div>
-  </section>
-</main>
-<script>
-function calculateMortgage() {
-  const loanAmount = parseFloat(document.getElementById('loanAmount').value);
-  const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
-  const loanTermMonths = parseInt(document.getElementById('loanTerm').value) * 12;
-  const propertyTaxAnnual = parseFloat(document.getElementById('propertyTax').value);
-  const insuranceAnnual = parseFloat(document.getElementById('insurance').value);
+                                <div class="form-group">
+                                    <label for="interestRate" class="form-label">Interest Rate (%)</label>
+                                    <input type="number" id="interestRate" name="interestRate" placeholder="6.5" min="0.1" max="20" step="0.01" class="form-input" required>
+                                    <div class="slider-container">
+                                        <input type="range" min="1" max="15" value="6.5" step="0.1" class="slider" id="interestRateSlider">
+                                    </div>
+                                </div>
 
-  if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTermMonths)) {
-    alert('Please fill in all required fields correctly.');
-    return;
-  }
+                                <div class="form-group">
+                                    <label for="state" class="form-label">State</label>
+                                    <select id="state" name="state" class="form-control" required>
+                                        <option value="">Select a state</option>
+                                        <option value="CA">California</option>
+                                        <option value="TX">Texas</option>
+                                        <option value="FL">Florida</option>
+                                        <option value="NY">New York</option>
+                                        <option value="IL">Illinois</option>
+                                    </select>
+                                </div>
 
-  const monthlyPrincipalInterest = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTermMonths)) / (Math.pow(1 + interestRate, loanTermMonths) - 1);
-  const monthlyPropertyTax = propertyTaxAnnual / 12;
-  const monthlyInsurance = insuranceAnnual / 12;
-  const totalMonthly = monthlyPrincipalInterest + monthlyPropertyTax + monthlyInsurance;
+                                <div class="form-group">
+                                    <label for="propertyTax" class="form-label">Annual Property Tax ($)
+                                        <span id="propertyTaxNote" class="text-gray" style="font-size: 12px;">(State average: $5,000)</span>
+                                    </label>
+                                    <input type="number" id="propertyTax" name="propertyTax" placeholder="5,000" min="0" step="100" class="form-input" required>
+                                </div>
 
-  let resultsHtml = '';
-  resultsHtml += `<p><strong>Total Monthly Payment: </strong>$${totalMonthly.toFixed(2)}</p>`;
-  resultsHtml += `<p><strong>Principal & Interest: </strong>$${monthlyPrincipalInterest.toFixed(2)}</p>`;
-  resultsHtml += `<p><strong>Property Tax: </strong>$${monthlyPropertyTax.toFixed(2)}</p>`;
-  resultsHtml += `<p><strong>Insurance: </strong>$${monthlyInsurance.toFixed(2)}</p>`;
+                                <div class="form-group">
+                                    <label for="insurance" class="form-label">Annual Home Insurance ($)
+                                        <span id="insuranceNote" class="text-gray" style="font-size: 12px;">(State average: $1,200)</span>
+                                    </label>
+                                    <input type="number" id="insurance" name="insurance" placeholder="1,200" min="0" step="100" class="form-input" required>
+                                </div>
 
-  document.getElementById('mortgage-calculator-output').innerHTML = resultsHtml;
-}
-</script>
+                                <div class="form-group">
+                                    <label for="hoa" class="form-label">Monthly HOA Fees ($)</label>
+                                    <input type="number" id="hoa" name="hoa" placeholder="100" min="0" step="10" class="form-input">
+                                </div>
+
+                                <div class="btn-group" style="display: flex; gap: 12px; margin-top: 24px;">
+                                    <button type="button" class="btn btn-primary" id="calculateBtn">Calculate</button>
+                                    <button type="reset" class="btn btn-secondary">Reset</button>
+                                    <button type="button" class="btn btn-success" id="shareBtn">Share Results</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Results Card -->
+                    <div class="calculator-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Loan Results</h2>
+                            <p class="card-description">Your personalized mortgage calculation results</p>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div id="results" aria-live="polite">
+                                <div class="result-highlight" style="background: rgba(var(--color-success-rgb), 0.1); padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--color-success);">
+                                    <div class="result-item" style="display: flex; justify-content: space-between;">
+                                        <span class="font-semibold">Total Monthly Payment:</span>
+                                        <span class="result-value font-bold" id="totalPayment" style="color: var(--color-success); font-size: 1.5rem;">$0</span>
+                                    </div>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+                                    <span>Principal & Interest:</span>
+                                    <span id="principalInterest">$0</span>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+                                    <span>Property Taxes:</span>
+                                    <span id="taxPayment">$0</span>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+                                    <span>Home Insurance:</span>
+                                    <span id="insurancePayment">$0</span>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+                                    <span>PMI:</span>
+                                    <span id="pmiPayment">$0</span>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+                                    <span>HOA Fees:</span>
+                                    <span id="hoaPayment">$0</span>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+                                    <span>Total Loan Amount:</span>
+                                    <span id="loanAmount">$0</span>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+                                    <span>Total Interest Paid:</span>
+                                    <span id="totalInterest">$0</span>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+                                    <span>Total of All Payments:</span>
+                                    <span id="totalPayments">$0</span>
+                                </div>
+
+                                <div class="result-item" style="display: flex; justify-content: space-between; padding: 8px 0;">
+                                    <span>Pay-off Date:</span>
+                                    <span id="payoffDate">-</span>
+                                </div>
+
+                                <div class="tabs" style="display: flex; border-bottom: 1px solid var(--color-border); margin: 24px 0 16px;">
+                                    <div class="tab active" data-tab="amortization" style="padding: 12px 16px; cursor: pointer; border-bottom: 3px solid var(--color-primary); color: var(--color-primary); font-weight: 500;">Amortization</div>
+                                    <div class="tab" data-tab="breakdown" style="padding: 12px 16px; cursor: pointer; color: var(--color-text-secondary);">Breakdown</div>
+                                    <div class="tab" data-tab="insights" style="padding: 12px 16px; cursor: pointer; color: var(--color-text-secondary);">AI Insights</div>
+                                </div>
+
+                                <div class="tab-content active" id="amortizationContent">
+                                    <div style="overflow-x: auto;">
+                                        <table class="amortization-table" style="width: 100%; border-collapse: collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: left; padding: 8px; border-bottom: 1px solid var(--color-border);">Year</th>
+                                                    <th style="text-align: right; padding: 8px; border-bottom: 1px solid var(--color-border);">Principal</th>
+                                                    <th style="text-align: right; padding: 8px; border-bottom: 1px solid var(--color-border);">Interest</th>
+                                                    <th style="text-align: right; padding: 8px; border-bottom: 1px solid var(--color-border);">Total Interest</th>
+                                                    <th style="text-align: right; padding: 8px; border-bottom: 1px solid var(--color-border);">Balance</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="amortizationTableBody">
+                                                <!-- Will be populated by JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="tab-content" id="breakdownContent" style="display: none;">
+                                    <div id="chartContainer" style="height: 300px; margin: 1rem 0;">
+                                        <p>Visual breakdown of your mortgage payment will appear here after calculation.</p>
+                                    </div>
+                                </div>
+
+                                <div class="tab-content" id="insightsContent" style="display: none;">
+                                    <div class="ai-insights" style="background-color: rgba(var(--color-info-rgb), 0.1); border-radius: 8px; padding: 16px; border-left: 4px solid var(--color-info);">
+                                        <h3 style="display: flex; align-items: center; gap: 8px; color: var(--color-info); margin-bottom: 16px;">
+                                            <i class="fas fa-robot"></i>
+                                            AI-Powered Insights
+                                        </h3>
+                                        <div id="insightsContainer">
+                                            <p>Complete the form to get personalized mortgage insights and recommendations.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        Finguid
+                    </div>
+                    <p>
+                        The world's first AI-enhanced financial calculator platform built specifically for Americans. 
+                        Make smarter financial decisions with accurate calculations and intelligent insights.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="#mortgage-calculator">Mortgage Calculator</a></li>
+                        <li><a href="#auto-loan-calculator">Auto Loan Calculator</a></li>
+                        <li><a href="#investment-calculator">Investment Calculator</a></li>
+                        <li><a href="#credit-card-calculator">Credit Card Calculator</a></li>
+                        <li><a href="#insurance-calculator">Insurance Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/blog">Financial Blog</a></li>
+                        <li><a href="/guides">Calculation Guides</a></li>
+                        <li><a href="/tools">Financial Tools</a></li>
+                        <li><a href="/api">API Documentation</a></li>
+                        <li><a href="/support">Support Center</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="/affiliate">Affiliate Program</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Finguid Financial Calculators. Built with ❤️ for Americans. All calculations are estimates and should be verified with financial professionals.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const form = document.getElementById('mortgage-calculator-form');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Input elements
+            const homePriceInput = document.getElementById('homePrice');
+            const homePriceSlider = document.getElementById('homePriceSlider');
+            const downPaymentInput = document.getElementById('downPayment');
+            const downPaymentPercentInput = document.getElementById('downPaymentPercent');
+            const downPaymentSlider = document.getElementById('downPaymentSlider');
+            const interestRateInput = document.getElementById('interestRate');
+            const interestRateSlider = document.getElementById('interestRateSlider');
+            const stateSelect = document.getElementById('state');
+            const propertyTaxInput = document.getElementById('propertyTax');
+            const insuranceInput = document.getElementById('insurance');
+            
+            // Result elements
+            const totalPaymentEl = document.getElementById('totalPayment');
+            const principalInterestEl = document.getElementById('principalInterest');
+            const taxPaymentEl = document.getElementById('taxPayment');
+            const insurancePaymentEl = document.getElementById('insurancePayment');
+            const pmiPaymentEl = document.getElementById('pmiPayment');
+            const hoaPaymentEl = document.getElementById('hoaPayment');
+            const loanAmountEl = document.getElementById('loanAmount');
+            const totalInterestEl = document.getElementById('totalInterest');
+            const totalPaymentsEl = document.getElementById('totalPayments');
+            const payoffDateEl = document.getElementById('payoffDate');
+            const amortizationTableBody = document.getElementById('amortizationTableBody');
+            const insightsContainer = document.getElementById('insightsContainer');
+            
+            // State-specific data (simplified for demo)
+            const stateData = {
+                'CA': { tax: 6000, insurance: 1500, name: 'California' },
+                'TX': { tax: 4500, insurance: 1800, name: 'Texas' },
+                'FL': { tax: 3500, insurance: 2000, name: 'Florida' },
+                'NY': { tax: 7000, insurance: 1300, name: 'New York' },
+                'IL': { tax: 5500, insurance: 1200, name: 'Illinois' }
+            };
+            
+            // Sync sliders with input fields
+            homePriceSlider.addEventListener('input', () => {
+                homePriceInput.value = homePriceSlider.value;
+                updateDownPaymentFromPercent();
+            });
+            
+            homePriceInput.addEventListener('input', () => {
+                homePriceSlider.value = homePriceInput.value;
+                updateDownPaymentFromPercent();
+            });
+            
+            downPaymentSlider.addEventListener('input', () => {
+                downPaymentPercentInput.value = downPaymentSlider.value;
+                updateDownPaymentFromPercent();
+            });
+            
+            downPaymentPercentInput.addEventListener('input', () => {
+                downPaymentSlider.value = downPaymentPercentInput.value;
+                updateDownPaymentFromPercent();
+            });
+            
+            downPaymentInput.addEventListener('input', () => {
+                updateDownPaymentFromValue();
+            });
+            
+            interestRateSlider.addEventListener('input', () => {
+                interestRateInput.value = interestRateSlider.value;
+            });
+            
+            interestRateInput.addEventListener('input', () => {
+                interestRateSlider.value = interestRateInput.value;
+            });
+            
+            // Update state-specific defaults
+            stateSelect.addEventListener('change', () => {
+                const state = stateSelect.value;
+                if (state && stateData[state]) {
+                    propertyTaxInput.value = stateData[state].tax;
+                    insuranceInput.value = stateData[state].insurance;
+                    
+                    // Update notes
+                    document.getElementById('propertyTaxNote').textContent = 
+                        `(State average: $${stateData[state].tax.toLocaleString()})`;
+                    document.getElementById('insuranceNote').textContent = 
+                        `(State average: $${stateData[state].insurance.toLocaleString()})`;
+                }
+            });
+            
+            // Tab functionality
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Deactivate all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Activate current tab
+                    tab.classList.add('active');
+                    document.getElementById(`${tabId}Content`).classList.add('active');
+                });
+            });
+            
+            // Calculate mortgage
+            calculateBtn.addEventListener('click', calculateMortgage);
+            
+            // Share results
+            shareBtn.addEventListener('click', shareResults);
+            
+            // Initial calculation with default values
+            calculateMortgage();
+            
+            // Helper functions
+            function updateDownPaymentFromPercent() {
+                if (homePriceInput.value) {
+                    const percent = downPaymentPercentInput.value / 100;
+                    downPaymentInput.value = Math.round(homePriceInput.value * percent);
+                }
+            }
+            
+            function updateDownPaymentFromValue() {
+                if (homePriceInput.value && downPaymentInput.value) {
+                    const percent = (downPaymentInput.value / homePriceInput.value) * 100;
+                    downPaymentPercentInput.value = percent.toFixed(1);
+                    downPaymentSlider.value = percent.toFixed(1);
+                }
+            }
+            
+            function calculateMortgage() {
+                // Get input values
+                const homePrice = parseFloat(homePriceInput.value) || 0;
+                const downPayment = parseFloat(downPaymentInput.value) || 0;
+                const loanTerm = parseInt(document.getElementById('loanTerm').value) || 30;
+                const interestRate = parseFloat(interestRateInput.value) || 0;
+                const propertyTax = parseFloat(propertyTaxInput.value) || 0;
+                const insurance = parseFloat(insuranceInput.value) || 0;
+                const hoa = parseFloat(document.getElementById('hoa').value) || 0;
+                
+                // Calculate loan amount
+                const loanAmount = homePrice - downPayment;
+                
+                // Calculate monthly interest rate
+                const monthlyRate = interestRate / 100 / 12;
+                
+                // Calculate number of payments
+                const numberOfPayments = loanTerm * 12;
+                
+                // Calculate monthly principal and interest
+                const monthlyPrincipalInterest = loanAmount * 
+                    (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                    (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+                
+                // Calculate PMI (if down payment is less than 20%)
+                let pmi = 0;
+                const downPaymentPercent = (downPayment / homePrice) * 100;
+                if (downPaymentPercent < 20) {
+                    pmi = loanAmount * 0.005 / 12; // 0.5% of loan amount annually
+                }
+                
+                // Calculate monthly property tax and insurance
+                const monthlyPropertyTax = propertyTax / 12;
+                const monthlyInsurance = insurance / 12;
+                
+                // Calculate total monthly payment
+                const totalMonthly = monthlyPrincipalInterest + monthlyPropertyTax + monthlyInsurance + pmi + hoa;
+                
+                // Calculate total interest paid over life of loan
+                const totalInterest = (monthlyPrincipalInterest * numberOfPayments) - loanAmount;
+                
+                // Calculate total of all payments
+                const totalPayments = monthlyPrincipalInterest * numberOfPayments + 
+                                    (propertyTax * loanTerm) + 
+                                    (insurance * loanTerm) + 
+                                    (pmi * numberOfPayments) + 
+                                    (hoa * numberOfPayments);
+                
+                // Calculate pay-off date
+                const today = new Date();
+                const payoffDate = new Date();
+                payoffDate.setFullYear(today.getFullYear() + loanTerm);
+                
+                // Update UI with results
+                totalPaymentEl.textContent = `$${totalMonthly.toFixed(2)}`;
+                principalInterestEl.textContent = `$${monthlyPrincipalInterest.toFixed(2)}`;
+                taxPaymentEl.textContent = `$${monthlyPropertyTax.toFixed(2)}`;
+                insurancePaymentEl.textContent = `$${monthlyInsurance.toFixed(2)}`;
+                pmiPaymentEl.textContent = pmi > 0 ? `$${pmi.toFixed(2)}` : '$0';
+                hoaPaymentEl.textContent = `$${hoa.toFixed(2)}`;
+                loanAmountEl.textContent = `$${loanAmount.toLocaleString()}`;
+                totalInterestEl.textContent = `$${totalInterest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                totalPaymentsEl.textContent = `$${totalPayments.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                payoffDateEl.textContent = payoffDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+                
+                // Generate amortization table
+                generateAmortizationTable(loanAmount, interestRate, loanTerm);
+                
+                // Generate AI insights
+                generateAIInsights(homePrice, downPayment, loanAmount, interestRate, loanTerm, totalMonthly, downPaymentPercent);
+            }
+            
+            function generateAmortizationTable(loanAmount, interestRate, loanTerm) {
+                const monthlyRate = interestRate / 100 / 12;
+                const numberOfPayments = loanTerm * 12;
+                const monthlyPayment = loanAmount * 
+                    (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                    (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+                
+                let balance = loanAmount;
+                let totalInterest = 0;
+                let html = '';
+                
+                for (let year = 1; year <= loanTerm; year++) {
+                    let yearPrincipal = 0;
+                    let yearInterest = 0;
+                    
+                    for (let month = 1; month <= 12; month++) {
+                        const interestPayment = balance * monthlyRate;
+                        const principalPayment = monthlyPayment - interestPayment;
+                        
+                        yearPrincipal += principalPayment;
+                        yearInterest += interestPayment;
+                        totalInterest += interestPayment;
+                        
+                        balance -= principalPayment;
+                        
+                        if (balance < 0) balance = 0;
+                    }
+                    
+                    html += `
+                        <tr>
+                            <td style="text-align: left; padding: 8px; border-bottom: 1px solid var(--color-border);">${year}</td>
+                            <td style="text-align: right; padding: 8px; border-bottom: 1px solid var(--color-border);">$${yearPrincipal.toFixed(2)}</td>
+                            <td style="text-align: right; padding: 8px; border-bottom: 1px solid var(--color-border);">$${yearInterest.toFixed(2)}</td>
+                            <td style="text-align: right; padding: 8px; border-bottom: 1px solid var(--color-border);">$${totalInterest.toFixed(2)}</td>
+                            <td style="text-align: right; padding: 8px; border-bottom: 1px solid var(--color-border);">$${balance.toFixed(2)}</td>
+                        </tr>
+                    `;
+                    
+                    if (balance <= 0) break;
+                }
+                
+                amortizationTableBody.innerHTML = html;
+            }
+            
+            function generateAIInsights(homePrice, downPayment, loanAmount, interestRate, loanTerm, monthlyPayment, downPaymentPercent) {
+                let insightsHTML = '';
+                
+                // Down payment insight
+                if (downPaymentPercent < 20) {
+                    insightsHTML += `
+                        <div class="insight-item" style="background: rgba(var(--color-warning-rgb), 0.1); padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid var(--color-warning);">
+                            <strong>Consider a larger down payment</strong>
+                            <p>Your down payment is ${downPaymentPercent.toFixed(1)}%, which is below the recommended 20%. 
+                            You're paying PMI of approximately $${(loanAmount * 0.005 / 12).toFixed(2)} per month. 
+                            Increasing your down payment to 20% would save you this cost.</p>
+                        </div>
+                    `;
+                } else {
+                    insightsHTML += `
+                        <div class="insight-item" style="background: rgba(var(--color-success-rgb), 0.1); padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid var(--color-success);">
+                            <strong>Great job on your down payment</strong>
+                            <p>Your down payment of ${downPaymentPercent.toFixed(1)}% is at or above the recommended 20%, 
+                            so you won't have to pay Private Mortgage Insurance (PMI). This saves you money every month.</p>
+                        </div>
+                    `;
+                }
+                
+                // Loan term insight
+                if (loanTerm === 30) {
+                    const payment15Year = calculatePaymentForTerm(15, loanAmount, interestRate);
+                    const interest30Year = (monthlyPayment * 360) - loanAmount;
+                    const interest15Year = (payment15Year * 180) - loanAmount;
+                    const savings = interest30Year - interest15Year;
+                    
+                    insightsHTML += `
+                        <div class="insight-item" style="background: rgba(var(--color-info-rgb), 0.1); padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid var(--color-info);">
+                            <strong>Consider a 15-year mortgage</strong>
+                            <p>With a 15-year term, your monthly payment would be approximately $${payment15Year.toFixed(2)} 
+                            but you would save $${savings.toLocaleString(undefined, {maximumFractionDigits: 0})} in interest over the life of the loan.</p>
+                        </div>
+                    `;
+                }
+                
+                // Debt-to-income ratio warning (simplified)
+                const estimatedIncome = monthlyPayment * 3; // Assuming payment is ⅓ of income
+                insightsHTML += `
+                    <div class="insight-item" style="background: rgba(var(--color-info-rgb), 0.1); padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid var(--color-info);">
+                        <strong>Debt-to-Income Ratio</strong>
+                        <p>Lenders typically recommend that your mortgage payment be no more than 28% of your gross monthly income. 
+                        Based on this payment, your estimated monthly income should be at least $${estimatedIncome.toFixed(2)}.</p>
+                    </div>
+                `;
+                
+                // State-specific insight
+                const state = stateSelect.value;
+                if (state && stateData[state]) {
+                    insightsHTML += `
+                        <div class="insight-item" style="background: rgba(var(--color-info-rgb), 0.1); padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid var(--color-info);">
+                            <strong>${stateData[state].name} Specific Advice</strong>
+                            <p>Property taxes in ${stateData[state].name} tend to be ${state === 'CA' || state === 'NY' ? 'higher' : 'around average'} 
+                            compared to national averages. Make sure to budget for potential tax increases over time.</p>
+                        </div>
+                    `;
+                }
+                
+                insightsContainer.innerHTML = insightsHTML;
+            }
+            
+            function calculatePaymentForTerm(term, amount, rate) {
+                const monthlyRate = rate / 100 / 12;
+                const numberOfPayments = term * 12;
+                return amount * 
+                    (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                    (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+            }
+            
+            function shareResults() {
+                // In a real implementation, this would generate a shareable link or image
+                alert('Sharing functionality would be implemented here. This could generate a unique URL with all parameters encoded or create a downloadable summary.');
+            }
+        });
+    </script>
+
+    <!-- Additional styles for the calculator -->
+    <style>
+        .slider-container {
+            margin-top: 8px;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 5px;
+            -webkit-appearance: none;
+            background: var(--color-border);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            background: var(--color-primary-hover);
+            transform: scale(1.1);
+        }
+        
+        .calculator-section {
+            padding: 40px 0;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        
+        .tab {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .insight-item {
+            margin-bottom: 16px;
+        }
+    </style>
 </body>
 </html>
