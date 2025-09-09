@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/WebApplication">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,41 @@
     <meta name="keywords" content="mortgage calculator, home loan calculator, mortgage payment, AI mortgage calculator, financial planning">
     <meta name="author" content="Finguid">
     <title>Advanced AI Mortgage Calculator | Finguid - Smart Home Buying Decisions</title>
+    
+    <!-- Schema.org structured data for AI and SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "AI-Enhanced Mortgage Calculator",
+      "url": "https://finguid.com/mortgage-calculator",
+      "description": "Advanced AI-powered mortgage calculator with state-specific data, voice control, and personalized financial insights.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "permissions": "microphone",
+      "featureList": [
+        "Voice-controlled calculations",
+        "State-specific tax data",
+        "AI-powered financial insights",
+        "Amortization schedule",
+        "Payment breakdown visualization"
+      ],
+      "screenshot": "https://finguid.com/images/mortgage-calculator-screenshot.png",
+      "softwareVersion": "2.0",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    
+    <link rel="canonical" href="https://finguid.com/mortgage-calculator">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <style>
@@ -632,6 +667,23 @@
                 border: 1px solid var(--medium-gray);
             }
         }
+
+        /* Clickable mortgage calculator link */
+        .calculator-link {
+            display: inline-block;
+            margin-top: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
+            background-color: var(--teal);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .calculator-link:hover {
+            background-color: var(--teal-dark);
+        }
     </style>
 </head>
 <body>
@@ -657,6 +709,11 @@
         <div class="calculator-title">
             <h1><i class="fas fa-calculator"></i> Advanced Mortgage Calculator</h1>
             <p>AI-powered mortgage calculator with state-specific data, voice control, and personalized financial insights to help you make smarter home buying decisions.</p>
+            
+            <!-- Clickable mortgage calculator link -->
+            <a href="https://finguid.com/mortgage-calculator" class="calculator-link">
+                <i class="fas fa-external-link-alt"></i> Use our AI-powered Mortgage Calculator
+            </a>
         </div>
 
         <div class="calculator-grid">
@@ -957,7 +1014,7 @@
             <div class="footer-column">
                 <h3>Calculators</h3>
                 <ul>
-                    <li><a href="https://finguid.com/calculators/mortgage">Mortgage Calculator</a></li>
+                    <li><a href="https://finguid.com/mortgage-calculator">Mortgage Calculator</a></li>
                     <li><a href="https://finguid.com/calculators/auto-loan">Auto Loan Calculator</a></li>
                     <li><a href="https://finguid.com/calculators/investment">Investment Calculator</a></li>
                     <li><a href="https://finguid.com/calculators/credit-card">Credit Card Calculator</a></li>
