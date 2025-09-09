@@ -1,954 +1,1726 @@
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebApplication">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    
-    <!-- Primary Meta Tags -->
-    <title>AI-Powered Mortgage Calculator for Americans | Finguid</title>
-    <meta name="description" content="World's first AI-enhanced mortgage calculator with state-specific tax rates, PMI calculations, and voice input. Free, accurate, and trusted by 100,000+ Americans.">
-    <meta name="keywords" content="mortgage calculator, home loan calculator, PMI calculator, property tax calculator, refinance calculator, AI mortgage calculator, USA mortgage rates">
-    <meta name="author" content="Finguid">
-    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://finguid.com/mortgage-calculator">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://finguid.com/mortgage-calculator">
-    <meta property="og:title" content="AI-Powered Mortgage Calculator for Americans | Finguid">
-    <meta property="og:description" content="Calculate accurate mortgage payments with AI insights, state-specific taxes, and PMI calculations. Voice input enabled.">
-    <meta property="og:image" content="https://finguid.com/assets/mortgage-calculator-preview.jpg">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://finguid.com/mortgage-calculator">
-    <meta property="twitter:title" content="AI Mortgage Calculator - Finguid">
-    <meta property="twitter:description" content="Smart mortgage calculator with AI insights and state-specific data">
-    <meta property="twitter:image" content="https://finguid.com/assets/mortgage-calculator-preview.jpg">
-    
-    <!-- Structured Data for AI Understanding -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Finguid AI Mortgage Calculator",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "All",
-        "url": "https://finguid.com/mortgage-calculator",
-        "description": "AI-powered mortgage calculator with state-specific tax rates and PMI calculations",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "ratingCount": "2847"
-        },
-        "featureList": [
-            "AI-powered insights",
-            "State-specific property tax rates",
-            "PMI calculations with removal timeline",
-            "Voice input capabilities",
-            "Mobile-responsive design",
-            "Amortization schedules",
-            "Extra payment scenarios",
-            "Refinance analysis",
-            "Export to PDF",
-            "Partner embeddable"
-        ],
-        "creator": {
-            "@type": "Organization",
-            "name": "Finguid",
-            "url": "https://finguid.com"
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI-powered mortgage calculator with state-specific tax rates, PMI calculations, and voice input. Get accurate mortgage payments instantly for all 50 US states.">
+  <meta name="keywords" content="mortgage calculator, home loan calculator, USA, AI calculator, PMI calculator, state tax rates, Finguid">
+  <meta name="author" content="Finguid">
+  
+  <title>🤖 AI Mortgage Calculator | State-Specific PMI & Tax Calculator - Finguid</title>
+  <link rel="canonical" href="https://finguid.com/mortgage-calculator">
+  
+  <!-- Open Graph & Twitter Cards -->
+  <meta property="og:title" content="AI-Powered Mortgage Calculator for Americans | Finguid">
+  <meta property="og:description" content="Calculate state-specific US mortgage payments with AI insights, PMI, taxes & insurance. Voice input, mobile-optimized, 100% free.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://finguid.com/mortgage-calculator">
+  <meta property="og:image" content="https://finguid.com/assets/mortgage-calculator-og.jpg">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Mortgage Calculator - Finguid">
+  <meta name="twitter:description" content="Smart, state-aware US mortgage calculator with AI insights. PMI, taxes, amortization schedule included.">
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+  
+  <!-- Structured Data for AI & Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Finguid AI Mortgage Calculator",
+    "description": "AI-enhanced mortgage calculator with state-specific tax rates, PMI calculations, and voice input for accurate US mortgage payment calculations.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "2847"
+    },
+    "featureList": [
+      "Voice input support",
+      "State-specific property tax rates",
+      "AI-powered payment insights", 
+      "PMI calculation with removal timeline",
+      "Mobile-responsive design",
+      "Partner embeddable widget"
+    ],
+    "url": "https://finguid.com/mortgage-calculator",
+    "screenshot": "https://finguid.com/assets/mortgage-calculator-screenshot.png"
+  }
+  </script>
+  
+  <!-- FAQ Schema for Voice Search & AI -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How accurate is Finguid's AI mortgage calculator?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our AI mortgage calculator uses real-time data from all 50 US states, including current property tax rates, PMI calculations, and insurance estimates. The AI provides personalized insights based on your specific financial scenario."
         }
+      },
+      {
+        "@type": "Question", 
+        "name": "Does this calculator include PMI and state taxes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, our calculator automatically includes PMI calculations based on your down payment and provides state-specific property tax rates for all 50 states. It also estimates homeowners insurance and shows PMI removal timeline."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I embed this calculator on my website?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely! We provide a simple embed code for real estate agents, lenders, and websites. The calculator is fully responsive and maintains Finguid branding."
+        }
+      }
+    ]
+  }
+  </script>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main stylesheet - using your existing style-1.css -->
+  <link rel="stylesheet" href="style-1.css">
+  
+  <style>
+    /* Calculator-specific styles that extend your main design system */
+    .calculator-page {
+      padding-top: 90px;
+      min-height: 100vh;
+      background: var(--color-background);
     }
-    </script>
     
-    <!-- FAQ Schema for Voice Search -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How accurate is the Finguid mortgage calculator?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Our AI-powered calculator uses real-time state tax rates, current PMI data, and official mortgage formulas to provide industry-leading accuracy within 0.01% of actual lender calculations."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Does the calculator include PMI calculations?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes! Our calculator automatically calculates PMI based on your credit score and loan-to-value ratio, and shows you exactly when PMI will be removed from your payments."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I see how extra payments affect my mortgage?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Absolutely! Our advanced calculator shows how extra principal payments can save you thousands in interest and years off your mortgage term."
-                }
-            }
-        ]
+    .calculator-header {
+      background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-secondary) 100%);
+      padding: var(--space-32) 0;
+      text-align: center;
+      border-bottom: 1px solid var(--color-border);
     }
-    </script>
     
-    <!-- Performance & SEO -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="/style-1.css" as="style">
-    <link rel="preload" href="/data/state-tax-rates.json" as="fetch" crossorigin>
+    .calculator-hero h1 {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text);
+      margin-bottom: var(--space-16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-12);
+    }
     
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    .calculator-hero .hero-icon {
+      font-size: var(--font-size-4xl);
+      color: var(--color-primary);
+    }
     
-    <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="/style-1.css">
+    .calculator-hero p {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-secondary);
+      margin: 0 auto;
+      max-width: 700px;
+      line-height: var(--line-height-normal);
+    }
     
-    <!-- AI Helper Files -->
-    <link rel="alternate" type="text/plain" href="/robots.txt">
-    <link rel="alternate" type="application/json" href="/api/calculator-data">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#21808d">
+    .calculator-features {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-32);
+      margin-top: var(--space-32);
+      flex-wrap: wrap;
+    }
     
-    <!-- AdSense Setup -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXX" crossorigin="anonymous"></script>
+    .feature-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-10) var(--space-16);
+      background: var(--color-surface);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--color-card-border);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text);
+    }
     
-    <style>
-        /* Additional Calculator-Specific Styles */
-        .calculator-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--space-32) var(--space-16);
-            padding-top: 100px;
-        }
-        
-        .calculator-hero {
-            text-align: center;
-            margin-bottom: var(--space-32);
-            background: var(--color-surface);
-            padding: var(--space-32);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-32);
-            margin-bottom: var(--space-32);
-        }
-        
-        @media (max-width: 1024px) {
-            .calculator-grid {
-                grid-template-columns: 1fr;
-                gap: var(--space-24);
-            }
-        }
-        
-        .input-card {
-            background: var(--color-surface);
-            border-radius: var(--radius-lg);
-            padding: var(--space-32);
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--color-card-border);
-        }
-        
-        .results-card {
-            background: var(--color-surface);
-            border-radius: var(--radius-lg);
-            padding: var(--space-32);
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--color-card-border);
-            position: sticky;
-            top: 100px;
-            height: fit-content;
-        }
-        
-        .form-group {
-            margin-bottom: var(--space-24);
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: var(--space-8);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text);
-            font-size: var(--font-size-base);
-        }
-        
-        .form-label i {
-            color: var(--color-primary);
-            margin-right: var(--space-8);
-            width: 16px;
-        }
-        
-        .input-group {
-            display: flex;
-            align-items: center;
-            border: 2px solid var(--color-border);
-            border-radius: var(--radius-base);
-            background: var(--color-background);
-            transition: border-color var(--duration-normal);
-        }
-        
-        .input-group:focus-within {
-            border-color: var(--color-primary);
-            box-shadow: var(--focus-ring);
-        }
-        
-        .input-prefix {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            padding: var(--space-12) var(--space-16);
-            font-weight: var(--font-weight-semibold);
-            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-        }
-        
-        .form-input {
-            flex: 1;
-            border: none;
-            padding: var(--space-12) var(--space-16);
-            font-size: var(--font-size-lg);
-            background: transparent;
-            color: var(--color-text);
-            border-radius: 0 var(--radius-base) var(--radius-base) 0;
-        }
-        
-        .form-input:focus {
-            outline: none;
-        }
-        
-        .range-container {
-            margin-top: var(--space-12);
-        }
-        
-        .range-input {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--color-secondary);
-            outline: none;
-            -webkit-appearance: none;
-        }
-        
-        .range-input::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--color-primary);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .range-input::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--color-primary);
-            cursor: pointer;
-            border: none;
-        }
-        
-        .range-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: var(--font-size-sm);
-            color: var(--color-text-secondary);
-            margin-top: var(--space-4);
-        }
-        
-        .voice-control {
-            display: flex;
-            align-items: center;
-            gap: var(--space-12);
-            margin-top: var(--space-16);
-            padding: var(--space-16);
-            background: var(--color-secondary);
-            border-radius: var(--radius-base);
-        }
-        
-        .voice-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            border: none;
-            cursor: pointer;
-            transition: all var(--duration-normal);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .voice-btn:hover {
-            background: var(--color-primary-hover);
-            transform: scale(1.05);
-        }
-        
-        .voice-status {
-            font-size: var(--font-size-sm);
-            color: var(--color-text-secondary);
-        }
-        
-        .calculate-btn {
-            width: 100%;
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            border: none;
-            padding: var(--space-16) var(--space-24);
-            border-radius: var(--radius-base);
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-            cursor: pointer;
-            transition: all var(--duration-normal);
-            margin-top: var(--space-24);
-        }
-        
-        .calculate-btn:hover {
-            background: var(--color-primary-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .result-item {
-            margin-bottom: var(--space-24);
-        }
-        
-        .result-label {
-            font-size: var(--font-size-sm);
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-4);
-        }
-        
-        .result-value {
-            font-size: var(--font-size-4xl);
-            font-weight: var(--font-weight-bold);
-            color: var(--color-primary);
-        }
-        
-        .breakdown-chart {
-            height: 40px;
-            border-radius: var(--radius-base);
-            overflow: hidden;
-            margin: var(--space-16) 0;
-            display: flex;
-        }
-        
-        .chart-segment {
-            height: 100%;
-            transition: width var(--duration-normal);
-        }
-        
-        .chart-principal { background: var(--color-primary); }
-        .chart-interest { background: var(--color-primary-hover); }
-        .chart-taxes { background: var(--color-warning); }
-        .chart-insurance { background: var(--color-error); }
-        .chart-pmi { background: var(--color-info); }
-        
-        .chart-legend {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-8);
-            margin-top: var(--space-12);
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-8);
-            font-size: var(--font-size-sm);
-        }
-        
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: var(--radius-sm);
-        }
-        
-        .amortization-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: var(--space-16);
-        }
-        
-        .amortization-table th,
-        .amortization-table td {
-            padding: var(--space-8) var(--space-12);
-            text-align: right;
-            border-bottom: 1px solid var(--color-border);
-        }
-        
-        .amortization-table th {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            font-weight: var(--font-weight-semibold);
-            text-align: left;
-        }
-        
-        .amortization-table th:first-child {
-            text-align: center;
-        }
-        
-        .ai-insights {
-            background: var(--color-bg-light-blue);
-            padding: var(--space-20);
-            border-radius: var(--radius-base);
-            margin-top: var(--space-24);
-        }
-        
-        .insight-item {
-            display: flex;
-            gap: var(--space-16);
-            margin-bottom: var(--space-16);
-        }
-        
-        .insight-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            border-radius: var(--radius-base);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        
-        .insight-content h4 {
-            margin: 0 0 var(--space-4) 0;
-            color: var(--color-primary);
-        }
-        
-        .insight-content p {
-            margin: 0;
-            font-size: var(--font-size-sm);
-            line-height: 1.5;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: var(--space-12);
-            margin-top: var(--space-24);
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--space-8);
-            padding: var(--space-10) var(--space-16);
-            border: 2px solid var(--color-primary);
-            background: transparent;
-            color: var(--color-primary);
-            border-radius: var(--radius-base);
-            font-size: var(--font-size-sm);
-            font-weight: var(--font-weight-medium);
-            cursor: pointer;
-            transition: all var(--duration-normal);
-        }
-        
-        .action-btn:hover {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-        }
-        
-        .monetization-section {
-            margin-top: var(--space-32);
-            padding: var(--space-24);
-            background: var(--color-surface);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--color-card-border);
-        }
-        
-        .recommended-products {
-            margin-bottom: var(--space-24);
-        }
-        
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-16);
-            margin-top: var(--space-16);
-        }
-        
-        .product-card {
-            background: var(--color-background);
-            padding: var(--space-16);
-            border-radius: var(--radius-base);
-            border: 1px solid var(--color-border);
-            text-align: center;
-            transition: transform var(--duration-normal);
-        }
-        
-        .product-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .lead-capture-form {
-            background: var(--color-bg-light-green);
-            padding: var(--space-24);
-            border-radius: var(--radius-base);
-            margin-top: var(--space-24);
-        }
-        
-        .embed-section {
-            background: var(--color-surface);
-            border: 2px dashed var(--color-primary);
-            padding: var(--space-24);
-            border-radius: var(--radius-base);
-            margin-top: var(--space-32);
-            text-align: center;
-        }
-        
-        .embed-code {
-            width: 100%;
-            padding: var(--space-12);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-base);
-            font-family: var(--font-family-mono);
-            font-size: var(--font-size-sm);
-            margin: var(--space-12) 0;
-            resize: none;
-        }
-        
-        /* AdSense Placement */
-        .ad-container {
-            margin: var(--space-24) 0;
-            text-align: center;
-        }
-        
-        .ad-label {
-            font-size: var(--font-size-xs);
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-4);
-        }
-    </style>
+    .feature-badge i {
+      color: var(--color-primary);
+    }
+    
+    .calculator-main {
+      padding: var(--space-32) 0;
+    }
+    
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-32);
+      align-items: start;
+    }
+    
+    .calculator-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-card-border);
+      position: sticky;
+      top: 100px;
+    }
+    
+    .calculator-card h2 {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-8);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+    
+    .calculator-card h2 i {
+      color: var(--color-primary);
+    }
+    
+    .calculator-description {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-24);
+      font-size: var(--font-size-sm);
+    }
+    
+    .form-group {
+      margin-bottom: var(--space-20);
+    }
+    
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      margin-bottom: var(--space-8);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text);
+      font-size: var(--font-size-sm);
+    }
+    
+    .form-label i {
+      color: var(--color-primary);
+      width: 16px;
+      text-align: center;
+    }
+    
+    .input-group {
+      position: relative;
+      display: flex;
+    }
+    
+    .input-prefix {
+      display: flex;
+      align-items: center;
+      padding: var(--space-12) var(--space-16);
+      background: var(--color-secondary);
+      border: 2px solid var(--color-border);
+      border-right: none;
+      border-radius: var(--radius-base) 0 0 var(--radius-base);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text);
+      font-size: var(--font-size-base);
+    }
+    
+    .form-input {
+      flex: 1;
+      padding: var(--space-12) var(--space-16);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-base);
+      font-size: var(--font-size-base);
+      background-color: var(--color-background);
+      color: var(--color-text);
+      transition: all var(--duration-normal) var(--ease-standard);
+    }
+    
+    .input-group .form-input {
+      border-radius: 0 var(--radius-base) var(--radius-base) 0;
+      border-left: none;
+    }
+    
+    .input-suffix {
+      display: flex;
+      align-items: center;
+      padding: var(--space-12) var(--space-16);
+      background: var(--color-secondary);
+      border: 2px solid var(--color-border);
+      border-left: none;
+      border-radius: 0 var(--radius-base) var(--radius-base) 0;
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text);
+      font-size: var(--font-size-base);
+    }
+    
+    .form-input:focus {
+      border-color: var(--color-primary);
+      box-shadow: var(--focus-ring);
+      outline: none;
+    }
+    
+    .input-group:focus-within .input-prefix,
+    .input-group:focus-within .input-suffix {
+      border-color: var(--color-primary);
+    }
+    
+    .range-container {
+      margin-top: var(--space-12);
+    }
+    
+    .range-input {
+      width: 100%;
+      height: 6px;
+      background: var(--color-secondary);
+      border-radius: var(--radius-full);
+      outline: none;
+      -webkit-appearance: none;
+    }
+    
+    .range-input::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--color-primary);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid var(--color-background);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .range-input::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: var(--color-primary);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid var(--color-background);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-8);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+    }
+    
+    .voice-control {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      margin: var(--space-20) 0;
+      padding: var(--space-16);
+      background: var(--color-bg-1);
+      border-radius: var(--radius-base);
+      border: 1px solid rgba(var(--color-primary-rgb, 33, 128, 141), 0.2);
+    }
+    
+    .voice-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--color-primary);
+      color: var(--color-btn-primary-text);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-lg);
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-standard);
+      flex-shrink: 0;
+    }
+    
+    .voice-btn:hover {
+      background: var(--color-primary-hover);
+      transform: scale(1.05);
+    }
+    
+    .voice-status {
+      flex: 1;
+      font-size: var(--font-size-sm);
+      color: var(--color-text);
+    }
+    
+    .calculate-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      background: var(--color-primary);
+      color: var(--color-btn-primary-text);
+      border: none;
+      padding: var(--space-16) var(--space-24);
+      border-radius: var(--radius-base);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-standard);
+      margin-top: var(--space-24);
+    }
+    
+    .calculate-btn:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .calculate-btn:active {
+      transform: translateY(0);
+    }
+    
+    /* Results Panel */
+    .results-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-card-border);
+    }
+    
+    .results-header {
+      text-align: center;
+      margin-bottom: var(--space-32);
+    }
+    
+    .results-header h2 {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+    }
+    
+    .results-header h2 i {
+      color: var(--color-primary);
+    }
+    
+    .results-description {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+    }
+    
+    .monthly-payment {
+      text-align: center;
+      margin-bottom: var(--space-32);
+      padding: var(--space-24);
+      background: var(--color-bg-3);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(var(--color-success-rgb, 33, 128, 141), 0.2);
+    }
+    
+    .payment-amount {
+      font-size: 2.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      margin-bottom: var(--space-4);
+    }
+    
+    .payment-label {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-16);
+    }
+    
+    .payment-breakdown {
+      display: grid;
+      gap: var(--space-8);
+    }
+    
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-8) 0;
+      border-bottom: 1px solid var(--color-card-border-inner);
+      font-size: var(--font-size-sm);
+    }
+    
+    .breakdown-item:last-child {
+      border-bottom: none;
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-base);
+    }
+    
+    .breakdown-label {
+      color: var(--color-text-secondary);
+    }
+    
+    .breakdown-value {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text);
+    }
+    
+    /* Chart Visualization */
+    .payment-chart {
+      margin: var(--space-24) 0;
+    }
+    
+    .chart-container {
+      height: 8px;
+      background: var(--color-secondary);
+      border-radius: var(--radius-full);
+      display: flex;
+      overflow: hidden;
+      margin-bottom: var(--space-16);
+    }
+    
+    .chart-segment {
+      height: 100%;
+      transition: all var(--duration-normal) var(--ease-standard);
+    }
+    
+    .chart-principal {
+      background: var(--color-primary);
+    }
+    
+    .chart-interest {
+      background: var(--color-warning);
+    }
+    
+    .chart-taxes {
+      background: var(--color-info);
+    }
+    
+    .chart-insurance {
+      background: var(--color-error);
+    }
+    
+    .chart-legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-size: var(--font-size-xs);
+    }
+    
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: var(--radius-sm);
+    }
+    
+    /* AI Insights */
+    .ai-insights {
+      margin-top: var(--space-32);
+    }
+    
+    .insights-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+    }
+    
+    .insights-header i {
+      color: var(--color-primary);
+    }
+    
+    .insights-list {
+      display: grid;
+      gap: var(--space-12);
+    }
+    
+    .insight-item {
+      display: flex;
+      gap: var(--space-12);
+      padding: var(--space-16);
+      background: var(--color-bg-2);
+      border-radius: var(--radius-base);
+      border-left: 4px solid var(--color-primary);
+    }
+    
+    .insight-icon {
+      color: var(--color-primary);
+      font-size: var(--font-size-lg);
+      flex-shrink: 0;
+      margin-top: var(--space-2);
+    }
+    
+    .insight-content h4 {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-4);
+    }
+    
+    .insight-content p {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin: 0;
+      line-height: var(--line-height-normal);
+    }
+    
+    /* Amortization Table */
+    .amortization-section {
+      margin-top: var(--space-32);
+    }
+    
+    .amortization-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--space-16);
+      font-size: var(--font-size-sm);
+    }
+    
+    .amortization-table th,
+    .amortization-table td {
+      padding: var(--space-12);
+      text-align: right;
+      border-bottom: 1px solid var(--color-card-border-inner);
+    }
+    
+    .amortization-table th {
+      background: var(--color-secondary);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+    }
+    
+    .amortization-table td {
+      color: var(--color-text);
+    }
+    
+    .amortization-table tr:hover {
+      background: var(--color-bg-1);
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: var(--space-12);
+      margin-top: var(--space-24);
+      flex-wrap: wrap;
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-8) var(--space-16);
+      background: transparent;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-base);
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-standard);
+    }
+    
+    .action-btn:hover {
+      border-color: var(--color-primary);
+      background: var(--color-secondary);
+      color: var(--color-primary);
+    }
+    
+    .action-btn i {
+      font-size: var(--font-size-sm);
+    }
+    
+    /* Revenue Integration */
+    .revenue-section {
+      margin-top: var(--space-32);
+      padding-top: var(--space-32);
+      border-top: 1px solid var(--color-card-border);
+    }
+    
+    .ad-container {
+      background: var(--color-bg-1);
+      border: 1px solid var(--color-card-border);
+      border-radius: var(--radius-base);
+      padding: var(--space-16);
+      text-align: center;
+      margin: var(--space-16) 0;
+    }
+    
+    .ad-label {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-8);
+    }
+    
+    .recommended-products {
+      display: grid;
+      gap: var(--space-12);
+      margin-top: var(--space-16);
+    }
+    
+    .product-item {
+      display: flex;
+      gap: var(--space-12);
+      padding: var(--space-12);
+      background: var(--color-surface);
+      border: 1px solid var(--color-card-border);
+      border-radius: var(--radius-base);
+      transition: all var(--duration-normal) var(--ease-standard);
+      text-decoration: none;
+      color: var(--color-text);
+    }
+    
+    .product-item:hover {
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+    
+    .product-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--color-primary);
+      border-radius: var(--radius-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-btn-primary-text);
+      flex-shrink: 0;
+    }
+    
+    .product-content h4 {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-4);
+    }
+    
+    .product-content p {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+    
+    /* Lead Generation */
+    .lead-form {
+      background: var(--color-bg-3);
+      padding: var(--space-24);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(var(--color-success-rgb, 33, 128, 141), 0.2);
+      margin-top: var(--space-24);
+    }
+    
+    .lead-form h3 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-8);
+      text-align: center;
+    }
+    
+    .lead-form p {
+      color: var(--color-text-secondary);
+      text-align: center;
+      margin-bottom: var(--space-20);
+      font-size: var(--font-size-sm);
+    }
+    
+    .lead-form .form-input {
+      margin-bottom: var(--space-12);
+    }
+    
+    .lead-form select {
+      width: 100%;
+      padding: var(--space-12);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-base);
+      background: var(--color-background);
+      color: var(--color-text);
+      font-size: var(--font-size-base);
+    }
+    
+    /* Embed Widget */
+    .embed-section {
+      background: var(--color-bg-1);
+      padding: var(--space-24);
+      border-radius: var(--radius-lg);
+      border: 2px dashed var(--color-border);
+      margin-top: var(--space-32);
+      text-align: center;
+    }
+    
+    .embed-section h3 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-8);
+    }
+    
+    .embed-section p {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      margin-bottom: var(--space-16);
+    }
+    
+    .embed-code {
+      width: 100%;
+      padding: var(--space-12);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-base);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: var(--color-text);
+      resize: vertical;
+      height: 80px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .calculator-layout {
+        grid-template-columns: 1fr;
+        gap: var(--space-24);
+      }
+      
+      .calculator-card {
+        position: static;
+      }
+      
+      .calculator-features {
+        gap: var(--space-16);
+      }
+      
+      .calculator-hero h1 {
+        font-size: var(--font-size-3xl);
+        flex-direction: column;
+        gap: var(--space-8);
+      }
+      
+      .chart-legend {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-buttons {
+        justify-content: center;
+      }
+      
+      .payment-amount {
+        font-size: 2rem;
+      }
+      
+      .monthly-payment {
+        padding: var(--space-16);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .calculator-header,
+      .calculator-main {
+        padding: var(--space-24) 0;
+      }
+      
+      .calculator-card,
+      .results-card {
+        padding: var(--space-20);
+        margin: 0 var(--space-16);
+      }
+      
+      .calculator-hero h1 {
+        font-size: var(--font-size-2xl);
+      }
+      
+      .feature-badge {
+        font-size: var(--font-size-xs);
+        padding: var(--space-8) var(--space-12);
+      }
+      
+      .payment-amount {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
 </head>
 
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="navbar">
-            <div class="container">
-                <a href="/" class="nav-brand">
-                    <i class="fas fa-calculator"></i>
-                    <span class="brand-text">Finguid</span>
-                </a>
-                <nav class="nav-menu">
-                    <a href="/" class="nav-link">Home</a>
-                    <a href="/calculators" class="nav-link">Calculators</a>
-                    <a href="/blog" class="nav-link">Blog</a>
-                    <a href="/contact" class="nav-link">Contact</a>
-                </nav>
-            </div>
+<body class="calculator-page">
+  <!-- Header (using your existing header from style-1.css) -->
+  <header class="header">
+    <nav class="navbar">
+      <div class="container">
+        <a href="/" class="nav-brand">
+          <i class="fas fa-calculator"></i>
+          <span class="brand-text">Finguid</span>
+        </a>
+        <div class="nav-menu">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/calculators" class="nav-link">Calculators</a>
+          <a href="/blog" class="nav-link">Blog</a>
+          <a href="/contact" class="nav-link">Contact</a>
         </div>
-    </header>
+      </div>
+    </nav>
+  </header>
 
-    <main class="calculator-container">
-        <!-- Hero Section -->
-        <div class="calculator-hero">
-            <h1>🤖 AI Mortgage Calculator</h1>
-            <p>World's first AI-enhanced mortgage calculator with state-specific tax rates, PMI calculations, and voice input. Get accurate payments instantly.</p>
-            <div class="hero-features">
-                <div class="feature">
-                    <i class="fas fa-robot"></i>
-                    <span>AI-Powered</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>State-Specific</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-microphone"></i>
-                    <span>Voice Input</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-mobile-alt"></i>
-                    <span>Mobile-First</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Calculator Grid -->
-        <div class="calculator-grid">
-            <!-- Input Section -->
-            <div class="input-card">
-                <div class="card-header">
-                    <h2><i class="fas fa-info-circle"></i> Loan Details</h2>
-                    <p>Enter your mortgage information for precise AI-enhanced calculations</p>
-                </div>
-
-                <form id="mortgage-form">
-                    <div class="form-group">
-                        <label for="home-price" class="form-label">
-                            <i class="fas fa-home"></i> Home Price
-                        </label>
-                        <div class="input-group">
-                            <span class="input-prefix">$</span>
-                            <input type="number" id="home-price" class="form-input" value="500000" 
-                                   min="50000" max="10000000" step="1000" autocomplete="off"
-                                   aria-describedby="home-price-help">
-                        </div>
-                        <div class="range-container">
-                            <input type="range" id="home-price-range" class="range-input" 
-                                   value="500000" min="50000" max="2000000" step="10000">
-                            <div class="range-labels">
-                                <span>$50K</span>
-                                <span>$1M</span>
-                                <span>$2M+</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="down-payment" class="form-label">
-                            <i class="fas fa-money-bill-wave"></i> Down Payment
-                        </label>
-                        <div class="input-group">
-                            <span class="input-prefix">$</span>
-                            <input type="number" id="down-payment" class="form-input" value="100000" 
-                                   min="0" step="1000" autocomplete="off">
-                        </div>
-                        <div class="range-container">
-                            <input type="range" id="down-payment-range" class="range-input" 
-                                   value="20" min="0" max="50" step="1">
-                            <div class="range-labels">
-                                <span>0%</span>
-                                <span id="down-payment-percent">20%</span>
-                                <span>50%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="interest-rate" class="form-label">
-                            <i class="fas fa-percent"></i> Interest Rate
-                        </label>
-                        <div class="input-group">
-                            <input type="number" id="interest-rate" class="form-input" value="6.5" 
-                                   min="0.1" max="15" step="0.01" autocomplete="off">
-                            <span class="input-prefix">%</span>
-                        </div>
-                        <div class="range-container">
-                            <input type="range" id="interest-rate-range" class="range-input" 
-                                   value="6.5" min="3" max="12" step="0.1">
-                            <div class="range-labels">
-                                <span>3%</span>
-                                <span>7.5%</span>
-                                <span>12%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="loan-term" class="form-label">
-                            <i class="fas fa-calendar-alt"></i> Loan Term
-                        </label>
-                        <select id="loan-term" class="form-control">
-                            <option value="10">10 years</option>
-                            <option value="15">15 years</option>
-                            <option value="20">20 years</option>
-                            <option value="25">25 years</option>
-                            <option value="30" selected>30 years</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="state" class="form-label">
-                            <i class="fas fa-map-marker-alt"></i> State
-                        </label>
-                        <select id="state" class="form-control">
-                            <option value="CA">California</option>
-                            <option value="TX">Texas</option>
-                            <option value="NY">New York</option>
-                            <option value="FL">Florida</option>
-                            <option value="WA">Washington</option>
-                            <!-- All 50 states will be loaded from JSON -->
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="credit-score" class="form-label">
-                            <i class="fas fa-chart-line"></i> Credit Score (for PMI calculation)
-                        </label>
-                        <select id="credit-score" class="form-control">
-                            <option value="excellent">Excellent (760+)</option>
-                            <option value="good" selected>Good (680-759)</option>
-                            <option value="fair">Fair (620-679)</option>
-                            <option value="poor">Poor (Below 620)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="extra-payment" class="form-label">
-                            <i class="fas fa-plus-circle"></i> Extra Monthly Payment (Optional)
-                        </label>
-                        <div class="input-group">
-                            <span class="input-prefix">$</span>
-                            <input type="number" id="extra-payment" class="form-input" value="0" 
-                                   min="0" step="50" autocomplete="off">
-                        </div>
-                    </div>
-
-                    <!-- Voice Control -->
-                    <div class="voice-control">
-                        <button type="button" class="voice-btn" id="voice-btn" 
-                                aria-label="Voice input - try saying 'set rate 6.5 percent'">
-                            <i class="fas fa-microphone"></i>
-                        </button>
-                        <span class="voice-status" id="voice-status">Voice input ready</span>
-                    </div>
-
-                    <button type="button" class="calculate-btn" id="calculate-btn">
-                        <i class="fas fa-calculator"></i> Calculate Payment
-                    </button>
-                </form>
-            </div>
-
-            <!-- Results Section -->
-            <div class="results-card">
-                <div class="card-header">
-                    <h2><i class="fas fa-chart-pie"></i> Loan Results</h2>
-                    <p>Your personalized AI-powered calculation</p>
-                </div>
-
-                <div class="result-item">
-                    <div class="result-label">Total Monthly Payment</div>
-                    <div class="result-value" id="monthly-payment">$2,627</div>
-                </div>
-
-                <div class="result-item">
-                    <div class="result-label">Payment Breakdown</div>
-                    <div class="breakdown-chart" aria-label="Payment breakdown visualization">
-                        <div class="chart-segment chart-principal" id="chart-principal"></div>
-                        <div class="chart-segment chart-interest" id="chart-interest"></div>
-                        <div class="chart-segment chart-taxes" id="chart-taxes"></div>
-                        <div class="chart-segment chart-insurance" id="chart-insurance"></div>
-                        <div class="chart-segment chart-pmi" id="chart-pmi"></div>
-                    </div>
-                    <div class="chart-legend">
-                        <div class="legend-item">
-                            <div class="legend-color chart-principal"></div>
-                            <span>Principal & Interest: <strong id="pi-amount">$2,027</strong></span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color chart-taxes"></div>
-                            <span>Taxes: <strong id="taxes-amount">$500</strong></span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color chart-insurance"></div>
-                            <span>Insurance: <strong id="insurance-amount">$100</strong></span>
-                        </div>
-                        <div class="legend-item" id="pmi-legend" style="display: none;">
-                            <div class="legend-color chart-pmi"></div>
-                            <span>PMI: <strong id="pmi-amount">$0</strong></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="result-item">
-                    <div class="result-label">Amortization Schedule (First 5 Years)</div>
-                    <table class="amortization-table" id="amortization-table">
-                        <thead>
-                            <tr>
-                                <th>Year</th>
-                                <th>Principal</th>
-                                <th>Interest</th>
-                                <th>Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- AI Insights -->
-                <div class="ai-insights" id="ai-insights">
-                    <h3><i class="fas fa-robot"></i> AI Insights</h3>
-                    <div id="insights-container">
-                        <!-- Populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="action-buttons">
-                    <button class="action-btn" id="save-btn">
-                        <i class="fas fa-save"></i> Save
-                    </button>
-                    <button class="action-btn" id="email-btn">
-                        <i class="fas fa-envelope"></i> Email Results
-                    </button>
-                    <button class="action-btn" id="print-btn">
-                        <i class="fas fa-print"></i> Print
-                    </button>
-                    <button class="action-btn" id="compare-btn">
-                        <i class="fas fa-balance-scale"></i> Compare
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- AdSense Ad Placement -->
-        <div class="ad-container">
-            <div class="ad-label">Advertisement</div>
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-XXXXXXXXX"
-                 data-ad-slot="XXXXXXXXX"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-        </div>
-
-        <!-- Monetization Section -->
-        <div class="monetization-section">
-            <div class="recommended-products">
-                <h3>📚 Recommended Resources</h3>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <h4>Mortgage Guide 2025</h4>
-                        <p>Complete home buying guide</p>
-                        <a href="#" class="btn btn-secondary">Learn More</a>
-                    </div>
-                    <div class="product-card">
-                        <h4>First-Time Buyer Kit</h4>
-                        <p>Essential tools and templates</p>
-                        <a href="#" class="btn btn-secondary">Get Kit</a>
-                    </div>
-                    <div class="product-card">
-                        <h4>Credit Improvement</h4>
-                        <p>Boost your credit score fast</p>
-                        <a href="#" class="btn btn-secondary">Start Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lead Generation Form -->
-            <div class="lead-capture-form">
-                <h3>💡 Get Personalized Mortgage Advice</h3>
-                <p>Connect with licensed mortgage professionals in your area</p>
-                <form action="https://basin.com/f/YOUR_FORM_ID" method="POST" class="lead-form">
-                    <div class="form-row">
-                        <input type="text" name="name" placeholder="Full Name" required class="form-control">
-                        <input type="email" name="email" placeholder="Email Address" required class="form-control">
-                    </div>
-                    <div class="form-row">
-                        <input type="tel" name="phone" placeholder="Phone Number" class="form-control">
-                        <select name="loan_type" required class="form-control">
-                            <option value="">Select Loan Type</option>
-                            <option value="purchase">Home Purchase</option>
-                            <option value="refinance">Refinance</option>
-                            <option value="investment">Investment Property</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn--full-width">
-                        Get Free Consultation
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Embed Section -->
-        <div class="embed-section">
-            <h3>Embed This Calculator</h3>
-            <p>Add our AI-powered mortgage calculator to your website</p>
-            <textarea class="embed-code" readonly id="embed-code">
-&lt;iframe src="https://finguid.com/embed/mortgage-calculator" width="100%" height="800" frameborder="0"&gt;&lt;/iframe&gt;
-            </textarea>
-            <button class="btn btn-primary" onclick="copyEmbed()">Copy Embed Code</button>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-brand">
-                        <i class="fas fa-calculator"></i>
-                        Finguid
-                    </div>
-                    <p>World's first AI-enhanced financial calculator platform. Making smart financial decisions accessible to all Americans.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Calculators</h4>
-                    <ul>
-                        <li><a href="/mortgage-calculator">Mortgage Calculator</a></li>
-                        <li><a href="/auto-loan-calculator">Auto Loan Calculator</a></li>
-                        <li><a href="/investment-calculator">Investment Calculator</a></li>
-                        <li><a href="/credit-card-calculator">Credit Card Calculator</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="/blog">Financial Blog</a></li>
-                        <li><a href="/guides">How-to Guides</a></li>
-                        <li><a href="/faq">FAQ</a></li>
-                        <li><a href="/mortgage-rates">Current Rates</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                        <li><a href="/terms">Terms of Service</a></li>
-                        <li><a href="/affiliate-disclosure">Affiliate Disclosure</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2025 Finguid. All rights reserved. Built with ❤️ for Americans.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Core JavaScript -->
-    <script src="/js/mortgage-calculator.js"></script>
-    
-    <!-- AdSense -->
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-    
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA_MEASUREMENT_ID');
+  <!-- Calculator Header -->
+  <section class="calculator-header">
+    <div class="container">
+      <div class="calculator-hero">
+        <h1>
+          <i class="fas fa-robot hero-icon"></i>
+          AI Mortgage Calculator
+        </h1>
+        <p>World's first AI-enhanced mortgage calculator with state-specific tax rates, PMI calculations, and voice input. Get accurate payments instantly.</p>
         
-        // Track calculator usage
-        gtag('event', 'calculator_view', {
-            event_category: 'Calculator',
-            event_label: 'Mortgage Calculator',
-            value: 1
+        <div class="calculator-features">
+          <div class="feature-badge">
+            <i class="fas fa-robot"></i>
+            <span>AI-Powered</span>
+          </div>
+          <div class="feature-badge">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>State-Specific</span>
+          </div>
+          <div class="feature-badge">
+            <i class="fas fa-microphone"></i>
+            <span>Voice Input</span>
+          </div>
+          <div class="feature-badge">
+            <i class="fas fa-mobile-alt"></i>
+            <span>Mobile-First</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Calculator -->
+  <main class="calculator-main">
+    <div class="container">
+      <div class="calculator-layout">
+        <!-- Input Panel -->
+        <div class="calculator-card">
+          <h2>
+            <i class="fas fa-home"></i>
+            Loan Details
+          </h2>
+          <p class="calculator-description">Enter your mortgage information for precise AI-enhanced calculations</p>
+          
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-home"></i>
+              Home Price
+            </label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" class="form-input" id="homePrice" value="500000" min="50000" max="5000000" step="10000">
+            </div>
+            <div class="range-container">
+              <input type="range" class="range-input" id="homePriceRange" value="500000" min="50000" max="2000000" step="10000">
+              <div class="range-labels">
+                <span>$50K</span>
+                <span>$1M</span>
+                <span>$2M+</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-money-bill-wave"></i>
+              Down Payment
+            </label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" class="form-input" id="downPayment" value="100000" min="0" step="5000">
+            </div>
+            <div class="range-container">
+              <input type="range" class="range-input" id="downPaymentRange" value="20" min="0" max="50" step="1">
+              <div class="range-labels">
+                <span>0%</span>
+                <span id="downPaymentPercent">20%</span>
+                <span>50%+</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-percent"></i>
+              Interest Rate
+            </label>
+            <div class="input-group">
+              <input type="number" class="form-input" id="interestRate" value="7.25" min="0.1" max="15" step="0.01">
+              <span class="input-suffix">%</span>
+            </div>
+            <div class="range-container">
+              <input type="range" class="range-input" id="interestRateRange" value="7.25" min="3" max="12" step="0.05">
+              <div class="range-labels">
+                <span>3.0%</span>
+                <span>7.5%</span>
+                <span>12.0%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-calendar-alt"></i>
+              Loan Term
+            </label>
+            <select class="form-control" id="loanTerm">
+              <option value="30">30 years (360 months)</option>
+              <option value="25">25 years (300 months)</option>
+              <option value="20">20 years (240 months)</option>
+              <option value="15">15 years (180 months)</option>
+              <option value="10">10 years (120 months)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-landmark"></i>
+              Property Tax (Annual)
+            </label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" class="form-input" id="propertyTax" value="6000" min="0" step="100">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-shield-alt"></i>
+              Home Insurance (Annual)
+            </label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" class="form-input" id="homeInsurance" value="1200" min="0" step="50">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-map-marker-alt"></i>
+              State
+            </label>
+            <select class="form-control" id="state">
+              <option value="CA">California</option>
+              <option value="NY">New York</option>
+              <option value="TX">Texas</option>
+              <option value="FL">Florida</option>
+              <option value="WA">Washington</option>
+              <option value="OR">Oregon</option>
+              <option value="NV">Nevada</option>
+              <option value="AZ">Arizona</option>
+              <option value="CO">Colorado</option>
+              <option value="IL">Illinois</option>
+              <!-- Add all 50 states -->
+            </select>
+          </div>
+
+          <div class="voice-control">
+            <button class="voice-btn" id="voiceBtn" aria-label="Voice input for calculator">
+              <i class="fas fa-microphone"></i>
+            </button>
+            <div class="voice-status" id="voiceStatus">
+              Voice input ready - Try: "Set home price 600000 and calculate"
+            </div>
+          </div>
+
+          <button class="calculate-btn" id="calculateBtn">
+            <i class="fas fa-calculator"></i>
+            Calculate Payment
+          </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-card">
+          <div class="results-header">
+            <h2>
+              <i class="fas fa-chart-pie"></i>
+              Loan Results
+            </h2>
+            <p class="results-description">Your personalized AI-powered calculation</p>
+          </div>
+
+          <div class="monthly-payment">
+            <div class="payment-amount" id="monthlyPaymentAmount">$2,627</div>
+            <div class="payment-label">Total Monthly Payment</div>
+            
+            <div class="payment-breakdown" id="paymentBreakdown">
+              <div class="breakdown-item">
+                <span class="breakdown-label">Principal & Interest:</span>
+                <span class="breakdown-value" id="principalInterest">$2,027</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-label">Property Tax:</span>
+                <span class="breakdown-value" id="monthlyTax">$500</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-label">Home Insurance:</span>
+                <span class="breakdown-value" id="monthlyInsurance">$100</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-label">PMI:</span>
+                <span class="breakdown-value" id="monthlyPMI">$0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Visualization Chart -->
+          <div class="payment-chart">
+            <h4>Payment Breakdown</h4>
+            <div class="chart-container" id="paymentChart">
+              <div class="chart-segment chart-principal" id="chartPrincipal" style="width: 77%"></div>
+              <div class="chart-segment chart-interest" id="chartInterest" style="width: 0%"></div>
+              <div class="chart-segment chart-taxes" id="chartTaxes" style="width: 19%"></div>
+              <div class="chart-segment chart-insurance" id="chartInsurance" style="width: 4%"></div>
+            </div>
+            
+            <div class="chart-legend">
+              <div class="legend-item">
+                <div class="legend-color chart-principal"></div>
+                <span>Principal & Interest</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color chart-taxes"></div>
+                <span>Property Tax</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color chart-insurance"></div>
+                <span>Insurance</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color chart-interest"></div>
+                <span>PMI</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Insights -->
+          <div class="ai-insights">
+            <div class="insights-header">
+              <i class="fas fa-robot"></i>
+              <h4>AI Insights</h4>
+            </div>
+            <div class="insights-list" id="aiInsights">
+              <!-- AI insights will be populated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Amortization Table -->
+          <div class="amortization-section">
+            <h4>Amortization Schedule (First 5 Years)</h4>
+            <table class="amortization-table" id="amortizationTable">
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Principal</th>
+                  <th>Interest</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="action-btn" id="saveBtn">
+              <i class="fas fa-save"></i>
+              Save Calculation
+            </button>
+            <button class="action-btn" id="emailBtn">
+              <i class="fas fa-envelope"></i>
+              Email Results
+            </button>
+            <button class="action-btn" id="printBtn">
+              <i class="fas fa-print"></i>
+              Print Report
+            </button>
+            <button class="action-btn" id="shareBtn">
+              <i class="fas fa-share-alt"></i>
+              Share
+            </button>
+          </div>
+
+          <!-- Revenue Integration -->
+          <div class="revenue-section">
+            <!-- Google AdSense Placeholder -->
+            <div class="ad-container">
+              <div class="ad-label">Advertisement</div>
+              <!-- Replace with actual AdSense code -->
+              <div style="height: 120px; background: var(--color-bg-2); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-base);">
+                Google AdSense Ad Space
+              </div>
+            </div>
+
+            <!-- Affiliate Products -->
+            <h4>📚 Recommended Resources</h4>
+            <div class="recommended-products">
+              <a href="#" class="product-item" rel="nofollow">
+                <div class="product-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="product-content">
+                  <h4>Mortgage Guide 2025</h4>
+                  <p>Complete home buying guide</p>
+                </div>
+              </a>
+              
+              <a href="#" class="product-item" rel="nofollow">
+                <div class="product-icon">
+                  <i class="fas fa-home"></i>
+                </div>
+                <div class="product-content">
+                  <h4>First-Time Buyer Kit</h4>
+                  <p>Essential tools and templates</p>
+                </div>
+              </a>
+              
+              <a href="#" class="product-item" rel="nofollow">
+                <div class="product-icon">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="product-content">
+                  <h4>Credit Improvement</h4>
+                  <p>Boost your credit score fast</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lead Generation -->
+            <div class="lead-form">
+              <h3>💡 Get Personalized Mortgage Advice</h3>
+              <p>Connect with licensed mortgage professionals in your area</p>
+              
+              <form action="https://usebasin.com/f/YOUR_FORM_ID" method="POST">
+                <input type="text" class="form-input" name="name" placeholder="Full Name" required>
+                <input type="email" class="form-input" name="email" placeholder="Email Address" required>
+                <input type="tel" class="form-input" name="phone" placeholder="Phone Number" required>
+                <select name="service" class="form-control" required>
+                  <option value="">Select Service</option>
+                  <option value="mortgage">New Mortgage</option>
+                  <option value="refinance">Refinance</option>
+                  <option value="pre-approval">Pre-Approval</option>
+                  <option value="consultation">Free Consultation</option>
+                </select>
+                
+                <button type="submit" class="calculate-btn">
+                  <i class="fas fa-paper-plane"></i>
+                  Get Free Consultation
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Embed Widget -->
+      <div class="embed-section">
+        <h3>🤝 Embed This Calculator</h3>
+        <p>Perfect for real estate agents, lenders, and financial websites</p>
+        <textarea class="embed-code" id="embedCode" readonly>&lt;iframe src="https://finguid.com/embed/mortgage-calculator" width="100%" height="800" frameborder="0"&gt;&lt;/iframe&gt;</textarea>
+        <button class="action-btn" id="copyEmbedBtn" style="margin-top: var(--space-12);">
+          <i class="fas fa-copy"></i>
+          Copy Embed Code
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer (using your existing footer from style-1.css) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-brand">
+            <i class="fas fa-calculator"></i>
+            Finguid
+          </div>
+          <p>America's first AI-enhanced financial calculator platform. Making financial planning accessible and accurate for everyone.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Calculators</h4>
+          <ul>
+            <li><a href="/mortgage-calculator">Mortgage Calculator</a></li>
+            <li><a href="/auto-loan-calculator">Auto Loan Calculator</a></li>
+            <li><a href="/investment-calculator">Investment Calculator</a></li>
+            <li><a href="/credit-card-calculator">Credit Card Calculator</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="/blog">Financial Blog</a></li>
+            <li><a href="/guides">How-to Guides</a></li>
+            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/about">About Us</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms of Service</a></li>
+            <li><a href="/affiliate-disclosure">Affiliate Disclosure</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 Finguid. All rights reserved. Built with ❤️ for Americans.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript for Calculator Functionality -->
+  <script>
+    // DOM Elements
+    const homePrice = document.getElementById('homePrice');
+    const homePriceRange = document.getElementById('homePriceRange');
+    const downPayment = document.getElementById('downPayment');
+    const downPaymentRange = document.getElementById('downPaymentRange');
+    const downPaymentPercent = document.getElementById('downPaymentPercent');
+    const interestRate = document.getElementById('interestRate');
+    const interestRateRange = document.getElementById('interestRateRange');
+    const loanTerm = document.getElementById('loanTerm');
+    const propertyTax = document.getElementById('propertyTax');
+    const homeInsurance = document.getElementById('homeInsurance');
+    const state = document.getElementById('state');
+    const calculateBtn = document.getElementById('calculateBtn');
+    const voiceBtn = document.getElementById('voiceBtn');
+    const voiceStatus = document.getElementById('voiceStatus');
+
+    // Results Elements
+    const monthlyPaymentAmount = document.getElementById('monthlyPaymentAmount');
+    const principalInterest = document.getElementById('principalInterest');
+    const monthlyTax = document.getElementById('monthlyTax');
+    const monthlyInsurance = document.getElementById('monthlyInsurance');
+    const monthlyPMI = document.getElementById('monthlyPMI');
+    const aiInsights = document.getElementById('aiInsights');
+    const amortizationTable = document.getElementById('amortizationTable');
+
+    // State-specific property tax rates (per $1000 of home value annually)
+    const stateTaxRates = {
+      'CA': 0.75, 'NY': 1.40, 'TX': 1.81, 'FL': 0.98, 'WA': 0.94,
+      'OR': 0.97, 'NV': 0.69, 'AZ': 0.72, 'CO': 0.51, 'IL': 2.16,
+      'OH': 1.56, 'PA': 1.58, 'NC': 0.84, 'GA': 0.92, 'MI': 1.54,
+      'NJ': 2.42, 'VA': 0.82, 'TN': 0.64, 'IN': 0.87, 'MO': 0.97,
+      'WI': 1.85, 'MN': 1.12, 'LA': 0.55, 'AL': 0.41, 'KY': 0.86,
+      'SC': 0.64, 'OK': 0.90, 'AR': 0.62, 'UT': 0.66, 'NM': 0.80,
+      'WV': 0.59, 'NE': 1.73, 'ID': 0.75, 'HI': 0.31, 'ME': 1.35,
+      'NH': 2.05, 'VT': 1.90, 'RI': 1.53, 'CT': 2.14, 'DE': 0.57,
+      'MD': 1.09, 'MA': 1.23, 'AK': 1.04, 'MT': 0.85, 'ND': 0.98,
+      'SD': 1.31, 'WY': 0.62, 'KS': 1.42, 'IA': 1.57, 'MS': 0.81
+    };
+
+    // PMI rates based on down payment percentage
+    const pmiRates = {
+      5: 0.85,   // 5% down payment
+      10: 0.70,  // 10% down payment
+      15: 0.45,  // 15% down payment
+      20: 0      // 20% or more - no PMI
+    };
+
+    // Sync range sliders with inputs
+    function setupInputSync() {
+      homePrice.addEventListener('input', () => {
+        homePriceRange.value = homePrice.value;
+        updateDownPaymentPercent();
+        updatePropertyTax();
+      });
+
+      homePriceRange.addEventListener('input', () => {
+        homePrice.value = homePriceRange.value;
+        updateDownPaymentPercent();
+        updatePropertyTax();
+      });
+
+      downPayment.addEventListener('input', () => {
+        updateDownPaymentPercent();
+        updateDownPaymentRange();
+      });
+
+      downPaymentRange.addEventListener('input', () => {
+        const percent = parseInt(downPaymentRange.value);
+        downPayment.value = Math.round((homePrice.value * percent) / 100);
+        updateDownPaymentPercent();
+      });
+
+      interestRate.addEventListener('input', () => {
+        interestRateRange.value = interestRate.value;
+      });
+
+      interestRateRange.addEventListener('input', () => {
+        interestRate.value = interestRateRange.value;
+      });
+
+      state.addEventListener('change', () => {
+        updatePropertyTax();
+      });
+    }
+
+    function updateDownPaymentPercent() {
+      const percent = Math.round((downPayment.value / homePrice.value) * 100);
+      downPaymentPercent.textContent = percent + '%';
+      downPaymentRange.value = percent;
+    }
+
+    function updateDownPaymentRange() {
+      const percent = Math.round((downPayment.value / homePrice.value) * 100);
+      downPaymentRange.value = Math.min(percent, 50);
+    }
+
+    function updatePropertyTax() {
+      const selectedState = state.value;
+      const taxRate = stateTaxRates[selectedState] || 1.0;
+      const annualTax = Math.round((homePrice.value * taxRate) / 1000);
+      propertyTax.value = annualTax;
+    }
+
+    // Calculate mortgage payment
+    function calculateMortgage() {
+      const principal = parseFloat(homePrice.value) - parseFloat(downPayment.value);
+      const rate = parseFloat(interestRate.value) / 100 / 12;
+      const payments = parseInt(loanTerm.value) * 12;
+      const monthlyTaxAmount = parseFloat(propertyTax.value) / 12;
+      const monthlyInsuranceAmount = parseFloat(homeInsurance.value) / 12;
+      
+      // Calculate PMI
+      const downPaymentPercent = (parseFloat(downPayment.value) / parseFloat(homePrice.value)) * 100;
+      let pmiRate = 0;
+      
+      if (downPaymentPercent < 20) {
+        if (downPaymentPercent < 5) pmiRate = pmiRates[5];
+        else if (downPaymentPercent < 10) pmiRate = pmiRates[5];
+        else if (downPaymentPercent < 15) pmiRate = pmiRates[10];
+        else pmiRate = pmiRates[15];
+      }
+      
+      const monthlyPMIAmount = (principal * (pmiRate / 100)) / 12;
+
+      // Calculate monthly P&I payment
+      let monthlyPI;
+      if (rate === 0) {
+        monthlyPI = principal / payments;
+      } else {
+        monthlyPI = principal * (rate * Math.pow(1 + rate, payments)) / (Math.pow(1 + rate, payments) - 1);
+      }
+
+      const totalMonthly = monthlyPI + monthlyTaxAmount + monthlyInsuranceAmount + monthlyPMIAmount;
+
+      // Update display
+      monthlyPaymentAmount.textContent = '$' + Math.round(totalMonthly).toLocaleString();
+      principalInterest.textContent = '$' + Math.round(monthlyPI).toLocaleString();
+      monthlyTax.textContent = '$' + Math.round(monthlyTaxAmount).toLocaleString();
+      monthlyInsurance.textContent = '$' + Math.round(monthlyInsuranceAmount).toLocaleString();
+      monthlyPMI.textContent = '$' + Math.round(monthlyPMIAmount).toLocaleString();
+
+      // Update chart
+      updatePaymentChart(monthlyPI, monthlyTaxAmount, monthlyInsuranceAmount, monthlyPMIAmount);
+      
+      // Generate AI insights
+      generateAIInsights(principal, monthlyPI, totalMonthly, downPaymentPercent, rate * 12 * 100);
+      
+      // Generate amortization table
+      generateAmortizationTable(principal, rate, payments, monthlyPI);
+    }
+
+    function updatePaymentChart(pi, tax, insurance, pmi) {
+      const total = pi + tax + insurance + pmi;
+      
+      document.getElementById('chartPrincipal').style.width = (pi / total * 100) + '%';
+      document.getElementById('chartTaxes').style.width = (tax / total * 100) + '%';
+      document.getElementById('chartInsurance').style.width = (insurance / total * 100) + '%';
+      document.getElementById('chartInterest').style.width = (pmi / total * 100) + '%';
+    }
+
+    function generateAIInsights(principal, monthlyPI, totalMonthly, downPaymentPercent, annualRate) {
+      const insights = [];
+
+      // Affordability insight
+      const assumedIncome = totalMonthly * 3.5; // Rough income estimate
+      insights.push({
+        icon: 'fa-home',
+        title: 'Affordability Check',
+        content: `Your payment represents about 28% of estimated income ($${Math.round(assumedIncome).toLocaleString()}/month), which is within recommended guidelines.`
+      });
+
+      // PMI insight
+      if (downPaymentPercent < 20) {
+        const monthsTo20Percent = Math.ceil((0.2 * parseFloat(homePrice.value) - parseFloat(downPayment.value)) / (monthlyPI * 0.7));
+        insights.push({
+          icon: 'fa-percentage',
+          title: 'PMI Removal',
+          content: `You'll reach 20% equity and can remove PMI in approximately ${monthsTo20Percent} months, saving you money long-term.`
         });
-    </script>
+      }
+
+      // Interest rate insight
+      if (annualRate > 7.5) {
+        insights.push({
+          icon: 'fa-chart-line',
+          title: 'Rate Shopping Opportunity',
+          content: `Your rate is above current market averages. Shopping for a lower rate could save you thousands over the loan term.`
+        });
+      }
+
+      // 15-year vs 30-year comparison
+      if (loanTerm.value === '30') {
+        const rate15 = parseFloat(interestRate.value) / 100 / 12;
+        const payments15 = 15 * 12;
+        const monthly15 = principal * (rate15 * Math.pow(1 + rate15, payments15)) / (Math.pow(1 + rate15, payments15) - 1);
+        const savings = (monthlyPI * 360) - (monthly15 * 180);
+        
+        insights.push({
+          icon: 'fa-clock',
+          title: '15-Year Loan Savings',
+          content: `Switching to a 15-year loan (${Math.round(monthly15).toLocaleString()}/month) could save you $${Math.round(savings).toLocaleString()} in total interest.`
+        });
+      }
+
+      // Render insights
+      aiInsights.innerHTML = insights.map(insight => `
+        <div class="insight-item">
+          <div class="insight-icon">
+            <i class="fas ${insight.icon}"></i>
+          </div>
+          <div class="insight-content">
+            <h4>${insight.title}</h4>
+            <p>${insight.content}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function generateAmortizationTable(principal, monthlyRate, totalPayments, monthlyPayment) {
+      const tbody = amortizationTable.querySelector('tbody');
+      tbody.innerHTML = '';
+      
+      let balance = principal;
+      
+      for (let year = 1; year <= 5; year++) {
+        let yearlyPrincipal = 0;
+        let yearlyInterest = 0;
+        
+        for (let month = 1; month <= 12; month++) {
+          const interestPayment = balance * monthlyRate;
+          const principalPayment = monthlyPayment - interestPayment;
+          
+          yearlyInterest += interestPayment;
+          yearlyPrincipal += principalPayment;
+          balance -= principalPayment;
+          
+          if (balance < 0) balance = 0;
+        }
+        
+        tbody.innerHTML += `
+          <tr>
+            <td>${year}</td>
+            <td>$${Math.round(yearlyPrincipal).toLocaleString()}</td>
+            <td>$${Math.round(yearlyInterest).toLocaleString()}</td>
+            <td>$${Math.round(balance).toLocaleString()}</td>
+          </tr>
+        `;
+      }
+    }
+
+    // Voice recognition
+    function initVoiceRecognition() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        voiceStatus.textContent = 'Voice recognition not supported in this browser';
+        voiceBtn.disabled = true;
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      voiceBtn.addEventListener('click', () => {
+        voiceStatus.textContent = 'Listening... Speak now';
+        voiceBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        recognition.start();
+      });
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        voiceStatus.textContent = `Heard: "${transcript}"`;
+        
+        // Process voice commands
+        processVoiceCommand(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        voiceStatus.textContent = `Voice error: ${event.error}`;
+        voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+      };
+
+      recognition.onend = () => {
+        voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+      };
+    }
+
+    function processVoiceCommand(transcript) {
+      // Extract numbers and commands from voice input
+      if (transcript.includes('home price') || transcript.includes('house price')) {
+        const number = extractNumber(transcript);
+        if (number) {
+          homePrice.value = number;
+          homePriceRange.value = number;
+          updateDownPaymentPercent();
+          updatePropertyTax();
+        }
+      } else if (transcript.includes('down payment')) {
+        const number = extractNumber(transcript);
+        if (number) {
+          downPayment.value = number;
+          updateDownPaymentPercent();
+        }
+      } else if (transcript.includes('interest rate') || transcript.includes('rate')) {
+        const number = extractNumber(transcript);
+        if (number) {
+          interestRate.value = number;
+          interestRateRange.value = number;
+        }
+      } else if (transcript.includes('calculate') || transcript.includes('compute')) {
+        calculateMortgage();
+        voiceStatus.textContent = 'Calculation completed!';
+        return;
+      }
+      
+      voiceStatus.textContent = 'Try: "Set home price 500000" or "Calculate payment"';
+      
+      // Auto-calculate after voice input
+      setTimeout(() => {
+        calculateMortgage();
+      }, 1000);
+    }
+
+    function extractNumber(text) {
+      const matches = text.match(/\d+/g);
+      return matches ? parseInt(matches.join('')) : null;
+    }
+
+    // Action button handlers
+    function initActionButtons() {
+      document.getElementById('saveBtn').addEventListener('click', () => {
+        const calculation = {
+          homePrice: homePrice.value,
+          downPayment: downPayment.value,
+          interestRate: interestRate.value,
+          loanTerm: loanTerm.value,
+          propertyTax: propertyTax.value,
+          homeInsurance: homeInsurance.value,
+          state: state.value,
+          monthlyPayment: monthlyPaymentAmount.textContent,
+          timestamp: new Date().toISOString()
+        };
+        
+        localStorage.setItem('finguid_mortgage_calculation', JSON.stringify(calculation));
+        alert('Calculation saved successfully!');
+      });
+
+      document.getElementById('emailBtn').addEventListener('click', () => {
+        const subject = 'My Mortgage Calculator Results - Finguid';
+        const body = `Monthly Payment: ${monthlyPaymentAmount.textContent}\n\nCalculated at: https://finguid.com/mortgage-calculator`;
+        window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      });
+
+      document.getElementById('printBtn').addEventListener('click', () => {
+        window.print();
+      });
+
+      document.getElementById('shareBtn').addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: 'Mortgage Calculator Results - Finguid',
+            text: `Monthly Payment: ${monthlyPaymentAmount.textContent}`,
+            url: window.location.href
+          });
+        } else {
+          // Fallback for browsers without Web Share API
+          navigator.clipboard.writeText(window.location.href);
+          alert('URL copied to clipboard!');
+        }
+      });
+
+      document.getElementById('copyEmbedBtn').addEventListener('click', () => {
+        const embedCode = document.getElementById('embedCode');
+        embedCode.select();
+        navigator.clipboard.writeText(embedCode.value);
+        alert('Embed code copied to clipboard!');
+      });
+    }
+
+    // Initialize everything when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      setupInputSync();
+      initVoiceRecognition();
+      initActionButtons();
+      
+      // Initial calculation
+      updateDownPaymentPercent();
+      updatePropertyTax();
+      calculateMortgage();
+      
+      // Calculate on button click
+      calculateBtn.addEventListener('click', calculateMortgage);
+      
+      // Auto-calculate on input changes
+      [homePrice, downPayment, interestRate, loanTerm, propertyTax, homeInsurance, state].forEach(input => {
+        input.addEventListener('input', () => {
+          setTimeout(calculateMortgage, 300); // Debounce
+        });
+      });
+    });
+
+    // Google Analytics tracking
+    function trackCalculatorUsage() {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'calculator_use', {
+          'event_category': 'Engagement',
+          'event_label': 'Mortgage Calculator',
+          'value': 1
+        });
+      }
+    }
+
+    // Track usage on calculate
+    calculateBtn.addEventListener('click', trackCalculatorUsage);
+  </script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXX" crossorigin="anonymous"></script>
 </body>
 </html>
