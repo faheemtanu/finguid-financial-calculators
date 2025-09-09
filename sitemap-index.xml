@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <sitemap>
+    <loc>https://www.finguid.com/main-sitemap.xml</loc>
+    <lastmod>2025-09-10</lastmod>
+  </sitemap>
+  
+  <sitemap>
+    <loc>https://www.finguid.com/calculators-sitemap.xml</loc>
+    <lastmod>2025-09-10</lastmod>
+  </sitemap>
+  
+  <sitemap>
+    <loc>https://www.finguid.com/blog-sitemap.xml</loc>
+    <lastmod>2025-09-10</lastmod>
+  </sitemap>
+  
+  <sitemap>
+    <loc>https://www.finguid.com/state-pages-sitemap.xml</loc>
+    <lastmod>2025-09-10</lastmod>
+  </sitemap>
+
+</sitemapindex>
