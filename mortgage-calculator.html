@@ -47,11 +47,11 @@
     <style>
         :root {
             /* Finguid Color Palette (Based on finguid.com) */
-            --teal: #21808d;
+            --teal: #2a9d8f;
             --teal-light: #8ab6b0;
             --teal-dark: #1d7a6e;
-            --cream: #fcfcf9;
-            --charcoal: #1f2324;
+            --cream: #f4f1de;
+            --charcoal: #264653;
             --orange: #e9c46a;
             --red: #e76f51;
             --white: #ffffff;
@@ -97,7 +97,7 @@
 
         body {
             font-family: var(--font-primary);
-            background-color: var(--cream);
+            background-color: var(--light-gray);
             color: var(--charcoal);
             line-height: 1.6;
         }
@@ -247,7 +247,7 @@
 
         .input-group:focus-within {
             border-color: var(--teal);
-            box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.2);
+            box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
         }
 
         .input-group input {
@@ -317,7 +317,7 @@
 
         select:focus {
             border-color: var(--teal);
-            box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.2);
+            box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
         }
 
         /* Voice Control */
@@ -409,6 +409,7 @@
 
         .legend-item {
             display: flex;
+            align-items: center;
             gap: var(--space-sm);
             font-size: var(--font-size-sm);
         }
@@ -683,40 +684,6 @@
         .calculator-link:hover {
             background-color: var(--teal-dark);
         }
-
-        /* New styles for improved AI insights */
-        .insight-priority-high {
-            border-left: 4px solid #e74c3c;
-        }
-
-        .insight-priority-medium {
-            border-left: 4px solid #f39c12;
-        }
-
-        .insight-priority-low {
-            border-left: 4px solid #2ecc71;
-        }
-
-        .insight-tag {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-left: 8px;
-            background: var(--teal-light);
-            color: white;
-        }
-
-        .savings-amount {
-            font-weight: bold;
-            color: #27ae60;
-        }
-
-        .risk-amount {
-            font-weight: bold;
-            color: #e74c3c;
-        }
     </style>
 </head>
 <body>
@@ -887,14 +854,6 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="annual-income"><i class="fas fa-money-bill-wave"></i> Annual Income ($) <small>(optional for better insights)</small></label>
-                    <div class="input-group">
-                        <span class="prefix">$</span>
-                        <input type="number" id="annual-income" value="100000" min="0" step="5000">
-                    </div>
-                </div>
-
                 <div class="voice-control">
                     <button class="voice-btn" id="voice-btn" aria-label="Voice control">
                         <i class="fas fa-microphone"></i>
@@ -942,7 +901,7 @@
                 </div>
 
                 <div class="result-item">
-                    <div class="result-label"><i class="fas fa-table"></极速赛车开奖直播
+                    <div class="result-label"><i class="fas fa-table"></i> Amortization Schedule (First 5 Years)</div>
                     <div class="table-container">
                         <table class="amortization-table">
                             <thead>
@@ -973,7 +932,7 @@
                                     <td>$373,636</td>
                                 </tr>
                                 <tr>
-                                    <极速赛车开奖直播
+                                    <td>4</td>
                                     <td>$9,596</td>
                                     <td>$16,688</td>
                                     <td>$364,040</td>
@@ -990,14 +949,40 @@
                 </div>
 
                 <div class="result-item">
-                    <div class="result-label"><i class="fas fa-robot"></i> AI Insights <span id="insights-count">(3)</span></div>
-                    <div class="insights-container" id="ai-insights-container">
-                        <!-- AI insights will be dynamically inserted here -->
+                    <div class="result-label"><i class="fas fa-robot"></i> AI Insights</div>
+                    <div class="insights-container">
+                        <div class="insight-item">
+                            <div class="insight-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h3>Consider a 15-year term</h3>
+                                <p>With your financial profile, a 15-year mortgage could save you $128,000 in interest payments.</p>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h3>Market Comparison</h3>
+                                <p>Your rate is 0.25% higher than the state average. Consider shopping around for better rates.</p>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h3>Affordability Check</h3>
+                                <p>Your mortgage payment is 28% of your income, which is within the recommended range.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="share-options">
-                    <button class极速赛车开奖直播
+                    <button class="share-btn" id="email-btn">
                         <i class="fas fa-envelope"></i>
                         <span>Email</span>
                     </button>
@@ -1029,7 +1014,7 @@
             <div class="footer-column">
                 <h3>Calculators</h3>
                 <ul>
-                    <li><a href="https://fingu极速赛车开奖直播
+                    <li><a href="https://finguid.com/mortgage-calculator">Mortgage Calculator</a></li>
                     <li><a href="https://finguid.com/calculators/auto-loan">Auto Loan Calculator</a></li>
                     <li><a href="https://finguid.com/calculators/investment">Investment Calculator</a></li>
                     <li><a href="https://finguid.com/calculators/credit-card">Credit Card Calculator</a></li>
@@ -1039,9 +1024,9 @@
             <div class="footer-column">
                 <h3>Resources</h3>
                 <ul>
-                    <li><a href="https://finguid.com/blog">Financial Blog</a></li>
+                    <li><a href="https://finguid.com/resources/blog">Financial Blog</a></li>
                     <li><a href="https://finguid.com/resources/guides">How-to Guides</a></li>
-                    <li><a href="https://finguid.com/resources/tools">Financial Tools</a></li>
+                    <li><a href="https://finguid.com/resources/faq">FAQ</a></li>
                     <li><a href="https://finguid.com/resources">All Resources</a></li>
                 </ul>
             </div>
@@ -1062,21 +1047,6 @@
     </footer>
 
     <script>
-        // State data with average interest rates and median home prices
-        const stateData = {
-            "CA": { avgRate: 4.2, medianPrice: 800000 },
-            "NY": { avgRate: 4.3, medianPrice: 650000 },
-            "TX": { avgRate: 4.4, medianPrice: 350000 },
-            "FL": { avg极速赛车开奖直播
-            "IL": { avgRate: 4.4, medianPrice: 320000 },
-            "PA": { avgRate: 4.3, medianPrice: 280000 },
-            "OH": { avgRate: 4.2, medianPrice: 220000 },
-            "GA": { avgRate: 4.4, medianPrice: 300000 },
-            "NC": { avgRate: 4.3, medianPrice: 320000 },
-            "MI": { avgRate: 4.2, medianPrice: 240000 },
-            "default": { avgRate: 4.5, medianPrice: 400000 }
-        };
-
         document.addEventListener('DOMContentLoaded', function() {
             // Sync range sliders with number inputs
             const homePriceInput = document.getElementById('home-price');
@@ -1086,7 +1056,6 @@
             const downPaymentPercent = document.getElementById('down-payment-percent');
             const interestRateInput = document.getElementById('interest-rate');
             const interestRateRange = document.getElementById('interest-rate-range');
-            const annualIncomeInput = document.getElementById('annual-income');
             
             // Home price sync
             homePriceInput.addEventListener('input', function() {
@@ -1108,7 +1077,7 @@
             });
             
             downPaymentRange.addEventListener('input', function() {
-                const homePrice = parseFloat(homePrice极速赛车开奖直播
+                const homePrice = parseFloat(homePriceInput.value);
                 const percent = this.value;
                 downPaymentInput.value = Math.round((homePrice * percent) / 100);
                 downPaymentPercent.textContent = Math.round(percent) + '%';
@@ -1142,7 +1111,7 @@
                     
                     recognition.lang = 'en-US';
                     recognition.interimResults = false;
-                    recognition.maxAlternatives极速赛车开奖直播
+                    recognition.maxAlternatives = 1;
                     
                     recognition.start();
                     voiceStatus.textContent = "Listening... Speak now";
@@ -1214,216 +1183,30 @@
                 calculatePayment();
             });
             
-            // Generate AI insights based on user input
-            function generateAIInsights(homePrice, downPayment, interestRate, loanTerm, propertyTax, homeInsurance, state, annualIncome) {
-                const insights = [];
-                const downPaymentPercent = (downPayment / homePrice) * 100;
-                const loanAmount = homePrice - downPayment;
-                const stateInfo = stateData[state] || stateData.default;
-                
-                // Insight 1: Down payment analysis
-                if (downPaymentPercent < 20) {
-                    insights.push({
-                        icon: "fas fa-exclamation-triangle",
-                        title: "Consider a Larger Down Payment",
-                        content: `With a ${downPaymentPercent.toFixed(1)}% down payment, you'll likely pay PMI (Private Mortgage Insurance), adding $${(loanAmount * 0.005 / 12).toFixed(2)}/month to your payment. Aim for 20% to avoid this cost.`,
-                        priority: "high",
-                        category: "Down Payment"
-                    });
-                } else if (downPaymentPercent > 30) {
-                    insights.push({
-                        icon: "fas fa-lightbulb",
-                        title: "Excellent Down Payment",
-                        content: `Your ${downPaymentPercent.toFixed(1)}% down payment is excellent! This shows strong financial readiness and gives you immediate equity in your home.`,
-                        priority: "low",
-                        category: "Down Payment"
-                    });
-                }
-                
-                // Insight 2: Interest rate comparison
-                const rateDiff = interestRate - stateInfo.avgRate;
-                if (rateDiff > 0.3) {
-                    insights.push({
-                        icon: "fas fa-chart-line",
-                        title: "Higher Than Average Rate",
-                        content: `Your rate is ${rate极速赛车开奖直播
-                        priority: "high",
-                        category: "Interest Rate"
-                    });
-                } else if (rateDiff < -0.2) {
-                    insights.push({
-                        icon: "fas fa-award",
-                        title: "Excellent Interest Rate",
-                        content: `Your rate is ${Math.abs(rateDiff).toFixed(2)}% lower than your state's average! You're getting a great deal on your mortgage.`,
-                        priority: "low",
-                        category: "Interest Rate"
-                    });
-                }
-                
-                // Insight 3: Home price comparison
-                const priceRatio = homePrice / stateInfo.medianPrice;
-                if (priceRatio > 1.3) {
-                    insights.push({
-                        icon: "fas fa-home",
-                        title: "Home Price Above Average",
-                        content: `Your home price is ${(priceRatio * 100).toFixed(0)}% of your state's median. Ensure this fits your long-term budget and goals.`,
-                        priority: "medium",
-                        category: "Home Price"
-                    });
-                }
-                
-                // Insight 4: Loan term analysis
-                if (loanTerm === 30) {
-                    const fifteenYearPayment = calculateMonthlyPayment(loanAmount, interestRate - 0.5, 15);
-                    const thirtyYearPayment = calculateMonthlyPayment(loanAmount, interestRate, 30);
-                    const savings = (thirtyYearPayment * 360) - (fifteenYearPayment * 180);
-                    
-                    insights.push({
-                        icon: "fas fa-clock",
-                        title: "Consider a 15-Year Term",
-                        content: `A 15-year term could save you $${savings.toLocaleString()} in interest. Your payment would increase by $${(fifteenYearPayment - thirtyYearPayment).toFixed(2)}/month.`,
-                        priority: "medium",
-                        category: "Loan Term"
-                    });
-                }
-                
-                // Insight 5: Debt-to-income ratio (极速赛车开奖直播
-                if (annualIncome > 0) {
-                    const monthlyPayment = calculateMonthlyPayment(loanAmount, interestRate, loanTerm) + (propertyTax / 12) + (homeInsurance / 12);
-                    const dti = (monthlyPayment / (annualIncome / 12)) * 100;
-                    
-                    if (dti > 28) {
-                        insights.push({
-                            icon: "fas fa-exclamation-circle",
-                            title: "High Debt-to-Income Ratio",
-                            content: `Your mortgage payment is ${dti.toFixed(1)}% of your monthly income. Lenders prefer this ratio to be under 28%. Consider a less expensive home or larger down payment.`,
-                            priority: "high",
-                            category: "Affordability"
-                        });
-                    } else {
-                        insights.push({
-                            icon: "fas fa-check-circle",
-                            title: "Good Debt-to-Income Ratio",
-                            content: `Your mortgage payment is ${dti.toFixed(1)}% of your monthly income, which is within the recommended range. This indicates good affordability.`,
-                            priority: "low",
-                            category: "Affordability"
-                        });
-                    }
-                }
-                
-                // Insight 6: Property tax analysis
-                const taxRate = (propertyTax / homePrice) * 100;
-                if (taxRate > 1.5) {
-                    insights.push({
-                        icon: "fas fa-landmark",
-                        title: "High Property Tax Area",
-                        content: `Your property tax rate is ${taxRate.toFixed(2)}%, which is higher than average. This significantly impacts your monthly payment.`,
-                        priority: "medium",
-                        category: "Taxes"
-                    });
-                }
-                
-                // If no insights were generated, provide positive reinforcement
-                if (insights.length === 0) {
-                    insights.push({
-                        icon: "fas fa-smile",
-                        title: "Solid Financial Plan",
-                        content: "Your mortgage parameters look solid! You're making financially responsible choices for your home purchase.",
-                        priority: "low",
-                        category: "General"
-                    });
-                }
-                
-                return insights;
-            }
-            
-            function calculateMonthlyDifference(loanAmount, rate1, term, rate2) {
-                const payment1 = calculateMonthlyPayment(loanAmount, rate1, term);
-                const payment2 = calculateMonthlyPayment(loanAmount, rate2, term);
-                return Math.abs(payment1 - payment2);
-            }
-            
-            function calculateMonthlyPayment(loanAmount, interestRate, loanTerm) {
-                const monthlyRate = interestRate / 100 / 12;
-                const termInMonths = loanTerm * 12;
-                return loanAmount * monthlyRate * Math.pow(1 + monthlyRate, termIn极速赛车开奖直播
-            }
-            
-            function displayAIInsights(insights) {
-                const container = document.getElementById('ai-insights-container');
-                container.innerHTML = '';
-                
-                document.getElementById('insights-count').textContent = `(${insights.length})`;
-                
-                insights.forEach(insight => {
-                    const insightEl = document.createElement('div');
-                    insightEl.className = `insight-item insight-priority-${insight.priority}`;
-                    
-                    insightEl.innerHTML = `
-                        <div class="insight-icon">
-                            <i class="${insight.icon}"></极速赛车开奖直播
-                        </div>
-                        <div class="insight-content">
-                            <h3>${insight.title} <span class="insight-tag">${insight.category}</span></h3>
-                            <p>${insight.content}</p>
-                        </div>
-                    `;
-                    
-                    container.appendChild(insightEl);
-                });
-            }
-            
             function calculatePayment() {
                 // Show calculating state
                 const originalText = calculateBtn.innerHTML;
                 calculateBtn.innerHTML = '<div class="loading"></div> Calculating...';
                 
-                // Get input values
-                const homePrice = parseFloat(homePriceInput.value);
-                const downPayment = parseFloat(downPaymentInput.value);
-                const interestRate = parseFloat(interestRateInput.value);
-                const loanTerm = parseInt(document.getElementById('loan-term').value);
-                const propertyTax = parseFloat(document.getElementById('property-tax').value);
-                const homeInsurance = parseFloat(document.getElementById('home-insurance').value);
-                const state = document.getElementById('state').value;
-                const annualIncome = parseFloat(annualIncomeInput.value) || 0;
-                
                 // Simple calculation for demo purposes
                 setTimeout(function() {
+                    const homePrice = parseFloat(homePriceInput.value);
+                    const downPayment = parseFloat(downPaymentInput.value);
                     const loanAmount = homePrice - downPayment;
-                    const monthlyRate = interestRate / 100 / 12;
-                    const termInMonths = loanTerm * 12;
+                    const interestRate = parseFloat(interestRateInput.value) / 100 / 12; // Monthly rate
+                    const loanTerm = parseInt(document.getElementById('loan-term').value) * 12; // Months
                     
                     // Calculate monthly payment using formula: M = P * (r(1+r)^n) / ((1+r)^n - 1)
-                    const monthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, termInMonths)) / (Math.pow(1 + monthlyRate, termInMonths) - 1);
-                    
-                    // Add monthly property tax and insurance
-                    const monthlyTax = propertyTax / 12;
-                    const monthlyInsurance = homeInsurance / 12;
-                    const totalMonthly = monthlyPayment + monthlyTax + monthlyInsurance;
+                    const monthlyPayment = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTerm)) / (Math.pow(1 + interestRate, loanTerm) - 1);
                     
                     // Update display
-                    document.getElementById('monthly-payment').textContent = '$' + Math.round(totalMonthly).toLocaleString();
-                    
-                    // Generate and display AI insights
-                    const insights = generateAIInsights(
-                        homePrice, 
-                        downPayment, 
-                        interestRate, 
-                        loanTerm, 
-                        propertyTax, 
-                        homeInsurance, 
-                        state,
-                        annualIncome
-                    );
-                    
-                    displayAIInsights(insights);
+                    document.getElementById('monthly-payment').textContent = '$' + Math.round(monthlyPayment).toLocaleString();
                     
                     // Restore button text
                     calculateBtn.innerHTML = originalText;
                     
                     // Show notification
-                    voiceStatus.textContent = "Calculation completed with personalized insights!";
+                    voiceStatus.textContent = "Calculation completed!";
                 }, 1500);
             }
             
@@ -1448,9 +1231,6 @@
             stateSelect.addEventListener('change', function() {
                 voiceStatus.textContent = "State selected for location-specific tax and insurance calculations";
             });
-            
-            // Calculate on page load to show initial insights
-            calculatePayment();
         });
     </script>
 </body>
