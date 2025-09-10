@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://yourusername.github.io/usa-financial-calculators/sitemap.xml
+
+# Block access to private files
+Disallow: /private/
+Disallow: /.git/
+Disallow: /node_modules/
