@@ -1,50 +1,28 @@
-// Service Worker for Finguid PWA
-const CACHE_NAME = 'finguid-calculator-v1.0.0';
-const urlsToCache = [
-  '/',
-  '/mortgage-calculator',
-  '/style.css',
-  '/mortgage-calculator.js',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+// Service Worker — Finguid Calculator v1.1.0
+const CACHE_NAME = 'finguid-calculator-v1.1.0';
+const ASSETS = [
+  '/', '/mortgage-calculator', '/style-1.css', '/mortgage-calculator.js',
+  '/manifest.json', '/icons/icon-192x192.png', '/icons/icon-512x512.png'
 ];
 
-// Install event - cache resources
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(urlsToCache);
-      })
-  );
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
 });
 
-// Fetch event - serve from cache when offline
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      }
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.map(k => k!==CACHE_NAME?caches.delete(k):Promise.resolve()))
+  ));
+});
+
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(r =>
+      r || fetch(e.request).then(resp => {
+        const clone=resp.clone();
+        caches.open(CACHE_NAME).then(c=>c.put(e.request,clone));
+        return resp;
+      }).catch(()=>r)
     )
-  );
-});
-
-// Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
   );
 });
