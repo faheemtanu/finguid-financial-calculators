@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+  <!-- reuse head from index.html (meta, fonts, CSS, PWA, JSON-LD) -->
+  <title>All Financial Calculators | FinGuid</title>
+  <link rel="stylesheet" href="enhanced-styles.css">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"Calculators Directory",
+    "url":"https://www.finguid.com/calculators.html"
+  }
+  </script>
+</head>
+<body>
+  <!-- Header (copy from index.html) -->
+  <main role="main" class="calculators-page container">
+    <section class="calculator-filters">
+      <h2>Find the Right Calculator</h2>
+      <div class="filter-controls">
+        <!-- same filter buttons -->
+      </div>
+    </section>
+    <section id="calculatorsGrid" class="calculators-grid" aria-live="polite">
+      <!-- Populated by app.js -->
+    </section>
+    <div id="no-results" class="no-results" hidden>
+      <i class="fas fa-search"></i>
+      <h3>No calculators found</h3>
+      <button class="btn btn-primary" onclick="clearSearch()">Show All</button>
+    </div>
+  </main>
+  <!-- Footer -->
+  <script src="app.js"></script>
+</body>
+</html>
