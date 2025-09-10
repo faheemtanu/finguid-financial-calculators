@@ -1,414 +1,472 @@
-// Mortgage Calculator JavaScript with Advanced Features
-// State tax rates data will be loaded from external JSON file
-let stateTaxRates = {};
+// ===== MORTGAGE CALCULATOR FUNCTIONALITY =====
 
-// Load state tax rates on page load
 document.addEventListener('DOMContentLoaded', function() {
-    loadStateTaxRates();
-    setupEventListeners();
-    setDefaultValues();
-});
-
-// Load state tax rates from JSON file
-async function loadStateTaxRates() {
-    try {
-        const response = await fetch('data/state-tax-rates.json');
-        stateTaxRates = await response.json();
-        populateStateDropdown();
-    } catch (error) {
-        console.error('Error loading state tax rates:', error);
-        // Fallback to basic state list if JSON fails to load
-        populateBasicStates();
-    }
-}
-
-// Populate state dropdown with tax rate data
-function populateStateDropdown() {
-    const stateSelect = document.getElementById('state');
-    stateSelect.innerHTML = '<option value="">Select State</option>';
     
-    // Sort states alphabetically
-    const sortedStates = Object.keys(stateTaxRates).sort();
+    // Get form elements
+    const mortgageForm = document.getElementById('mortgage-form');
+    const homePriceInput = document.getElementById('home-price');
+    const downPaymentInput = document.getElementById('down-payment');
+    const interestRateInput = document.getElementById('interest-rate');
+    const loanTermInput = document.getElementById('loan-term');
+    const propertyTaxInput = document.getElementById('property-tax');
+    const homeInsuranceInput = document.getElementById('home-insurance');
+    const hoaFeesInput = document.getElementById('hoa-fees');
     
-    sortedStates.forEach(state => {
-        const option = document.createElement('option');
-        option.value = state;
-        option.textContent = state;
-        stateSelect.appendChild(option);
-    });
-}
-
-// Fallback state list if JSON fails
-function populateBasicStates() {
-    const states = [
-        'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
-        'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho',
-        'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-        'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-        'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
-        'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
-        'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
-        'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
-        'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
-        'West Virginia', 'Wisconsin', 'Wyoming'
-    ];
+    // Get results elements
+    const resultsCard = document.getElementById('results-card');
+    const amortizationCard = document.getElementById('amortization-card');
     
-    const stateSelect = document.getElementById('state');
-    stateSelect.innerHTML = '<option value="">Select State</option>';
+    // Initialize calculator
+    initializeMortgageCalculator();
     
-    states.forEach(state => {
-        const option = document.createElement('option');
-        option.value = state;
-        option.textContent = state;
-        stateSelect.appendChild(option);
-    });
-}
-
-// Setup event listeners
-function setupEventListeners() {
-    // Real-time calculation on input change
-    const inputs = ['homePrice', 'downPayment', 'interestRate', 'loanTerm', 'propertyTax', 'homeInsurance', 'hoaFees'];
-    inputs.forEach(inputId => {
-        const element = document.getElementById(inputId);
-        if (element) {
-            element.addEventListener('input', debounce(calculateMortgage, 500));
-        }
-    });
-    
-    // State selection handler
-    document.getElementById('state').addEventListener('change', function() {
-        updatePropertyTaxFromState();
-        calculateMortgage();
-    });
-    
-    // Down payment percentage calculator
-    document.getElementById('homePrice').addEventListener('input', updateDownPaymentSuggestion);
-    document.getElementById('downPayment').addEventListener('input', updateDownPaymentPercentage);
-}
-
-// Set default values
-function setDefaultValues() {
-    document.getElementById('homePrice').value = '400000';
-    document.getElementById('downPayment').value = '80000';
-    document.getElementById('interestRate').value = '6.5';
-    document.getElementById('propertyTax').value = '4800';
-    document.getElementById('homeInsurance').value = '1200';
-}
-
-// Update property tax based on selected state
-function updatePropertyTaxFromState() {
-    const selectedState = document.getElementById('state').value;
-    const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
-    
-    if (selectedState && stateTaxRates[selectedState] && homePrice > 0) {
-        const taxRate = stateTaxRates[selectedState].rate / 100;
-        const estimatedTax = homePrice * taxRate;
-        document.getElementById('propertyTax').value = Math.round(estimatedTax);
-    }
-}
-
-// Update down payment percentage display
-function updateDownPaymentPercentage() {
-    const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
-    const downPayment = parseFloat(document.getElementById('downPayment').value) || 0;
-    
-    if (homePrice > 0) {
-        const percentage = (downPayment / homePrice) * 100;
-        // This will be displayed in results
-    }
-}
-
-// Suggest down payment amounts
-function updateDownPaymentSuggestion() {
-    const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
-    if (homePrice > 0) {
-        // Auto-suggest 20% down payment to avoid PMI
-        const suggestedDown = homePrice * 0.20;
-        if (!document.getElementById('downPayment').value) {
-            document.getElementById('downPayment').value = Math.round(suggestedDown);
-        }
-    }
-}
-
-// Main mortgage calculation function
-function calculateMortgage() {
-    try {
-        // Get input values
-        const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
-        const downPayment = parseFloat(document.getElementById('downPayment').value) || 0;
-        const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
-        const loanTermYears = parseInt(document.getElementById('loanTerm').value) || 30;
-        const annualPropertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
-        const annualInsurance = parseFloat(document.getElementById('homeInsurance').value) || 0;
-        const monthlyHOA = parseFloat(document.getElementById('hoaFees').value) || 0;
+    function initializeMortgageCalculator() {
+        // Set up form validation
+        setupFormValidation();
         
-        // Validation
-        if (homePrice <= 0 || interestRate <= 0) {
-            document.getElementById('resultsContainer').style.display = 'none';
-            document.getElementById('placeholder').style.display = 'block';
-            return;
+        // Set up currency formatting
+        setupCurrencyInputs();
+        
+        // Set up form submission
+        mortgageForm.addEventListener('submit', handleFormSubmission);
+        
+        // Set up down payment percentage calculation
+        homePriceInput.addEventListener('input', updateDownPaymentPercentage);
+        downPaymentInput.addEventListener('input', updateDownPaymentPercentage);
+        
+        // Track calculator usage
+        trackCalculatorPageLoad();
+    }
+    
+    function setupFormValidation() {
+        // Add validation classes and messages
+        const requiredFields = [homePriceInput, downPaymentInput, interestRateInput];
+        
+        requiredFields.forEach(field => {
+            field.addEventListener('blur', validateField);
+            field.addEventListener('input', clearFieldError);
+        });
+    }
+    
+    function setupCurrencyInputs() {
+        const currencyInputs = document.querySelectorAll('.currency-input');
+        
+        currencyInputs.forEach(input => {
+            input.addEventListener('input', formatCurrencyInput);
+            input.addEventListener('blur', formatCurrencyOnBlur);
+        });
+    }
+    
+    function formatCurrencyInput(event) {
+        const input = event.target;
+        let value = input.value.replace(/[^0-9]/g, '');
+        
+        if (value) {
+            value = parseInt(value).toLocaleString();
         }
+        
+        input.value = value;
+    }
+    
+    function formatCurrencyOnBlur(event) {
+        const input = event.target;
+        if (!input.value) return;
+        
+        const numValue = parseFloat(input.value.replace(/[^0-9.]/g, ''));
+        if (!isNaN(numValue)) {
+            input.value = numValue.toLocaleString();
+        }
+    }
+    
+    function updateDownPaymentPercentage() {
+        const homePrice = parseFloat(homePriceInput.value.replace(/[^0-9.]/g, '')) || 0;
+        const downPayment = parseFloat(downPaymentInput.value.replace(/[^0-9.]/g, '')) || 0;
+        
+        const percentage = homePrice > 0 ? (downPayment / homePrice * 100).toFixed(1) : 0;
+        document.getElementById('down-payment-percent').textContent = `${percentage}%`;
+    }
+    
+    function validateField(event) {
+        const field = event.target;
+        const value = field.value.trim();
+        
+        // Remove existing error styling
+        field.classList.remove('error');
+        removeFieldError(field);
+        
+        if (!value && isRequiredField(field)) {
+            addFieldError(field, 'This field is required');
+            return false;
+        }
+        
+        // Validate specific field types
+        if (field === interestRateInput) {
+            const rate = parseFloat(value);
+            if (isNaN(rate) || rate < 0 || rate > 30) {
+                addFieldError(field, 'Please enter a valid interest rate (0-30%)');
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    function clearFieldError(event) {
+        const field = event.target;
+        field.classList.remove('error');
+        removeFieldError(field);
+    }
+    
+    function addFieldError(field, message) {
+        field.classList.add('error');
+        
+        // Remove existing error message
+        removeFieldError(field);
+        
+        // Add new error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'form-error';
+        errorDiv.textContent = message;
+        
+        field.parentNode.parentNode.appendChild(errorDiv);
+    }
+    
+    function removeFieldError(field) {
+        const errorElement = field.parentNode.parentNode.querySelector('.form-error');
+        if (errorElement) {
+            errorElement.remove();
+        }
+    }
+    
+    function isRequiredField(field) {
+        return [homePriceInput, downPaymentInput, interestRateInput].includes(field);
+    }
+    
+    function handleFormSubmission(event) {
+        event.preventDefault();
+        
+        // Validate all required fields
+        const isValid = validateAllFields();
+        
+        if (isValid) {
+            calculateMortgage();
+            showResults();
+            scrollToResults();
+            trackCalculatorUsage();
+        }
+    }
+    
+    function validateAllFields() {
+        let isValid = true;
+        const requiredFields = [homePriceInput, downPaymentInput, interestRateInput];
+        
+        requiredFields.forEach(field => {
+            if (!validateField({ target: field })) {
+                isValid = false;
+            }
+        });
+        
+        return isValid;
+    }
+    
+    function calculateMortgage() {
+        // Get input values
+        const homePrice = parseFloat(homePriceInput.value.replace(/[^0-9.]/g, '')) || 0;
+        const downPayment = parseFloat(downPaymentInput.value.replace(/[^0-9.]/g, '')) || 0;
+        const annualRate = parseFloat(interestRateInput.value) || 0;
+        const loanTermYears = parseInt(loanTermInput.value) || 30;
+        const annualPropertyTax = parseFloat(propertyTaxInput.value.replace(/[^0-9.]/g, '')) || 0;
+        const annualInsurance = parseFloat(homeInsuranceInput.value.replace(/[^0-9.]/g, '')) || 0;
+        const monthlyHOA = parseFloat(hoaFeesInput.value.replace(/[^0-9.]/g, '')) || 0;
         
         // Calculate loan amount
         const loanAmount = homePrice - downPayment;
         
-        if (loanAmount <= 0) {
-            alert('Down payment cannot be greater than or equal to home price');
-            return;
+        // Calculate monthly payment (Principal & Interest)
+        const monthlyRate = annualRate / 100 / 12;
+        const totalPayments = loanTermYears * 12;
+        
+        let monthlyPI = 0;
+        if (monthlyRate > 0) {
+            monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments))
+                / (Math.pow(1 + monthlyRate, totalPayments) - 1);
+        } else {
+            monthlyPI = loanAmount / totalPayments;
         }
         
-        // Calculate monthly interest rate and number of payments
-        const monthlyRate = interestRate / 100 / 12;
-        const numberOfPayments = loanTermYears * 12;
-        
-        // Calculate monthly principal and interest payment
-        const monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
-                         (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+        // Calculate PMI (if down payment < 20%)
+        const downPaymentPercent = (downPayment / homePrice) * 100;
+        const monthlyPMI = downPaymentPercent < 20 ? calculatePMI(loanAmount, homePrice) : 0;
         
         // Calculate other monthly costs
         const monthlyPropertyTax = annualPropertyTax / 12;
         const monthlyInsurance = annualInsurance / 12;
         
-        // Calculate PMI (Private Mortgage Insurance)
-        const downPaymentPercent = (downPayment / homePrice) * 100;
-        let monthlyPMI = 0;
+        // Calculate totals
+        const totalMonthlyPayment = monthlyPI + monthlyPMI + monthlyPropertyTax + monthlyInsurance + monthlyHOA;
+        const totalInterest = (monthlyPI * totalPayments) - loanAmount;
+        const totalPaid = loanAmount + totalInterest;
         
-        if (downPaymentPercent < 20) {
-            // PMI is typically 0.3% to 1.5% of loan amount annually
-            // Using 0.5% as default, can be made more sophisticated
-            monthlyPMI = (loanAmount * 0.005) / 12;
-        }
+        // Store results for display
+        const results = {
+            loanAmount: loanAmount,
+            monthlyPI: monthlyPI,
+            monthlyPMI: monthlyPMI,
+            monthlyPropertyTax: monthlyPropertyTax,
+            monthlyInsurance: monthlyInsurance,
+            monthlyHOA: monthlyHOA,
+            totalMonthlyPayment: totalMonthlyPayment,
+            totalInterest: totalInterest,
+            totalPaid: totalPaid,
+            annualRate: annualRate,
+            loanTermYears: loanTermYears,
+            totalPayments: totalPayments
+        };
         
-        // Calculate total monthly payment
-        const totalMonthlyPayment = monthlyPI + monthlyPropertyTax + monthlyInsurance + monthlyPMI + monthlyHOA;
-        
-        // Calculate loan totals
-        const totalInterest = (monthlyPI * numberOfPayments) - loanAmount;
-        const totalLoanCost = loanAmount + totalInterest;
-        
-        // Display results
-        displayResults({
-            totalMonthlyPayment,
-            monthlyPI,
-            monthlyPropertyTax,
-            monthlyInsurance,
-            monthlyPMI,
-            monthlyHOA,
-            loanAmount,
-            totalInterest,
-            totalLoanCost,
-            downPaymentPercent,
-            homePrice,
-            downPayment,
-            interestRate,
-            loanTermYears
-        });
-        
-        // Generate amortization schedule
-        generateAmortizationSchedule(loanAmount, monthlyRate, numberOfPayments, monthlyPI);
-        
-        // Generate AI recommendation
-        generateAIRecommendation({
-            downPaymentPercent,
-            monthlyPI,
-            totalMonthlyPayment,
-            interestRate,
-            loanAmount,
-            homePrice
-        });
-        
-        // Track calculator usage
-        if (typeof trackCalculatorUse === 'function') {
-            trackCalculatorUse();
-        }
-        
-    } catch (error) {
-        console.error('Error in mortgage calculation:', error);
-        alert('An error occurred during calculation. Please check your inputs.');
+        displayResults(results);
+        generateAmortizationSchedule(loanAmount, monthlyRate, totalPayments, monthlyPI);
     }
-}
-
-// Display calculation results
-function displayResults(results) {
-    // Show results container
-    document.getElementById('resultsContainer').style.display = 'block';
-    document.getElementById('placeholder').style.display = 'none';
     
-    // Format currency display
-    const formatCurrency = (amount) => new Intl.NumberFormat('en-US', {
+    function calculatePMI(loanAmount, homeValue) {
+        const ltvRatio = loanAmount / homeValue;
+        let pmiRate = 0.005; // Default 0.5%
+        
+        // Adjust PMI rate based on LTV ratio
+        if (ltvRatio > 0.95) {
+            pmiRate = 0.012; // 1.2%
+        } else if (ltvRatio > 0.90) {
+            pmiRate = 0.008; // 0.8%
+        } else if (ltvRatio > 0.85) {
+            pmiRate = 0.006; // 0.6%
+        }
+        
+        const annualPMI = loanAmount * pmiRate;
+        return annualPMI / 12;
+    }
+    
+    function displayResults(results) {
+        // Update payment breakdown
+        document.getElementById('total-monthly-payment').textContent = formatCurrency(results.totalMonthlyPayment);
+        document.getElementById('principal-interest').textContent = formatCurrency(results.monthlyPI);
+        document.getElementById('monthly-property-tax').textContent = formatCurrency(results.monthlyPropertyTax);
+        document.getElementById('monthly-insurance').textContent = formatCurrency(results.monthlyInsurance);
+        
+        // Show/hide PMI row
+        const pmiRow = document.getElementById('pmi-row');
+        if (results.monthlyPMI > 0) {
+            document.getElementById('monthly-pmi').textContent = formatCurrency(results.monthlyPMI);
+            pmiRow.style.display = 'flex';
+        } else {
+            pmiRow.style.display = 'none';
+        }
+        
+        // Show/hide HOA row
+        const hoaRow = document.getElementById('hoa-row');
+        if (results.monthlyHOA > 0) {
+            document.getElementById('monthly-hoa').textContent = formatCurrency(results.monthlyHOA);
+            hoaRow.style.display = 'flex';
+        } else {
+            hoaRow.style.display = 'none';
+        }
+        
+        // Update loan summary
+        document.getElementById('loan-amount-display').textContent = formatCurrency(results.loanAmount);
+        document.getElementById('total-interest').textContent = formatCurrency(results.totalInterest);
+        document.getElementById('total-paid').textContent = formatCurrency(results.totalPaid);
+    }
+    
+    function generateAmortizationSchedule(loanAmount, monthlyRate, totalPayments, monthlyPI) {
+        const tbody = document.getElementById('amortization-tbody');
+        tbody.innerHTML = '';
+        
+        let remainingBalance = loanAmount;
+        let yearlyPrincipalPaid = 0;
+        let yearlyInterestPaid = 0;
+        
+        for (let month = 1; month <= totalPayments; month++) {
+            const interestPayment = remainingBalance * monthlyRate;
+            const principalPayment = monthlyPI - interestPayment;
+            remainingBalance -= principalPayment;
+            
+            yearlyPrincipalPaid += principalPayment;
+            yearlyInterestPaid += interestPayment;
+            
+            // Display yearly totals
+            if (month % 12 === 0 || month === totalPayments) {
+                const year = Math.ceil(month / 12);
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>Year ${year}</td>
+                    <td>${formatCurrency(yearlyPrincipalPaid)}</td>
+                    <td>${formatCurrency(yearlyInterestPaid)}</td>
+                    <td>${formatCurrency(Math.max(0, remainingBalance))}</td>
+                `;
+                
+                tbody.appendChild(row);
+                
+                // Reset yearly totals
+                yearlyPrincipalPaid = 0;
+                yearlyInterestPaid = 0;
+            }
+        }
+    }
+    
+    function showResults() {
+        resultsCard.style.display = 'block';
+        amortizationCard.style.display = 'block';
+        
+        // Animate results appearance
+        setTimeout(() => {
+            resultsCard.classList.add('fade-in-up');
+            amortizationCard.classList.add('fade-in-up');
+        }, 100);
+    }
+    
+    function scrollToResults() {
+        resultsCard.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    }
+    
+    function trackCalculatorPageLoad() {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                'event_category': 'calculator',
+                'event_label': 'mortgage_calculator'
+            });
+        }
+    }
+    
+    function trackCalculatorUsage() {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'mortgage_calculation', {
+                'event_category': 'engagement',
+                'event_label': 'calculate_button_clicked'
+            });
+        }
+    }
+});
+
+// ===== UTILITY FUNCTIONS FOR MORTGAGE CALCULATOR =====
+
+function formatCurrency(amount) {
+    if (isNaN(amount) || amount === null) return '$0';
+    
+    return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
-    }).format(amount);
-    
-    // Update main payment display
-    document.getElementById('totalMonthlyPayment').textContent = formatCurrency(results.totalMonthlyPayment);
-    
-    // Update payment breakdown
-    document.getElementById('principalInterest').textContent = formatCurrency(results.monthlyPI);
-    document.getElementById('monthlyPropertyTax').textContent = formatCurrency(results.monthlyPropertyTax);
-    document.getElementById('monthlyInsurance').textContent = formatCurrency(results.monthlyInsurance);
-    document.getElementById('totalBreakdown').textContent = formatCurrency(results.totalMonthlyPayment);
-    
-    // Handle PMI display
-    const pmiRow = document.getElementById('pmiRow');
-    if (results.monthlyPMI > 0) {
-        pmiRow.style.display = 'flex';
-        document.getElementById('monthlyPMI').textContent = formatCurrency(results.monthlyPMI);
-    } else {
-        pmiRow.style.display = 'none';
-    }
-    
-    // Handle HOA display
-    const hoaRow = document.getElementById('hoaRow');
-    if (results.monthlyHOA > 0) {
-        hoaRow.style.display = 'flex';
-        document.getElementById('monthlyHOA').textContent = formatCurrency(results.monthlyHOA);
-    } else {
-        hoaRow.style.display = 'none';
-    }
-    
-    // Update loan summary
-    document.getElementById('loanAmount').textContent = formatCurrency(results.loanAmount);
-    document.getElementById('totalInterest').textContent = formatCurrency(results.totalInterest);
-    document.getElementById('totalLoanCost').textContent = formatCurrency(results.totalLoanCost);
-    document.getElementById('downPaymentPercent').textContent = results.downPaymentPercent.toFixed(1) + '%';
+    }).format(Math.round(amount));
 }
 
-// Generate amortization schedule
-function generateAmortizationSchedule(loanAmount, monthlyRate, numberOfPayments, monthlyPayment) {
-    let balance = loanAmount;
-    let amortizationData = [];
+function formatPercent(decimal, decimals = 2) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'percent',
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    }).format(decimal);
+}
+
+// ===== ENHANCED FORM VALIDATION =====
+
+function validateMortgageInputs(data) {
+    const errors = {};
     
-    for (let year = 1; year <= Math.ceil(numberOfPayments / 12); year++) {
-        let yearlyPrincipal = 0;
-        let yearlyInterest = 0;
-        
-        for (let month = 1; month <= 12 && ((year - 1) * 12 + month) <= numberOfPayments; month++) {
-            const interestPayment = balance * monthlyRate;
-            const principalPayment = monthlyPayment - interestPayment;
-            
-            yearlyPrincipal += principalPayment;
-            yearlyInterest += interestPayment;
-            balance -= principalPayment;
-        }
-        
-        amortizationData.push({
-            year: year,
-            principal: yearlyPrincipal,
-            interest: yearlyInterest,
-            balance: Math.max(0, balance)
+    if (!data.homePrice || data.homePrice <= 0) {
+        errors.homePrice = 'Please enter a valid home price';
+    }
+    
+    if (!data.downPayment || data.downPayment <= 0) {
+        errors.downPayment = 'Please enter a valid down payment';
+    }
+    
+    if (data.downPayment >= data.homePrice) {
+        errors.downPayment = 'Down payment must be less than home price';
+    }
+    
+    if (!data.interestRate || data.interestRate <= 0 || data.interestRate > 30) {
+        errors.interestRate = 'Please enter a valid interest rate (0.1% - 30%)';
+    }
+    
+    if (data.propertyTax < 0) {
+        errors.propertyTax = 'Property tax cannot be negative';
+    }
+    
+    if (data.homeInsurance < 0) {
+        errors.homeInsurance = 'Home insurance cannot be negative';
+    }
+    
+    if (data.hoaFees < 0) {
+        errors.hoaFees = 'HOA fees cannot be negative';
+    }
+    
+    return errors;
+}
+
+// ===== MORTGAGE INSIGHTS AND RECOMMENDATIONS =====
+
+function generateMortgageInsights(results) {
+    const insights = [];
+    const downPaymentPercent = results.downPaymentPercent;
+    const dtiRatio = results.totalMonthlyPayment / results.monthlyIncome;
+    
+    // Down payment insights
+    if (downPaymentPercent < 20) {
+        insights.push({
+            type: 'warning',
+            title: 'PMI Required',
+            message: `With a ${downPaymentPercent.toFixed(1)}% down payment, you'll pay $${formatCurrency(results.monthlyPMI)} monthly for PMI. Consider increasing your down payment to 20% to eliminate this cost.`
         });
-        
-        if (balance <= 0) break;
-    }
-    
-    // Populate amortization table
-    const tableBody = document.getElementById('amortizationTable');
-    tableBody.innerHTML = '';
-    
-    amortizationData.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${row.year}</td>
-            <td>$${row.principal.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-            <td>$${row.interest.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-            <td>$${row.balance.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-        `;
-        tableBody.appendChild(tr);
-    });
-}
-
-// Generate AI-powered recommendation
-function generateAIRecommendation(data) {
-    let recommendation = '';
-    
-    if (data.downPaymentPercent < 20) {
-        recommendation = `💡 <strong>PMI Alert:</strong> With ${data.downPaymentPercent.toFixed(1)}% down, you'll pay PMI. Consider saving for a 20% down payment (${((data.homePrice * 0.2) - (data.homePrice * data.downPaymentPercent / 100)).toLocaleString('en-US', {style: 'currency', currency: 'USD', minimumFractionDigits: 0})} more) to eliminate PMI and save money.`;
-    } else if (data.interestRate > 7) {
-        recommendation = `📈 <strong>Interest Rate Tip:</strong> Your rate of ${data.interestRate}% is relatively high. Consider shopping around with multiple lenders or improving your credit score to secure better rates.`;
-    } else if (data.totalMonthlyPayment > data.homePrice * 0.0035) {
-        recommendation = `⚠️ <strong>Affordability Warning:</strong> Your monthly payment is quite high relative to the home price. Consider a less expensive home or larger down payment to improve affordability.`;
     } else {
-        recommendation = `✅ <strong>Good Deal:</strong> Your mortgage terms look favorable! You're putting down ${data.downPaymentPercent.toFixed(1)}% and have a competitive interest rate of ${data.interestRate}%.`;
+        insights.push({
+            type: 'success',
+            title: 'No PMI Required',
+            message: 'Great! With a 20%+ down payment, you won\'t need to pay private mortgage insurance.'
+        });
     }
     
-    // Add extra payment suggestion
-    const extraPayment = data.monthlyPI * 0.1; // Suggest 10% extra
-    recommendation += ` <br><br><strong>Savings Tip:</strong> Adding just $${extraPayment.toFixed(0)}/month extra to principal could save you thousands in interest and pay off your loan years earlier.`;
-    
-    document.getElementById('aiRecommendation').innerHTML = recommendation;
-}
-
-// Toggle amortization schedule visibility
-function toggleAmortization() {
-    const container = document.getElementById('amortizationContainer');
-    const button = document.querySelector('.toggle-amortization');
-    
-    if (container.classList.contains('hidden')) {
-        container.classList.remove('hidden');
-        button.innerHTML = '<i class="fas fa-chart-line"></i> Hide Amortization Schedule';
-    } else {
-        container.classList.add('hidden');
-        button.innerHTML = '<i class="fas fa-chart-line"></i> View Amortization Schedule';
-    }
-}
-
-// Utility function to debounce rapid input changes
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Format number inputs with commas
-function formatNumberInput(input) {
-    const value = input.value.replace(/,/g, '');
-    if (!isNaN(value) && value !== '') {
-        input.value = parseFloat(value).toLocaleString('en-US');
-    }
-}
-
-// Export functionality (for future PDF generation)
-function exportResults() {
-    // This function can be enhanced to generate PDF reports
-    const results = {
-        homePrice: document.getElementById('homePrice').value,
-        downPayment: document.getElementById('downPayment').value,
-        monthlyPayment: document.getElementById('totalMonthlyPayment').textContent,
-        // Add more fields as needed
-    };
-    
-    console.log('Exporting results:', results);
-    // Future: Generate PDF or email functionality
-}
-
-// Initialize calculator with URL parameters (for sharing)
-function initializeFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if (urlParams.get('price')) {
-        document.getElementById('homePrice').value = urlParams.get('price');
-    }
-    if (urlParams.get('down')) {
-        document.getElementById('downPayment').value = urlParams.get('down');
-    }
-    if (urlParams.get('rate')) {
-        document.getElementById('interestRate').value = urlParams.get('rate');
+    // Interest rate insights
+    if (results.annualRate > 7.5) {
+        insights.push({
+            type: 'info',
+            title: 'Interest Rate Consideration',
+            message: 'Your interest rate is above the current average. Consider shopping around for better rates or improving your credit score.'
+        });
     }
     
-    // Calculate if parameters were provided
-    if (urlParams.has('price') || urlParams.has('down') || urlParams.has('rate')) {
-        setTimeout(calculateMortgage, 100);
+    // Loan term insights
+    if (results.loanTermYears === 30) {
+        const savings15Year = calculate15YearSavings(results);
+        insights.push({
+            type: 'info',
+            title: '15-Year Loan Comparison',
+            message: `A 15-year loan would save you approximately $${formatCurrency(savings15Year)} in interest, but increase your monthly payment.`
+        });
     }
+    
+    return insights;
 }
 
-// Call initialization
-document.addEventListener('DOMContentLoaded', initializeFromURL);
+function calculate15YearSavings(results30) {
+    // Calculate 15-year loan savings
+    const monthlyRate = results30.annualRate / 100 / 12;
+    const payments15 = 15 * 12;
+    
+    const monthly15 = results30.loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, payments15))
+        / (Math.pow(1 + monthlyRate, payments15) - 1);
+    
+    const totalInterest15 = (monthly15 * payments15) - results30.loanAmount;
+    
+    return results30.totalInterest - totalInterest15;
+}
+
+// ===== EXPORT FUNCTIONS FOR OTHER SCRIPTS =====
+
+window.MortgageCalculator = {
+    formatCurrency,
+    formatPercent,
+    validateMortgageInputs,
+    generateMortgageInsights
+};
