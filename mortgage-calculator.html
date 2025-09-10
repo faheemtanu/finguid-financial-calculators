@@ -1,522 +1,318 @@
-/*=== COLOR TOKENS & BRANDING ===*/
-:root {
-  /* Brand Colors */
-  --color-primary: #21808d; /* Teal 500 */
-  --color-primary-hover: #1d5371; /* Darker Teal */
-  --color-primary-active: #1a4961;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>USA Financial Calculators - AI Enhanced Tools</title>
+    <meta name="description" content="Free AI-enhanced financial calculators including mortgage, auto loan, and investment calculators with state-specific accuracy and AI insights." />
 
-  --color-secondary: rgba(94, 82, 64, 0.12); /* Brown-600 12% opacity */
-  --color-secondary-hover: rgba(94, 82, 64, 0.2);
-  --color-secondary-active: rgba(94, 82, 64, 0.25);
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-  --color-background: #fcfcf9; /* Cream 50 */
-  --color-surface: #fffffd; /* Cream 100 */
-  --color-text: #13343b; /* Slate-900 */
-  --color-text-secondary: #626c71; /* Slate-500 */
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-  --color-error: #c0152f; /* Red 500 */
-  --color-success: #21808d; /* Teal 500 */
-  --color-warning: #a84b2f; /* Orange 500 */
-  --color-info: #626c71; /* Slate 500 */
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container nav">
+            <div class="logo">
+                <i class="fas fa-calculator"></i> USA Financial Calculators
+            </div>
+            <div><span>🇺🇸 Built for Americans</span></div>
+        </div>
+    </header>
 
-  --color-border: rgba(94, 82, 64, 0.2);
-  --color-focus-ring: rgba(33, 128, 141, 0.4);
-  --color-btn-primary-text: #fcfcf9;
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>🤖 AI-Enhanced Financial Calculators</h1>
+        <p>Make smarter financial decisions with our intelligent calculators. Built specifically for US users with state-specific data and AI insights.</p>
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-robot"></i>
+                <h3>AI-Powered</h3>
+                <p>Smart calculations with personalized insights</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>State-Specific</h3>
+                <p>Accurate tax rates and regulations for all 50 states</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Mobile-First</h3>
+                <p>Perfect experience on any device</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <h3>100% Free</h3>
+                <p>No hidden fees, completely free to use</p>
+            </div>
+        </div>
+    </section>
 
-  /* Background accents for sections */
-  --color-bg-light-blue: rgba(59, 130, 246, 0.08);
-  --color-bg-light-yellow: rgba(245, 158, 11, 0.08);
-  --color-bg-light-green: rgba(34, 197, 94, 0.08);
-}
+    <!-- Calculators Section -->
+    <main class="container calculator-grid">
+        <!-- Mortgage Calculator -->
+        <section class="calculator-card" aria-labelledby="mortgageTitle" role="region">
+            <h2 id="mortgageTitle"><i class="fas fa-home"></i> Mortgage Calculator</h2>
+            <form id="mortgageForm" onsubmit="event.preventDefault(); calculateMortgage();">
+                <div class="form-group">
+                    <label for="loanAmount">Loan Amount ($)</label>
+                    <input type="number" id="loanAmount" placeholder="300000" min="1000" required />
+                </div>
+                <div class="form-group">
+                    <label for="interestRate">Interest Rate (%)</label>
+                    <input type="number" id="interestRate" step="0.01" placeholder="6.5" min="0" max="25" required />
+                </div>
+                <div class="form-group">
+                    <label for="loanTerm">Loan Term (Years)</label>
+                    <input type="number" id="loanTerm" placeholder="30" min="1" max="50" required />
+                </div>
+                <div class="form-group">
+                    <label for="propertyTax">Annual Property Tax ($)</label>
+                    <input type="number" id="propertyTax" placeholder="3000" min="0" step="1" />
+                </div>
+                <div class="form-group">
+                    <label for="insurance">Annual Insurance ($)</label>
+                    <input type="number" id="insurance" placeholder="1200" min="0" step="1" />
+                </div>
+                <button class="calculate-btn" type="submit">
+                    <i class="fas fa-calculator"></i> Calculate Payment
+                </button>
+            </form>
+            <section id="mortgageResult" class="result" aria-live="polite" aria-atomic="true" hidden>
+                <h3>Your Monthly Payment</h3>
+                <div id="mortgageOutput"></div>
+            </section>
+        </section>
 
-/* Dark Mode Overrides */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #1f2324; /* Charcoal 700 */
-    --color-surface: #262828; /* Charcoal 800 */
-    --color-text: #f5f5f5; /* Gray 200 */
-    --color-text-secondary: rgba(245, 245, 245, 0.7);
-    --color-secondary: rgba(119, 124, 124, 0.15);
-    --color-border: rgba(119, 124, 124, 0.3);
-    --color-focus-ring: rgba(50, 184, 198, 0.4); /* Teal 300 */
-    --color-btn-primary-text: #13343b; /* Slate 900 */
-  }
-}
+        <!-- Auto Loan Calculator -->
+        <section class="calculator-card" aria-labelledby="autoLoanTitle" role="region">
+            <h2 id="autoLoanTitle"><i class="fas fa-car"></i> Auto Loan Calculator</h2>
+            <form id="autoLoanForm" onsubmit="event.preventDefault(); calculateAuto();">
+                <div class="form-group">
+                    <label for="carPrice">Car Price ($)</label>
+                    <input type="number" id="carPrice" placeholder="25000" min="1000" required />
+                </div>
+                <div class="form-group">
+                    <label for="downPayment">Down Payment ($)</label>
+                    <input type="number" id="downPayment" placeholder="5000" min="0" step="1" />
+                </div>
+                <div class="form-group">
+                    <label for="autoRate">Interest Rate (%)</label>
+                    <input type="number" id="autoRate" step="0.01" placeholder="5.5" min="0" max="25" required />
+                </div>
+                <div class="form-group">
+                    <label for="autoTerm">Loan Term (Months)</label>
+                    <input type="number" id="autoTerm" placeholder="60" min="12" max="84" required />
+                </div>
+                <button class="calculate-btn" type="submit">
+                    <i class="fas fa-calculator"></i> Calculate Payment
+                </button>
+            </form>
+            <section id="autoResult" class="result" aria-live="polite" aria-atomic="true" hidden>
+                <h3>Your Monthly Payment</h3>
+                <div id="autoOutput"></div>
+            </section>
+        </section>
 
-/*=== TYPOGRAPHY & BASE STYLES ===*/
-html {
-  font-size: 14px;
-  font-family: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, sans-serif;
-  line-height: 1.5;
-  color: var(--color-text);
-  background-color: var(--color-background);
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-}
+        <!-- Investment Calculator -->
+        <section class="calculator-card" aria-labelledby="investmentTitle" role="region">
+            <h2 id="investmentTitle"><i class="fas fa-chart-line"></i> Investment Calculator</h2>
+            <form id="investmentForm" onsubmit="event.preventDefault(); calculateInvestment();">
+                <div class="form-group">
+                    <label for="initialInvestment">Initial Investment ($)</label>
+                    <input type="number" id="initialInvestment" placeholder="10000" min="0" step="1" />
+                </div>
+                <div class="form-group">
+                    <label for="monthlyContribution">Monthly Contribution ($)</label>
+                    <input type="number" id="monthlyContribution" placeholder="500" min="0" step="1" />
+                </div>
+                <div class="form-group">
+                    <label for="investmentRate">Expected Return Rate (%)</label>
+                    <input type="number" id="investmentRate" step="0.01" placeholder="7" min="0" max="25" required />
+                </div>
+                <div class="form-group">
+                    <label for="investmentYears">Investment Period (Years)</label>
+                    <input type="number" id="investmentYears" placeholder="20" min="1" max="100" required />
+                </div>
+                <button class="calculate-btn" type="submit">
+                    <i class="fas fa-calculator"></i> Calculate Growth
+                </button>
+            </form>
+            <section id="investmentResult" class="result" aria-live="polite" aria-atomic="true" hidden>
+                <h3>Investment Growth</h3>
+                <div id="investmentOutput"></div>
+            </section>
+        </section>
+    </main>
 
-*, *::before, *::after {
-  box-sizing: inherit;
-  margin: 0;
-  padding: 0;
-}
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container" role="contentinfo">
+            <p>© 2025 USA Financial Calculators. Built with ❤️ for Americans. All calculators are free to use.</p>
+            <p>
+                <a href="#" aria-label="Privacy Policy">Privacy Policy</a> | 
+                <a href="#" aria-label="Terms of Service">Terms of Service</a> | 
+                <a href="#" aria-label="Contact Us">Contact</a>
+            </p>
+        </div>
+    </footer>
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-background);
-  color: var(--color-text);
-}
+    <!-- JavaScript Calculator Scripts -->
+    <script>
+        // Mortgage Calculator
+        function calculateMortgage() {
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+            const loanTermMonths = parseFloat(document.getElementById('loanTerm').value) * 12;
+            const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 550;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  color: var(--color-text);
-}
+            if (!loanAmount || !interestRate || !loanTermMonths) {
+                alert('Please fill in all required fields.');
+                return;
+            }
 
-h1 { font-size: 30px; }
-h2 { font-size: 24px; }
-h3 { font-size: 20px; }
-h4 { font-size: 18px; }
-h5 { font-size: 16px; }
-h6 { font-size: 14px; }
+            const monthlyPI = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTermMonths)) / (Math.pow(1 + interestRate, loanTermMonths) - 1);
+            const monthlyTax = propertyTax / 12;
+            const monthlyInsurance = insurance / 12;
+            const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance;
+            const totalInterest = (monthlyPI * loanTermMonths) - loanAmount;
 
-p {
-  margin-bottom: 16px;
-  color: var(--color-text-secondary);
-  font-size: 16px;
-  line-height: 1.5;
-}
+            document.getElementById('mortgageOutput').innerHTML = `
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    <div style="font-size: 24px; font-weight: bold; color: #1e40af;">$${totalMonthly.toFixed(2)}</div>
+                    <div style="color: #6b7280; margin-top: 5px;">Total Monthly Payment</div>
+                    <div style="margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Principal & Interest:</span>
+                            <span><strong>$${monthlyPI.toFixed(2)}</strong></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Property Tax:</span>
+                            <span>$${monthlyTax.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Insurance:</span>
+                            <span>$${monthlyInsurance.toFixed(2)}</span>
+                        </div>
+                        <hr style="margin: 10px 0;">
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Total Interest Paid:</span>
+                            <span><strong>$${totalInterest.toFixed(2)}</strong></span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background: #eff6ff; border-left: 4px solid #3b82f6;">
+                        💡 AI Tip: Consider making extra principal payments to reduce total interest.
+                    </div>
+                </div>`;
+            document.getElementById('mortgageResult').hidden = false;
+        }
 
-a {
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color 250ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-a:hover, a:focus {
-  color: var(--color-primary-hover);
-  outline: none;
-}
+        // Auto Loan Calculator
+        function calculateAuto() {
+            const carPrice = parseFloat(document.getElementById('carPrice').value);
+            const downPayment = parseFloat(document.getElementById('downPayment').value) || 0;
+            const interestRate = parseFloat(document.getElementById('autoRate').value) / 100 / 12;
+            const loanTermMonths = parseFloat(document.getElementById('autoTerm').value);
 
-/* Code and preformatted text */
-code, pre {
-  font-family: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  background-color: var(--color-secondary);
-  border-radius: 6px;
-  padding: 2px 8px;
-  font-size: 0.95em;
-  word-break: break-word;
-}
-pre {
-  padding: 16px;
-  overflow-x: auto;
-  border: 1px solid var(--color-border);
-  margin-bottom: 16px;
-}
+            if (!carPrice || !interestRate || !loanTermMonths) {
+                alert('Please fill in all required fields.');
+                return;
+            }
 
-/*=== LAYOUT & CONTAINERS ===*/
-.container {
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 20px;
-  padding-right: 20px;
-}
+            const loanAmount = carPrice - downPayment;
+            if (loanAmount <= 0) {
+                alert('Down payment cannot be greater than or equal to car price.');
+                return;
+            }
 
-/* Grid for calculators */
-.calculator-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 32px;
-  margin-bottom: 48px;
-}
+            const monthlyPayment = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTermMonths)) / (Math.pow(1 + interestRate, loanTermMonths) - 1);
+            const totalPayment = monthlyPayment * loanTermMonths;
+            const totalInterest = totalPayment - loanAmount;
 
-/* Responsive grid fallback for smaller screens */
-@media (max-width: 768px) {
-  .calculator-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-}
+            document.getElementById('autoOutput').innerHTML = `
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    <div style="font-size: 24px; font-weight: bold; color: #1e40af;">$${monthlyPayment.toFixed(2)}</div>
+                    <div style="color: #6b7280; margin-top: 5px;">Monthly Payment</div>
+                    <div style="margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Car Price:</span><span>$${carPrice.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Down Payment:</span><span>$${downPayment.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Loan Amount:</span><span><strong>$${loanAmount.toFixed(2)}</strong></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Total Interest:</span><span>$${totalInterest.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background: #eff6ff; border-left: 4px solid #3b82f6;">
+                        💡 AI Tip: Increase your down payment by 20% to reduce interest.
+                    </div>
+                </div>`;
+            document.getElementById('autoResult').hidden = false;
+        }
 
-/* Flex utilities */
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.gap-4 { gap: 4px; }
-.gap-8 { gap: 8px; }
-.gap-16 { gap: 16px; }
+        // Investment Calculator
+        function calculateInvestment() {
+            const initialInvestment = parseFloat(document.getElementById('initialInvestment').value) || 0;
+            const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+            const annualRate = parseFloat(document.getElementById('investmentRate').value) / 100;
+            const years = parseFloat(document.getElementById('investmentYears').value);
 
-/*=== UI COMPONENTS ===*/
-/* Buttons */
-.btn {
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 24px;
-  font-size: 16px;
-  transition: background-color 250ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms ease;
-  border: none;
-  text-decoration: none;
-  user-select: none;
-}
+            if (!annualRate || !years) {
+                alert('Please fill in all required fields.');
+                return;
+            }
 
-.btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
+            const monthlyRate = annualRate / 12;
+            const totalMonths = years * 12;
 
-.btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-btn-primary-text);
-}
-.btn-primary:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(33, 128, 141, 0.4);
-}
+            // Future value of initial investment
+            const futureValueInitial = initialInvestment * Math.pow(1 + monthlyRate, totalMonths);
 
-.btn-primary:active {
-  background-color: var(--color-primary-active);
-  transform: translateY(0);
-  box-shadow: none;
-}
+            // Future value of monthly contributions
+            let futureValueMonthly = 0;
+            if (monthlyContribution > 0 && monthlyRate > 0) {
+                futureValueMonthly = monthlyContribution * (Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate;
+            } else if (monthlyContribution > 0) {
+                futureValueMonthly = monthlyContribution * totalMonths;
+            }
 
-.btn-secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-text);
-  border: 2px solid transparent;
-}
-.btn-secondary:hover {
-  background-color: var(--color-secondary-hover);
-  border-color: var(--color-primary);
-}
-.btn-secondary:active {
-  background-color: var(--color-secondary-active);
-}
+            const totalFutureValue = futureValueInitial + futureValueMonthly;
+            const totalContributions = initialInvestment + (monthlyContribution * totalMonths);
+            const totalGains = totalFutureValue - totalContributions;
 
-/* Disabled */
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+            document.getElementById('investmentOutput').innerHTML = `
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    <div style="font-size: 24px; font-weight: bold; color: #059669;">$${totalFutureValue.toFixed(2)}</div>
+                    <div style="color: #6b7280; margin-top: 5px;">Total Value After ${years} Years</div>
+                    <div style="margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                            <span>Total Contributions:</span><span>$${totalContributions.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0; color: #059669;">
+                            <span>Investment Gains:</span><strong>$${totalGains.toFixed(2)}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 5px 0; color: #059669;">
+                            <span>Return on Investment:</span><strong>${((totalGains / totalContributions) * 100).toFixed(2)}%</strong>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background: #ecfdf5; border-left: 4px solid #10b981;">
+                        💡 AI Tip: Starting early is key! Even 5 more years could add thousands.
+                    </div>
+                </div>`;
+            document.getElementById('investmentResult').hidden = false;
+        }
+    </script>
 
-/* Cards */
-.card, .calculator-card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-card-border);
-  border-radius: 12px;
-  padding: 32px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 250ms ease, transform 250ms ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.card:hover, .calculator-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(33, 128, 141, 0.4);
-  transform: translateY(-5px);
-}
-
-.calculator-card h2 {
-  color: var(--color-primary);
-  margin-bottom: 24px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.calculator-card h3 {
-  color: var(--color-text);
-  font-size: 18px;
-  font-weight: 600;
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--color-border);
-}
-
-/* Form groups */
-.form-group {
-  margin-bottom: 24px;
-}
-
-.form-label {
-  display: block;
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--color-text);
-  margin-bottom: 8px;
-}
-
-.form-input, select.form-control {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--color-text);
-  background-color: var(--color-surface);
-  border: 2px solid var(--color-border);
-  border-radius: 8px;
-  transition: border-color 200ms ease, box-shadow 200ms ease;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.form-input:focus, select.form-control:focus {
-  border-color: var(--color-primary);
-  outline: none;
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
-
-.form-input.invalid, .form-control.invalid {
-  border-color: var(--color-error);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23c0152f' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 40px;
-}
-
-.form-input.valid, .form-control.valid {
-  border-color: var(--color-success);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2321805d' viewBox='0 0 16 16'%3E%3Cpath d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 40px;
-}
-
-/* Buttons in forms */
-.calculate-btn {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-  width: 100%;
-  padding: 15px 30px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 250ms ease;
-}
-
-.calculate-btn:hover {
-  background: var(--color-primary-hover);
-}
-
-/* Result Boxes */
-.result {
-  background: rgba(34, 197, 94, 0.1);
-  border-left: 4px solid var(--color-success);
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 8px;
-  display: none;
-}
-
-.result.show {
-  display: block;
-}
-
-.result h3 {
-  color: #047857; /* Darker green */
-  margin-bottom: 10px;
-}
-
-/* Alerts */
-.alert {
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  border-left: 4px solid;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.alert-success {
-  background-color: rgba(33, 128, 141, 0.15);
-  border-color: var(--color-success);
-  color: var(--color-success);
-}
-.alert-error {
-  background-color: rgba(192, 21, 47, 0.15);
-  border-color: var(--color-error);
-  color: var(--color-error);
-}
-.alert-warning {
-  background-color: rgba(168, 75, 47, 0.15);
-  border-color: var(--color-warning);
-  color: var(--color-warning);
-}
-.alert-info {
-  background-color: rgba(98, 108, 113, 0.15);
-  border-color: var(--color-info);
-  color: var(--color-info);
-}
-
-/* Tooltips */
-.tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--color-charcoal-800);
-  color: var(--color-white);
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 250ms ease;
-  z-index: 1000;
-}
-.tooltip:hover::after {
-  opacity: 1;
-}
-
-/*=== NAVIGATION & HEADER ===*/
-.header {
-  background: var(--color-surface);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-  padding: 20px 0;
-}
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-.logo {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--color-primary);
-  display: flex;
-  align-items: center;
-}
-.logo i {
-  margin-right: 8px;
-  font-size: 28px;
-}
-
-/* Hamburger - Mobile Nav Toggle */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-}
-.hamburger span {
-  width: 25px;
-  height: 3px;
-  background: var(--color-primary);
-  margin: 3px 0;
-  transition: 250ms ease;
-}
-@media (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-  .nav-menu {
-    position: fixed;
-    left: -100%;
-    top: 70px;
-    flex-direction: column;
-    background-color: var(--color-surface);
-    width: 100%;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    padding: 32px 0;
-    text-align: center;
-    transition: left 250ms ease;
-  }
-  .nav-menu.active {
-    left: 0;
-  }
-}
-
-/*=== HERO SECTION ===*/
-.hero {
-  padding: 120px 20px 32px;
-  text-align: center;
-  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-secondary) 100%);
-  margin-bottom: 40px;
-}
-.hero h1 {
-  font-size: 48px;
-  color: var(--color-primary);
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-.hero p {
-  font-size: 20px;
-  color: var(--color-text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/*=== FOOTER SECTION ===*/
-.footer {
-  background: var(--color-charcoal-700);
-  color: var(--color-gray-200);
-  padding: 40px 20px 20px;
-  text-align: center;
-}
-.footer a {
-  color: var(--color-primary);
-  margin: 0 8px;
-  text-decoration: none;
-  transition: color 250ms ease;
-}
-.footer a:hover {
-  color: var(--color-primary-hover);
-}
-
-/*=== ANIMATIONS ===*/
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-/*=== RESPONSIVE TYPOGRAPHY ===*/
-@media (max-width: 768px) {
-  h1 { font-size: 32px; }
-  h2 { font-size: 24px; }
-  h3 { font-size: 20px; }
-  .hero p { font-size: 18px; }
-}
-
-/*=== UTILITY CLASSES ===*/
-.text-center { text-align: center; }
-.font-bold { font-weight: 700; }
-.font-semibold { font-weight: 600; }
-.mb-1 { margin-bottom: 4px; }
-.mb-2 { margin-bottom: 8px; }
-.mb-3 { margin-bottom: 16px; }
-.mb-4 { margin-bottom: 24px; }
-.mb-5 { margin-bottom: 32px; }
-.mt-1 { margin-top: 4px; }
-.mt-2 { margin-top: 8px; }
-.mt-3 { margin-top: 16px; }
-.mt-4 { margin-top: 24px; }
-.mt-5 { margin-top: 32px; }
-
+</body>
+</html>
