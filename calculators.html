@@ -1,9 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" data-color-scheme="light">
 <head>
-  <!-- reuse head from index.html (meta, fonts, CSS, PWA, JSON-LD) -->
+  <!-- Primary Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
   <title>All Financial Calculators | FinGuid</title>
+  <meta name="description" content="Comprehensive suite of AI-powered financial calculators for mortgages, loans, investments, retirement & more.">
+  <meta name="keywords" content="financial calculators,mortgage,auto loan,investment,retirement,AI finance,USA">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://www.finguid.com/calculators.html">
+  <meta property="og:title"       content="All Financial Calculators | FinGuid">
+  <meta property="og:description" content="Browse our full directory of AI-powered mortgage, loan, investment, retirement calculators—free and accurate.">
+  <meta property="og:image"       content="https://www.finguid.com/images/og-image.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="All Financial Calculators | FinGuid">
+  <meta name="twitter:description" content="Browse our full directory of AI-powered mortgage, loan, investment, retirement calculators—free and accurate.">
+  <meta name="twitter:image"       content="https://www.finguid.com/images/og-image.jpg">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.finguid.com/calculators.html">
+
+  <!-- Fonts & CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="enhanced-styles.css">
+
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -12,26 +38,87 @@
     "url":"https://www.finguid.com/calculators.html"
   }
   </script>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#21808d">
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" sizes="any">
 </head>
+
 <body>
-  <!-- Header (copy from index.html) -->
+  <!-- Header -->
+  <header class="header">
+    <nav class="nav container" aria-label="Primary">
+      <a href="/" class="logo"><i class="fas fa-calculator"></i><span>FinGuid</span></a>
+      <button id="navToggle" class="hamburger" aria-expanded="false" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div id="navMenu" class="nav-menu">
+        <a href="/" class="nav-link">Home</a>
+        <a href="calculators.html" class="nav-link active">Calculators</a>
+        <a href="resources.html" class="nav-link">Resources</a>
+        <a href="partners.html" class="nav-link">Partners</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Calculators Directory -->
   <main role="main" class="calculators-page container">
     <section class="calculator-filters">
       <h2>Find the Right Calculator</h2>
       <div class="filter-controls">
-        <!-- same filter buttons -->
+        <div class="category-filters" role="group">
+          <button class="filter-btn active" data-category="all" aria-pressed="true">All</button>
+          <button class="filter-btn" data-category="mortgage">Mortgage</button>
+          <button class="filter-btn" data-category="auto">Auto & Loans</button>
+          <button class="filter-btn" data-category="investment">Investment</button>
+          <button class="filter-btn" data-category="credit">Credit & Debt</button>
+          <button class="filter-btn" data-category="tax">Tax</button>
+          <button class="filter-btn" data-category="insurance">Insurance</button>
+        </div>
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input id="calculator-search" type="search" placeholder="Search calculators…" aria-label="Search calculators">
+        </div>
       </div>
     </section>
+
     <section id="calculatorsGrid" class="calculators-grid" aria-live="polite">
-      <!-- Populated by app.js -->
+      <!-- Calculator cards will be injected here by app.js -->
     </section>
+
     <div id="no-results" class="no-results" hidden>
       <i class="fas fa-search"></i>
       <h3>No calculators found</h3>
       <button class="btn btn-primary" onclick="clearSearch()">Show All</button>
     </div>
   </main>
+
   <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <a href="/" class="footer-logo"><i class="fas fa-calculator"></i>FinGuid</a>
+      <p>100% accurate, privacy-first, AI-powered financial calculators.</p>
+      <nav class="social-links" aria-label="Social media">
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      </nav>
+      <p class="footer-bottom">&copy; 2025 FinGuid. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
   <script src="app.js"></script>
+  <script>
+    // Google Analytics
+    window.dataLayer = window.dataLayer||[];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config','GA_MEASUREMENT_ID');
+  </script>
 </body>
 </html>
