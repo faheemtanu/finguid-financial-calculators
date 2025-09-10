@@ -1,192 +1,522 @@
-<div class="container">
-  <div class="calculator-grid">
-    <!-- Mortgage Calculator Card -->
-    <div class="calculator-card">
-      <h2><i class="fas fa-home"></i> Mortgage Calculator</h2>
-      <div class="form-group">
-        <label for="loanAmount">Loan Amount ($)</label>
-        <input type="number" id="loanAmount" placeholder="300,000" min="1000" step="1000" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="interestRate">Interest Rate (%)</label>
-        <input type="number" id="interestRate" placeholder="6.5" min="0" max="100" step="0.01" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="loanTerm">Loan Term (Years)</label>
-        <input type="number" id="loanTerm" placeholder="30" min="1" max="50" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="propertyTax">Annual Property Tax ($)</label>
-        <input type="number" id="propertyTax" placeholder="3,000" min="0" step="10" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="insurance">Annual Insurance ($)</label>
-        <input type="number" id="insurance" placeholder="1,200" min="0" step="10" class="form-control">
-      </div>
-      <button class="calculate-btn" onclick="calculateMortgage()">
-        <i class="fas fa-calculator"></i> Calculate Payment
-      </button>
-      <div id="mortgageResult" class="result"></div>
-    </div>
+/*=== COLOR TOKENS & BRANDING ===*/
+:root {
+  /* Brand Colors */
+  --color-primary: #21808d; /* Teal 500 */
+  --color-primary-hover: #1d5371; /* Darker Teal */
+  --color-primary-active: #1a4961;
 
-    <!-- Auto Loan Calculator Card -->
-    <div class="calculator-card">
-      <h2><i class="fas fa-car"></i> Auto Loan Calculator</h2>
-      <div class="form-group">
-        <label for="carPrice">Car Price ($)</label>
-        <input type="number" id="carPrice" placeholder="25,000" min="1000" step="500" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="downPayment">Down Payment ($)</label>
-        <input type="number" id="downPayment" placeholder="5,000" min="0" step="500" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="autoRate">Interest Rate (%)</label>
-        <input type="number" id="autoRate" placeholder="5.5" min="0" max="25" step="0.01" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="autoTerm">Loan Term (Months)</label>
-        <input type="number" id="autoTerm" placeholder="60" min="12" max="84" class="form-control">
-      </div>
-      <button class="calculate-btn" onclick="calculateAuto()">
-        <i class="fas fa-calculator"></i> Calculate Payment
-      </button>
-      <div id="autoResult" class="result"></div>
-    </div>
+  --color-secondary: rgba(94, 82, 64, 0.12); /* Brown-600 12% opacity */
+  --color-secondary-hover: rgba(94, 82, 64, 0.2);
+  --color-secondary-active: rgba(94, 82, 64, 0.25);
 
-    <!-- Investment Calculator Card -->
-    <div class="calculator-card">
-      <h2><i class="fas fa-chart-line"></i> Investment Calculator</h2>
-      <div class="form-group">
-        <label for="initialInvestment">Initial Investment ($)</label>
-        <input type="number" id="initialInvestment" placeholder="10,000" min="0" step="100" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="monthlyContribution">Monthly Contribution ($)</label>
-        <input type="number" id="monthlyContribution" placeholder="500" min="0" step="50" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="investmentRate">Expected Return Rate (%)</label>
-        <input type="number" id="investmentRate" placeholder="7" min="0" max="100" step="0.01" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="investmentYears">Investment Period (Years)</label>
-        <input type="number" id="investmentYears" placeholder="20" min="1" max="50" class="form-control">
-      </div>
-      <button class="calculate-btn" onclick="calculateInvestment()">
-        <i class="fas fa-calculator"></i> Calculate Growth
-      </button>
-      <div id="investmentResult" class="result"></div>
-    </div>
-  </div>
-</div>
+  --color-background: #fcfcf9; /* Cream 50 */
+  --color-surface: #fffffd; /* Cream 100 */
+  --color-text: #13343b; /* Slate-900 */
+  --color-text-secondary: #626c71; /* Slate-500 */
 
-<script>
-// Mortgage Calculator Function
-function calculateMortgage() {
-  const loanAmount = parseFloat(document.getElementById('loanAmount').value);
-  const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
-  const loanTerm = parseFloat(document.getElementById('loanTerm').value) * 12;
-  const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
-  const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+  --color-error: #c0152f; /* Red 500 */
+  --color-success: #21808d; /* Teal 500 */
+  --color-warning: #a84b2f; /* Orange 500 */
+  --color-info: #626c71; /* Slate 500 */
 
-  if (!loanAmount || !interestRate || !loanTerm) {
-    alert('Please fill in all required fields');
-    return;
-  }
+  --color-border: rgba(94, 82, 64, 0.2);
+  --color-focus-ring: rgba(33, 128, 141, 0.4);
+  --color-btn-primary-text: #fcfcf9;
 
-  const monthlyInterestFactor = Math.pow(1 + interestRate, loanTerm);
-  const monthlyPI = loanAmount * (interestRate * monthlyInterestFactor) / (monthlyInterestFactor - 1);
-
-  const monthlyTax = propertyTax / 12;
-  const monthlyInsurance = insurance / 12;
-  const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance;
-
-  const totalInterest = (monthlyPI * loanTerm) - loanAmount;
-
-  document.getElementById('mortgageResult').innerHTML = `
-    <h3>Your Monthly Payment</h3>
-    <div><strong>$${totalMonthly.toFixed(2)}</strong></div>
-    <div>Principal & Interest: $${monthlyPI.toFixed(2)}</div>
-    <div>Property Tax: $${monthlyTax.toFixed(2)}</div>
-    <div>Insurance: $${monthlyInsurance.toFixed(2)}</div>
-    <hr>
-    <div>Total Interest Paid: $${totalInterest.toFixed(2)}</div>
-    <div class="ai-insight">💡 AI Tip: Consider extra principal payments to reduce interest.</div>
-  `;
-  document.getElementById('mortgageResult').classList.add('show');
+  /* Background accents for sections */
+  --color-bg-light-blue: rgba(59, 130, 246, 0.08);
+  --color-bg-light-yellow: rgba(245, 158, 11, 0.08);
+  --color-bg-light-green: rgba(34, 197, 94, 0.08);
 }
 
-// Auto Loan Calculator Function
-function calculateAuto() {
-  const carPrice = parseFloat(document.getElementById('carPrice').value);
-  const downPayment = parseFloat(document.getElementById('downPayment').value) || 0;
-  const interestRate = parseFloat(document.getElementById('autoRate').value) / 100 / 12;
-  const loanTerm = parseFloat(document.getElementById('autoTerm').value);
-
-  if (!carPrice || !interestRate || !loanTerm) {
-    alert('Please fill in all required fields');
-    return;
+/* Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #1f2324; /* Charcoal 700 */
+    --color-surface: #262828; /* Charcoal 800 */
+    --color-text: #f5f5f5; /* Gray 200 */
+    --color-text-secondary: rgba(245, 245, 245, 0.7);
+    --color-secondary: rgba(119, 124, 124, 0.15);
+    --color-border: rgba(119, 124, 124, 0.3);
+    --color-focus-ring: rgba(50, 184, 198, 0.4); /* Teal 300 */
+    --color-btn-primary-text: #13343b; /* Slate 900 */
   }
-
-  const loanAmount = carPrice - downPayment;
-  if (loanAmount <= 0) {
-    alert('Down payment cannot be greater than or equal to car price');
-    return;
-  }
-
-  const monthlyInterestFactor = Math.pow(1 + interestRate, loanTerm);
-  const monthlyPayment = loanAmount * (interestRate * monthlyInterestFactor) / (monthlyInterestFactor - 1);
-  const totalPayment = monthlyPayment * loanTerm;
-  const totalInterest = totalPayment - loanAmount;
-
-  document.getElementById('autoResult').innerHTML = `
-    <h3>Your Monthly Payment</h3>
-    <div><strong>$${monthlyPayment.toFixed(2)}</strong></div>
-    <div>Car Price: $${carPrice.toFixed(2)}</div>
-    <div>Down Payment: $${downPayment.toFixed(2)}</div>
-    <div>Loan Amount: $${loanAmount.toFixed(2)}</div>
-    <div>Total Interest: $${totalInterest.toFixed(2)}</div>
-    <div class="ai-insight">💡 AI Tip: Increasing your down payment by 20% can reduce interest significantly.</div>
-  `;
-  document.getElementById('autoResult').classList.add('show');
 }
 
-// Investment Calculator Function
-function calculateInvestment() {
-  const initialInvestment = parseFloat(document.getElementById('initialInvestment').value) || 0;
-  const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
-  const annualRate = parseFloat(document.getElementById('investmentRate').value) / 100;
-  const years = parseFloat(document.getElementById('investmentYears').value);
-
-  if (!annualRate || !years) {
-    alert('Please fill in all required fields');
-    return;
-  }
-
-  const monthlyRate = annualRate / 12;
-  const totalMonths = years * 12;
-
-  const futureValueInitial = initialInvestment * Math.pow(1 + monthlyRate, totalMonths);
-  let futureValueMonthly = 0;
-  if (monthlyContribution > 0 && monthlyRate > 0) {
-    futureValueMonthly = monthlyContribution * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
-  } else if (monthlyContribution > 0) {
-    futureValueMonthly = monthlyContribution * totalMonths;
-  }
-
-  const totalFutureValue = futureValueInitial + futureValueMonthly;
-  const totalContributions = initialInvestment + (monthlyContribution * totalMonths);
-  const totalGains = totalFutureValue - totalContributions;
-
-  document.getElementById('investmentResult').innerHTML = `
-    <h3>Investment Growth</h3>
-    <div><strong>$${totalFutureValue.toFixed(2)}</strong> total value after ${years} years</div>
-    <div>Total Contributions: $${totalContributions.toFixed(2)}</div>
-    <div style="color: #059669;">Investment Gains: $${totalGains.toFixed(2)}</div>
-    <div style="color: #059669;">Return on Investment: ${(totalGains / totalContributions * 100).toFixed(2)}%</div>
-    <div class="ai-insight">💡 AI Tip: Starting 5 years earlier could add thousands more!</div>
-  `;
-  document.getElementById('investmentResult').classList.add('show');
+/*=== TYPOGRAPHY & BASE STYLES ===*/
+html {
+  font-size: 14px;
+  font-family: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
 }
-</script>
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+h1 { font-size: 30px; }
+h2 { font-size: 24px; }
+h3 { font-size: 20px; }
+h4 { font-size: 18px; }
+h5 { font-size: 16px; }
+h6 { font-size: 14px; }
+
+p {
+  margin-bottom: 16px;
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+a:hover, a:focus {
+  color: var(--color-primary-hover);
+  outline: none;
+}
+
+/* Code and preformatted text */
+code, pre {
+  font-family: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background-color: var(--color-secondary);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.95em;
+  word-break: break-word;
+}
+pre {
+  padding: 16px;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  margin-bottom: 16px;
+}
+
+/*=== LAYOUT & CONTAINERS ===*/
+.container {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Grid for calculators */
+.calculator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+/* Responsive grid fallback for smaller screens */
+@media (max-width: 768px) {
+  .calculator-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Flex utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 4px; }
+.gap-8 { gap: 8px; }
+.gap-16 { gap: 16px; }
+
+/*=== UI COMPONENTS ===*/
+/* Buttons */
+.btn {
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  font-size: 16px;
+  transition: background-color 250ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms ease;
+  border: none;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(33, 128, 141, 0.4);
+}
+
+.btn-primary:active {
+  background-color: var(--color-primary-active);
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+  border: 2px solid transparent;
+}
+.btn-secondary:hover {
+  background-color: var(--color-secondary-hover);
+  border-color: var(--color-primary);
+}
+.btn-secondary:active {
+  background-color: var(--color-secondary-active);
+}
+
+/* Disabled */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Cards */
+.card, .calculator-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 250ms ease, transform 250ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover, .calculator-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(33, 128, 141, 0.4);
+  transform: translateY(-5px);
+}
+
+.calculator-card h2 {
+  color: var(--color-primary);
+  margin-bottom: 24px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.calculator-card h3 {
+  color: var(--color-text);
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.form-input, select.form-control {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.form-input:focus, select.form-control:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.form-input.invalid, .form-control.invalid {
+  border-color: var(--color-error);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23c0152f' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+.form-input.valid, .form-control.valid {
+  border-color: var(--color-success);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2321805d' viewBox='0 0 16 16'%3E%3Cpath d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+/* Buttons in forms */
+.calculate-btn {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  width: 100%;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 250ms ease;
+}
+
+.calculate-btn:hover {
+  background: var(--color-primary-hover);
+}
+
+/* Result Boxes */
+.result {
+  background: rgba(34, 197, 94, 0.1);
+  border-left: 4px solid var(--color-success);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  display: none;
+}
+
+.result.show {
+  display: block;
+}
+
+.result h3 {
+  color: #047857; /* Darker green */
+  margin-bottom: 10px;
+}
+
+/* Alerts */
+.alert {
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-left: 4px solid;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.alert-success {
+  background-color: rgba(33, 128, 141, 0.15);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+.alert-error {
+  background-color: rgba(192, 21, 47, 0.15);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+.alert-warning {
+  background-color: rgba(168, 75, 47, 0.15);
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+.alert-info {
+  background-color: rgba(98, 108, 113, 0.15);
+  border-color: var(--color-info);
+  color: var(--color-info);
+}
+
+/* Tooltips */
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-charcoal-800);
+  color: var(--color-white);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms ease;
+  z-index: 1000;
+}
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+/*=== NAVIGATION & HEADER ===*/
+.header {
+  background: var(--color-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  padding: 20px 0;
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+}
+.logo i {
+  margin-right: 8px;
+  font-size: 28px;
+}
+
+/* Hamburger - Mobile Nav Toggle */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: var(--color-primary);
+  margin: 3px 0;
+  transition: 250ms ease;
+}
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  .nav-menu {
+    position: fixed;
+    left: -100%;
+    top: 70px;
+    flex-direction: column;
+    background-color: var(--color-surface);
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    padding: 32px 0;
+    text-align: center;
+    transition: left 250ms ease;
+  }
+  .nav-menu.active {
+    left: 0;
+  }
+}
+
+/*=== HERO SECTION ===*/
+.hero {
+  padding: 120px 20px 32px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-secondary) 100%);
+  margin-bottom: 40px;
+}
+.hero h1 {
+  font-size: 48px;
+  color: var(--color-primary);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.hero p {
+  font-size: 20px;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/*=== FOOTER SECTION ===*/
+.footer {
+  background: var(--color-charcoal-700);
+  color: var(--color-gray-200);
+  padding: 40px 20px 20px;
+  text-align: center;
+}
+.footer a {
+  color: var(--color-primary);
+  margin: 0 8px;
+  text-decoration: none;
+  transition: color 250ms ease;
+}
+.footer a:hover {
+  color: var(--color-primary-hover);
+}
+
+/*=== ANIMATIONS ===*/
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/*=== RESPONSIVE TYPOGRAPHY ===*/
+@media (max-width: 768px) {
+  h1 { font-size: 32px; }
+  h2 { font-size: 24px; }
+  h3 { font-size: 20px; }
+  .hero p { font-size: 18px; }
+}
+
+/*=== UTILITY CLASSES ===*/
+.text-center { text-align: center; }
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.mb-1 { margin-bottom: 4px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 16px; }
+.mb-4 { margin-bottom: 24px; }
+.mb-5 { margin-bottom: 32px; }
+.mt-1 { margin-top: 4px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 16px; }
+.mt-4 { margin-top: 24px; }
+.mt-5 { margin-top: 32px; }
+
