@@ -1,148 +1,344 @@
 <!DOCTYPE html>
-<html lang="en" data-color-scheme="light">
+<html lang="en">
 <head>
-  <!-- Primary Meta Tags -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
-  <title>Financial Calculators – AI-Enhanced Tools for Americans | FinGuid</title>
-  <meta name="description" content="Comprehensive suite of AI-powered financial calculators for mortgages, loans, investments, retirement & more.">
-  <meta name="keywords" content="financial calculators,mortgage,auto loan,investment,retirement,AI finance,USA">
-
-  <!-- Open Graph -->
-  <meta property="og:type"        content="website">
-  <meta property="og:url"         content="https://www.finguid.com/">
-  <meta property="og:title"       content="AI-Enhanced Financial Calculators | FinGuid">
-  <meta property="og:description" content="AI-powered mortgage, loan, investment, retirement calculators—free and accurate.">
-  <meta property="og:image"       content="https://www.finguid.com/images/og-image.jpg">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:title"       content="AI-Enhanced Financial Calculators | FinGuid">
-  <meta name="twitter:description" content="AI-powered mortgage, loan, investment, retirement calculators—free and accurate.">
-  <meta name="twitter:image"       content="https://www.finguid.com/images/og-image.jpg">
-
-  <!-- Canonical -->
-  <link rel="canonical" href="https://www.finguid.com/">
-
-  <!-- Fonts & CSS -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="enhanced-styles.css">
-
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "FinGuid Financial Calculators",
-    "url": "https://www.finguid.com/",
-    "applicationCategory": "FinanceApplication",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "2847"
-    },
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://www.finguid.com/calculators.html?search={search_term}",
-      "query-input": "required name=search_term"
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free USA Financial Calculators | AI-Enhanced Financial Planning Tools</title>
+    <meta name="description" content="Make smarter financial decisions with our intelligent calculators. Get accurate results with state-specific tax rates, insurance costs, and AI-powered insights.">
+    <meta name="keywords" content="financial calculator, mortgage calculator, auto loan calculator, investment calculator, USA financial tools, AI financial planning">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Free USA Financial Calculators | AI-Enhanced Financial Planning Tools">
+    <meta property="og:description" content="Professional-grade calculators with accurate results you can trust. Calculate mortgage payments, auto loans, investments, and more with AI-powered insights.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.finguid.com">
+    <meta property="og:image" content="https://www.finguid.com/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "USA Financial Calculators",
+        "url": "https://www.finguid.com",
+        "logo": "https://www.finguid.com/logo.png",
+        "description": "World's first AI-enhanced financial calculator platform for Americans",
+        "sameAs": [
+            "https://linkedin.com/company/finguid",
+            "https://twitter.com/finguid",
+            "https://facebook.com/finguid"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-800-FINGUID",
+            "contactType": "customer service",
+            "email": "contactus@finguid.com",
+            "availableLanguage": "English"
+        }
     }
-  }
-  </script>
-
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#21808d">
-
-  <!-- Favicon -->
-  <link rel="icon" href="favicon.ico" sizes="any">
+    </script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
 </head>
-
 <body>
-  <!-- Header -->
-  <header class="header">
-    <nav class="nav container" aria-label="Primary">
-      <a href="/" class="logo"><i class="fas fa-calculator"></i><span>FinGuid</span></a>
-      <button id="navToggle" class="hamburger" aria-expanded="false" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-      <div id="navMenu" class="nav-menu">
-        <a href="/" class="nav-link active">Home</a>
-        <a href="calculators.html" class="nav-link">Calculators</a>
-        <a href="resources.html" class="nav-link">Resources</a>
-        <a href="partners.html" class="nav-link">Partners</a>
-        <a href="contact.html" class="nav-link">Contact</a>
-      </div>
-    </nav>
-  </header>
+    <!-- Navigation -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="/" class="nav-brand">
+                    <i class="fas fa-calculator"></i>
+                    <span class="brand-text">USA Financial Calculators</span>
+                </a>
+                
+                <!-- UPDATED NAVIGATION MENU - This is where your new links go -->
+                <div class="nav-menu" id="nav-menu">
+                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/calculators.html" class="nav-link">Calculators</a>
+                    <a href="/resources.html" class="nav-link">Resources</a>
+                    <a href="/partners.html" class="nav-link">Partners</a>
+                    <a href="/contact.html" class="nav-link">Contact</a>
+                </div>
+                
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container hero-content">
-      <h1>World's First AI-Enhanced Financial Calculator Platform</h1>
-      <p>Make smarter financial decisions with our intelligent calculators powered by AI across mortgages, loans, investments, taxes, insurance, and more.</p>
-      <div class="hero-stats">
-        <div class="stat-item"><span class="stat-number">50+</span><span class="stat-label">Calculators</span></div>
-        <div class="stat-item"><span class="stat-number">50</span><span class="stat-label">States</span></div>
-        <div class="stat-item"><span class="stat-number">1M+</span><span class="stat-label">Uses</span></div>
-      </div>
-    </div>
-  </section>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Make Smarter Financial Decisions
+                        <span class="highlight">With AI-Enhanced Calculators</span>
+                    </h1>
+                    <p class="hero-description">
+                        Professional-grade calculators with accurate results you can trust. Get state-specific tax rates, insurance costs, and intelligent insights to plan your financial future.
+                    </p>
+                    
+                    <!-- Hero Features -->
+                    <div class="hero-features">
+                        <div class="feature">
+                            <i class="fas fa-shield-check"></i>
+                            <span>100% Accurate</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Mobile Friendly</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-lock"></i>
+                            <span>Privacy First</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-robot"></i>
+                            <span>AI Powered</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Call to Action Buttons -->
+                    <div class="hero-cta">
+                        <a href="/calculators.html" class="cta-button primary">
+                            <i class="fas fa-calculator"></i>
+                            Try Calculators Free
+                        </a>
+                        <a href="/contact.html" class="cta-button secondary">
+                            <i class="fas fa-envelope"></i>
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- Main Content -->
-  <main role="main" class="calculators-page container">
-    <section class="calculator-filters">
-      <h2>Find the Right Calculator</h2>
-      <div class="filter-controls">
-        <div class="category-filters" role="group">
-          <button class="filter-btn active" data-category="all" aria-pressed="true">All</button>
-          <button class="filter-btn" data-category="mortgage">Mortgage</button>
-          <button class="filter-btn" data-category="auto">Auto & Loans</button>
-          <button class="filter-btn" data-category="investment">Investment</button>
-          <button class="filter-btn" data-category="credit">Credit & Debt</button>
-          <button class="filter-btn" data-category="tax">Tax</button>
-          <button class="filter-btn" data-category="insurance">Insurance</button>
+        <!-- Calculators Preview Section -->
+        <section class="calculators-preview">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Financial Calculators Built for Americans</h2>
+                    <p>We're building the world's first AI-enhanced financial calculator platform specifically designed for Americans. Our calculators use real-time data, state-specific tax rates, and intelligent algorithms to give you the most accurate results possible.</p>
+                </div>
+                
+                <div class="calculator-grid">
+                    <!-- Mortgage Calculator Card -->
+                    <div class="calculator-card">
+                        <div class="card-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3>Mortgage Calculator</h3>
+                        <p>Calculate monthly payments, PMI, taxes, and insurance. See total cost breakdown and amortization schedule with state-specific data.</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-check-circle"></i>PMI Calculator Included</li>
+                            <li><i class="fas fa-check-circle"></i>Property Tax by State</li>
+                            <li><i class="fas fa-check-circle"></i>Amortization Schedule</li>
+                            <li><i class="fas fa-check-circle"></i>Insurance Cost Estimates</li>
+                        </ul>
+                        <a href="/mortgage-calculator.html" class="card-button">
+                            <i class="fas fa-calculator"></i>
+                            Calculate Now
+                        </a>
+                    </div>
+
+                    <!-- Auto Loan Calculator Card -->
+                    <div class="calculator-card">
+                        <div class="card-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3>Auto Loan Calculator</h3>
+                        <p>Calculate car payments with trade-in value, taxes, and fees. Compare financing options easily with detailed breakdowns.</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-clock"></i>Coming Week 3</li>
+                            <li><i class="fas fa-check-circle"></i>Trade-in Value Calculator</li>
+                            <li><i class="fas fa-check-circle"></i>State Tax Integration</li>
+                            <li><i class="fas fa-check-circle"></i>Financing Comparison</li>
+                        </ul>
+                        <button class="card-button" disabled style="opacity: 0.6;">
+                            <i class="fas fa-calendar"></i>
+                            Coming Soon
+                        </button>
+                    </div>
+
+                    <!-- Investment Calculator Card -->
+                    <div class="calculator-card">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Investment Calculator</h3>
+                        <p>Plan your financial future with compound interest calculations and retirement planning tools powered by AI insights.</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-clock"></i>Coming Week 4</li>
+                            <li><i class="fas fa-check-circle"></i>Compound Interest</li>
+                            <li><i class="fas fa-check-circle"></i>Retirement Planning</li>
+                            <li><i class="fas fa-check-circle"></i>Portfolio Analysis</li>
+                        </ul>
+                        <button class="card-button" disabled style="opacity: 0.6;">
+                            <i class="fas fa-calendar"></i>
+                            Coming Soon
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- View All Calculators Button -->
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="/calculators.html" class="cta-button primary">
+                        <i class="fas fa-th"></i>
+                        View All Calculators
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about">
+            <div class="container">
+                <div class="about-content">
+                    <h2>Why Choose Our Financial Calculators?</h2>
+                    <p>We're building the world's first AI-enhanced financial calculator platform specifically designed for Americans. Our calculators use real-time data, state-specific tax rates, and intelligent algorithms to give you the most accurate results possible.</p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>AI-Powered Insights</h4>
+                                <p>Get personalized recommendations and smart tips based on your calculations. Our AI analyzes your financial data to provide actionable insights for better decision-making.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Always Up-to-Date</h4>
+                                <p>Always up-to-date with current interest rates, tax rates, and market data. Our system automatically updates with the latest financial information to ensure accuracy.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-flag-usa"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Built for Americans</h4>
+                                <p>Built specifically for American financial regulations and requirements. Every calculator includes state-specific data, tax rates, and compliance with US financial standards.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter">
+            <div class="container">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <h3>Stay Updated with New Financial Tools</h3>
+                        <p>Be the first to know when we launch new calculators and AI-powered features. Join thousands of Americans already using our platform.</p>
+                    </div>
+                    <form id="newsletter-form" class="newsletter-form">
+                        <input type="email" placeholder="Enter your email address" required aria-label="Email address">
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                            Subscribe Free
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        USA Financial Calculators
+                    </div>
+                    <p>Building the world's first AI-enhanced financial calculator platform specifically designed for Americans. Make smarter financial decisions with our intelligent tools.</p>
+                    
+                    <!-- Social Links -->
+                    <div class="social-links">
+                        <a href="https://linkedin.com/company/finguid" aria-label="LinkedIn" target="_blank" rel="noopener">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://twitter.com/finguid" aria-label="Twitter" target="_blank" rel="noopener">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://facebook.com/finguid" aria-label="Facebook" target="_blank" rel="noopener">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="mailto:contactus@finguid.com" aria-label="Email" rel="noopener">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/auto-loan-calculator.html">Auto Loan Calculator</a></li>
+                        <li><a href="/investment-calculator.html">Investment Calculator</a></li>
+                        <li><a href="/credit-card-calculator.html">Credit Card Calculator</a></li>
+                        <li><a href="/calculators.html">All Calculators</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/blog.html">Financial Blog</a></li>
+                        <li><a href="/guides.html">How-to Guides</a></li>
+                        <li><a href="/faq.html">FAQ</a></li>
+                        <li><a href="/resources.html">All Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                        <li><a href="/partners.html">Partner Program</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 USA Financial Calculators (Finguid.com). All rights reserved. Built with ❤️ for Americans' financial success.</p>
+            </div>
         </div>
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input id="calculator-search" type="search" placeholder="Search calculators…" aria-label="Search calculators">
-        </div>
-      </div>
-    </section>
+    </footer>
 
-    <section id="calculatorsGrid" class="calculators-grid" aria-live="polite">
-      <!-- Cards populated by app.js -->
-    </section>
-
-    <div id="no-results" class="no-results" hidden>
-      <i class="fas fa-search"></i>
-      <h3>No calculators found</h3>
-      <button class="btn btn-primary" onclick="clearSearch()">Show All</button>
-    </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <a href="/" class="footer-logo"><i class="fas fa-calculator"></i>FinGuid</a>
-      <p>100% accurate, privacy-first, AI-powered financial calculators.</p>
-      <nav class="social-links" aria-label="Social media">
-        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-      </nav>
-      <p class="footer-bottom">&copy; 2025 FinGuid. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="app.js"></script>
-  <script>
-    // Google Analytics
-    window.dataLayer = window.dataLayer||[];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config','GA_MEASUREMENT_ID');
-  </script>
+    <!-- Scripts -->
+    <script src="script.js"></script>
 </body>
 </html>
