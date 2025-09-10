@@ -122,3 +122,64 @@
   </script>
 </body>
 </html>
+document.addEventListener('DOMContentLoaded', initCalculators);
+
+function initCalculators() {
+  const calculatorGrid = document.getElementById('calculatorGrid');
+  if (!calculatorGrid) {
+    console.error('Calculator grid container not found');
+    return;
+  }
+
+  // Define calculators array (ensure all calculators are listed)
+  const calculators = [
+    {
+      id: 'mortgage-calculator',
+      title: 'Mortgage Calculator',
+      subtitle: 'Calculate monthly payments with PMI, taxes, and insurance',
+      icon: 'fas fa-home',
+      category: 'mortgage'
+    },
+    {
+      id: 'auto-loan-calculator',
+      title: 'Auto Loan Calculator',
+      subtitle: 'Calculate car loan payments with trade-in values',
+      icon: 'fas fa-car',
+      category: 'auto'
+    },
+    {
+      id: 'investment-calculator',
+      title: 'Investment Calculator',
+      subtitle: 'Plan your financial future with compound interest',
+      icon: 'fas fa-chart-line',
+      category: 'investment'
+    }
+    // Add other calculators here
+  ];
+
+  // Clear existing calculators
+  calculatorGrid.innerHTML = '';
+
+  // Create and append each calculator card
+  calculators.forEach(calc => {
+    const card = document.createElement('div');
+    card.className = 'calculator-card';
+    card.id = calc.id;
+    card.setAttribute('role', 'region');
+    card.setAttribute('aria-labelledby', `${calc.id}-title`);
+    card.innerHTML = `
+      <div class="card-icon"><i class="${calc.icon}"></i></div>
+      <h3 id="${calc.id}-title">${calc.title}</h3>
+      <p>${calc.subtitle}</p>
+      <button onclick="openCalculator('${calc.id}')">Open Calculator</button>
+    `;
+    calculatorGrid.appendChild(card);
+  });
+}
+
+// Placeholder for actual calculator opening logic
+function openCalculator(id) {
+  alert('Opening ' + id);
+  // Implement calculator navigation or modal open logic here
+}
+
