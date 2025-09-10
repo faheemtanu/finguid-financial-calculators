@@ -1,7 +1,7 @@
 // Service Worker — Finguid Calculator v1.1.0
 const CACHE_NAME = 'finguid-calculator-v1.1.0';
 const ASSETS = [
-  '/', '/mortgage-calculator', '/style-1.css', '/mortgage-calculator.js',
+  '/', '/mortgage-calculator', '/style.css', '/mortgage-calculator.js',
   '/manifest.json', '/icons/icon-192x192.png', '/icons/icon-512x512.png'
 ];
 
