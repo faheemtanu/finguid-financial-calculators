@@ -1,0 +1,22 @@
+# ads.txt file for finguid.com
+# This file authorizes digital advertising sellers
+# Required for Google AdSense approval
+
+# Google AdSense
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+
+# Format: domain, publisher_id, relationship, certification_authority_id
+# Replace pub-0000000000000000 with your actual AdSense Publisher ID after approval
+
+# Additional ad networks can be added here as you grow:
+# adsystem.com, 123456789, DIRECT
+# revcontent.com, 123456, DIRECT
+# outbrain.com, 123456789, DIRECT
+
+# Instructions for implementation:
+# 1. Replace pub-0000000000000000 with your actual Google AdSense Publisher ID
+# 2. Upload this file to your website root directory (finguid.com/ads.txt)
+# 3. Verify the file is accessible at: https://finguid.com/ads.txt
+# 4. This helps prevent ad fraud and is required for AdSense approval
+
+# Note: Keep this file updated as you add new advertising partners
