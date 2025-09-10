@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USA Financial Calculators - AI Enhanced Tools | World's First AI Calculator Platform</title>
+    <meta name="description" content="Free AI-enhanced financial calculators for mortgage, auto loans, investments, credit cards, insurance, and taxes. Get accurate results with state-specific data and AI insights.">
+    <meta name="keywords" content="financial calculator, mortgage calculator, auto loan calculator, investment calculator, credit card calculator, AI financial tools, USA financial planning">
+    <meta name="author" content="Finguid Financial Calculators">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="USA Financial Calculators - AI Enhanced Tools">
+    <meta property="og:description" content="Free AI-enhanced financial calculators with state-specific data and intelligent insights">
+    <meta property="og:image" content="https://www.finguid.com/images/og-image.jpg">
+    <meta property="og:url" content="https://www.finguid.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="USA Financial Calculators - AI Enhanced Tools">
+    <meta name="twitter:description" content="Free AI-enhanced financial calculators with state-specific data">
+    <meta name="twitter:image" content="https://www.finguid.com/images/twitter-image.jpg">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "USA Financial Calculators",
+        "description": "AI-enhanced financial calculators for mortgage, auto loans, investments, and more",
+        "url": "https://www.finguid.com",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "Finguid",
+            "url": "https://www.finguid.com"
+        }
+    }
+    </script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="calculator-styles.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196f3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="calculators.js" as="script">
+    <link rel="preload" href="main.js" as="script">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Skip to main content link -->
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
+</head>
+<body>
+    <!-- Connection Status Indicator -->
+    <div id="connection-status" class="connection-status hidden" role="alert"></div>
+    
+    <!-- Install PWA Prompt -->
+    <div id="install-prompt" class="install-prompt hidden" role="banner">
+        <div class="install-content">
+            <div class="install-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div class="install-text">
+                <h3>Install Our App</h3>
+                <p>Get quick access to all financial calculators</p>
+            </div>
+            <div class="install-actions">
+                <button id="install-btn" class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    Install
+                </button>
+                <button id="install-close" class="btn btn-secondary" aria-label="Close install prompt">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="header" role="banner">
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <a href="#" class="nav-brand" aria-label="Finguid Financial Calculators Home">
+                    <i class="fas fa-calculator" aria-hidden="true"></i>
+                    <span class="brand-text">Finguid</span>
+                </a>
+                
+                <div class="nav-menu-wrapper">
+                    <ul class="nav-menu" id="navMenu" role="menubar">
+                        <li role="none">
+                            <a href="#calculators" class="nav-link" role="menuitem">Calculators</a>
+                        </li>
+                        <li role="none">
+                            <a href="#about" class="nav-link" role="menuitem">About</a>
+                        </li>
+                        <li role="none">
+                            <a href="#blog" class="nav-link" role="menuitem">Blog</a>
+                        </li>
+                        <li role="none">
+                            <a href="#contact" class="nav-link" role="menuitem">Contact</a>
+                        </li>
+                    </ul>
+                    
+                    <button class="hamburger" id="hamburgerBtn" aria-expanded="false" aria-controls="navMenu" aria-label="Toggle navigation menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="hero" role="banner">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Make Smarter Financial Decisions
+                        <span class="highlight">With AI-Enhanced Calculators</span>
+                    </h1>
+                    <p class="hero-description">
+                        Professional-grade calculators with accurate results you can trust. Get state-specific tax rates, 
+                        insurance costs, and intelligent insights to plan your financial future.
+                    </p>
+                    
+                    <div class="hero-features">
+                        <div class="feature">
+                            <i class="fas fa-robot" aria-hidden="true"></i>
+                            <span>AI-Powered Insights</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                            <span>State-Specific Data</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                            <span>Mobile-First Design</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                            <span>100% Free</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-cta">
+                        <a href="#calculators" class="cta-button primary">
+                            <i class="fas fa-calculator"></i>
+                            Start Calculating
+                        </a>
+                        <a href="#about" class="cta-button secondary">
+                            <i class="fas fa-info-circle"></i>
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Calculators Section -->
+        <section id="calculators" class="calculators-preview" role="region" aria-labelledby="calculators-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="calculators-heading">Financial Calculators Built for Americans</h2>
+                    <p>Get accurate calculations with AI insights, state-specific data, and professional-grade results you can trust.</p>
+                </div>
+                
+                <!-- Calculator Grid -->
+                <div class="calculator-grid" id="calculatorGrid" role="main">
+                    <!-- Calculators will be dynamically generated here -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- About Section -->
+        <section id="about" class="about" role="region" aria-labelledby="about-heading">
+            <div class="container">
+                <div class="about-content">
+                    <h2 id="about-heading">Why Choose Our Financial Calculators?</h2>
+                    <p>
+                        We're building the world's first AI-enhanced financial calculator platform specifically designed for Americans. 
+                        Our calculators use real-time data, state-specific tax rates, and intelligent algorithms to give you the most 
+                        accurate results possible.
+                    </p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain" aria-hidden="true"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>AI-Powered Insights</h4>
+                                <p>
+                                    Get personalized recommendations and smart tips based on your calculations. Our AI analyzes your 
+                                    financial data to provide actionable insights for better decision-making.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Always Up-to-Date</h4>
+                                <p>
+                                    Always up-to-date with current interest rates, tax rates, and market data. Our system automatically 
+                                    updates with the latest financial information to ensure accuracy.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-flag-usa" aria-hidden="true"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Built for Americans</h4>
+                                <p>
+                                    Built specifically for American financial regulations and requirements. Every calculator includes 
+                                    state-specific data, tax rates, and compliance with US financial standards.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Email Results</h4>
+                                <p>
+                                    Email your calculation results directly to yourself or share with your financial advisor. 
+                                    Get detailed PDF reports with all calculations and insights included.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Newsletter Section -->
+        <section class="newsletter" role="region" aria-labelledby="newsletter-heading">
+            <div class="container">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <h3 id="newsletter-heading">Stay Updated with Financial Insights</h3>
+                        <p>Get the latest financial tips, calculator updates, and market insights delivered to your inbox.</p>
+                    </div>
+                    
+                    <form class="newsletter-form" id="newsletterForm" role="form">
+                        <label for="newsletter-email" class="sr-only">Email address</label>
+                        <input 
+                            type="email" 
+                            id="newsletter-email" 
+                            name="email" 
+                            placeholder="Enter your email address"
+                            required
+                            aria-describedby="newsletter-error newsletter-success"
+                        >
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                            Subscribe
+                        </button>
+                    </form>
+                    
+                    <div id="newsletter-error" class="form-error" role="alert"></div>
+                    <div id="newsletter-success" class="form-success" role="alert"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        Finguid
+                    </div>
+                    <p>
+                        The world's first AI-enhanced financial calculator platform built specifically for Americans. 
+                        Make smarter financial decisions with accurate calculations and intelligent insights.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="#mortgage-calculator">Mortgage Calculator</a></li>
+                        <li><a href="#auto-loan-calculator">Auto Loan Calculator</a></li>
+                        <li><a href="#investment-calculator">Investment Calculator</a></li>
+                        <li><a href="#credit-card-calculator">Credit Card Calculator</a></li>
+                        <li><a href="#insurance-calculator">Insurance Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/blog">Financial Blog</a></li>
+                        <li><a href="/guides">Calculation Guides</a></li>
+                        <li><a href="/tools">Financial Tools</a></li>
+                        <li><a href="/api">API Documentation</a></li>
+                        <li><a href="/support">Support Center</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="/affiliate">Affiliate Program</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Finguid Financial Calculators. Built with ❤️ for Americans. All calculations are estimates and should be verified with financial professionals.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Email Modal -->
+    <div class="email-modal" id="emailModal" role="dialog" aria-labelledby="email-modal-title" aria-hidden="true">
+        <div class="email-modal-content">
+            <div class="email-modal-header">
+                <h3 id="email-modal-title">Email Your Results</h3>
+                <button class="email-modal-close" id="emailModalClose" aria-label="Close email modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form class="email-form" id="emailForm">
+                <div class="form-group">
+                    <label for="email-recipient" class="form-label">Email Address</label>
+                    <input type="email" id="email-recipient" name="email" class="form-input" required 
+                           placeholder="Enter your email address" aria-describedby="email-help">
+                    <div id="email-help" class="form-help">We'll send your calculation results to this email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email-name" class="form-label">Your Name (Optional)</label>
+                    <input type="text" id="email-name" name="name" class="form-input" 
+                           placeholder="Enter your name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email-message" class="form-label">Additional Message (Optional)</label>
+                    <textarea id="email-message" name="message" class="form-input" rows="3"
+                              placeholder="Add any additional notes or questions"></textarea>
+                </div>
+                
+                <div class="email-buttons">
+                    <button type="button" class="btn btn-secondary" id="emailCancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i>
+                        Send Results
+                    </button>
+                </div>
+            </form>
+            
+            <div id="email-status" class="form-status" role="alert"></div>
+        </div>
+    </div>
+    
+    <!-- Live region for screen reader announcements -->
+    <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+    
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="calculators.js"></script>
+    <script src="main.js"></script>
+    
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID', {
+            page_title: 'USA Financial Calculators',
+            page_location: window.location.href
+        });
+    </script>
+</body>
+</html>
