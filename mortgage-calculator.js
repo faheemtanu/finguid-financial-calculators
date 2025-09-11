@@ -1386,3 +1386,18 @@
     });
 
 })();
+// Safe-init after definitions
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+// In calculate(), after result is computed:
+if (currentMode === 'payment') {
+  if (typeof window.Chart !== 'undefined') {
+    updateCharts(result);
+  } else {
+    console.warn('Chart.js not loaded; skipping charts');
+  }
+}
