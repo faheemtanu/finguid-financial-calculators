@@ -7301,4 +7301,40 @@ th {
   align-items: center;
   justify-content: center;
 }
+/* Center and balance the mission blurb (home + calculators) */
+.mission-blurb,
+.hero .hero-description,
+.calculators-hero .container > p,
+.section-header p {
+  /* center the block */
+  margin-inline: auto;
+  text-align: center;
+
+  /* responsive line length (measure) */
+  max-inline-size: clamp(68ch, 60vw, 120ch);
+
+  /* balance wrapping for nicer two-line headings/subheads */
+  text-wrap: balance;
+}
+
+/* Laptops (~two balanced lines) */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .mission-blurb,
+  .hero .hero-description,
+  .calculators-hero .container > p,
+  .section-header p {
+    max-inline-size: 112ch; /* tune 108–120ch if needed */
+  }
+}
+
+/* Tablets and below (narrower for readability) */
+@media (max-width: 1023px) {
+  .mission-blurb,
+  .hero .hero-description,
+  .calculators-hero .container > p,
+  .section-header p {
+    max-inline-size: 68ch;
+    padding-inline: 16px;
+  }
+}
 
