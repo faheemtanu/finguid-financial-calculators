@@ -7211,3 +7211,48 @@ th {
         margin-top: var(--space-20);
     }
 }
+/* === Card size reductions (sitewide) === */
+/* Tighter grid on calculator sections */
+.calculators-grid,
+.calculator-grid {
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); /* was 350px */
+  gap: 16px; /* was larger */
+}
+
+/* Smaller card footprint */
+.calculator-card {
+  padding: 20px; /* was ~var(--space-32)/32px */
+  border-radius: 10px;
+}
+
+/* Icon and text sizing */
+.calculator-card .card-icon {
+  width: 48px;
+  height: 48px; /* smaller than the default 64px block */
+}
+.calculator-card h3,
+.calculator-card h2 {
+  font-size: 18px; /* down from xl/20–24px */
+  margin-bottom: 10px;
+}
+.calculator-card p {
+  font-size: 14px;
+}
+
+/* Buttons a bit smaller */
+.card-button,
+.calculate-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+/* Feature list spacing */
+.card-features li { margin-bottom: 6px; }
+
+/* Optional: more columns on large screens */
+@media (min-width: 1024px) {
+  .calculators-grid,
+  .calculator-grid {
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+  }
+}
