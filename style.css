@@ -7273,3 +7273,31 @@ th {
 <h3 class="mb-2">Investment Calculator</h3>
 .card-icon { display:flex; align-items:center; justify-content:center; }
 .card-icon i { font-size:22px; color:#fff; line-height:1; }
+/* Stronger, accessible icon badges on calculator cards */
+.calculator-card .card-icon,
+.calculator-card .icon-badge,
+.calc-card .icon-badge,
+.card .icon-badge {
+  background-color: #0E7490;   /* teal-600 style, darker for contrast */
+  color: #fff;                 /* icon color */
+  opacity: 1;                  /* ensure no dimming */
+}
+
+/* Ensure glyphs inherit the white color whether <i> or <svg> is used */
+.calculator-card .card-icon i,
+.calculator-card .icon-badge i,
+.card .icon-badge i,
+.calculator-card .card-icon svg,
+.calculator-card .icon-badge svg,
+.card .icon-badge svg {
+  color: currentColor;
+  fill: currentColor;
+}
+
+/* Center the glyph inside the badge for consistency */
+.calculator-card .card-icon,
+.calculator-card .icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
