@@ -1,80 +1,22 @@
 {
-  "name": "HomeLoan Pro - AI-Enhanced USA Mortgage Calculator",
-  "short_name": "HomeLoan Pro",
-  "description": "America's first AI-enhanced mortgage calculator with voice input, 50-state data, refinance & affordability tools. Calculate accurate home loan payments with smart insights.",
-  "start_url": "/mortgage-calculator",
-  "display": "standalone",
-  "background_color": "#FCFCF9",
-  "theme_color": "#21808d",
-  "orientation": "portrait-primary",
+  "name": "Finguid Mortgage Pro",
+  "short_name": "MortgagePro",
+  "description": "Trusted mortgage calculator with state-accurate taxes, PMI, insurance & AI insights. Voice input enabled.",
+  "start_url": "/mortgage-calculator.html",
   "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
   "lang": "en-US",
-  "dir": "ltr",
-  "categories": ["finance", "productivity", "utilities", "business"],
+  "orientation": "portrait",
   "icons": [
-    { "src": "/icons/icon-72x72.png", "sizes": "72x72", "type": "image/png", "purpose": "maskable any" },
-    { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png", "purpose": "maskable any" },
-    { "src": "/icons/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "maskable any" },
-    { "src": "/icons/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "maskable any" },
-    { "src": "/icons/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "maskable any" },
-    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable any" },
-    { "src": "/icons/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "maskable any" },
-    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable any" }
+    { "src": "/icons/icon-72x72.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png" }
   ],
   "shortcuts": [
-    {
-      "name": "Monthly Payment Calculator",
-      "short_name": "Payment",
-      "description": "Calculate monthly mortgage payments with AI insights",
-      "url": "/mortgage-calculator?mode=payment",
-      "icons": [{"src": "/icons/shortcut-payment.png", "sizes": "192x192", "type": "image/png"}]
-    },
-    {
-      "name": "Refinance Calculator", 
-      "short_name": "Refinance",
-      "description": "Calculate refinance savings and break-even point",
-      "url": "/mortgage-calculator?mode=refinance",
-      "icons": [{"src": "/icons/shortcut-refinance.png", "sizes": "192x192", "type": "image/png"}]
-    },
-    {
-      "name": "Home Affordability Calculator",
-      "short_name": "Affordability", 
-      "description": "Calculate maximum home price you can afford",
-      "url": "/mortgage-calculator?mode=affordability",
-      "icons": [{"src": "/icons/shortcut-affordability.png", "sizes": "192x192", "type": "image/png"}]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshots/mobile-mortgage-calculator.png",
-      "sizes": "390x844", 
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "HomeLoan Pro Mortgage Calculator - Mobile View"
-    },
-    {
-      "src": "/screenshots/desktop-mortgage-calculator.png",
-      "sizes": "1280x720",
-      "type": "image/png", 
-      "form_factor": "wide",
-      "label": "HomeLoan Pro Mortgage Calculator - Desktop View"
-    }
-  ],
-  "edge_side_panel": { "preferred_width": 400 },
-  "protocol_handlers": [
-    {
-      "protocol": "web+mortgage",
-      "url": "/mortgage-calculator?calc=%s"
-    }
-  ],
-  "share_target": {
-    "action": "/share-calculation",
-    "method": "POST",
-    "enctype": "multipart/form-data", 
-    "params": {
-      "title": "title",
-      "text": "text", 
-      "url": "url"
-    }
-  }
+    { "name": "Monthly Payment", "short_name": "Monthly", "url": "/mortgage-calculator.html#tab-monthly" },
+    { "name": "Refinance", "short_name": "Refinance", "url": "/mortgage-calculator.html#tab-refinance" },
+    { "name": "Affordability", "short_name": "Affordability", "url": "/mortgage-calculator.html#tab-affordability" }
+  ]
 }
