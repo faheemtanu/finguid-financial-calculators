@@ -7256,3 +7256,20 @@ th {
     grid-template-columns: repeat(3, minmax(260px, 1fr));
   }
 }
+<!-- inside each .calculator-card -->
+<div class="card-icon" aria-hidden="true">
+  <i class="fa-solid fa-house"></i>  <!-- Mortgage -->
+</div>
+<h3 class="mb-2">Mortgage Calculator</h3>
+
+<div class="card-icon" aria-hidden="true">
+  <i class="fa-solid fa-car"></i>    <!-- Auto Loan -->
+</div>
+<h3 class="mb-2">Auto Loan Calculator</h3>
+
+<div class="card-icon" aria-hidden="true">
+  <i class="fa-solid fa-chart-line"></i> <!-- Investment -->
+</div>
+<h3 class="mb-2">Investment Calculator</h3>
+.card-icon { display:flex; align-items:center; justify-content:center; }
+.card-icon i { font-size:22px; color:#fff; line-height:1; }
