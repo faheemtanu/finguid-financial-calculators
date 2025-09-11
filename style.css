@@ -7301,8 +7301,4 @@ th {
   align-items: center;
   justify-content: center;
 }
-/* Only needed if duotone icons are in use */
-.icon-badge .fa-duotone-icon {
-  --fa-primary-opacity: 1;
-  --fa-secondary-opacity: 1;
-}
+
