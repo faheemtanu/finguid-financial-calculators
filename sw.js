@@ -1,68 +1,45 @@
-// HomeLoan Pro Service Worker v2.0.0
-// Enhanced caching for mortgage calculator with offline support
+// AI-Enhanced Mortgage Calculator Service Worker v3.0.0
+const CACHE_NAME = 'ai-mortgage-calc-v3.0.0';
+const STATIC_CACHE = 'ai-mortgage-static-v3.0.0';
+const DYNAMIC_CACHE = 'ai-mortgage-dynamic-v3.0.0';
 
-const CACHE_NAME = 'homeloan-pro-v2.0.0';
-const STATIC_CACHE = 'homeloan-static-v2.0.0';
-const DYNAMIC_CACHE = 'homeloan-dynamic-v2.0.0';
-
-// Assets to cache immediately
+// Core assets to cache immediately
 const CORE_ASSETS = [
   '/',
-  '/mortgage-calculator',
   '/mortgage-calculator.html',
-  '/style.css', 
+  '/style.css',
   '/mortgage-calculator.js',
   '/manifest.json',
+  '/api/latest-results.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
-];
-
-// Network-first assets (always try network first)
-const NETWORK_FIRST = [
-  '/api/',
-  '/mortgage-rates',
-  '/current-rates'
-];
-
-// Cache-first assets (try cache first)  
-const CACHE_FIRST = [
-  '/icons/',
-  '/images/',
-  '/fonts/',
-  '.woff2',
-  '.woff',
-  '.png',
-  '.jpg',
-  '.jpeg',
-  '.svg'
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://cdn.jsdelivr.net/npm/chart.js'
 ];
 
 // Install event - cache core assets
 self.addEventListener('install', (event) => {
-  console.log('HomeLoan Pro SW: Installing v2.0.0');
-  
+  console.log('AI Mortgage Calculator SW: Installing v3.0.0');
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
-        console.log('HomeLoan Pro SW: Caching core assets');
+        console.log('AI Mortgage Calculator SW: Caching core assets');
         return cache.addAll(CORE_ASSETS);
       })
       .then(() => {
-        console.log('HomeLoan Pro SW: Core assets cached');
+        console.log('AI Mortgage Calculator SW: Core assets cached');
         return self.skipWaiting();
       })
       .catch((error) => {
-        console.error('HomeLoan Pro SW: Failed to cache core assets', error);
+        console.error('AI Mortgage Calculator SW: Failed to cache core assets', error);
       })
   );
 });
 
 // Activate event - cleanup old caches
 self.addEventListener('activate', (event) => {
-  console.log('HomeLoan Pro SW: Activating v2.0.0');
-  
+  console.log('AI Mortgage Calculator SW: Activating v3.0.0');
   event.waitUntil(
     Promise.all([
       // Clean up old caches
@@ -70,7 +47,7 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
-              console.log('HomeLoan Pro SW: Deleting old cache', cacheName);
+              console.log('AI Mortgage Calculator SW: Deleting old cache', cacheName);
               return caches.delete(cacheName);
             }
           })
@@ -86,12 +63,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-  
+
   // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
   }
-  
+
   // Skip chrome-extension and other non-http requests
   if (!url.protocol.startsWith('http')) {
     return;
@@ -105,28 +82,29 @@ async function handleRequest(request) {
   const url = new URL(request.url);
   
   try {
-    // 1. Network-first strategy (for dynamic content)
-    if (NETWORK_FIRST.some(pattern => url.pathname.startsWith(pattern))) {
+    // API requests - network first with fallback
+    if (url.pathname.startsWith('/api/')) {
       return await networkFirst(request);
     }
     
-    // 2. Cache-first strategy (for static assets)
-    if (CACHE_FIRST.some(pattern => 
-      url.pathname.includes(pattern) || url.pathname.endsWith(pattern)
-    )) {
+    // Static assets - cache first
+    if (url.pathname.includes('.css') || url.pathname.includes('.js') || 
+        url.pathname.includes('.png') || url.pathname.includes('.jpg') || 
+        url.pathname.includes('.svg') || url.hostname.includes('fonts.googleapis.com') ||
+        url.hostname.includes('cdnjs.cloudflare.com')) {
       return await cacheFirst(request);
     }
     
-    // 3. Stale-while-revalidate for core pages
-    if (CORE_ASSETS.includes(url.pathname) || url.pathname === '/mortgage-calculator') {
+    // Core pages - stale while revalidate
+    if (CORE_ASSETS.includes(url.pathname) || url.pathname === '/mortgage-calculator.html') {
       return await staleWhileRevalidate(request);
     }
     
-    // 4. Network-only for everything else (with fallback)
+    // Everything else - network with fallback
     return await networkWithFallback(request);
     
   } catch (error) {
-    console.error('HomeLoan Pro SW: Request failed', error);
+    console.error('AI Mortgage Calculator SW: Request failed', error);
     return await getOfflineFallback(request);
   }
 }
@@ -135,16 +113,12 @@ async function handleRequest(request) {
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
-    
     if (response.ok) {
-      // Cache successful responses
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, response.clone());
     }
-    
     return response;
   } catch (error) {
-    // Network failed, try cache
     const cached = await caches.match(request);
     if (cached) {
       return cached;
@@ -153,22 +127,19 @@ async function networkFirst(request) {
   }
 }
 
-// Cache-first strategy  
+// Cache-first strategy
 async function cacheFirst(request) {
   const cached = await caches.match(request);
-  
   if (cached) {
     return cached;
   }
   
   try {
     const response = await fetch(request);
-    
     if (response.ok) {
       const cache = await caches.open(STATIC_CACHE);
       cache.put(request, response.clone());
     }
-    
     return response;
   } catch (error) {
     throw error;
@@ -203,16 +174,12 @@ async function staleWhileRevalidate(request) {
 async function networkWithFallback(request) {
   try {
     const response = await fetch(request);
-    
     if (response.ok) {
-      // Cache successful responses in dynamic cache
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, response.clone());
     }
-    
     return response;
   } catch (error) {
-    // Try to find in any cache
     const cached = await caches.match(request);
     if (cached) {
       return cached;
@@ -227,18 +194,30 @@ async function getOfflineFallback(request) {
   
   // For navigation requests, return the main app
   if (request.mode === 'navigate') {
-    const cachedApp = await caches.match('/mortgage-calculator');
+    const cachedApp = await caches.match('/mortgage-calculator.html');
     if (cachedApp) {
       return cachedApp;
     }
   }
   
-  // For images, return a placeholder if available
-  if (request.destination === 'image') {
-    const placeholder = await caches.match('/icons/icon-192x192.png');
-    if (placeholder) {
-      return placeholder;
-    }
+  // For API requests, return cached calculation data
+  if (url.pathname.startsWith('/api/')) {
+    return new Response(
+      JSON.stringify({
+        error: 'Offline',
+        message: 'Calculation results not available offline',
+        cached: true,
+        timestamp: new Date().toISOString()
+      }),
+      {
+        status: 503,
+        statusText: 'Service Unavailable',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
+        }
+      }
+    );
   }
   
   // Generic offline response
@@ -259,20 +238,18 @@ async function getOfflineFallback(request) {
   );
 }
 
-// Background sync for form submissions
+// Background sync for calculation results
 self.addEventListener('sync', (event) => {
-  if (event.tag === 'mortgage-calculation') {
+  if (event.tag === 'sync-calculations') {
     event.waitUntil(syncCalculations());
   }
 });
 
-// Sync stored calculations when back online
 async function syncCalculations() {
   try {
-    // Get stored calculations from IndexedDB or localStorage
-    const calculations = JSON.parse(localStorage.getItem('pendingCalculations') || '[]');
+    const pendingCalculations = JSON.parse(localStorage.getItem('pendingCalculations') || '[]');
     
-    for (const calc of calculations) {
+    for (const calc of pendingCalculations) {
       try {
         await fetch('/api/save-calculation', {
           method: 'POST',
@@ -286,73 +263,13 @@ async function syncCalculations() {
       }
     }
     
-    // Clear synced calculations
     localStorage.removeItem('pendingCalculations');
-    
   } catch (error) {
     console.error('Background sync failed', error);
   }
 }
 
-// Push notifications for rate changes (if implemented)
-self.addEventListener('push', (event) => {
-  if (event.data) {
-    const data = event.data.json();
-    
-    event.waitUntil(
-      self.registration.showNotification(data.title, {
-        body: data.message,
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-72x72.png',
-        tag: 'mortgage-rates',
-        actions: [
-          {
-            action: 'recalculate',
-            title: 'Recalculate'
-          },
-          {
-            action: 'dismiss', 
-            title: 'Dismiss'
-          }
-        ]
-      })
-    );
-  }
-});
-
-// Handle notification clicks
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  
-  if (event.action === 'recalculate') {
-    event.waitUntil(
-      clients.openWindow('/mortgage-calculator')
-    );
-  }
-});
-
-// Periodic background sync for rate updates (if supported)
-self.addEventListener('periodicsync', (event) => {
-  if (event.tag === 'rate-update') {
-    event.waitUntil(updateMortgageRates());
-  }
-});
-
-async function updateMortgageRates() {
-  try {
-    const response = await fetch('/api/current-rates');
-    const rates = await response.json();
-    
-    // Cache the rates
-    const cache = await caches.open(DYNAMIC_CACHE);
-    cache.put('/api/current-rates', new Response(JSON.stringify(rates)));
-    
-  } catch (error) {
-    console.error('Failed to update rates', error);
-  }
-}
-
-// Clean up old dynamic cache entries periodically
+// Message handling for cache cleanup
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'CACHE_CLEANUP') {
     event.waitUntil(cleanupDynamicCache());
@@ -370,4 +287,4 @@ async function cleanupDynamicCache() {
   }
 }
 
-console.log('HomeLoan Pro Service Worker v2.0.0 loaded');
+console.log('AI-Enhanced Mortgage Calculator Service Worker v3.0.0 loaded');
