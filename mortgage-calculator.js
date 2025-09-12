@@ -1401,3 +1401,110 @@ if (currentMode === 'payment') {
     console.warn('Chart.js not loaded; skipping charts');
   }
 }
+// Wrap in IIFE to avoid globals
+(() => {
+  const $ = q => document.querySelector(q);
+  const $$ = q => Array.from(document.querySelectorAll(q));
+  // Predefined scenarios data
+  const PAYMENT_SCENARIOS = [
+    { name: 'First-Time Buyer', dpPct: 3.5 },
+    { name: 'Conventional 20%', dpPct: 20 },
+    { name: '15yr vs 30yr', compare: [15,30] },
+    { name: 'Jumbo Loan', dpPct:25, loanCap:750000 },
+    { name: 'Low DP 5%', dpPct:5 },
+    { name: 'Investment Prop', dpPct:25 },
+    { name: 'Extra Payment', extraMonthly:200 },
+    { name: 'Rate Impact', rateDelta:1.0 }
+  ];
+  const REFI_SCENARIOS = [
+    { name:'Rate & Term', newRate:-0.5, newTerm:30 },
+    { name:'Cash-Out', closingCosts:10000 },
+    { name:'ARM→Fixed', newRate:-1.0 },
+    { name:'Shorten Term', newTerm:15 },
+    { name:'High-Balance', loanCap:750000 },
+    { name:'PMI Removal', dpPct:20 }
+  ];
+  const AFFORD_SCENARIOS = [
+    { name:'Young Pro', income:65000, dti:36 },
+    { name:'Dual Income', income:120000 },
+    { name:'High Earner', income:180000, dti:28 },
+    { name:'FHA Buyer', income:55000, dti:43 },
+    { name:'Move-Up', income:95000 },
+    { name:'Max Stretch', dti:43 }
+  ];
+
+  let currentMode = 'payment';
+  // initialize UI
+  function init() {
+    // render scenario buttons
+    PAYMENT_SCENARIOS.forEach((s,i) => {
+      const btn = document.createElement('button');
+      btn.className = 'scenario-btn btn--secondary';
+      btn.textContent = s.name;
+      btn.onclick = () => applyScenario('payment',i);
+      $('.#payment-scenarios').append(btn);
+    });
+    REFI_SCENARIOS.forEach((s,i) => {
+      const btn = document.createElement('button');
+      btn.className = 'scenario-btn btn--secondary';
+      btn.textContent = s.name;
+      btn.onclick = () => applyScenario('refinance',i);
+      $('#refinance-scenarios').append(btn);
+    });
+    AFFORD_SCENARIOS.forEach((s,i) => {
+      const btn = document.createElement('button');
+      btn.className = 'scenario-btn btn--secondary';
+      btn.textContent = s.name;
+      btn.onclick = () => applyScenario('affordability',i);
+      $('#affordability-scenarios').append(btn);
+    });
+
+    // tab buttons
+    $$('.tab-btn').forEach(tb => tb.addEventListener('click',()=>{
+      switchMode(tb.dataset.mode);
+    }));
+    // calculate buttons (all three share same id)
+    $$('button#calculate-btn').forEach(btn=>btn.addEventListener('click',calculate));
+    switchMode('payment');
+  }
+
+  function switchMode(mode) {
+    currentMode = mode;
+    $$('.mode-content').forEach(sec=>sec.classList.add('hidden'));
+    $(`#${mode}-mode`).classList.remove('hidden');
+    $$('.tab-btn').forEach(tb=>tb.classList.toggle('active', tb.dataset.mode===mode));
+    calculate();
+  }
+
+  function applyScenario(mode,index) {
+    const sc = { payment:PAYMENT_SCENARIOS, refinance:REFI_SCENARIOS, affordability:AFFORD_SCENARIOS }[mode][index];
+    // merge into form fields
+    if(mode==='payment') {
+      if(sc.dpPct!=null) $('#dp-percent').value = sc.dpPct;
+      if(sc.extraMonthly) $('#extra-monthly').value = sc.extraMonthly;
+      if(sc.rateDelta) {
+        $('#interest-rate').value = parseFloat($('#interest-rate').value||0)+sc.rateDelta;
+      }
+      // trigger updates
+    }
+    if(mode==='refinance') {
+      Object.assignFields(sc, ['newRate','newTerm','closingCosts']);
+    }
+    if(mode==='affordability') {
+      if(sc.income) $('#annual-income').value=sc.income;
+      if(sc.dti) $('#dti-ratio').value=sc.dti;
+    }
+    calculate();
+  }
+
+  function calculate(){
+    const res = { payment:calcPayment, refinance:calcRefi, affordability:calcAfford }[currentMode]();
+    renderResults(res);
+    generateInsights(res);
+  }
+
+  // ...reuse your existing calculatePayment(), calculateRefinance(), calculateAffordability(),
+  // updateDisplay(), updateCharts(), updateAmortizationTable(), generateInsights() exactly as before...
+
+  document.addEventListener('DOMContentLoaded',init);
+})();
