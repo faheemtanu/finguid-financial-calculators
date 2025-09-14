@@ -1,7 +1,7 @@
-/* HomeLoan Pro - AI-Enhanced Mortgage Calculator 2025
-   Features: Voice Input, 50-State Data, PMI, Refinance, Affordability, AI Insights
-   SEO & Performance Optimized for US Market
-*/
+/* HomeLoan Pro - Enhanced Mortgage Calculator with Advanced Features
+   Features: Bi-weekly payments, Credit score impact, Closing costs, Rent vs Buy, Investment analysis
+   Enhanced with side-by-side layout and comprehensive financial tools
+   SEO & Performance Optimized for US Market */
 
 (() => {
     'use strict';
@@ -10,7 +10,7 @@
     const $$ = (s) => Array.from(document.querySelectorAll(s));
     const money = (n) => `$${n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     const formatNumber = (n) => n.toLocaleString('en-US');
-
+    
     // US State tax rates (%) - All 50 states
     const stateTaxRates = {
         AL: 0.41, AK: 1.24, AZ: 0.60, AR: 0.66, CA: 0.81, CO: 0.52, CT: 2.16, DE: 0.62,
@@ -22,17 +22,41 @@
         WI: 1.71, WY: 0.61
     };
 
+    // Credit Score Impact Data
+    const creditScoreRates = {
+        800: { rate: 6.43, pmiRate: 0.30 },
+        780: { rate: 6.43, pmiRate: 0.32 }, 
+        760: { rate: 6.54, pmiRate: 0.35 },
+        740: { rate: 6.63, pmiRate: 0.40 },
+        720: { rate: 6.79, pmiRate: 0.45 },
+        700: { rate: 6.83, pmiRate: 0.50 },
+        680: { rate: 6.98, pmiRate: 0.60 },
+        660: { rate: 7.04, pmiRate: 0.70 },
+        640: { rate: 7.20, pmiRate: 0.85 },
+        620: { rate: 7.34, pmiRate: 1.05 }
+    };
+
+    // Closing Costs by State
+    const closingCostsByState = {
+        CA: { titleInsurance: 0.002, recordingFees: 250, transferTax: 0.0011, avgAttorneyFees: 1200 },
+        TX: { titleInsurance: 0.00075, recordingFees: 180, transferTax: 0, avgAttorneyFees: 800 },
+        FL: { titleInsurance: 0.00125, recordingFees: 200, transferTax: 0.007, avgAttorneyFees: 900 },
+        NY: { titleInsurance: 0.0015, recordingFees: 300, transferTax: 0.004, avgAttorneyFees: 1500 },
+        IL: { titleInsurance: 0.0018, recordingFees: 220, transferTax: 0.001, avgAttorneyFees: 1100 },
+        // Default for other states
+        DEFAULT: { titleInsurance: 0.0015, recordingFees: 200, transferTax: 0.001, avgAttorneyFees: 1000 }
+    };
+
     // State names for tooltips
     const stateNames = {
-        AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
-        CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', FL: 'Florida', GA: 'Georgia',
-        HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas',
-        KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts',
-        MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana',
-        NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico',
-        NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma',
-        OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota',
-        TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia',
+        AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado',
+        CT: 'Connecticut', DE: 'Delaware', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho',
+        IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana',
+        ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi',
+        MO: 'Missouri', MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey',
+        NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio',
+        OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina',
+        SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia',
         WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming'
     };
 
@@ -40,9 +64,13 @@
     let currentMode = 'payment';
     let activeTerm = 30;
     let usePct = false;
+    let currentPaymentFreq = 'monthly';
     let comparisons = [];
     let recognition = null;
     let currentCalculation = null;
+    let payoffChart = null;
+    let breakdownChart = null;
+    let amortizationChart = null;
 
     // Elements cache
     const els = {
@@ -63,7 +91,16 @@
         hoaFees: $('#hoa-fees'),
         extraMonthly: $('#extra-monthly'),
         extraOnce: $('#extra-once'),
-
+        
+        // Credit score elements
+        creditScore: $('#credit-score'),
+        useCreditScore: $('#use-credit-score'),
+        
+        // Payment frequency elements
+        monthlyToggle: $('#monthly-toggle'),
+        biweeklyToggle: $('#biweekly-toggle'),
+        biweeklyResults: $('#biweekly-results'),
+        
         // Refinance mode inputs
         currentBalance: $('#current-balance'),
         currentRate: $('#current-rate'),
@@ -71,13 +108,27 @@
         newRate: $('#new-rate'),
         newTerm: $('#new-term'),
         closingCosts: $('#closing-costs'),
-
+        
         // Affordability mode inputs
         annualIncome: $('#annual-income'),
         monthlyDebts: $('#monthly-debts'),
         downPaymentSaved: $('#down-payment-saved'),
         dtiRatio: $('#dti-ratio'),
-
+        
+        // Rent vs Buy inputs
+        homeValue: $('#home-value'),
+        monthlyRent: $('#monthly-rent'),
+        rentIncrease: $('#rent-increase'),
+        homeAppreciation: $('#home-appreciation'),
+        analysisYears: $('#analysis-years'),
+        
+        // Investment inputs
+        investmentPrice: $('#investment-price'),
+        investmentDown: $('#investment-down'),
+        monthlyRentalIncome: $('#monthly-rental-income'),
+        vacancyRate: $('#vacancy-rate'),
+        operatingExpenses: $('#operating-expenses'),
+        
         // UI controls
         tabAmount: $('#tab-amount'),
         tabPercent: $('#tab-percent'),
@@ -87,7 +138,7 @@
         termButtons: $('#term-buttons'),
         advancedToggle: $('#advanced-toggle'),
         advancedPanel: $('#advanced-panel'),
-
+        
         // Results
         totalPayment: $('#total-payment'),
         loanAmount: $('#loan-amount'),
@@ -98,7 +149,7 @@
         pmiAmount: $('#pmi-amount'),
         hoaAmount: $('#hoa-amount'),
         rowPmi: $('#row-pmi'),
-
+        
         // Charts and tables
         breakdownChart: $('#breakdownChart'),
         amortizationChart: $('#amortizationChart'),
@@ -106,7 +157,7 @@
         amortizationBody: $('#amortization-body'),
         fullScheduleBody: $('#full-schedule-body'),
         scheduleModal: $('#schedule-modal'),
-
+        
         // Actions
         calculateBtn: $('#calculate-btn'),
         resetBtn: $('#reset-form'),
@@ -115,21 +166,50 @@
         printBtn: $('#print-results'),
         viewFullSchedule: $('#view-full-schedule'),
         closeSchedule: $('#close-schedule'),
-
+        
         // Voice
         voiceBtns: $$('.voice-btn'),
         voiceStatus: $('#voice-status'),
-
+        
         // Insights
         insightsList: $('#insights-list'),
-
+        
         // Comparison
         scenarioName: $('#scenario-name'),
         addScenario: $('#add-scenario'),
         clearScenarios: $('#clear-scenarios'),
         comparisonGrid: $('#comparison-grid'),
-        scenarioBtns: $$('.scenario-btn')
+        scenarioBtns: $$('.scenario-btn'),
+        
+        // Enhanced sections
+        creditScoreImpact: $('#credit-score-impact'),
+        closingCostsSection: $('#closing-costs')
     };
+
+    // Utility functions
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    function showNotification(message, type = 'info') {
+        // Simple notification system
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
 
     // Initialize calculator
     function init() {
@@ -152,30 +232,39 @@
         });
 
         // Down payment tabs
-        els.tabAmount.addEventListener('click', () => switchDPMode(false));
-        els.tabPercent.addEventListener('click', () => switchDPMode(true));
+        els.tabAmount?.addEventListener('click', () => switchDPMode(false));
+        els.tabPercent?.addEventListener('click', () => switchDPMode(true));
+
+        // Payment frequency toggle
+        els.monthlyToggle?.addEventListener('click', () => setPaymentFreq('monthly'));
+        els.biweeklyToggle?.addEventListener('click', () => setPaymentFreq('biweekly'));
+
+        // Credit score slider
+        els.creditScore?.addEventListener('input', updateCreditScoreDisplay);
+        els.useCreditScore?.addEventListener('change', calculate);
 
         // Input synchronization
-        els.homePrice.addEventListener('input', handleHomePriceChange);
-        els.dpAmount.addEventListener('input', () => syncDownPayment(false));
-        els.dpPercent.addEventListener('input', () => syncDownPayment(true));
-        els.state.addEventListener('change', updatePropertyTax);
+        els.homePrice?.addEventListener('input', handleHomePriceChange);
+        els.dpAmount?.addEventListener('input', () => syncDownPayment(false));
+        els.dpPercent?.addEventListener('input', () => syncDownPayment(true));
+        els.state?.addEventListener('change', updatePropertyTax);
 
         // Term selection
-        els.termButtons.addEventListener('click', (e) => {
+        els.termButtons?.addEventListener('click', (e) => {
             const btn = e.target.closest('.chip[data-term]');
             if (btn) setTerm(+btn.dataset.term);
         });
-        els.termCustom.addEventListener('input', handleCustomTerm);
+        
+        els.termCustom?.addEventListener('input', handleCustomTerm);
 
         // Advanced options
-        els.advancedToggle.addEventListener('click', toggleAdvanced);
+        els.advancedToggle?.addEventListener('click', toggleAdvanced);
 
         // Auto-calculation on input changes
         const autoCalcInputs = [
             els.homePrice, els.dpAmount, els.dpPercent, els.interestRate,
             els.propertyTax, els.homeInsurance, els.pmiRate, els.hoaFees,
-            els.extraMonthly, els.extraOnce
+            els.extraMonthly, els.extraOnce, els.creditScore
         ];
         
         autoCalcInputs.forEach(input => {
@@ -185,32 +274,25 @@
         });
 
         // Action buttons
-        els.calculateBtn.addEventListener('click', calculate);
-        els.resetBtn.addEventListener('click', resetForm);
-        els.emailBtn.addEventListener('click', emailResults);
-        els.shareBtn.addEventListener('click', shareResults);
-        els.printBtn.addEventListener('click', () => window.print());
-        els.viewFullSchedule.addEventListener('click', showFullSchedule);
-        els.closeSchedule.addEventListener('click', () => els.scheduleModal.close());
+        els.calculateBtn?.addEventListener('click', calculate);
+        els.resetBtn?.addEventListener('click', resetForm);
+        els.emailBtn?.addEventListener('click', emailResults);
+        els.shareBtn?.addEventListener('click', shareResults);
+        els.printBtn?.addEventListener('click', () => window.print());
+        els.viewFullSchedule?.addEventListener('click', showFullSchedule);
+        els.closeSchedule?.addEventListener('click', () => els.scheduleModal?.close());
 
         // Voice buttons
         els.voiceBtns.forEach(btn => {
             btn.addEventListener('click', () => startVoiceInput(btn.dataset.field));
         });
 
-        // Voice status close
-        $('.voice-close')?.addEventListener('click', hideVoiceStatus);
-
         // Comparison
-        els.addScenario.addEventListener('click', addComparison);
-        els.clearScenarios.addEventListener('click', clearComparisons);
-        
-        els.scenarioBtns.forEach(btn => {
-            btn.addEventListener('click', () => loadScenario(btn.dataset.scenario));
-        });
+        els.addScenario?.addEventListener('click', addComparison);
+        els.clearScenarios?.addEventListener('click', clearComparisons);
 
         // Modal backdrop click
-        els.scheduleModal.addEventListener('click', (e) => {
+        els.scheduleModal?.addEventListener('click', (e) => {
             if (e.target === els.scheduleModal) {
                 els.scheduleModal.close();
             }
@@ -225,7 +307,6 @@
         try {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                // Hide voice buttons if not supported
                 els.voiceBtns.forEach(btn => btn.style.display = 'none');
                 return;
             }
@@ -248,7 +329,6 @@
             };
 
             recognition.onend = hideVoiceStatus;
-
         } catch (error) {
             console.warn('Voice recognition not available:', error);
             els.voiceBtns.forEach(btn => btn.style.display = 'none');
@@ -269,6 +349,7 @@
         switchDPMode(false);
         updatePropertyTax();
         updateInsurance();
+        updateCreditScoreDisplay();
     }
 
     // Mode switching
@@ -282,45 +363,358 @@
 
         // Show/hide content
         els.modeContents.forEach(content => {
-            content.classList.toggle('hidden', content.id !== `${mode}-mode`);
+            const contentId = content.id.replace('-mode', '');
+            content.classList.toggle('active', contentId === mode || content.id === `${mode}-mode`);
         });
 
         // Update calculate button text
         const btnText = {
             'payment': 'Calculate Payment',
             'refinance': 'Calculate Savings',
-            'affordability': 'Calculate Affordability'
+            'affordability': 'Calculate Affordability',
+            'rent-vs-buy': 'Compare Rent vs Buy',
+            'investment': 'Analyze Investment'
         };
-        els.calculateBtn.innerHTML = `<i class="fas fa-calculator"></i> ${btnText[mode]}`;
+        
+        if (els.calculateBtn) {
+            els.calculateBtn.innerHTML = `<i class="fas fa-calculator"></i> ${btnText[mode]}`;
+        }
 
         calculate();
+    }
+
+    // Payment frequency toggle
+    function setPaymentFreq(freq) {
+        currentPaymentFreq = freq;
+        
+        // Update button states
+        els.monthlyToggle?.classList.toggle('active', freq === 'monthly');
+        els.biweeklyToggle?.classList.toggle('active', freq === 'biweekly');
+        
+        // Show/hide bi-weekly results
+        if (els.biweeklyResults) {
+            if (freq === 'biweekly') {
+                els.biweeklyResults.classList.remove('hidden');
+                updateBiWeeklyDisplay();
+            } else {
+                els.biweeklyResults.classList.add('hidden');
+            }
+        }
+        
+        calculate();
+    }
+
+    // Credit score functions
+    function updateCreditScoreDisplay() {
+        const creditScore = +els.creditScore?.value || 740;
+        const useCreditForRate = els.useCreditScore?.checked;
+        
+        // Update display
+        const creditValue = $('.credit-value');
+        const creditRating = $('.credit-rating');
+        
+        if (creditValue) creditValue.textContent = creditScore;
+        if (creditRating) {
+            let rating = 'Fair';
+            if (creditScore >= 800) rating = 'Exceptional';
+            else if (creditScore >= 740) rating = 'Very Good';
+            else if (creditScore >= 670) rating = 'Good';
+            else if (creditScore >= 580) rating = 'Fair';
+            else rating = 'Poor';
+            
+            creditRating.textContent = rating;
+        }
+        
+        // Update interest rate if enabled
+        if (useCreditForRate && els.interestRate) {
+            const rates = Object.keys(creditScoreRates).map(Number).sort((a, b) => b - a);
+            const closestScore = rates.find(score => creditScore >= score) || 620;
+            const rateData = creditScoreRates[closestScore];
+            
+            if (rateData) {
+                els.interestRate.value = rateData.rate;
+            }
+        }
+        
+        // Update credit score impact display
+        updateCreditScoreImpact(creditScore);
+    }
+
+    function updateCreditScoreImpact(currentScore) {
+        const creditSection = els.creditScoreImpact;
+        if (!creditSection) return;
+        
+        const homePrice = +els.homePrice?.value || 400000;
+        const dpAmount = +els.dpAmount?.value || 80000;
+        const loanAmount = homePrice - dpAmount;
+        
+        const scenarios = [];
+        for (const [score, data] of Object.entries(creditScoreRates)) {
+            const scenarioScore = parseInt(score);
+            if (scenarioScore >= currentScore - 60 && scenarioScore <= currentScore + 60) {
+                const monthlyRate = data.rate / 100 / 12;
+                const months = 30 * 12;
+                
+                // Calculate monthly PI payment
+                let monthlyPayment = 0;
+                if (monthlyRate > 0) {
+                    monthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+                                   (Math.pow(1 + monthlyRate, months) - 1);
+                }
+                
+                // Calculate PMI if down payment < 20%
+                const dpPercent = ((homePrice - loanAmount) / homePrice) * 100;
+                const monthlyPMI = dpPercent < 20 ? (loanAmount * data.pmiRate / 100 / 12) : 0;
+                
+                scenarios.push({
+                    creditScore: scenarioScore,
+                    interestRate: data.rate,
+                    monthlyPayment: monthlyPayment + monthlyPMI,
+                    monthlyPMI,
+                    totalCost: (monthlyPayment + monthlyPMI) * months
+                });
+            }
+        }
+        
+        scenarios.sort((a, b) => b.creditScore - a.creditScore);
+        
+        let html = `
+            <div class="credit-scenarios">
+        `;
+        
+        scenarios.forEach((scenario, index) => {
+            const isCurrentScore = scenario.creditScore <= currentScore && 
+                                 (index === scenarios.length - 1 || scenarios[index + 1].creditScore > currentScore);
+            
+            html += `
+                <div class="credit-scenario ${isCurrentScore ? 'current' : ''}">
+                    <div class="score-badge">${scenario.creditScore}+</div>
+                    <div class="rate-info">
+                        <span class="rate">${scenario.interestRate}% APR</span>
+                        <span class="payment">${money(scenario.monthlyPayment)}/mo</span>
+                    </div>
+                    ${scenario.monthlyPMI > 0 ? `<div class="pmi">PMI: ${money(scenario.monthlyPMI)}</div>` : ''}
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        creditSection.innerHTML = html;
+    }
+
+    // Closing costs calculation
+    function calculateClosingCosts(homePrice, loanAmount, state) {
+        const stateData = closingCostsByState[state] || closingCostsByState['DEFAULT'];
+        
+        const costs = {
+            // Lender Fees
+            originationFee: loanAmount * 0.01, // 1% origination fee
+            appraisalFee: homePrice < 500000 ? 500 : 750,
+            creditReportFee: 50,
+            floodCertification: 25,
+            taxService: 75,
+            
+            // Third Party Fees
+            titleInsurance: homePrice * stateData.titleInsurance,
+            homeInspection: 400,
+            surveyFee: 350,
+            recordingFees: stateData.recordingFees,
+            attorneyFees: stateData.avgAttorneyFees,
+            
+            // Government Fees
+            transferTax: homePrice * stateData.transferTax,
+            
+            // Prepaid Items
+            homeownersInsurance: (homePrice * 0.0024) / 12, // 1 month
+            propertyTaxes: (homePrice * (stateTaxRates[state] || 1.0) / 100) / 12 * 2, // 2 months
+            mortgageInsurance: loanAmount * 0.005 / 12, // 1 month if applicable
+            
+            // Escrow Deposits
+            escrowInsurance: (homePrice * 0.0024) / 12 * 2, // 2 months
+            escrowTaxes: (homePrice * (stateTaxRates[state] || 1.0) / 100) / 12 * 2 // 2 months
+        };
+        
+        // Calculate total
+        const totalClosingCosts = Object.values(costs).reduce((sum, cost) => sum + cost, 0);
+        const cashToClose = totalClosingCosts + (homePrice - loanAmount); // Plus down payment
+        
+        return {
+            itemizedCosts: costs,
+            totalClosingCosts,
+            cashToClose,
+            percentOfLoan: (totalClosingCosts / loanAmount) * 100
+        };
+    }
+
+    function updateClosingCostsDisplay() {
+        const closingSection = els.closingCostsSection;
+        if (!closingSection) return;
+        
+        const homePrice = +els.homePrice?.value || 400000;
+        const dpAmount = +els.dpAmount?.value || 80000;
+        const loanAmount = homePrice - dpAmount;
+        const state = els.state?.value || 'CA';
+        
+        const closingData = calculateClosingCosts(homePrice, loanAmount, state);
+        
+        let html = `
+            <div class="closing-summary">
+                <div class="total-cost">
+                    <span class="label">Total Closing Costs:</span>
+                    <span class="amount">${money(closingData.totalClosingCosts)}</span>
+                </div>
+                <div class="cash-to-close">
+                    <span class="label">Cash to Close:</span>
+                    <span class="amount highlight">${money(closingData.cashToClose)}</span>
+                </div>
+            </div>
+            
+            <div class="cost-categories">
+        `;
+        
+        // Group costs by category
+        const categories = [
+            {
+                name: 'Lender Fees',
+                items: ['originationFee', 'appraisalFee', 'creditReportFee', 'floodCertification', 'taxService']
+            },
+            {
+                name: 'Third Party Fees',
+                items: ['titleInsurance', 'homeInspection', 'surveyFee', 'recordingFees', 'attorneyFees']
+            },
+            {
+                name: 'Government Fees',
+                items: ['transferTax']
+            },
+            {
+                name: 'Prepaid Items',
+                items: ['homeownersInsurance', 'propertyTaxes', 'mortgageInsurance']
+            }
+        ];
+        
+        categories.forEach(category => {
+            html += `<div class="cost-category">
+                        <h4>${category.name}</h4>`;
+            
+            category.items.forEach(item => {
+                const cost = closingData.itemizedCosts[item];
+                if (cost > 0) {
+                    const label = item.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                    html += `<div class="cost-item">
+                                <span>${label}:</span>
+                                <span>${money(cost)}</span>
+                            </div>`;
+                }
+            });
+            
+            html += '</div>';
+        });
+        
+        html += `
+            </div>
+            <div class="closing-tips">
+                <h4>💡 Money Saving Tips</h4>
+                <ul>
+                    <li>Shop around for title insurance and attorney fees</li>
+                    <li>Ask seller to contribute to closing costs</li>
+                    <li>Consider lender credits to reduce upfront costs</li>
+                    <li>Review Loan Estimate carefully for accuracy</li>
+                </ul>
+            </div>
+        `;
+        
+        closingSection.innerHTML = html;
+    }
+
+    // Bi-weekly payment calculations
+    function calculateBiWeeklyPayments(loanAmount, annualRate, monthlyPayment) {
+        const biWeeklyPayment = monthlyPayment / 2;
+        const biWeeklyRate = annualRate / 26; // 26 payments per year
+        
+        let balance = loanAmount;
+        let paymentNumber = 0;
+        let totalInterest = 0;
+        
+        // Calculate bi-weekly schedule
+        while (balance > 0 && paymentNumber < 780) { // Max 30 years worth
+            const interestPayment = balance * biWeeklyRate;
+            let principalPayment = biWeeklyPayment - interestPayment;
+            
+            if (principalPayment > balance) {
+                principalPayment = balance;
+            }
+            
+            totalInterest += interestPayment;
+            balance -= principalPayment;
+            paymentNumber++;
+            
+            if (balance <= 0) break;
+        }
+        
+        return {
+            biWeeklyPayment: biWeeklyPayment,
+            totalPayments: paymentNumber,
+            yearsToPayoff: paymentNumber / 26,
+            totalInterest: totalInterest
+        };
+    }
+
+    function updateBiWeeklyDisplay() {
+        if (!currentCalculation) return;
+        
+        const { loanAmount, rate, monthlyPI, totalInterest, term } = currentCalculation;
+        const biWeeklyData = calculateBiWeeklyPayments(loanAmount, rate / 100, monthlyPI);
+        
+        // Update display elements
+        const monthlyAmount = $('#monthly-amount');
+        const monthlyPayoff = $('#monthly-payoff');
+        const monthlyInterest = $('#monthly-interest');
+        const biweeklyAmount = $('#biweekly-amount');
+        const biweeklyPayoff = $('#biweekly-payoff');
+        const biweeklyInterest = $('#biweekly-interest');
+        const timeSaved = $('#time-saved');
+        const interestSaved = $('#interest-saved');
+        
+        if (monthlyAmount) monthlyAmount.textContent = money(monthlyPI);
+        if (monthlyPayoff) monthlyPayoff.textContent = `${term} years`;
+        if (monthlyInterest) monthlyInterest.textContent = money(totalInterest);
+        
+        if (biweeklyAmount) biweeklyAmount.textContent = money(biWeeklyData.biWeeklyPayment);
+        if (biweeklyPayoff) biweeklyPayoff.textContent = `${biWeeklyData.yearsToPayoff.toFixed(1)} years`;
+        if (biweeklyInterest) biweeklyInterest.textContent = money(biWeeklyData.totalInterest);
+        
+        // Calculate savings
+        const timesSaved = term - biWeeklyData.yearsToPayoff;
+        const interestSavings = totalInterest - biWeeklyData.totalInterest;
+        
+        if (timeSaved) timeSaved.textContent = `${timesSaved.toFixed(1)} years`;
+        if (interestSaved) interestSaved.textContent = money(interestSavings);
     }
 
     // Down payment mode switching
     function switchDPMode(usePercent) {
         usePct = usePercent;
-        els.tabAmount.classList.toggle('active', !usePercent);
-        els.tabPercent.classList.toggle('active', usePercent);
-        els.dpAmountWrap.classList.toggle('hidden', usePercent);
-        els.dpPercentWrap.classList.toggle('hidden', !usePercent);
-        
+        els.tabAmount?.classList.toggle('active', !usePercent);
+        els.tabPercent?.classList.toggle('active', usePercent);
+        els.dpAmountWrap?.classList.toggle('hidden', usePercent);
+        els.dpPercentWrap?.classList.toggle('hidden', !usePercent);
         syncDownPayment(usePercent);
     }
 
     // Sync down payment inputs
     function syncDownPayment(fromPercent) {
-        const homePrice = +els.homePrice.value || 0;
+        const homePrice = +els.homePrice?.value || 0;
         
         if (fromPercent) {
-            const pct = Math.min(100, Math.max(0, +els.dpPercent.value || 0));
+            const pct = Math.min(100, Math.max(0, +els.dpPercent?.value || 0));
             const amt = Math.round(homePrice * pct / 100);
-            els.dpAmount.value = amt;
+            if (els.dpAmount) els.dpAmount.value = amt;
         } else {
-            const amt = Math.min(homePrice, Math.max(0, +els.dpAmount.value || 0));
+            const amt = Math.min(homePrice, Math.max(0, +els.dpAmount?.value || 0));
             const pct = homePrice > 0 ? (amt / homePrice * 100) : 0;
-            els.dpPercent.value = pct.toFixed(1);
+            if (els.dpPercent) els.dpPercent.value = pct.toFixed(1);
         }
-
+        
         updatePMIBanner();
     }
 
@@ -329,28 +723,32 @@
         syncDownPayment(usePct);
         updatePropertyTax();
         updateInsurance();
+        updateClosingCostsDisplay();
     }
 
     // Update PMI banner
     function updatePMIBanner() {
-        const dpPct = +els.dpPercent.value || 0;
+        const dpPct = +els.dpPercent?.value || 0;
         const needsPMI = dpPct < 20;
-        els.pmiBanner.classList.toggle('hidden', !needsPMI);
         
-        if (needsPMI) {
-            els.pmiBanner.innerHTML = `
-                <i class="fas fa-exclamation-triangle"></i>
-                <span>PMI Required - Down payment is ${dpPct.toFixed(1)}% (less than 20% of home value)</span>
-            `;
+        if (els.pmiBanner) {
+            els.pmiBanner.classList.toggle('hidden', !needsPMI);
+            
+            if (needsPMI) {
+                els.pmiBanner.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    PMI Required - Down payment is ${dpPct.toFixed(1)}% (less than 20% of home value)
+                `;
+            }
         }
     }
 
     // Update property tax based on state
     function updatePropertyTax() {
-        const homePrice = +els.homePrice.value || 0;
-        const state = els.state.value;
+        const homePrice = +els.homePrice?.value || 0;
+        const state = els.state?.value;
         
-        if (!state || !homePrice) return;
+        if (!state || !homePrice || !els.propertyTax) return;
         
         const taxRate = stateTaxRates[state] || 1.0;
         const annualTax = Math.round(homePrice * (taxRate / 100));
@@ -359,42 +757,56 @@
         // Update tooltip with state info
         const stateInfo = `${stateNames[state]} average: ${taxRate}%`;
         els.propertyTax.setAttribute('title', stateInfo);
+        
+        updateClosingCostsDisplay();
     }
 
     // Update insurance estimate
     function updateInsurance() {
-        const homePrice = +els.homePrice.value || 0;
+        const homePrice = +els.homePrice?.value || 0;
         const estimate = Math.round(homePrice * 0.0024); // ~0.24% of home value
-        els.homeInsurance.value = Math.max(600, Math.min(estimate, 3000));
+        
+        if (els.homeInsurance) {
+            els.homeInsurance.value = Math.max(600, Math.min(estimate, 3000));
+        }
     }
 
     // Term selection
     function setTerm(years) {
         activeTerm = years;
+        
         $$('[data-term]').forEach(btn => {
             btn.classList.toggle('active', +btn.dataset.term === years);
         });
-        els.termCustom.value = '';
+        
+        if (els.termCustom) els.termCustom.value = '';
         calculate();
     }
 
     // Handle custom term input
     function handleCustomTerm() {
-        const customYears = +els.termCustom.value;
+        const customYears = +els.termCustom?.value;
+        
         if (customYears >= 1 && customYears <= 40) {
             activeTerm = customYears;
             $$('[data-term]').forEach(btn => btn.classList.remove('active'));
         }
+        
         calculate();
     }
 
     // Toggle advanced options
     function toggleAdvanced() {
         const panel = els.advancedPanel;
-        const arrow = els.advancedToggle.querySelector('.arrow');
+        const arrow = els.advancedToggle?.querySelector('.arrow');
         
-        panel.classList.toggle('hidden');
-        arrow.classList.toggle('rotated');
+        if (panel) {
+            panel.classList.toggle('hidden');
+        }
+        
+        if (arrow) {
+            arrow.classList.toggle('rotated');
+        }
     }
 
     // Voice input functions
@@ -410,30 +822,32 @@
 
     function processVoiceCommand(transcript) {
         console.log('Voice command:', transcript);
-        
         const numbers = transcript.match(/\d+(?:\.\d+)?/g);
         
         if (transcript.includes('home price') || transcript.includes('house price')) {
             if (numbers && numbers.length > 0) {
                 let value = parseFloat(numbers[0]);
                 if (value < 10000) value *= 1000;
-                els.homePrice.value = value;
-                handleHomePriceChange();
+                if (els.homePrice) {
+                    els.homePrice.value = value;
+                    handleHomePriceChange();
+                }
                 showNotification(`Home price set to ${money(value)}`, 'success');
             }
         } else if (transcript.includes('down payment')) {
             if (numbers && numbers.length > 0) {
                 let value = parseFloat(numbers[0]);
+                
                 if (transcript.includes('percent')) {
                     usePct = true;
                     switchDPMode(true);
-                    els.dpPercent.value = value;
+                    if (els.dpPercent) els.dpPercent.value = value;
                     syncDownPayment(true);
                 } else {
                     if (value < 1000) value *= 1000;
                     usePct = false;
                     switchDPMode(false);
-                    els.dpAmount.value = value;
+                    if (els.dpAmount) els.dpAmount.value = value;
                     syncDownPayment(false);
                 }
                 showNotification('Down payment updated', 'success');
@@ -441,7 +855,7 @@
         } else if (transcript.includes('interest rate') || transcript.includes('rate')) {
             if (numbers && numbers.length > 0) {
                 const value = parseFloat(numbers[0]);
-                els.interestRate.value = value;
+                if (els.interestRate) els.interestRate.value = value;
                 showNotification(`Interest rate set to ${value}%`, 'success');
             }
         } else if (transcript.includes('calculate')) {
@@ -455,11 +869,15 @@
     }
 
     function showVoiceStatus() {
-        els.voiceStatus.classList.add('active');
+        if (els.voiceStatus) {
+            els.voiceStatus.classList.add('active');
+        }
     }
 
     function hideVoiceStatus() {
-        els.voiceStatus.classList.remove('active');
+        if (els.voiceStatus) {
+            els.voiceStatus.classList.remove('active');
+        }
     }
 
     // Main calculation function
@@ -477,6 +895,12 @@
                 case 'affordability':
                     result = calculateAffordability();
                     break;
+                case 'rent-vs-buy':
+                    result = calculateRentVsBuy();
+                    break;
+                case 'investment':
+                    result = calculateInvestment();
+                    break;
                 default:
                     result = calculatePayment();
             }
@@ -485,9 +909,15 @@
                 currentCalculation = result;
                 updateDisplay(result);
                 generateInsights(result);
+                
                 if (currentMode === 'payment') {
                     updateCharts(result);
                     updateAmortizationTable(result);
+                    updateClosingCostsDisplay();
+                    
+                    if (currentPaymentFreq === 'biweekly') {
+                        updateBiWeeklyDisplay();
+                    }
                 }
             }
         } catch (error) {
@@ -498,46 +928,58 @@
 
     // Payment calculation
     function calculatePayment() {
-        const homePrice = +els.homePrice.value || 0;
-        const dpAmount = +els.dpAmount.value || 0;
+        const homePrice = +els.homePrice?.value || 0;
+        const dpAmount = +els.dpAmount?.value || 0;
         const loanAmount = Math.max(0, homePrice - dpAmount);
-        const rate = (+els.interestRate.value || 0) / 100;
-        const term = +els.termCustom.value || activeTerm;
+        let rate = (+els.interestRate?.value || 0) / 100;
+        const term = +els.termCustom?.value || activeTerm;
         const months = term * 12;
-
+        
+        // Apply credit score adjustment if enabled
+        if (els.useCreditScore?.checked) {
+            const creditScore = +els.creditScore?.value || 740;
+            const rates = Object.keys(creditScoreRates).map(Number).sort((a, b) => b - a);
+            const closestScore = rates.find(score => creditScore >= score) || 620;
+            const rateData = creditScoreRates[closestScore];
+            
+            if (rateData) {
+                rate = rateData.rate / 100;
+            }
+        }
+        
         if (!homePrice || !rate || !term) return null;
-
+        
         // Property costs
-        const annualTax = +els.propertyTax.value || 0;
-        const annualInsurance = +els.homeInsurance.value || 0;
-        const pmiRate = (+els.pmiRate.value || 0) / 100;
-        const monthlyHOA = +els.hoaFees.value || 0;
-        const extraMonthly = +els.extraMonthly.value || 0;
-        const extraOnce = +els.extraOnce.value || 0;
-
+        const annualTax = +els.propertyTax?.value || 0;
+        const annualInsurance = +els.homeInsurance?.value || 0;
+        const pmiRate = (+els.pmiRate?.value || 0) / 100;
+        const monthlyHOA = +els.hoaFees?.value || 0;
+        const extraMonthly = +els.extraMonthly?.value || 0;
+        const extraOnce = +els.extraOnce?.value || 0;
+        
         // Calculate monthly P&I
         const monthlyRate = rate / 12;
         let monthlyPI = 0;
+        
         if (monthlyRate > 0) {
             monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
                        (Math.pow(1 + monthlyRate, months) - 1);
         } else {
             monthlyPI = loanAmount / months;
         }
-
+        
         // Other monthly costs
         const monthlyTax = annualTax / 12;
         const monthlyInsurance = annualInsurance / 12;
         const dpPercent = homePrice > 0 ? (dpAmount / homePrice * 100) : 0;
         const needsPMI = dpPercent < 20;
         const monthlyPMI = needsPMI ? (loanAmount * pmiRate / 12) : 0;
-
         const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + monthlyPMI + monthlyHOA;
-
+        
         // Generate amortization schedule with extra payments
         const schedule = generateSchedule(loanAmount, monthlyRate, monthlyPI, months, extraMonthly, extraOnce);
         const totalInterest = schedule.reduce((sum, payment) => sum + payment.interest, 0);
-
+        
         return {
             mode: 'payment',
             homePrice,
@@ -563,27 +1005,27 @@
 
     // Refinance calculation
     function calculateRefinance() {
-        const currentBalance = +els.currentBalance.value || 0;
-        const currentRate = (+els.currentRate.value || 0) / 100;
-        const remainingTerm = +els.remainingTerm.value || 0;
-        const newRate = (+els.newRate.value || 0) / 100;
-        const newTerm = +els.newTerm.value || 0;
-        const closingCosts = +els.closingCosts.value || 0;
-
+        const currentBalance = +els.currentBalance?.value || 0;
+        const currentRate = (+els.currentRate?.value || 0) / 100;
+        const remainingTerm = +els.remainingTerm?.value || 0;
+        const newRate = (+els.newRate?.value || 0) / 100;
+        const newTerm = +els.newTerm?.value || 0;
+        const closingCosts = +els.closingCosts?.value || 0;
+        
         if (!currentBalance || !currentRate || !newRate || !newTerm) return null;
-
+        
         // Current payment
         const currentMonths = remainingTerm * 12;
         const currentMonthlyRate = currentRate / 12;
         const currentPayment = currentBalance * (currentMonthlyRate * Math.pow(1 + currentMonthlyRate, currentMonths)) / 
                               (Math.pow(1 + currentMonthlyRate, currentMonths) - 1);
-
+        
         // New payment
         const newMonths = newTerm * 12;
         const newMonthlyRate = newRate / 12;
         const newPayment = currentBalance * (newMonthlyRate * Math.pow(1 + newMonthlyRate, newMonths)) / 
                           (Math.pow(1 + newMonthlyRate, newMonths) - 1);
-
+        
         // Savings calculations
         const monthlySavings = currentPayment - newPayment;
         const breakEvenMonths = closingCosts / Math.abs(monthlySavings);
@@ -602,17 +1044,17 @@
 
     // Affordability calculation
     function calculateAffordability() {
-        const annualIncome = +els.annualIncome.value || 0;
-        const monthlyDebts = +els.monthlyDebts.value || 0;
-        const downPayment = +els.downPaymentSaved.value || 0;
-        const dtiRatio = (+els.dtiRatio.value || 36) / 100;
-
+        const annualIncome = +els.annualIncome?.value || 0;
+        const monthlyDebts = +els.monthlyDebts?.value || 0;
+        const downPayment = +els.downPaymentSaved?.value || 0;
+        const dtiRatio = (+els.dtiRatio?.value || 36) / 100;
+        
         if (!annualIncome) return null;
-
+        
         const monthlyIncome = annualIncome / 12;
         const maxTotalPayment = monthlyIncome * dtiRatio;
         const maxMortgagePayment = maxTotalPayment - monthlyDebts;
-
+        
         // Estimate maximum home price (assuming 6.5% rate, 30 years, typical costs)
         const estimatedRate = 0.065 / 12;
         const estimatedMonths = 30 * 12;
@@ -623,7 +1065,7 @@
         const maxPI = maxMortgagePayment * 0.75;
         const maxLoanAmount = maxPI / piRatio;
         const maxHomePrice = maxLoanAmount + downPayment;
-
+        
         return {
             mode: 'affordability',
             annualIncome,
@@ -637,25 +1079,124 @@
         };
     }
 
+    // Rent vs Buy calculation
+    function calculateRentVsBuy() {
+        const homeValue = +els.homeValue?.value || 0;
+        const monthlyRent = +els.monthlyRent?.value || 0;
+        const rentIncrease = (+els.rentIncrease?.value || 3) / 100;
+        const homeAppreciation = (+els.homeAppreciation?.value || 3.5) / 100;
+        const analysisYears = +els.analysisYears?.value || 10;
+        
+        if (!homeValue || !monthlyRent) return null;
+        
+        // Simplified buy vs rent calculation
+        const downPayment = homeValue * 0.2; // Assume 20% down
+        const loanAmount = homeValue - downPayment;
+        const mortgageRate = 0.065 / 12; // 6.5% annual
+        const months = 30 * 12;
+        
+        // Monthly mortgage payment
+        const monthlyMortgage = loanAmount * (mortgageRate * Math.pow(1 + mortgageRate, months)) / 
+                               (Math.pow(1 + mortgageRate, months) - 1);
+        
+        // Additional monthly costs for buying
+        const monthlyTax = homeValue * 0.012 / 12; // 1.2% annual property tax
+        const monthlyInsurance = homeValue * 0.0024 / 12; // 0.24% annual insurance
+        const monthlyMaintenance = homeValue * 0.01 / 12; // 1% annual maintenance
+        
+        const totalMonthlyCostBuy = monthlyMortgage + monthlyTax + monthlyInsurance + monthlyMaintenance;
+        
+        // Calculate totals over analysis period
+        let totalRentCost = 0;
+        let currentRent = monthlyRent;
+        
+        for (let year = 1; year <= analysisYears; year++) {
+            totalRentCost += currentRent * 12;
+            currentRent *= (1 + rentIncrease);
+        }
+        
+        const totalBuyCost = downPayment + (totalMonthlyCostBuy * analysisYears * 12);
+        const homeValueAfterAppreciation = homeValue * Math.pow(1 + homeAppreciation, analysisYears);
+        const netBuyCost = totalBuyCost - homeValueAfterAppreciation;
+        
+        return {
+            mode: 'rent-vs-buy',
+            homeValue,
+            monthlyRent,
+            totalMonthlyCostBuy,
+            totalRentCost,
+            totalBuyCost,
+            netBuyCost,
+            homeValueAfterAppreciation,
+            analysisYears,
+            recommendation: netBuyCost < totalRentCost ? 'buy' : 'rent'
+        };
+    }
+
+    // Investment property calculation
+    function calculateInvestment() {
+        const propertyPrice = +els.investmentPrice?.value || 0;
+        const downPayment = +els.investmentDown?.value || 0;
+        const monthlyRent = +els.monthlyRentalIncome?.value || 0;
+        const vacancyRate = (+els.vacancyRate?.value || 5) / 100;
+        const operatingExpenses = +els.operatingExpenses?.value || 0;
+        
+        if (!propertyPrice || !monthlyRent) return null;
+        
+        const loanAmount = propertyPrice - downPayment;
+        const mortgageRate = 0.075 / 12; // 7.5% for investment property
+        const months = 30 * 12;
+        
+        // Monthly mortgage payment
+        const monthlyMortgage = loanAmount * (mortgageRate * Math.pow(1 + mortgageRate, months)) / 
+                               (Math.pow(1 + mortgageRate, months) - 1);
+        
+        // Calculate cash flow
+        const effectiveRent = monthlyRent * (1 - vacancyRate);
+        const netOperatingIncome = effectiveRent - operatingExpenses;
+        const cashFlow = netOperatingIncome - monthlyMortgage;
+        
+        // Calculate key metrics
+        const grossRentMultiplier = propertyPrice / (monthlyRent * 12);
+        const capRate = (netOperatingIncome * 12) / propertyPrice;
+        const cashOnCashReturn = (cashFlow * 12) / downPayment;
+        
+        return {
+            mode: 'investment',
+            propertyPrice,
+            downPayment,
+            monthlyRent,
+            effectiveRent,
+            monthlyMortgage,
+            operatingExpenses,
+            netOperatingIncome,
+            cashFlow,
+            grossRentMultiplier,
+            capRate: capRate * 100,
+            cashOnCashReturn: cashOnCashReturn * 100
+        };
+    }
+
     // Generate amortization schedule
     function generateSchedule(loanAmount, monthlyRate, monthlyPI, totalMonths, extraMonthly = 0, extraOnce = 0) {
         const schedule = [];
         let balance = loanAmount;
         let totalExtra = 0;
-
+        
         for (let month = 1; month <= totalMonths && balance > 0; month++) {
             const interestPayment = balance * monthlyRate;
             let principalPayment = monthlyPI - interestPayment;
             let extraPayment = 0;
-
+            
             // Add extra payments
             if (month === 1 && extraOnce > 0) {
                 extraPayment += Math.min(extraOnce, balance - principalPayment);
             }
+            
             if (extraMonthly > 0) {
                 extraPayment += Math.min(extraMonthly, balance - principalPayment);
             }
-
+            
             totalExtra += extraPayment;
             principalPayment += extraPayment;
             
@@ -664,9 +1205,9 @@
                 principalPayment = balance;
                 extraPayment = principalPayment - (monthlyPI - interestPayment);
             }
-
+            
             balance = Math.max(0, balance - principalPayment);
-
+            
             schedule.push({
                 month,
                 payment: monthlyPI + extraPayment,
@@ -675,10 +1216,10 @@
                 extra: extraPayment,
                 balance
             });
-
+            
             if (balance === 0) break;
         }
-
+        
         return schedule;
     }
 
@@ -694,357 +1235,373 @@
             case 'affordability':
                 updateAffordabilityDisplay(result);
                 break;
+            case 'rent-vs-buy':
+                updateRentVsBuyDisplay(result);
+                break;
+            case 'investment':
+                updateInvestmentDisplay(result);
+                break;
         }
     }
 
     // Update payment mode display
     function updatePaymentDisplay(result) {
-        els.totalPayment.textContent = money(result.totalMonthly);
-        els.loanAmount.textContent = money(result.loanAmount);
-        els.totalInterest.textContent = money(result.totalInterest);
-        els.piAmount.textContent = money(result.monthlyPI);
-        els.taxAmount.textContent = money(result.monthlyTax);
-        els.insuranceAmount.textContent = money(result.monthlyInsurance);
-        els.pmiAmount.textContent = money(result.monthlyPMI);
-        els.hoaAmount.textContent = money(result.monthlyHOA);
-
+        if (els.totalPayment) els.totalPayment.textContent = money(result.totalMonthly);
+        if (els.loanAmount) els.loanAmount.textContent = money(result.loanAmount);
+        if (els.totalInterest) els.totalInterest.textContent = money(result.totalInterest);
+        if (els.piAmount) els.piAmount.textContent = money(result.monthlyPI);
+        if (els.taxAmount) els.taxAmount.textContent = money(result.monthlyTax);
+        if (els.insuranceAmount) els.insuranceAmount.textContent = money(result.monthlyInsurance);
+        if (els.pmiAmount) els.pmiAmount.textContent = money(result.monthlyPMI);
+        if (els.hoaAmount) els.hoaAmount.textContent = money(result.monthlyHOA);
+        
         // Show/hide PMI row
-        els.rowPmi.classList.toggle('hidden', !result.needsPMI);
+        if (els.rowPmi) els.rowPmi.classList.toggle('hidden', !result.needsPMI);
     }
 
     // Update refinance mode display
     function updateRefinanceDisplay(result) {
         const savingsColor = result.monthlySavings > 0 ? '#10b981' : '#ef4444';
         
-        els.totalPayment.innerHTML = `
-            <div style="text-align: center;">
-                <div style="font-size: 0.9em; color: var(--color-text-secondary);">Monthly Savings</div>
-                <div style="color: ${savingsColor}; font-weight: bold;">
-                    ${result.monthlySavings > 0 ? '+' : ''}${money(Math.abs(result.monthlySavings))}
+        if (els.totalPayment) {
+            els.totalPayment.innerHTML = `
+                <div class="refinance-comparison">
+                    <div class="comparison-item">
+                        <span class="label">Current Payment</span>
+                        <span class="value">${money(result.currentPayment)}</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="label">New Payment</span>
+                        <span class="value">${money(result.newPayment)}</span>
+                    </div>
+                    <div class="comparison-item highlight">
+                        <span class="label">Monthly ${result.monthlySavings > 0 ? 'Savings' : 'Increase'}</span>
+                        <span class="value" style="color: ${savingsColor}">
+                            ${money(Math.abs(result.monthlySavings))}
+                        </span>
+                    </div>
                 </div>
-                <div style="font-size: 0.8em; margin-top: 8px;">
-                    Break-even: ${Math.ceil(result.breakEvenMonths)} months
-                </div>
-            </div>
-        `;
-
-        els.loanAmount.textContent = money(result.currentBalance);
-        els.totalInterest.innerHTML = `
-            <div>Current: ${money(result.currentPayment)}</div>
-            <div>New: ${money(result.newPayment)}</div>
-        `;
+            `;
+        }
     }
 
     // Update affordability mode display
     function updateAffordabilityDisplay(result) {
-        els.totalPayment.innerHTML = `
-            <div style="text-align: center;">
-                <div style="font-size: 0.9em; color: var(--color-text-secondary);">Max Home Price</div>
-                <div style="color: var(--color-success); font-weight: bold;">
-                    ${money(result.maxHomePrice)}
-                </div>
-            </div>
-        `;
-
-        els.loanAmount.textContent = money(result.maxHomePrice - result.downPayment);
-        els.totalInterest.innerHTML = `
-            <div>Max Payment: ${money(result.maxMortgagePayment)}</div>
-            <div>DTI Ratio: ${result.dtiRatio.toFixed(1)}%</div>
-        `;
-    }
-
-    // Update charts
-    function updateCharts(result) {
-        if (result.mode !== 'payment') return;
-
-        // Pie chart for payment breakdown
-        const breakdownData = [
-            result.monthlyPI,
-            result.monthlyTax,
-            result.monthlyInsurance,
-            result.monthlyPMI,
-            result.monthlyHOA
-        ];
-        const colors = ['#21808d', '#a84b2f', '#626c71', '#c0152f', '#94a3b8'];
-        const labels = ['P&I', 'Taxes', 'Insurance', 'PMI', 'HOA'];
-        
-        drawPieChart(els.breakdownChart, breakdownData, colors, labels);
-
-        // Line chart for balance over time
-        const balancePoints = result.schedule
-            .filter((_, i) => i % 12 === 0 || i === result.schedule.length - 1)
-            .map((payment, i) => ({ x: i, y: payment.balance }));
-        
-        drawLineChart(els.amortizationChart, balancePoints);
-    }
-
-    // Draw pie chart
-    function drawPieChart(canvas, data, colors, labels) {
-        const ctx = canvas.getContext('2d');
-        const rect = canvas.getBoundingClientRect();
-        const size = Math.min(rect.width, rect.height);
-        
-        canvas.width = size;
-        canvas.height = size;
-        
-        ctx.clearRect(0, 0, size, size);
-        
-        const total = data.reduce((sum, value) => sum + value, 0);
-        const centerX = size / 2;
-        const centerY = size / 2;
-        const radius = Math.min(centerX, centerY) * 0.8;
-        
-        let startAngle = -Math.PI / 2;
-        
-        data.forEach((value, index) => {
-            if (value > 0) {
-                const angle = (value / total) * 2 * Math.PI;
-                
-                ctx.beginPath();
-                ctx.moveTo(centerX, centerY);
-                ctx.arc(centerX, centerY, radius, startAngle, startAngle + angle);
-                ctx.closePath();
-                
-                ctx.fillStyle = colors[index];
-                ctx.fill();
-                
-                startAngle += angle;
-            }
-        });
-
-        // Update legend
-        let legendHTML = '';
-        data.forEach((value, index) => {
-            if (value > 0) {
-                legendHTML += `
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: ${colors[index]}"></div>
-                        <span>${labels[index]}: ${money(value)}</span>
+        if (els.totalPayment) {
+            els.totalPayment.innerHTML = `
+                <div class="affordability-results">
+                    <div class="affordability-item">
+                        <span class="label">Maximum Home Price</span>
+                        <span class="value highlight">${money(result.maxHomePrice)}</span>
                     </div>
-                `;
-            }
-        });
-        els.legendBreakdown.innerHTML = legendHTML;
-    }
-
-    // Draw line chart
-    function drawLineChart(canvas, points) {
-        if (points.length === 0) return;
-        
-        const ctx = canvas.getContext('2d');
-        const rect = canvas.getBoundingClientRect();
-        
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        const padding = 40;
-        const chartWidth = canvas.width - 2 * padding;
-        const chartHeight = canvas.height - 2 * padding;
-        
-        const maxY = Math.max(...points.map(p => p.y));
-        const maxX = Math.max(...points.map(p => p.x));
-        
-        // Draw axes
-        ctx.strokeStyle = '#e5e7eb';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(padding, padding);
-        ctx.lineTo(padding, padding + chartHeight);
-        ctx.lineTo(padding + chartWidth, padding + chartHeight);
-        ctx.stroke();
-        
-        // Draw line
-        if (points.length > 1) {
-            ctx.strokeStyle = '#21808d';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            
-            points.forEach((point, index) => {
-                const x = padding + (point.x / maxX) * chartWidth;
-                const y = padding + chartHeight - (point.y / maxY) * chartHeight;
-                
-                if (index === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
-            });
-            
-            ctx.stroke();
+                    <div class="affordability-item">
+                        <span class="label">Maximum Monthly Payment</span>
+                        <span class="value">${money(result.maxMortgagePayment)}</span>
+                    </div>
+                    <div class="affordability-item">
+                        <span class="label">Monthly Income</span>
+                        <span class="value">${money(result.monthlyIncome)}</span>
+                    </div>
+                </div>
+            `;
         }
     }
 
-    // Update amortization table
-    function updateAmortizationTable(result) {
-        if (result.mode !== 'payment' || !result.schedule) return;
+    // Update rent vs buy display
+    function updateRentVsBuyDisplay(result) {
+        if (els.totalPayment) {
+            els.totalPayment.innerHTML = `
+                <div class="rent-vs-buy-results">
+                    <div class="comparison-header">
+                        <h3>Recommendation: ${result.recommendation === 'buy' ? '🏠 Buy' : '🏠 Rent'}</h3>
+                    </div>
+                    <div class="comparison-grid">
+                        <div class="comparison-option">
+                            <h4>Renting</h4>
+                            <div class="option-details">
+                                <span class="total-cost">${money(result.totalRentCost)}</span>
+                                <span class="period">Total over ${result.analysisYears} years</span>
+                            </div>
+                        </div>
+                        <div class="comparison-option">
+                            <h4>Buying</h4>
+                            <div class="option-details">
+                                <span class="total-cost">${money(result.netBuyCost)}</span>
+                                <span class="period">Net cost after appreciation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
 
-        let html = '';
-        let currentYear = 1;
-        let yearlyPayment = 0;
-        let yearlyPrincipal = 0;
-        let yearlyInterest = 0;
-        let yearEndBalance = 0;
+    // Update investment display
+    function updateInvestmentDisplay(result) {
+        if (els.totalPayment) {
+            els.totalPayment.innerHTML = `
+                <div class="investment-results">
+                    <div class="investment-metrics">
+                        <div class="metric-item ${result.cashFlow > 0 ? 'positive' : 'negative'}">
+                            <span class="label">Monthly Cash Flow</span>
+                            <span class="value">${money(result.cashFlow)}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="label">Cap Rate</span>
+                            <span class="value">${result.capRate.toFixed(2)}%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="label">Cash-on-Cash Return</span>
+                            <span class="value">${result.cashOnCashReturn.toFixed(2)}%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="label">Gross Rent Multiplier</span>
+                            <span class="value">${result.grossRentMultiplier.toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
 
-        result.schedule.forEach((payment, index) => {
-            yearlyPayment += payment.payment;
-            yearlyPrincipal += payment.principal;
-            yearlyInterest += payment.interest;
-            yearEndBalance = payment.balance;
+    // Charts update function
+    function updateCharts(result) {
+        updateBreakdownChart(result);
+        updateAmortizationChart(result);
+    }
 
-            // End of year or last payment
-            if (payment.month % 12 === 0 || index === result.schedule.length - 1) {
-                if (currentYear <= 5) {
-                    html += `
-                        <tr>
-                            <td>${currentYear}</td>
-                            <td>${money(yearlyPayment)}</td>
-                            <td>${money(yearlyPrincipal)}</td>
-                            <td>${money(yearlyInterest)}</td>
-                            <td>${money(yearEndBalance)}</td>
-                        </tr>
-                    `;
+    function updateBreakdownChart(result) {
+        const ctx = els.breakdownChart?.getContext('2d');
+        if (!ctx) return;
+        
+        if (breakdownChart) {
+            breakdownChart.destroy();
+        }
+        
+        const data = {
+            labels: ['Principal & Interest', 'Property Tax', 'Insurance', 'PMI', 'HOA'],
+            datasets: [{
+                data: [
+                    result.monthlyPI,
+                    result.monthlyTax,
+                    result.monthlyInsurance,
+                    result.monthlyPMI,
+                    result.monthlyHOA
+                ],
+                backgroundColor: [
+                    '#33808d',
+                    '#e6814f',
+                    '#32c68d',
+                    '#ff5459',
+                    '#a855f7'
+                ]
+            }]
+        };
+        
+        breakdownChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
                 }
-                
-                currentYear++;
-                yearlyPayment = 0;
-                yearlyPrincipal = 0;
-                yearlyInterest = 0;
             }
         });
+    }
 
+    function updateAmortizationChart(result) {
+        const ctx = els.amortizationChart?.getContext('2d');
+        if (!ctx || !result.schedule) return;
+        
+        if (amortizationChart) {
+            amortizationChart.destroy();
+        }
+        
+        // Sample data points (every 12 months)
+        const labels = [];
+        const principalData = [];
+        const balanceData = [];
+        
+        result.schedule.forEach((payment, index) => {
+            if (index % 12 === 0) {
+                labels.push(`Year ${Math.floor(index / 12) + 1}`);
+                principalData.push(result.loanAmount - payment.balance);
+                balanceData.push(payment.balance);
+            }
+        });
+        
+        amortizationChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Principal Paid',
+                    data: principalData,
+                    borderColor: '#33808d',
+                    backgroundColor: 'rgba(51, 128, 141, 0.1)',
+                    fill: true
+                }, {
+                    label: 'Remaining Balance',
+                    data: balanceData,
+                    borderColor: '#e6814f',
+                    backgroundColor: 'rgba(230, 129, 79, 0.1)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Amortization table update
+    function updateAmortizationTable(result) {
+        if (!els.amortizationBody || !result.schedule) return;
+        
+        let html = '';
+        const schedule = result.schedule;
+        
+        // Show first 5 years (60 payments) grouped by year
+        for (let year = 1; year <= 5; year++) {
+            const yearStart = (year - 1) * 12;
+            const yearEnd = Math.min(year * 12, schedule.length);
+            
+            if (yearStart >= schedule.length) break;
+            
+            let yearPayment = 0;
+            let yearPrincipal = 0;
+            let yearInterest = 0;
+            
+            for (let month = yearStart; month < yearEnd; month++) {
+                if (schedule[month]) {
+                    yearPayment += schedule[month].payment;
+                    yearPrincipal += schedule[month].principal;
+                    yearInterest += schedule[month].interest;
+                }
+            }
+            
+            const endBalance = schedule[yearEnd - 1]?.balance || 0;
+            
+            html += `
+                <tr>
+                    <td>${year}</td>
+                    <td>${money(yearPayment)}</td>
+                    <td>${money(yearPrincipal)}</td>
+                    <td>${money(yearInterest)}</td>
+                    <td>${money(endBalance)}</td>
+                </tr>
+            `;
+        }
+        
         els.amortizationBody.innerHTML = html;
     }
 
     // Generate AI insights
     function generateInsights(result) {
+        if (!els.insightsList) return;
+        
         const insights = [];
-
+        
         if (result.mode === 'payment') {
             // PMI insight
             if (result.needsPMI) {
-                const additionalDP = Math.max(0, result.homePrice * 0.2 - result.dpAmount);
-                insights.push({
-                    icon: 'fas fa-shield-alt',
-                    type: 'tip',
-                    title: 'Eliminate PMI',
-                    message: `Increase down payment by ${money(additionalDP)} to reach 20% and eliminate PMI (saves ${money(result.monthlyPMI)}/month)`
-                });
+                const dpNeeded = result.homePrice * 0.2 - result.dpAmount;
+                insights.push(`💡 Increase down payment by ${money(dpNeeded)} to eliminate PMI and save ${money(result.monthlyPMI)}/month`);
             }
-
-            // Term comparison
-            if (result.term > 15) {
-                const rate15 = result.rate / 100 / 12;
-                const months15 = 15 * 12;
-                const payment15 = result.loanAmount * (rate15 * Math.pow(1 + rate15, months15)) / (Math.pow(1 + rate15, months15) - 1);
-                const interest15 = payment15 * months15 - result.loanAmount;
-                const interestSavings = result.totalInterest - interest15;
-                
-                insights.push({
-                    icon: 'fas fa-calendar',
-                    type: 'comparison',
-                    title: 'Consider 15-Year Term',
-                    message: `15-year loan: ${money(payment15)}/month, saves ${money(interestSavings)} in total interest`
-                });
+            
+            // Bi-weekly insight
+            if (currentPaymentFreq === 'monthly') {
+                const biWeeklyData = calculateBiWeeklyPayments(result.loanAmount, result.rate / 100, result.monthlyPI);
+                const savings = result.totalInterest - biWeeklyData.totalInterest;
+                insights.push(`🎯 Consider bi-weekly payments to save ${money(savings)} in interest`);
             }
-
-            // Extra payment benefits
-            if (result.extraMonthly > 0 || result.extraOnce > 0) {
-                const withoutExtra = generateSchedule(result.loanAmount, result.rate / 100 / 12, result.monthlyPI, result.term * 12, 0, 0);
-                const monthsSaved = withoutExtra.length - result.schedule.length;
-                const interestSaved = withoutExtra.reduce((sum, p) => sum + p.interest, 0) - result.totalInterest;
-                
-                insights.push({
-                    icon: 'fas fa-rocket',
-                    type: 'savings',
-                    title: 'Extra Payment Impact',
-                    message: `Extra payments save ${monthsSaved} months and ${money(interestSaved)} in interest`
-                });
-            } else {
-                insights.push({
-                    icon: 'fas fa-plus-circle',
-                    type: 'tip',
-                    title: 'Consider Extra Payments',
-                    message: `Adding $100/month could save years on your loan and thousands in interest`
-                });
-            }
-
-            // Interest rate insight
-            if (result.rate > 7) {
-                insights.push({
-                    icon: 'fas fa-percentage',
-                    type: 'warning',
-                    title: 'High Interest Rate',
-                    message: `Consider improving credit score or shopping for better rates to reduce monthly payment`
-                });
-            }
-
-        } else if (result.mode === 'refinance') {
-            if (result.monthlySavings > 0) {
-                insights.push({
-                    icon: 'fas fa-chart-line',
-                    type: 'savings',
-                    title: 'Refinance Benefits',
-                    message: `You'll break even in ${Math.ceil(result.breakEvenMonths)} months and save ${money(result.monthlySavings * 12)} annually`
-                });
-            } else {
-                insights.push({
-                    icon: 'fas fa-times-circle',
-                    type: 'warning',
-                    title: 'Not Recommended',
-                    message: `Current refinance would increase monthly payment by ${money(Math.abs(result.monthlySavings))}`
-                });
-            }
-        } else if (result.mode === 'affordability') {
-            insights.push({
-                icon: 'fas fa-home',
-                type: 'info',
-                title: 'Home Price Range',
-                message: `Based on ${result.dtiRatio}% DTI ratio, you can afford homes up to ${money(result.maxHomePrice)}`
-            });
-
-            if (result.maxMortgagePayment < 1000) {
-                insights.push({
-                    icon: 'fas fa-exclamation-triangle',
-                    type: 'warning',
-                    title: 'Limited Budget',
-                    message: `Consider increasing income or reducing existing debts to improve affordability`
-                });
+            
+            // Rate shopping insight
+            const rateSavings = result.loanAmount * 0.0025 * result.term; // 0.25% savings
+            insights.push(`🏦 Shop around for better rates - 0.25% savings = ${money(rateSavings)} over loan term`);
+            
+            // Extra payment insight
+            if (result.extraMonthly === 0) {
+                insights.push(`💰 Adding $100/month extra could save years off your mortgage`);
             }
         }
-
-        // Render insights
-        let insightsHTML = '';
+        
+        // Investment insights
+        if (result.mode === 'investment') {
+            if (result.capRate < 5) {
+                insights.push(`📈 Cap rate of ${result.capRate.toFixed(2)}% is below market average`);
+            }
+            
+            if (result.cashFlow < 0) {
+                insights.push(`⚠️ Negative cash flow of ${money(Math.abs(result.cashFlow))}/month requires additional investment`);
+            }
+        }
+        
+        let html = '';
         insights.forEach(insight => {
-            const colorClass = {
-                'tip': 'insight-tip',
-                'savings': 'insight-savings',
-                'warning': 'insight-warning',
-                'comparison': 'insight-comparison',
-                'info': 'insight-info'
-            }[insight.type];
-
-            insightsHTML += `
-                <li class="insight-item ${colorClass}">
-                    <div class="insight-icon">
-                        <i class="${insight.icon}"></i>
-                    </div>
-                    <div class="insight-content">
-                        <strong>${insight.title}</strong>
-                        <p>${insight.message}</p>
-                    </div>
-                </li>
-            `;
+            html += `<li>${insight}</li>`;
         });
-
-        els.insightsList.innerHTML = insightsHTML;
+        
+        els.insightsList.innerHTML = html;
     }
 
-    // Show full schedule modal
-    function showFullSchedule() {
-        if (!currentCalculation || !currentCalculation.schedule) return;
+    // Utility functions for other features
+    function resetForm() {
+        // Reset to default values
+        if (els.homePrice) els.homePrice.value = '400000';
+        if (els.dpAmount) els.dpAmount.value = '80000';
+        if (els.interestRate) els.interestRate.value = '6.5';
+        
+        setTerm(30);
+        calculate();
+    }
 
+    function emailResults() {
+        // Implementation for email functionality
+        showNotification('Email functionality coming soon!', 'info');
+    }
+
+    function shareResults() {
+        // Implementation for share functionality
+        if (navigator.share) {
+            navigator.share({
+                title: 'Mortgage Calculation Results',
+                text: 'Check out my mortgage calculation results',
+                url: window.location.href
+            });
+        } else {
+            showNotification('Share functionality not supported', 'error');
+        }
+    }
+
+    function showFullSchedule() {
+        if (els.scheduleModal) {
+            els.scheduleModal.showModal();
+            updateFullScheduleTable();
+        }
+    }
+
+    function updateFullScheduleTable() {
+        if (!els.fullScheduleBody || !currentCalculation?.schedule) return;
+        
         let html = '';
         currentCalculation.schedule.forEach(payment => {
             html += `
@@ -1058,453 +1615,91 @@
                 </tr>
             `;
         });
-
+        
         els.fullScheduleBody.innerHTML = html;
-        els.scheduleModal.showModal();
     }
 
-    // Email results
-    function emailResults() {
-        if (!currentCalculation) return;
-
-        let subject, body;
-
-        if (currentCalculation.mode === 'payment') {
-            subject = encodeURIComponent(`Mortgage Calculator Results - ${money(currentCalculation.totalMonthly)}/month`);
-            body = encodeURIComponent(
-                `Mortgage Calculator Results from Finguid HomeLoan Pro\n\n` +
-                `Home Price: ${money(currentCalculation.homePrice)}\n` +
-                `Down Payment: ${money(currentCalculation.dpAmount)} (${currentCalculation.dpPercent.toFixed(1)}%)\n` +
-                `Loan Amount: ${money(currentCalculation.loanAmount)}\n` +
-                `Interest Rate: ${currentCalculation.rate.toFixed(2)}%\n` +
-                `Term: ${currentCalculation.term} years\n\n` +
-                `Monthly Payment Breakdown:\n` +
-                `Principal & Interest: ${money(currentCalculation.monthlyPI)}\n` +
-                `Property Tax: ${money(currentCalculation.monthlyTax)}\n` +
-                `Insurance: ${money(currentCalculation.monthlyInsurance)}\n` +
-                `PMI: ${money(currentCalculation.monthlyPMI)}\n` +
-                `HOA: ${money(currentCalculation.monthlyHOA)}\n` +
-                `Total Monthly: ${money(currentCalculation.totalMonthly)}\n\n` +
-                `Total Interest: ${money(currentCalculation.totalInterest)}\n\n` +
-                `Calculate your mortgage at: https://www.finguid.com/mortgage-calculator`
-            );
-        }
-
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-    }
-
-    // Share results
-    function shareResults() {
-        if (!navigator.share) {
-            // Fallback: copy to clipboard
-            copyToClipboard();
+    function addComparison() {
+        // Implementation for scenario comparison
+        if (!currentCalculation) {
+            showNotification('Please calculate first', 'error');
             return;
         }
-
-        const shareData = {
-            title: 'Mortgage Calculator Results',
-            text: `Check out my mortgage calculation: ${money(currentCalculation.totalMonthly)}/month`,
-            url: window.location.href
-        };
-
-        navigator.share(shareData)
-            .then(() => showNotification('Results shared successfully!', 'success'))
-            .catch(() => copyToClipboard());
-    }
-
-    // Copy results to clipboard
-    function copyToClipboard() {
-        const text = `My mortgage payment: ${money(currentCalculation.totalMonthly)}/month. Calculate yours at ${window.location.href}`;
         
-        navigator.clipboard.writeText(text)
-            .then(() => showNotification('Results copied to clipboard!', 'success'))
-            .catch(() => showNotification('Unable to copy results', 'error'));
-    }
-
-    // Comparison functions
-    function addComparison() {
-        if (!currentCalculation) return;
-
-        const name = els.scenarioName.value.trim() || `Scenario ${comparisons.length + 1}`;
-        
+        const name = els.scenarioName?.value || `Scenario ${comparisons.length + 1}`;
         comparisons.push({
             name,
-            ...currentCalculation
+            calculation: {...currentCalculation}
         });
-
-        els.scenarioName.value = '';
-        renderComparisons();
-        showNotification('Scenario added to comparison', 'success');
+        
+        updateComparisonDisplay();
+        if (els.scenarioName) els.scenarioName.value = '';
     }
 
     function clearComparisons() {
         comparisons = [];
-        renderComparisons();
-        showNotification('All scenarios cleared', 'info');
+        updateComparisonDisplay();
     }
 
-    function renderComparisons() {
+    function updateComparisonDisplay() {
+        if (!els.comparisonGrid) return;
+        
         if (comparisons.length === 0) {
-            els.comparisonGrid.innerHTML = '<p style="text-align: center; color: var(--color-text-secondary);">No scenarios to compare. Add scenarios above.</p>';
+            els.comparisonGrid.innerHTML = '<p class="empty-state">No scenarios to compare. Add scenarios above.</p>';
             return;
         }
-
+        
         let html = '';
         comparisons.forEach((scenario, index) => {
+            const calc = scenario.calculation;
             html += `
-                <div class="comparison-card">
-                    <div class="comparison-header">
-                        <h4>${scenario.name}</h4>
-                        <button class="remove-scenario" onclick="removeComparison(${index})" title="Remove">
-                            <i class="fas fa-times"></i>
-                        </button>
+                <div class="comparison-scenario">
+                    <h4>${scenario.name}</h4>
+                    <div class="scenario-details">
+                        <div class="detail">Payment: ${money(calc.totalMonthly)}</div>
+                        <div class="detail">Loan: ${money(calc.loanAmount)}</div>
+                        <div class="detail">Interest: ${money(calc.totalInterest)}</div>
                     </div>
-                    <div class="comparison-details">
-                        <div class="detail-row">
-                            <span>Monthly Payment:</span>
-                            <strong>${money(scenario.totalMonthly)}</strong>
-                        </div>
-                        <div class="detail-row">
-                            <span>Loan Amount:</span>
-                            <span>${money(scenario.loanAmount)}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span>Interest Rate:</span>
-                            <span>${scenario.rate.toFixed(2)}%</span>
-                        </div>
-                        <div class="detail-row">
-                            <span>Term:</span>
-                            <span>${scenario.term} years</span>
-                        </div>
-                        <div class="detail-row">
-                            <span>Total Interest:</span>
-                            <span>${money(scenario.totalInterest)}</span>
-                        </div>
-                    </div>
+                    <button class="btn-outline btn-sm" onclick="removeScenario(${index})">Remove</button>
                 </div>
             `;
         });
-
+        
         els.comparisonGrid.innerHTML = html;
     }
 
-    // Load predefined scenarios
-    function loadScenario(scenarioType) {
-        const baseValues = {
-            homePrice: 400000,
-            dpAmount: 80000,
-            interestRate: 6.75,
-            state: 'CA'
-        };
-
-        // Set base values
-        Object.keys(baseValues).forEach(key => {
-            if (els[key]) els[key].value = baseValues[key];
-        });
-
-        clearComparisons();
-
-        switch (scenarioType) {
-            case '15year':
-                // Add 30-year scenario
-                setTerm(30);
-                calculate();
-                els.scenarioName.value = '30-Year Fixed';
-                addComparison();
-                
-                // Add 15-year scenario
-                setTerm(15);
-                calculate();
-                els.scenarioName.value = '15-Year Fixed';
-                addComparison();
-                break;
-
-            case 'rates':
-                // Compare different rates
-                [6.0, 6.5, 7.0, 7.5].forEach(rate => {
-                    els.interestRate.value = rate;
-                    calculate();
-                    els.scenarioName.value = `${rate}% Rate`;
-                    addComparison();
-                });
-                break;
-
-            case 'downpayment':
-                // Compare different down payments
-                [50000, 80000, 100000].forEach(dp => {
-                    els.dpAmount.value = dp;
-                    syncDownPayment(false);
-                    calculate();
-                    els.scenarioName.value = `${money(dp)} Down`;
-                    addComparison();
-                });
-                break;
-
-            case 'extraPayment':
-                // Compare with and without extra payments
-                els.extraMonthly.value = 0;
-                calculate();
-                els.scenarioName.value = 'No Extra Payment';
-                addComparison();
-
-                els.extraMonthly.value = 200;
-                calculate();
-                els.scenarioName.value = '$200 Extra/Month';
-                addComparison();
-                break;
-        }
-
-        showNotification(`${scenarioType} scenarios loaded`, 'success');
-    }
-
-    // Remove comparison
-    window.removeComparison = function(index) {
+    function removeScenario(index) {
         comparisons.splice(index, 1);
-        renderComparisons();
-    };
-
-    // Reset form
-    function resetForm() {
-        // Reset inputs to defaults
-        els.homePrice.value = 400000;
-        els.dpAmount.value = 80000;
-        els.dpPercent.value = 20;
-        els.interestRate.value = 6.75;
-        els.state.value = '';
-        els.propertyTax.value = 0;
-        els.homeInsurance.value = 960;
-        els.pmiRate.value = 0.8;
-        els.hoaFees.value = 0;
-        els.extraMonthly.value = 0;
-        els.extraOnce.value = 0;
-        els.termCustom.value = '';
-
-        // Reset UI state
-        setTerm(30);
-        switchDPMode(false);
-        switchMode('payment');
-        clearComparisons();
-
-        // Recalculate
-        updatePropertyTax();
-        updateInsurance();
-        calculate();
-
-        showNotification('Form reset to defaults', 'info');
-    }
-
-    // Utility functions
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    function showNotification(message, type = 'info') {
-        // Simple notification system
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'}-circle"></i>
-            <span>${message}</span>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 100);
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 3000);
-    }
-
-    function showTooltip(event) {
-        const tooltip = event.target.dataset.tooltip;
-        if (!tooltip) return;
-
-        const tooltipEl = document.createElement('div');
-        tooltipEl.className = 'tooltip-popup';
-        tooltipEl.textContent = tooltip;
-        
-        document.body.appendChild(tooltipEl);
-        
-        const rect = event.target.getBoundingClientRect();
-        tooltipEl.style.left = rect.left + rect.width / 2 - tooltipEl.offsetWidth / 2 + 'px';
-        tooltipEl.style.top = rect.top - tooltipEl.offsetHeight - 10 + 'px';
-    }
-
-    function hideTooltip() {
-        const tooltip = document.querySelector('.tooltip-popup');
-        if (tooltip) {
-            document.body.removeChild(tooltip);
-        }
+        updateComparisonDisplay();
     }
 
     function toggleMobileMenu() {
         const navMenu = $('#nav-menu');
-        const hamburger = $('#hamburger');
-        navMenu.classList.toggle('active');
-        hamburger.classList.toggle('active');
-    }
-
-    // Initialize when DOM is loaded
-    document.addEventListener('DOMContentLoaded', init);
-
-    // Export functions for global access
-    window.mortgageCalc = {
-        loadScenario,
-        removeComparison
-    };
-
-    // Analytics tracking
-    function trackEvent(action, category = 'Calculator') {
-        if (typeof gtag !== 'undefined') {
-            gtag('event', action, {
-                event_category: category,
-                event_label: currentMode
-            });
+        if (navMenu) {
+            navMenu.classList.toggle('active');
         }
     }
 
-    // Track calculator usage
-    document.addEventListener('DOMContentLoaded', () => {
-        els.calculateBtn.addEventListener('click', () => trackEvent('calculate'));
-        els.modeTabs.forEach(tab => {
-            tab.addEventListener('click', () => trackEvent('mode_switch', 'Navigation'));
-        });
-    });
-
-})();
-// Safe-init after definitions
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
-
-// In calculate(), after result is computed:
-if (currentMode === 'payment') {
-  if (typeof window.Chart !== 'undefined') {
-    updateCharts(result);
-  } else {
-    console.warn('Chart.js not loaded; skipping charts');
-  }
-}
-// Wrap in IIFE to avoid globals
-(() => {
-  const $ = q => document.querySelector(q);
-  const $$ = q => Array.from(document.querySelectorAll(q));
-  // Predefined scenarios data
-  const PAYMENT_SCENARIOS = [
-    { name: 'First-Time Buyer', dpPct: 3.5 },
-    { name: 'Conventional 20%', dpPct: 20 },
-    { name: '15yr vs 30yr', compare: [15,30] },
-    { name: 'Jumbo Loan', dpPct:25, loanCap:750000 },
-    { name: 'Low DP 5%', dpPct:5 },
-    { name: 'Investment Prop', dpPct:25 },
-    { name: 'Extra Payment', extraMonthly:200 },
-    { name: 'Rate Impact', rateDelta:1.0 }
-  ];
-  const REFI_SCENARIOS = [
-    { name:'Rate & Term', newRate:-0.5, newTerm:30 },
-    { name:'Cash-Out', closingCosts:10000 },
-    { name:'ARM→Fixed', newRate:-1.0 },
-    { name:'Shorten Term', newTerm:15 },
-    { name:'High-Balance', loanCap:750000 },
-    { name:'PMI Removal', dpPct:20 }
-  ];
-  const AFFORD_SCENARIOS = [
-    { name:'Young Pro', income:65000, dti:36 },
-    { name:'Dual Income', income:120000 },
-    { name:'High Earner', income:180000, dti:28 },
-    { name:'FHA Buyer', income:55000, dti:43 },
-    { name:'Move-Up', income:95000 },
-    { name:'Max Stretch', dti:43 }
-  ];
-
-  let currentMode = 'payment';
-  // initialize UI
-  function init() {
-    // render scenario buttons
-    PAYMENT_SCENARIOS.forEach((s,i) => {
-      const btn = document.createElement('button');
-      btn.className = 'scenario-btn btn--secondary';
-      btn.textContent = s.name;
-      btn.onclick = () => applyScenario('payment',i);
-      $('.#payment-scenarios').append(btn);
-    });
-    REFI_SCENARIOS.forEach((s,i) => {
-      const btn = document.createElement('button');
-      btn.className = 'scenario-btn btn--secondary';
-      btn.textContent = s.name;
-      btn.onclick = () => applyScenario('refinance',i);
-      $('#refinance-scenarios').append(btn);
-    });
-    AFFORD_SCENARIOS.forEach((s,i) => {
-      const btn = document.createElement('button');
-      btn.className = 'scenario-btn btn--secondary';
-      btn.textContent = s.name;
-      btn.onclick = () => applyScenario('affordability',i);
-      $('#affordability-scenarios').append(btn);
-    });
-
-    // tab buttons
-    $$('.tab-btn').forEach(tb => tb.addEventListener('click',()=>{
-      switchMode(tb.dataset.mode);
-    }));
-    // calculate buttons (all three share same id)
-    $$('button#calculate-btn').forEach(btn=>btn.addEventListener('click',calculate));
-    switchMode('payment');
-  }
-
-  function switchMode(mode) {
-    currentMode = mode;
-    $$('.mode-content').forEach(sec=>sec.classList.add('hidden'));
-    $(`#${mode}-mode`).classList.remove('hidden');
-    $$('.tab-btn').forEach(tb=>tb.classList.toggle('active', tb.dataset.mode===mode));
-    calculate();
-  }
-
-  function applyScenario(mode,index) {
-    const sc = { payment:PAYMENT_SCENARIOS, refinance:REFI_SCENARIOS, affordability:AFFORD_SCENARIOS }[mode][index];
-    // merge into form fields
-    if(mode==='payment') {
-      if(sc.dpPct!=null) $('#dp-percent').value = sc.dpPct;
-      if(sc.extraMonthly) $('#extra-monthly').value = sc.extraMonthly;
-      if(sc.rateDelta) {
-        $('#interest-rate').value = parseFloat($('#interest-rate').value||0)+sc.rateDelta;
-      }
-      // trigger updates
+    function showTooltip(event) {
+        // Implementation for tooltip display
+        const tooltip = event.target.getAttribute('data-tooltip');
+        if (tooltip) {
+            // Create and show tooltip
+        }
     }
-    if(mode==='refinance') {
-      Object.assignFields(sc, ['newRate','newTerm','closingCosts']);
+
+    function hideTooltip(event) {
+        // Implementation for tooltip hiding
     }
-    if(mode==='affordability') {
-      if(sc.income) $('#annual-income').value=sc.income;
-      if(sc.dti) $('#dti-ratio').value=sc.dti;
+
+    // Make functions globally available
+    window.removeScenario = removeScenario;
+    
+    // Initialize when DOM is loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
     }
-    calculate();
-  }
 
-  function calculate(){
-    const res = { payment:calcPayment, refinance:calcRefi, affordability:calcAfford }[currentMode]();
-    renderResults(res);
-    generateInsights(res);
-  }
-
-  // ...reuse your existing calculatePayment(), calculateRefinance(), calculateAffordability(),
-  // updateDisplay(), updateCharts(), updateAmortizationTable(), generateInsights() exactly as before...
-
-  document.addEventListener('DOMContentLoaded',init);
 })();
