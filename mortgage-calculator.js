@@ -1,5 +1,5 @@
 /* HomeLoan Pro - AI-Enhanced Mortgage Calculator 2025
-   Features: Voice Input, 50-State Data, PMI, Refinance, Affordability, AI Insights
+   Features: Voice Input, 50-State Data, PMI, AI Insights
    SEO & Performance Optimized for US Market
 */
 
@@ -46,10 +46,6 @@
 
     // Elements cache
     const els = {
-        // Mode tabs
-        modeTabs: $$('.tab-btn[data-mode]'),
-        modeContents: $$('.mode-content'),
-        
         // Payment mode inputs
         homePrice: $('#home-price'),
         dpAmount: $('#dp-amount'),
@@ -63,20 +59,6 @@
         hoaFees: $('#hoa-fees'),
         extraMonthly: $('#extra-monthly'),
         extraOnce: $('#extra-once'),
-
-        // Refinance mode inputs
-        currentBalance: $('#current-balance'),
-        currentRate: $('#current-rate'),
-        remainingTerm: $('#remaining-term'),
-        newRate: $('#new-rate'),
-        newTerm: $('#new-term'),
-        closingCosts: $('#closing-costs'),
-
-        // Affordability mode inputs
-        annualIncome: $('#annual-income'),
-        monthlyDebts: $('#monthly-debts'),
-        downPaymentSaved: $('#down-payment-saved'),
-        dtiRatio: $('#dti-ratio'),
 
         // UI controls
         tabAmount: $('#tab-amount'),
@@ -137,20 +119,11 @@
         setupVoiceRecognition();
         setupTooltips();
         setInitialValues();
-        switchMode('payment');
         calculate();
     }
 
     // Event listeners setup
     function setupEventListeners() {
-        // Mode switching
-        els.modeTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const mode = tab.dataset.mode;
-                switchMode(mode);
-            });
-        });
-
         // Down payment tabs
         els.tabAmount.addEventListener('click', () => switchDPMode(false));
         els.tabPercent.addEventListener('click', () => switchDPMode(true));
@@ -269,31 +242,6 @@
         switchDPMode(false);
         updatePropertyTax();
         updateInsurance();
-    }
-
-    // Mode switching
-    function switchMode(mode) {
-        currentMode = mode;
-        
-        // Update active tab
-        els.modeTabs.forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.mode === mode);
-        });
-
-        // Show/hide content
-        els.modeContents.forEach(content => {
-            content.classList.toggle('hidden', content.id !== `${mode}-mode`);
-        });
-
-        // Update calculate button text
-        const btnText = {
-            'payment': 'Calculate Payment',
-            'refinance': 'Calculate Savings',
-            'affordability': 'Calculate Affordability'
-        };
-        els.calculateBtn.innerHTML = `<i class="fas fa-calculator"></i> ${btnText[mode]}`;
-
-        calculate();
     }
 
     // Down payment mode switching
@@ -465,30 +413,14 @@
     // Main calculation function
     function calculate() {
         try {
-            let result;
-            
-            switch (currentMode) {
-                case 'payment':
-                    result = calculatePayment();
-                    break;
-                case 'refinance':
-                    result = calculateRefinance();
-                    break;
-                case 'affordability':
-                    result = calculateAffordability();
-                    break;
-                default:
-                    result = calculatePayment();
-            }
+            const result = calculatePayment();
             
             if (result) {
                 currentCalculation = result;
                 updateDisplay(result);
                 generateInsights(result);
-                if (currentMode === 'payment') {
-                    updateCharts(result);
-                    updateAmortizationTable(result);
-                }
+                updateCharts(result);
+                updateAmortizationTable(result);
             }
         } catch (error) {
             console.error('Calculation error:', error);
@@ -561,82 +493,6 @@
         };
     }
 
-    // Refinance calculation
-    function calculateRefinance() {
-        const currentBalance = +els.currentBalance.value || 0;
-        const currentRate = (+els.currentRate.value || 0) / 100;
-        const remainingTerm = +els.remainingTerm.value || 0;
-        const newRate = (+els.newRate.value || 0) / 100;
-        const newTerm = +els.newTerm.value || 0;
-        const closingCosts = +els.closingCosts.value || 0;
-
-        if (!currentBalance || !currentRate || !newRate || !newTerm) return null;
-
-        // Current payment
-        const currentMonths = remainingTerm * 12;
-        const currentMonthlyRate = currentRate / 12;
-        const currentPayment = currentBalance * (currentMonthlyRate * Math.pow(1 + currentMonthlyRate, currentMonths)) / 
-                              (Math.pow(1 + currentMonthlyRate, currentMonths) - 1);
-
-        // New payment
-        const newMonths = newTerm * 12;
-        const newMonthlyRate = newRate / 12;
-        const newPayment = currentBalance * (newMonthlyRate * Math.pow(1 + newMonthlyRate, newMonths)) / 
-                          (Math.pow(1 + newMonthlyRate, newMonths) - 1);
-
-        // Savings calculations
-        const monthlySavings = currentPayment - newPayment;
-        const breakEvenMonths = closingCosts / Math.abs(monthlySavings);
-        
-        return {
-            mode: 'refinance',
-            currentBalance,
-            currentPayment,
-            newPayment,
-            monthlySavings,
-            closingCosts,
-            breakEvenMonths,
-            rateDifference: (currentRate - newRate) * 100
-        };
-    }
-
-    // Affordability calculation
-    function calculateAffordability() {
-        const annualIncome = +els.annualIncome.value || 0;
-        const monthlyDebts = +els.monthlyDebts.value || 0;
-        const downPayment = +els.downPaymentSaved.value || 0;
-        const dtiRatio = (+els.dtiRatio.value || 36) / 100;
-
-        if (!annualIncome) return null;
-
-        const monthlyIncome = annualIncome / 12;
-        const maxTotalPayment = monthlyIncome * dtiRatio;
-        const maxMortgagePayment = maxTotalPayment - monthlyDebts;
-
-        // Estimate maximum home price (assuming 6.5% rate, 30 years, typical costs)
-        const estimatedRate = 0.065 / 12;
-        const estimatedMonths = 30 * 12;
-        const piRatio = estimatedRate * Math.pow(1 + estimatedRate, estimatedMonths) / 
-                       (Math.pow(1 + estimatedRate, estimatedMonths) - 1);
-        
-        // Assume ~25% of payment goes to taxes/insurance/PMI
-        const maxPI = maxMortgagePayment * 0.75;
-        const maxLoanAmount = maxPI / piRatio;
-        const maxHomePrice = maxLoanAmount + downPayment;
-
-        return {
-            mode: 'affordability',
-            annualIncome,
-            monthlyIncome,
-            monthlyDebts,
-            maxTotalPayment,
-            maxMortgagePayment,
-            maxHomePrice,
-            downPayment,
-            dtiRatio: dtiRatio * 100
-        };
-    }
-
     // Generate amortization schedule
     function generateSchedule(loanAmount, monthlyRate, monthlyPI, totalMonths, extraMonthly = 0, extraOnce = 0) {
         const schedule = [];
@@ -684,17 +540,7 @@
 
     // Update display based on calculation mode
     function updateDisplay(result) {
-        switch (result.mode) {
-            case 'payment':
-                updatePaymentDisplay(result);
-                break;
-            case 'refinance':
-                updateRefinanceDisplay(result);
-                break;
-            case 'affordability':
-                updateAffordabilityDisplay(result);
-                break;
-        }
+        updatePaymentDisplay(result);
     }
 
     // Update payment mode display
@@ -710,47 +556,6 @@
 
         // Show/hide PMI row
         els.rowPmi.classList.toggle('hidden', !result.needsPMI);
-    }
-
-    // Update refinance mode display
-    function updateRefinanceDisplay(result) {
-        const savingsColor = result.monthlySavings > 0 ? '#10b981' : '#ef4444';
-        
-        els.totalPayment.innerHTML = `
-            <div style="text-align: center;">
-                <div style="font-size: 0.9em; color: var(--color-text-secondary);">Monthly Savings</div>
-                <div style="color: ${savingsColor}; font-weight: bold;">
-                    ${result.monthlySavings > 0 ? '+' : ''}${money(Math.abs(result.monthlySavings))}
-                </div>
-                <div style="font-size: 0.8em; margin-top: 8px;">
-                    Break-even: ${Math.ceil(result.breakEvenMonths)} months
-                </div>
-            </div>
-        `;
-
-        els.loanAmount.textContent = money(result.currentBalance);
-        els.totalInterest.innerHTML = `
-            <div>Current: ${money(result.currentPayment)}</div>
-            <div>New: ${money(result.newPayment)}</div>
-        `;
-    }
-
-    // Update affordability mode display
-    function updateAffordabilityDisplay(result) {
-        els.totalPayment.innerHTML = `
-            <div style="text-align: center;">
-                <div style="font-size: 0.9em; color: var(--color-text-secondary);">Max Home Price</div>
-                <div style="color: var(--color-success); font-weight: bold;">
-                    ${money(result.maxHomePrice)}
-                </div>
-            </div>
-        `;
-
-        els.loanAmount.textContent = money(result.maxHomePrice - result.downPayment);
-        els.totalInterest.innerHTML = `
-            <div>Max Payment: ${money(result.maxMortgagePayment)}</div>
-            <div>DTI Ratio: ${result.dtiRatio.toFixed(1)}%</div>
-        `;
     }
 
     // Update charts
@@ -977,39 +782,6 @@
                     type: 'warning',
                     title: 'High Interest Rate',
                     message: `Consider improving credit score or shopping for better rates to reduce monthly payment`
-                });
-            }
-
-        } else if (result.mode === 'refinance') {
-            if (result.monthlySavings > 0) {
-                insights.push({
-                    icon: 'fas fa-chart-line',
-                    type: 'savings',
-                    title: 'Refinance Benefits',
-                    message: `You'll break even in ${Math.ceil(result.breakEvenMonths)} months and save ${money(result.monthlySavings * 12)} annually`
-                });
-            } else {
-                insights.push({
-                    icon: 'fas fa-times-circle',
-                    type: 'warning',
-                    title: 'Not Recommended',
-                    message: `Current refinance would increase monthly payment by ${money(Math.abs(result.monthlySavings))}`
-                });
-            }
-        } else if (result.mode === 'affordability') {
-            insights.push({
-                icon: 'fas fa-home',
-                type: 'info',
-                title: 'Home Price Range',
-                message: `Based on ${result.dtiRatio}% DTI ratio, you can afford homes up to ${money(result.maxHomePrice)}`
-            });
-
-            if (result.maxMortgagePayment < 1000) {
-                insights.push({
-                    icon: 'fas fa-exclamation-triangle',
-                    type: 'warning',
-                    title: 'Limited Budget',
-                    message: `Consider increasing income or reducing existing debts to improve affordability`
                 });
             }
         }
@@ -1282,7 +1054,6 @@
         // Reset UI state
         setTerm(30);
         switchDPMode(false);
-        switchMode('payment');
         clearComparisons();
 
         // Recalculate
@@ -1380,9 +1151,6 @@
     // Track calculator usage
     document.addEventListener('DOMContentLoaded', () => {
         els.calculateBtn.addEventListener('click', () => trackEvent('calculate'));
-        els.modeTabs.forEach(tab => {
-            tab.addEventListener('click', () => trackEvent('mode_switch', 'Navigation'));
-        });
     });
 
 })();
@@ -1401,110 +1169,3 @@ if (currentMode === 'payment') {
     console.warn('Chart.js not loaded; skipping charts');
   }
 }
-// Wrap in IIFE to avoid globals
-(() => {
-  const $ = q => document.querySelector(q);
-  const $$ = q => Array.from(document.querySelectorAll(q));
-  // Predefined scenarios data
-  const PAYMENT_SCENARIOS = [
-    { name: 'First-Time Buyer', dpPct: 3.5 },
-    { name: 'Conventional 20%', dpPct: 20 },
-    { name: '15yr vs 30yr', compare: [15,30] },
-    { name: 'Jumbo Loan', dpPct:25, loanCap:750000 },
-    { name: 'Low DP 5%', dpPct:5 },
-    { name: 'Investment Prop', dpPct:25 },
-    { name: 'Extra Payment', extraMonthly:200 },
-    { name: 'Rate Impact', rateDelta:1.0 }
-  ];
-  const REFI_SCENARIOS = [
-    { name:'Rate & Term', newRate:-0.5, newTerm:30 },
-    { name:'Cash-Out', closingCosts:10000 },
-    { name:'ARM→Fixed', newRate:-1.0 },
-    { name:'Shorten Term', newTerm:15 },
-    { name:'High-Balance', loanCap:750000 },
-    { name:'PMI Removal', dpPct:20 }
-  ];
-  const AFFORD_SCENARIOS = [
-    { name:'Young Pro', income:65000, dti:36 },
-    { name:'Dual Income', income:120000 },
-    { name:'High Earner', income:180000, dti:28 },
-    { name:'FHA Buyer', income:55000, dti:43 },
-    { name:'Move-Up', income:95000 },
-    { name:'Max Stretch', dti:43 }
-  ];
-
-  let currentMode = 'payment';
-  // initialize UI
-  function init() {
-    // render scenario buttons
-    PAYMENT_SCENARIOS.forEach((s,i) => {
-      const btn = document.createElement('button');
-      btn.className = 'scenario-btn btn--secondary';
-      btn.textContent = s.name;
-      btn.onclick = () => applyScenario('payment',i);
-      $('.#payment-scenarios').append(btn);
-    });
-    REFI_SCENARIOS.forEach((s,i) => {
-      const btn = document.createElement('button');
-      btn.className = 'scenario-btn btn--secondary';
-      btn.textContent = s.name;
-      btn.onclick = () => applyScenario('refinance',i);
-      $('#refinance-scenarios').append(btn);
-    });
-    AFFORD_SCENARIOS.forEach((s,i) => {
-      const btn = document.createElement('button');
-      btn.className = 'scenario-btn btn--secondary';
-      btn.textContent = s.name;
-      btn.onclick = () => applyScenario('affordability',i);
-      $('#affordability-scenarios').append(btn);
-    });
-
-    // tab buttons
-    $$('.tab-btn').forEach(tb => tb.addEventListener('click',()=>{
-      switchMode(tb.dataset.mode);
-    }));
-    // calculate buttons (all three share same id)
-    $$('button#calculate-btn').forEach(btn=>btn.addEventListener('click',calculate));
-    switchMode('payment');
-  }
-
-  function switchMode(mode) {
-    currentMode = mode;
-    $$('.mode-content').forEach(sec=>sec.classList.add('hidden'));
-    $(`#${mode}-mode`).classList.remove('hidden');
-    $$('.tab-btn').forEach(tb=>tb.classList.toggle('active', tb.dataset.mode===mode));
-    calculate();
-  }
-
-  function applyScenario(mode,index) {
-    const sc = { payment:PAYMENT_SCENARIOS, refinance:REFI_SCENARIOS, affordability:AFFORD_SCENARIOS }[mode][index];
-    // merge into form fields
-    if(mode==='payment') {
-      if(sc.dpPct!=null) $('#dp-percent').value = sc.dpPct;
-      if(sc.extraMonthly) $('#extra-monthly').value = sc.extraMonthly;
-      if(sc.rateDelta) {
-        $('#interest-rate').value = parseFloat($('#interest-rate').value||0)+sc.rateDelta;
-      }
-      // trigger updates
-    }
-    if(mode==='refinance') {
-      Object.assignFields(sc, ['newRate','newTerm','closingCosts']);
-    }
-    if(mode==='affordability') {
-      if(sc.income) $('#annual-income').value=sc.income;
-      if(sc.dti) $('#dti-ratio').value=sc.dti;
-    }
-    calculate();
-  }
-
-  function calculate(){
-    const res = { payment:calcPayment, refinance:calcRefi, affordability:calcAfford }[currentMode]();
-    renderResults(res);
-    generateInsights(res);
-  }
-
-  // ...reuse your existing calculatePayment(), calculateRefinance(), calculateAffordability(),
-  // updateDisplay(), updateCharts(), updateAmortizationTable(), generateInsights() exactly as before...
-
-  document.addEventListener('DOMContentLoaded',init);
-})();
