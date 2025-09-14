@@ -24,6 +24,7 @@
             --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
+        /* CSS Reset */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -39,12 +40,14 @@
             margin: 0;
         }
 
+        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
 
+        /* Header */
         .header {
             background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
             color: white;
@@ -68,6 +71,13 @@
             text-decoration: none;
         }
 
+        /* Main Content */
+        .main-title {
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--color-primary);
+        }
+
         .calculator-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -81,6 +91,7 @@
             }
         }
 
+        /* Calculator Panels */
         .calculator-panel {
             background: white;
             border-radius: 12px;
@@ -101,8 +112,10 @@
             color: var(--color-text-secondary);
         }
 
+        /* Form Elements */
         .form-group {
             margin-bottom: 1.25rem;
+            position: relative;
         }
 
         .form-label {
@@ -130,6 +143,22 @@
             box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.1);
         }
 
+        .form-input.invalid {
+            border-color: var(--color-error);
+        }
+
+        .error-message {
+            color: var(--color-error);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Down Payment Tabs */
         .dp-tabs {
             display: flex;
             background: var(--color-bg);
@@ -168,6 +197,7 @@
             display: none;
         }
 
+        /* PMI Banner */
         .pmi-banner {
             background: #fef3c7;
             color: #92400e;
@@ -180,6 +210,7 @@
             font-size: 0.875rem;
         }
 
+        /* Term Buttons */
         .term-buttons {
             display: flex;
             flex-wrap: wrap;
@@ -214,6 +245,7 @@
             max-width: 150px;
         }
 
+        /* Advanced Options */
         .advanced-toggle {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -245,6 +277,7 @@
             margin-bottom: 1rem;
         }
 
+        /* Buttons */
         .action-buttons {
             display: flex;
             gap: 0.75rem;
@@ -298,7 +331,27 @@
             color: white;
         }
 
-        /* Results Panel Styles */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Panel */
         .results-summary {
             background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
             border-radius: 12px;
@@ -349,6 +402,7 @@
             font-size: 1.1rem;
         }
 
+        /* Payment Breakdown */
         .breakdown-section {
             background: white;
             border-radius: 12px;
@@ -374,28 +428,35 @@
         .breakdown-row:nth-child(1) {
             border-left: 4px solid var(--color-primary);
         }
-        
+
         .breakdown-row:nth-child(2) {
             border-left: 4px solid var(--color-secondary);
         }
-        
+
         .breakdown-row:nth-child(3) {
             border-left: 4px solid var(--color-accent);
         }
-        
+
         .breakdown-row:nth-child(4) {
             border-left: 4px solid var(--color-error);
         }
-        
+
         .breakdown-row:nth-child(5) {
             border-left: 4px solid #94a3b8;
         }
 
+        /* Charts Section */
         .charts-section {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
             margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
         }
 
         .chart-container {
@@ -410,7 +471,7 @@
             color: var(--color-text);
         }
 
-        #breakdownChart {
+        .chart-canvas {
             max-width: 100%;
             margin: 0 auto;
             display: block;
@@ -437,6 +498,7 @@
             border-radius: 4px;
         }
 
+        /* Insights Section */
         .insights-section {
             background: white;
             border-radius: 12px;
@@ -476,6 +538,7 @@
             color: var(--color-text-secondary);
         }
 
+        /* Amortization Section */
         .amortization-section {
             background: white;
             border-radius: 12px;
@@ -522,6 +585,7 @@
             background: #f8fafc;
         }
 
+        /* Result Actions */
         .result-actions {
             display: flex;
             gap: 0.75rem;
@@ -562,17 +626,17 @@
             background: linear-gradient(135deg, var(--color-primary) 0%, #2a9d8f 100%);
             color: white;
         }
-        
+
         .scenario-btn:nth-child(2) {
             background: linear-gradient(135deg, var(--color-secondary) 0%, #c15a2b 100%);
             color: white;
         }
-        
+
         .scenario-btn:nth-child(3) {
             background: linear-gradient(135deg, var(--color-accent) 0%, #8191a0 100%);
             color: white;
         }
-        
+
         .scenario-btn:nth-child(4) {
             background: linear-gradient(135deg, var(--color-error) 0%, #e63946 100%);
             color: white;
@@ -601,11 +665,11 @@
         .comparison-card:nth-child(2) {
             border-top-color: var(--color-secondary);
         }
-        
+
         .comparison-card:nth-child(3) {
             border-top-color: var(--color-accent);
         }
-        
+
         .comparison-card:nth-child(4) {
             border-top-color: var(--color-error);
         }
@@ -832,6 +896,29 @@
             border-left: 4px solid var(--color-primary);
         }
 
+        /* Additional Elements */
+        .payoff-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .payoff-item {
+            text-align: center;
+        }
+
+        .payoff-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .payoff-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .calculator-layout {
@@ -863,6 +950,70 @@
                 align-items: flex-start;
                 gap: 1rem;
             }
+            
+            .payoff-info {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+
+        /* Dark theme support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-text: #f1f5f9;
+                --color-text-secondary: #cbd5e1;
+                --color-bg: #0f172a;
+                --color-bg-secondary: #1e293b;
+            }
+            
+            .calculator-panel,
+            .breakdown-section,
+            .chart-container,
+            .insights-section,
+            .amortization-section,
+            .comparison-section,
+            .comparison-card {
+                background: #1e293b;
+                color: var(--color-text);
+            }
+            
+            .form-input {
+                background: var(--color-bg);
+                color: var(--color-text);
+                border-color: #334155;
+            }
+            
+            .breakdown-row,
+            .amortization-table th,
+            .schedule-table th {
+                background: #1a2437;
+            }
+            
+            .chip {
+                background: var(--color-bg);
+                border-color: #334155;
+            }
+            
+            .advanced-toggle {
+                background: var(--color-bg);
+                border-color: #334155;
+                color: var(--color-text);
+            }
+            
+            .advanced-panel {
+                border-color: #334155;
+                background: var(--color-bg);
+            }
+            
+            .btn-secondary {
+                background: var(--color-bg);
+                color: var(--color-text);
+                border-color: #334155;
+            }
+            
+            .btn-secondary:hover {
+                background: #334155;
+            }
         }
     </style>
 </head>
@@ -878,7 +1029,7 @@
     </header>
 
     <main class="container">
-        <h1 style="text-align: center; margin: 2rem 0; color: var(--color-primary);">
+        <h1 class="main-title">
             🏠 AI-Enhanced Mortgage Calculator
         </h1>
         
@@ -894,11 +1045,12 @@
                     <label for="home-price" class="form-label">
                         <i class="fas fa-home"></i>
                         Home Price ($)
-                        <button class="voice-btn" data-field="home-price" title="Voice Input">
+                        <button class="voice-btn" data-field="home-price" title="Voice Input" aria-label="Voice input for home price">
                             <i class="fas fa-microphone"></i>
                         </button>
                     </label>
-                    <input type="number" id="home-price" class="form-input" value="400000" min="10000" max="10000000" step="1000">
+                    <input type="number" id="home-price" class="form-input" value="400000" min="10000" max="10000000" step="1000" required>
+                    <div class="error-message" id="home-price-error" aria-live="polite"></div>
                 </div>
 
                 <div class="form-group">
@@ -907,38 +1059,40 @@
                         Down Payment
                     </label>
                     <div class="dp-tabs">
-                        <button class="tab-btn active" id="tab-amount">Amount $</button>
-                        <button class="tab-btn" id="tab-percent">Percent %</button>
+                        <button class="tab-btn active" id="tab-amount" aria-pressed="true">Amount $</button>
+                        <button class="tab-btn" id="tab-percent" aria-pressed="false">Percent %</button>
                     </div>
                     <div class="dp-inputs">
                         <div id="dp-amount-wrap" class="dp-input-wrap">
-                            <input type="number" id="dp-amount" class="form-input" value="80000" min="0" step="1000">
-                            <button class="voice-btn" data-field="dp-amount" title="Voice Input">
+                            <input type="number" id="dp-amount" class="form-input" value="80000" min="0" step="1000" required>
+                            <button class="voice-btn" data-field="dp-amount" title="Voice Input" aria-label="Voice input for down payment amount">
                                 <i class="fas fa-microphone"></i>
                             </button>
                         </div>
                         <div id="dp-percent-wrap" class="dp-input-wrap hidden">
-                            <input type="number" id="dp-percent" class="form-input" value="20" min="0" max="100" step="0.1">
-                            <button class="voice-btn" data-field="dp-percent" title="Voice Input">
+                            <input type="number" id="dp-percent" class="form-input" value="20" min="0" max="100" step="0.1" required>
+                            <button class="voice-btn" data-field="dp-percent" title="Voice Input" aria-label="Voice input for down payment percentage">
                                 <i class="fas fa-microphone"></i>
                             </button>
                         </div>
                     </div>
-                    <div id="pmi-banner" class="pmi-banner hidden">
+                    <div id="pmi-banner" class="pmi-banner hidden" role="alert">
                         <i class="fas fa-exclamation-triangle"></i>
                         <span>PMI Required - Down payment is less than 20% of home value</span>
                     </div>
+                    <div class="error-message" id="dp-error" aria-live="polite"></div>
                 </div>
 
                 <div class="form-group">
                     <label for="interest-rate" class="form-label">
                         <i class="fas fa-chart-line"></i>
                         Interest Rate (%)
-                        <button class="voice-btn" data-field="interest-rate" title="Voice Input">
+                        <button class="voice-btn" data-field="interest-rate" title="Voice Input" aria-label="Voice input for interest rate">
                             <i class="fas fa-microphone"></i>
                         </button>
                     </label>
-                    <input type="number" id="interest-rate" class="form-input" value="6.75" min="0.1" max="30" step="0.01">
+                    <input type="number" id="interest-rate" class="form-input" value="6.75" min="0.1" max="30" step="0.01" required>
+                    <div class="error-message" id="interest-rate-error" aria-live="polite"></div>
                 </div>
 
                 <div class="form-group">
@@ -955,6 +1109,7 @@
                         <span class="or-text">or</span>
                     </div>
                     <input type="number" id="term-custom" class="form-input custom-term" placeholder="Custom years (1-40)" min="1" max="40">
+                    <div class="error-message" id="term-error" aria-live="polite"></div>
                 </div>
 
                 <div class="form-group">
@@ -1027,12 +1182,12 @@
                 </div>
 
                 <div class="advanced-section">
-                    <button class="advanced-toggle" id="advanced-toggle">
+                    <button class="advanced-toggle" id="advanced-toggle" aria-expanded="false">
                         <i class="fas fa-cog"></i>
                         <span>Advanced Options</span>
                         <i class="fas fa-chevron-down arrow"></i>
                     </button>
-                    <div id="advanced-panel" class="advanced-panel hidden">
+                    <div id="advanced-panel" class="advanced-panel hidden" aria-hidden="true">
                         <div class="form-group">
                             <label for="home-insurance" class="form-label">
                                 <i class="fas fa-shield-alt"></i>
@@ -1078,7 +1233,8 @@
                 <div class="action-buttons">
                     <button id="calculate-btn" class="btn btn-primary btn-full-width">
                         <i class="fas fa-calculator"></i>
-                        Calculate Payment
+                        <span id="calculate-text">Calculate Payment</span>
+                        <span id="calculate-spinner" class="spinner hidden"></span>
                     </button>
                     <button id="reset-form" class="btn btn-secondary">
                         <i class="fas fa-undo"></i>
@@ -1107,6 +1263,16 @@
                         <div class="metric">
                             <span class="metric-label">Total Interest</span>
                             <span class="metric-value" id="total-interest">$422,983</span>
+                        </div>
+                    </div>
+                    <div class="payoff-info">
+                        <div class="payoff-item">
+                            <div class="payoff-label">Total Paid</div>
+                            <div class="payoff-value" id="total-paid">$742,983</div>
+                        </div>
+                        <div class="payoff-item">
+                            <div class="payoff-label">Payoff Date</div>
+                            <div class="payoff-value" id="payoff-date">Aug 2053</div>
                         </div>
                     </div>
                 </div>
@@ -1140,8 +1306,13 @@
                 <div class="charts-section">
                     <div class="chart-container">
                         <h4>Payment Breakdown</h4>
-                        <canvas id="breakdownChart" width="300" height="200"></canvas>
+                        <canvas id="breakdownChart" class="chart-canvas" width="300" height="200"></canvas>
                         <div id="legend-breakdown" class="chart-legend"></div>
+                    </div>
+                    <div class="chart-container">
+                        <h4>Principal vs Interest</h4>
+                        <canvas id="piChart" class="chart-canvas" width="300" height="200"></canvas>
+                        <div id="legend-pi" class="chart-legend"></div>
                     </div>
                 </div>
 
@@ -1306,20 +1477,6 @@
                 WI: 1.71, WY: 0.61
             };
 
-            // State names for tooltips
-            const stateNames = {
-                AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
-                CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', FL: 'Florida', GA: 'Georgia',
-                HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas',
-                KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts',
-                MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana',
-                NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico',
-                NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma',
-                OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota',
-                TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia',
-                WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming'
-            };
-
             // Calculator state
             let currentMode = 'payment';
             let activeTerm = 30;
@@ -1358,6 +1515,8 @@
                 totalPayment: $('#total-payment'),
                 loanAmount: $('#loan-amount'),
                 totalInterest: $('#total-interest'),
+                totalPaid: $('#total-paid'),
+                payoffDate: $('#payoff-date'),
                 piAmount: $('#pi-amount'),
                 taxAmount: $('#tax-amount'),
                 insuranceAmount: $('#insurance-amount'),
@@ -1367,13 +1526,17 @@
 
                 // Charts and tables
                 breakdownChart: $('#breakdownChart'),
+                piChart: $('#piChart'),
                 legendBreakdown: $('#legend-breakdown'),
+                legendPi: $('#legend-pi'),
                 amortizationBody: $('#amortization-body'),
                 fullScheduleBody: $('#full-schedule-body'),
                 scheduleModal: $('#schedule-modal'),
 
                 // Actions
                 calculateBtn: $('#calculate-btn'),
+                calculateText: $('#calculate-text'),
+                calculateSpinner: $('#calculate-spinner'),
                 resetBtn: $('#reset-form'),
                 emailBtn: $('#email-results'),
                 shareBtn: $('#share-results'),
@@ -1390,7 +1553,13 @@
 
                 // Comparison
                 comparisonCards: $('#comparison-cards'),
-                scenarioBtns: $$('.scenario-btn')
+                scenarioBtns: $$('.scenario-btn'),
+
+                // Error messages
+                homePriceError: $('#home-price-error'),
+                dpError: $('#dp-error'),
+                interestRateError: $('#interest-rate-error'),
+                termError: $('#term-error')
             };
 
             // Initialize calculator
@@ -1432,7 +1601,8 @@
                 
                 autoCalcInputs.forEach(input => {
                     if (input) {
-                        input.addEventListener('input', debounce(calculate, 300));
+                        input.addEventListener('input', debounce(validateInput, 300));
+                        input.addEventListener('input', debounce(calculate, 500));
                     }
                 });
 
@@ -1464,6 +1634,94 @@
                         els.scheduleModal.close();
                     }
                 });
+            }
+
+            // Input validation
+            function validateInput(e) {
+                const input = e.target;
+                const value = parseFloat(input.value);
+                const min = parseFloat(input.min) || 0;
+                const max = parseFloat(input.max) || Infinity;
+                
+                // Clear previous errors
+                hideError(input.id);
+                
+                // Check if empty
+                if (input.value === '' || isNaN(value)) {
+                    showError(input.id, 'This field is required');
+                    return false;
+                }
+                
+                // Check min value
+                if (value < min) {
+                    showError(input.id, `Value must be at least ${min}`);
+                    return false;
+                }
+                
+                // Check max value
+                if (value > max) {
+                    showError(input.id, `Value must be less than ${max}`);
+                    return false;
+                }
+                
+                // Special validation for down payment
+                if (input.id === 'dp-amount' || input.id === 'dp-percent') {
+                    const homePrice = parseFloat(els.homePrice.value);
+                    if (input.id === 'dp-amount' && value > homePrice) {
+                        showError(input.id, 'Down payment cannot exceed home price');
+                        return false;
+                    }
+                    if (input.id === 'dp-percent' && value > 100) {
+                        showError(input.id, 'Down payment cannot exceed 100%');
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
+            
+            function showError(inputId, message) {
+                const errorField = $(`#${inputId}-error`);
+                if (errorField) {
+                    errorField.textContent = message;
+                    errorField.classList.add('show');
+                }
+                $(`#${inputId}`).classList.add('invalid');
+            }
+            
+            function hideError(inputId) {
+                const errorField = $(`#${inputId}-error`);
+                if (errorField) {
+                    errorField.classList.remove('show');
+                }
+                $(`#${inputId}`).classList.remove('invalid');
+            }
+            
+            function validateAll() {
+                const inputs = [
+                    els.homePrice, 
+                    usePct ? els.dpPercent : els.dpAmount, 
+                    els.interestRate
+                ];
+                
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (!input) return;
+                    
+                    const event = new Event('input', {
+                        bubbles: true,
+                        cancelable: true,
+                    });
+                    
+                    input.dispatchEvent(event);
+                    
+                    if (input.classList.contains('invalid')) {
+                        isValid = false;
+                    }
+                });
+                
+                return isValid;
             }
 
             // Voice recognition setup
@@ -1514,8 +1772,11 @@
                 usePct = usePercent;
                 els.tabAmount.classList.toggle('active', !usePercent);
                 els.tabPercent.classList.toggle('active', usePercent);
+                els.tabAmount.setAttribute('aria-pressed', !usePercent);
+                els.tabPercent.setAttribute('aria-pressed', usePercent);
                 els.dpAmountWrap.classList.toggle('hidden', usePercent);
                 els.dpPercentWrap.classList.toggle('hidden', !usePercent);
+                els.advancedPanel.setAttribute('aria-hidden', !usePercent);
                 
                 syncDownPayment(usePercent);
             }
@@ -1603,9 +1864,11 @@
                 const arrow = els.advancedToggle.querySelector('.arrow');
                 const button = els.advancedToggle;
                 
-                panel.classList.toggle('hidden');
+                const isExpanded = panel.classList.toggle('hidden');
                 arrow.classList.toggle('rotated');
                 button.classList.toggle('active');
+                button.setAttribute('aria-expanded', !isExpanded);
+                panel.setAttribute('aria-hidden', isExpanded);
             }
 
             // Voice input functions
@@ -1675,19 +1938,44 @@
 
             // Main calculation function
             function calculate() {
+                if (!validateAll()) {
+                    showNotification('Please fix validation errors before calculating', 'error');
+                    return;
+                }
+                
                 try {
-                    const result = calculatePayment();
+                    showLoading(true);
                     
-                    if (result) {
-                        currentCalculation = result;
-                        updateDisplay(result);
-                        generateInsights(result);
-                        updateCharts(result);
-                        updateAmortizationTable(result);
-                    }
+                    // Use setTimeout to allow UI to update before heavy computation
+                    setTimeout(() => {
+                        const result = calculatePayment();
+                        
+                        if (result) {
+                            currentCalculation = result;
+                            updateDisplay(result);
+                            generateInsights(result);
+                            updateCharts(result);
+                            updateAmortizationTable(result);
+                        }
+                        
+                        showLoading(false);
+                    }, 50);
                 } catch (error) {
                     console.error('Calculation error:', error);
                     showNotification('Calculation error. Please check your inputs.', 'error');
+                    showLoading(false);
+                }
+            }
+            
+            function showLoading(show) {
+                if (show) {
+                    els.calculateText.classList.add('hidden');
+                    els.calculateSpinner.classList.remove('hidden');
+                    els.calculateBtn.disabled = true;
+                } else {
+                    els.calculateText.classList.remove('hidden');
+                    els.calculateSpinner.classList.add('hidden');
+                    els.calculateBtn.disabled = false;
                 }
             }
 
@@ -1732,6 +2020,10 @@
                 // Generate amortization schedule with extra payments
                 const schedule = generateSchedule(loanAmount, monthlyRate, monthlyPI, months, extraMonthly, extraOnce);
                 const totalInterest = schedule.reduce((sum, payment) => sum + payment.interest, 0);
+                const totalPaid = loanAmount + totalInterest;
+                
+                // Calculate payoff date
+                const payoffDate = calculatePayoffDate(schedule);
 
                 return {
                     mode: 'payment',
@@ -1748,12 +2040,27 @@
                     monthlyHOA,
                     totalMonthly,
                     totalInterest,
-                    totalCost: loanAmount + totalInterest,
+                    totalPaid,
                     needsPMI,
                     schedule,
                     extraMonthly,
-                    extraOnce
+                    extraOnce,
+                    payoffDate
                 };
+            }
+            
+            // Calculate payoff date
+            function calculatePayoffDate(schedule) {
+                if (schedule.length === 0) return 'N/A';
+                
+                const lastPayment = schedule[schedule.length - 1];
+                const months = lastPayment.month;
+                
+                const today = new Date();
+                const payoffDate = new Date(today);
+                payoffDate.setMonth(payoffDate.getMonth() + months);
+                
+                return payoffDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
             }
 
             // Generate amortization schedule
@@ -1811,6 +2118,8 @@
                 els.totalPayment.textContent = money(result.totalMonthly);
                 els.loanAmount.textContent = money(result.loanAmount);
                 els.totalInterest.textContent = money(result.totalInterest);
+                els.totalPaid.textContent = money(result.totalPaid);
+                els.payoffDate.textContent = result.payoffDate;
                 els.piAmount.textContent = money(result.monthlyPI);
                 els.taxAmount.textContent = money(result.monthlyTax);
                 els.insuranceAmount.textContent = money(result.monthlyInsurance);
@@ -1836,11 +2145,20 @@
                 const colors = ['#21808d', '#a84b2f', '#626c71', '#c0152f', '#94a3b8'];
                 const labels = ['P&I', 'Taxes', 'Insurance', 'PMI', 'HOA'];
                 
-                drawPieChart(els.breakdownChart, breakdownData, colors, labels);
+                drawPieChart(els.breakdownChart, breakdownData, colors, labels, els.legendBreakdown);
+                
+                // Pie chart for principal vs interest
+                const totalPrincipal = result.loanAmount;
+                const totalInterest = result.totalInterest;
+                const piData = [totalPrincipal, totalInterest];
+                const piColors = ['#21808d', '#a84b2f'];
+                const piLabels = ['Principal', 'Interest'];
+                
+                drawPieChart(els.piChart, piData, piColors, piLabels, els.legendPi);
             }
 
             // Draw pie chart
-            function drawPieChart(canvas, data, colors, labels) {
+            function drawPieChart(canvas, data, colors, labels, legendElement) {
                 const ctx = canvas.getContext('2d');
                 const rect = canvas.getBoundingClientRect();
                 const size = Math.min(rect.width, rect.height);
@@ -1877,15 +2195,16 @@
                 let legendHTML = '';
                 data.forEach((value, index) => {
                     if (value > 0) {
+                        const percentage = ((value / total) * 100).toFixed(1);
                         legendHTML += `
                             <div class="legend-item">
                                 <div class="legend-color" style="background: ${colors[index]}"></div>
-                                <span>${labels[index]}: ${money(value)}</span>
+                                <span>${labels[index]}: ${money(value)} (${percentage}%)</span>
                             </div>
                         `;
                     }
                 });
-                els.legendBreakdown.innerHTML = legendHTML;
+                legendElement.innerHTML = legendHTML;
             }
 
             // Update amortization table
@@ -2181,7 +2500,7 @@
                 }
 
                 renderComparisons();
-                showNotification(`${scenarioType.replace(/([A-Z])/g, ' $1')} scenarios loaded`, 'success');
+                showNotification(`${scenarioType.replace(/([A-Z])/g, ' $1')} scenarios loaded', 'success`);
             }
 
             function renderComparisons() {
@@ -2260,6 +2579,10 @@
                 comparisons = [];
                 renderComparisons();
 
+                // Clear error messages
+                $$('.error-message').forEach(el => el.classList.remove('show'));
+                $$('.form-input').forEach(el => el.classList.remove('invalid'));
+
                 // Recalculate
                 updatePropertyTax();
                 updateInsurance();
@@ -2308,171 +2631,5 @@
             init();
         });
     </script>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🏠 AI-Enhanced Mortgage Calculator</title>
-  <style>
-    /* Basic Reset */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; line-height: 1.5; color: #333; background: #f9f9f9; }
-    .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-    h1, h2, h3, h4 { margin-bottom: 0.5rem; color: #005f73; }
-    form { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.25rem; font-weight: bold; }
-    input, select, button { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
-    button { background: #008891; color: #fff; border: none; cursor: pointer; }
-    button:hover { background: #005f73; }
-    .results { margin-top: 2rem; background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .result-item { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
-    .error { color: #b00020; font-size: 0.875rem; margin-top: 0.25rem; }
-    @media (max-width: 600px) {
-      .result-item { flex-direction: column; align-items: flex-start; }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🏠 AI-Enhanced Mortgage Calculator</h1>
-
-    <form id="mortgage-form" novalidate>
-      <h2>Loan Details</h2>
-
-      <div class="form-group">
-        <label for="home-price">Home Price ($)</label>
-        <input type="number" id="home-price" name="homePrice" required min="0" step="0.01" />
-        <span class="error" id="home-price-error"></span>
-      </div>
-
-      <div class="form-group">
-        <label for="down-payment">Down Payment ($)</label>
-        <input type="number" id="down-payment" name="downPayment" required min="0" step="0.01" />
-        <span class="error" id="down-payment-error"></span>
-      </div>
-
-      <div class="form-group">
-        <label for="interest-rate">Interest Rate (%)</label>
-        <input type="number" id="interest-rate" name="interestRate" required min="0" max="100" step="0.01" />
-        <span class="error" id="interest-rate-error"></span>
-      </div>
-
-      <div class="form-group">
-        <label for="loan-term">Term (years)</label>
-        <select id="loan-term" name="loanTerm" required>
-          <option value="">Select term</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-        </select>
-        <span class="error" id="loan-term-error"></span>
-      </div>
-
-      <button type="submit">Calculate</button>
-    </form>
-
-    <div id="results" class="results" hidden>
-      <h2>Payment Results</h2>
-      <div class="result-item"><span>Total Monthly Payment:</span><span id="total-payment"></span></div>
-      <div class="result-item"><span>Loan Amount:</span><span id="loan-amount"></span></div>
-      <div class="result-item"><span>Total Interest:</span><span id="total-interest"></span></div>
-      <h3>Monthly Breakdown</h3>
-      <div class="result-item"><span>P&amp;I:</span><span id="breakdown-pi"></span></div>
-      <div class="result-item"><span>Taxes:</span><span id="breakdown-taxes"></span></div>
-      <div class="result-item"><span>Insurance:</span><span id="breakdown-insurance"></span></div>
-      <div class="result-item"><span>PMI:</span><span id="breakdown-pmi"></span></div>
-      <div class="result-item"><span>HOA:</span><span id="breakdown-hoa"></span></div>
-      <h3>AI Insights</h3>
-      <p id="ai-insights"></p>
-    </div>
-  </div>
-
-  <script>
-    function formatCurrency(value) {
-      return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function showError(inputId, message) {
-      document.getElementById(inputId + '-error').textContent = message;
-    }
-
-    function clearErrors() {
-      ['home-price','down-payment','interest-rate','loan-term'].forEach(id => {
-        showError(id, '');
-      });
-    }
-
-    function validateForm(data) {
-      let valid = true;
-      clearErrors();
-      if (data.homePrice <= 0) {
-        showError('home-price','Enter a valid home price');
-        valid = false;
-      }
-      if (data.downPayment < 0 || data.downPayment > data.homePrice) {
-        showError('down-payment','Must be between 0 and home price');
-        valid = false;
-      }
-      if (data.interestRate <= 0 || data.interestRate > 100) {
-        showError('interest-rate','Enter a valid rate');
-        valid = false;
-      }
-      if (!data.loanTerm) {
-        showError('loan-term','Select a term');
-        valid = false;
-      }
-      return valid;
-    }
-
-    function calculatePayment({ homePrice, downPayment, interestRate, loanTerm }) {
-      const principal = homePrice - downPayment;
-      const monthlyRate = interestRate / 100 / 12;
-      const months = loanTerm * 12;
-      const x = Math.pow(1 + monthlyRate, months);
-      const monthlyPI = principal * (monthlyRate * x) / (x - 1);
-      return { principal, monthlyPI, months, monthlyRate };
-    }
-
-    document.getElementById('mortgage-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const data = {
-        homePrice: parseFloat(document.getElementById('home-price').value),
-        downPayment: parseFloat(document.getElementById('down-payment').value),
-        interestRate: parseFloat(document.getElementById('interest-rate').value),
-        loanTerm: parseInt(document.getElementById('loan-term').value, 10)
-      };
-      if (!validateForm(data)) return;
-
-      const { principal, monthlyPI, months, monthlyRate } = calculatePayment(data);
-      const totalInterest = monthlyPI * months - principal;
-      // For simplicity, using fixed percentages for taxes, insurance, PMI, HOA
-      const monthlyTaxes = principal * 0.012 / 12;
-      const monthlyInsurance = principal * 0.003 / 12;
-      const monthlyPMI = (downPayment / homePrice < 0.2) ? principal * 0.01 / 12 : 0;
-      const monthlyHOA = 0;
-
-      document.getElementById('total-payment').textContent = formatCurrency(monthlyPI + monthlyTaxes + monthlyInsurance + monthlyPMI + monthlyHOA);
-      document.getElementById('loan-amount').textContent = formatCurrency(principal);
-      document.getElementById('total-interest').textContent = formatCurrency(totalInterest);
-      document.getElementById('breakdown-pi').textContent = formatCurrency(monthlyPI);
-      document.getElementById('breakdown-taxes').textContent = formatCurrency(monthlyTaxes);
-      document.getElementById('breakdown-insurance').textContent = formatCurrency(monthlyInsurance);
-      document.getElementById('breakdown-pmi').textContent = formatCurrency(monthlyPMI);
-      document.getElementById('breakdown-hoa').textContent = formatCurrency(monthlyHOA);
-
-      // Simple AI Insight
-      const insight = (monthlyPMI > 0)
-        ? 'You are paying PMI. Consider a larger down payment to avoid PMI.'
-        : 'Great! No PMI required.';
-      document.getElementById('ai-insights').textContent = insight;
-
-      document.getElementById('results').hidden = false;
-      window.scrollTo({ top: document.getElementById('results').offsetTop - 20, behavior: 'smooth' });
-    });
-  </script>
-</body>
-</html>
 </body>
 </html>
