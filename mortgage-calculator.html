@@ -17,10 +17,7 @@
   <link rel="icon" href="icons/icon-192x192.png">
   <link rel="apple-touch-icon" href="icons/icon-192x192.png">
   <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="page-mortgage">
   <!-- Header -->
@@ -32,103 +29,124 @@
       </a>
       <ul class="nav-menu">
         <li><a href="/mortgage-calculator" class="nav-link">Mortgage</a></li>
-        <li><a href="/mortgage-calculator" class="nav-link">Calculators</a></li>
+        <li><a href="/calculators" class="nav-link">Calculators</a></li>
         <li><a href="/resources" class="nav-link">Resources</a></li>
         <li><a href="/about" class="nav-link">About</a></li>
         <li><a href="/contact" class="nav-link">Contact</a></li>
       </ul>
-      <div id="hamburger" class="hamburger">
-        <span></span><span></span><span></span>
-      </div>
+      <div id="hamburger" class="hamburger"><span></span><span></span><span></span></div>
     </nav>
   </header>
 
-  <!-- Calculator -->
   <main class="container" style="padding-top:120px;">
-    <!-- Tabs -->
+    <!-- Only Mortgage Payment Tab -->
     <div class="mode-tabs">
       <button class="tab-btn active" data-mode="payment">Mortgage Payment</button>
-      <button class="tab-btn" data-mode="refinance">Refinance</button>
-      <button class="tab-btn" data-mode="affordability">Affordability</button>
     </div>
 
     <div class="calculator-grid">
-      <!-- Mortgage Payment -->
+      <!-- Input Panel -->
       <section id="payment-mode" class="mode-content calculator-card">
-        <!-- (unchanged) -->
-      </section>
+        <h3>Loan Details</h3>
+        <p>Enter your mortgage information for precise AI-enhanced calculations</p>
 
-      <!-- Refinance -->
-      <section id="refinance-mode" class="mode-content hidden calculator-card">
-        <h3>Refinance Analysis</h3>
         <div class="form-row">
           <div class="form-group">
-            <label for="current-balance">Current Balance ($)</label>
-            <input id="current-balance" type="number" class="form-control" placeholder="280000">
+            <label for="home-price">
+              <i class="fas fa-home"></i> Home Price ($)
+              <button class="voice-btn" data-field="home-price"><i class="fas fa-microphone"></i></button>
+            </label>
+            <input id="home-price" type="number" class="form-control" placeholder="300000">
           </div>
           <div class="form-group">
-            <label for="current-rate">Current Rate (%)</label>
-            <input id="current-rate" type="number" step="0.01" class="form-control" placeholder="7.5">
-          </div>
-          <div class="form-group">
-            <label for="remaining-term">Remaining Term (years)</label>
-            <input id="remaining-term" type="number" class="form-control" placeholder="25">
-          </div>
-          <div class="form-group">
-            <label for="new-rate">New Rate (%)</label>
-            <input id="new-rate" type="number" step="0.01" class="form-control" placeholder="6.0">
-          </div>
-          <div class="form-group">
-            <label for="new-term">New Term (years)</label>
-            <input id="new-term" type="number" class="form-control" placeholder="30">
-          </div>
-          <div class="form-group">
-            <label for="closing-costs">Closing Costs ($)</label>
-            <input id="closing-costs" type="number" class="form-control" placeholder="5000">
+            <label><i class="fas fa-money-bill"></i> Down Payment</label>
+            <div class="dp-tabs">
+              <button id="tab-amount" class="dp-tab active">Amount ($)</button>
+              <button id="tab-percent" class="dp-tab">%</button>
+            </div>
+            <div id="dp-amount-wrap">
+              <input id="dp-amount" type="number" class="form-control" placeholder="60000">
+            </div>
+            <div id="dp-percent-wrap" class="hidden">
+              <input id="dp-percent" type="number" class="form-control" placeholder="20">
+            </div>
           </div>
         </div>
-        <button id="calculate-btn" class="btn--primary btn--full-width">Calculate Savings</button>
 
-        <!-- Results (only essential savings metrics) -->
-        <div id="results-panel" class="results-panel">
-          <h4>Refinance Benefits</h4>
-          <p id="break-even">Break-even in: <span id="break-even-months"></span> months</p>
-          <p id="annual-savings">Annual Savings: <span id="annual-savings-value"></span></p>
-        </div>
-      </section>
-
-      <!-- Affordability -->
-      <section id="affordability-mode" class="mode-content hidden calculator-card">
-        <h3>Affordability</h3>
         <div class="form-row">
           <div class="form-group">
-            <label for="annual-income">Annual Income ($)</label>
-            <input id="annual-income" type="number" class="form-control" placeholder="80000">
+            <label for="interest-rate"><i class="fas fa-percentage"></i> Interest Rate (%)</label>
+            <input id="interest-rate" type="number" step="0.01" class="form-control" placeholder="6.5">
           </div>
           <div class="form-group">
-            <label for="monthly-debts">Monthly Debts ($)</label>
-            <input id="monthly-debts" type="number" class="form-control" placeholder="500">
+            <label><i class="fas fa-calendar"></i> Loan Term (years)</label>
+            <div id="term-buttons" class="term-buttons">
+              <button class="chip" data-term="15">15</button>
+              <button class="chip active" data-term="30">30</button>
+            </div>
+            <input id="term-custom" type="number" class="form-control" placeholder="Custom">
           </div>
+        </div>
+
+        <div class="form-row">
           <div class="form-group">
-            <label for="down-payment-saved">Down Payment Saved ($)</label>
-            <input id="down-payment-saved" type="number" class="form-control" placeholder="50000">
-          </div>
-          <div class="form-group">
-            <label for="dti-ratio">Max DTI Ratio (%)</label>
-            <select id="dti-ratio" class="form-control">
-              <option value="28">28%</option>
-              <option value="31">31%</option>
-              <option value="36" selected>36%</option>
-              <option value="43">43%</option>
+            <label for="state"><i class="fas fa-map-marker-alt"></i> State</label>
+            <select id="state" class="form-control">
+              <!-- 50 state options -->
             </select>
           </div>
+          <div class="form-group">
+            <label for="property-tax"><i class="fas fa-building"></i> Annual Property Tax ($)</label>
+            <input id="property-tax" type="number" class="form-control" placeholder="0" readonly>
+          </div>
         </div>
-        <button id="calculate-btn" class="btn--primary btn--full-width">Calculate Affordability</button>
 
-        <!-- Results (only max home price) -->
-        <div id="results-panel" class="results-panel">
-          <h4>Maximum Home Price</h4>
-          <p id="max-home-price">$0</p>
+        <div id="pmi-banner" class="pmi-banner hidden">
+          <i class="fas fa-info-circle"></i>
+          PMI Required – Down payment <span id="pmi-info"></span>%
+        </div>
+
+        <button id="calculate-btn" class="btn--primary btn--full-width">
+          <i class="fas fa-calculator"></i> Calculate Payment
+        </button>
+      </section>
+
+      <!-- Results Panel -->
+      <section class="calculator-card results-panel">
+        <h3>Payment Results</h3>
+        <p>Your personalized mortgage calculation with AI insights</p>
+
+        <div class="main-result">
+          <div class="result-label">Total Monthly Payment</div>
+          <div class="result-value" id="total-payment">$0</div>
+        </div>
+        <div class="key-metrics">
+          <div class="metric"><span>Loan Amount</span> <span id="loan-amount">$0</span></div>
+          <div class="metric"><span>Total Interest</span> <span id="total-interest">$0</span></div>
+        </div>
+
+        <h4>Monthly Breakdown</h4>
+        <div class="breakdown-grid">
+          <div class="breakdown-item"><span>P&I</span> <span id="pi-amount">$0</span></div>
+          <div class="breakdown-item"><span>Taxes</span> <span id="tax-amount">$0</span></div>
+          <div class="breakdown-item"><span>Insurance</span> <span id="insurance-amount">$0</span></div>
+          <div class="breakdown-item" id="row-pmi"><span>PMI</span> <span id="pmi-amount">$0</span></div>
+          <div class="breakdown-item"><span>HOA</span> <span id="hoa-amount">$0</span></div>
+        </div>
+
+        <h4>Payment Breakdown</h4>
+        <canvas id="breakdownChart"></canvas>
+
+        <h4>Balance Over Time</h4>
+        <canvas id="amortizationChart"></canvas>
+      </section>
+
+      <!-- AI Insights Panel -->
+      <section class="calculator-card insights-panel">
+        <h3>AI Insights</h3>
+        <p>Personalized recommendations to save money</p>
+        <div id="insights-list" class="insights-list">
+          <!-- dynamic insights -->
         </div>
       </section>
     </div>
@@ -137,11 +155,11 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container footer-content">
-      <!-- unchanged -->
+      <!-- unchanged footer -->
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- Script -->
   <script src="mortgage-calculator.js"></script>
 </body>
 </html>
