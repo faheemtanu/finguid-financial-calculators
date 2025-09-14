@@ -1,2084 +1,991 @@
-:root {
-  /* Primitive Color Tokens */
-  --color-white: rgba(255, 255, 255, 1);
-  --color-black: rgba(0, 0, 0, 1);
-  --color-cream-50: rgba(252, 252, 249, 1);
-  --color-cream-100: rgba(255, 255, 253, 1);
-  --color-gray-200: rgba(245, 245, 245, 1);
-  --color-gray-300: rgba(167, 169, 169, 1);
-  --color-gray-400: rgba(119, 124, 124, 1);
-  --color-slate-500: rgba(98, 108, 113, 1);
-  --color-brown-600: rgba(94, 82, 64, 1);
-  --color-charcoal-700: rgba(31, 33, 33, 1);
-  --color-charcoal-800: rgba(38, 40, 40, 1);
-  --color-slate-900: rgba(19, 52, 59, 1);
-  --color-teal-300: rgba(50, 184, 198, 1);
-  --color-teal-400: rgba(45, 166, 178, 1);
-  --color-teal-500: rgba(33, 128, 141, 1);
-  --color-teal-600: rgba(29, 116, 128, 1);
-  --color-teal-700: rgba(26, 104, 115, 1);
-  --color-teal-800: rgba(41, 150, 161, 1);
-  --color-red-400: rgba(255, 84, 89, 1);
-  --color-red-500: rgba(192, 21, 47, 1);
-  --color-orange-400: rgba(230, 129, 97, 1);
-  --color-orange-500: rgba(168, 75, 47, 1);
-
-  /* RGB versions for opacity control */
-  --color-brown-600-rgb: 94, 82, 64;
-  --color-teal-500-rgb: 33, 128, 141;
-  --color-slate-900-rgb: 19, 52, 59;
-  --color-slate-500-rgb: 98, 108, 113;
-  --color-red-500-rgb: 192, 21, 47;
-  --color-red-400-rgb: 255, 84, 89;
-  --color-orange-500-rgb: 168, 75, 47;
-  --color-orange-400-rgb: 230, 129, 97;
-
-  /* Background color tokens (Light Mode) */
-  --color-bg-1: rgba(59, 130, 246, 0.08); /* Light blue */
-  --color-bg-2: rgba(245, 158, 11, 0.08); /* Light yellow */
-  --color-bg-3: rgba(34, 197, 94, 0.08); /* Light green */
-  --color-bg-4: rgba(239, 68, 68, 0.08); /* Light red */
-  --color-bg-5: rgba(147, 51, 234, 0.08); /* Light purple */
-  --color-bg-6: rgba(249, 115, 22, 0.08); /* Light orange */
-  --color-bg-7: rgba(236, 72, 153, 0.08); /* Light pink */
-  --color-bg-8: rgba(6, 182, 212, 0.08); /* Light cyan */
-
-  /* Semantic Color Tokens (Light Mode) */
-  --color-background: var(--color-cream-50);
-  --color-surface: var(--color-cream-100);
-  --color-text: var(--color-slate-900);
-  --color-text-secondary: var(--color-slate-500);
-  --color-primary: var(--color-teal-500);
-  --color-primary-hover: var(--color-teal-600);
-  --color-primary-active: var(--color-teal-700);
-  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-btn-primary-text: var(--color-cream-50);
-  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-error: var(--color-red-500);
-  --color-success: var(--color-teal-500);
-  --color-warning: var(--color-orange-500);
-  --color-info: var(--color-slate-500);
-  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
-  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
-
-  /* Common style patterns */
-  --focus-ring: 0 0 0 3px var(--color-focus-ring);
-  --focus-outline: 2px solid var(--color-primary);
-  --status-bg-opacity: 0.15;
-  --status-border-opacity: 0.25;
-  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-
-  /* RGB versions for opacity control */
-  --color-success-rgb: 33, 128, 141;
-  --color-error-rgb: 192, 21, 47;
-  --color-warning-rgb: 168, 75, 47;
-  --color-info-rgb: 98, 108, 113;
-
-  /* Typography */
-  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
-    Monaco, Consolas, monospace;
-  --font-size-xs: 11px;
-  --font-size-sm: 12px;
-  --font-size-base: 14px;
-  --font-size-md: 14px;
-  --font-size-lg: 16px;
-  --font-size-xl: 18px;
-  --font-size-2xl: 20px;
-  --font-size-3xl: 24px;
-  --font-size-4xl: 30px;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 550;
-  --font-weight-bold: 600;
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.5;
-  --letter-spacing-tight: -0.01em;
-
-  /* Spacing */
-  --space-0: 0;
-  --space-1: 1px;
-  --space-2: 2px;
-  --space-4: 4px;
-  --space-6: 6px;
-  --space-8: 8px;
-  --space-10: 10px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-20: 20px;
-  --space-24: 24px;
-  --space-32: 32px;
-
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-base: 8px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-full: 9999px;
-
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
-    0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
-    0 4px 6px -2px rgba(0, 0, 0, 0.02);
-  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
-
-  /* Animation */
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Layout */
-  --container-sm: 640px;
-  --container-md: 768px;
-  --container-lg: 1024px;
-  --container-xl: 1280px;
-}
-
-/* Dark mode colors */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* RGB versions for opacity control (Dark Mode) */
-    --color-gray-400-rgb: 119, 124, 124;
-    --color-teal-300-rgb: 50, 184, 198;
-    --color-gray-300-rgb: 167, 169, 169;
-    --color-gray-200-rgb: 245, 245, 245;
-
-    /* Background color tokens (Dark Mode) */
-    --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
-    --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
-    --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
-    --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
-    --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
-    --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
-    --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
-    --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
-
-    /* Semantic Color Tokens (Dark Mode) */
-    --color-background: var(--color-charcoal-700);
-    --color-surface: var(--color-charcoal-800);
-    --color-text: var(--color-gray-200);
-    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-    --color-primary: var(--color-teal-300);
-    --color-primary-hover: var(--color-teal-400);
-    --color-primary-active: var(--color-teal-800);
-    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
-    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
-    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-    --color-error: var(--color-red-400);
-    --color-success: var(--color-teal-300);
-    --color-warning: var(--color-orange-400);
-    --color-info: var(--color-gray-300);
-    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
-    --color-btn-primary-text: var(--color-slate-900);
-    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
-    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
-    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-    --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-    --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
-
-    /* Common style patterns - updated for dark mode */
-    --focus-ring: 0 0 0 3px var(--color-focus-ring);
-    --focus-outline: 2px solid var(--color-primary);
-    --status-bg-opacity: 0.15;
-    --status-border-opacity: 0.25;
-    --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-
-    /* RGB versions for dark mode */
-    --color-success-rgb: var(--color-teal-300-rgb);
-    --color-error-rgb: var(--color-red-400-rgb);
-    --color-warning-rgb: var(--color-orange-400-rgb);
-    --color-info-rgb: var(--color-gray-300-rgb);
-  }
-}
-
-/* Data attribute for manual theme switching */
-[data-color-scheme="dark"] {
-  /* RGB versions for opacity control (dark mode) */
-  --color-gray-400-rgb: 119, 124, 124;
-  --color-teal-300-rgb: 50, 184, 198;
-  --color-gray-300-rgb: 167, 169, 169;
-  --color-gray-200-rgb: 245, 245, 245;
-
-  /* Colorful background palette - Dark Mode */
-  --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
-  --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
-  --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
-  --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
-  --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
-  --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
-  --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
-  --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
-
-  /* Semantic Color Tokens (Dark Mode) */
-  --color-background: var(--color-charcoal-700);
-  --color-surface: var(--color-charcoal-800);
-  --color-text: var(--color-gray-200);
-  --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-  --color-primary: var(--color-teal-300);
-  --color-primary-hover: var(--color-teal-400);
-  --color-primary-active: var(--color-teal-800);
-  --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
-  --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-  --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
-  --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-  --color-error: var(--color-red-400);
-  --color-success: var(--color-teal-300);
-  --color-warning: var(--color-orange-400);
-  --color-info: var(--color-gray-300);
-  --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
-  --color-btn-primary-text: var(--color-slate-900);
-  --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
-  --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
-  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-  --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-  --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
-
-  /* Common style patterns - updated for dark mode */
-  --focus-ring: 0 0 0 3px var(--color-focus-ring);
-  --focus-outline: 2px solid var(--color-primary);
-  --status-bg-opacity: 0.15;
-  --status-border-opacity: 0.25;
-  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-
-  /* RGB versions for dark mode */
-  --color-success-rgb: var(--color-teal-300-rgb);
-  --color-error-rgb: var(--color-red-400-rgb);
-  --color-warning-rgb: var(--color-orange-400-rgb);
-  --color-info-rgb: var(--color-gray-300-rgb);
-}
-
-[data-color-scheme="light"] {
-  /* RGB versions for opacity control (light mode) */
-  --color-brown-600-rgb: 94, 82, 64;
-  --color-teal-500-rgb: 33, 128, 141;
-  --color-slate-900-rgb: 19, 52, 59;
-
-  /* Semantic Color Tokens (Light Mode) */
-  --color-background: var(--color-cream-50);
-  --color-surface: var(--color-cream-100);
-  --color-text: var(--color-slate-900);
-  --color-text-secondary: var(--color-slate-500);
-  --color-primary: var(--color-teal-500);
-  --color-primary-hover: var(--color-teal-600);
-  --color-primary-active: var(--color-teal-700);
-  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-btn-primary-text: var(--color-cream-50);
-  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-error: var(--color-red-500);
-  --color-success: var(--color-teal-500);
-  --color-warning: var(--color-orange-500);
-  --color-info: var(--color-slate-500);
-  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
-
-  /* RGB versions for light mode */
-  --color-success-rgb: var(--color-teal-500-rgb);
-  --color-error-rgb: var(--color-red-500-rgb);
-  --color-warning-rgb: var(--color-orange-500-rgb);
-  --color-info-rgb: var(--color-slate-500-rgb);
-}
-
-/* Base styles */
-html {
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  line-height: var(--line-height-normal);
-  color: var(--color-text);
-  background-color: var(--color-background);
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
-  color: var(--color-text);
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-h1 {
-  font-size: var(--font-size-4xl);
-}
-h2 {
-  font-size: var(--font-size-3xl);
-}
-h3 {
-  font-size: var(--font-size-2xl);
-}
-h4 {
-  font-size: var(--font-size-xl);
-}
-h5 {
-  font-size: var(--font-size-lg);
-}
-h6 {
-  font-size: var(--font-size-md);
-}
-
-p {
-  margin: 0 0 var(--space-16) 0;
-}
-
-a {
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-standard);
-}
-
-a:hover {
-  color: var(--color-primary-hover);
-}
-
-code,
-pre {
-  font-family: var(--font-family-mono);
-  font-size: calc(var(--font-size-base) * 0.95);
-  background-color: var(--color-secondary);
-  border-radius: var(--radius-sm);
-}
-
-code {
-  padding: var(--space-1) var(--space-4);
-}
-
-pre {
-  padding: var(--space-16);
-  margin: var(--space-16) 0;
-  overflow: auto;
-  border: 1px solid var(--color-border);
-}
-
-pre code {
-  background: none;
-  padding: 0;
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-8) var(--space-16);
-  border-radius: var(--radius-base);
-  font-size: var(--font-size-base);
-  font-weight: 500;
-  line-height: 1.5;
-  cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-standard);
-  border: none;
-  text-decoration: none;
-  position: relative;
-}
-
-.btn:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-.btn--primary {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-}
-
-.btn--primary:hover {
-  background: var(--color-primary-hover);
-}
-
-.btn--primary:active {
-  background: var(--color-primary-active);
-}
-
-.btn--secondary {
-  background: var(--color-secondary);
-  color: var(--color-text);
-}
-
-.btn--secondary:hover {
-  background: var(--color-secondary-hover);
-}
-
-.btn--secondary:active {
-  background: var(--color-secondary-active);
-}
-
-.btn--outline {
-  background: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-}
-
-.btn--outline:hover {
-  background: var(--color-secondary);
-}
-
-.btn--sm {
-  padding: var(--space-4) var(--space-12);
-  font-size: var(--font-size-sm);
-  border-radius: var(--radius-sm);
-}
-
-.btn--lg {
-  padding: var(--space-10) var(--space-20);
-  font-size: var(--font-size-lg);
-  border-radius: var(--radius-md);
-}
-
-.btn--full-width {
-  width: 100%;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Form elements */
-.form-control {
-  display: block;
-  width: 100%;
-  padding: var(--space-8) var(--space-12);
-  font-size: var(--font-size-md);
-  line-height: 1.5;
-  color: var(--color-text);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-  transition: border-color var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard);
-}
-
-textarea.form-control {
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-}
-
-select.form-control {
-  padding: var(--space-8) var(--space-12);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: var(--select-caret-light);
-  background-repeat: no-repeat;
-  background-position: right var(--space-12) center;
-  background-size: 16px;
-  padding-right: var(--space-32);
-}
-
-/* Add a dark mode specific caret */
-@media (prefers-color-scheme: dark) {
-  select.form-control {
-    background-image: var(--select-caret-dark);
-  }
-}
-
-/* Also handle data-color-scheme */
-[data-color-scheme="dark"] select.form-control {
-  background-image: var(--select-caret-dark);
-}
-
-[data-color-scheme="light"] select.form-control {
-  background-image: var(--select-caret-light);
-}
-
-.form-control:focus {
-  border-color: var(--color-primary);
-  outline: var(--focus-outline);
-}
-
-.form-label {
-  display: block;
-  margin-bottom: var(--space-8);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-}
-
-.form-group {
-  margin-bottom: var(--space-16);
-}
-
-/* Card component */
-.card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-card-border);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  transition: box-shadow var(--duration-normal) var(--ease-standard);
-}
-
-.card:hover {
-  box-shadow: var(--shadow-md);
-}
-
-.card__body {
-  padding: var(--space-16);
-}
-
-.card__header,
-.card__footer {
-  padding: var(--space-16);
-  border-bottom: 1px solid var(--color-card-border-inner);
-}
-
-/* Status indicators - simplified with CSS variables */
-.status {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-6) var(--space-12);
-  border-radius: var(--radius-full);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-}
-
-.status--success {
-  background-color: rgba(
-    var(--color-success-rgb, 33, 128, 141),
-    var(--status-bg-opacity)
-  );
-  color: var(--color-success);
-  border: 1px solid
-    rgba(var(--color-success-rgb, 33, 128, 141), var(--status-border-opacity));
-}
-
-.status--error {
-  background-color: rgba(
-    var(--color-error-rgb, 192, 21, 47),
-    var(--status-bg-opacity)
-  );
-  color: var(--color-error);
-  border: 1px solid
-    rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
-}
-
-.status--warning {
-  background-color: rgba(
-    var(--color-warning-rgb, 168, 75, 47),
-    var(--status-bg-opacity)
-  );
-  color: var(--color-warning);
-  border: 1px solid
-    rgba(var(--color-warning-rgb, 168, 75, 47), var(--status-border-opacity));
-}
-
-.status--info {
-  background-color: rgba(
-    var(--color-info-rgb, 98, 108, 113),
-    var(--status-bg-opacity)
-  );
-  color: var(--color-info);
-  border: 1px solid
-    rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
-}
-
-/* Container layout */
-.container {
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: var(--space-16);
-  padding-left: var(--space-16);
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: var(--container-sm);
-  }
-}
-@media (min-width: 768px) {
-  .container {
-    max-width: var(--container-md);
-  }
-}
-@media (min-width: 1024px) {
-  .container {
-    max-width: var(--container-lg);
-  }
-}
-@media (min-width: 1280px) {
-  .container {
-    max-width: var(--container-xl);
-  }
-}
-
-/* Utility classes */
-.flex {
-  display: flex;
-}
-.flex-col {
-  flex-direction: column;
-}
-.items-center {
-  align-items: center;
-}
-.justify-center {
-  justify-content: center;
-}
-.justify-between {
-  justify-content: space-between;
-}
-.gap-4 {
-  gap: var(--space-4);
-}
-.gap-8 {
-  gap: var(--space-8);
-}
-.gap-16 {
-  gap: var(--space-16);
-}
-
-.m-0 {
-  margin: 0;
-}
-.mt-8 {
-  margin-top: var(--space-8);
-}
-.mb-8 {
-  margin-bottom: var(--space-8);
-}
-.mx-8 {
-  margin-left: var(--space-8);
-  margin-right: var(--space-8);
-}
-.my-8 {
-  margin-top: var(--space-8);
-  margin-bottom: var(--space-8);
-}
-
-.p-0 {
-  padding: 0;
-}
-.py-8 {
-  padding-top: var(--space-8);
-  padding-bottom: var(--space-8);
-}
-.px-8 {
-  padding-left: var(--space-8);
-  padding-right: var(--space-8);
-}
-.py-16 {
-  padding-top: var(--space-16);
-  padding-bottom: var(--space-16);
-}
-.px-16 {
-  padding-left: var(--space-16);
-  padding-right: var(--space-16);
-}
-
-.block {
-  display: block;
-}
-.hidden {
-  display: none;
-}
-
-/* Accessibility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: 2px;
-}
-
-/* Dark mode specifics */
-[data-color-scheme="dark"] .btn--outline {
-  border: 1px solid var(--color-border-secondary);
-}
-
-@font-face {
-  font-family: 'FKGroteskNeue';
-  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
-    format('woff2');
-}
-
-/* END PERPLEXITY DESIGN SYSTEM */
-/* Modern CSS Reset and Base Styles */
-:root {
-  /* Using design system variables - no need to redeclare them here */
-}
-
-/* Dark Mode - using design system approach */
-@media (prefers-color-scheme: dark) {
-  /* Dark mode handled by design system */
-}
-
-/* Reset */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: var(--font-size-base);
-  scroll-behavior: smooth;
-  font-family: var(--font-family-base);
-  line-height: var(--line-height-normal);
-  color: var(--color-text);
-  background-color: var(--color-background);
-  -webkit-font-smoothing: antialiased;
-}
-
-body {
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-normal);
-  color: var(--color-text);
-  background-color: var(--color-background);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Container */
-.container {
-  max-width: var(--container-xl);
-  margin: 0 auto;
-  padding: 0 var(--space-16);
-}
-
-@media (min-width: 640px) {
-  .container {
-    padding: 0 var(--space-24);
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    padding: 0 var(--space-32);
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 0 var(--space-12);
-  }
-}
-
-/* Header Navigation */
-.header {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  height: 80px;
-}
-
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
-  padding: 0 var(--space-24);
-}
-
-@media (max-width: 480px) {
-  .navbar {
-    padding: 0 var(--space-16);
-  }
-}
-
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-standard);
-}
-
-.nav-brand:hover {
-  color: var(--color-primary-hover);
-}
-
-.brand-icon {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-  border-radius: var(--radius-base);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-btn-primary-text);
-  font-size: var(--font-size-lg);
-}
-
-.nav-menu {
-  display: flex;
-  align-items: center;
-  gap: var(--space-32);
-}
-
-@media (max-width: 480px) {
-  .nav-menu {
-    gap: var(--space-16);
-  }
-}
-
-.nav-link {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-  padding: var(--space-8) var(--space-12);
-  border-radius: var(--radius-sm);
-  transition: all var(--duration-fast) var(--ease-standard);
-  position: relative;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  color: var(--color-primary);
-  background-color: var(--color-secondary);
-}
-
-/* Mobile Navigation */
-.mobile-menu-toggle {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  padding: var(--space-8);
-  background: none;
-  border: none;
-}
-
-.mobile-menu-toggle span {
-  width: 24px;
-  height: 3px;
-  background-color: var(--color-text);
-  margin: var(--space-2) 0;
-  transition: all var(--duration-normal) var(--ease-standard);
-  border-radius: var(--space-2);
-}
-
-@media (max-width: 768px) {
-  .nav-menu {
-    display: none;
-  }
+// Enhanced Mortgage Calculator JavaScript Implementation
+document.addEventListener('DOMContentLoaded', function() {
+  'use strict';
+
+  // Utility functions
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
   
-  .mobile-menu-toggle {
-    display: flex;
-  }
-}
-
-/* Page Header */
-.page-header {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  color: var(--color-btn-primary-text);
-  padding: var(--space-32) 0 var(--space-32);
-  text-align: center;
-}
-
-@media (max-width: 480px) {
-  .page-header {
-    padding: var(--space-24) 0 var(--space-20);
-  }
-}
-
-.page-title {
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-16);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 480px) {
-  .page-title {
-    font-size: var(--font-size-2xl);
-  }
-}
-
-.page-subtitle {
-  font-size: var(--font-size-lg);
-  opacity: 0.9;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-@media (max-width: 480px) {
-  .page-subtitle {
-    font-size: var(--font-size-base);
-  }
-}
-
-/* Main Layout */
-.main-content {
-  margin: var(--space-32) 0;
-}
-
-@media (max-width: 480px) {
-  .main-content {
-    margin: var(--space-20) 0;
-  }
-}
-
-.calculator-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-32);
-  align-items: start;
-}
-
-@media (max-width: 1024px) {
-  .calculator-layout {
-    grid-template-columns: 1fr;
-    gap: var(--space-24);
-  }
-}
-
-@media (max-width: 480px) {
-  .calculator-layout {
-    gap: var(--space-16);
-  }
-}
-
-/* Calculator Panel */
-.calculator-panel {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-32);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-card-border);
-  position: sticky;
-  top: calc(80px + var(--space-16));
-}
-
-@media (max-width: 1024px) {
-  .calculator-panel {
-    position: static;
-  }
-}
-
-@media (max-width: 480px) {
-  .calculator-panel {
-    padding: var(--space-20);
-  }
-}
-
-.panel-header {
-  margin-bottom: var(--space-24);
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: var(--space-16);
-}
-
-.panel-header h2 {
-  color: var(--color-primary);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-8);
-}
-
-.panel-header p {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-}
-
-/* Form Sections */
-.form-section {
-  margin-bottom: var(--space-32);
-}
-
-@media (max-width: 480px) {
-  .form-section {
-    margin-bottom: var(--space-24);
-  }
-}
-
-.section-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  margin-bottom: var(--space-16);
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-}
-
-.section-title i {
-  color: var(--color-primary);
-}
-
-/* Form Groups */
-.form-group {
-  margin-bottom: var(--space-24);
-}
-
-@media (max-width: 480px) {
-  .form-group {
-    margin-bottom: var(--space-20);
-  }
-}
-
-.form-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-  margin-bottom: var(--space-8);
-  font-size: var(--font-size-sm);
-}
-
-.label-help {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-normal);
-}
-
-/* Form Inputs */
-.form-input,
-.form-select {
-  width: 100%;
-  padding: var(--space-12) var(--space-16);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-base);
-  font-size: var(--font-size-base);
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  transition: all var(--duration-normal) var(--ease-standard);
-  font-family: var(--font-family-base);
-}
-
-.form-input:focus,
-.form-select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: var(--focus-ring);
-}
-
-.form-input:hover,
-.form-select:hover {
-  border-color: var(--color-primary-hover);
-}
-
-/* Input Groups with Icons */
-.input-group {
-  position: relative;
-}
-
-.input-icon {
-  position: absolute;
-  left: var(--space-16);
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  pointer-events: none;
-}
-
-.input-group .form-input {
-  padding-left: var(--space-32);
-}
-
-/* Down Payment Tabs */
-.dp-tabs {
-  display: flex;
-  background: var(--color-secondary);
-  border-radius: var(--radius-base);
-  padding: var(--space-4);
-  margin-bottom: var(--space-16);
-  border: 1px solid var(--color-border);
-}
-
-.tab-btn {
-  flex: 1;
-  padding: var(--space-8) var(--space-16);
-  border: none;
-  background: transparent;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  transition: all var(--duration-fast) var(--ease-standard);
-}
-
-.tab-btn.active {
-  background: var(--color-surface);
-  color: var(--color-primary);
-  box-shadow: var(--shadow-xs);
-}
-
-.tab-btn:hover:not(.active) {
-  color: var(--color-text);
-}
-
-/* Down Payment Inputs */
-.dp-inputs {
-  position: relative;
-}
-
-.dp-input-wrap {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-}
-
-@media (max-width: 480px) {
-  .dp-input-wrap {
-    flex-direction: column;
-    gap: var(--space-12);
-  }
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* PMI Banner */
-.pmi-banner {
-  background: rgba(var(--color-warning-rgb), var(--status-bg-opacity));
-  color: var(--color-warning);
-  padding: var(--space-16);
-  border-radius: var(--radius-base);
-  margin-top: var(--space-16);
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  border: 1px solid rgba(var(--color-warning-rgb), var(--status-border-opacity));
-}
-
-.pmi-banner i {
-  color: var(--color-warning);
-  flex-shrink: 0;
-}
-
-@media (max-width: 480px) {
-  .pmi-banner {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-/* Term Selection */
-.term-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-8);
-  margin-bottom: var(--space-16);
-}
-
-.chip {
-  padding: var(--space-8) var(--space-16);
-  background: var(--color-secondary);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-  transition: all var(--duration-fast) var(--ease-standard);
-}
-
-.chip:hover {
-  border-color: var(--color-primary);
-  color: var(--color-text);
-}
-
-.chip.active {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-  border-color: var(--color-primary);
-}
-
-.or-text {
-  align-self: center;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  margin: 0 var(--space-8);
-  font-style: italic;
-}
-
-.custom-term {
-  max-width: 120px;
-}
-
-/* Advanced Options */
-.advanced-toggle {
-  width: 100%;
-  padding: var(--space-16);
-  background: var(--color-secondary);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-base);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-  margin-bottom: var(--space-16);
-  transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.advanced-toggle:hover {
-  background: var(--color-secondary-hover);
-  border-color: var(--color-primary);
-}
-
-.advanced-toggle.active {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-  border-color: var(--color-primary);
-}
-
-.advanced-toggle .arrow {
-  transition: transform var(--duration-normal) var(--ease-standard);
-}
-
-.advanced-toggle.active .arrow {
-  transform: rotate(180deg);
-}
-
-.advanced-panel {
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-base);
-  padding: var(--space-24);
-  margin-bottom: var(--space-16);
-  background: var(--color-secondary);
-}
-
-@media (max-width: 480px) {
-  .advanced-panel {
-    padding: var(--space-16);
-  }
-}
-
-.advanced-panel .form-group:last-child {
-  margin-bottom: 0;
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-12) var(--space-24);
-  border: none;
-  border-radius: var(--radius-base);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-base);
-  cursor: pointer;
-  gap: var(--space-8);
-  transition: all var(--duration-normal) var(--ease-standard);
-  text-decoration: none;
-  min-height: 48px;
-  font-family: var(--font-family-base);
-}
-
-.btn:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-.btn-primary {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-primary:hover {
-  background: var(--color-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.btn-primary:active {
-  background: var(--color-primary-active);
-}
-
-.btn-secondary {
-  background: var(--color-secondary);
-  color: var(--color-text);
-  border: 2px solid var(--color-border);
-}
-
-.btn-secondary:hover {
-  background: var(--color-secondary-hover);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-.btn-secondary:active {
-  background: var(--color-secondary-active);
-}
-
-.btn-outline {
-  background: transparent;
-  border: 2px solid var(--color-primary);
-  color: var(--color-primary);
-}
-
-.btn-outline:hover {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-}
-
-.btn-full-width {
-  width: 100%;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-/* Loading State */
-.btn .spinner {
-  display: none;
-  width: 16px;
-  height: 16px;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.btn.loading .spinner {
-  display: inline-block;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Action Buttons */
-.action-buttons {
-  display: flex;
-  gap: var(--space-16);
-  margin-top: var(--space-32);
-  padding-top: var(--space-24);
-  border-top: 1px solid var(--color-border);
-}
-
-@media (max-width: 768px) {
-  .action-buttons {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .action-buttons {
-    gap: var(--space-12);
-    margin-top: var(--space-24);
-    padding-top: var(--space-16);
-  }
-}
-
-/* Results Panel */
-.results-panel {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-card-border);
-  overflow: hidden;
-}
-
-/* Results Summary */
-.results-summary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  padding: var(--space-32);
-  color: var(--color-btn-primary-text);
-  text-align: center;
-}
-
-@media (max-width: 480px) {
-  .results-summary {
-    padding: var(--space-20);
-  }
-}
-
-.main-result {
-  margin-bottom: var(--space-24);
-}
-
-.result-label {
-  font-size: var(--font-size-lg);
-  opacity: 0.9;
-  margin-bottom: var(--space-8);
-}
-
-.result-value {
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
-  margin: var(--space-8) 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 480px) {
-  .result-value {
-    font-size: var(--font-size-3xl);
-  }
-}
-
-.key-metrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--space-16);
-}
-
-@media (max-width: 768px) {
-  .key-metrics {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .key-metrics {
-    grid-template-columns: 1fr;
-  }
-}
-
-.metric {
-  background: rgba(255, 255, 255, 0.15);
-  padding: var(--space-16);
-  border-radius: var(--radius-base);
-  text-align: center;
-  backdrop-filter: blur(10px);
-}
-
-.metric-label {
-  display: block;
-  font-size: var(--font-size-xs);
-  opacity: 0.8;
-  margin-bottom: var(--space-4);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.metric-value {
-  display: block;
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-lg);
-}
-
-/* Breakdown Section */
-.breakdown-section {
-  padding: var(--space-32);
-}
-
-@media (max-width: 480px) {
-  .breakdown-section {
-    padding: var(--space-20);
-  }
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-24);
-}
-
-@media (max-width: 480px) {
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-16);
-  }
-}
-
-.section-header h3 {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.breakdown-table {
-  display: grid;
-  gap: var(--space-12);
-}
-
-.breakdown-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-16);
-  border-radius: var(--radius-base);
-  background: var(--color-secondary);
-  border-left: 4px solid var(--color-primary);
-  transition: all var(--duration-fast) var(--ease-standard);
-}
-
-.breakdown-row:hover {
-  background: var(--color-secondary-hover);
-  transform: translateX(4px);
-}
-
-@media (max-width: 480px) {
-  .breakdown-row {
-    flex-direction: column;
-    text-align: center;
-    gap: var(--space-8);
-  }
-}
-
-.breakdown-row:nth-child(1) { border-left-color: var(--color-primary); }
-.breakdown-row:nth-child(2) { border-left-color: var(--color-orange-500); }
-.breakdown-row:nth-child(3) { border-left-color: var(--color-slate-500); }
-.breakdown-row:nth-child(4) { border-left-color: var(--color-error); }
-.breakdown-row:nth-child(5) { border-left-color: var(--color-warning); }
-
-.breakdown-label {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-}
-
-.breakdown-value {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  font-size: var(--font-size-lg);
-}
-
-/* Charts Section */
-.charts-section {
-  padding: var(--space-32);
-  border-top: 1px solid var(--color-border);
-}
-
-@media (max-width: 480px) {
-  .charts-section {
-    padding: var(--space-20);
-  }
-}
-
-.chart-container {
-  background: var(--color-secondary);
-  border-radius: var(--radius-base);
-  padding: var(--space-24);
-  margin-bottom: var(--space-24);
-}
-
-@media (max-width: 480px) {
-  .chart-container {
-    padding: var(--space-16);
-  }
-}
-
-.chart-container h4 {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  margin-bottom: var(--space-16);
-  text-align: center;
-}
-
-#breakdownChart {
-  max-width: 100%;
-  height: auto;
-  margin: 0 auto;
-  display: block;
-}
-
-.chart-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-16);
-  justify-content: center;
-  margin-top: var(--space-16);
-}
-
-@media (max-width: 480px) {
-  .chart-legend {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  font-size: var(--font-size-sm);
-}
-
-.legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: var(--radius-sm);
-  flex-shrink: 0;
-}
-
-/* Insights Section */
-.insights-section {
-  padding: var(--space-32);
-  border-top: 1px solid var(--color-border);
-  background: var(--color-secondary);
-}
-
-@media (max-width: 480px) {
-  .insights-section {
-    padding: var(--space-20);
-  }
-}
-
-.insights-list {
-  list-style: none;
-  display: grid;
-  gap: var(--space-16);
-}
-
-.insight-item {
-  display: flex;
-  gap: var(--space-16);
-  padding: var(--space-24);
-  border-radius: var(--radius-base);
-  background: var(--color-surface);
-  border: 1px solid var(--color-card-border);
-  border-left: 4px solid var(--color-primary);
-  transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.insight-item:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-@media (max-width: 480px) {
-  .insight-item {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-.insight-icon {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-  border-radius: var(--radius-base);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-btn-primary-text);
-  font-size: var(--font-size-lg);
-}
-
-.insight-content h4 {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  margin-bottom: var(--space-8);
-}
-
-.insight-content p {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
-  margin: 0;
-}
-
-/* Result Actions */
-.result-actions {
-  display: flex;
-  gap: var(--space-16);
-  justify-content: center;
-  padding: var(--space-32);
-  border-top: 1px solid var(--color-border);
-  background: var(--color-secondary);
-}
-
-@media (max-width: 768px) {
-  .result-actions {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .result-actions {
-    padding: var(--space-20);
-  }
-}
-
-/* Amortization Table */
-.amortization-section {
-  margin-top: var(--space-32);
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-card-border);
-  overflow: hidden;
-}
-
-@media (max-width: 480px) {
-  .amortization-section {
-    margin-top: var(--space-24);
-  }
-}
-
-.amortization-header {
-  padding: var(--space-32);
-  background: var(--color-secondary);
-  border-bottom: 1px solid var(--color-border);
-}
-
-@media (max-width: 480px) {
-  .amortization-header {
-    padding: var(--space-20);
-  }
-}
-
-.table-container {
-  overflow-x: auto;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.amortization-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--font-size-sm);
-}
-
-.amortization-table th {
-  background: var(--color-secondary);
-  padding: var(--space-16);
-  text-align: left;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  border-bottom: 2px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.amortization-table td {
-  padding: var(--space-12) var(--space-16);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text);
-}
-
-.amortization-table tr:hover {
-  background: var(--color-secondary);
-}
-
-.amortization-table .currency {
-  text-align: right;
-  font-weight: var(--font-weight-medium);
-}
-
-/* Comparison Section */
-.comparison-section {
-  margin-top: var(--space-32);
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-32);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-card-border);
-}
-
-@media (max-width: 480px) {
-  .comparison-section {
-    margin-top: var(--space-24);
-    padding: var(--space-20);
-  }
-}
-
-.predefined-scenarios {
-  margin-bottom: var(--space-32);
-}
-
-@media (max-width: 480px) {
-  .predefined-scenarios {
-    margin-bottom: var(--space-24);
-  }
-}
-
-.scenario-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-16);
-}
-
-@media (max-width: 768px) {
-  .scenario-buttons {
-    grid-template-columns: 1fr;
-  }
-}
-
-.scenario-btn {
-  padding: var(--space-24);
-  border-radius: var(--radius-base);
-  border: none;
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-standard);
-  text-align: center;
-  color: var(--color-btn-primary-text);
-}
-
-.scenario-btn:nth-child(1) {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-}
-
-.scenario-btn:nth-child(2) {
-  background: linear-gradient(135deg, var(--color-orange-500) 0%, var(--color-orange-400) 100%);
-}
-
-.scenario-btn:nth-child(3) {
-  background: linear-gradient(135deg, var(--color-slate-500) 0%, var(--color-slate-900) 100%);
-}
-
-.scenario-btn:nth-child(4) {
-  background: linear-gradient(135deg, var(--color-error) 0%, var(--color-red-400) 100%);
-}
-
-.scenario-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.comparison-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--space-24);
-}
-
-@media (max-width: 768px) {
-  .comparison-cards {
-    grid-template-columns: 1fr;
-  }
-}
-
-.comparison-card {
-  background: var(--color-surface);
-  border-radius: var(--radius-base);
-  padding: var(--space-24);
-  box-shadow: var(--shadow-sm);
-  border-top: 4px solid var(--color-primary);
-  border: 1px solid var(--color-card-border);
-}
-
-.comparison-card:nth-child(2) { border-top-color: var(--color-orange-500); }
-.comparison-card:nth-child(3) { border-top-color: var(--color-slate-500); }
-.comparison-card:nth-child(4) { border-top-color: var(--color-error); }
-
-.comparison-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-16);
-}
-
-@media (max-width: 480px) {
-  .comparison-header {
-    flex-direction: column;
-    gap: var(--space-8);
-    text-align: center;
-  }
-}
-
-.comparison-title {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-lg);
-  color: var(--color-primary);
-}
-
-.comparison-savings {
-  background: var(--color-success);
-  color: var(--color-btn-primary-text);
-  padding: var(--space-8) var(--space-16);
-  border-radius: var(--radius-full);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xs);
-}
-
-.comparison-details {
-  display: grid;
-  gap: var(--space-12);
-}
-
-.comparison-row {
-  display: flex;
-  justify-content: space-between;
-  padding: var(--space-8) 0;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.comparison-row:last-child {
-  border-bottom: none;
-}
-
-/* Responsive Utilities */
-@media (max-width: 768px) {
-  .calculator-panel {
-    padding: var(--space-24);
-  }
+  // Formatting utilities
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
   
-  .page-title {
-    font-size: var(--font-size-3xl);
-  }
+  const formatCurrencyDetailed = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
+  };
   
-  .result-value {
-    font-size: var(--font-size-3xl);
-  }
+  const formatNumber = (num) => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
   
-  .key-metrics {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  .scenario-buttons {
-    grid-template-columns: 1fr;
-  }
-  
-  .comparison-cards {
-    grid-template-columns: 1fr;
-  }
-  
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-16);
-  }
-}
+  const formatPercentage = (num, decimals = 1) => {
+    return `${num.toFixed(decimals)}%`;
+  };
 
-@media (max-width: 480px) {
-  .page-title {
-    font-size: var(--font-size-2xl);
-  }
-  
-  .key-metrics {
-    grid-template-columns: 1fr;
-  }
-  
-  .chart-legend {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .breakdown-row {
-    flex-direction: column;
-    text-align: center;
-    gap: var(--space-8);
-  }
-  
-  .insight-item {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .comparison-header {
-    flex-direction: column;
-    gap: var(--space-8);
-    text-align: center;
-  }
-}
+  // Debounce utility for performance
+  const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
 
-/* Utility Classes */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
+  // US State property tax rates (annual percentage)
+  const stateTaxRates = {
+    'AL': 0.41, 'AK': 1.19, 'AZ': 0.62, 'AR': 0.61, 'CA': 0.75,
+    'CO': 0.51, 'CT': 2.14, 'DE': 0.57, 'FL': 0.83, 'GA': 0.89,
+    'HI': 0.28, 'ID': 0.63, 'IL': 2.27, 'IN': 0.85, 'IA': 1.53,
+    'KS': 1.41, 'KY': 0.86, 'LA': 0.55, 'ME': 1.28, 'MD': 1.06,
+    'MA': 1.17, 'MI': 1.54, 'MN': 1.12, 'MS': 0.61, 'MO': 0.97,
+    'MT': 0.84, 'NE': 1.73, 'NV': 0.53, 'NH': 2.05, 'NJ': 2.49,
+    'NM': 0.55, 'NY': 1.69, 'NC': 0.84, 'ND': 0.98, 'OH': 1.56,
+    'OK': 0.90, 'OR': 0.87, 'PA': 1.58, 'RI': 1.53, 'SC': 0.57,
+    'SD': 1.32, 'TN': 0.64, 'TX': 1.81, 'UT': 0.58, 'VT': 1.90,
+    'VA': 0.82, 'WA': 0.94, 'WV': 0.59, 'WI': 1.85, 'WY': 0.62
+  };
 
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
+  // State names for reference
+  const stateNames = {
+    'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas',
+    'CA': 'California', 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware',
+    'FL': 'Florida', 'GA': 'Georgia', 'HI': 'Hawaii', 'ID': 'Idaho',
+    'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa', 'KS': 'Kansas',
+    'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine', 'MD': 'Maryland',
+    'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota', 'MS': 'Mississippi',
+    'MO': 'Missouri', 'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada',
+    'NH': 'New Hampshire', 'NJ': 'New Jersey', 'NM': 'New Mexico', 'NY': 'New York',
+    'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio', 'OK': 'Oklahoma',
+    'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island', 'SC': 'South Carolina',
+    'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah',
+    'VT': 'Vermont', 'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia',
+    'WI': 'Wisconsin', 'WY': 'Wyoming'
+  };
 
-.font-bold { font-weight: var(--font-weight-bold); }
-.font-semibold { font-weight: var(--font-weight-semibold); }
-.font-medium { font-weight: var(--font-weight-medium); }
+  // Calculator state
+  let calculatorState = {
+    currentMode: 'payment',
+    activeTerm: 30,
+    usePctDownPayment: false,
+    comparisons: [],
+    recognition: null,
+    currentCalculation: null,
+    isAdvancedMode: false
+  };
 
-.text-primary { color: var(--color-primary); }
-.text-secondary { color: var(--color-text-secondary); }
-.text-muted { color: var(--color-text-secondary); }
+  // DOM Elements cache
+  const elements = {
+    // Form inputs
+    homePrice: $('#home-price'),
+    dpAmount: $('#dp-amount'),
+    dpPercent: $('#dp-percent'),
+    interestRate: $('#interest-rate'),
+    termCustom: $('#term-custom'),
+    state: $('#state'),
+    propertyTax: $('#property-tax'),
+    homeInsurance: $('#home-insurance'),
+    pmiRate: $('#pmi-rate'),
+    hoaFees: $('#hoa-fees'),
+    extraMonthly: $('#extra-monthly'),
+    extraOnce: $('#extra-once'),
 
-/* Focus and Accessibility */
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-a:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: 2px;
-}
+    // UI controls
+    tabAmount: $('#tab-amount'),
+    tabPercent: $('#tab-percent'),
+    dpAmountWrap: $('#dp-amount-wrap'),
+    dpPercentWrap: $('#dp-percent-wrap'),
+    pmiBanner: $('#pmi-banner'),
+    termButtons: $('#term-buttons'),
+    advancedToggle: $('#advanced-toggle'),
+    advancedPanel: $('#advanced-panel'),
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    // Results
+    totalPayment: $('#total-payment'),
+    loanAmount: $('#loan-amount'),
+    totalInterest: $('#total-interest'),
+    piAmount: $('#pi-amount'),
+    taxAmount: $('#tax-amount'),
+    insuranceAmount: $('#insurance-amount'),
+    pmiAmount: $('#pmi-amount'),
+    hoaAmount: $('#hoa-amount'),
+    rowPmi: $('#row-pmi'),
+
+    // Charts and tables
+    breakdownChart: $('#breakdownChart'),
+    legendBreakdown: $('#legend-breakdown'),
+    amortizationBody: $('#amortization-body'),
+    fullScheduleBody: $('#full-schedule-body'),
+    scheduleModal: $('#schedule-modal'),
+
+    // Action buttons
+    calculateBtn: $('#calculate-btn'),
+    resetBtn: $('#reset-form'),
+    emailBtn: $('#email-results'),
+    shareBtn: $('#share-results'),
+    printBtn: $('#print-results'),
+    viewFullSchedule: $('#view-full-schedule'),
+    closeSchedule: $('#close-schedule'),
+
+    // Voice and AI
+    voiceBtns: $$('.voice-btn'),
+    voiceStatus: $('#voice-status'),
+
+    // Insights and comparison
+    insightsList: $('#insights-list'),
+    comparisonCards: $('#comparison-cards'),
+    scenarioBtns: $$('.scenario-btn')
+  };
+
+  // Initialize calculator
+  function init() {
+    setupEventListeners();
+    setupVoiceRecognition();
+    setInitialValues();
+    populateStateDropdown();
+    calculate();
   }
-}
 
-/* Print Styles */
-@media print {
-  .header,
-  .mobile-menu-toggle,
-  .action-buttons,
-  .result-actions {
-    display: none !important;
+  // Event listeners setup
+  function setupEventListeners() {
+    // Down payment tabs
+    if (elements.tabAmount) {
+      elements.tabAmount.addEventListener('click', () => switchDPMode(false));
+    }
+    if (elements.tabPercent) {
+      elements.tabPercent.addEventListener('click', () => switchDPMode(true));
+    }
+
+    // Input synchronization
+    if (elements.homePrice) {
+      elements.homePrice.addEventListener('input', handleHomePriceChange);
+    }
+    if (elements.dpAmount) {
+      elements.dpAmount.addEventListener('input', () => syncDownPayment(false));
+    }
+    if (elements.dpPercent) {
+      elements.dpPercent.addEventListener('input', () => syncDownPayment(true));
+    }
+    if (elements.state) {
+      elements.state.addEventListener('change', updatePropertyTax);
+    }
+
+    // Term selection
+    if (elements.termButtons) {
+      elements.termButtons.addEventListener('click', (e) => {
+        const btn = e.target.closest('.chip[data-term]');
+        if (btn) setTerm(parseInt(btn.dataset.term));
+      });
+    }
+
+    if (elements.termCustom) {
+      elements.termCustom.addEventListener('input', handleCustomTerm);
+    }
+
+    // Advanced options
+    if (elements.advancedToggle) {
+      elements.advancedToggle.addEventListener('click', toggleAdvanced);
+    }
+
+    // Auto-calculation on input changes
+    const autoCalcInputs = [
+      elements.homePrice, elements.dpAmount, elements.dpPercent,
+      elements.interestRate, elements.propertyTax, elements.homeInsurance,
+      elements.pmiRate, elements.hoaFees, elements.extraMonthly, elements.extraOnce
+    ].filter(Boolean);
+
+    autoCalcInputs.forEach(input => {
+      input.addEventListener('input', debounce(calculate, 300));
+    });
+
+    // Action buttons
+    if (elements.calculateBtn) {
+      elements.calculateBtn.addEventListener('click', calculate);
+    }
+    if (elements.resetBtn) {
+      elements.resetBtn.addEventListener('click', resetForm);
+    }
+    if (elements.emailBtn) {
+      elements.emailBtn.addEventListener('click', emailResults);
+    }
+    if (elements.shareBtn) {
+      elements.shareBtn.addEventListener('click', shareResults);
+    }
+    if (elements.printBtn) {
+      elements.printBtn.addEventListener('click', () => window.print());
+    }
+    if (elements.viewFullSchedule) {
+      elements.viewFullSchedule.addEventListener('click', showFullSchedule);
+    }
+    if (elements.closeSchedule) {
+      elements.closeSchedule.addEventListener('click', () => elements.scheduleModal?.close());
+    }
+
+    // Voice buttons
+    elements.voiceBtns.forEach(btn => {
+      btn.addEventListener('click', () => startVoiceInput(btn.dataset.field));
+    });
+
+    // Voice status close
+    const voiceClose = $('.voice-close');
+    if (voiceClose) {
+      voiceClose.addEventListener('click', hideVoiceStatus);
+    }
+
+    // Comparison scenarios
+    elements.scenarioBtns.forEach(btn => {
+      btn.addEventListener('click', () => loadScenario(btn.dataset.scenario));
+    });
+
+    // Modal backdrop click
+    if (elements.scheduleModal) {
+      elements.scheduleModal.addEventListener('click', (e) => {
+        if (e.target === elements.scheduleModal) {
+          elements.scheduleModal.close();
+        }
+      });
+    }
+
+    // Mobile menu toggle
+    const mobileToggle = $('.mobile-menu-toggle');
+    const navMenu = $('.nav-menu');
+    if (mobileToggle && navMenu) {
+      mobileToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+      });
+    }
   }
-  
-  .page-header {
-    margin-top: 0;
+
+  // Voice recognition setup
+  function setupVoiceRecognition() {
+    try {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        elements.voiceBtns.forEach(btn => btn.style.display = 'none');
+        return;
+      }
+
+      calculatorState.recognition = new SpeechRecognition();
+      calculatorState.recognition.continuous = false;
+      calculatorState.recognition.interimResults = false;
+      calculatorState.recognition.lang = 'en-US';
+      calculatorState.recognition.maxAlternatives = 1;
+
+      calculatorState.recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        processVoiceCommand(transcript);
+      };
+
+      calculatorState.recognition.onerror = (event) => {
+        console.error('Voice recognition error:', event.error);
+        hideVoiceStatus();
+        showNotification('Voice recognition error. Please try again.', 'error');
+      };
+
+      calculatorState.recognition.onend = hideVoiceStatus;
+    } catch (error) {
+      console.warn('Voice recognition not available:', error);
+      elements.voiceBtns.forEach(btn => btn.style.display = 'none');
+    }
   }
-  
-  .calculator-layout {
-    display: block;
+
+  // Populate state dropdown
+  function populateStateDropdown() {
+    if (!elements.state) return;
+
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Select State';
+    elements.state.appendChild(defaultOption);
+
+    Object.entries(stateNames).forEach(([code, name]) => {
+      const option = document.createElement('option');
+      option.value = code;
+      option.textContent = `${name} (${code})`;
+      elements.state.appendChild(option);
+    });
+
+    // Set default to California
+    elements.state.value = 'CA';
   }
-  
-  .calculator-panel,
-  .results-panel {
-    box-shadow: none;
-    border: 1px solid #ddd;
-    margin-bottom: var(--space-24);
-    page-break-inside: avoid;
+
+  // Set initial values
+  function setInitialValues() {
+    setTerm(30);
+    switchDPMode(false);
+    updatePropertyTax();
+    updateInsurance();
   }
-}
+
+  // Down payment mode switching
+  function switchDPMode(usePercent) {
+    calculatorState.usePctDownPayment = usePercent;
+    
+    if (elements.tabAmount) elements.tabAmount.classList.toggle('active', !usePercent);
+    if (elements.tabPercent) elements.tabPercent.classList.toggle('active', usePercent);
+    if (elements.dpAmountWrap) elements.dpAmountWrap.classList.toggle('hidden', usePercent);
+    if (elements.dpPercentWrap) elements.dpPercentWrap.classList.toggle('hidden', !usePercent);
+    
+    syncDownPayment(usePercent);
+  }
+
+  // Sync down payment inputs
+  function syncDownPayment(fromPercent) {
+    const homePrice = parseFloat(elements.homePrice?.value || 0);
+    
+    if (fromPercent) {
+      const pct = Math.min(100, Math.max(0, parseFloat(elements.dpPercent?.value || 0)));
+      const amt = Math.round(homePrice * pct / 100);
+      if (elements.dpAmount) elements.dpAmount.value = amt;
+    } else {
+      const amt = Math.min(homePrice, Math.max(0, parseFloat(elements.dpAmount?.value || 0)));
+      const pct = homePrice > 0 ? (amt / homePrice * 100) : 0;
+      if (elements.dpPercent) elements.dpPercent.value = pct.toFixed(1);
+    }
+    
+    updatePMIBanner();
+  }
+
+  // Handle home price changes
+  function handleHomePriceChange() {
+    syncDownPayment(calculatorState.usePctDownPayment);
+    updatePropertyTax();
+    updateInsurance();
+  }
+
+  // Update PMI banner
+  function updatePMIBanner() {
+    if (!elements.pmiBanner || !elements.dpPercent) return;
+    
+    const dpPct = parseFloat(elements.dpPercent.value || 0);
+    const needsPMI = dpPct < 20;
+    
+    elements.pmiBanner.classList.toggle('hidden', !needsPMI);
+    
+    if (needsPMI) {
+      elements.pmiBanner.innerHTML = `
+        <i class="fas fa-info-circle"></i>
+        <div>
+          <strong>PMI Required</strong><br>
+          Down payment is ${formatPercentage(dpPct)} (less than 20% of home value)
+        </div>
+      `;
+    }
+  }
+
+  // Update property tax based on state
+  function updatePropertyTax() {
+    if (!elements.propertyTax || !elements.state || !elements.homePrice) return;
+    
+    const homePrice = parseFloat(elements.homePrice.value || 0);
+    const state = elements.state.value;
+    
+    if (!state || !homePrice) return;
+    
+    const taxRate = stateTaxRates[state] || 1.0;
+    const annualTax = Math.round(homePrice * (taxRate / 100));
+    elements.propertyTax.value = annualTax;
+  }
+
+  // Update insurance estimate
+  function updateInsurance() {
+    if (!elements.homeInsurance || !elements.homePrice) return;
+    
+    const homePrice = parseFloat(elements.homePrice.value || 0);
+    const estimate = Math.round(homePrice * 0.0024); // ~0.24% of home value
+    elements.homeInsurance.value = Math.max(600, Math.min(estimate, 3000));
+  }
+
+  // Term selection
+  function setTerm(years) {
+    calculatorState.activeTerm = years;
+    
+    $$('[data-term]').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.term) === years);
+    });
+    
+    if (elements.termCustom) elements.termCustom.value = '';
+    calculate();
+  }
+
+  // Handle custom term input
+  function handleCustomTerm() {
+    if (!elements.termCustom) return;
+    
+    const customYears = parseInt(elements.termCustom.value);
+    if (customYears >= 1 && customYears <= 40) {
+      calculatorState.activeTerm = customYears;
+      $$('[data-term]').forEach(btn => btn.classList.remove('active'));
+    }
+    calculate();
+  }
+
+  // Toggle advanced options
+  function toggleAdvanced() {
+    if (!elements.advancedPanel || !elements.advancedToggle) return;
+    
+    calculatorState.isAdvancedMode = !calculatorState.isAdvancedMode;
+    
+    elements.advancedPanel.classList.toggle('hidden', !calculatorState.isAdvancedMode);
+    elements.advancedToggle.classList.toggle('active', calculatorState.isAdvancedMode);
+    
+    const arrow = elements.advancedToggle.querySelector('.arrow');
+    if (arrow) {
+      arrow.classList.toggle('rotated', calculatorState.isAdvancedMode);
+    }
+  }
+
+  // Voice input functions
+  function startVoiceInput(field) {
+    if (!calculatorState.recognition) {
+      showNotification('Voice input not supported in this browser', 'error');
+      return;
+    }
+    
+    showVoiceStatus();
+    calculatorState.recognition.start();
+  }
+
+  function processVoiceCommand(transcript) {
+    console.log('Voice command:', transcript);
+    
+    const numbers = transcript.match(/\d+(?:\.\d+)?/g);
+    
+    if (transcript.includes('home price') || transcript.includes('house price')) {
+      if (numbers && numbers.length > 0) {
+        let value = parseFloat(numbers[0]);
+        if (value < 10000) value *= 1000;
+        if (elements.homePrice) {
+          elements.homePrice.value = value;
+          handleHomePriceChange();
+        }
+        showNotification(`Home price set to ${formatCurrency(value)}`, 'success');
+      }
+    } else if (transcript.includes('down payment')) {
+      if (numbers && numbers.length > 0) {
+        let value = parseFloat(numbers[0]);
+        if (transcript.includes('percent')) {
+          calculatorState.usePctDownPayment = true;
+          switchDPMode(true);
+          if (elements.dpPercent) {
+            elements.dpPercent.value = value;
+            syncDownPayment(true);
+          }
+        } else {
+          if (value < 1000) value *= 1000;
+          calculatorState.usePctDownPayment = false;
+          switchDPMode(false);
+          if (elements.dpAmount) {
+            elements.dpAmount.value = value;
+            syncDownPayment(false);
+          }
+        }
+        showNotification('Down payment updated', 'success');
+      }
+    } else if (transcript.includes('interest rate') || transcript.includes('rate')) {
+      if (numbers && numbers.length > 0) {
+        const value = parseFloat(numbers[0]);
+        if (elements.interestRate) {
+          elements.interestRate.value = value;
+        }
+        showNotification(`Interest rate set to ${formatPercentage(value)}`, 'success');
+      }
+    } else if (transcript.includes('calculate')) {
+      calculate();
+      showNotification('Calculation completed!', 'success');
+    } else {
+      showNotification('Try saying: "home price 400000" or "interest rate 6.5"', 'info');
+    }
+    
+    calculate();
+  }
+
+  function showVoiceStatus() {
+    if (elements.voiceStatus) {
+      elements.voiceStatus.classList.add('active');
+    }
+  }
+
+  function hideVoiceStatus() {
+    if (elements.voiceStatus) {
+      elements.voiceStatus.classList.remove('active');
+    }
+  }
+
+  // Main calculation function
+  function calculate() {
+    try {
+      const result = calculatePayment();
+      if (result) {
+        calculatorState.currentCalculation = result;
+        updateDisplay(result);
+        generateInsights(result);
+        updateCharts(result);
+        updateAmortizationTable(result);
+      }
+    } catch (error) {
+      console.error('Calculation error:', error);
+      showNotification('Calculation error. Please check your inputs.', 'error');
+    }
+  }
+
+  // Payment calculation
+  function calculatePayment() {
+    const homePrice = parseFloat(elements.homePrice?.value || 0);
+    const dpAmount = parseFloat(elements.dpAmount?.value || 0);
+    const loanAmount = Math.max(0, homePrice - dpAmount);
+    const rate = parseFloat(elements.interestRate?.value || 0) / 100;
+    const term = parseInt(elements.termCustom?.value) || calculatorState.activeTerm;
+    const months = term * 12;
+
+    if (!homePrice || !rate || !term) return null;
+
+    // Property costs
+    const annualTax = parseFloat(elements.propertyTax?.value || 0);
+    const annualInsurance = parseFloat(elements.homeInsurance?.value || 0);
+    const pmiRate = parseFloat(elements.pmiRate?.value || 0) / 100;
+    const monthlyHOA = parseFloat(elements.hoaFees?.value || 0);
+    const extraMonthly = parseFloat(elements.extraMonthly?.value || 0);
+    const extraOnce = parseFloat(elements.extraOnce?.value || 0);
+
+    // Calculate monthly P&I
+    const monthlyRate = rate / 12;
+    let monthlyPI = 0;
+    
+    if (monthlyRate > 0) {
+      monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+                  (Math.pow(1 + monthlyRate, months) - 1);
+    } else {
+      monthlyPI = loanAmount / months;
+    }
+
+    // Other monthly costs
+    const monthlyTax = annualTax / 12;
+    const monthlyInsurance = annualInsurance / 12;
+    const dpPercent = homePrice > 0 ? (dpAmount / homePrice * 100) : 0;
+    const needsPMI = dpPercent < 20;
+    const monthlyPMI = needsPMI ? (loanAmount * pmiRate / 12) : 0;
+    const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + monthlyPMI + monthlyHOA;
+
+    // Generate amortization schedule with extra payments
+    const schedule = generateSchedule(loanAmount, monthlyRate, monthlyPI, months, extraMonthly, extraOnce);
+    const totalInterest = schedule.reduce((sum, payment) => sum + payment.interest, 0);
+
+    return {
+      mode: 'payment',
+      homePrice,
+      dpAmount,
+      dpPercent,
+      loanAmount,
+      rate: rate * 100,
+      term,
+      monthlyPI,
+      monthlyTax,
+      monthlyInsurance,
+      monthlyPMI,
+      monthlyHOA,
+      totalMonthly,
+      totalInterest,
+      totalCost: loanAmount + totalInterest,
+      needsPMI,
+      schedule,
+      extraMonthly,
+      extraOnce
+    };
+  }
+
+  // Generate amortization schedule
+  function generateSchedule(loanAmount, monthlyRate, monthlyPI, totalMonths, extraMonthly = 0, extraOnce = 0) {
+    const schedule = [];
+    let balance = loanAmount;
+    let totalExtra = 0;
+
+    for (let month = 1; month <= totalMonths && balance > 0; month++) {
+      const interestPayment = balance * monthlyRate;
+      let principalPayment = monthlyPI - interestPayment;
+      let extraPayment = 0;
+
+      // Add extra payments
+      if (month === 1 && extraOnce > 0) {
+        extraPayment += Math.min(extraOnce, balance - principalPayment);
+      }
+      if (extraMonthly > 0) {
+        extraPayment += Math.min(extraMonthly, balance - principalPayment);
+      }
+
+      totalExtra += extraPayment;
+      principalPayment += extraPayment;
+
+      // Ensure we don't overpay
+      if (principalPayment > balance) {
+        principalPayment = balance;
+        extraPayment = principalPayment - (monthlyPI - interestPayment);
+      }
+
+      balance = Math.max(0, balance - principalPayment);
+
+      schedule.push({
+        month,
+        payment: monthlyPI + extraPayment,
+        principal: principalPayment,
+        interest: interestPayment,
+        extra: extraPayment,
+        balance
+      });
+
+      if (balance === 0) break;
+    }
+
+    return schedule;
+  }
+
+  // Update display based on calculation mode
+  function updateDisplay(result) {
+    updatePaymentDisplay(result);
+  }
+
+  // Update payment mode display
+  function updatePaymentDisplay(result) {
+    if (elements.totalPayment) elements.totalPayment.textContent = formatCurrency(result.totalMonthly);
+    if (elements.loanAmount) elements.loanAmount.textContent = formatCurrency(result.loanAmount);
+    if (elements.totalInterest) elements.totalInterest.textContent = formatCurrency(result.totalInterest);
+    if (elements.piAmount) elements.piAmount.textContent = formatCurrency(result.monthlyPI);
+    if (elements.taxAmount) elements.taxAmount.textContent = formatCurrency(result.monthlyTax);
+    if (elements.insuranceAmount) elements.insuranceAmount.textContent = formatCurrency(result.monthlyInsurance);
+    if (elements.pmiAmount) elements.pmiAmount.textContent = formatCurrency(result.monthlyPMI);
+    if (elements.hoaAmount) elements.hoaAmount.textContent = formatCurrency(result.monthlyHOA);
+
+    // Show/hide PMI row
+    if (elements.rowPmi) {
+      elements.rowPmi.classList.toggle('hidden', !result.needsPMI);
+    }
+  }
+
+  // Update charts
+  function updateCharts(result) {
+    if (result.mode !== 'payment') return;
+
+    const breakdownData = [
+      result.monthlyPI,
+      result.monthlyTax,
+      result.monthlyInsurance,
+      result.monthlyPMI,
+      result.monthlyHOA
+    ].filter(value => value > 0);
+
+    const colors = ['#21808d', '#a84b2f', '#626c71', '#ef4444', '#94a3b8'];
+    const labels = ['P&I', 'Taxes', 'Insurance', 'PMI', 'HOA'].filter((_, index) => 
+      [result.monthlyPI, result.monthlyTax, result.monthlyInsurance, result.monthlyPMI, result.monthlyHOA][index] > 0
+    );
+
+    if (elements.breakdownChart) {
+      drawPieChart(elements.breakdownChart, breakdownData, colors, labels);
+    }
+  }
+
+  // Draw pie chart
+  function drawPieChart(canvas, data, colors, labels) {
+    const ctx = canvas.getContext('2d');
+    const rect = canvas.getBoundingClientRect();
+    const size = Math.min(rect.width, rect.height, 300);
+    
+    canvas.width = size;
+    canvas.height = size;
+    
+    ctx.clearRect(0, 0, size, size);
+    
+    const total = data.reduce((sum, value) => sum + value, 0);
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const radius = Math.min(centerX, centerY) * 0.8;
+    
+    let startAngle = -Math.PI / 2;
+    
+    data.forEach((value, index) => {
+      if (value > 0) {
+        const angle = (value / total) * 2 * Math.PI;
+        
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, startAngle + angle);
+        ctx.closePath();
+        ctx.fillStyle = colors[index];
+        ctx.fill();
+        
+        startAngle += angle;
+      }
+    });
+
+    // Update legend
+    if (elements.legendBreakdown) {
+      let legendHTML = '';
+      data.forEach((value, index) => {
+        if (value > 0) {
+          legendHTML += `
+            <div class="legend-item">
+              <span class="legend-color" style="background-color: ${colors[index]}"></span>
+              <span>${labels[index]}: ${formatCurrency(value)}</span>
+            </div>
+          `;
+        }
+      });
+      elements.legendBreakdown.innerHTML = legendHTML;
+    }
+  }
+
+  // Generate insights
+  function generateInsights(result) {
+    if (!elements.insightsList) return;
+
+    const insights = [];
+
+    // PMI insight
+    if (result.needsPMI) {
+      const monthlyPMI = result.monthlyPMI;
+      const annualPMI = monthlyPMI * 12;
+      insights.push({
+        icon: 'fas fa-shield-alt',
+        title: 'PMI Impact',
+        message: `You'll pay ${formatCurrency(monthlyPMI)}/month (${formatCurrency(annualPMI)}/year) for PMI. Consider increasing your down payment to 20% to eliminate PMI.`,
+        type: 'warning'
+      });
+    }
+
+    // Interest vs principal insight
+    const totalPaid = result.totalCost;
+    const interestRatio = (result.totalInterest / totalPaid) * 100;
+    insights.push({
+      icon: 'fas fa-chart-pie',
+      title: 'Interest vs Principal',
+      message: `Over the life of the loan, ${formatPercentage(interestRatio, 1)} of your payments (${formatCurrency(result.totalInterest)}) will go toward interest.`,
+      type: 'info'
+    });
+
+    // Extra payment insight
+    if (result.extraMonthly > 0) {
+      const scheduleWithoutExtra = generateSchedule(result.loanAmount, result.rate / 100 / 12, result.monthlyPI, result.term * 12, 0, 0);
+      const regularInterest = scheduleWithoutExtra.reduce((sum, payment) => sum + payment.interest, 0);
+      const interestSaved = regularInterest - result.totalInterest;
+      const monthsSaved = (result.term * 12) - result.schedule.length;
+      
+      insights.push({
+        icon: 'fas fa-piggy-bank',
+        title: 'Extra Payment Benefits',
+        message: `Your extra ${formatCurrency(result.extraMonthly)}/month saves ${formatCurrency(interestSaved)} in interest and pays off your loan ${monthsSaved} months early.`,
+        type: 'success'
+      });
+    } else {
+      const extraAmount = Math.round(result.monthlyPI * 0.1);
+      const scheduleWithExtra = generateSchedule(result.loanAmount, result.rate / 100 / 12, result.monthlyPI, result.term * 12, extraAmount, 0);
+      const regularInterest = result.totalInterest;
+      const extraInterest = scheduleWithExtra.reduce((sum, payment) => sum + payment.interest, 0);
+      const potentialSavings = regularInterest - extraInterest;
+      const monthsSaved = (result.term * 12) - scheduleWithExtra.length;
+      
+      insights.push({
+        icon: 'fas fa-lightbulb',
+        title: 'Extra Payment Opportunity',
+        message: `Adding just ${formatCurrency(extraAmount)}/month could save ${formatCurrency(potentialSavings)} in interest and pay off your loan ${monthsSaved} months early.`,
+        type: 'tip'
+      });
+    }
+
+    // Refinancing insight
+    if (result.rate > 6.0) {
+      insights.push({
+        icon: 'fas fa-sync-alt',
+        title: 'Refinancing Opportunity',
+        message: `Your rate of ${formatPercentage(result.rate)} is above current market averages. Consider refinancing if rates drop to save on monthly payments.`,
+        type: 'tip'
+      });
+    }
+
+    renderInsights(insights);
+  }
+
+  // Render insights
+  function renderInsights(insights) {
+    if (!elements.insightsList) return;
+
+    const iconMap = {
+      warning: 'fas fa-exclamation-triangle',
+      info: 'fas fa-info-circle',
+      success: 'fas fa-check-circle',
+      tip: 'fas fa-lightbulb'
+    };
+
+    const html = insights.map(insight => `
+      <li class="insight-item">
+        <div class="insight-icon">
+          <i class="${insight.icon || iconMap[insight.type]}"></i>
+        </div>
+        <div class="insight-content">
+          <h4>${insight.title}</h4>
+          <p>${insight.message}</p>
+        </div>
+      </li>
+    `).join('');
+
+    elements.insightsList.innerHTML = html;
+  }
+
+  // Update amortization table
+  function updateAmortizationTable(result) {
+    if (!elements.amortizationBody) return;
+
+    const schedule = result.schedule.slice(0, 60); // First 5 years
+    
+    const html = schedule.map(payment => `
+      <tr>
+        <td>${payment.month}</td>
+        <td class="currency">${formatCurrencyDetailed(payment.payment)}</td>
+        <td class="currency">${formatCurrencyDetailed(payment.principal)}</td>
+        <td class="currency">${formatCurrencyDetailed(payment.interest)}</td>
+        <td class="currency">${formatCurrency(payment.balance)}</td>
+      </tr>
+    `).join('');
+
+    elements.amortizationBody.innerHTML = html;
+  }
+
+  // Utility functions for actions
+  function resetForm() {
+    const form = document.querySelector('form');
+    if (form) {
+      form.reset();
+      setInitialValues();
+      calculate();
+    }
+  }
+
+  function emailResults() {
+    if (!calculatorState.currentCalculation) return;
+    
+    const result = calculatorState.currentCalculation;
+    const subject = 'Mortgage Calculator Results';
+    const body = `
+Home Price: ${formatCurrency(result.homePrice)}
+Down Payment: ${formatCurrency(result.dpAmount)} (${formatPercentage(result.dpPercent)})
+Loan Amount: ${formatCurrency(result.loanAmount)}
+Interest Rate: ${formatPercentage(result.rate)}
+Loan Term: ${result.term} years
+
+Monthly Payment: ${formatCurrency(result.totalMonthly)}
+- Principal & Interest: ${formatCurrency(result.monthlyPI)}
+- Property Tax: ${formatCurrency(result.monthlyTax)}
+- Insurance: ${formatCurrency(result.monthlyInsurance)}
+- PMI: ${formatCurrency(result.monthlyPMI)}
+- HOA: ${formatCurrency(result.monthlyHOA)}
+
+Total Interest: ${formatCurrency(result.totalInterest)}
+
+Generated by Finguid Mortgage Calculator
+    `.trim();
+
+    const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+  }
+
+  function shareResults() {
+    if (!calculatorState.currentCalculation) return;
+    
+    const result = calculatorState.currentCalculation;
+    const shareData = {
+      title: 'Mortgage Calculator Results',
+      text: `Monthly payment of ${formatCurrency(result.totalMonthly)} for a ${formatCurrency(result.homePrice)} home`,
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      navigator.share(shareData).catch(err => console.log('Share failed:', err));
+    } else {
+      // Fallback: copy to clipboard
+      const textToCopy = `${shareData.text} - ${shareData.url}`;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        showNotification('Results copied to clipboard!', 'success');
+      }).catch(() => {
+        showNotification('Unable to share results', 'error');
+      });
+    }
+  }
+
+  function showFullSchedule() {
+    if (!elements.scheduleModal || !elements.fullScheduleBody) return;
+    
+    const result = calculatorState.currentCalculation;
+    if (!result) return;
+
+    const html = result.schedule.map(payment => `
+      <tr>
+        <td>${payment.month}</td>
+        <td class="currency">${formatCurrencyDetailed(payment.payment)}</td>
+        <td class="currency">${formatCurrencyDetailed(payment.principal)}</td>
+        <td class="currency">${formatCurrencyDetailed(payment.interest)}</td>
+        <td class="currency">${formatCurrency(payment.balance)}</td>
+      </tr>
+    `).join('');
+
+    elements.fullScheduleBody.innerHTML = html;
+    elements.scheduleModal.showModal();
+  }
+
+  function loadScenario(scenario) {
+    // Implement scenario loading logic based on scenario type
+    console.log('Loading scenario:', scenario);
+    // This would populate different calculation scenarios
+  }
+
+  // Notification system
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+      <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i>
+      <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 3000);
+  }
+
+  // Analytics tracking
+  function trackCalculatorUsage() {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'calculator_use', {
+        event_category: 'Calculator',
+        event_label: 'Mortgage Calculator',
+        value: 1
+      });
+    }
+  }
+
+  // Initialize the calculator when DOM is ready
+  init();
+
+  // Track usage on calculation
+  document.addEventListener('calculate', trackCalculatorUsage);
+});
