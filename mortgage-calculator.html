@@ -2308,5 +2308,171 @@
             init();
         });
     </script>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🏠 AI-Enhanced Mortgage Calculator</title>
+  <style>
+    /* Basic Reset */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; line-height: 1.5; color: #333; background: #f9f9f9; }
+    .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+    h1, h2, h3, h4 { margin-bottom: 0.5rem; color: #005f73; }
+    form { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.25rem; font-weight: bold; }
+    input, select, button { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+    button { background: #008891; color: #fff; border: none; cursor: pointer; }
+    button:hover { background: #005f73; }
+    .results { margin-top: 2rem; background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .result-item { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    .error { color: #b00020; font-size: 0.875rem; margin-top: 0.25rem; }
+    @media (max-width: 600px) {
+      .result-item { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏠 AI-Enhanced Mortgage Calculator</h1>
+
+    <form id="mortgage-form" novalidate>
+      <h2>Loan Details</h2>
+
+      <div class="form-group">
+        <label for="home-price">Home Price ($)</label>
+        <input type="number" id="home-price" name="homePrice" required min="0" step="0.01" />
+        <span class="error" id="home-price-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="down-payment">Down Payment ($)</label>
+        <input type="number" id="down-payment" name="downPayment" required min="0" step="0.01" />
+        <span class="error" id="down-payment-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="interest-rate">Interest Rate (%)</label>
+        <input type="number" id="interest-rate" name="interestRate" required min="0" max="100" step="0.01" />
+        <span class="error" id="interest-rate-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="loan-term">Term (years)</label>
+        <select id="loan-term" name="loanTerm" required>
+          <option value="">Select term</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+        </select>
+        <span class="error" id="loan-term-error"></span>
+      </div>
+
+      <button type="submit">Calculate</button>
+    </form>
+
+    <div id="results" class="results" hidden>
+      <h2>Payment Results</h2>
+      <div class="result-item"><span>Total Monthly Payment:</span><span id="total-payment"></span></div>
+      <div class="result-item"><span>Loan Amount:</span><span id="loan-amount"></span></div>
+      <div class="result-item"><span>Total Interest:</span><span id="total-interest"></span></div>
+      <h3>Monthly Breakdown</h3>
+      <div class="result-item"><span>P&amp;I:</span><span id="breakdown-pi"></span></div>
+      <div class="result-item"><span>Taxes:</span><span id="breakdown-taxes"></span></div>
+      <div class="result-item"><span>Insurance:</span><span id="breakdown-insurance"></span></div>
+      <div class="result-item"><span>PMI:</span><span id="breakdown-pmi"></span></div>
+      <div class="result-item"><span>HOA:</span><span id="breakdown-hoa"></span></div>
+      <h3>AI Insights</h3>
+      <p id="ai-insights"></p>
+    </div>
+  </div>
+
+  <script>
+    function formatCurrency(value) {
+      return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function showError(inputId, message) {
+      document.getElementById(inputId + '-error').textContent = message;
+    }
+
+    function clearErrors() {
+      ['home-price','down-payment','interest-rate','loan-term'].forEach(id => {
+        showError(id, '');
+      });
+    }
+
+    function validateForm(data) {
+      let valid = true;
+      clearErrors();
+      if (data.homePrice <= 0) {
+        showError('home-price','Enter a valid home price');
+        valid = false;
+      }
+      if (data.downPayment < 0 || data.downPayment > data.homePrice) {
+        showError('down-payment','Must be between 0 and home price');
+        valid = false;
+      }
+      if (data.interestRate <= 0 || data.interestRate > 100) {
+        showError('interest-rate','Enter a valid rate');
+        valid = false;
+      }
+      if (!data.loanTerm) {
+        showError('loan-term','Select a term');
+        valid = false;
+      }
+      return valid;
+    }
+
+    function calculatePayment({ homePrice, downPayment, interestRate, loanTerm }) {
+      const principal = homePrice - downPayment;
+      const monthlyRate = interestRate / 100 / 12;
+      const months = loanTerm * 12;
+      const x = Math.pow(1 + monthlyRate, months);
+      const monthlyPI = principal * (monthlyRate * x) / (x - 1);
+      return { principal, monthlyPI, months, monthlyRate };
+    }
+
+    document.getElementById('mortgage-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const data = {
+        homePrice: parseFloat(document.getElementById('home-price').value),
+        downPayment: parseFloat(document.getElementById('down-payment').value),
+        interestRate: parseFloat(document.getElementById('interest-rate').value),
+        loanTerm: parseInt(document.getElementById('loan-term').value, 10)
+      };
+      if (!validateForm(data)) return;
+
+      const { principal, monthlyPI, months, monthlyRate } = calculatePayment(data);
+      const totalInterest = monthlyPI * months - principal;
+      // For simplicity, using fixed percentages for taxes, insurance, PMI, HOA
+      const monthlyTaxes = principal * 0.012 / 12;
+      const monthlyInsurance = principal * 0.003 / 12;
+      const monthlyPMI = (downPayment / homePrice < 0.2) ? principal * 0.01 / 12 : 0;
+      const monthlyHOA = 0;
+
+      document.getElementById('total-payment').textContent = formatCurrency(monthlyPI + monthlyTaxes + monthlyInsurance + monthlyPMI + monthlyHOA);
+      document.getElementById('loan-amount').textContent = formatCurrency(principal);
+      document.getElementById('total-interest').textContent = formatCurrency(totalInterest);
+      document.getElementById('breakdown-pi').textContent = formatCurrency(monthlyPI);
+      document.getElementById('breakdown-taxes').textContent = formatCurrency(monthlyTaxes);
+      document.getElementById('breakdown-insurance').textContent = formatCurrency(monthlyInsurance);
+      document.getElementById('breakdown-pmi').textContent = formatCurrency(monthlyPMI);
+      document.getElementById('breakdown-hoa').textContent = formatCurrency(monthlyHOA);
+
+      // Simple AI Insight
+      const insight = (monthlyPMI > 0)
+        ? 'You are paying PMI. Consider a larger down payment to avoid PMI.'
+        : 'Great! No PMI required.';
+      document.getElementById('ai-insights').textContent = insight;
+
+      document.getElementById('results').hidden = false;
+      window.scrollTo({ top: document.getElementById('results').offsetTop - 20, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
 </body>
 </html>
