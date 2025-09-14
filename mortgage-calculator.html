@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NYBL2CDNQJ');
+</script>
+<!-- at the top of mortgage-calculator.html -->
+<body class="page-mortgage">
+  ...
+</body>
+  <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HomeLoan Pro - AI-Enhanced USA Mortgage Calculator | Free Home Loan Payment Estimator</title>
-    <meta name="description" content="Calculate accurate mortgage payments with HomeLoan Pro's AI-enhanced calculator. Get state-specific property taxes, PMI calculations, and smart insights for all 50 US states. Free mortgage calculator with voice input and refinance options.">
-    <meta name="keywords" content="mortgage calculator, home loan calculator, USA mortgage rates, property tax calculator, PMI calculator, refinance calculator, home affordability calculator">
+    <meta name="description" content="Calculate accurate mortgage payments with HomeLoan Pro's AI-enhanced calculator. Get state-specific property taxes, PMI calculations, and smart insights for all 50 US states. Free mortgage calculator with voice input.">
+    <meta name="keywords" content="mortgage calculator, home loan calculator, USA mortgage rates, property tax calculator, PMI calculator, home affordability calculator">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -39,8 +52,6 @@
             "Voice Input Support",
             "50-State Property Tax Data", 
             "PMI Calculator",
-            "Refinance Mode",
-            "Affordability Calculator",
             "AI Insights",
             "Amortization Schedule"
         ],
@@ -52,968 +63,38 @@
     }
     </script>
 
-    <style>
-        :root {
-            --primary: #21808d;
-            --primary-dark: #1a656f;
-            --secondary: #f3f4f6;
-            --accent: #f59e0b;
-            --text: #1f2937;
-            --text-light: #6b7280;
-            --border: #e5e7eb;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --bg-white: #ffffff;
-            --bg-light: #f9fafb;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text);
-            background-color: var(--bg-light);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header Styles */
-        .header {
-            background-color: var(--bg-white);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-        
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-        
-        .nav-brand i {
-            margin-right: 0.5rem;
-        }
-        
-        .nav-menu {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-link {
-            text-decoration: none;
-            color: var(--text);
-            padding: 0.5rem 1rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary);
-        }
-        
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-        
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background-color: var(--text);
-            margin: 2px 0;
-            transition: all 0.3s;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 3rem 0;
-            text-align: center;
-        }
-        
-        .hero-title {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .highlight {
-            color: var(--accent);
-        }
-        
-        .hero-description {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-        }
-        
-        .hero-features {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .feature {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .feature i {
-            font-size: 1.5rem;
-        }
-        
-        /* Calculator Section */
-        .calculator-section {
-            padding: 3rem 0;
-        }
-        
-        .mode-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: 1rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        
-        .tab-btn.active {
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--primary);
-            border-radius: 3px 3px 0 0;
-        }
-        
-        .calculator-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        
-        @media (max-width: 968px) {
-            .calculator-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .calculator-panel {
-            background-color: var(--bg-white);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            padding: 1.5rem;
-        }
-        
-        .panel-header {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .panel-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .form-label i {
-            margin-right: 0.5rem;
-            color: var(--primary);
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.1);
-        }
-        
-        .dp-tabs {
-            display: flex;
-            margin-bottom: 0.5rem;
-        }
-        
-        .dp-tabs .tab-btn {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .dp-inputs {
-            position: relative;
-        }
-        
-        .dp-input-wrap {
-            position: relative;
-        }
-        
-        .voice-btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-        }
-        
-        .term-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .chip {
-            padding: 0.5rem 1rem;
-            background-color: var(--secondary);
-            border: none;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .chip.active, .chip:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .or-text {
-            display: flex;
-            align-items: center;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-        
-        .pmi-banner {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem;
-            background-color: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 6px;
-            margin-top: 0.5rem;
-            color: var(--error);
-        }
-        
-        .pmi-banner i {
-            margin-right: 0.5rem;
-        }
-        
-        .advanced-toggle {
-            display: flex;
-            align-items: center;
-            background: none;
-            border: none;
-            color: var(--primary);
-            font-weight: 500;
-            cursor: pointer;
-            padding: 0;
-            margin-bottom: 1rem;
-        }
-        
-        .advanced-toggle i:first-child {
-            margin-right: 0.5rem;
-        }
-        
-        .advanced-toggle .arrow {
-            margin-left: auto;
-        }
-        
-        .advanced-panel {
-            border-top: 1px solid var(--border);
-            padding-top: 1.5rem;
-        }
-        
-        .help-text {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin-top: 0.25rem;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .btn i {
-            margin-right: 0.5rem;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-        
-        .btn-secondary {
-            background-color: var(--secondary);
-            color: var(--text);
-        }
-        
-        .btn-secondary:hover {
-            background-color: #e5e7eb;
-        }
-        
-        .btn-full-width {
-            width: 100%;
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        /* Results Panel */
-        .results-summary {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .main-result {
-            margin-bottom: 1.5rem;
-        }
-        
-        .result-label {
-            font-size: 1rem;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-        }
-        
-        .result-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .key-metrics {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        
-        .metric {
-            background-color: var(--bg-light);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .metric-label {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 0.25rem;
-        }
-        
-        .metric-value {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        
-        .breakdown-section {
-            margin-bottom: 2rem;
-        }
-        
-        .breakdown-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .breakdown-table {
-            background-color: var(--bg-light);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .breakdown-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .breakdown-row:last-child {
-            border-bottom: none;
-        }
-        
-        .breakdown-label {
-            font-weight: 500;
-        }
-        
-        .breakdown-value {
-            font-weight: 600;
-            color: var(--primary);
-        }
-        
-        .charts-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .charts-section {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .chart-container {
-            background-color: var(--bg-light);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .chart-container h4 {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-        
-        .chart-container canvas {
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .chart-legend {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .insights-section {
-            margin-bottom: 2rem;
-        }
-        
-        .insights-section h3 {
-            display: flex;
-            align-items: center;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .insights-section h3 i {
-            margin-right: 0.5rem;
-            color: var(--accent);
-        }
-        
-        .insights-section small {
-            font-weight: normal;
-            color: var(--text-light);
-            margin-left: 0.5rem;
-        }
-        
-        .insights-list {
-            list-style: none;
-            background-color: var(--bg-light);
-            border-radius: 8px;
-            padding: 1rem;
-        }
-        
-        .insights-list li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .insights-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .amortization-section {
-            margin-bottom: 2rem;
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .section-header h3 {
-            font-size: 1.2rem;
-        }
-        
-        .table-container {
-            overflow-x: auto;
-        }
-        
-        .amortization-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .amortization-table th,
-        .amortization-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .amortization-table th {
-            font-weight: 600;
-            background-color: var(--bg-light);
-        }
-        
-        .result-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-        
-        /* Comparison Section */
-        .comparison-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-        }
-        
-        .scenario-controls {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .scenario-controls .form-input {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .predefined-scenarios {
-            margin-bottom: 1.5rem;
-        }
-        
-        .predefined-scenarios h4 {
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-        
-        .scenario-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .scenario-btn {
-            padding: 0.5rem 1rem;
-            background-color: var(--secondary);
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .scenario-btn:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        /* Voice Status */
-        .voice-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 1000;
-            display: none;
-        }
-        
-        .voice-animation {
-            display: flex;
-            gap: 4px;
-        }
-        
-        .voice-dot {
-            width: 8px;
-            height: 8px;
-            background-color: white;
-            border-radius: 50%;
-            animation: voicePulse 1.5s infinite ease-in-out;
-        }
-        
-        .voice-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        
-        .voice-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        
-        @keyframes voicePulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.7;
-            }
-            50% {
-                transform: scale(1.5);
-                opacity: 1;
-            }
-        }
-        
-        .voice-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 0;
-            margin-left: 0.5rem;
-        }
-        
-        /* Modal */
-        .schedule-modal {
-            width: 90%;
-            max-width: 1000px;
-            border: none;
-            border-radius: 12px;
-            padding: 0;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        
-        .schedule-modal::backdrop {
-            background-color: rgba(0,0,0,0.5);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .modal-header h2 {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-        }
-        
-        .modal-header h2 i {
-            margin-right: 0.5rem;
-            color: var(--primary);
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-light);
-        }
-        
-        .modal-body {
-            padding: 1.5rem;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        
-        .schedule-info {
-            margin-bottom: 1.5rem;
-        }
-        
-        .brand-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .brand-logo {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-        }
-        
-        .full-schedule {
-            font-size: 0.9rem;
-        }
-        
-        .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .schedule-table th,
-        .schedule-table td {
-            padding: 0.5rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .schedule-table th {
-            font-weight: 600;
-            background-color: var(--bg-light);
-            position: sticky;
-            top: 0;
-        }
-        
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            padding: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-        
-        /* Footer */
-        .footer {
-            background-color: var(--bg-white);
-            padding: 3rem 0 1.5rem;
-            margin-top: 3rem;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .footer-brand i {
-            margin-right: 0.5rem;
-        }
-        
-        .footer-section h4 {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-        
-        .footer-section ul {
-            list-style: none;
-        }
-        
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .footer-section ul li a {
-            text-decoration: none;
-            color: var(--text-light);
-            transition: color 0.2s;
-        }
-        
-        .footer-section ul li a:hover {
-            color: var(--primary);
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-            color: var(--text-light);
-        }
-        
-        /* Utility Classes */
-        .hidden {
-            display: none;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 70px;
-                flex-direction: column;
-                background-color: var(--bg-white);
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0,0,0,0.05);
-                padding: 2rem 0;
-            }
-            
-            .nav-menu.active {
-                left: 0;
-            }
-            
-            .nav-link {
-                padding: 1rem;
-                display: block;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-            
-            .hamburger.active span:nth-child(2) {
-                opacity: 0;
-            }
-            
-            .hamburger.active span:nth-child(1) {
-                transform: translateY(8px) rotate(45deg);
-            }
-            
-            .hamburger.active span:nth-child(3) {
-                transform: translateY(-8px) rotate(-45deg);
-            }
-            
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .key-metrics {
-                grid-template-columns: 1fr;
-            }
-            
-            .result-actions {
-                flex-direction: column;
-            }
-            
-            .scenario-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .scenario-controls .form-input {
-                min-width: auto;
-            }
-            
-            .modal-footer {
-                flex-direction: column;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <meta name="theme-color" content="#21808d">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-        <nav class="navbar container">
-            <a href="/" class="nav-brand">
-                <i class="fas fa-calculator"></i>
-                <span class="brand-text">Finguid</span>
-            </a>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="/" class="nav-link">Home</a></li>
-                <li><a href="/mortgage-calculator" class="nav-link active">Mortgage</a></li>
-                <li><a href="/calculators" class="nav-link">Calculators</a></li>
-                <li><a href="/resources" class="nav-link">Resources</a></li>
-                <li><a href="/about" class="nav-link">About</a></li>
-                <li><a href="/contact" class="nav-link">Contact</a></li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+        <nav class="navbar">
+            <div class="container">
+                <a href="/" class="nav-brand">
+                    <i class="fas fa-calculator"></i>
+                    <span class="brand-text">Finguid</span>
+                </a>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="/" class="nav-link">Home</a></li>
+                    <li><a href="/mortgage-calculator" class="nav-link active">Mortgage</a></li>
+                    <li><a href="/calculators" class="nav-link">Calculators</a></li>
+                    <li><a href="/resources" class="nav-link">Resources</a></li>
+                    <li><a href="/about" class="nav-link">About</a></li>
+                    <li><a href="/contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </nav>
     </header>
@@ -1021,7 +102,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero mortgage-hero">
             <div class="container">
                 <div class="hero-content">
                     <h1 class="hero-title">
@@ -1053,17 +134,13 @@
             </div>
         </section>
 
-        <!-- Calculator Section -->
+        <!-- Calculator Modes -->
         <section class="calculator-section">
             <div class="container">
-                <div class="mode-tabs">
-                    <button class="tab-btn active" data-mode="payment">Monthly Payment</button>
-                    <button class="tab-btn" data-mode="refinance">Refinance</button>
-                    <button class="tab-btn" data-mode="affordability">Affordability</button>
-                </div>
-
+                <!-- Removed mode tabs for refinance and affordability -->
+                
                 <div class="calculator-layout">
-                    <!-- Input Panel -->
+                    <!-- Left Panel - Inputs -->
                     <div class="calculator-panel inputs-panel">
                         <div class="panel-header">
                             <h2>Loan Details</h2>
@@ -1074,9 +151,9 @@
                         <div class="mode-content" id="payment-mode">
                             <div class="form-group">
                                 <label for="home-price" class="form-label">
-                                    <i class="fas fa-home"></i>
+                                    <i class="fas fa-home" data-tooltip="The total purchase price of the home"></i>
                                     Home Price ($)
-                                    <button class="voice-btn" data-field="home-price" title="Voice Input" aria-label="Voice input for home price">
+                                    <button class="voice-btn" data-field="home-price" title="Voice Input">
                                         <i class="fas fa-microphone"></i>
                                     </button>
                                 </label>
@@ -1085,7 +162,7 @@
 
                             <div class="form-group">
                                 <label class="form-label">
-                                    <i class="fas fa-percentage"></i>
+                                    <i class="fas fa-percentage" data-tooltip="Your upfront payment - affects PMI requirements"></i>
                                     Down Payment
                                 </label>
                                 <div class="dp-tabs">
@@ -1095,13 +172,13 @@
                                 <div class="dp-inputs">
                                     <div id="dp-amount-wrap" class="dp-input-wrap">
                                         <input type="number" id="dp-amount" class="form-input" value="80000" min="0" step="1000">
-                                        <button class="voice-btn" data-field="dp-amount" title="Voice Input" aria-label="Voice input for down payment amount">
+                                        <button class="voice-btn" data-field="dp-amount" title="Voice Input">
                                             <i class="fas fa-microphone"></i>
                                         </button>
                                     </div>
                                     <div id="dp-percent-wrap" class="dp-input-wrap hidden">
                                         <input type="number" id="dp-percent" class="form-input" value="20" min="0" max="100" step="0.1">
-                                        <button class="voice-btn" data-field="dp-percent" title="Voice Input" aria-label="Voice input for down payment percent">
+                                        <button class="voice-btn" data-field="dp-percent" title="Voice Input">
                                             <i class="fas fa-microphone"></i>
                                         </button>
                                     </div>
@@ -1115,9 +192,9 @@
 
                             <div class="form-group">
                                 <label for="interest-rate" class="form-label">
-                                    <i class="fas fa-chart-line"></i>
+                                    <i class="fas fa-chart-line" data-tooltip="Annual interest rate for your mortgage loan"></i>
                                     Interest Rate (%)
-                                    <button class="voice-btn" data-field="interest-rate" title="Voice Input" aria-label="Voice input for interest rate">
+                                    <button class="voice-btn" data-field="interest-rate" title="Voice Input">
                                         <i class="fas fa-microphone"></i>
                                     </button>
                                 </label>
@@ -1126,7 +203,7 @@
 
                             <div class="form-group">
                                 <label class="form-label">
-                                    <i class="fas fa-calendar-alt"></i>
+                                    <i class="fas fa-calendar-alt" data-tooltip="Length of your mortgage loan in years"></i>
                                     Loan Term
                                 </label>
                                 <div class="term-buttons" id="term-buttons">
@@ -1142,7 +219,7 @@
 
                             <div class="form-group">
                                 <label for="state" class="form-label">
-                                    <i class="fas fa-map-marker-alt"></i>
+                                    <i class="fas fa-map-marker-alt" data-tooltip="Select your state for accurate property tax calculations"></i>
                                     Property State
                                 </label>
                                 <select id="state" class="form-control">
@@ -1174,7 +251,7 @@
                                     <option value="MO">Missouri</option>
                                     <option value="MT">Montana</option>
                                     <option value="NE">Nebraska</option>
-                                    <option value="NV">Nevada</option>
+                                    <option value="NV">Nebada</option>
                                     <option value="NH">New Hampshire</option>
                                     <option value="NJ">New Jersey</option>
                                     <option value="NM">New Mexico</option>
@@ -1202,7 +279,7 @@
 
                             <div class="form-group">
                                 <label for="property-tax" class="form-label">
-                                    <i class="fas fa-building"></i>
+                                    <i class="fas fa-building" data-tooltip="Annual property tax - auto-calculated based on state and home value"></i>
                                     Property Tax (Annual $)
                                 </label>
                                 <input type="number" id="property-tax" class="form-input" value="1640" min="0" step="100">
@@ -1211,7 +288,7 @@
 
                             <!-- Advanced Options -->
                             <div class="advanced-section">
-                                <button class="advanced-toggle" id="advanced-toggle" aria-expanded="false">
+                                <button class="advanced-toggle" id="advanced-toggle">
                                     <i class="fas fa-cog"></i>
                                     <span>Advanced Options</span>
                                     <i class="fas fa-chevron-down arrow"></i>
@@ -1219,7 +296,7 @@
                                 <div id="advanced-panel" class="advanced-panel hidden">
                                     <div class="form-group">
                                         <label for="home-insurance" class="form-label">
-                                            <i class="fas fa-shield-alt"></i>
+                                            <i class="fas fa-shield-alt" data-tooltip="Annual homeowners insurance premium"></i>
                                             Home Insurance (Annual $)
                                         </label>
                                         <input type="number" id="home-insurance" class="form-input" value="960" min="0" step="50">
@@ -1227,7 +304,7 @@
 
                                     <div class="form-group">
                                         <label for="pmi-rate" class="form-label">
-                                            <i class="fas fa-umbrella"></i>
+                                            <i class="fas fa-umbrella" data-tooltip="Private Mortgage Insurance rate (typically 0.5% - 1.5% annually)"></i>
                                             PMI Rate (Annual %)
                                         </label>
                                         <input type="number" id="pmi-rate" class="form-input" value="0.8" min="0" max="5" step="0.1">
@@ -1235,7 +312,7 @@
 
                                     <div class="form-group">
                                         <label for="hoa-fees" class="form-label">
-                                            <i class="fas fa-users"></i>
+                                            <i class="fas fa-users" data-tooltip="Monthly Homeowners Association or condo fees"></i>
                                             HOA Fees (Monthly $)
                                         </label>
                                         <input type="number" id="hoa-fees" class="form-input" value="0" min="0" step="25">
@@ -1243,7 +320,7 @@
 
                                     <div class="form-group">
                                         <label for="extra-monthly" class="form-label">
-                                            <i class="fas fa-plus-circle"></i>
+                                            <i class="fas fa-plus-circle" data-tooltip="Additional monthly payment towards principal to pay off loan faster"></i>
                                             Extra Monthly Payment ($)
                                         </label>
                                         <input type="number" id="extra-monthly" class="form-input" value="0" min="0" step="50">
@@ -1251,7 +328,7 @@
 
                                     <div class="form-group">
                                         <label for="extra-once" class="form-label">
-                                            <i class="fas fa-hand-holding-usd"></i>
+                                            <i class="fas fa-hand-holding-usd" data-tooltip="One-time extra payment in the first month"></i>
                                             One-Time Extra Payment ($)
                                         </label>
                                         <input type="number" id="extra-once" class="form-input" value="0" min="0" step="100">
@@ -1273,7 +350,7 @@
                         </div>
                     </div>
 
-                    <!-- Results Panel -->
+                    <!-- Right Panel - Results -->
                     <div class="calculator-panel results-panel">
                         <div class="panel-header">
                             <h2>Payment Results</h2>
@@ -1347,10 +424,35 @@
                                 <small>Personalized recommendations to save money</small>
                             </h3>
                             <ul id="insights-list" class="insights-list">
-                                <li>Consider a 15-year term to save $152,000 in interest</li>
-                                <li>Increasing your down payment by 5% would eliminate PMI</li>
-                                <li>Your estimated home equity after 5 years: $85,000</li>
+                                <!-- Dynamic AI insights will be populated here -->
                             </ul>
+                        </div>
+
+                        <!-- Amortization Preview -->
+                        <div class="amortization-section">
+                            <div class="section-header">
+                                <h3>Payment Schedule (First 5 Years)</h3>
+                                <button id="view-full-schedule" class="btn btn-outline">
+                                    <i class="fas fa-table"></i>
+                                    View Full Schedule
+                                </button>
+                            </div>
+                            <div class="table-container">
+                                <table class="amortization-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Year</th>
+                                            <th>Payment</th>
+                                            <th>Principal</th>
+                                            <th>Interest</th>
+                                            <th>End Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="amortization-body">
+                                        <!-- Dynamic amortization data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <!-- Action Buttons -->
@@ -1370,9 +472,105 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Comparison Section -->
+                <div class="comparison-section">
+                    <div class="section-header">
+                        <h3>Loan Comparison Scenarios</h3>
+                        <p>Compare different loan options side by side</p>
+                    </div>
+                    
+                    <div class="scenario-controls">
+                        <input type="text" id="scenario-name" class="form-input" placeholder="Scenario name (e.g., '15-year loan')">
+                        <button id="add-scenario" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Current Scenario
+                        </button>
+                        <button id="clear-scenarios" class="btn btn-outline">
+                            <i class="fas fa-trash"></i>
+                            Clear All
+                        </button>
+                    </div>
+
+                    <div class="predefined-scenarios">
+                        <h4>Quick Scenarios</h4>
+                        <div class="scenario-buttons">
+                            <button class="scenario-btn" data-scenario="15year">15-Year vs 30-Year</button>
+                            <button class="scenario-btn" data-scenario="rates">Rate Comparison</button>
+                            <button class="scenario-btn" data-scenario="downpayment">Down Payment Impact</button>
+                            <button class="scenario-btn" data-scenario="extraPayment">Extra Payment Benefits</button>
+                        </div>
+                    </div>
+
+                    <div id="comparison-grid" class="comparison-grid">
+                        <!-- Dynamic comparison scenarios will be populated here -->
+                    </div>
+                </div>
             </div>
         </section>
     </main>
+
+    <!-- Voice Status Indicator -->
+    <div id="voice-status" class="voice-status">
+        <div class="voice-animation">
+            <div class="voice-dot"></div>
+            <div class="voice-dot"></div>
+            <div class="voice-dot"></div>
+        </div>
+        <span>Listening... Say "home price 400000" or "calculate"</span>
+        <button class="voice-close">×</button>
+    </div>
+
+    <!-- Full Schedule Modal -->
+    <dialog id="schedule-modal" class="schedule-modal">
+        <div class="modal-header">
+            <h2>
+                <i class="fas fa-table"></i>
+                Complete Amortization Schedule
+            </h2>
+            <button id="close-schedule" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="schedule-info">
+                <div class="brand-info">
+                    <img src="icons/icon-192x192.png" alt="Finguid Logo" class="brand-logo">
+                    <div>
+                        <strong>Finguid HomeLoan Pro</strong>
+                        <br>www.finguid.com
+                    </div>
+                </div>
+            </div>
+            <div class="table-container full-schedule">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Payment</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Extra</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="full-schedule-body">
+                        <!-- Dynamic full schedule data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="window.print()">
+                <i class="fas fa-print"></i>
+                Print Schedule
+            </button>
+            <button class="btn btn-secondary" id="download-schedule">
+                <i class="fas fa-download"></i>
+                Download CSV
+            </button>
+        </div>
+    </dialog>
 
     <!-- Footer -->
     <footer class="footer">
@@ -1419,100 +617,17 @@
         </div>
     </footer>
 
-    <!-- Font Awesome Kit -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    
+    <!-- Scripts -->
+    <script src="mortgage-calculator.js"></script>
     <script>
-        // Mobile menu toggle
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('nav-menu');
-        
-        hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            hamburger.classList.toggle('active');
-        });
-        
-        // Advanced options toggle
-        const advancedToggle = document.getElementById('advanced-toggle');
-        const advancedPanel = document.getElementById('advanced-panel');
-        
-        advancedToggle.addEventListener('click', () => {
-            advancedPanel.classList.toggle('hidden');
-            const isExpanded = advancedToggle.getAttribute('aria-expanded') === 'true';
-            advancedToggle.setAttribute('aria-expanded', !isExpanded);
-            
-            // Rotate arrow icon
-            const arrow = advancedToggle.querySelector('.arrow');
-            arrow.classList.toggle('fa-chevron-down');
-            arrow.classList.toggle('fa-chevron-up');
-        });
-        
-        // Mode tabs functionality
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all tabs
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked tab
-                button.classList.add('active');
-                
-                // Here you would show/hide the appropriate content
-                // based on the data-mode attribute
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(error => console.log('SW registration failed'));
             });
-        });
-        
-        // Down payment tabs functionality
-        const dpTabButtons = document.querySelectorAll('.dp-tabs .tab-btn');
-        const dpAmountWrap = document.getElementById('dp-amount-wrap');
-        const dpPercentWrap = document.getElementById('dp-percent-wrap');
-        
-        dpTabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all tabs
-                dpTabButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked tab
-                button.classList.add('active');
-                
-                // Show the appropriate input field
-                const tab = button.getAttribute('data-tab');
-                if (tab === 'amount') {
-                    dpAmountWrap.classList.remove('hidden');
-                    dpPercentWrap.classList.add('hidden');
-                } else {
-                    dpAmountWrap.classList.add('hidden');
-                    dpPercentWrap.classList.remove('hidden');
-                }
-            });
-        });
-        
-        // Loan term buttons functionality
-        const termButtons = document.querySelectorAll('.term-buttons .chip');
-        const customTermInput = document.getElementById('term-custom');
-        
-        termButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                termButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked button
-                button.classList.add('active');
-                
-                // Clear custom term input
-                customTermInput.value = '';
-            });
-        });
-        
-        // Calculate button functionality
-        const calculateBtn = document.getElementById('calculate-btn');
-        
-        calculateBtn.addEventListener('click', () => {
-            // Here you would implement the mortgage calculation logic
-            // This is just a placeholder for demonstration
-            alert('Calculation would happen here! In a real implementation, this would update all the result values, charts, and insights.');
-        });
+        }
     </script>
 </body>
 </html>
