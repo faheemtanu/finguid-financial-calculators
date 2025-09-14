@@ -1,2072 +1,2084 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NYBL2CDNQJ');
-</script>
-<!-- at the top of mortgage-calculator.html -->
-<body class="page-mortgage">
-  ...
-</body>
-  <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomeLoan Pro - AI-Enhanced USA Mortgage Calculator | Free Home Loan Payment Estimator</title>
-    <meta name="description" content="Calculate accurate mortgage payments with HomeLoan Pro's AI-enhanced calculator. Get state-specific property taxes, PMI calculations, and smart insights for all 50 US states. Free mortgage calculator with voice input.">
-    <meta name="keywords" content="mortgage calculator, home loan calculator, USA mortgage rates, property tax calculator, PMI calculator, home affordability calculator">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.finguid.com/mortgage-calculator">
-    <meta property="og:title" content="HomeLoan Pro - AI-Enhanced USA Mortgage Calculator">
-    <meta property="og:description" content="Free mortgage calculator with AI insights, voice input, and state-specific data for all 50 US states.">
-    <meta property="og:image" content="https://www.finguid.com/assets/mortgage-calculator-preview.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://www.finguid.com/mortgage-calculator">
-    <meta property="twitter:title" content="HomeLoan Pro - AI-Enhanced USA Mortgage Calculator">
-    <meta property="twitter:description" content="Free mortgage calculator with AI insights, voice input, and state-specific data for all 50 US states.">
-    <meta property="twitter:image" content="https://www.finguid.com/assets/mortgage-calculator-preview.jpg">
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "HomeLoan Pro - Mortgage Calculator",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Web Browser",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "description": "Free AI-enhanced mortgage calculator for USA home loans with state-specific property taxes and PMI calculations",
-        "featureList": [
-            "Voice Input Support",
-            "50-State Property Tax Data", 
-            "PMI Calculator",
-            "AI Insights",
-            "Amortization Schedule"
-        ],
-        "provider": {
-            "@type": "Organization",
-            "name": "Finguid",
-            "url": "https://www.finguid.com"
-        }
-    }
-    </script>
-
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-    <meta name="theme-color" content="#21808d">
-    
-    <!-- Fonts and Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* Additional styles for the left-right layout */
-        .calculator-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        
-        @media (max-width: 1024px) {
-            .calculator-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .inputs-panel {
-            background: var(--color-bg-primary);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .results-panel {
-            background: var(--color-bg-primary);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-md);
-        }
-        
-        /* Enhanced Advanced Options */
-        .advanced-toggle.active {
-            background-color: var(--color-primary);
-            color: white;
-            border-color: var(--color-primary-dark);
-        }
-        
-        .advanced-toggle.active .arrow {
-            transform: rotate(180deg);
-        }
-        
-        .advanced-toggle {
-            padding: 12px 16px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border: 2px solid var(--color-border);
-        }
-        
-        /* Enhanced Results Panel */
-        .results-summary {
-            background: linear-gradient(135deg, #21808d 0%, #2a9d8f 100%);
-            border-radius: 12px;
-            padding: 1.5rem;
-            color: white;
-            margin-bottom: 1.5rem;
-        }
-        
-        .main-result {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        
-        .result-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        .result-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0.5rem 0;
-        }
-        
-        .key-metrics {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .metric {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 0.75rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .metric-label {
-            display: block;
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-        
-        .metric-value {
-            display: block;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        
-        /* Enhanced Payment Breakdown */
-        .breakdown-section {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-        
-        .breakdown-table {
-            display: grid;
-            gap: 0.75rem;
-        }
-        
-        .breakdown-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            border-radius: 8px;
-            background: #f8fafc;
-        }
-        
-        .breakdown-row:nth-child(1) {
-            border-left: 4px solid #21808d;
-        }
-        
-        .breakdown-row:nth-child(2) {
-            border-left: 4px solid #a84b2f;
-        }
-        
-        .breakdown-row:nth-child(3) {
-            border-left: 4px solid #626c71;
-        }
-        
-        .breakdown-row:nth-child(4) {
-            border-left: 4px solid #c0152f;
-        }
-        
-        .breakdown-row:nth-child(5) {
-            border-left: 4px solid #94a3b8;
-        }
-        
-        /* Enhanced Predefined Scenarios */
-        .predefined-scenarios {
-            margin: 2rem 0;
-        }
-        
-        .scenario-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .scenario-btn {
-            padding: 1rem;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        
-        .scenario-btn:nth-child(1) {
-            background: linear-gradient(135deg, #21808d 0%, #2a9d8f 100%);
-            color: white;
-        }
-        
-        .scenario-btn:nth-child(2) {
-            background: linear-gradient(135deg, #a84b2f 0%, #c15a2b 100%);
-            color: white;
-        }
-        
-        .scenario-btn:nth-child(3) {
-            background: linear-gradient(135deg, #626c71 0%, #8191a0 100%);
-            color: white;
-        }
-        
-        .scenario-btn:nth-child(4) {
-            background: linear-gradient(135deg, #c0152f 0%, #e63946 100%);
-            color: white;
-        }
-        
-        .scenario-btn:nth-child(5) {
-            background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 100%);
-            color: #1e293b;
-        }
-        
-        .scenario-btn:nth-child(6) {
-            background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
-            color: white;
-        }
-        
-        .scenario-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Comparison Cards */
-        .comparison-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        
-        .comparison-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border-top: 4px solid #21808d;
-        }
-        
-        .comparison-card:nth-child(2) {
-            border-top-color: #a84b2f;
-        }
-        
-        .comparison-card:nth-child(3) {
-            border-top-color: #626c71;
-        }
-        
-        .comparison-card:nth-child(4) {
-            border-top-color: #c0152f;
-        }
-        
-        .comparison-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .comparison-title {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #21808d;
-        }
-        
-        .comparison-savings {
-            background: #f0fdf4;
-            color: #166534;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .comparison-details {
-            display: grid;
-            gap: 0.75rem;
-        }
-        
-        .comparison-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .comparison-row:last-child {
-            border-bottom: none;
-        }
-        
-        /* Enhanced Amortization Table */
-        .amortization-section {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-        
-        .amortization-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .amortization-table th {
-            background: #f8fafc;
-            padding: 0.75rem;
-            text-align: left;
-            font-weight: 600;
-            color: #374151;
-        }
-        
-        .amortization-table td {
-            padding: 0.75rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .amortization-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .amortization-table tr:hover {
-            background: #f8fafc;
-        }
-        
-        /* Enhanced AI Insights */
-        .insights-section {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-        
-        .insights-list {
-            list-style: none;
-            padding: 0;
-            margin: 1rem 0 0 0;
-        }
-        
-        .insight-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.75rem;
-            background: #f8fafc;
-            border-left: 4px solid #21808d;
-        }
-        
-        .insight-item:nth-child(2) {
-            border-left-color: #a84b2f;
-        }
-        
-        .insight-item:nth-child(3) {
-            border-left-color: #626c71;
-        }
-        
-        .insight-icon {
-            font-size: 1.5rem;
-            color: #21808d;
-        }
-        
-        .insight-content strong {
-            display: block;
-            margin-bottom: 0.25rem;
-            color: #1e293b;
-        }
-        
-        .insight-content p {
-            margin: 0;
-            color: #64748b;
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <nav class="navbar">
-            <div class="container">
-                <a href="/" class="nav-brand">
-                    <i class="fas fa-calculator"></i>
-                    <span class="brand-text">Finguid</span>
-                </a>
-                <ul class="nav-menu" id="nav-menu">
-                    <li><a href="/" class="nav-link">Home</a></li>
-                    <li><a href="/mortgage-calculator" class="nav-link active">Mortgage</a></li>
-                    <li><a href="/calculators" class="nav-link">Calculators</a></li>
-                    <li><a href="/resources" class="nav-link">Resources</a></li>
-                    <li><a href="/about" class="nav-link">About</a></li>
-                    <li><a href="/contact" class="nav-link">Contact</a></li>
-                </ul>
-                <div class="hamburger" id="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Hero Section -->
-        <section class="hero mortgage-hero">
-            <div class="container">
-                <div class="hero-content">
-                    <h1 class="hero-title">
-                        🏠 HomeLoan Pro - AI-Enhanced 
-                        <span class="highlight">Mortgage Calculator</span>
-                    </h1>
-                    <p class="hero-description">
-                        Calculate accurate mortgage payments with state-specific taxes, PMI, insurance, and AI-powered insights. Voice input enabled for effortless calculations across all 50 US states.
-                    </p>
-                    <div class="hero-features">
-                        <div class="feature">
-                            <i class="fas fa-microphone"></i>
-                            <span>Voice Input</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-map-marked-alt"></i>
-                            <span>50 State Data</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-robot"></i>
-                            <span>AI Insights</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-mobile-alt"></i>
-                            <span>Mobile PWA</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Calculator Modes -->
-        <section class="calculator-section">
-            <div class="container">
-                <!-- Removed mode tabs for refinance and affordability -->
-                
-                <div class="calculator-layout">
-                    <!-- Left Panel - Inputs -->
-                    <div class="calculator-panel inputs-panel">
-                        <div class="panel-header">
-                            <h2>Loan Details</h2>
-                            <p>Enter your mortgage information for precise AI-enhanced calculations</p>
-                        </div>
-
-                        <!-- Payment Mode Inputs -->
-                        <div class="mode-content" id="payment-mode">
-                            <div class="form-group">
-                                <label for="home-price" class="form-label">
-                                    <i class="fas fa-home" data-tooltip="The total purchase price of the home"></i>
-                                    Home Price ($)
-                                    <button class="voice-btn" data-field="home-price" title="Voice Input">
-                                        <i class="fas fa-microphone"></i>
-                                    </button>
-                                </label>
-                                <input type="number" id="home-price" class="form-input" value="400000" min="10000" max="10000000" step="1000">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fas fa-percentage" data-tooltip="Your upfront payment - affects PMI requirements"></i>
-                                    Down Payment
-                                </label>
-                                <div class="dp-tabs">
-                                    <button class="tab-btn active" id="tab-amount" data-tab="amount">Amount $</button>
-                                    <button class="tab-btn" id="tab-percent" data-tab="percent">Percent %</button>
-                                </div>
-                                <div class="dp-inputs">
-                                    <div id="dp-amount-wrap" class="dp-input-wrap">
-                                        <input type="number" id="dp-amount" class="form-input" value="80000" min="0" step="1000">
-                                        <button class="voice-btn" data-field="dp-amount" title="Voice Input">
-                                            <i class="fas fa-microphone"></i>
-                                        </button>
-                                    </div>
-                                    <div id="dp-percent-wrap" class="dp-input-wrap hidden">
-                                        <input type="number" id="dp-percent" class="form-input" value="20" min="0" max="100" step="0.1">
-                                        <button class="voice-btn" data-field="dp-percent" title="Voice Input">
-                                            <i class="fas fa-microphone"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!-- PMI Banner -->
-                                <div id="pmi-banner" class="pmi-banner hidden">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <span>PMI Required - Down payment is less than 20% of home value</span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="interest-rate" class="form-label">
-                                    <i class="fas fa-chart-line" data-tooltip="Annual interest rate for your mortgage loan"></i>
-                                    Interest Rate (%)
-                                    <button class="voice-btn" data-field="interest-rate" title="Voice Input">
-                                        <i class="fas fa-microphone"></i>
-                                    </button>
-                                </label>
-                                <input type="number" id="interest-rate" class="form-input" value="6.75" min="0.1" max="30" step="0.01">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fas fa-calendar-alt" data-tooltip="Length of your mortgage loan in years"></i>
-                                    Loan Term
-                                </label>
-                                <div class="term-buttons" id="term-buttons">
-                                    <button class="chip" data-term="10">10y</button>
-                                    <button class="chip" data-term="15">15y</button>
-                                    <button class="chip" data-term="20">20y</button>
-                                    <button class="chip" data-term="25">25y</button>
-                                    <button class="chip active" data-term="30">30y</button>
-                                    <span class="or-text">or</span>
-                                </div>
-                                <input type="number" id="term-custom" class="form-input custom-term" placeholder="Custom years (1-40)" min="1" max="40">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="state" class="form-label">
-                                    <i class="fas fa-map-marker-alt" data-tooltip="Select your state for accurate property tax calculations"></i>
-                                    Property State
-                                </label>
-                                <select id="state" class="form-control">
-                                    <option value="">Select State</option>
-                                    <option value="AL">Alabama</option>
-                                    <option value="AK">Alaska</option>
-                                    <option value="AZ">Arizona</option>
-                                    <option value="AR">Arkansas</option>
-                                    <option value="CA">California</option>
-                                    <option value="CO">Colorado</option>
-                                    <option value="CT">Connecticut</option>
-                                    <option value="DE">Delaware</option>
-                                    <option value="FL">Florida</option>
-                                    <option value="GA">Georgia</option>
-                                    <option value="HI">Hawaii</option>
-                                    <option value="ID">Idaho</option>
-                                    <option value="IL">Illinois</option>
-                                    <option value="IN">Indiana</option>
-                                    <option value="IA">Iowa</option>
-                                    <option value="KS">Kansas</option>
-                                    <option value="KY">Kentucky</option>
-                                    <option value="LA">Louisiana</option>
-                                    <option value="ME">Maine</option>
-                                    <option value="MD">Maryland</option>
-                                    <option value="MA">Massachusetts</option>
-                                    <option value="MI">Michigan</option>
-                                    <option value="MN">Minnesota</option>
-                                    <option value="MS">Mississippi</option>
-                                    <option value="MO">Missouri</option>
-                                    <option value="MT">Montana</option>
-                                    <option value="NE">Nebraska</option>
-                                    <option value="NV">Nebada</option>
-                                    <option value="NH">New Hampshire</option>
-                                    <option value="NJ">New Jersey</option>
-                                    <option value="NM">New Mexico</option>
-                                    <option value="NY">New York</option>
-                                    <option value="NC">North Carolina</option>
-                                    <option value="ND">North Dakota</option>
-                                    <option value="OH">Ohio</option>
-                                    <option value="OK">Oklahoma</option>
-                                    <option value="OR">Oregon</option>
-                                    <option value="PA">Pennsylvania</option>
-                                    <option value="RI">Rhode Island</option>
-                                    <option value="SC">South Carolina</option>
-                                    <option value="SD">South Dakota</option>
-                                    <option value="TN">Tennessee</option>
-                                    <option value="TX">Texas</option>
-                                    <option value="UT">Utah</option>
-                                    <option value="VT">Vermont</option>
-                                    <option value="VA">Virginia</option>
-                                    <option value="WA">Washington</option>
-                                    <option value="WV">West Virginia</option>
-                                    <option value="WI">Wisconsin</option>
-                                    <option value="WY">Wyoming</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="property-tax" class="form-label">
-                                    <i class="fas fa-building" data-tooltip="Annual property tax - auto-calculated based on state and home value"></i>
-                                    Property Tax (Annual $)
-                                </label>
-                                <input type="number" id="property-tax" class="form-input" value="1640" min="0" step="100">
-                                <small class="help-text">Auto-calculated based on state average</small>
-                            </div>
-
-                            <!-- Advanced Options -->
-                            <div class="advanced-section">
-                                <button class="advanced-toggle" id="advanced-toggle">
-                                    <i class="fas fa-cog"></i>
-                                    <span>Advanced Options</span>
-                                    <i class="fas fa-chevron-down arrow"></i>
-                                </button>
-                                <div id="advanced-panel" class="advanced-panel hidden">
-                                    <div class="form-group">
-                                        <label for="home-insurance" class="form-label">
-                                            <i class="fas fa-shield-alt" data-tooltip="Annual homeowners insurance premium"></i>
-                                            Home Insurance (Annual $)
-                                        </label>
-                                        <input type="number" id="home-insurance" class="form-input" value="960" min="0" step="50">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="pmi-rate" class="form-label">
-                                            <i class="fas fa-umbrella" data-tooltip="Private Mortgage Insurance rate (typically 0.5% - 1.5% annually)"></i>
-                                            PMI Rate (Annual %)
-                                        </label>
-                                        <input type="number" id="pmi-rate" class="form-input" value="0.8" min="0" max="5" step="0.1">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="hoa-fees" class="form-label">
-                                            <i class="fas fa-users" data-tooltip="Monthly Homeowners Association or condo fees"></i>
-                                            HOA Fees (Monthly $)
-                                        </label>
-                                        <input type="number" id="hoa-fees" class="form-input" value="0" min="0" step="25">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="extra-monthly" class="form-label">
-                                            <i class="fas fa-plus-circle" data-tooltip="Additional monthly payment towards principal to pay off loan faster"></i>
-                                            Extra Monthly Payment ($)
-                                        </label>
-                                        <input type="number" id="extra-monthly" class="form-input" value="0" min="0" step="50">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="extra-once" class="form-label">
-                                            <i class="fas fa-hand-holding-usd" data-tooltip="One-time extra payment in the first month"></i>
-                                            One-Time Extra Payment ($)
-                                        </label>
-                                        <input type="number" id="extra-once" class="form-input" value="0" min="0" step="100">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="action-buttons">
-                            <button id="calculate-btn" class="btn btn-primary btn-full-width">
-                                <i class="fas fa-calculator"></i>
-                                Calculate Payment
-                            </button>
-                            <button id="reset-form" class="btn btn-secondary">
-                                <i class="fas fa-undo"></i>
-                                Reset
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Right Panel - Results -->
-                    <div class="calculator-panel results-panel">
-                        <div class="panel-header">
-                            <h2>Payment Results</h2>
-                            <p>Your personalized mortgage calculation with AI insights</p>
-                        </div>
-
-                        <!-- Main Results -->
-                        <div class="results-summary">
-                            <div class="main-result">
-                                <div class="result-label">Total Monthly Payment</div>
-                                <div class="result-value" id="total-payment">$2,923</div>
-                            </div>
-                            <div class="key-metrics">
-                                <div class="metric">
-                                    <span class="metric-label">Loan Amount</span>
-                                    <span class="metric-value" id="loan-amount">$320,000</span>
-                                </div>
-                                <div class="metric">
-                                    <span class="metric-label">Total Interest</span>
-                                    <span class="metric-value" id="total-interest">$422,983</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Payment Breakdown -->
-                        <div class="breakdown-section">
-                            <h3>Monthly Breakdown</h3>
-                            <div class="breakdown-table">
-                                <div class="breakdown-row">
-                                    <span class="breakdown-label">P&I</span>
-                                    <span class="breakdown-value" id="pi-amount">$2,590</span>
-                                </div>
-                                <div class="breakdown-row">
-                                    <span class="breakdown-label">Taxes</span>
-                                    <span class="breakdown-value" id="tax-amount">$137</span>
-                                </div>
-                                <div class="breakdown-row">
-                                    <span class="breakdown-label">Insurance</span>
-                                    <span class="breakdown-value" id="insurance-amount">$80</span>
-                                </div>
-                                <div class="breakdown-row" id="row-pmi">
-                                    <span class="breakdown-label">PMI</span>
-                                    <span class="breakdown-value" id="pmi-amount">$213</span>
-                                </div>
-                                <div class="breakdown-row">
-                                    <span class="breakdown-label">HOA</span>
-                                    <span class="breakdown-value" id="hoa-amount">$0</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Charts -->
-                        <div class="charts-section">
-                            <div class="chart-container">
-                                <h4>Payment Breakdown</h4>
-                                <canvas id="breakdownChart" width="300" height="200"></canvas>
-                                <div id="legend-breakdown" class="chart-legend"></div>
-                            </div>
-                        </div>
-
-                        <!-- AI Insights -->
-                        <div class="insights-section">
-                            <h3>
-                                <i class="fas fa-lightbulb"></i>
-                                AI Insights
-                                <small>Personalized recommendations to save money</small>
-                            </h3>
-                            <ul id="insights-list" class="insights-list">
-                                <!-- Dynamic AI insights will be populated here -->
-                            </ul>
-                        </div>
-
-                        <!-- Amortization Preview -->
-                        <div class="amortization-section">
-                            <div class="section-header">
-                                <h3>Payment Schedule (First 5 Years)</h3>
-                                <button id="view-full-schedule" class="btn btn-outline">
-                                    <i class="fas fa-table"></i>
-                                    View Full Schedule
-                                </button>
-                            </div>
-                            <div class="table-container">
-                                <table class="amortization-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Year</th>
-                                            <th>Payment</th>
-                                            <th>Principal</th>
-                                            <th>Interest</th>
-                                            <th>End Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="amortization-body">
-                                        <!-- Dynamic amortization data will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="result-actions">
-                            <button id="email-results" class="btn btn-secondary">
-                                <i class="fas fa-envelope"></i>
-                                Email Results
-                            </button>
-                            <button id="share-results" class="btn btn-secondary">
-                                <i class="fas fa-share"></i>
-                                Share
-                            </button>
-                            <button id="print-results" class="btn btn-secondary">
-                                <i class="fas fa-print"></i>
-                                Print
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Comparison Section -->
-                <div class="comparison-section">
-                    <div class="section-header">
-                        <h3>Loan Comparison Scenarios</h3>
-                        <p>Compare different loan options side by side</p>
-                    </div>
-                    
-                    <!-- Predefined Scenarios -->
-                    <div class="predefined-scenarios">
-                        <h4>Quick Scenarios</h4>
-                        <div class="scenario-buttons">
-                            <button class="scenario-btn" data-scenario="15year">15-Year vs 30-Year</button>
-                            <button class="scenario-btn" data-scenario="rates">Rate Comparison</button>
-                            <button class="scenario-btn" data-scenario="downpayment">Down Payment Impact</button>
-                            <button class="scenario-btn" data-scenario="extraPayment">Extra Payment Benefits</button>
-                            <button class="scenario-btn" data-scenario="highCost">High Cost Area</button>
-                            <button class="scenario-btn" data-scenario="lowRate">Low Rate Advantage</button>
-                        </div>
-                    </div>
-
-                    <div id="comparison-cards" class="comparison-cards">
-                        <!-- Dynamic comparison cards will be populated here -->
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Voice Status Indicator -->
-    <div id="voice-status" class="voice-status">
-        <div class="voice-animation">
-            <div class="voice-dot"></div>
-            <div class="voice-dot"></div>
-            <div class="voice-dot"></div>
-        </div>
-        <span>Listening... Say "home price 400000" or "calculate"</span>
-        <button class="voice-close">×</button>
-    </div>
-
-    <!-- Full Schedule Modal -->
-    <dialog id="schedule-modal" class="schedule-modal">
-        <div class="modal-header">
-            <h2>
-                <i class="fas fa-table"></i>
-                Complete Amortization Schedule
-            </h2>
-            <button id="close-schedule" class="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="schedule-info">
-                <div class="brand-info">
-                    <img src="icons/icon-192x192.png" alt="Finguid Logo" class="brand-logo">
-                    <div>
-                        <strong>Finguid HomeLoan Pro</strong>
-                        <br>www.finguid.com
-                    </div>
-                </div>
-            </div>
-            <div class="table-container full-schedule">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Payment</th>
-                            <th>Principal</th>
-                            <th>Interest</th>
-                            <th>Extra</th>
-                            <th>Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody id="full-schedule-body">
-                        <!-- Dynamic full schedule data will be populated here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" onclick="window.print()">
-                <i class="fas fa-print"></i>
-                Print Schedule
-            </button>
-            <button class="btn btn-secondary" id="download-schedule">
-                <i class="fas fa-download"></i>
-                Download CSV
-            </button>
-        </div>
-    </dialog>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-brand">
-                        <i class="fas fa-calculator"></i>
-                        Finguid
-                    </div>
-                    <p>America's first AI-enhanced financial calculator platform. Make smarter financial decisions with accurate, state-specific calculations and intelligent insights.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Calculators</h4>
-                    <ul>
-                        <li><a href="/mortgage-calculator">Mortgage Calculator</a></li>
-                        <li><a href="/calculators/auto-loan">Auto Loan</a></li>
-                        <li><a href="/calculators/investment">Investment</a></li>
-                        <li><a href="/calculators/refinance">Refinance</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="/mortgage-rates">Current Rates</a></li>
-                        <li><a href="/guides">Buying Guides</a></li>
-                        <li><a href="/blog">Financial Blog</a></li>
-                        <li><a href="/faq">FAQ</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                        <li><a href="/terms">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Finguid. All rights reserved. | Built with ❤️ for Americans</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script>
-        /* HomeLoan Pro - AI-Enhanced Mortgage Calculator 2025
-           Features: Voice Input, 50-State Data, PMI, AI Insights
-           SEO & Performance Optimized for US Market
-        */
-
-        (() => {
-            'use strict';
-            
-            const $ = (s) => document.querySelector(s);
-            const $$ = (s) => Array.from(document.querySelectorAll(s));
-            const money = (n) => `$${n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            const formatNumber = (n) => n.toLocaleString('en-US');
-
-            // US State tax rates (%) - All 50 states
-            const stateTaxRates = {
-                AL: 0.41, AK: 1.24, AZ: 0.60, AR: 0.66, CA: 0.81, CO: 0.52, CT: 2.16, DE: 0.62,
-                FL: 0.89, GA: 0.95, HI: 0.29, ID: 0.63, IL: 2.29, IN: 0.83, IA: 1.59, KS: 1.40,
-                KY: 0.89, LA: 0.62, ME: 1.29, MD: 1.07, MA: 1.19, MI: 1.53, MN: 1.10, MS: 0.81,
-                MO: 1.00, MT: 0.83, NE: 1.70, NV: 0.55, NH: 2.09, NJ: 2.46, NM: 0.84, NY: 1.73,
-                NC: 0.80, ND: 1.02, OH: 1.57, OK: 0.99, OR: 0.92, PA: 1.56, RI: 1.54, SC: 0.58,
-                SD: 1.24, TN: 0.65, TX: 1.90, UT: 0.57, VT: 1.89, VA: 0.83, WA: 0.93, WV: 0.59,
-                WI: 1.71, WY: 0.61
-            };
-
-            // State names for tooltips
-            const stateNames = {
-                AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
-                CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', FL: 'Florida', GA: 'Georgia',
-                HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas',
-                KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts',
-                MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana',
-                NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico',
-                NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma',
-                OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota',
-                TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia',
-                WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming'
-            };
-
-            // Calculator state
-            let currentMode = 'payment';
-            let activeTerm = 30;
-            let usePct = false;
-            let comparisons = [];
-            let recognition = null;
-            let currentCalculation = null;
-
-            // Elements cache
-            const els = {
-                // Payment mode inputs
-                homePrice: $('#home-price'),
-                dpAmount: $('#dp-amount'),
-                dpPercent: $('#dp-percent'),
-                interestRate: $('#interest-rate'),
-                termCustom: $('#term-custom'),
-                state: $('#state'),
-                propertyTax: $('#property-tax'),
-                homeInsurance: $('#home-insurance'),
-                pmiRate: $('#pmi-rate'),
-                hoaFees: $('#hoa-fees'),
-                extraMonthly: $('#extra-monthly'),
-                extraOnce: $('#extra-once'),
-
-                // UI controls
-                tabAmount: $('#tab-amount'),
-                tabPercent: $('#tab-percent'),
-                dpAmountWrap: $('#dp-amount-wrap'),
-                dpPercentWrap: $('#dp-percent-wrap'),
-                pmiBanner: $('#pmi-banner'),
-                termButtons: $('#term-buttons'),
-                advancedToggle: $('#advanced-toggle'),
-                advancedPanel: $('#advanced-panel'),
-
-                // Results
-                totalPayment: $('#total-payment'),
-                loanAmount: $('#loan-amount'),
-                totalInterest: $('#total-interest'),
-                piAmount: $('#pi-amount'),
-                taxAmount: $('#tax-amount'),
-                insuranceAmount: $('#insurance-amount'),
-                pmiAmount: $('#pmi-amount'),
-                hoaAmount: $('#hoa-amount'),
-                rowPmi: $('#row-pmi'),
-
-                // Charts and tables
-                breakdownChart: $('#breakdownChart'),
-                legendBreakdown: $('#legend-breakdown'),
-                amortizationBody: $('#amortization-body'),
-                fullScheduleBody: $('#full-schedule-body'),
-                scheduleModal: $('#schedule-modal'),
-
-                // Actions
-                calculateBtn: $('#calculate-btn'),
-                resetBtn: $('#reset-form'),
-                emailBtn: $('#email-results'),
-                shareBtn: $('#share-results'),
-                printBtn: $('#print-results'),
-                viewFullSchedule: $('#view-full-schedule'),
-                closeSchedule: $('#close-schedule'),
-
-                // Voice
-                voiceBtns: $$('.voice-btn'),
-                voiceStatus: $('#voice-status'),
-
-                // Insights
-                insightsList: $('#insights-list'),
-
-                // Comparison
-                comparisonCards: $('#comparison-cards'),
-                scenarioBtns: $$('.scenario-btn')
-            };
-
-            // Initialize calculator
-            function init() {
-                setupEventListeners();
-                setupVoiceRecognition();
-                setupTooltips();
-                setInitialValues();
-                calculate();
-            }
-
-            // Event listeners setup
-            function setupEventListeners() {
-                // Down payment tabs
-                els.tabAmount.addEventListener('click', () => switchDPMode(false));
-                els.tabPercent.addEventListener('click', () => switchDPMode(true));
-
-                // Input synchronization
-                els.homePrice.addEventListener('input', handleHomePriceChange);
-                els.dpAmount.addEventListener('input', () => syncDownPayment(false));
-                els.dpPercent.addEventListener('input', () => syncDownPayment(true));
-                els.state.addEventListener('change', updatePropertyTax);
-
-                // Term selection
-                els.termButtons.addEventListener('click', (e) => {
-                    const btn = e.target.closest('.chip[data-term]');
-                    if (btn) setTerm(+btn.dataset.term);
-                });
-                els.termCustom.addEventListener('input', handleCustomTerm);
-
-                // Advanced options
-                els.advancedToggle.addEventListener('click', toggleAdvanced);
-
-                // Auto-calculation on input changes
-                const autoCalcInputs = [
-                    els.homePrice, els.dpAmount, els.dpPercent, els.interestRate,
-                    els.propertyTax, els.homeInsurance, els.pmiRate, els.hoaFees,
-                    els.extraMonthly, els.extraOnce
-                ];
-                
-                autoCalcInputs.forEach(input => {
-                    if (input) {
-                        input.addEventListener('input', debounce(calculate, 300));
-                    }
-                });
-
-                // Action buttons
-                els.calculateBtn.addEventListener('click', calculate);
-                els.resetBtn.addEventListener('click', resetForm);
-                els.emailBtn.addEventListener('click', emailResults);
-                els.shareBtn.addEventListener('click', shareResults);
-                els.printBtn.addEventListener('click', () => window.print());
-                els.viewFullSchedule.addEventListener('click', showFullSchedule);
-                els.closeSchedule.addEventListener('click', () => els.scheduleModal.close());
-
-                // Voice buttons
-                els.voiceBtns.forEach(btn => {
-                    btn.addEventListener('click', () => startVoiceInput(btn.dataset.field));
-                });
-
-                // Voice status close
-                $('.voice-close')?.addEventListener('click', hideVoiceStatus);
-                
-                // Comparison
-                els.scenarioBtns.forEach(btn => {
-                    btn.addEventListener('click', () => loadScenario(btn.dataset.scenario));
-                });
-
-                // Modal backdrop click
-                els.scheduleModal.addEventListener('click', (e) => {
-                    if (e.target === els.scheduleModal) {
-                        els.scheduleModal.close();
-                    }
-                });
-
-                // Hamburger menu
-                $('#hamburger')?.addEventListener('click', toggleMobileMenu);
-            }
-
-            // Voice recognition setup
-            function setupVoiceRecognition() {
-                try {
-                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    if (!SpeechRecognition) {
-                        // Hide voice buttons if not supported
-                        els.voiceBtns.forEach(btn => btn.style.display = 'none');
-                        return;
-                    }
-
-                    recognition = new SpeechRecognition();
-                    recognition.continuous = false;
-                    recognition.interimResults = false;
-                    recognition.lang = 'en-US';
-                    recognition.maxAlternatives = 1;
-
-                    recognition.onresult = (event) => {
-                        const transcript = event.results[0][0].transcript.toLowerCase();
-                        processVoiceCommand(transcript);
-                    };
-
-                    recognition.onerror = (event) => {
-                        console.error('Voice recognition error:', event.error);
-                        hideVoiceStatus();
-                        showNotification('Voice recognition error. Please try again.', 'error');
-                    };
-
-                    recognition.onend = hideVoiceStatus;
-
-                } catch (error) {
-                    console.warn('Voice recognition not available:', error);
-                    els.voiceBtns.forEach(btn => btn.style.display = 'none');
-                }
-            }
-
-            // Tooltip setup
-            function setupTooltips() {
-                $$('[data-tooltip]').forEach(element => {
-                    element.addEventListener('mouseenter', showTooltip);
-                    element.addEventListener('mouseleave', hideTooltip);
-                });
-            }
-
-            // Set initial values
-            function setInitialValues() {
-                setTerm(30);
-                switchDPMode(false);
-                updatePropertyTax();
-                updateInsurance();
-            }
-
-            // Down payment mode switching
-            function switchDPMode(usePercent) {
-                usePct = usePercent;
-                els.tabAmount.classList.toggle('active', !usePercent);
-                els.tabPercent.classList.toggle('active', usePercent);
-                els.dpAmountWrap.classList.toggle('hidden', usePercent);
-                els.dpPercentWrap.classList.toggle('hidden', !usePercent);
-                
-                syncDownPayment(usePercent);
-            }
-
-            // Sync down payment inputs
-            function syncDownPayment(fromPercent) {
-                const homePrice = +els.homePrice.value || 0;
-                
-                if (fromPercent) {
-                    const pct = Math.min(100, Math.max(0, +els.dpPercent.value || 0));
-                    const amt = Math.round(homePrice * pct / 100);
-                    els.dpAmount.value = amt;
-                } else {
-                    const amt = Math.min(homePrice, Math.max(0, +els.dpAmount.value || 0));
-                    const pct = homePrice > 0 ? (amt / homePrice * 100) : 0;
-                    els.dpPercent.value = pct.toFixed(1);
-                }
-
-                updatePMIBanner();
-            }
-
-            // Handle home price changes
-            function handleHomePriceChange() {
-                syncDownPayment(usePct);
-                updatePropertyTax();
-                updateInsurance();
-            }
-
-            // Update PMI banner
-            function updatePMIBanner() {
-                const dpPct = +els.dpPercent.value || 0;
-                const needsPMI = dpPct < 20;
-                els.pmiBanner.classList.toggle('hidden', !needsPMI);
-                
-                if (needsPMI) {
-                    els.pmiBanner.innerHTML = `
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <span>PMI Required - Down payment is ${dpPct.toFixed(1)}% (less than 20% of home value)</span>
-                    `;
-                }
-            }
-
-            // Update property tax based on state
-            function updatePropertyTax() {
-                const homePrice = +els.homePrice.value || 0;
-                const state = els.state.value;
-                
-                if (!state || !homePrice) return;
-                
-                const taxRate = stateTaxRates[state] || 1.0;
-                const annualTax = Math.round(homePrice * (taxRate / 100));
-                els.propertyTax.value = annualTax;
-                
-                // Update tooltip with state info
-                const stateInfo = `${stateNames[state]} average: ${taxRate}%`;
-                els.propertyTax.setAttribute('title', stateInfo);
-            }
-
-            // Update insurance estimate
-            function updateInsurance() {
-                const homePrice = +els.homePrice.value || 0;
-                const estimate = Math.round(homePrice * 0.0024); // ~0.24% of home value
-                els.homeInsurance.value = Math.max(600, Math.min(estimate, 3000));
-            }
-
-            // Term selection
-            function setTerm(years) {
-                activeTerm = years;
-                $$('[data-term]').forEach(btn => {
-                    btn.classList.toggle('active', +btn.dataset.term === years);
-                });
-                els.termCustom.value = '';
-                calculate();
-            }
-
-            // Handle custom term input
-            function handleCustomTerm() {
-                const customYears = +els.termCustom.value;
-                if (customYears >= 1 && customYears <= 40) {
-                    activeTerm = customYears;
-                    $$('[data-term]').forEach(btn => btn.classList.remove('active'));
-                }
-                calculate();
-            }
-
-            // Toggle advanced options
-            function toggleAdvanced() {
-                const panel = els.advancedPanel;
-                const arrow = els.advancedToggle.querySelector('.arrow');
-                const button = els.advancedToggle;
-                
-                panel.classList.toggle('hidden');
-                arrow.classList.toggle('rotated');
-                button.classList.toggle('active');
-            }
-
-            // Voice input functions
-            function startVoiceInput(field) {
-                if (!recognition) {
-                    showNotification('Voice input not supported in this browser', 'error');
-                    return;
-                }
-                
-                showVoiceStatus();
-                recognition.start();
-            }
-
-            function processVoiceCommand(transcript) {
-                console.log('Voice command:', transcript);
-                
-                const numbers = transcript.match(/\d+(?:\.\d+)?/g);
-                
-                if (transcript.includes('home price') || transcript.includes('house price')) {
-                    if (numbers && numbers.length > 0) {
-                        let value = parseFloat(numbers[0]);
-                        if (value < 10000) value *= 1000;
-                        els.homePrice.value = value;
-                        handleHomePriceChange();
-                        showNotification(`Home price set to ${money(value)}`, 'success');
-                    }
-                } else if (transcript.includes('down payment')) {
-                    if (numbers && numbers.length > 0) {
-                        let value = parseFloat(numbers[0]);
-                        if (transcript.includes('percent')) {
-                            usePct = true;
-                            switchDPMode(true);
-                            els.dpPercent.value = value;
-                            syncDownPayment(true);
-                        } else {
-                            if (value < 1000) value *= 1000;
-                            usePct = false;
-                            switchDPMode(false);
-                            els.dpAmount.value = value;
-                            syncDownPayment(false);
-                        }
-                        showNotification('Down payment updated', 'success');
-                    }
-                } else if (transcript.includes('interest rate') || transcript.includes('rate')) {
-                    if (numbers && numbers.length > 0) {
-                        const value = parseFloat(numbers[0]);
-                        els.interestRate.value = value;
-                        showNotification(`Interest rate set to ${value}%`, 'success');
-                    }
-                } else if (transcript.includes('calculate')) {
-                    calculate();
-                    showNotification('Calculation completed!', 'success');
-                } else {
-                    showNotification('Try saying: "home price 400000" or "interest rate 6.5"', 'info');
-                }
-                
-                calculate();
-            }
-
-            function showVoiceStatus() {
-                els.voiceStatus.classList.add('active');
-            }
-
-            function hideVoiceStatus() {
-                els.voiceStatus.classList.remove('active');
-            }
-
-            // Main calculation function
-            function calculate() {
-                try {
-                    const result = calculatePayment();
-                    
-                    if (result) {
-                        currentCalculation = result;
-                        updateDisplay(result);
-                        generateInsights(result);
-                        updateCharts(result);
-                        updateAmortizationTable(result);
-                    }
-                } catch (error) {
-                    console.error('Calculation error:', error);
-                    showNotification('Calculation error. Please check your inputs.', 'error');
-                }
-            }
-
-            // Payment calculation
-            function calculatePayment() {
-                const homePrice = +els.homePrice.value || 0;
-                const dpAmount = +els.dpAmount.value || 0;
-                const loanAmount = Math.max(0, homePrice - dpAmount);
-                const rate = (+els.interestRate.value || 0) / 100;
-                const term = +els.termCustom.value || activeTerm;
-                const months = term * 12;
-
-                if (!homePrice || !rate || !term) return null;
-
-                // Property costs
-                const annualTax = +els.propertyTax.value || 0;
-                const annualInsurance = +els.homeInsurance.value || 0;
-                const pmiRate = (+els.pmiRate.value || 0) / 100;
-                const monthlyHOA = +els.hoaFees.value || 0;
-                const extraMonthly = +els.extraMonthly.value || 0;
-                const extraOnce = +els.extraOnce.value || 0;
-
-                // Calculate monthly P&I
-                const monthlyRate = rate / 12;
-                let monthlyPI = 0;
-                if (monthlyRate > 0) {
-                    monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
-                               (Math.pow(1 + monthlyRate, months) - 1);
-                } else {
-                    monthlyPI = loanAmount / months;
-                }
-
-                // Other monthly costs
-                const monthlyTax = annualTax / 12;
-                const monthlyInsurance = annualInsurance / 12;
-                const dpPercent = homePrice > 0 ? (dpAmount / homePrice * 100) : 0;
-                const needsPMI = dpPercent < 20;
-                const monthlyPMI = needsPMI ? (loanAmount * pmiRate / 12) : 0;
-
-                const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + monthlyPMI + monthlyHOA;
-
-                // Generate amortization schedule with extra payments
-                const schedule = generateSchedule(loanAmount, monthlyRate, monthlyPI, months, extraMonthly, extraOnce);
-                const totalInterest = schedule.reduce((sum, payment) => sum + payment.interest, 0);
-
-                return {
-                    mode: 'payment',
-                    homePrice,
-                    dpAmount,
-                    dpPercent,
-                    loanAmount,
-                    rate: rate * 100,
-                    term,
-                    monthlyPI,
-                    monthlyTax,
-                    monthlyInsurance,
-                    monthlyPMI,
-                    monthlyHOA,
-                    totalMonthly,
-                    totalInterest,
-                    totalCost: loanAmount + totalInterest,
-                    needsPMI,
-                    schedule,
-                    extraMonthly,
-                    extraOnce
-                };
-            }
-
-            // Generate amortization schedule
-            function generateSchedule(loanAmount, monthlyRate, monthlyPI, totalMonths, extraMonthly = 0, extraOnce = 0) {
-                const schedule = [];
-                let balance = loanAmount;
-                let totalExtra = 0;
-
-                for (let month = 1; month <= totalMonths && balance > 0; month++) {
-                    const interestPayment = balance * monthlyRate;
-                    let principalPayment = monthlyPI - interestPayment;
-                    let extraPayment = 0;
-
-                    // Add extra payments
-                    if (month === 1 && extraOnce > 0) {
-                        extraPayment += Math.min(extraOnce, balance - principalPayment);
-                    }
-                    if (extraMonthly > 0) {
-                        extraPayment += Math.min(extraMonthly, balance - principalPayment);
-                    }
-
-                    totalExtra += extraPayment;
-                    principalPayment += extraPayment;
-                    
-                    // Ensure we don't overpay
-                    if (principalPayment > balance) {
-                        principalPayment = balance;
-                        extraPayment = principalPayment - (monthlyPI - interestPayment);
-                    }
-
-                    balance = Math.max(0, balance - principalPayment);
-
-                    schedule.push({
-                        month,
-                        payment: monthlyPI + extraPayment,
-                        principal: principalPayment,
-                        interest: interestPayment,
-                        extra: extraPayment,
-                        balance
-                    });
-
-                    if (balance === 0) break;
-                }
-
-                return schedule;
-            }
-
-            // Update display based on calculation mode
-            function updateDisplay(result) {
-                updatePaymentDisplay(result);
-            }
-
-            // Update payment mode display
-            function updatePaymentDisplay(result) {
-                els.totalPayment.textContent = money(result.totalMonthly);
-                els.loanAmount.textContent = money(result.loanAmount);
-                els.totalInterest.textContent = money(result.totalInterest);
-                els.piAmount.textContent = money(result.monthlyPI);
-                els.taxAmount.textContent = money(result.monthlyTax);
-                els.insuranceAmount.textContent = money(result.monthlyInsurance);
-                els.pmiAmount.textContent = money(result.monthlyPMI);
-                els.hoaAmount.textContent = money(result.monthlyHOA);
-
-                // Show/hide PMI row
-                els.rowPmi.classList.toggle('hidden', !result.needsPMI);
-            }
-
-            // Update charts
-            function updateCharts(result) {
-                if (result.mode !== 'payment') return;
-
-                // Pie chart for payment breakdown
-                const breakdownData = [
-                    result.monthlyPI,
-                    result.monthlyTax,
-                    result.monthlyInsurance,
-                    result.monthlyPMI,
-                    result.monthlyHOA
-                ];
-                const colors = ['#21808d', '#a84b2f', '#626c71', '#c0152f', '#94a3b8'];
-                const labels = ['P&I', 'Taxes', 'Insurance', 'PMI', 'HOA'];
-                
-                drawPieChart(els.breakdownChart, breakdownData, colors, labels);
-            }
-
-            // Draw pie chart
-            function drawPieChart(canvas, data, colors, labels) {
-                const ctx = canvas.getContext('2d');
-                const rect = canvas.getBoundingClientRect();
-                const size = Math.min(rect.width, rect.height);
-                
-                canvas.width = size;
-                canvas.height = size;
-                
-                ctx.clearRect(0, 0, size, size);
-                
-                const total = data.reduce((sum, value) => sum + value, 0);
-                const centerX = size / 2;
-                const centerY = size / 2;
-                const radius = Math.min(centerX, centerY) * 0.8;
-                
-                let startAngle = -Math.PI / 2;
-                
-                data.forEach((value, index) => {
-                    if (value > 0) {
-                        const angle = (value / total) * 2 * Math.PI;
-                        
-                        ctx.beginPath();
-                        ctx.moveTo(centerX, centerY);
-                        ctx.arc(centerX, centerY, radius, startAngle, startAngle + angle);
-                        ctx.closePath();
-                        
-                        ctx.fillStyle = colors[index];
-                        ctx.fill();
-                        
-                        startAngle += angle;
-                    }
-                });
-
-                // Update legend
-                let legendHTML = '';
-                data.forEach((value, index) => {
-                    if (value > 0) {
-                        legendHTML += `
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: ${colors[index]}"></div>
-                                <span>${labels[index]}: ${money(value)}</span>
-                            </div>
-                        `;
-                    }
-                });
-                els.legendBreakdown.innerHTML = legendHTML;
-            }
-
-            // Update amortization table
-            function updateAmortizationTable(result) {
-                if (result.mode !== 'payment' || !result.schedule) return;
-
-                let html = '';
-                let currentYear = 1;
-                let yearlyPayment = 0;
-                let yearlyPrincipal = 0;
-                let yearlyInterest = 0;
-                let yearEndBalance = 0;
-
-                result.schedule.forEach((payment, index) => {
-                    yearlyPayment += payment.payment;
-                    yearlyPrincipal += payment.principal;
-                    yearlyInterest += payment.interest;
-                    yearEndBalance = payment.balance;
-
-                    // End of year or last payment
-                    if (payment.month % 12 === 0 || index === result.schedule.length - 1) {
-                        if (currentYear <= 5) {
-                            html += `
-                                <tr>
-                                    <td>${currentYear}</td>
-                                    <td>${money(yearlyPayment)}</td>
-                                    <td>${money(yearlyPrincipal)}</td>
-                                    <td>${money(yearlyInterest)}</td>
-                                    <td>${money(yearEndBalance)}</td>
-                                </tr>
-                            `;
-                        }
-                        
-                        currentYear++;
-                        yearlyPayment = 0;
-                        yearlyPrincipal = 0;
-                        yearlyInterest = 0;
-                    }
-                });
-
-                els.amortizationBody.innerHTML = html;
-            }
-
-            // Generate AI insights
-            function generateInsights(result) {
-                const insights = [];
-
-                if (result.mode === 'payment') {
-                    // PMI insight
-                    if (result.needsPMI) {
-                        const additionalDP = Math.max(0, result.homePrice * 0.2 - result.dpAmount);
-                        insights.push({
-                            icon: 'fas fa-shield-alt',
-                            type: 'tip',
-                            title: 'Eliminate PMI',
-                            message: `Increase down payment by ${money(additionalDP)} to reach 20% and eliminate PMI (saves ${money(result.monthlyPMI)}/month)`
-                        });
-                    }
-
-                    // Term comparison
-                    if (result.term > 15) {
-                        const rate15 = result.rate / 100 / 12;
-                        const months15 = 15 * 12;
-                        const payment15 = result.loanAmount * (rate15 * Math.pow(1 + rate15, months15)) / (Math.pow(1 + rate15, months15) - 1);
-                        const interest15 = payment15 * months15 - result.loanAmount;
-                        const interestSavings = result.totalInterest - interest15;
-                        
-                        insights.push({
-                            icon: 'fas fa-calendar',
-                            type: 'comparison',
-                            title: 'Consider 15-Year Term',
-                            message: `15-year loan: ${money(payment15)}/month, saves ${money(interestSavings)} in total interest`
-                        });
-                    }
-
-                    // Extra payment benefits
-                    if (result.extraMonthly > 0 || result.extraOnce > 0) {
-                        const withoutExtra = generateSchedule(result.loanAmount, result.rate / 100 / 12, result.monthlyPI, result.term * 12, 0, 0);
-                        const monthsSaved = withoutExtra.length - result.schedule.length;
-                        const interestSaved = withoutExtra.reduce((sum, p) => sum + p.interest, 0) - result.totalInterest;
-                        
-                        insights.push({
-                            icon: 'fas fa-rocket',
-                            type: 'savings',
-                            title: 'Extra Payment Impact',
-                            message: `Extra payments save ${monthsSaved} months and ${money(interestSaved)} in interest`
-                        });
-                    } else {
-                        insights.push({
-                            icon: 'fas fa-plus-circle',
-                            type: 'tip',
-                            title: 'Consider Extra Payments',
-                            message: `Adding $100/month could save years on your loan and thousands in interest`
-                        });
-                    }
-
-                    // Interest rate insight
-                    if (result.rate > 7) {
-                        insights.push({
-                            icon: 'fas fa-percentage',
-                            type: 'warning',
-                            title: 'High Interest Rate',
-                            message: `Consider improving credit score or shopping for better rates to reduce monthly payment`
-                        });
-                    }
-                }
-
-                // Render insights
-                let insightsHTML = '';
-                insights.forEach(insight => {
-                    const colorClass = {
-                        'tip': 'insight-tip',
-                        'savings': 'insight-savings',
-                        'warning': 'insight-warning',
-                        'comparison': 'insight-comparison',
-                        'info': 'insight-info'
-                    }[insight.type];
-
-                    insightsHTML += `
-                        <li class="insight-item ${colorClass}">
-                            <div class="insight-icon">
-                                <i class="${insight.icon}"></i>
-                            </div>
-                            <div class="insight-content">
-                                <strong>${insight.title}</strong>
-                                <p>${insight.message}</p>
-                            </div>
-                        </li>
-                    `;
-                });
-
-                els.insightsList.innerHTML = insightsHTML;
-            }
-
-            // Show full schedule modal
-            function showFullSchedule() {
-                if (!currentCalculation || !currentCalculation.schedule) return;
-
-                let html = '';
-                currentCalculation.schedule.forEach(payment => {
-                    html += `
-                        <tr>
-                            <td>${payment.month}</td>
-                            <td>${money(payment.payment)}</td>
-                            <td>${money(payment.principal)}</td>
-                            <td>${money(payment.interest)}</td>
-                            <td>${money(payment.extra)}</td>
-                            <td>${money(payment.balance)}</td>
-                        </tr>
-                    `;
-                });
-
-                els.fullScheduleBody.innerHTML = html;
-                els.scheduleModal.showModal();
-            }
-
-            // Email results
-            function emailResults() {
-                if (!currentCalculation) return;
-
-                let subject, body;
-
-                if (currentCalculation.mode === 'payment') {
-                    subject = encodeURIComponent(`Mortgage Calculator Results - ${money(currentCalculation.totalMonthly)}/month`);
-                    body = encodeURIComponent(
-                        `Mortgage Calculator Results from Finguid HomeLoan Pro\n\n` +
-                        `Home Price: ${money(currentCalculation.homePrice)}\n` +
-                        `Down Payment: ${money(currentCalculation.dpAmount)} (${currentCalculation.dpPercent.toFixed(1)}%)\n` +
-                        `Loan Amount: ${money(currentCalculation.loanAmount)}\n` +
-                        `Interest Rate: ${currentCalculation.rate.toFixed(2)}%\n` +
-                        `Term: ${currentCalculation.term} years\n\n` +
-                        `Monthly Payment Breakdown:\n` +
-                        `Principal & Interest: ${money(currentCalculation.monthlyPI)}\n` +
-                        `Property Tax: ${money(currentCalculation.monthlyTax)}\n` +
-                        `Insurance: ${money(currentCalculation.monthlyInsurance)}\n` +
-                        `PMI: ${money(currentCalculation.monthlyPMI)}\n` +
-                        `HOA: ${money(currentCalculation.monthlyHOA)}\n` +
-                        `Total Monthly: ${money(currentCalculation.totalMonthly)}\n\n` +
-                        `Total Interest: ${money(currentCalculation.totalInterest)}\n\n` +
-                        `Calculate your mortgage at: https://www.finguid.com/mortgage-calculator`
-                    );
-                }
-
-                window.location.href = `mailto:?subject=${subject}&body=${body}`;
-            }
-
-            // Share results
-            function shareResults() {
-                if (!navigator.share) {
-                    // Fallback: copy to clipboard
-                    copyToClipboard();
-                    return;
-                }
-
-                const shareData = {
-                    title: 'Mortgage Calculator Results',
-                    text: `Check out my mortgage calculation: ${money(currentCalculation.totalMonthly)}/month`,
-                    url: window.location.href
-                };
-
-                navigator.share(shareData)
-                    .then(() => showNotification('Results shared successfully!', 'success'))
-                    .catch(() => copyToClipboard());
-            }
-
-            // Copy results to clipboard
-            function copyToClipboard() {
-                const text = `My mortgage payment: ${money(currentCalculation.totalMonthly)}/month. Calculate yours at ${window.location.href}`;
-                
-                navigator.clipboard.writeText(text)
-                    .then(() => showNotification('Results copied to clipboard!', 'success'))
-                    .catch(() => showNotification('Unable to copy results', 'error'));
-            }
-
-            // Load predefined scenarios
-            function loadScenario(scenarioType) {
-                // Clear previous comparisons
-                comparisons = [];
-                
-                // Set base values
-                const baseValues = {
-                    homePrice: 400000,
-                    dpAmount: 80000,
-                    interestRate: 6.75,
-                    state: 'CA'
-                };
-
-                // Set base values
-                Object.keys(baseValues).forEach(key => {
-                    if (els[key]) els[key].value = baseValues[key];
-                });
-
-                switch (scenarioType) {
-                    case '15year':
-                        // Add 30-year scenario
-                        setTerm(30);
-                        calculate();
-                        comparisons.push({
-                            name: '30-Year Fixed',
-                            ...currentCalculation
-                        });
-                        
-                        // Add 15-year scenario
-                        setTerm(15);
-                        calculate();
-                        comparisons.push({
-                            name: '15-Year Fixed',
-                            ...currentCalculation
-                        });
-                        break;
-
-                    case 'rates':
-                        // Compare different rates
-                        [5.5, 6.0, 6.5, 7.0].forEach(rate => {
-                            els.interestRate.value = rate;
-                            calculate();
-                            comparisons.push({
-                                name: `${rate}% Rate`,
-                                ...currentCalculation
-                            });
-                        });
-                        break;
-
-                    case 'downpayment':
-                        // Compare different down payments
-                        [40000, 80000, 120000].forEach(dp => {
-                            els.dpAmount.value = dp;
-                            syncDownPayment(false);
-                            calculate();
-                            comparisons.push({
-                                name: `${money(dp)} Down`,
-                                ...currentCalculation
-                            });
-                        });
-                        break;
-
-                    case 'extraPayment':
-                        // Compare with and without extra payments
-                        els.extraMonthly.value = 0;
-                        calculate();
-                        comparisons.push({
-                            name: 'No Extra Payment',
-                            ...currentCalculation
-                        });
-
-                        els.extraMonthly.value = 200;
-                        calculate();
-                        comparisons.push({
-                            name: '$200 Extra/Month',
-                            ...currentCalculation
-                        });
-                        break;
-
-                    case 'highCost':
-                        // High cost area scenario
-                        els.homePrice.value = 750000;
-                        els.dpAmount.value = 150000;
-                        els.interestRate.value = 6.25;
-                        els.state.value = 'CA';
-                        updatePropertyTax();
-                        calculate();
-                        comparisons.push({
-                            name: 'High Cost Area',
-                            ...currentCalculation
-                        });
-                        break;
-
-                    case 'lowRate':
-                        // Low rate advantage
-                        els.homePrice.value = 400000;
-                        els.dpAmount.value = 80000;
-                        els.interestRate.value = 5.5;
-                        calculate();
-                        comparisons.push({
-                            name: 'Low Rate Advantage',
-                            ...currentCalculation
-                        });
-                        break;
-                }
-
-                renderComparisons();
-                showNotification(`${scenarioType.replace(/([A-Z])/g, ' $1')} scenarios loaded`, 'success');
-            }
-
-            function renderComparisons() {
-                if (comparisons.length === 0) {
-                    els.comparisonCards.innerHTML = '<p style="text-align: center; color: var(--color-text-secondary);">No scenarios to compare. Select a scenario above.</p>';
-                    return;
-                }
-
-                let html = '';
-                comparisons.forEach((scenario, index) => {
-                    // Find the base scenario for comparison (first one)
-                    const baseScenario = comparisons[0];
-                    const monthlySavings = index > 0 ? baseScenario.totalMonthly - scenario.totalMonthly : 0;
-                    const interestSavings = index > 0 ? baseScenario.totalInterest - scenario.totalInterest : 0;
-                    
-                    html += `
-                        <div class="comparison-card">
-                            <div class="comparison-header">
-                                <h4 class="comparison-title">${scenario.name}</h4>
-                                ${monthlySavings > 0 ? `<div class="comparison-savings">Saves ${money(monthlySavings)}/mo</div>` : ''}
-                            </div>
-                            <div class="comparison-details">
-                                <div class="comparison-row">
-                                    <span>Monthly Payment:</span>
-                                    <strong>${money(scenario.totalMonthly)}</strong>
-                                </div>
-                                <div class="comparison-row">
-                                    <span>Loan Amount:</span>
-                                    <span>${money(scenario.loanAmount)}</span>
-                                </div>
-                                <div class="comparison-row">
-                                    <span>Interest Rate:</span>
-                                    <span>${scenario.rate.toFixed(2)}%</span>
-                                </div>
-                                <div class="comparison-row">
-                                    <span>Term:</span>
-                                    <span>${scenario.term} years</span>
-                                </div>
-                                <div class="comparison-row">
-                                    <span>Total Interest:</span>
-                                    <span>${money(scenario.totalInterest)}</span>
-                                </div>
-                                ${interestSavings > 0 ? `
-                                <div class="comparison-row">
-                                    <span>Interest Savings:</span>
-                                    <span style="color: #166534; font-weight: 600;">${money(interestSavings)}</span>
-                                </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                els.comparisonCards.innerHTML = html;
-            }
-
-            // Reset form
-            function resetForm() {
-                // Reset inputs to defaults
-                els.homePrice.value = 400000;
-                els.dpAmount.value = 80000;
-                els.dpPercent.value = 20;
-                els.interestRate.value = 6.75;
-                els.state.value = '';
-                els.propertyTax.value = 0;
-                els.homeInsurance.value = 960;
-                els.pmiRate.value = 0.8;
-                els.hoaFees.value = 0;
-                els.extraMonthly.value = 0;
-                els.extraOnce.value = 0;
-                els.termCustom.value = '';
-
-                // Reset UI state
-                setTerm(30);
-                switchDPMode(false);
-                comparisons = [];
-                renderComparisons();
-
-                // Recalculate
-                updatePropertyTax();
-                updateInsurance();
-                calculate();
-
-                showNotification('Form reset to defaults', 'info');
-            }
-
-            // Utility functions
-            function debounce(func, wait) {
-                let timeout;
-                return function executedFunction(...args) {
-                    const later = () => {
-                        clearTimeout(timeout);
-                        func(...args);
-                    };
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                };
-            }
-
-            function showNotification(message, type = 'info') {
-                // Simple notification system
-                const notification = document.createElement('div');
-                notification.className = `notification notification-${type}`;
-                notification.innerHTML = `
-                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'}-circle"></i>
-                    <span>${message}</span>
-                `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.classList.add('show');
-                }, 100);
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    setTimeout(() => {
-                        document.body.removeChild(notification);
-                    }, 300);
-                }, 3000);
-            }
-
-            function showTooltip(event) {
-                const tooltip = event.target.dataset.tooltip;
-                if (!tooltip) return;
-
-                const tooltipEl = document.createElement('div');
-                tooltipEl.className = 'tooltip-popup';
-                tooltipEl.textContent = tooltip;
-                
-                document.body.appendChild(tooltipEl);
-                
-                const rect = event.target.getBoundingClientRect();
-                tooltipEl.style.left = rect.left + rect.width / 2 - tooltipEl.offsetWidth / 2 + 'px';
-                tooltipEl.style.top = rect.top - tooltipEl.offsetHeight - 10 + 'px';
-            }
-
-            function hideTooltip() {
-                const tooltip = document.querySelector('.tooltip-popup');
-                if (tooltip) {
-                    document.body.removeChild(tooltip);
-                }
-            }
-
-            function toggleMobileMenu() {
-                const navMenu = $('#nav-menu');
-                const hamburger = $('#hamburger');
-                navMenu.classList.toggle('active');
-                hamburger.classList.toggle('active');
-            }
-
-            // Initialize when DOM is loaded
-            document.addEventListener('DOMContentLoaded', init);
-
-            // Analytics tracking
-            function trackEvent(action, category = 'Calculator') {
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', action, {
-                        event_category: category,
-                        event_label: currentMode
-                    });
-                }
-            }
-
-            // Track calculator usage
-            document.addEventListener('DOMContentLoaded', () => {
-                els.calculateBtn.addEventListener('click', () => trackEvent('calculate'));
-            });
-
-        })();
-    </script>
-</body>
-</html>
+:root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+
+  /* RGB versions for opacity control */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+
+  /* Background color tokens (Light Mode) */
+  --color-bg-1: rgba(59, 130, 246, 0.08); /* Light blue */
+  --color-bg-2: rgba(245, 158, 11, 0.08); /* Light yellow */
+  --color-bg-3: rgba(34, 197, 94, 0.08); /* Light green */
+  --color-bg-4: rgba(239, 68, 68, 0.08); /* Light red */
+  --color-bg-5: rgba(147, 51, 234, 0.08); /* Light purple */
+  --color-bg-6: rgba(249, 115, 22, 0.08); /* Light orange */
+  --color-bg-7: rgba(236, 72, 153, 0.08); /* Light pink */
+  --color-bg-8: rgba(6, 182, 212, 0.08); /* Light cyan */
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+  /* Common style patterns */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  /* RGB versions for opacity control */
+  --color-success-rgb: 33, 128, 141;
+  --color-error-rgb: 192, 21, 47;
+  --color-warning-rgb: 168, 75, 47;
+  --color-info-rgb: 98, 108, 113;
+
+  /* Typography */
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
+    0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
+    0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* RGB versions for opacity control (Dark Mode) */
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+
+    /* Background color tokens (Dark Mode) */
+    --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
+    --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
+    --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
+    --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
+    --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
+    --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
+    --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
+    --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+
+    /* Semantic Color Tokens (Dark Mode) */
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+    /* Common style patterns - updated for dark mode */
+    --focus-ring: 0 0 0 3px var(--color-focus-ring);
+    --focus-outline: 2px solid var(--color-primary);
+    --status-bg-opacity: 0.15;
+    --status-border-opacity: 0.25;
+    --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+    /* RGB versions for dark mode */
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+/* Data attribute for manual theme switching */
+[data-color-scheme="dark"] {
+  /* RGB versions for opacity control (dark mode) */
+  --color-gray-400-rgb: 119, 124, 124;
+  --color-teal-300-rgb: 50, 184, 198;
+  --color-gray-300-rgb: 167, 169, 169;
+  --color-gray-200-rgb: 245, 245, 245;
+
+  /* Colorful background palette - Dark Mode */
+  --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
+  --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
+  --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
+  --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
+  --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
+  --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
+  --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
+  --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+
+  /* Semantic Color Tokens (Dark Mode) */
+  --color-background: var(--color-charcoal-700);
+  --color-surface: var(--color-charcoal-800);
+  --color-text: var(--color-gray-200);
+  --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+  --color-primary: var(--color-teal-300);
+  --color-primary-hover: var(--color-teal-400);
+  --color-primary-active: var(--color-teal-800);
+  --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+  --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+  --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+  --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+  --color-error: var(--color-red-400);
+  --color-success: var(--color-teal-300);
+  --color-warning: var(--color-orange-400);
+  --color-info: var(--color-gray-300);
+  --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+  --color-btn-primary-text: var(--color-slate-900);
+  --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
+  --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+  --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+  /* Common style patterns - updated for dark mode */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  /* RGB versions for dark mode */
+  --color-success-rgb: var(--color-teal-300-rgb);
+  --color-error-rgb: var(--color-red-400-rgb);
+  --color-warning-rgb: var(--color-orange-400-rgb);
+  --color-info-rgb: var(--color-gray-300-rgb);
+}
+
+[data-color-scheme="light"] {
+  /* RGB versions for opacity control (light mode) */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+
+  /* RGB versions for light mode */
+  --color-success-rgb: var(--color-teal-500-rgb);
+  --color-error-rgb: var(--color-red-500-rgb);
+  --color-warning-rgb: var(--color-orange-500-rgb);
+  --color-info-rgb: var(--color-slate-500-rgb);
+}
+
+/* Base styles */
+html {
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+}
+h2 {
+  font-size: var(--font-size-3xl);
+}
+h3 {
+  font-size: var(--font-size-2xl);
+}
+h4 {
+  font-size: var(--font-size-xl);
+}
+h5 {
+  font-size: var(--font-size-lg);
+}
+h6 {
+  font-size: var(--font-size-md);
+}
+
+p {
+  margin: 0 0 var(--space-16) 0;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+code,
+pre {
+  font-family: var(--font-family-mono);
+  font-size: calc(var(--font-size-base) * 0.95);
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-sm);
+}
+
+code {
+  padding: var(--space-1) var(--space-4);
+}
+
+pre {
+  padding: var(--space-16);
+  margin: var(--space-16) 0;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+  border: none;
+  text-decoration: none;
+  position: relative;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn--primary:active {
+  background: var(--color-primary-active);
+}
+
+.btn--secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover {
+  background: var(--color-secondary-hover);
+}
+
+.btn--secondary:active {
+  background: var(--color-secondary-active);
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--outline:hover {
+  background: var(--color-secondary);
+}
+
+.btn--sm {
+  padding: var(--space-4) var(--space-12);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+}
+
+.btn--lg {
+  padding: var(--space-10) var(--space-20);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-md);
+}
+
+.btn--full-width {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form elements */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: var(--space-8) var(--space-12);
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+textarea.form-control {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+}
+
+select.form-control {
+  padding: var(--space-8) var(--space-12);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: var(--select-caret-light);
+  background-repeat: no-repeat;
+  background-position: right var(--space-12) center;
+  background-size: 16px;
+  padding-right: var(--space-32);
+}
+
+/* Add a dark mode specific caret */
+@media (prefers-color-scheme: dark) {
+  select.form-control {
+    background-image: var(--select-caret-dark);
+  }
+}
+
+/* Also handle data-color-scheme */
+[data-color-scheme="dark"] select.form-control {
+  background-image: var(--select-caret-dark);
+}
+
+[data-color-scheme="light"] select.form-control {
+  background-image: var(--select-caret-light);
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  outline: var(--focus-outline);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-8);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.form-group {
+  margin-bottom: var(--space-16);
+}
+
+/* Card component */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card__body {
+  padding: var(--space-16);
+}
+
+.card__header,
+.card__footer {
+  padding: var(--space-16);
+  border-bottom: 1px solid var(--color-card-border-inner);
+}
+
+/* Status indicators - simplified with CSS variables */
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.status--success {
+  background-color: rgba(
+    var(--color-success-rgb, 33, 128, 141),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-success);
+  border: 1px solid
+    rgba(var(--color-success-rgb, 33, 128, 141), var(--status-border-opacity));
+}
+
+.status--error {
+  background-color: rgba(
+    var(--color-error-rgb, 192, 21, 47),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-error);
+  border: 1px solid
+    rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
+}
+
+.status--warning {
+  background-color: rgba(
+    var(--color-warning-rgb, 168, 75, 47),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-warning);
+  border: 1px solid
+    rgba(var(--color-warning-rgb, 168, 75, 47), var(--status-border-opacity));
+}
+
+.status--info {
+  background-color: rgba(
+    var(--color-info-rgb, 98, 108, 113),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-info);
+  border: 1px solid
+    rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
+}
+
+/* Container layout */
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: var(--space-16);
+  padding-left: var(--space-16);
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: var(--container-sm);
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: var(--container-md);
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: var(--container-lg);
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: var(--container-xl);
+  }
+}
+
+/* Utility classes */
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-8 {
+  gap: var(--space-8);
+}
+.gap-16 {
+  gap: var(--space-16);
+}
+
+.m-0 {
+  margin: 0;
+}
+.mt-8 {
+  margin-top: var(--space-8);
+}
+.mb-8 {
+  margin-bottom: var(--space-8);
+}
+.mx-8 {
+  margin-left: var(--space-8);
+  margin-right: var(--space-8);
+}
+.my-8 {
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.p-0 {
+  padding: 0;
+}
+.py-8 {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+}
+.px-8 {
+  padding-left: var(--space-8);
+  padding-right: var(--space-8);
+}
+.py-16 {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+.px-16 {
+  padding-left: var(--space-16);
+  padding-right: var(--space-16);
+}
+
+.block {
+  display: block;
+}
+.hidden {
+  display: none;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+/* Dark mode specifics */
+[data-color-scheme="dark"] .btn--outline {
+  border: 1px solid var(--color-border-secondary);
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
+    format('woff2');
+}
+
+/* END PERPLEXITY DESIGN SYSTEM */
+/* Modern CSS Reset and Base Styles */
+:root {
+  /* Using design system variables - no need to redeclare them here */
+}
+
+/* Dark Mode - using design system approach */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode handled by design system */
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container */
+.container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: 0 var(--space-16);
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 var(--space-24);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--space-32);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--space-12);
+  }
+}
+
+/* Header Navigation */
+.header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 80px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 var(--space-24);
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 var(--space-16);
+  }
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.nav-brand:hover {
+  color: var(--color-primary-hover);
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  border-radius: var(--radius-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-btn-primary-text);
+  font-size: var(--font-size-lg);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-32);
+}
+
+@media (max-width: 480px) {
+  .nav-menu {
+    gap: var(--space-16);
+  }
+}
+
+.nav-link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-standard);
+  position: relative;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--color-primary);
+  background-color: var(--color-secondary);
+}
+
+/* Mobile Navigation */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  padding: var(--space-8);
+  background: none;
+  border: none;
+}
+
+.mobile-menu-toggle span {
+  width: 24px;
+  height: 3px;
+  background-color: var(--color-text);
+  margin: var(--space-2) 0;
+  transition: all var(--duration-normal) var(--ease-standard);
+  border-radius: var(--space-2);
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+  }
+}
+
+/* Page Header */
+.page-header {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  color: var(--color-btn-primary-text);
+  padding: var(--space-32) 0 var(--space-32);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    padding: var(--space-24) 0 var(--space-20);
+  }
+}
+
+.page-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-16);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.page-subtitle {
+  font-size: var(--font-size-lg);
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  .page-subtitle {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Main Layout */
+.main-content {
+  margin: var(--space-32) 0;
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    margin: var(--space-20) 0;
+  }
+}
+
+.calculator-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-32);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .calculator-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-24);
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-layout {
+    gap: var(--space-16);
+  }
+}
+
+/* Calculator Panel */
+.calculator-panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-32);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-card-border);
+  position: sticky;
+  top: calc(80px + var(--space-16));
+}
+
+@media (max-width: 1024px) {
+  .calculator-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-panel {
+    padding: var(--space-20);
+  }
+}
+
+.panel-header {
+  margin-bottom: var(--space-24);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-16);
+}
+
+.panel-header h2 {
+  color: var(--color-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-8);
+}
+
+.panel-header p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: var(--space-32);
+}
+
+@media (max-width: 480px) {
+  .form-section {
+    margin-bottom: var(--space-24);
+  }
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-16);
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.section-title i {
+  color: var(--color-primary);
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: var(--space-24);
+}
+
+@media (max-width: 480px) {
+  .form-group {
+    margin-bottom: var(--space-20);
+  }
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  margin-bottom: var(--space-8);
+  font-size: var(--font-size-sm);
+}
+
+.label-help {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+}
+
+/* Form Inputs */
+.form-input,
+.form-select {
+  width: 100%;
+  padding: var(--space-12) var(--space-16);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  transition: all var(--duration-normal) var(--ease-standard);
+  font-family: var(--font-family-base);
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.form-input:hover,
+.form-select:hover {
+  border-color: var(--color-primary-hover);
+}
+
+/* Input Groups with Icons */
+.input-group {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: var(--space-16);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  pointer-events: none;
+}
+
+.input-group .form-input {
+  padding-left: var(--space-32);
+}
+
+/* Down Payment Tabs */
+.dp-tabs {
+  display: flex;
+  background: var(--color-secondary);
+  border-radius: var(--radius-base);
+  padding: var(--space-4);
+  margin-bottom: var(--space-16);
+  border: 1px solid var(--color-border);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: var(--space-8) var(--space-16);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.tab-btn.active {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-xs);
+}
+
+.tab-btn:hover:not(.active) {
+  color: var(--color-text);
+}
+
+/* Down Payment Inputs */
+.dp-inputs {
+  position: relative;
+}
+
+.dp-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+@media (max-width: 480px) {
+  .dp-input-wrap {
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* PMI Banner */
+.pmi-banner {
+  background: rgba(var(--color-warning-rgb), var(--status-bg-opacity));
+  color: var(--color-warning);
+  padding: var(--space-16);
+  border-radius: var(--radius-base);
+  margin-top: var(--space-16);
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid rgba(var(--color-warning-rgb), var(--status-border-opacity));
+}
+
+.pmi-banner i {
+  color: var(--color-warning);
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .pmi-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Term Selection */
+.term-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-bottom: var(--space-16);
+}
+
+.chip {
+  padding: var(--space-8) var(--space-16);
+  background: var(--color-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.chip.active {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  border-color: var(--color-primary);
+}
+
+.or-text {
+  align-self: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin: 0 var(--space-8);
+  font-style: italic;
+}
+
+.custom-term {
+  max-width: 120px;
+}
+
+/* Advanced Options */
+.advanced-toggle {
+  width: 100%;
+  padding: var(--space-16);
+  background: var(--color-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-base);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  margin-bottom: var(--space-16);
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.advanced-toggle:hover {
+  background: var(--color-secondary-hover);
+  border-color: var(--color-primary);
+}
+
+.advanced-toggle.active {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  border-color: var(--color-primary);
+}
+
+.advanced-toggle .arrow {
+  transition: transform var(--duration-normal) var(--ease-standard);
+}
+
+.advanced-toggle.active .arrow {
+  transform: rotate(180deg);
+}
+
+.advanced-panel {
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: var(--space-24);
+  margin-bottom: var(--space-16);
+  background: var(--color-secondary);
+}
+
+@media (max-width: 480px) {
+  .advanced-panel {
+    padding: var(--space-16);
+  }
+}
+
+.advanced-panel .form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-24);
+  border: none;
+  border-radius: var(--radius-base);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  gap: var(--space-8);
+  transition: all var(--duration-normal) var(--ease-standard);
+  text-decoration: none;
+  min-height: 48px;
+  font-family: var(--font-family-base);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+  background: var(--color-primary-active);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  background: var(--color-secondary-hover);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-secondary:active {
+  background: var(--color-secondary-active);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-outline:hover {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn-full-width {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Loading State */
+.btn .spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.btn.loading .spinner {
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: var(--space-16);
+  margin-top: var(--space-32);
+  padding-top: var(--space-24);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .action-buttons {
+    gap: var(--space-12);
+    margin-top: var(--space-24);
+    padding-top: var(--space-16);
+  }
+}
+
+/* Results Panel */
+.results-panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-card-border);
+  overflow: hidden;
+}
+
+/* Results Summary */
+.results-summary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  padding: var(--space-32);
+  color: var(--color-btn-primary-text);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .results-summary {
+    padding: var(--space-20);
+  }
+}
+
+.main-result {
+  margin-bottom: var(--space-24);
+}
+
+.result-label {
+  font-size: var(--font-size-lg);
+  opacity: 0.9;
+  margin-bottom: var(--space-8);
+}
+
+.result-value {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin: var(--space-8) 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 480px) {
+  .result-value {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+.key-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-16);
+}
+
+@media (max-width: 768px) {
+  .key-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .key-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric {
+  background: rgba(255, 255, 255, 0.15);
+  padding: var(--space-16);
+  border-radius: var(--radius-base);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.metric-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  opacity: 0.8;
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  display: block;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+}
+
+/* Breakdown Section */
+.breakdown-section {
+  padding: var(--space-32);
+}
+
+@media (max-width: 480px) {
+  .breakdown-section {
+    padding: var(--space-20);
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-24);
+}
+
+@media (max-width: 480px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+}
+
+.section-header h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.breakdown-table {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-16);
+  border-radius: var(--radius-base);
+  background: var(--color-secondary);
+  border-left: 4px solid var(--color-primary);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.breakdown-row:hover {
+  background: var(--color-secondary-hover);
+  transform: translateX(4px);
+}
+
+@media (max-width: 480px) {
+  .breakdown-row {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-8);
+  }
+}
+
+.breakdown-row:nth-child(1) { border-left-color: var(--color-primary); }
+.breakdown-row:nth-child(2) { border-left-color: var(--color-orange-500); }
+.breakdown-row:nth-child(3) { border-left-color: var(--color-slate-500); }
+.breakdown-row:nth-child(4) { border-left-color: var(--color-error); }
+.breakdown-row:nth-child(5) { border-left-color: var(--color-warning); }
+
+.breakdown-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.breakdown-value {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+}
+
+/* Charts Section */
+.charts-section {
+  padding: var(--space-32);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 480px) {
+  .charts-section {
+    padding: var(--space-20);
+  }
+}
+
+.chart-container {
+  background: var(--color-secondary);
+  border-radius: var(--radius-base);
+  padding: var(--space-24);
+  margin-bottom: var(--space-24);
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    padding: var(--space-16);
+  }
+}
+
+.chart-container h4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-16);
+  text-align: center;
+}
+
+#breakdownChart {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  justify-content: center;
+  margin-top: var(--space-16);
+}
+
+@media (max-width: 480px) {
+  .chart-legend {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--font-size-sm);
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+/* Insights Section */
+.insights-section {
+  padding: var(--space-32);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-secondary);
+}
+
+@media (max-width: 480px) {
+  .insights-section {
+    padding: var(--space-20);
+  }
+}
+
+.insights-list {
+  list-style: none;
+  display: grid;
+  gap: var(--space-16);
+}
+
+.insight-item {
+  display: flex;
+  gap: var(--space-16);
+  padding: var(--space-24);
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-left: 4px solid var(--color-primary);
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.insight-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 480px) {
+  .insight-item {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.insight-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  border-radius: var(--radius-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-btn-primary-text);
+  font-size: var(--font-size-lg);
+}
+
+.insight-content h4 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-8);
+}
+
+.insight-content p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}
+
+/* Result Actions */
+.result-actions {
+  display: flex;
+  gap: var(--space-16);
+  justify-content: center;
+  padding: var(--space-32);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-secondary);
+}
+
+@media (max-width: 768px) {
+  .result-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .result-actions {
+    padding: var(--space-20);
+  }
+}
+
+/* Amortization Table */
+.amortization-section {
+  margin-top: var(--space-32);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-card-border);
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .amortization-section {
+    margin-top: var(--space-24);
+  }
+}
+
+.amortization-header {
+  padding: var(--space-32);
+  background: var(--color-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+@media (max-width: 480px) {
+  .amortization-header {
+    padding: var(--space-20);
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.amortization-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.amortization-table th {
+  background: var(--color-secondary);
+  padding: var(--space-16);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.amortization-table td {
+  padding: var(--space-12) var(--space-16);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.amortization-table tr:hover {
+  background: var(--color-secondary);
+}
+
+.amortization-table .currency {
+  text-align: right;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Comparison Section */
+.comparison-section {
+  margin-top: var(--space-32);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-32);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-card-border);
+}
+
+@media (max-width: 480px) {
+  .comparison-section {
+    margin-top: var(--space-24);
+    padding: var(--space-20);
+  }
+}
+
+.predefined-scenarios {
+  margin-bottom: var(--space-32);
+}
+
+@media (max-width: 480px) {
+  .predefined-scenarios {
+    margin-bottom: var(--space-24);
+  }
+}
+
+.scenario-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-16);
+}
+
+@media (max-width: 768px) {
+  .scenario-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scenario-btn {
+  padding: var(--space-24);
+  border-radius: var(--radius-base);
+  border: none;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+  text-align: center;
+  color: var(--color-btn-primary-text);
+}
+
+.scenario-btn:nth-child(1) {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+}
+
+.scenario-btn:nth-child(2) {
+  background: linear-gradient(135deg, var(--color-orange-500) 0%, var(--color-orange-400) 100%);
+}
+
+.scenario-btn:nth-child(3) {
+  background: linear-gradient(135deg, var(--color-slate-500) 0%, var(--color-slate-900) 100%);
+}
+
+.scenario-btn:nth-child(4) {
+  background: linear-gradient(135deg, var(--color-error) 0%, var(--color-red-400) 100%);
+}
+
+.scenario-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.comparison-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-24);
+}
+
+@media (max-width: 768px) {
+  .comparison-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.comparison-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-base);
+  padding: var(--space-24);
+  box-shadow: var(--shadow-sm);
+  border-top: 4px solid var(--color-primary);
+  border: 1px solid var(--color-card-border);
+}
+
+.comparison-card:nth-child(2) { border-top-color: var(--color-orange-500); }
+.comparison-card:nth-child(3) { border-top-color: var(--color-slate-500); }
+.comparison-card:nth-child(4) { border-top-color: var(--color-error); }
+
+.comparison-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-16);
+}
+
+@media (max-width: 480px) {
+  .comparison-header {
+    flex-direction: column;
+    gap: var(--space-8);
+    text-align: center;
+  }
+}
+
+.comparison-title {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+}
+
+.comparison-savings {
+  background: var(--color-success);
+  color: var(--color-btn-primary-text);
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+}
+
+.comparison-details {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.comparison-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-8) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comparison-row:last-child {
+  border-bottom: none;
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .calculator-panel {
+    padding: var(--space-24);
+  }
+  
+  .page-title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .result-value {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .key-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .scenario-buttons {
+    grid-template-columns: 1fr;
+  }
+  
+  .comparison-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .key-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-legend {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .breakdown-row {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-8);
+  }
+  
+  .insight-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .comparison-header {
+    flex-direction: column;
+    gap: var(--space-8);
+    text-align: center;
+  }
+}
+
+/* Utility Classes */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-medium { font-weight: var(--font-weight-medium); }
+
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-muted { color: var(--color-text-secondary); }
+
+/* Focus and Accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .header,
+  .mobile-menu-toggle,
+  .action-buttons,
+  .result-actions {
+    display: none !important;
+  }
+  
+  .page-header {
+    margin-top: 0;
+  }
+  
+  .calculator-layout {
+    display: block;
+  }
+  
+  .calculator-panel,
+  .results-panel {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    margin-bottom: var(--space-24);
+    page-break-inside: avoid;
+  }
+}
