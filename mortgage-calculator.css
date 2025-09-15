@@ -2087,4 +2087,18 @@ a:focus-visible {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+  .header {
+  margin-bottom: 4px !important; /* Reduce space below header */
+  padding-bottom: 4px !important; /* Reduce padding inside header bottom */
+}
+
+.navbar {
+  padding-bottom: 0 !important; /* Remove extra bottom padding from navigation */
+}
+
+.main-content {
+  margin-top: 8px !important; /* Reduce space above main content */
+  padding-top: 0 !important;
+}
+
   
