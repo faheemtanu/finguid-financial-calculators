@@ -562,7 +562,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const extraMonthly = parseFloat(elements.extraMonthly?.value || 0);
     const extraOnce = parseFloat(elements.extraOnce?.value || 0);
 
-    // Calculate monthly P&I
+    // Calculate monthly Principal & Interest
     const monthlyRate = rate / 12;
     let monthlyPI = 0;
     
@@ -688,7 +688,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ].filter(value => value > 0);
 
     const colors = ['#21808d', '#a84b2f', '#626c71', '#ef4444', '#94a3b8'];
-    const labels = ['P&I', 'Taxes', 'Insurance', 'PMI', 'HOA'].filter((_, index) => 
+    const labels = ['Principal & Interest', 'Taxes', 'Insurance', 'PMI', 'HOA'].filter((_, index) => 
       [result.monthlyPI, result.monthlyTax, result.monthlyInsurance, result.monthlyPMI, result.monthlyHOA][index] > 0
     );
 
