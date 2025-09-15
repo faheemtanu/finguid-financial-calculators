@@ -182,11 +182,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (elements.state) {
       elements.state.addEventListener('change', updatePropertyTax);
-      // Fixed: Added calculate call when state changes
-      elements.state.addEventListener('change', calculate);
     }
 
-    // Term selection - Updated to handle all term buttons
+    // Term selection
     if (elements.termButtons) {
       elements.termButtons.addEventListener('click', (e) => {
         const btn = e.target.closest('.chip[data-term]');
@@ -248,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
       voiceClose.addEventListener('click', hideVoiceStatus);
     }
 
-    // Comparison scenarios - Fixed to use real calculations
+    // Comparison scenarios
     elements.scenarioBtns.forEach(btn => {
       btn.addEventListener('click', () => loadScenario(btn.dataset.scenario));
     });
@@ -412,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.homeInsurance.value = Math.max(600, Math.min(estimate, 3000));
   }
 
-  // Term selection - Updated to handle all term buttons
+  // Term selection
   function setTerm(years) {
     calculatorState.activeTerm = years;
     
@@ -538,7 +536,6 @@ document.addEventListener('DOMContentLoaded', function() {
         generateInsights(result);
         updateCharts(result);
         updateAmortizationTable(result);
-        updateComparisonScenarios(result); // Fixed: Added comparison update
       }
     } catch (error) {
       console.error('Calculation error:', error);
@@ -865,187 +862,6 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.amortizationBody.innerHTML = html;
   }
 
-  // Update comparison scenarios - Fixed to use real calculations
-  function updateComparisonScenarios(result) {
-    if (!elements.comparisonCards) return;
-    
-    // Calculate comparison scenarios
-    const current = result;
-    
-    // Lower rate scenario (1% less)
-    const lowerRate = calculatePaymentWithModification({
-      rate: Math.max(0.1, current.rate - 1)
-    });
-    
-    // Higher down payment scenario (25% down)
-    const higherDP = calculatePaymentWithModification({
-      dpPercent: 25
-    });
-    
-    // Shorter term scenario (15 years)
-    const shorterTerm = calculatePaymentWithModification({
-      term: 15
-    });
-    
-    const html = `
-      <div class="comparison-card">
-        <div class="comparison-header">
-          <h4 class="comparison-title">Current Scenario</h4>
-          <span class="comparison-savings">Baseline</span>
-        </div>
-        <div class="comparison-details">
-          <div class="comparison-row">
-            <span>Monthly Payment</span>
-            <span class="currency">${formatCurrency(current.totalMonthly)}</span>
-          </div>
-          <div class="comparison-row">
-            <span>Total Interest</span>
-            <span class="currency">${formatCurrency(current.totalInterest)}</span>
-          </div>
-          <div class="comparison-row">
-            <span>Loan Term</span>
-            <span>${current.term} years</span>
-          </div>
-          <div class="comparison-row">
-            <span>Interest Rate</span>
-            <span>${formatPercentage(current.rate)}</span>
-          </div>
-        </div>
-      </div>
-      <div class="comparison-card">
-        <div class="comparison-header">
-          <h4 class="comparison-title">Lower Rate (${formatPercentage(lowerRate.rate)})</h4>
-          <span class="comparison-savings">Save ${formatCurrency(current.totalMonthly - lowerRate.totalMonthly)}/mo</span>
-        </div>
-        <div class="comparison-details">
-          <div class="comparison-row">
-            <span>Monthly Payment</span>
-            <span class="currency">${formatCurrency(lowerRate.totalMonthly)}</span>
-          </div>
-          <div class="comparison-row">
-            <span>Total Interest</span>
-            <span class="currency">${formatCurrency(lowerRate.totalInterest)}</span>
-          </div>
-          <div class="comparison-row">
-            <span>Loan Term</span>
-            <span>${lowerRate.term} years</span>
-          </div>
-          <div class="comparison-row">
-            <span>Interest Rate</span>
-            <span>${formatPercentage(lowerRate.rate)}</span>
-          </div>
-        </div>
-      </div>
-      <div class="comparison-card">
-        <div class="comparison-header">
-          <h4 class="comparison-title">Higher Down Payment (${formatPercentage(higherDP.dpPercent)})</h4>
-          <span class="comparison-savings">Save ${formatCurrency(current.totalMonthly - higherDP.totalMonthly)}/mo</span>
-        </div>
-        <div class="comparison-details">
-          <div class="comparison-row">
-            <span>Monthly Payment</span>
-            <span class="currency">${formatCurrency(higherDP.totalMonthly)}</span>
-          </div>
-          <div class="comparison-row">
-            <span>Total Interest</span>
-            <span class="currency">${formatCurrency(higherDP.totalInterest)}</span>
-          </div>
-          <div class="comparison-row">
-            <span>Loan Term</span>
-            <span>${higherDP.term} years</span>
-          </div>
-          <div class="comparison-row">
-            <span>Down Payment</span>
-            <span class="currency">${formatCurrency(higherDP.dpAmount)}</span>
-          </div>
-        </div>
-      </div>
-      <div class="comparison-card">
-        <div class="comparison-header">
-          <h4 class="comparison-title">Shorter Term (${shorterTerm.term} years)</h4>
-          <span class="comparison-savings">Save ${formatCurrency(current.totalInterest - shorterTerm.totalInterest)} interest</span>
-        </div>
-        <div class="comparison-details">
-          <div class="comparison-row">
-            <span>Monthly Payment</span>
-            <span class="currency">${formatCurrency(shorterTerm.totalMonthly)}</span>
-          </div>
-          <div class="comparison-row">
-            <span>Total Interest</span>
-            <span class="currency">${formatCurrency(shorterTerm.totalInterest)}</span>
-          </div>
-          <div class="comparison-row">
-            <span>Loan Term</span>
-            <span>${shorterTerm.term} years</span>
-          </div>
-          <div class="comparison-row">
-            <span>Interest Rate</span>
-            <span>${formatPercentage(shorterTerm.rate)}</span>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    elements.comparisonCards.innerHTML = html;
-  }
-
-  // Helper function to calculate payment with modifications
-  function calculatePaymentWithModification(modifications) {
-    const homePrice = parseFloat(elements.homePrice?.value || 0);
-    const baseDPAmount = parseFloat(elements.dpAmount?.value || 0);
-    const baseRate = parseFloat(elements.interestRate?.value || 0);
-    const baseTerm = parseInt(elements.termCustom?.value) || calculatorState.activeTerm;
-    
-    const dpPercent = modifications.dpPercent || (homePrice > 0 ? (baseDPAmount / homePrice * 100) : 0);
-    const dpAmount = modifications.dpPercent ? Math.round(homePrice * modifications.dpPercent / 100) : baseDPAmount;
-    const rate = modifications.rate !== undefined ? modifications.rate : baseRate;
-    const term = modifications.term || baseTerm;
-    
-    const loanAmount = Math.max(0, homePrice - dpAmount);
-    const months = term * 12;
-    
-    if (!homePrice || !rate || !term) return null;
-    
-    // Property costs
-    const annualTax = parseFloat(elements.propertyTax?.value || 0);
-    const annualInsurance = parseFloat(elements.homeInsurance?.value || 0);
-    const pmiRate = parseFloat(elements.pmiRate?.value || 0) / 100;
-    const monthlyHOA = parseFloat(elements.hoaFees?.value || 0);
-    
-    // Calculate monthly P&I
-    const monthlyRate = rate / 100 / 12;
-    let monthlyPI = 0;
-    
-    if (monthlyRate > 0) {
-      monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
-                  (Math.pow(1 + monthlyRate, months) - 1);
-    } else {
-      monthlyPI = loanAmount / months;
-    }
-    
-    // Other monthly costs
-    const monthlyTax = annualTax / 12;
-    const monthlyInsurance = annualInsurance / 12;
-    const needsPMI = dpPercent < 20;
-    const monthlyPMI = needsPMI ? (loanAmount * pmiRate / 12) : 0;
-    const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + monthlyPMI + monthlyHOA;
-    
-    // Calculate total interest
-    const totalInterest = (monthlyPI * months) - loanAmount;
-    
-    return {
-      homePrice,
-      dpAmount,
-      dpPercent,
-      loanAmount,
-      rate,
-      term,
-      totalMonthly,
-      totalInterest,
-      needsPMI
-    };
-  }
-
   // Utility functions for actions
   function resetForm() {
     const form = document.querySelector('form');
@@ -1128,9 +944,9 @@ Generated by Finguid Mortgage Calculator
   }
 
   function loadScenario(scenario) {
+    // Implement scenario loading logic based on scenario type
+    console.log('Loading scenario:', scenario);
     // This would populate different calculation scenarios
-    // For now, we'll just update the comparison cards
-    calculate();
   }
 
   // Notification system
@@ -1156,6 +972,20 @@ Generated by Finguid Mortgage Calculator
     }, 3000);
   }
 
+  // Analytics tracking
+  function trackCalculatorUsage() {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'calculator_use', {
+        event_category: 'Calculator',
+        event_label: 'Mortgage Calculator',
+        value: 1
+      });
+    }
+  }
+
   // Initialize the calculator when DOM is ready
   init();
+
+  // Track usage on calculation
+  document.addEventListener('calculate', trackCalculatorUsage);
 });
