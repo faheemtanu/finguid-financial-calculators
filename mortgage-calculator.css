@@ -2108,3 +2108,10 @@ a:focus-visible {
 
 /* Optional: if home hero has margins, normalize it too */
 .header + .home-hero { margin-top: 0 !important; }
+/* Hide Loan Comparison Scenarios on Mortgage Calculator page */
+.comparison-section,
+.predefined-scenarios,
+.scenario-buttons,
+.comparison-cards {
+  display: none !important;
+}
