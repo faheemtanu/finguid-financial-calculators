@@ -2089,3 +2089,22 @@ a:focus-visible {
   padding-top: 8px !important;     /* was large; shrink to close the gap */
   padding-bottom: 16px !important; /* keep comfortable spacing below the title */
 }
+/* Site-wide shared hero/header sizing */
+:root {
+  --hero-pt: clamp(12px, 2.5vw, 20px);   /* top padding */
+  --hero-pb: clamp(12px, 2.5vw, 20px);   /* bottom padding */
+  --hero-min-h: clamp(160px, 22vh, 240px); /* consistent card height */
+}
+
+/* Apply same size to both home hero and mortgage header */
+.home-hero,
+.page-header {
+  padding: var(--hero-pt) 0 var(--hero-pb) !important;
+  min-height: var(--hero-min-h) !important;
+}
+
+/* Ensure no extra gap below the sticky nav */
+.header + .page-header { margin-top: 0 !important; }
+
+/* Optional: if home hero has margins, normalize it too */
+.header + .home-hero { margin-top: 0 !important; }
