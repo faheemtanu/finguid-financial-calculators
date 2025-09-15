@@ -2118,3 +2118,17 @@ body {
   margin-bottom: 0 !important;  /* Remove any bottom margin */
   padding-bottom: 0 !important; /* Remove any bottom padding */
 }
+.page-header {
+  padding-top: 12px !important;    /* Reduce top padding */
+  padding-bottom: 12px !important; /* Reduce bottom padding */
+}
+
+.page-header .page-title {
+  font-size: 22px !important;       /* Slightly smaller heading font */
+  margin-bottom: 8px !important;    /* Less margin below title */
+}
+
+.page-header p {
+  font-size: 14px !important;       /* Slightly smaller subtitle font */
+  margin: 0 !important;             /* Remove default margin */
+}
