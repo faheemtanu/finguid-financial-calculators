@@ -2081,33 +2081,6 @@ a:focus-visible {
     margin-bottom: var(--space-24);
     page-break-inside: avoid;
   }
-}
-/* Further reduce vertical space between header and calculator page content */
-
-/* Header adjustments */
-.header {
-  margin-bottom: 4px !important;
-  padding-bottom: 4px !important;
-}
-
-/* Page header padding/margin reduction */
-.page-header {
-  margin-top: 0 !important;
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
-}
-
-/* Main content margin adjustment */
-.main-content {
-  margin-top: 4px !important;
-  padding-top: 0 !important;
-}
-
-/* Remove any top margin/padding on body */
-body {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-}
 
 /* Optional: tighten container padding */
 .container {
@@ -2117,18 +2090,4 @@ body {
 .header {
   margin-bottom: 0 !important;  /* Remove any bottom margin */
   padding-bottom: 0 !important; /* Remove any bottom padding */
-}
-.page-header {
-  padding-top: 12px !important;    /* Reduce top padding */
-  padding-bottom: 12px !important; /* Reduce bottom padding */
-}
-
-.page-header .page-title {
-  font-size: 22px !important;       /* Slightly smaller heading font */
-  margin-bottom: 8px !important;    /* Less margin below title */
-}
-
-.page-header p {
-  font-size: 14px !important;       /* Slightly smaller subtitle font */
-  margin: 0 !important;             /* Remove default margin */
 }
