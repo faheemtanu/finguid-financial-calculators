@@ -2082,3 +2082,293 @@ a:focus-visible {
     page-break-inside: avoid;
   }
 }
+/* Add these styles to the existing CSS file */
+
+/* Remove extra space above the heading */
+.page-header {
+    margin-top: 0;
+    padding-top: var(--space-32);
+}
+
+/* Footer Styles */
+.global-footer {
+    background: var(--color-charcoal-700);
+    color: var(--color-gray-200);
+    padding: var(--space-32) 0;
+    margin-top: var(--space-32);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-32);
+    margin-bottom: var(--space-32);
+}
+
+.footer-section h3,
+.footer-section h4 {
+    color: var(--color-white);
+    margin-bottom: var(--space-16);
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section li {
+    margin-bottom: var(--space-8);
+}
+
+.footer-section a {
+    color: var(--color-gray-300);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.footer-section a:hover {
+    color: var(--color-primary);
+}
+
+.newsletter-form {
+    margin-top: var(--space-16);
+}
+
+.newsletter-form form {
+    display: flex;
+    gap: var(--space-8);
+    margin-top: var(--space-12);
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: var(--space-8) var(--space-12);
+    border: 1px solid var(--color-gray-400);
+    border-radius: var(--radius-base);
+    background: var(--color-charcoal-800);
+    color: var(--color-gray-200);
+}
+
+.newsletter-form button {
+    padding: var(--space-8) var(--space-16);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-base);
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-standard);
+}
+
+.newsletter-form button:hover {
+    background: var(--color-primary-hover);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--color-gray-400);
+    padding-top: var(--space-16);
+    text-align: center;
+    color: var(--color-gray-300);
+}
+
+/* Amortization Schedule Modal Improvements */
+.schedule-modal {
+    width: 90%;
+    max-width: 210mm; /* A4 width */
+    max-height: 90vh;
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 0;
+    background: var(--color-surface);
+}
+
+.schedule-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-24);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-primary);
+    color: var(--color-btn-primary-text);
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--color-btn-primary-text);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--color-btn-primary-text);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+}
+
+.modal-body {
+    padding: var(--space-24);
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.schedule-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-24);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.brand-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+}
+
+.brand-logo-text {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.schedule-details {
+    display: grid;
+    gap: var(--space-8);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-16);
+}
+
+.detail-item span:first-child {
+    font-weight: var(--font-weight-medium);
+}
+
+.full-schedule {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+}
+
+.schedule-table th {
+    background: var(--color-secondary);
+    padding: var(--space-12) var(--space-16);
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    border-bottom: 2px solid var(--color-border);
+    position: sticky;
+    top: 0;
+}
+
+.schedule-table td {
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.schedule-table tr:nth-child(even) {
+    background: var(--color-background);
+}
+
+.schedule-table tr:hover {
+    background: var(--color-secondary);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-16);
+    padding: var(--space-24);
+    border-top: 1px solid var(--color-border);
+}
+
+/* Print styles for amortization schedule */
+@media print {
+    .schedule-modal {
+        width: 100%;
+        max-width: none;
+        height: auto;
+        max-height: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .modal-header,
+    .modal-footer {
+        display: none;
+    }
+    
+    .modal-body {
+        max-height: none;
+        overflow: visible;
+        padding: 0;
+    }
+    
+    .schedule-info {
+        page-break-after: avoid;
+    }
+    
+    .schedule-table {
+        page-break-inside: avoid;
+    }
+    
+    .schedule-table tr {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-24);
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-24);
+    }
+    
+    .schedule-info {
+        flex-direction: column;
+        gap: var(--space-16);
+    }
+    
+    .schedule-details {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .schedule-modal {
+        width: 95%;
+        margin: 2.5vh auto;
+    }
+    
+    .modal-body {
+        padding: var(--space-16);
+    }
+    
+    .schedule-table {
+        font-size: var(--font-size-xs);
+    }
+    
+    .schedule-table th,
+    .schedule-table td {
+        padding: var(--space-8) var(--space-10);
+    }
+}
