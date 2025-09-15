@@ -2087,7 +2087,7 @@ a:focus-visible {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
-  /* Further reduce vertical space between header and calculator page content */
+ /* Further reduce vertical space between header and calculator page content */
 
 /* Header adjustments */
 .header {
@@ -2123,3 +2123,4 @@ body {
   margin-bottom: 0 !important;  /* Remove any bottom margin */
   padding-bottom: 0 !important; /* Remove any bottom padding */
 }
+
