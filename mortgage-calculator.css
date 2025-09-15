@@ -2082,3 +2082,10 @@ a:focus-visible {
     page-break-inside: avoid;
   }
 }
+/* Remove extra space under nav on Mortgage Calculator page */
+.header { margin-bottom: 0 !important; }               /* ensure no gap from header */
+.header + .page-header { margin-top: 0 !important; }   /* kill any collapsing margin */
+.page-header {
+  padding-top: 8px !important;     /* was large; shrink to close the gap */
+  padding-bottom: 16px !important; /* keep comfortable spacing below the title */
+}
