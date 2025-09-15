@@ -2082,3 +2082,30 @@ a:focus-visible {
     page-break-inside: avoid;
   }
 }
+/* Reduce vertical space between header and calculator page content */
+
+.header {
+  margin-bottom: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.page-header {
+  margin-top: 0 !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+
+.main-content {
+  margin-top: 8px !important;
+  padding-top: 0 !important;
+}
+
+body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.container {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
