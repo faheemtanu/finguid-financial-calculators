@@ -132,11 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
     fullScheduleBody: $('#full-schedule-body'),
     scheduleModal: $('#schedule-modal'),
 
-    // Modal elements
-    modalLoanAmount: $('#modal-loan-amount'),
-    modalInterestRate: $('#modal-interest-rate'),
-    modalLoanTerm: $('#modal-loan-term'),
-
     // Action buttons
     calculateBtn: $('#calculate-btn'),
     resetBtn: $('#reset-form'),
@@ -187,12 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (elements.state) {
       elements.state.addEventListener('change', updatePropertyTax);
-      elements.state.addEventListener('change', calculate);
-    }
-
-    // Property tax change should trigger calculation
-    if (elements.propertyTax) {
-      elements.propertyTax.addEventListener('input', debounce(calculate, 300));
     }
 
     // Term selection
@@ -215,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Auto-calculation on input changes
     const autoCalcInputs = [
       elements.homePrice, elements.dpAmount, elements.dpPercent,
-      elements.interestRate, elements.homeInsurance,
+      elements.interestRate, elements.propertyTax, elements.homeInsurance,
       elements.pmiRate, elements.hoaFees, elements.extraMonthly, elements.extraOnce
     ].filter(Boolean);
 
@@ -376,7 +365,6 @@ document.addEventListener('DOMContentLoaded', function() {
     syncDownPayment(calculatorState.usePctDownPayment);
     updatePropertyTax();
     updateInsurance();
-    calculate();
   }
 
   // Update PMI banner
@@ -548,7 +536,6 @@ document.addEventListener('DOMContentLoaded', function() {
         generateInsights(result);
         updateCharts(result);
         updateAmortizationTable(result);
-        updateComparisonScenarios(result);
       }
     } catch (error) {
       console.error('Calculation error:', error);
@@ -701,7 +688,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ].filter(value => value > 0);
 
     const colors = ['#21808d', '#a84b2f', '#626c71', '#ef4444', '#94a3b8'];
-    const labels = ['Principal & Interest', 'Taxes', 'Insurance', 'PMI', 'HOA'].filter((_, index) => 
+    const labels = ['P&I', 'Taxes', 'Insurance', 'PMI', 'HOA'].filter((_, index) => 
       [result.monthlyPI, result.monthlyTax, result.monthlyInsurance, result.monthlyPMI, result.monthlyHOA][index] > 0
     );
 
@@ -875,159 +862,14 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.amortizationBody.innerHTML = html;
   }
 
-  // Update comparison scenarios
-  function updateComparisonScenarios(result) {
-    if (!elements.comparisonCards) return;
-    
-    const scenarios = [
-      {
-        title: 'Current Scenario',
-        icon: 'fas fa-home',
-        color: 'primary',
-        data: result
-      },
-      {
-        title: 'Lower Interest Rate',
-        icon: 'fas fa-arrow-down',
-        color: 'warning',
-        data: calculateScenario(result, { rate: result.rate * 0.8 }) // 20% lower rate
-      },
-      {
-        title: 'Higher Down Payment',
-        icon: 'fas fa-arrow-up',
-        color: 'info',
-        data: calculateScenario(result, { dpPercent: Math.min(100, result.dpPercent + 10) }) // 10% more down payment
-      },
-      {
-        title: 'Shorter Term',
-        icon: 'fas fa-clock',
-        color: 'error',
-        data: calculateScenario(result, { term: Math.max(5, result.term - 5) }) // 5 years shorter term
-      }
-    ];
-    
-    const html = scenarios.map((scenario, index) => {
-      const savings = scenario.data.totalMonthly - result.totalMonthly;
-      const savingsPercent = ((savings / result.totalMonthly) * 100).toFixed(1);
-      
-      return `
-        <div class="comparison-card">
-          <div class="comparison-header">
-            <h4 class="comparison-title">${scenario.title}</h4>
-            ${savings < 0 ? `<span class="comparison-savings">Save ${formatCurrency(-savings)}/mo</span>` : ''}
-          </div>
-          <div class="comparison-details">
-            <div class="comparison-row">
-              <span>Monthly Payment</span>
-              <span class="currency">${formatCurrency(scenario.data.totalMonthly)}</span>
-            </div>
-            <div class="comparison-row">
-              <span>Total Interest</span>
-              <span class="currency">${formatCurrency(scenario.data.totalInterest)}</span>
-            </div>
-            <div class="comparison-row">
-              <span>Loan Term</span>
-              <span>${scenario.data.term} years</span>
-            </div>
-            <div class="comparison-row">
-              <span>Interest Rate</span>
-              <span>${formatPercentage(scenario.data.rate)}</span>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-    
-    elements.comparisonCards.innerHTML = html;
-  }
-
-  // Calculate scenario based on changes
-  function calculateScenario(baseResult, changes) {
-    const homePrice = baseResult.homePrice;
-    const dpPercent = changes.dpPercent || baseResult.dpPercent;
-    const dpAmount = homePrice * (dpPercent / 100);
-    const loanAmount = Math.max(0, homePrice - dpAmount);
-    const rate = changes.rate || baseResult.rate;
-    const term = changes.term || baseResult.term;
-    const months = term * 12;
-    
-    // Property costs (use same as base)
-    const annualTax = parseFloat(elements.propertyTax?.value || 0);
-    const annualInsurance = parseFloat(elements.homeInsurance?.value || 0);
-    const pmiRate = parseFloat(elements.pmiRate?.value || 0) / 100;
-    const monthlyHOA = parseFloat(elements.hoaFees?.value || 0);
-    
-    // Calculate monthly P&I
-    const monthlyRate = rate / 100 / 12;
-    let monthlyPI = 0;
-    
-    if (monthlyRate > 0) {
-      monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
-                  (Math.pow(1 + monthlyRate, months) - 1);
-    } else {
-      monthlyPI = loanAmount / months;
-    }
-    
-    // Other monthly costs
-    const monthlyTax = annualTax / 12;
-    const monthlyInsurance = annualInsurance / 12;
-    const needsPMI = dpPercent < 20;
-    const monthlyPMI = needsPMI ? (loanAmount * pmiRate / 12) : 0;
-    const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + monthlyPMI + monthlyHOA;
-    
-    // Generate amortization schedule
-    const schedule = generateSchedule(loanAmount, monthlyRate, monthlyPI, months, 0, 0);
-    const totalInterest = schedule.reduce((sum, payment) => sum + payment.interest, 0);
-    
-    return {
-      mode: 'payment',
-      homePrice,
-      dpAmount,
-      dpPercent,
-      loanAmount,
-      rate,
-      term,
-      monthlyPI,
-      monthlyTax,
-      monthlyInsurance,
-      monthlyPMI,
-      monthlyHOA,
-      totalMonthly,
-      totalInterest,
-      totalCost: loanAmount + totalInterest,
-      needsPMI,
-      schedule
-    };
-  }
-
   // Utility functions for actions
   function resetForm() {
-    // Reset form inputs
-    if (elements.homePrice) elements.homePrice.value = 500000;
-    if (elements.dpAmount) elements.dpAmount.value = 100000;
-    if (elements.dpPercent) elements.dpPercent.value = 20;
-    if (elements.interestRate) elements.interestRate.value = 6.5;
-    if (elements.termCustom) elements.termCustom.value = '';
-    if (elements.state) elements.state.value = 'CA';
-    if (elements.propertyTax) elements.propertyTax.value = 3750;
-    if (elements.homeInsurance) elements.homeInsurance.value = 1200;
-    if (elements.pmiRate) elements.pmiRate.value = 0.5;
-    if (elements.hoaFees) elements.hoaFees.value = 0;
-    if (elements.extraMonthly) elements.extraMonthly.value = 0;
-    if (elements.extraOnce) elements.extraOnce.value = 0;
-    
-    // Reset term selection
-    setTerm(30);
-    switchDPMode(false);
-    
-    // Update property tax and insurance
-    updatePropertyTax();
-    updateInsurance();
-    
-    // Recalculate
-    calculate();
-    
-    showNotification('Form has been reset to default values', 'success');
+    const form = document.querySelector('form');
+    if (form) {
+      form.reset();
+      setInitialValues();
+      calculate();
+    }
   }
 
   function emailResults() {
@@ -1087,11 +929,6 @@ Generated by Finguid Mortgage Calculator
     const result = calculatorState.currentCalculation;
     if (!result) return;
 
-    // Update modal details
-    if (elements.modalLoanAmount) elements.modalLoanAmount.textContent = formatCurrency(result.loanAmount);
-    if (elements.modalInterestRate) elements.modalInterestRate.textContent = formatPercentage(result.rate);
-    if (elements.modalLoanTerm) elements.modalLoanTerm.textContent = `${result.term} years`;
-
     const html = result.schedule.map(payment => `
       <tr>
         <td>${payment.month}</td>
@@ -1107,34 +944,9 @@ Generated by Finguid Mortgage Calculator
   }
 
   function loadScenario(scenario) {
-    if (!calculatorState.currentCalculation) return;
-    
-    const result = calculatorState.currentCalculation;
-    let changes = {};
-    
-    switch(scenario) {
-      case 'lower-rate':
-        changes.rate = result.rate * 0.8; // 20% lower rate
-        break;
-      case 'higher-dp':
-        changes.dpPercent = Math.min(100, result.dpPercent + 10); // 10% more down payment
-        break;
-      case 'shorter-term':
-        changes.term = Math.max(5, result.term - 5); // 5 years shorter term
-        break;
-      default:
-        // Current scenario - no changes
-        break;
-    }
-    
-    const scenarioResult = calculateScenario(result, changes);
-    calculatorState.currentCalculation = scenarioResult;
-    updateDisplay(scenarioResult);
-    generateInsights(scenarioResult);
-    updateCharts(scenarioResult);
-    updateAmortizationTable(scenarioResult);
-    
-    showNotification(`Loaded ${scenario.replace('-', ' ')} scenario`, 'success');
+    // Implement scenario loading logic based on scenario type
+    console.log('Loading scenario:', scenario);
+    // This would populate different calculation scenarios
   }
 
   // Notification system
