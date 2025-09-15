@@ -2087,18 +2087,35 @@ a:focus-visible {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
-  .header {
-  margin-bottom: 4px !important; /* Reduce space below header */
-  padding-bottom: 4px !important; /* Reduce padding inside header bottom */
+  /* Further reduce vertical space between header and calculator page content */
+
+/* Header adjustments */
+.header {
+  margin-bottom: 4px !important;
+  padding-bottom: 4px !important;
 }
 
-.navbar {
-  padding-bottom: 0 !important; /* Remove extra bottom padding from navigation */
+/* Page header padding/margin reduction */
+.page-header {
+  margin-top: 0 !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
 }
 
+/* Main content margin adjustment */
 .main-content {
-  margin-top: 8px !important; /* Reduce space above main content */
+  margin-top: 4px !important;
   padding-top: 0 !important;
 }
 
-  
+/* Remove any top margin/padding on body */
+body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Optional: tighten container padding */
+.container {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
