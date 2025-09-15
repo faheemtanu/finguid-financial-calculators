@@ -2119,3 +2119,7 @@ body {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+.header {
+  margin-bottom: 0 !important;  /* Remove any bottom margin */
+  padding-bottom: 0 !important; /* Remove any bottom padding */
+}
