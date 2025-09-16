@@ -786,15 +786,11 @@ const ChartManager = {
         };
 
         try {
-            // Note: In production, you would load Chart.js library
-            // this.chart = new Chart(ctx, config);
-            
-            // For now, create a simple text-based visualization
-            this.createSimpleChart(data, ctx.parentElement);
-            
+            this.chart = new Chart(ctx, config);
+            this.updateLegend(data);
         } catch (error) {
             console.error('Chart creation error:', error);
-            this.createFallbackChart(data, ctx.parentElement);
+            this.createSimpleChart(data, ctx.parentElement);
         }
     },
 
@@ -819,23 +815,6 @@ const ChartManager = {
         }).join('');
 
         container.innerHTML = chartHTML;
-    },
-
-    createFallbackChart(data, container) {
-        const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-        const listHTML = data.labels.map((label, index) => {
-            const value = data.datasets[0].data[index];
-            const percentage = ((value / total) * 100).toFixed(1);
-            
-            return `
-                <li style="margin-bottom: 8px; display: flex; justify-content: space-between;">
-                    <span>${label}</span>
-                    <span><strong>${Utils.formatCurrency(value)}</strong> (${percentage}%)</span>
-                </li>
-            `;
-        }).join('');
-
-        container.innerHTML = `<ul style="list-style: none; padding: 0;">${listHTML}</ul>`;
     },
 
     updateLegend(data) {
