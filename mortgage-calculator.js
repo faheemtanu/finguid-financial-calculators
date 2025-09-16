@@ -148,7 +148,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Insights and comparison
     insightsList: $('#insights-list'),
     comparisonCards: $('#comparison-cards'),
-    scenarioBtns: $$('.scenario-btn')
+    scenarioBtns: $$('.scenario-btn'),
+
+    // Modal elements
+    modalLoanAmount: $('#modal-loan-amount'),
+    modalInterestRate: $('#modal-interest-rate'),
+    modalLoanTerm: $('#modal-loan-term')
   };
 
   // Initialize calculator
@@ -399,6 +404,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const taxRate = stateTaxRates[state] || 1.0;
     const annualTax = Math.round(homePrice * (taxRate / 100));
     elements.propertyTax.value = annualTax;
+    
+    // Trigger calculation when state changes
+    calculate();
   }
 
   // Update insurance estimate
@@ -536,6 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
         generateInsights(result);
         updateCharts(result);
         updateAmortizationTable(result);
+        updateComparisonScenarios(result);
       }
     } catch (error) {
       console.error('Calculation error:', error);
@@ -688,7 +697,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ].filter(value => value > 0);
 
     const colors = ['#21808d', '#a84b2f', '#626c71', '#ef4444', '#94a3b8'];
-    const labels = ['P&I', 'Taxes', 'Insurance', 'PMI', 'HOA'].filter((_, index) => 
+    const labels = ['Payment & Interest', 'Taxes', 'Insurance', 'PMI', 'HOA'].filter((_, index) => 
       [result.monthlyPI, result.monthlyTax, result.monthlyInsurance, result.monthlyPMI, result.monthlyHOA][index] > 0
     );
 
@@ -862,14 +871,199 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.amortizationBody.innerHTML = html;
   }
 
+  // Update comparison scenarios
+  function updateComparisonScenarios(result) {
+    if (!elements.comparisonCards) return;
+    
+    const scenarios = [
+      {
+        title: "Current Scenario",
+        icon: "fas fa-home",
+        color: "primary",
+        data: result
+      },
+      {
+        title: "Lower Interest Rate",
+        icon: "fas fa-arrow-down",
+        color: "success",
+        data: calculateScenario(result, { interestRate: Math.max(2.5, result.rate - 1) })
+      },
+      {
+        title: "Higher Down Payment",
+        icon: "fas fa-arrow-up",
+        color: "info",
+        data: calculateScenario(result, { 
+          dpAmount: Math.min(result.homePrice, result.dpAmount + (result.homePrice * 0.1)),
+          dpPercent: Math.min(100, result.dpPercent + 10)
+        })
+      },
+      {
+        title: "Shorter Term",
+        icon: "fas fa-clock",
+        color: "warning",
+        data: calculateScenario(result, { term: Math.max(10, result.term - 5) })
+      }
+    ];
+
+    const html = scenarios.map((scenario, index) => {
+      const data = scenario.data;
+      const monthlySavings = result.totalMonthly - data.totalMonthly;
+      const interestSavings = result.totalInterest - data.totalInterest;
+      
+      return `
+        <div class="comparison-card">
+          <div class="comparison-header">
+            <h4 class="comparison-title">
+              <i class="${scenario.icon}"></i>
+              ${scenario.title}
+            </h4>
+            ${monthlySavings > 0 ? `
+              <span class="comparison-savings">
+                Save ${formatCurrency(monthlySavings)}/mo
+              </span>
+            ` : ''}
+          </div>
+          <div class="comparison-details">
+            <div class="comparison-row">
+              <span>Monthly Payment</span>
+              <span class="comparison-value">${formatCurrency(data.totalMonthly)}</span>
+            </div>
+            <div class="comparison-row">
+              <span>Total Interest</span>
+              <span class="comparison-value">${formatCurrency(data.totalInterest)}</span>
+            </div>
+            <div class="comparison-row">
+              <span>Loan Term</span>
+              <span class="comparison-value">${data.term} years</span>
+            </div>
+            ${monthlySavings > 0 ? `
+              <div class="comparison-row">
+                <span>Monthly Savings</span>
+                <span class="comparison-value text-success">${formatCurrency(monthlySavings)}</span>
+              </div>
+              <div class="comparison-row">
+                <span>Interest Savings</span>
+                <span class="comparison-value text-success">${formatCurrency(interestSavings)}</span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    elements.comparisonCards.innerHTML = html;
+  }
+
+  // Calculate scenario based on changes
+  function calculateScenario(baseResult, changes) {
+    // Create a copy of the base result with changes applied
+    const scenarioResult = {...baseResult};
+    
+    // Apply changes
+    if (changes.interestRate !== undefined) {
+      scenarioResult.rate = changes.interestRate;
+    }
+    
+    if (changes.dpAmount !== undefined) {
+      scenarioResult.dpAmount = changes.dpAmount;
+      scenarioResult.dpPercent = (changes.dpAmount / scenarioResult.homePrice) * 100;
+      scenarioResult.loanAmount = scenarioResult.homePrice - changes.dpAmount;
+    }
+    
+    if (changes.term !== undefined) {
+      scenarioResult.term = changes.term;
+    }
+    
+    // Recalculate the scenario
+    const monthlyRate = scenarioResult.rate / 100 / 12;
+    const months = scenarioResult.term * 12;
+    
+    // Recalculate monthly P&I
+    if (monthlyRate > 0) {
+      scenarioResult.monthlyPI = scenarioResult.loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+                                (Math.pow(1 + monthlyRate, months) - 1);
+    } else {
+      scenarioResult.monthlyPI = scenarioResult.loanAmount / months;
+    }
+    
+    // Recalculate PMI
+    const needsPMI = scenarioResult.dpPercent < 20;
+    scenarioResult.monthlyPMI = needsPMI ? (scenarioResult.loanAmount * (scenarioResult.pmiRate / 100) / 12) : 0;
+    
+    // Recalculate total monthly
+    scenarioResult.totalMonthly = scenarioResult.monthlyPI + scenarioResult.monthlyTax + 
+                                 scenarioResult.monthlyInsurance + scenarioResult.monthlyPMI + 
+                                 scenarioResult.monthlyHOA;
+    
+    // Regenerate schedule
+    scenarioResult.schedule = generateSchedule(scenarioResult.loanAmount, monthlyRate, 
+                                             scenarioResult.monthlyPI, months, 
+                                             scenarioResult.extraMonthly, scenarioResult.extraOnce);
+    
+    // Recalculate total interest
+    scenarioResult.totalInterest = scenarioResult.schedule.reduce((sum, payment) => sum + payment.interest, 0);
+    scenarioResult.totalCost = scenarioResult.loanAmount + scenarioResult.totalInterest;
+    
+    return scenarioResult;
+  }
+
+  // Load scenario
+  function loadScenario(scenario) {
+    if (!calculatorState.currentCalculation) return;
+    
+    let changes = {};
+    
+    switch(scenario) {
+      case 'lower-rate':
+        changes.interestRate = Math.max(2.5, calculatorState.currentCalculation.rate - 1);
+        break;
+      case 'higher-dp':
+        changes.dpAmount = Math.min(
+          calculatorState.currentCalculation.homePrice, 
+          calculatorState.currentCalculation.dpAmount + (calculatorState.currentCalculation.homePrice * 0.1)
+        );
+        break;
+      case 'shorter-term':
+        changes.term = Math.max(10, calculatorState.currentCalculation.term - 5);
+        break;
+      default:
+        // Current scenario - no changes needed
+        return;
+    }
+    
+    const scenarioResult = calculateScenario(calculatorState.currentCalculation, changes);
+    calculatorState.currentCalculation = scenarioResult;
+    updateDisplay(scenarioResult);
+    generateInsights(scenarioResult);
+    updateCharts(scenarioResult);
+    updateAmortizationTable(scenarioResult);
+    updateComparisonScenarios(scenarioResult);
+  }
+
   // Utility functions for actions
   function resetForm() {
-    const form = document.querySelector('form');
-    if (form) {
-      form.reset();
-      setInitialValues();
-      calculate();
-    }
+    // Reset form inputs
+    if (elements.homePrice) elements.homePrice.value = 500000;
+    if (elements.dpAmount) elements.dpAmount.value = 100000;
+    if (elements.dpPercent) elements.dpPercent.value = 20;
+    if (elements.interestRate) elements.interestRate.value = 6.5;
+    if (elements.termCustom) elements.termCustom.value = '';
+    if (elements.propertyTax) elements.propertyTax.value = 3750;
+    if (elements.homeInsurance) elements.homeInsurance.value = 1200;
+    if (elements.pmiRate) elements.pmiRate.value = 0.5;
+    if (elements.hoaFees) elements.hoaFees.value = 0;
+    if (elements.extraMonthly) elements.extraMonthly.value = 0;
+    if (elements.extraOnce) elements.extraOnce.value = 0;
+    
+    // Reset UI state
+    setTerm(30);
+    switchDPMode(false);
+    populateStateDropdown();
+    updatePropertyTax();
+    updateInsurance();
+    
+    // Recalculate
+    calculate();
   }
 
   function emailResults() {
@@ -929,6 +1123,11 @@ Generated by Finguid Mortgage Calculator
     const result = calculatorState.currentCalculation;
     if (!result) return;
 
+    // Update modal summary
+    if (elements.modalLoanAmount) elements.modalLoanAmount.textContent = formatCurrency(result.loanAmount);
+    if (elements.modalInterestRate) elements.modalInterestRate.textContent = formatPercentage(result.rate);
+    if (elements.modalLoanTerm) elements.modalLoanTerm.textContent = `${result.term} years`;
+
     const html = result.schedule.map(payment => `
       <tr>
         <td>${payment.month}</td>
@@ -941,12 +1140,6 @@ Generated by Finguid Mortgage Calculator
 
     elements.fullScheduleBody.innerHTML = html;
     elements.scheduleModal.showModal();
-  }
-
-  function loadScenario(scenario) {
-    // Implement scenario loading logic based on scenario type
-    console.log('Loading scenario:', scenario);
-    // This would populate different calculation scenarios
   }
 
   // Notification system
