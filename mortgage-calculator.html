@@ -41,7 +41,6 @@
     </script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="mortgage-calculator-style.css">
     <link rel="stylesheet" href="mortgage-calculator.css">
 </head>
 <body>
@@ -77,7 +76,7 @@
     </header>
 
     <!-- Page Header -->
-    <div class="page-header">
+    <div class="page-header" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
         <div class="container">
             <h1 class="page-title">🏠 AI-Enhanced Mortgage Calculator</h1>
             <p class="page-subtitle">
@@ -182,7 +181,10 @@
                             
                             <!-- Term Buttons -->
                             <div class="term-buttons" id="term-buttons">
+                                <button type="button" class="chip" data-term="10">10 years</button>
                                 <button type="button" class="chip" data-term="15">15 years</button>
+                                <button type="button" class="chip" data-term="20">20 years</button>
+                                <button type="button" class="chip" data-term="25">25 years</button>
                                 <button type="button" class="chip active" data-term="30">30 years</button>
                                 <span class="or-text">or</span>
                                 <input type="number" id="term-custom" class="form-input custom-term" 
@@ -330,7 +332,7 @@
                         
                         <div class="breakdown-table">
                             <div class="breakdown-row">
-                                <span class="breakdown-label">P&I</span>
+                                <span class="breakdown-label">Payment & Interest</span>
                                 <span id="pi-amount" class="breakdown-value">$2,590</span>
                             </div>
                             <div class="breakdown-row">
@@ -458,6 +460,73 @@
         </div>
     </main>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        USA Financial Calculators
+                    </div>
+                    <p>Building the world's first AI-enhanced financial calculator platform specifically designed for Americans. Make smarter financial decisions with our intelligent tools.</p>
+                    
+                    <!-- Social Links -->
+                    <div class="social-links">
+                        <a href="https://linkedin.com/company/finguid" aria-label="LinkedIn" target="_blank" rel="noopener">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://twitter.com/finguid" aria-label="Twitter" target="_blank" rel="noopener">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://facebook.com/finguid" aria-label="Facebook" target="_blank" rel="noopener">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="mailto:contactus@finguid.com" aria-label="Email" rel="noopener">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/auto-loan-calculator.html">Auto Loan Calculator</a></li>
+                        <li><a href="/investment-calculator.html">Investment Calculator</a></li>
+                        <li><a href="/credit-card-calculator.html">Credit Card Calculator</a></li>
+                        <li><a href="/calculators.html">All Calculators</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/blog.html">Financial Blog</a></li>
+                        <li><a href="/guides.html">How-to Guides</a></li>
+                        <li><a href="/faq.html">FAQ</a></li>
+                        <li><a href="/resources.html">All Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                        <li><a href="/partners.html">Partner Program</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 USA Financial Calculators (Finguid.com). All rights reserved. Built with ❤️ for Americans' financial success.</p>
+            </div>
+        </div>
+    </footer>
+
     <!-- Voice Status Indicator -->
     <div id="voice-status" class="voice-status">
         <div class="voice-animation">
@@ -482,11 +551,27 @@
         <div class="modal-body">
             <div class="schedule-info">
                 <div class="brand-info">
-                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>" 
-                         alt="Finguid" class="brand-logo">
+                    <div class="brand-logo-text">
+                        <i class="fas fa-calculator"></i>
+                        <span>Finguid</span>
+                    </div>
                     <div>
                         <h3>Finguid Mortgage Calculator</h3>
                         <p>Complete payment schedule breakdown</p>
+                    </div>
+                </div>
+                <div class="schedule-summary">
+                    <div class="summary-item">
+                        <span>Loan Amount:</span>
+                        <span id="modal-loan-amount">$400,000</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Interest Rate:</span>
+                        <span id="modal-interest-rate">6.5%</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Loan Term:</span>
+                        <span id="modal-loan-term">30 years</span>
                     </div>
                 </div>
             </div>
@@ -541,79 +626,5 @@
             });
         });
     </script>
-    <!-- Newsletter CTA (optional, as shown above footer in the screenshot) -->
-<section class="newsletter">
-  <div class="container newsletter-content">
-    <div class="newsletter-text">
-      <h3>Stay Updated with New Financial Tools</h3>
-      <p>Be the first to know when we launch new calculators and AI‑powered features. Join thousands of Americans already using our platform.</p>
-    </div>
-    <form class="newsletter-form" action="#" method="post">
-      <input type="email" placeholder="Enter your email address" aria-label="Email address" required>
-      <button type="submit">Subscribe Free</button>
-    </form>
-  </div>
-</section>
-
-<!-- Dark branded footer (identical to homepage) -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-content">
-      <!-- Brand/description -->
-      <div class="footer-section">
-        <div class="footer-brand">
-          <i class="fa-solid fa-calculator" aria-hidden="true"></i>
-          USA Financial Calculators
-        </div>
-        <p>Building the world's first AI‑enhanced financial calculator platform specifically designed for Americans. Make smarter financial decisions with our intelligent tools.</p>
-        <div class="social-links">
-          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-        </div>
-      </div>
-
-      <!-- Calculators -->
-      <div class="footer-section">
-        <h4>Calculators</h4>
-        <ul>
-          <li><a href="/mortgage-calculator">Mortgage Calculator</a></li>
-          <li><a href="/auto-loan-calculator">Auto Loan Calculator</a></li>
-          <li><a href="/investment-calculator">Investment Calculator</a></li>
-          <li><a href="/credit-card-payoff-calculator">Credit Card Calculator</a></li>
-          <li><a href="/calculators">All Calculators</a></li>
-        </ul>
-      </div>
-
-      <!-- Resources -->
-      <div class="footer-section">
-        <h4>Resources</h4>
-        <ul>
-          <li><a href="/blog">Financial Blog</a></li>
-          <li><a href="/how-to">How‑to Guides</a></li>
-          <li><a href="/faq">FAQ</a></li>
-          <li><a href="/resources">All Resources</a></li>
-        </ul>
-      </div>
-
-      <!-- Company -->
-      <div class="footer-section">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="/about">About Us</a></li>
-          <li><a href="/contact">Contact Us</a></li>
-          <li><a href="/partners">Partner Program</a></li>
-          <li><a href="/privacy">Privacy Policy</a></li>
-          <li><a href="/terms">Terms of Service</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>© 2025 USA Financial Calculators (Finguid.com). All rights reserved. Built with ❤️ for Americans' financial success.</p>
-    </div>
-  </div>
-</footer>
 </body>
 </html>
