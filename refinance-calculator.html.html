@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Refinance Calculator | USA Financial Calculators</title>
+    <meta name="description" content="Free refinance calculator to determine if refinancing your mortgage saves you money. Compare current vs new loan terms with AI-powered insights.">
+    
+    <!-- Open Graph tags for social media -->
+    <meta property="og:title" content="Mortgage Refinance Calculator | USA Financial Calculators">
+    <meta property="og:description" content="Free refinance calculator to determine if refinancing your mortgage saves you money. Compare current vs new loan terms with AI-powered insights.">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="refinance-calculator.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <i class="fas fa-calculator"></i>
+                    <span class="brand-text">USA Financial Calculators</span>
+                </div>
+                <div class="nav-menu" id="nav-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="index.html#calculators" class="nav-link">Calculators</a>
+                    <a href="index.html#about" class="nav-link">About</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="calculator-card">
+            <h2><i class="fas fa-sync-alt"></i> Mortgage Refinance Calculator</h2>
+            <p>Determine if refinancing your mortgage makes financial sense by comparing your current loan with a new loan.</p>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="basic">Basic Calculator</div>
+                <div class="tab" data-tab="advanced">Advanced Calculator</div>
+            </div>
+            
+            <div class="tab-content active" id="basic-tab">
+                <div class="form-group">
+                    <label for="currentBalance">Current Loan Balance ($)</label>
+                    <input type="number" id="currentBalance" placeholder="250,000" min="1000">
+                </div>
+                <div class="form-group">
+                    <label for="currentRate">Current Interest Rate (%)</label>
+                    <input type="number" id="currentRate" placeholder="6.5" min="0.1" max="25" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="remainingTerm">Remaining Loan Term (Years)</label>
+                    <input type="number" id="remainingTerm" placeholder="25" min="1" max="40">
+                </div>
+                <div class="form-group">
+                    <label for="newRate">New Interest Rate (%)</label>
+                    <input type="number" id="newRate" placeholder="5.5" min="0.1" max="25" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="newTerm">New Loan Term (Years)</label>
+                    <select id="newTerm">
+                        <option value="30">30 years</option>
+                        <option value="25">25 years</option>
+                        <option value="20">20 years</option>
+                        <option value="15">15 years</option>
+                        <option value="10">10 years</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="closingCosts">Closing Costs ($)</label>
+                    <input type="number" id="closingCosts" placeholder="5,000" min="0">
+                </div>
+                <button class="calculate-btn" onclick="calculateRefinance()">
+                    <i class="fas fa-calculator"></i> Calculate Refinance Savings
+                </button>
+            </div>
+            
+            <div class="tab-content" id="advanced-tab">
+                <div class="form-group">
+                    <label for="propertyValue">Property Value ($)</label>
+                    <input type="number" id="propertyValue" placeholder="350,000" min="1000">
+                </div>
+                <div class="form-group">
+                    <label for="cashOut">Cash-Out Amount (if any) ($)</label>
+                    <input type="number" id="cashOut" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="annualTax">Annual Property Tax ($)</label>
+                    <input type="number" id="annualTax" placeholder="3,600" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="annualInsurance">Annual Insurance ($)</label>
+                    <input type="number" id="annualInsurance" placeholder="1,200" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <select id="state">
+                        <option value="">Select State</option>
+                        <option value="CA">California</option>
+                        <option value="TX">Texas</option>
+                        <option value="FL">Florida</option>
+                        <option value="NY">New York</option>
+                        <!-- Add all 50 states -->
+                    </select>
+                </div>
+                <button class="calculate-btn" onclick="calculateRefinanceAdvanced()">
+                    <i class="fas fa-calculator"></i> Calculate Advanced Refinance
+                </button>
+            </div>
+            
+            <div id="refinanceResult" class="result">
+                <h3>Refinance Analysis Results</h3>
+                <div id="refinanceOutput"></div>
+            </div>
+        </div>
+        
+        <div class="calculator-card">
+            <h2><i class="fas fa-lightbulb"></i> Understanding Refinancing</h2>
+            <p>Refinancing your mortgage can save you money if the new interest rate is significantly lower than your current rate. However, you need to consider closing costs and how long you plan to stay in the home.</p>
+            
+            <div class="ai-tip">
+                <h4><i class="fas fa-robot"></i> AI Tip</h4>
+                <p>Generally, refinancing makes sense if you can reduce your interest rate by at least 0.75% to 1% and plan to stay in your home long enough to recoup the closing costs through monthly savings.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        <span>USA Financial Calculators</span>
+                    </div>
+                    <p>Empowering Americans to make confident financial decisions with intelligent calculators.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="#">Mortgage Calculator</a></li>
+                        <li><a href="#">Auto Loan Calculator</a></li>
+                        <li><a href="#">Investment Calculator</a></li>
+                        <li><a href="#">Credit Card Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Financial Guides</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 USA Financial Calculators. All rights reserved. Made with ❤️ for Americans.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="refinance-calculator.js"></script>
+</body>
+</html>
