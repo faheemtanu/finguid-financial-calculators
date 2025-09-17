@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent vs Buy Calculator | USA Financial Calculators</title>
+    <meta name="description" content="Calculate whether it's better to rent or buy a home based on your financial situation. Get AI-powered insights for your housing decision.">
+    <meta name="keywords" content="rent vs buy calculator, should I rent or buy, home buying calculator, renting vs buying, mortgage calculator">
+    
+    <!-- Open Graph tags for social media -->
+    <meta property="og:title" content="Rent vs Buy Calculator | USA Financial Calculators">
+    <meta property="og:description" content Calculate whether it's better to rent or buy a home based on your financial situation. Get AI-powered insights.">
+    <meta property="og:type" content="website">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Rent vs Buy Calculator CSS -->
+    <link rel="stylesheet" href="rent-vs-buy-calculator.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <i class="fas fa-calculator"></i>
+                    <span class="brand-text">USA Financial Calculators</span>
+                </div>
+                <div class="nav-menu" id="nav-menu">
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="../index.html#calculators" class="nav-link">Calculators</a>
+                    <a href="../index.html#about" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Calculator Header Section -->
+    <section class="calculator-header">
+        <div class="container">
+            <div class="calculator-hero">
+                <h1><i class="fas fa-home"></i> Rent vs Buy Calculator</h1>
+                <p>Determine whether renting or buying a home makes more financial sense for your situation</p>
+                <div class="calculator-breadcrumb">
+                    <a href="../index.html">Home</a> <i class="fas fa-chevron-right"></i> 
+                    <a href="../index.html#calculators">Calculators</a> <i class="fas fa-chevron-right"></i> 
+                    <span>Rent vs Buy</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="calculator-section">
+        <div class="container">
+            <div class="calculator-grid">
+                <!-- Input Form -->
+                <div class="calculator-inputs">
+                    <div class="input-card">
+                        <h3><i class="fas fa-edit"></i> Input Your Details</h3>
+                        
+                        <div class="input-group">
+                            <label for="home-price">Home Price ($)</label>
+                            <input type="number" id="home-price" placeholder="400,000" min="50000" step="1000">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="down-payment">Down Payment ($)</label>
+                            <input type="number" id="down-payment" placeholder="80,000" min="0" step="1000">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="loan-term">Loan Term (years)</label>
+                            <select id="loan-term">
+                                <option value="30">30 years</option>
+                                <option value="20">20 years</option>
+                                <option value="15">15 years</option>
+                                <option value="10">10 years</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="interest-rate">Interest Rate (%)</label>
+                            <input type="number" id="interest-rate" placeholder="6.5" min="0.1" max="20" step="0.01">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="property-tax">Annual Property Tax ($)</label>
+                            <input type="number" id="property-tax" placeholder="4,800" min="0" step="100">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="home-insurance">Annual Home Insurance ($)</label>
+                            <input type="number" id="home-insurance" placeholder="1,200" min="0" step="100">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="pmi">PMI (% of loan amount annually, if down payment < 20%)</label>
+                            <input type="number" id="pmi" placeholder="0.5" min="0" max="5" step="0.01" value="0.5">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="hoa">Monthly HOA Fees ($)</label>
+                            <input type="number" id="hoa" placeholder="0" min="0" step="10">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="monthly-rent">Monthly Rent ($)</label>
+                            <input type="number" id="monthly-rent" placeholder="2,500" min="100" step="100">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="rent-increase">Annual Rent Increase (%)</label>
+                            <input type="number" id="rent-increase" placeholder="3" min="0" max="20" step="0.1" value="3">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="investment-return">Expected Investment Return (%)</label>
+                            <input type="number" id="investment-return" placeholder="7" min="0" max="20" step="0.1" value="7">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="length-of-stay">Length of Stay (years)</label>
+                            <input type="number" id="length-of-stay" placeholder="7" min="1" max="30" step="1" value="7">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="inflation-rate">Annual Inflation Rate (%)</label>
+                            <input type="number" id="inflation-rate" placeholder="2.5" min="0" max="10" step="0.1" value="2.5">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="marginal-tax-rate">Marginal Tax Rate (%)</label>
+                            <input type="number" id="marginal-tax-rate" placeholder="22" min="0" max="50" step="0.1" value="22">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="home-appreciation">Annual Home Appreciation (%)</label>
+                            <input type="number" id="home-appreciation" placeholder="3" min="-10" max="20" step="0.1" value="3">
+                        </div>
+                        
+                        <button id="calculate-btn" class="calculate-button">
+                            <i class="fas fa-calculator"></i> Calculate
+                        </button>
+                        
+                        <button id="reset-btn" class="reset-button">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Results Section -->
+                <div class="calculator-results">
+                    <div class="results-card">
+                        <h3><i class="fas fa-chart-bar"></i> Results</h3>
+                        
+                        <div class="results-summary">
+                            <div class="result-box buying">
+                                <h4>Cost of Buying</h4>
+                                <div class="amount" id="buying-cost">$0</div>
+                                <div class="breakdown" id="buying-breakdown">Breakdown</div>
+                            </div>
+                            
+                            <div class="result-box renting">
+                                <h4>Cost of Renting</h4>
+                                <div class="amount" id="renting-cost">$0</div>
+                                <div class="breakdown" id="renting-breakdown">Breakdown</div>
+                            </div>
+                            
+                            <div class="result-box difference">
+                                <h4>Difference</h4>
+                                <div class="amount" id="difference-amount">$0</div>
+                                <div class="breakdown" id="recommendation">Recommendation</div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-details">
+                            <h4>Detailed Breakdown</h4>
+                            <div class="details-table" id="results-table">
+                                <p>Enter your details and click Calculate to see results</p>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-insights">
+                            <h4><i class="fas fa-robot"></i> AI-Powered Insights</h4>
+                            <div class="insights-content" id="ai-insights">
+                                <p>Our AI will analyze your specific situation and provide personalized recommendations after calculation.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="results-actions">
+                            <button class="action-button" id="download-pdf">
+                                <i class="fas fa-file-pdf"></i> Download PDF Report
+                            </button>
+                            <button class="action-button" id="share-results">
+                                <i class="fas fa-share-alt"></i> Share Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How does the rent vs buy calculator work?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our calculator compares the total costs of renting versus buying a home over your specified time period. It considers factors like mortgage payments, property taxes, insurance, maintenance, potential investment returns, home appreciation, and tax benefits to provide a comprehensive financial comparison.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What factors should I consider when deciding to rent or buy?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Key factors include: how long you plan to stay in the home, local market conditions, mortgage rates, potential home appreciation, rental prices in your area, your financial stability, and the opportunity cost of using your savings for a down payment versus other investments.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How does home appreciation affect the rent vs buy decision?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Home appreciation can significantly impact the rent vs buy calculation. If home values increase substantially, buying becomes more favorable as you build equity. However, if home values stagnate or decline, renting might be the better financial choice. Our calculator allows you to adjust the expected appreciation rate to see how it affects your decision.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What is the break-even point for buying vs renting?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The break-even point is when the total cost of buying becomes less than the total cost of renting. This varies based on your specific situation but typically occurs after 5-7 years of ownership. Our calculator shows you exactly when this break-even point occurs based on your inputs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Calculators -->
+    <section class="related-calculators">
+        <div class="container">
+            <h2>Related Calculators</h2>
+            <div class="related-grid">
+                <a href="../mortgage-calculator/mortgage-calculator.html" class="related-card">
+                    <i class="fas fa-home"></i>
+                    <h3>Mortgage Calculator</h3>
+                    <p>Calculate your monthly mortgage payment</p>
+                </a>
+                
+                <a href="../affordability-calculator/affordability-calculator.html" class="related-card">
+                    <i class="fas fa-piggy-bank"></i>
+                    <h3>Affordability Calculator</h3>
+                    <p>See how much home you can afford</p>
+                </a>
+                
+                <a href="../refinance-calculator/refinance-calculator.html" class="related-card">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>Refinance Calculator</h3>
+                    <p>Calculate potential savings from refinancing</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <div class="newsletter-text">
+                    <h3>Stay Updated</h3>
+                    <p>Get notified when we launch new calculators and financial planning tools.</p>
+                </div>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        <span>USA Financial Calculators</span>
+                    </div>
+                    <p>Empowering Americans to make confident financial decisions with intelligent calculators.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="../mortgage-calculator/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="../rent-vs-buy-calculator/rent-vs-buy-calculator.html">Rent vs Buy Calculator</a></li>
+                        <li><a href="../investment-calculator/investment-calculator.html">Investment Calculator</a></li>
+                        <li><a href="../auto-loan-calculator/auto-loan-calculator.html">Auto Loan Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../blog.html">Financial Guides</a></li>
+                        <li><a href="../blog.html">Blog</a></li>
+                        <li><a href="../faq.html">FAQ</a></li>
+                        <li><a href="../contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="../privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="../terms-of-service.html">Terms of Service</a></li>
+                        <li><a href="../disclaimer.html">Disclaimer</a></li>
+                        <li><a href="../cookie-policy.html">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 USA Financial Calculators. All rights reserved. Made with ❤️ for Americans.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="rent-vs-buy-calculator.js"></script>
+</body>
+</html>
