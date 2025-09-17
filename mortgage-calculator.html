@@ -361,9 +361,6 @@
                                            value="400000"
                                            required
                                            aria-describedby="home-price-help home-price-error">
-                                    <button type="button" class="voice-btn" data-field="home-price" aria-label="Use voice input for home price">
-                                        <i class="fas fa-microphone" aria-hidden="true"></i>
-                                    </button>
                                 </div>
                                 <div id="home-price-help" class="input-help">
                                     <i class="fas fa-info-circle" aria-hidden="true"></i>
@@ -496,7 +493,7 @@
                                             <button type="button" class="term-chip active" data-term="30">30 years</button>
                                             <button type="button" class="term-chip" data-term="15">15 years</button>
                                             <button type="button" class="term-chip" data-term="20">20 years</button>
-                                            <button type="button" class="term-chip" data-term="25">25 years</button>
+                                            <button type="button" class="term-chip" data-term="10">10 years</button>
                                         </div>
                                         
                                         <div class="custom-term">
@@ -506,7 +503,7 @@
                                                        id="loan-term-custom" 
                                                        name="loanTermCustom"
                                                        class="form-input term-input" 
-                                                       placeholder="30" 
+                                                       placeholder="Custom" 
                                                        min="5" 
                                                        max="50" 
                                                        step="1">
@@ -858,11 +855,11 @@
                     
                     <div class="section-controls">
                         <div class="view-controls">
-                            <button type="button" class="view-btn active" data-view="preview">
-                                Preview (5 Years)
+                            <button type="button" class="view-btn active" data-view="monthly">
+                                Monthly View
                             </button>
-                            <button type="button" class="view-btn" data-view="full">
-                                Full Schedule
+                            <button type="button" class="view-btn" data-view="yearly">
+                                Yearly View
                             </button>
                         </div>
                         
@@ -1066,19 +1063,6 @@
                 </form>
             </div>
         </div>
-    </div>
-
-    <!-- Voice Input Status -->
-    <div class="voice-status" id="voice-status" aria-live="polite" aria-hidden="true">
-        <div class="voice-content">
-            <div class="voice-icon">
-                <i class="fas fa-microphone" aria-hidden="true"></i>
-            </div>
-            <div class="voice-text">Listening...</div>
-        </div>
-        <button type="button" class="voice-close" aria-label="Stop listening">
-            <i class="fas fa-times" aria-hidden="true"></i>
-        </button>
     </div>
 
     <!-- Toast Notifications -->
