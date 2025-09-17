@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Affordability Calculator | Finguid</title>
+    <meta name="description" content="Calculate how much house you can afford based on your income, debts, down payment, and location. Get AI-powered insights for smarter home buying decisions.">
+    <link rel="stylesheet" href="affordability-calculator.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Home Affordability Calculator",
+      "applicationCategory": "FinancialApplication",
+      "operatingSystem": "Any",
+      "description": "Calculate how much house you can afford based on your income, debts, down payment, and location.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Header with finguid.com style -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="nav-brand">
+                    <i class="fas fa-calculator"></i>
+                    <span>finguid</span>
+                </a>
+                <div class="nav-menu" id="nav-menu">
+                    <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/blog" class="nav-link">Blog</a>
+                    <a href="/about" class="nav-link">About</a>
+                    <a href="/contact" class="nav-link">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="#" class="btn btn-outline">Sign In</a>
+                    <a href="#" class="btn btn-primary">Sign Up</a>
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-home"></i> Home Affordability Calculator</h1>
+            <p>Discover how much house you can truly afford based on your financial situation. Get AI-powered insights for smarter home buying decisions.</p>
+        </div>
+
+        <div class="calculator-card">
+            <div class="calculator-header">
+                <h2>Calculate Your Home Affordability</h2>
+                <p>Enter your financial details below to see what price range fits your budget</p>
+            </div>
+
+            <div class="calculator-form">
+                <div class="form-section">
+                    <h3><i class="fas fa-money-bill-wave"></i> Income & Debt Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="annualIncome">Annual Income ($)</label>
+                            <input type="number" id="annualIncome" placeholder="75,000" min="0">
+                            <span class="help-text">Your gross annual income before taxes</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="monthlyDebts">Monthly Debts ($)</label>
+                            <input type="number" id="monthlyDebts" placeholder="500" min="0">
+                            <span class="help-text">Car loans, credit cards, student loans, etc.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-piggy-bank"></i> Down Payment & Savings</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="downPayment">Down Payment Amount ($)</label>
+                            <input type="number" id="downPayment" placeholder="20,000" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="downPaymentPercent">Down Payment Percentage (%)</label>
+                            <input type="number" id="downPaymentPercent" placeholder="20" min="0" max="100" step="0.5">
+                            <span class="help-text">Typically 3-20% of home price</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-percentage"></i> Loan Details</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="interestRate">Interest Rate (%)</label>
+                            <input type="number" id="interestRate" placeholder="7.5" min="0.1" max="20" step="0.125">
+                            <span class="help-text">Current average mortgage rate is 7-8%</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="loanTerm">Loan Term (Years)</label>
+                            <select id="loanTerm">
+                                <option value="30">30 years</option>
+                                <option value="15">15 years</option>
+                                <option value="10">10 years</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Location & Additional Costs</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <select id="state">
+                                <option value="">Select State</option>
+                                <option value="CA">California</option>
+                                <option value="TX">Texas</option>
+                                <option value="FL">Florida</option>
+                                <option value="NY">New York</option>
+                                <!-- More states would be added in production -->
+                            </select>
+                            <span class="help-text">For accurate tax estimates</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="propertyTax">Annual Property Tax ($)</label>
+                            <input type="number" id="propertyTax" placeholder="Auto-calculated" disabled>
+                            <span class="help-text">Estimated based on state</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="homeInsurance">Annual Home Insurance ($)</label>
+                            <input type="number" id="homeInsurance" placeholder="1,200" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="hoaFees">Monthly HOA Fees ($)</label>
+                            <input type="number" id="hoaFees" placeholder="0" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="calculateBtn" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calculator"></i> Calculate Affordability
+                    </button>
+                    <button id="resetBtn" class="btn btn-outline">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <div id="results" class="results-container">
+                <div class="results-header">
+                    <h3>Your Home Affordability Results</h3>
+                    <p>Based on your financial information, here's what you can afford</p>
+                </div>
+
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="result-content">
+                            <h4>Maximum Home Price</h4>
+                            <div class="result-value" id="maxHomePrice">$0</div>
+                            <p>Based on your financial profile</p>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="result-content">
+                            <h4>Monthly Mortgage Payment</h4>
+                            <div class="result-value" id="monthlyPayment">$0</div>
+                            <p>Principal, interest, taxes & insurance</p>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="result-content">
+                            <h4>Loan Amount</h4>
+                            <div class="result-value" id="loanAmount">$0</div>
+                            <p>After down payment</p>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="result-content">
+                            <h4>Debt-to-Income Ratio</h4>
+                            <div class="result-value" id="dtiRatio">0%</div>
+                            <p>Lenders prefer under 43%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-breakdown">
+                    <h4>Payment Breakdown</h4>
+                    <div class="breakdown-grid">
+                        <div class="breakdown-item">
+                            <span>Principal & Interest</span>
+                            <span id="breakdownPI">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Property Taxes</span>
+                            <span id="breakdownTax">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Home Insurance</span>
+                            <span id="breakdownInsurance">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>HOA Fees</span>
+                            <span id="breakdownHOA">$0</span>
+                        </div>
+                        <div class="breakdown-item total">
+                            <span>Total Monthly Payment</span>
+                            <span id="breakdownTotal">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-insights">
+                    <h4><i class="fas fa-robot"></i> AI-Powered Insights</h4>
+                    <div id="aiInsightsText">
+                        Enter your financial information above to get personalized insights and recommendations.
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-share-alt"></i> Share Results
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Download Report
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-envelope"></i> Email Results
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-sections">
+            <div class="info-card">
+                <h3>Understanding Home Affordability</h3>
+                <p>Home affordability is determined by several factors including your income, existing debts, down payment amount, credit score, and current mortgage rates. Lenders typically use the 28/36 rule:</p>
+                <ul>
+                    <li><strong>28% Front-End Ratio:</strong> Your monthly housing costs should not exceed 28% of your gross monthly income.</li>
+                    <li><strong>36% Back-End Ratio:</strong> Your total monthly debt payments (including housing) should not exceed 36% of your gross monthly income.</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3>Tips to Improve Your Home Affordability</h3>
+                <ul>
+                    <li>Increase your down payment savings</li>
+                    <li>Pay down existing debts to lower your DTI ratio</li>
+                    <li>Improve your credit score for better interest rates</li>
+                    <li>Consider less expensive neighborhoods or smaller homes</li>
+                    <li>Look into first-time home buyer programs</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer with finguid.com style -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        <span>finguid</span>
+                    </div>
+                    <p>Empowering Americans to make confident financial decisions with intelligent calculators.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="#">Mortgage Calculator</a></li>
+                        <li><a href="#">Auto Loan Calculator</a></li>
+                        <li><a href="#">Investment Calculator</a></li>
+                        <li><a href="#">Credit Card Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Financial Guides</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 finguid. All rights reserved. Made with ❤️ for Americans.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="affordability-calculator.js"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</body>
+</html>
