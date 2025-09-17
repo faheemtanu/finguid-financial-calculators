@@ -238,7 +238,7 @@ body {
 }
 
 .hero-title {
-  font-size: 0.25rem;
+  font-size: 1.5rem;
   font-weight: 800;
   margin-bottom: var(--space-sm);
 }
@@ -1570,7 +1570,7 @@ body {
   }
   
   .hero-subtitle {
-    font-size: o.25rem;
+    font-size: o.9rem;
   }
   
   .footer-bottom-content {
