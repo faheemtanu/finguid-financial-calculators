@@ -264,7 +264,7 @@ body {
   background: rgba(255, 255, 255, 0.2);
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-full);
-  font-size: 0.9rem;
+  font-size: 0.5rem;
   font-weight: 500;
   backdrop-filter: blur(10px);
 }
