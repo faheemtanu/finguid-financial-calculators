@@ -1,35 +1,32 @@
 /**
- * FinGuid Mortgage Calculator - Enhanced Version 4.0.0
+ * FinGuid Mortgage Calculator - Enhanced Version 5.0.0
  * Production-ready mortgage calculator with all requested improvements
  * 
  * Key Features:
- * - Smaller loan type cards
- * - No breadcrumb navigation
- * - Ordered loan terms (10, 15, 20, 30) with manual entry
- * - Right-side navigation
+ * - Reduced hero section to half size
+ * - Default calculation values
+ * - Auto-calculation functionality
+ * - Next month default for loan start date
+ * - Manual date entry option
+ * - Amortization with monthly/yearly views
+ * - Collapse/expand/export/print controls
  * - State-based property tax auto-calculation
- * - Expandable/reducible amortization schedule
- * - Monthly/yearly amortization views
- * - Voice commands without "Listening..." text
- * - AI-powered insights
- * - Real-time calculations
- * - Comprehensive error handling
+ * - Enhanced UI matching style.css design system
  */
 
 'use strict';
 
 // Global application state
 const MortgageCalculator = {
-    version: '4.0.0',
+    version: '5.0.0',
     initialized: false,
     state: {
         currentCalculation: null,
         chartInstance: null,
         amortizationData: [],
-        voiceRecognition: null,
         currentLoanType: 'conventional',
         validationErrors: new Map(),
-        isAmortizationExpanded: false,
+        isAmortizationExpanded: true,
         currentAmortizationView: 'monthly',
         currentPage: 1,
         pageSize: 12
@@ -174,6 +171,13 @@ const Utils = {
             ? { year: 'numeric', month: 'short' }
             : { year: 'numeric', month: 'numeric', day: 'numeric' };
         return date.toLocaleDateString('en-US', options);
+    },
+
+    // Get next month date for default loan start
+    getNextMonthDate() {
+        const today = new Date();
+        const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+        return nextMonth.toISOString().split('T')[0];
     }
 };
 
@@ -265,7 +269,7 @@ const MortgageEngine = {
               { ...inputs, ...results };
         const annualRate = inputs.interestRate / 100;
         const monthlyRate = annualRate / 12;
-        const startDate = new Date(inputs.startDate || new Date());
+        const startDate = new Date(inputs.startDate || Utils.getNextMonthDate());
 
         const schedule = [];
         let balance = loanAmount;
@@ -474,137 +478,6 @@ const ChartManager = {
     }
 };
 
-// Voice recognition manager - NO "LISTENING..." TEXT DISPLAY
-const VoiceManager = {
-    recognition: null,
-    activeField: null,
-
-    init() {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            // Hide voice buttons if not supported
-            Utils.$$('.voice-btn').forEach(btn => btn.style.display = 'none');
-            return;
-        }
-
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        this.recognition = new SpeechRecognition();
-
-        this.recognition.continuous = false;
-        this.recognition.interimResults = false;
-        this.recognition.lang = 'en-US';
-
-        this.recognition.onresult = (event) => {
-            const result = event.results[0][0].transcript;
-            this.processVoiceInput(result);
-            this.hideVoiceStatus();
-        };
-
-        this.recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-            this.hideVoiceStatus();
-            ToastManager.show('Voice input failed. Please try again.', 'error');
-        };
-
-        this.recognition.onend = () => {
-            this.hideVoiceStatus();
-        };
-
-        // Bind voice buttons
-        Utils.$$('.voice-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const fieldId = btn.dataset.field;
-                this.startListening(fieldId);
-            });
-        });
-
-        // Voice status close button
-        const voiceClose = Utils.$('#voice-close');
-        if (voiceClose) {
-            voiceClose.addEventListener('click', () => {
-                this.stopListening();
-            });
-        }
-    },
-
-    startListening(fieldId) {
-        if (!this.recognition) return;
-
-        this.activeField = fieldId;
-        this.showVoiceStatus();
-
-        try {
-            this.recognition.start();
-        } catch (error) {
-            console.error('Failed to start voice recognition:', error);
-            this.hideVoiceStatus();
-        }
-    },
-
-    stopListening() {
-        if (this.recognition) {
-            this.recognition.stop();
-        }
-        this.hideVoiceStatus();
-    },
-
-    showVoiceStatus() {
-        const voiceStatus = Utils.$('#voice-status');
-        if (voiceStatus) {
-            voiceStatus.classList.remove('hidden');
-        }
-    },
-
-    hideVoiceStatus() {
-        const voiceStatus = Utils.$('#voice-status');
-        if (voiceStatus) {
-            voiceStatus.classList.add('hidden');
-        }
-    },
-
-    processVoiceInput(transcript) {
-        if (!this.activeField) return;
-
-        const field = Utils.$(`#${this.activeField}`);
-        if (!field) return;
-
-        // Process the transcript based on field type
-        let value = this.parseVoiceInput(transcript, this.activeField);
-
-        if (value !== null) {
-            field.value = value;
-            field.dispatchEvent(new Event('input', { bubbles: true }));
-            ToastManager.show(`Set ${this.activeField.replace('-', ' ')} to ${value}`, 'success');
-        } else {
-            ToastManager.show(`Couldn't understand "${transcript}". Please try again.`, 'warning');
-        }
-    },
-
-    parseVoiceInput(transcript, fieldId) {
-        const text = transcript.toLowerCase().trim();
-
-        // Remove common words and extract numbers
-        const cleanText = text.replace(/dollars?|thousand|k|percent|%/g, '');
-        const numbers = cleanText.match(/\d+(\.\d+)?/g);
-
-        if (!numbers || numbers.length === 0) return null;
-
-        let value = parseFloat(numbers[0]);
-
-        // Handle thousands
-        if (text.includes('thousand') || text.includes('k')) {
-            value *= 1000;
-        }
-
-        // Handle field-specific processing
-        if (fieldId === 'home-price' && value < 10000) {
-            value *= 1000; // Assume thousands for home prices
-        }
-
-        return value;
-    }
-};
-
 // Toast notification manager
 const ToastManager = {
     show(message, type = 'info', duration = 3000) {
@@ -722,8 +595,9 @@ class Calculator {
     init() {
         this.bindEvents();
         this.initializeForm();
-        this.initializeVoice();
-        VoiceManager.init();
+        this.setDefaultStartDate();
+        this.setInitialPropertyTax();
+        this.calculateMortgage(); // Trigger initial calculation with default values
     }
 
     bindEvents() {
@@ -733,7 +607,7 @@ class Calculator {
             form.addEventListener('submit', (e) => this.handleFormSubmit(e));
         }
 
-        // Real-time calculation
+        // AUTO-CALCULATION on input change
         form.addEventListener('input', Utils.debounce((e) => {
             this.calculateMortgage();
         }, MortgageCalculator.config.debounceDelay));
@@ -806,6 +680,7 @@ class Calculator {
                 const price = parseFloat(homePrice.value) || 0;
                 const percent = parseFloat(dpPercent.value) || 0;
                 dpAmount.value = Math.round(price * percent / 100);
+                this.calculateMortgage();
             });
 
             dpAmount.addEventListener('input', () => {
@@ -814,12 +689,19 @@ class Calculator {
                 if (price > 0) {
                     dpPercent.value = ((amount / price) * 100).toFixed(1);
                 }
+                this.calculateMortgage();
             });
 
             homePrice.addEventListener('input', () => {
                 const price = parseFloat(homePrice.value) || 0;
                 const percent = parseFloat(dpPercent.value) || 0;
                 dpAmount.value = Math.round(price * percent / 100);
+
+                // Auto-update property tax based on selected state
+                const selectedState = stateSelect.value;
+                if (selectedState && STATE_TAX_RATES[selectedState]) {
+                    this.updatePropertyTaxFromState(selectedState);
+                }
             });
         }
 
@@ -836,29 +718,22 @@ class Calculator {
             });
         });
 
-        // EXPANDABLE AMORTIZATION SCHEDULE
+        // AMORTIZATION CONTROLS - Collapse/Expand
+        const collapseBtn = Utils.$('#collapse-schedule');
         const expandBtn = Utils.$('#expand-schedule');
         const tableContainer = Utils.$('#table-container');
 
-        if (expandBtn && tableContainer) {
-            expandBtn.addEventListener('click', () => {
-                const isExpanded = tableContainer.classList.contains('expanded');
+        if (collapseBtn && expandBtn && tableContainer) {
+            collapseBtn.addEventListener('click', () => {
+                tableContainer.classList.remove('expanded');
+                tableContainer.classList.add('collapsed');
+                MortgageCalculator.state.isAmortizationExpanded = false;
+            });
 
-                if (isExpanded) {
-                    tableContainer.classList.remove('expanded');
-                    expandBtn.innerHTML = `
-                        <i class="fas fa-expand" aria-hidden="true"></i>
-                        <span class="expand-text">Expand</span>
-                    `;
-                    MortgageCalculator.state.isAmortizationExpanded = false;
-                } else {
-                    tableContainer.classList.add('expanded');
-                    expandBtn.innerHTML = `
-                        <i class="fas fa-compress" aria-hidden="true"></i>
-                        <span class="expand-text">Collapse</span>
-                    `;
-                    MortgageCalculator.state.isAmortizationExpanded = true;
-                }
+            expandBtn.addEventListener('click', () => {
+                tableContainer.classList.remove('collapsed');
+                tableContainer.classList.add('expanded');
+                MortgageCalculator.state.isAmortizationExpanded = true;
             });
         }
 
@@ -874,6 +749,30 @@ class Calculator {
             });
         });
 
+        // Export and Print functionality
+        const exportBtn = Utils.$('#export-schedule');
+        const printBtn = Utils.$('#print-schedule');
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => this.exportAmortizationSchedule());
+        }
+
+        if (printBtn) {
+            printBtn.addEventListener('click', () => this.printAmortizationSchedule());
+        }
+
+        // Next month button for loan start date
+        const btnToday = Utils.$('#btn-today');
+        if (btnToday) {
+            btnToday.addEventListener('click', () => {
+                const startDateInput = Utils.$('#start-date');
+                if (startDateInput) {
+                    startDateInput.value = Utils.getNextMonthDate();
+                    this.calculateMortgage();
+                }
+            });
+        }
+
         // Mobile menu toggle
         const mobileToggle = Utils.$('#mobile-menu-toggle');
         const navMenu = Utils.$('#nav-menu');
@@ -887,7 +786,7 @@ class Calculator {
         }
 
         // Modal handling
-        const preapprovalBtns = Utils.$$('#get-pre-approved, #cta-get-started');
+        const preapprovalBtns = Utils.$$('#cta-get-started');
         const modal = Utils.$('#preapproval-modal');
         const modalClose = Utils.$('#modal-close');
         const modalOverlay = Utils.$('.modal-overlay');
@@ -903,29 +802,28 @@ class Calculator {
         if (modalOverlay) {
             modalOverlay.addEventListener('click', () => this.closeModal());
         }
+    }
 
-        // Print functionality
-        const printBtn = Utils.$('#print-results');
-        if (printBtn) {
-            printBtn.addEventListener('click', () => window.print());
+    setDefaultStartDate() {
+        const startDateInput = Utils.$('#start-date');
+        if (startDateInput) {
+            startDateInput.value = Utils.getNextMonthDate();
+        }
+    }
+
+    setInitialPropertyTax() {
+        // Set default property tax for California (default selected state)
+        const stateSelect = Utils.$('#state');
+        if (stateSelect && stateSelect.value === 'CA') {
+            this.updatePropertyTaxFromState('CA');
         }
     }
 
     initializeForm() {
-        // Set default start date
-        const startDateInput = Utils.$('#start-date');
-        if (startDateInput) {
-            const today = new Date();
-            const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-            startDateInput.value = nextMonth.toISOString().split('T')[0];
-        }
-
-        // Trigger initial calculation
-        this.calculateMortgage();
-    }
-
-    initializeVoice() {
-        VoiceManager.init();
+        // Trigger initial calculation with default values
+        setTimeout(() => {
+            this.calculateMortgage();
+        }, 100);
     }
 
     handleFormSubmit(e) {
@@ -1037,7 +935,7 @@ class Calculator {
             hoaFees: parseFloat(Utils.$('#hoa-fees').value) || 0,
             extraMonthly: parseFloat(Utils.$('#extra-monthly').value) || 0,
             extraYearly: parseFloat(Utils.$('#extra-yearly').value) || 0,
-            startDate: Utils.$('#start-date').value
+            startDate: Utils.$('#start-date').value || Utils.getNextMonthDate()
         };
     }
 
@@ -1051,8 +949,7 @@ class Calculator {
         const validations = [
             { field: 'home-price', value: inputs.homePrice },
             { field: 'interest-rate', value: inputs.interestRate },
-            { field: 'loan-term', value: inputs.loanTerm },
-            { field: 'state', value: inputs.state }
+            { field: 'loan-term', value: inputs.loanTerm }
         ];
 
         validations.forEach(({ field, value }) => {
@@ -1076,29 +973,18 @@ class Calculator {
         }
 
         // Update payment breakdown
-        const breakdownEl = Utils.$('#payment-breakdown');
-        if (breakdownEl) {
-            const breakdownItems = [
-                { label: 'Principal & Interest', value: results.monthlyPI },
-                { label: 'Property Tax', value: results.monthlyTax },
-                { label: 'Home Insurance', value: results.monthlyInsurance }
-            ];
+        const breakdownItems = [
+            { id: 'principal-interest', value: results.monthlyPI },
+            { id: 'monthly-property-tax', value: results.monthlyTax },
+            { id: 'monthly-insurance', value: results.monthlyInsurance }
+        ];
 
-            if (results.monthlyPMI > 0) {
-                breakdownItems.push({ label: 'PMI', value: results.monthlyPMI });
+        breakdownItems.forEach(({ id, value }) => {
+            const el = Utils.$(`#${id}`);
+            if (el) {
+                el.textContent = Utils.formatCurrency(value);
             }
-
-            if (results.monthlyHOA > 0) {
-                breakdownItems.push({ label: 'HOA Fees', value: results.monthlyHOA });
-            }
-
-            breakdownEl.innerHTML = breakdownItems.map(item => `
-                <div class="breakdown-item">
-                    <span class="breakdown-label">${item.label}</span>
-                    <span class="breakdown-value">${Utils.formatCurrency(item.value)}</span>
-                </div>
-            `).join('');
-        }
+        });
 
         // Update summary stats
         const summaryStats = [
@@ -1196,6 +1082,105 @@ class Calculator {
         return yearlyData;
     }
 
+    exportAmortizationSchedule() {
+        try {
+            const schedule = MortgageCalculator.state.amortizationData;
+            if (!schedule.length) return;
+
+            // Create CSV content
+            const headers = ['Payment #', 'Date', 'Payment', 'Principal', 'Interest', 'Balance', 'Equity'];
+            const csvContent = [
+                headers.join(','),
+                ...schedule.map(row => [
+                    row.paymentNumber,
+                    row.date.toLocaleDateString(),
+                    row.payment.toFixed(2),
+                    row.principal.toFixed(2),
+                    row.interest.toFixed(2),
+                    row.balance.toFixed(2),
+                    row.equity.toFixed(2)
+                ].join(','))
+            ].join('\n');
+
+            // Download CSV
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amortization-schedule.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+
+            ToastManager.show('Amortization schedule exported successfully!', 'success');
+        } catch (error) {
+            console.error('Export error:', error);
+            ToastManager.show('Failed to export schedule. Please try again.', 'error');
+        }
+    }
+
+    printAmortizationSchedule() {
+        try {
+            const printWindow = window.open('', '_blank');
+            const schedule = MortgageCalculator.state.amortizationData;
+
+            if (!schedule.length) return;
+
+            const printContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Amortization Schedule</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+                        th { background-color: #f2f2f2; }
+                        .currency { text-align: right; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Amortization Schedule</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Payment #</th>
+                                <th>Date</th>
+                                <th>Payment</th>
+                                <th>Principal</th>
+                                <th>Interest</th>
+                                <th>Balance</th>
+                                <th>Equity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${schedule.map(row => `
+                                <tr>
+                                    <td>${row.paymentNumber}</td>
+                                    <td>${row.date.toLocaleDateString()}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.payment)}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.principal)}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.interest)}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.balance)}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.equity)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.print();
+
+            ToastManager.show('Amortization schedule prepared for printing!', 'success');
+        } catch (error) {
+            console.error('Print error:', error);
+            ToastManager.show('Failed to prepare print view. Please try again.', 'error');
+        }
+    }
+
     openModal() {
         const modal = Utils.$('#preapproval-modal');
         if (modal) {
@@ -1224,23 +1209,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize calculator
     const calculator = new Calculator();
 
-    // Initialize voice manager separately
-    VoiceManager.init();
-
     // Set global reference
     window.MortgageCalculator = MortgageCalculator;
     window.Calculator = calculator;
 
-    console.log('🏠 FinGuid Mortgage Calculator v4.0.0 initialized successfully!');
+    console.log('🏠 FinGuid Mortgage Calculator v5.0.0 initialized successfully!');
     console.log('✅ All requested improvements implemented:');
-    console.log('  - Smaller loan type cards');
-    console.log('  - No breadcrumb navigation');
-    console.log('  - Ordered loan terms (10, 15, 20, 30) with manual entry');
-    console.log('  - Right-side navigation');
+    console.log('  - Reduced hero section to half size');
+    console.log('  - Default calculation values with auto-calculation');
+    console.log('  - FinGuid left, navigation right');
+    console.log('  - Next month default for loan start date');
+    console.log('  - Manual date entry option');
+    console.log('  - Amortization with monthly/yearly views');
+    console.log('  - Collapse/expand/export/print controls');
     console.log('  - State-based property tax auto-calculation');
-    console.log('  - Expandable/reducible amortization schedule');
-    console.log('  - Monthly/yearly amortization views');
-    console.log('  - Voice commands without "Listening..." text');
     console.log('  - Footer matching home page design');
 });
 
@@ -1248,8 +1230,8 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         // Pause any ongoing processes when page is hidden
-        if (VoiceManager.recognition) {
-            VoiceManager.stopListening();
+        if (MortgageCalculator.state.chartInstance) {
+            // Could pause chart animations here
         }
     }
 });
@@ -1265,6 +1247,5 @@ window.Utils = Utils;
 window.MortgageEngine = MortgageEngine;
 window.AIInsights = AIInsights;
 window.ChartManager = ChartManager;
-window.VoiceManager = VoiceManager;
 window.ToastManager = ToastManager;
 window.FormValidator = FormValidator;
