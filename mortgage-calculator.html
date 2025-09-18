@@ -1,296 +1,401 @@
-/**
- * FinGuid Mortgage Calculator v7.3 - Production Ready & Feature Complete
- * - Accurately calculates and displays the impact of extra monthly and one-time payments.
- * - Fully functional, paginated amortization schedule with correct data.
- * - Implemented Save PDF, Share, and Print result actions.
- * - Powers all interactive elements including tooltips and a more robust AI engine.
- */
-'use strict';
-
-document.addEventListener('DOMContentLoaded', () => {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 AI-Enhanced Mortgage Calculator | FinGuid USA</title>
+    <meta name="description" content="Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights. World's first AI-enhanced mortgage calculator.">
     
-    // --- STATE & CONFIGURATION ---
-    const state = {
-        pieChart: null, barChart: null, amortizationData: [],
-        currentAmortizationView: 'monthly', amortizationPage: 1,
-        speechRecognition: null, isListening: false, screenReader: false,
-    };
-    const config = {
-        debounceDelay: 300,
-        amortizationPageSize: 12,
-        chartColors: ['#21808D', '#F59E0B', '#10B981', '#EF4444', '#8B5CF6'],
-    };
-
-    // --- DOM ELEMENT CACHE ---
-    const elements = {
-        form: document.getElementById('mortgage-form'),
-        homePrice: document.getElementById('home-price'),
-        dpAmount: document.getElementById('dp-amount'),
-        dpPercent: document.getElementById('dp-percent'),
-        interestRate: document.getElementById('interest-rate'),
-        loanTerm: document.getElementById('loan-term'),
-        startDate: document.getElementById('start-date'),
-        stateSelect: document.getElementById('state'),
-        propertyTax: document.getElementById('property-tax'),
-        homeInsurance: document.getElementById('home-insurance'),
-        hoaFees: document.getElementById('hoa-fees'),
-        extraMonthly: document.getElementById('extra-monthly'),
-        extraYearly: document.getElementById('extra-yearly'),
-        extraYearlyDate: document.getElementById('extra-yearly-date'),
-        totalPayment: document.getElementById('total-payment'),
-        paymentBreakdown: document.getElementById('payment-breakdown'),
-        extraPaymentSummary: document.getElementById('extra-payment-summary'),
-        insightsList: document.getElementById('insights-list'),
-        pieChartCanvas: document.getElementById('pie-chart'),
-        barChartCanvas: document.getElementById('bar-chart'),
-        amortizationTableBody: document.querySelector('#amortization-table tbody'),
-        amortizationTableHead: document.querySelector('#amortization-table thead'),
-        paginationControls: document.getElementById('pagination-controls'),
-        pageInfo: document.getElementById('page-info'),
-        prevPageBtn: document.getElementById('prev-page'),
-        nextPageBtn: document.getElementById('next-page'),
-        globalVoiceBtn: document.getElementById('global-voice-btn'),
-        screenReaderBtn: document.getElementById('screen-reader-btn'),
-        voiceStatus: document.getElementById('voice-status'),
-        srAnnouncer: document.getElementById('sr-announcer'),
-    };
-
-    // --- INITIALIZATION ---
-    function init() {
-        populateStateDropdown();
-        bindEvents();
-        setDefaultValues();
-        setupSpeechRecognition();
-        calculateAndDisplay();
-    }
-
-    function setDefaultValues() {
-        elements.homePrice.value = 400000;
-        elements.dpAmount.value = 80000;
-        elements.dpPercent.value = 20;
-        elements.interestRate.value = 6.75;
-        elements.loanTerm.value = 30;
-        elements.propertyTax.value = 4400;
-        elements.homeInsurance.value = 1700;
-        elements.hoaFees.value = 0;
-        elements.extraMonthly.value = 0;
-        elements.extraYearly.value = 0;
-        const nextMonth = new Date();
-        nextMonth.setMonth(nextMonth.getMonth() + 1);
-        elements.startDate.value = nextMonth.toISOString().slice(0, 7);
-        elements.extraYearlyDate.value = new Date(nextMonth.getFullYear() + 1, nextMonth.getMonth()).toISOString().slice(0, 7);
-    }
+    <meta property="og:title" content="AI-Enhanced Mortgage Calculator | FinGuid USA">
+    <meta property="og:description" content="Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.finguid.com/mortgage-calculator">
+    <meta property="og:image" content="https://www.finguid.com/images/mortgage-calculator-preview.jpg">
     
-    // --- EVENT BINDING ---
-    function bindEvents() {
-        elements.form.addEventListener('input', debounce(calculateAndDisplay, config.debounceDelay));
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', handleTabClick));
-        document.querySelectorAll('.term-chip').forEach(chip => chip.addEventListener('click', handleTermChipClick));
-        elements.stateSelect.addEventListener('change', updatePropertyTaxFromState);
-        elements.globalVoiceBtn.addEventListener('click', toggleVoiceListening);
-        elements.screenReaderBtn.addEventListener('click', toggleScreenReader);
-        document.getElementById('view-monthly').addEventListener('click', () => setAmortizationView('monthly'));
-        document.getElementById('view-yearly').addEventListener('click', () => setAmortizationView('yearly'));
-        elements.prevPageBtn.addEventListener('click', () => changeAmortizationPage(-1));
-        elements.nextPageBtn.addEventListener('click', () => changeAmortizationPage(1));
-        document.getElementById('share-btn').addEventListener('click', shareResults);
-        document.getElementById('save-pdf-btn').addEventListener('click', saveResultsAsPDF);
-        document.getElementById('print-btn').addEventListener('click', () => window.print());
-        document.getElementById('export-csv-btn').addEventListener('click', exportAmortizationToCSV);
-        document.getElementById('print-schedule-btn').addEventListener('click', printAmortization);
-        document.getElementById('hamburger').addEventListener('click', () => document.getElementById('nav-menu').classList.toggle('active'));
-    }
+    <link rel="stylesheet" href="mortgage-calculator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    // --- EVENT HANDLERS ---
-    function handleTabClick(e) {
-        const targetTab = e.target.dataset.tab;
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        e.target.classList.add('active');
-        document.querySelector(`.tab-content[data-tab-content="${targetTab}"]`).classList.add('active');
-        syncDownPayment(targetTab);
-    }
-
-    function handleTermChipClick(e) {
-        document.querySelectorAll('.term-chip').forEach(chip => chip.classList.remove('active'));
-        e.target.classList.add('active');
-        elements.loanTerm.value = e.target.dataset.term;
-        calculateAndDisplay();
-    }
-
-    // --- CORE CALCULATION & DISPLAY ---
-    function calculateAndDisplay() {
-        const inputs = getFormInputs();
-        const results = calculateMortgage(inputs);
-        state.amortizationData = generateAmortization(inputs, results);
-        displayResults(results, inputs);
-        displayAIInsights(inputs, results);
-        displayCharts(results);
-        displayAmortization();
-    }
-
-    function getFormInputs() {
-        const homePrice = parseFloat(elements.homePrice.value) || 0;
-        let dpAmount = parseFloat(elements.dpAmount.value) || 0;
-        if (document.querySelector('.tab-btn[data-tab="percent"]').classList.contains('active')) {
-            const dpPercent = parseFloat(elements.dpPercent.value) || 0;
-            dpAmount = (homePrice * dpPercent) / 100;
-        }
-        return {
-            homePrice, dpAmount, interestRate: parseFloat(elements.interestRate.value) || 0,
-            loanTerm: parseInt(elements.loanTerm.value) || 0, startDate: elements.startDate.value,
-            state: elements.stateSelect.value, propertyTax: parseFloat(elements.propertyTax.value) || 0,
-            homeInsurance: parseFloat(elements.homeInsurance.value) || 0, hoaFees: parseFloat(elements.hoaFees.value) || 0,
-            extraMonthly: parseFloat(elements.extraMonthly.value) || 0, extraYearly: parseFloat(elements.extraYearly.value) || 0,
-            extraYearlyDate: elements.extraYearlyDate.value,
-        };
-    }
-
-    function calculateMortgage(inputs) {
-        const { homePrice, dpAmount, interestRate, loanTerm, propertyTax, homeInsurance, hoaFees } = inputs;
-        const loanAmount = homePrice - dpAmount;
-        if (loanAmount <= 0 || interestRate === 0 || loanTerm === 0) {
-            return { totalMonthly: 0, loanAmount: 0, monthlyPI: 0, monthlyPMI: 0, monthlyTax: 0, monthlyInsurance: 0, monthlyHOA: 0, totalInterest: 0, totalPaid: 0 };
-        }
-        
-        const monthlyRate = (interestRate / 100) / 12;
-        const numPayments = loanTerm * 12;
-        
-        // Principal & Interest (P&I) Calculation
-        const monthlyPI = loanAmount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -numPayments));
-
-        // PMI Calculation (if down payment is < 20%)
-        const dpPercent = (dpAmount / homePrice) * 100;
-        const monthlyPMI = dpPercent < 20 ? (loanAmount * 0.005) / 12 : 0;
-        
-        // Other monthly costs
-        const monthlyTax = propertyTax / 12;
-        const monthlyInsurance = homeInsurance / 12;
-        const monthlyHOA = hoaFees;
-
-        const totalMonthly = monthlyPI + monthlyPMI + monthlyTax + monthlyInsurance + monthlyHOA;
-        const totalInterest = (monthlyPI * numPayments) - loanAmount;
-
-        return {
-            loanAmount,
-            dpPercent,
-            monthlyPI: isNaN(monthlyPI) ? 0 : monthlyPI,
-            monthlyPMI,
-            monthlyTax,
-            monthlyInsurance,
-            monthlyHOA,
-            totalMonthly: isNaN(totalMonthly) ? 0 : totalMonthly,
-            totalInterest
-        };
-    }
-
-    // --- DISPLAY FUNCTIONS ---
-    function displayResults(results, inputs) {
-        elements.totalPayment.textContent = formatCurrency(results.totalMonthly, 2);
-        elements.paymentBreakdown.innerHTML = `
-            <div class="breakdown-item" data-tooltip="The portion of your payment that goes toward paying off the loan balance and interest."><span>Principal & Interest</span><span>${formatCurrency(results.monthlyPI, 2)}</span></div>
-            ${results.monthlyPMI > 0 ? `<div class="breakdown-item" data-tooltip="Private Mortgage Insurance, required if your down payment is less than 20%."><span>PMI</span><span>${formatCurrency(results.monthlyPMI, 2)}</span></div>` : ''}
-            <div class="breakdown-item" data-tooltip="Estimated monthly property taxes based on your state."><span>Property Tax</span><span>${formatCurrency(results.monthlyTax, 2)}</span></div>
-            <div class="breakdown-item" data-tooltip="Estimated monthly homeowner's insurance cost."><span>Home Insurance</span><span>${formatCurrency(results.monthlyInsurance, 2)}</span></div>
-            ${inputs.hoaFees > 0 ? `<div class="breakdown-item" data-tooltip="Monthly fees to a Homeowners' Association."><span>HOA Fees</span><span>${formatCurrency(results.monthlyHOA, 2)}</span></div>` : ''}
-        `;
-        // Additional display logic for extra payments can go here
-    }
-
-    function generateAmortization(inputs, results) {
-        let { loanAmount } = results;
-        const { monthlyPI, extraMonthly, extraYearly, extraYearlyDate } = inputs;
-        const monthlyRate = (inputs.interestRate / 100) / 12;
-        let balance = loanAmount;
-        const schedule = [];
-        let monthCounter = 0;
-        let totalInterestPaid = 0;
-        const yearlyExtraPaymentDate = inputs.extraYearlyDate ? new Date(inputs.extraYearlyDate) : null;
-
-        while (balance > 0 && monthCounter < 360) {
-            monthCounter++;
-            let interestPayment = balance * monthlyRate;
-            let principalPayment = monthlyPI - interestPayment;
-            
-            // Handle extra payments
-            let totalPrincipalPaid = principalPayment + extraMonthly;
-            if (yearlyExtraPaymentDate && monthCounter === (yearlyExtraPaymentDate.getFullYear() - new Date(inputs.startDate).getFullYear()) * 12 + (yearlyExtraPaymentDate.getMonth() - new Date(inputs.startDate).getMonth())) {
-                totalPrincipalPaid += extraYearly;
-            }
-            
-            balance -= totalPrincipalPaid;
-            totalInterestPaid += interestPayment;
-
-            schedule.push({
-                month: monthCounter,
-                balance: Math.max(0, balance),
-                interest: interestPayment,
-                principal: principalPayment,
-                extra: extraMonthly,
-            });
-        }
-        return schedule;
-    }
-
-    function displayAmortization() {
-        const tableBody = elements.amortizationTableBody;
-        tableBody.innerHTML = '';
-        state.amortizationData.slice((state.amortizationPage - 1) * config.amortizationPageSize, state.amortizationPage * config.amortizationPageSize).forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${row.month}</td>
-                <td>${formatCurrency(row.balance, 2)}</td>
-                <td>${formatCurrency(row.principal, 2)}</td>
-                <td>${formatCurrency(row.interest, 2)}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
-
-        const totalPages = Math.ceil(state.amortizationData.length / config.amortizationPageSize);
-        elements.pageInfo.textContent = `Page ${state.amortizationPage} of ${totalPages}`;
-        elements.prevPageBtn.disabled = state.amortizationPage === 1;
-        elements.nextPageBtn.disabled = state.amortizationPage === totalPages;
-    }
-
-    function changeAmortizationPage(delta) {
-        state.amortizationPage += delta;
-        displayAmortization();
-    }
-
-    function setAmortizationView(view) {
-        // Not fully implemented but would switch between monthly and yearly views
-        state.currentAmortizationView = view;
-        document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`view-${view}`).classList.add('active');
-        displayAmortization();
-    }
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     
-    // --- UTILITY & SUPPORT FUNCTIONS ---
-    function debounce(fn, delay) {
-        let id;
-        return (...args) => {
-            clearTimeout(id);
-            id = setTimeout(() => fn(...args), delay);
-        };
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "FinGuid AI-Enhanced Mortgage Calculator",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
     }
+    </script>
 
-    function formatCurrency(v, d = 0) {
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
-    }
+</head>
+<body>
+    <header class="header">
+        <div class="container nav-container">
+            <a href="/" class="nav-brand"><i class="fas fa-calculator" aria-hidden="true"></i> FinGuid</a>
+            <nav class="nav-links">
+                <a href="#">Calculators</a>
+                <a href="#">Resources</a>
+                <a href="#">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="hero-section">
+                <h1 class="hero-title">AI-Enhanced Mortgage Calculator</h1>
+                <p class="hero-subtitle">Get precise monthly payments, understand your savings, and plan your financial future with AI-powered insights.</p>
+            </section>
+
+            <div class="calculator-layout">
+                <div class="calculator-panel card">
+                    <form id="mortgage-form" class="calculator-form">
+                        <div class="panel-header">
+                            <h2>Your Loan Details</h2>
+                            <div class="loan-type-selector">
+                                <label for="loan-type">Loan Type</label>
+                                <select id="loan-type">
+                                    <option value="conventional">Conventional</option>
+                                    <option value="fha">FHA</option>
+                                    <option value="va">VA</option>
+                                    <option value="usda">USDA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group form-group-combined">
+                                <label for="home-price">Home Price ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="home-price" value="350,000" inputmode="numeric">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dp-amount">Down Payment ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="dp-amount" value="70,000" inputmode="numeric">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dp-percent">Down Payment (%)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">%</span>
+                                    <input type="text" id="dp-percent" value="20" inputmode="numeric">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="interest-rate">Interest Rate (%)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">%</span>
+                                    <input type="text" id="interest-rate" value="7.25" inputmode="decimal">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="loan-term">Loan Term (Years)</label>
+                                <div class="term-chips">
+                                    <span class="chip active" data-term="30">30</span>
+                                    <span class="chip" data-term="20">20</span>
+                                    <span class="chip" data-term="15">15</span>
+                                    <span class="chip" data-term="10">10</span>
+                                    <input type="number" id="loan-term" placeholder="Custom" min="1" max="50">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="state">Property State</label>
+                                <select id="state"></select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="start-date">Start Date</label>
+                                <input type="month" id="start-date" value="2025-10">
+                            </div>
+
+                            <div class="form-group form-group-combined">
+                                <label for="property-tax">Annual Property Tax ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="property-tax" placeholder="Auto-calculated" inputmode="numeric">
+                                </div>
+                                <div class="tax-info-label">
+                                    <span id="tax-info-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-group-combined">
+                                <label for="home-insurance">Annual Home Insurance ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="home-insurance" value="1,500" inputmode="numeric">
+                                </div>
+                            </div>
+
+                            <div class="form-group form-group-combined" data-tooltip="This is required for conventional loans with less than 20% down payment.">
+                                <label for="pmi">Annual PMI ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="pmi" value="0" inputmode="numeric">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group form-group-combined">
+                                <label for="hoa-fees">Monthly HOA Fees ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="hoa-fees" value="0" inputmode="numeric">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group form-group-combined">
+                                <label for="extra-monthly">Extra Monthly Payment ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="extra-monthly" value="0" inputmode="numeric">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group form-group-combined">
+                                <label for="extra-one-time">One-Time Extra Payment ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="extra-one-time" value="0" inputmode="numeric" data-tooltip="e.g., a bonus or inheritance">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-calculator"></i> Calculate</button>
+                            <button type="button" id="voice-btn" class="btn btn-secondary"><i class="fas fa-microphone"></i> Voice</button>
+                            <button type="button" id="screen-reader-btn" class="btn btn-secondary">
+                                <i class="fas fa-universal-access"></i> Screen Reader
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="results-panel" class="results-panel hidden">
+                    <div class="result-card card" id="your-mortgage-results">
+                        <div class="panel-header">
+                            <h2>Your Mortgage Results</h2>
+                        </div>
+                        <div class="summary-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Total Monthly Payment</span>
+                                <span class="total-payment-amount" id="total-monthly-payment">$0.00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Principal & Interest</span>
+                                <span class="stat-value" id="principal-interest">$0.00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Property Taxes</span>
+                                <span class="stat-value" id="monthly-tax">$0.00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Home Insurance</span>
+                                <span class="stat-value" id="monthly-insurance">$0.00</span>
+                            </div>
+                            <div class="stat-item" id="pmi-stat">
+                                <span class="stat-label">PMI</span>
+                                <span class="stat-value" id="monthly-pmi">$0.00</span>
+                            </div>
+                            <div class="stat-item" id="hoa-stat">
+                                <span class="stat-label">HOA Fees</span>
+                                <span class="stat-value" id="monthly-hoa">$0.00</span>
+                            </div>
+                            <div class="stat-item" id="extra-payment-stat">
+                                <span class="stat-label">Extra Payments</span>
+                                <span class="stat-value" id="total-extra-payments">$0.00</span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="payment-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="amortization-card card">
+                        <div class="panel-header" id="amortization-header">
+                            <h2>Amortization Schedule</h2>
+                            <i class="fas fa-chevron-down toggle-icon" aria-expanded="false" aria-controls="amortization-table-container"></i>
+                        </div>
+                        <div id="amortization-table-container" class="collapse-content">
+                            <div class="table-controls">
+                                <button id="prev-page" class="btn btn-pagination" disabled>Prev</button>
+                                <span id="page-info" class="page-info">Page 1 of 1</span>
+                                <button id="next-page" class="btn btn-pagination" disabled>Next</button>
+                                <select id="amortization-view-selector" class="dropdown">
+                                    <option value="monthly">Monthly</option>
+                                    <option value="yearly">Yearly</option>
+                                </select>
+                            </div>
+                            <table id="amortization-table">
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Starting Balance</th>
+                                        <th>Principal</th>
+                                        <th>Interest</th>
+                                        <th>Taxes & Insurance</th>
+                                        <th>Extra Payment</th>
+                                        <th>Ending Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="insights-card card" id="insights-panel">
+                        <div class="panel-header">
+                            <h2>AI-Powered Insights</h2>
+                        </div>
+                        <div id="ai-insights-list" class="insights-list">
+                            </div>
+                    </div>
+                    
+                    <div class="result-actions card">
+                        <div class="panel-header">
+                            <h2>Share Your Results</h2>
+                        </div>
+                        <div class="results-actions">
+                            <button id="share-btn" class="btn btn-secondary" data-tooltip="Share results via social media or email.">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                            <button id="pdf-btn" class="btn btn-secondary" data-tooltip="Save a detailed report as a PDF.">
+                                <i class="fas fa-file-pdf"></i> Save as PDF
+                            </button>
+                            <button id="print-btn" class="btn btn-secondary" data-tooltip="Print the full amortization schedule.">
+                                <i class="fas fa-print"></i> Print
+                            </button>
+                            <button id="csv-btn" class="btn btn-secondary" data-tooltip="Export the amortization data to a CSV file.">
+                                <i class="fas fa-file-csv"></i> Export to CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chart-card card">
+                        <div class="panel-header">
+                            <h2>Mortgage Over Time</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="timeline-chart"></canvas>
+                        </div>
+                        <div class="over-time-summary">
+                            <div class="over-time-item">
+                                <span class="summary-label">Total Interest Paid</span>
+                                <span class="summary-value" id="total-interest-paid">$0</span>
+                            </div>
+                            <div class="over-time-item">
+                                <span class="summary-label">Total Principal Paid</span>
+                                <span class="summary-value" id="total-principal-paid">$0</span>
+                            </div>
+                            <div class="over-time-item">
+                                <span class="summary-label">Total Paid Over Loan Term</span>
+                                <span class="summary-value" id="total-paid">$0</span>
+                            </div>
+                            <div class="over-time-item" id="extra-payments-summary">
+                                <span class="summary-label">Total Savings</span>
+                                <span class="summary-value" id="total-savings">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ad-panel card">
+                    <div class="panel-header">
+                        <h2></h2>
+                    </div>
+                    <div class="ad-container">
+                        <img src="https://via.placeholder.com/300x600.png?text=Ad+Space" alt="Advertisement">
+                    </div>
+                </div>
+            </div>
+
+            <section class="related-calculators-card card">
+                <div class="panel-header">
+                    <h2>Related Calculators</h2>
+                </div>
+                <div class="related-grid">
+                    <a href="#" class="related-item">
+                        <i class="fas fa-car"></i>
+                        <h4>Auto Loan</h4>
+                    </a>
+                    <a href="#" class="related-item">
+                        <i class="fas fa-university"></i>
+                        <h4>Student Loan</h4>
+                    </a>
+                    <a href="#" class="related-item">
+                        <i class="fas fa-piggy-bank"></i>
+                        <h4>Savings Goals</h4>
+                    </a>
+                    <a href="#" class="related-item">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Investment</h4>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
     
-    // Unchanged functions (stubs)
-    function populateStateDropdown() { /* Unchanged with full state list */ }
-    function updatePropertyTaxFromState() { /* Unchanged */ }
-    function toggleVoiceListening() { /* Unchanged */ }
-    function setupSpeechRecognition() { /* Unchanged */ }
-    function toggleScreenReader() { state.screenReader = !state.screenReader; elements.screenReaderBtn.classList.toggle('active', state.screenReader); announceToSR(`Screen reader announcements ${state.screenReader ? 'enabled' : 'disabled'}.`); }
-    function shareResults() { alert("Share functionality would be implemented here."); }
-    function saveResultsAsPDF() { alert("PDF export functionality would be implemented here."); }
-    function printAmortization() { window.print(); }
-    function exportAmortizationToCSV() { alert("CSV export functionality would be implemented here."); }
-    function displayCharts(results) { /* Chart.js implementation goes here */ }
-    function displayAIInsights(inputs, results) { /* AI logic goes here */ }
-    function announceToSR(message) { if (state.screenReader) { elements.srAnnouncer.textContent = ''; setTimeout(() => { elements.srAnnouncer.textContent = message; }, 100); } }
-
-    init();
-});
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand"><i class="fas fa-calculator"></i> FinGuid</div>
+                    <p>Building the world's first AI-enhanced financial calculator platform specifically designed for Americans.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="#">Auto Loan Calculator</a></li>
+                        <li><a href="#">Investment Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Financial Blog</a></li>
+                        <li><a href="#">How-to Guides</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Finguid.com. All rights reserved. Calculations are estimates for informational purposes only.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <div id="voice-status" class="voice-status" aria-live="assertive" style="display: none;">
+        <i class="fas fa-microphone-alt" aria-hidden="true"></i>
+        <span>Listening...</span>
+        <button id="voice-close" aria-label="Stop voice command">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+    
+    <div id="sr-announcements" class="sr-only" aria-live="assertive"></div>
+    
+    <div id="toast-container" class="toast-container"></div>
+    
+    <script src="mortgage-calculator.js"></script>
+</body>
+</html>
