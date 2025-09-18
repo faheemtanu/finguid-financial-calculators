@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI-Enhanced Mortgage Calculator | FinGuid USA</title>
     <meta name="description" content="The world's first AI-enhanced mortgage calculator for the USA. Get precise monthly payments with state-specific taxes, PMI, and AI-powered insights. Compliant, partner-friendly, and accessible.">
-    <meta name="keywords" content="mortgage calculator, AI financial tools, home loan calculator, monthly mortgage payment, USA mortgage rates, finguid">
     
     <meta property="og:title" content="AI-Enhanced Mortgage Calculator | FinGuid USA">
-    <meta property="og:description" content="Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.">
+    <meta property="og:description" content="Calculate your mortgage payment with state-specific taxes, PMI, insurance, and AI insights.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.finguid.com/mortgage-calculator.html">
-    <meta property="og:image" content="https://www.finguid.com/og-image.jpg">
     
     <link rel="stylesheet" href="mortgage-calculator.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -61,16 +59,10 @@
     </header>
 
     <main id="main-content">
-        <section class="hero">
+        <section class="hero-section hero-compact">
             <div class="container">
-                <div class="hero-content">
-                    <h1 class="hero-title">
-                        AI-Enhanced Mortgage Calculator
-                    </h1>
-                    <p class="hero-description">
-                        Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights. America's most accurate mortgage calculator.
-                    </p>
-                </div>
+                <h1 class="hero-title">🏠 AI-Enhanced Mortgage Calculator</h1>
+                <p class="hero-subtitle">Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.</p>
             </div>
         </section>
         
@@ -92,7 +84,7 @@
                                     <label for="home-price">Home Price</label>
                                     <div class="input-with-prefix">
                                         <span class="input-prefix">$</span>
-                                        <input type="number" id="home-price" value="400000" data-voice-term="home price" required>
+                                        <input type="number" id="home-price" value="400000" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -104,12 +96,12 @@
                                     <div class="tab-content active" data-tab-content="dollar">
                                         <div class="input-with-prefix">
                                             <span class="input-prefix">$</span>
-                                            <input type="number" id="dp-amount" value="80000" data-voice-term="down payment amount">
+                                            <input type="number" id="dp-amount" value="80000">
                                         </div>
                                     </div>
                                     <div class="tab-content" data-tab-content="percent">
                                         <div class="input-with-suffix">
-                                            <input type="number" id="dp-percent" value="20" data-voice-term="down payment percent">
+                                            <input type="number" id="dp-percent" value="20">
                                             <span class="input-suffix">%</span>
                                         </div>
                                     </div>
@@ -117,7 +109,7 @@
                                 <div class="form-group">
                                     <label for="interest-rate">Interest Rate</label>
                                     <div class="input-with-suffix">
-                                        <input type="number" id="interest-rate" value="6.75" step="0.01" data-voice-term="interest rate" required>
+                                        <input type="number" id="interest-rate" value="6.75" step="0.01" required>
                                         <span class="input-suffix">%</span>
                                     </div>
                                 </div>
@@ -131,7 +123,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="loan-term">Or Custom Term (Years)</label>
-                                    <input type="number" id="loan-term" value="30" data-voice-term="loan term" required>
+                                    <input type="number" id="loan-term" value="30" required>
                                 </div>
                             </fieldset>
 
@@ -139,7 +131,7 @@
                                 <legend class="section-title">Loan Start Date</legend>
                                 <div class="form-group">
                                     <label for="start-date">First Payment</label>
-                                    <input type="month" id="start-date" data-voice-term="start date" required>
+                                    <input type="month" id="start-date" required>
                                 </div>
                             </fieldset>
 
@@ -152,13 +144,13 @@
                                         <legend class="section-title">Location & Taxes</legend>
                                         <div class="form-group">
                                             <label for="state">State</label>
-                                            <select id="state" data-voice-term="state" required></select>
+                                            <select id="state" required></select>
                                         </div>
                                         <div class="form-group">
                                             <label for="property-tax">Annual Property Tax</label>
                                             <div class="input-with-prefix">
                                                 <span class="input-prefix">$</span>
-                                                <input type="number" id="property-tax" value="4400" data-voice-term="property tax">
+                                                <input type="number" id="property-tax" value="4400">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -168,14 +160,31 @@
                                             <label for="home-insurance">Annual Home Insurance</label>
                                             <div class="input-with-prefix">
                                                 <span class="input-prefix">$</span>
-                                                <input type="number" id="home-insurance" value="1700" data-voice-term="home insurance">
+                                                <input type="number" id="home-insurance" value="1700">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="hoa-fees">Monthly HOA Fees</label>
                                             <div class="input-with-prefix">
                                                 <span class="input-prefix">$</span>
-                                                <input type="number" id="hoa-fees" value="0" data-voice-term="hoa fees">
+                                                <input type="number" id="hoa-fees" value="0">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="form-section">
+                                        <legend class="section-title">Extra Payments</legend>
+                                        <div class="form-group">
+                                            <label for="extra-monthly">Extra Monthly Payment</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix">$</span>
+                                                <input type="number" id="extra-monthly" value="0">
+                                            </div>
+                                        </div>
+                                         <div class="form-group">
+                                            <label for="extra-yearly">Extra Yearly Payment (One-time)</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix">$</span>
+                                                <input type="number" id="extra-yearly" value="0">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -194,17 +203,28 @@
                             <div id="payment-breakdown" class="payment-breakdown"></div>
                         </div>
 
+                        <div class="results-actions">
+                            <button id="share-btn"><i class="fas fa-share-alt"></i> Share</button>
+                            <button id="save-pdf-btn"><i class="fas fa-file-pdf"></i> Save PDF</button>
+                            <button id="print-btn"><i class="fas fa-print"></i> Print</button>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="tab-controls chart-tabs">
+                                <button type="button" class="tab-btn active" data-tab="pie-chart"><i class="fas fa-chart-pie"></i> Pie Chart</button>
+                                <button type="button" class="tab-btn" data-tab="bar-chart"><i class="fas fa-chart-bar"></i> Bar Chart</button>
+                            </div>
+                            <div class="tab-content active" data-tab-content="pie-chart">
+                                <div class="chart-container"><canvas id="pie-chart"></canvas></div>
+                            </div>
+                            <div class="tab-content" data-tab-content="bar-chart">
+                                <div class="chart-container"><canvas id="bar-chart"></canvas></div>
+                            </div>
+                        </div>
+
                         <div class="result-card" id="ai-insights">
                             <h2><i class="fas fa-robot"></i> AI-Powered Insights</h2>
                             <div id="insights-list" class="insights-list"></div>
-                        </div>
-
-                        <div class="result-card">
-                            <h2><i class="fas fa-chart-bar"></i> Payment Breakdown</h2>
-                            <div class="chart-layout">
-                                <div class="chart-container"><canvas id="pie-chart"></canvas></div>
-                                <div class="chart-container"><canvas id="bar-chart"></canvas></div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -216,8 +236,15 @@
                     </summary>
                     <div class="amortization-content">
                         <div class="table-controls">
-                            <button id="view-monthly" class="table-view-btn active">Monthly</button>
-                            <button id="view-yearly" class="table-view-btn">Yearly</button>
+                            <div class="view-controls">
+                                <button id="view-monthly" class="table-view-btn active">Monthly</button>
+                                <button id="view-yearly" class="table-view-btn">Yearly</button>
+                            </div>
+                            <div class="pagination-controls" id="pagination-controls">
+                                <button id="prev-page">&laquo;</button>
+                                <span id="page-info"></span>
+                                <button id="next-page">&raquo;</button>
+                            </div>
                         </div>
                         <div class="table-responsive">
                             <table id="amortization-table">
