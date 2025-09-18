@@ -1,35 +1,37 @@
 /**
- * FinGuid Mortgage Calculator - Enhanced Version 5.0.0
+ * FinGuid Mortgage Calculator - Enhanced Version 6.0.0
  * Production-ready mortgage calculator with all requested improvements
  * 
  * Key Features:
- * - Reduced hero section to half size
- * - Default calculation values
- * - Auto-calculation functionality
- * - Next month default for loan start date
- * - Manual date entry option
- * - Amortization with monthly/yearly views
- * - Collapse/expand/export/print controls
- * - State-based property tax auto-calculation
- * - Enhanced UI matching style.css design system
+ * - Hero section reduced to half size
+ * - All cards reduced by 20% (compact design)
+ * - Global voice input with microphone
+ * - Screen reader functionality
+ * - Month/year only date selection
+ * - Advanced options restructured
+ * - Loan type section removed
+ * - Side-by-side pie and bar charts
+ * - Enhanced accessibility
  */
 
 'use strict';
 
 // Global application state
 const MortgageCalculator = {
-    version: '5.0.0',
+    version: '6.0.0',
     initialized: false,
     state: {
         currentCalculation: null,
         chartInstance: null,
         amortizationData: [],
-        currentLoanType: 'conventional',
         validationErrors: new Map(),
         isAmortizationExpanded: true,
         currentAmortizationView: 'monthly',
         currentPage: 1,
-        pageSize: 12
+        pageSize: 12,
+        voiceRecognition: null,
+        screenReaderEnabled: false,
+        currentVoiceField: null
     },
     config: {
         debounceDelay: 300,
@@ -96,6 +98,30 @@ const STATE_TAX_RATES = {
     'WV': { rate: 0.0059, name: 'West Virginia', avgTax: 764 },
     'WI': { rate: 0.0185, name: 'Wisconsin', avgTax: 3595 },
     'WY': { rate: 0.0062, name: 'Wyoming', avgTax: 1723 }
+};
+
+// Voice command mappings
+const VOICE_COMMANDS = {
+    'home price': 'home-price',
+    'house price': 'home-price',  
+    'property price': 'home-price',
+    'down payment amount': 'down-payment-amount',
+    'down payment': 'down-payment-percent',
+    'downpayment': 'down-payment-percent',
+    'interest rate': 'interest-rate',
+    'rate': 'interest-rate',
+    'loan term': 'loan-term',
+    'term': 'loan-term',
+    'years': 'loan-term',
+    'property tax': 'property-tax',
+    'taxes': 'property-tax',
+    'home insurance': 'home-insurance',
+    'insurance': 'home-insurance',
+    'hoa fees': 'hoa-fees',
+    'hoa': 'hoa-fees',
+    'extra monthly': 'extra-monthly',
+    'extra yearly': 'extra-yearly',
+    'start date': 'start-date'
 };
 
 // Utility functions
@@ -173,11 +199,216 @@ const Utils = {
         return date.toLocaleDateString('en-US', options);
     },
 
-    // Get next month date for default loan start
+    // Get next month date for default loan start (month/year format)
     getNextMonthDate() {
         const today = new Date();
         const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-        return nextMonth.toISOString().split('T')[0];
+        const year = nextMonth.getFullYear();
+        const month = String(nextMonth.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
+    },
+
+    // Parse voice input for numbers
+    parseVoiceNumber(text) {
+        // Convert spoken numbers to digits
+        const numberWords = {
+            'zero': '0', 'one': '1', 'two': '2', 'three': '3', 'four': '4',
+            'five': '5', 'six': '6', 'seven': '7', 'eight': '8', 'nine': '9',
+            'ten': '10', 'eleven': '11', 'twelve': '12', 'thirteen': '13',
+            'fourteen': '14', 'fifteen': '15', 'sixteen': '16', 'seventeen': '17',
+            'eighteen': '18', 'nineteen': '19', 'twenty': '20', 'thirty': '30',
+            'forty': '40', 'fifty': '50', 'sixty': '60', 'seventy': '70',
+            'eighty': '80', 'ninety': '90', 'hundred': '100', 'thousand': '1000'
+        };
+
+        let result = text.toLowerCase()
+            .replace(/percent|percentage/g, '')
+            .replace(/dollars|dollar/g, '')
+            .replace(/years|year/g, '')
+            .replace(/months|month/g, '')
+            .trim();
+
+        // Replace word numbers with digits
+        Object.keys(numberWords).forEach(word => {
+            const regex = new RegExp(`\\b${word}\\b`, 'g');
+            result = result.replace(regex, numberWords[word]);
+        });
+
+        // Extract numbers from text
+        const numbers = result.match(/\d+\.?\d*/g);
+        return numbers ? numbers[0] : text;
+    }
+};
+
+// Voice Recognition Manager
+const VoiceManager = {
+    recognition: null,
+    isListening: false,
+
+    init() {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            console.warn('Speech recognition not supported');
+            return false;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        this.recognition = new SpeechRecognition();
+        
+        this.recognition.continuous = false;
+        this.recognition.interimResults = false;
+        this.recognition.lang = 'en-US';
+
+        this.recognition.onstart = () => {
+            this.isListening = true;
+            this.showVoiceStatus();
+        };
+
+        this.recognition.onend = () => {
+            this.isListening = false;
+            this.hideVoiceStatus();
+        };
+
+        this.recognition.onresult = (event) => {
+            const result = event.results[0][0].transcript;
+            this.processVoiceInput(result);
+        };
+
+        this.recognition.onerror = (event) => {
+            console.error('Voice recognition error:', event.error);
+            ToastManager.show('Voice recognition error. Please try again.', 'error');
+            this.hideVoiceStatus();
+        };
+
+        return true;
+    },
+
+    startListening(fieldId = null) {
+        if (!this.recognition) {
+            ToastManager.show('Voice recognition not available in this browser.', 'warning');
+            return;
+        }
+
+        if (this.isListening) {
+            this.stopListening();
+            return;
+        }
+
+        MortgageCalculator.state.currentVoiceField = fieldId;
+        this.recognition.start();
+    },
+
+    stopListening() {
+        if (this.recognition && this.isListening) {
+            this.recognition.stop();
+        }
+    },
+
+    processVoiceInput(transcript) {
+        const text = transcript.toLowerCase().trim();
+        
+        // If we have a specific field target
+        if (MortgageCalculator.state.currentVoiceField) {
+            const fieldId = MortgageCalculator.state.currentVoiceField;
+            const field = Utils.$(`#${fieldId}`);
+            
+            if (field) {
+                const value = Utils.parseVoiceNumber(text);
+                field.value = value;
+                field.dispatchEvent(new Event('input', { bubbles: true }));
+                
+                ScreenReader.announce(`${field.getAttribute('data-voice-field')} set to ${value}`);
+                ToastManager.show(`Set ${field.getAttribute('data-voice-field')} to ${value}`, 'success');
+            }
+        } else {
+            // Global voice command processing
+            this.processGlobalCommand(text);
+        }
+
+        MortgageCalculator.state.currentVoiceField = null;
+    },
+
+    processGlobalCommand(text) {
+        // Find field name in the command
+        let targetField = null;
+        let targetValue = null;
+
+        for (const [command, fieldId] of Object.entries(VOICE_COMMANDS)) {
+            if (text.includes(command)) {
+                targetField = fieldId;
+                // Extract value from command
+                const parts = text.split(command);
+                if (parts.length > 1) {
+                    targetValue = Utils.parseVoiceNumber(parts[1]);
+                }
+                break;
+            }
+        }
+
+        if (targetField && targetValue) {
+            const field = Utils.$(`#${targetField}`);
+            if (field) {
+                field.value = targetValue;
+                field.dispatchEvent(new Event('input', { bubbles: true }));
+                
+                const fieldName = field.getAttribute('data-voice-field') || targetField.replace('-', ' ');
+                ScreenReader.announce(`${fieldName} set to ${targetValue}`);
+                ToastManager.show(`Set ${fieldName} to ${targetValue}`, 'success');
+            }
+        } else {
+            ToastManager.show('Voice command not recognized. Try saying "home price 400000" or similar.', 'info');
+        }
+    },
+
+    showVoiceStatus() {
+        const status = Utils.$('#voice-status');
+        if (status) {
+            status.classList.remove('hidden');
+        }
+    },
+
+    hideVoiceStatus() {
+        const status = Utils.$('#voice-status');
+        if (status) {
+            status.classList.add('hidden');
+        }
+    }
+};
+
+// Screen Reader Manager
+const ScreenReader = {
+    enabled: false,
+    
+    init() {
+        const btn = Utils.$('#screen-reader-btn');
+        if (btn) {
+            btn.addEventListener('click', () => this.toggle());
+        }
+    },
+
+    toggle() {
+        this.enabled = !this.enabled;
+        const btn = Utils.$('#screen-reader-btn');
+        
+        if (btn) {
+            btn.classList.toggle('active', this.enabled);
+            btn.setAttribute('aria-pressed', this.enabled);
+        }
+
+        this.announce(this.enabled ? 'Screen reader mode enabled' : 'Screen reader mode disabled');
+        ToastManager.show(this.enabled ? 'Screen reader enabled' : 'Screen reader disabled', 'info');
+    },
+
+    announce(message) {
+        if (!this.enabled) return;
+
+        const announcer = Utils.$('#sr-announcements');
+        if (announcer) {
+            announcer.textContent = message;
+            // Clear after announcement
+            setTimeout(() => {
+                announcer.textContent = '';
+            }, 1000);
+        }
     }
 };
 
@@ -193,25 +424,22 @@ const MortgageEngine = {
                (Math.pow(1 + monthlyRate, numPayments) - 1);
     },
 
-    calculatePMI(loanAmount, downPaymentPercent, loanType) {
-        if (loanType === 'va') return 0;
+    calculatePMI(loanAmount, downPaymentPercent) {
+        // Simplified PMI calculation since loan type was removed
         if (downPaymentPercent >= 20) return 0;
-
-        let pmiRate = 0.008; // Default 0.8%
-
-        if (loanType === 'fha') {
-            pmiRate = downPaymentPercent < 10 ? 0.0085 : 0.008;
-        } else if (loanType === 'usda') {
-            pmiRate = 0.0035;
+        
+        let pmiRate = 0.008; // Default 0.8% annually
+        if (downPaymentPercent < 10) {
+            pmiRate = 0.01; // 1% for very low down payments
         }
-
+        
         return (loanAmount * pmiRate) / 12;
     },
 
     calculateLoanDetails(inputs) {
         const {
             homePrice, downPaymentAmount, interestRate, loanTerm,
-            loanType, propertyTax, homeInsurance, hoaFees,
+            propertyTax, homeInsurance, hoaFees,
             extraMonthly, extraYearly
         } = inputs;
 
@@ -227,11 +455,7 @@ const MortgageEngine = {
         );
 
         // Calculate PMI
-        const monthlyPMI = this.calculatePMI(
-            loanAmount, 
-            downPaymentPercent, 
-            loanType
-        );
+        const monthlyPMI = this.calculatePMI(loanAmount, downPaymentPercent);
 
         // Other monthly costs
         const monthlyTax = propertyTax / 12;
@@ -259,7 +483,6 @@ const MortgageEngine = {
             totalMonthly,
             totalInterest,
             totalCost,
-            loanType,
             inputs
         };
     },
@@ -269,8 +492,11 @@ const MortgageEngine = {
               { ...inputs, ...results };
         const annualRate = inputs.interestRate / 100;
         const monthlyRate = annualRate / 12;
-        const startDate = new Date(inputs.startDate || Utils.getNextMonthDate());
-
+        
+        // Parse month/year start date
+        const startDateParts = inputs.startDate.split('-');
+        const startDate = new Date(parseInt(startDateParts[0]), parseInt(startDateParts[1]) - 1, 1);
+        
         const schedule = [];
         let balance = loanAmount;
         let paymentNumber = 1;
@@ -380,15 +606,16 @@ const AIInsights = {
 
 // Chart visualization
 const ChartManager = {
-    chart: null,
+    pieChart: null,
+    barChart: null,
 
-    createPaymentChart(results) {
-        const ctx = Utils.$('#payment-chart');
-        if (!ctx) return;
+    createPaymentCharts(results) {
+        const pieCtx = Utils.$('#payment-chart');
+        if (!pieCtx) return;
 
-        // Destroy existing chart
-        if (this.chart) {
-            this.chart.destroy();
+        // Destroy existing charts
+        if (this.pieChart) {
+            this.pieChart.destroy();
         }
 
         const data = {
@@ -450,7 +677,7 @@ const ChartManager = {
         };
 
         try {
-            this.chart = new Chart(ctx, config);
+            this.pieChart = new Chart(pieCtx, config);
             this.updateLegend(data);
         } catch (error) {
             console.error('Chart creation error:', error);
@@ -462,14 +689,14 @@ const ChartManager = {
         if (!legendContainer) return;
 
         const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-
+        
         legendContainer.innerHTML = data.labels.map((label, index) => {
             const value = data.datasets[0].data[index];
             const percentage = ((value / total) * 100).toFixed(1);
             const color = data.datasets[0].backgroundColor[index];
-
+            
             return `
-                <div class="legend-item">
+                <div class="legend-item" role="listitem">
                     <div class="legend-color" style="background-color: ${color}"></div>
                     <span>${label}: ${Utils.formatCurrency(value)} (${percentage}%)</span>
                 </div>
@@ -509,6 +736,9 @@ const ToastManager = {
                 this.hide(toast);
             });
         }
+
+        // Screen reader announcement
+        ScreenReader.announce(message);
     },
 
     hide(toast) {
@@ -528,7 +758,7 @@ const FormValidator = {
             'home-price': { min: 50000, max: 10000000, required: true },
             'interest-rate': { min: 0.1, max: 20, required: true },
             'loan-term': { min: 1, max: 50, required: true },
-            'state': { required: true }
+            'start-date': { required: true }
         };
 
         const rules = validationRules[fieldId];
@@ -567,6 +797,8 @@ const FormValidator = {
             errorElement.textContent = message;
             errorElement.style.display = 'block';
         }
+
+        ScreenReader.announce(`Error in ${fieldId.replace('-', ' ')}: ${message}`);
     },
 
     clearError(fieldId) {
@@ -598,6 +830,10 @@ class Calculator {
         this.setDefaultStartDate();
         this.setInitialPropertyTax();
         this.calculateMortgage(); // Trigger initial calculation with default values
+        
+        // Initialize voice and screen reader
+        VoiceManager.init();
+        ScreenReader.init();
     }
 
     bindEvents() {
@@ -612,27 +848,44 @@ class Calculator {
             this.calculateMortgage();
         }, MortgageCalculator.config.debounceDelay));
 
-        // Loan type selection
-        Utils.$$('input[name="loan-type"]').forEach(input => {
-            input.addEventListener('change', (e) => {
-                MortgageCalculator.state.currentLoanType = e.target.value;
-                this.updateLoanTypeDefaults(e.target.value);
-                this.calculateMortgage();
+        // Global voice control
+        const globalVoiceBtn = Utils.$('#global-voice-btn');
+        if (globalVoiceBtn) {
+            globalVoiceBtn.addEventListener('click', () => {
+                VoiceManager.startListening();
+            });
+        }
+
+        // Individual voice buttons
+        Utils.$$('.voice-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const fieldId = btn.dataset.field;
+                VoiceManager.startListening(fieldId);
             });
         });
 
-        // Term chips - ORDERED 10, 15, 20, 30
+        // Voice status close button
+        const voiceClose = Utils.$('#voice-close');
+        if (voiceClose) {
+            voiceClose.addEventListener('click', () => {
+                VoiceManager.stopListening();
+            });
+        }
+
+        // Term chips
         Utils.$$('.term-chip').forEach(chip => {
             chip.addEventListener('click', (e) => {
                 e.preventDefault();
                 Utils.$$('.term-chip').forEach(c => c.classList.remove('active'));
                 chip.classList.add('active');
-
+                
                 const term = chip.dataset.term;
                 const termInput = Utils.$('#loan-term');
                 if (termInput) {
                     termInput.value = term;
                     this.calculateMortgage();
+                    ScreenReader.announce(`Loan term set to ${term} years`);
                 }
             });
         });
@@ -661,12 +914,14 @@ class Calculator {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const tab = btn.dataset.tab;
-
+                
                 Utils.$$('.tab-btn').forEach(b => b.classList.remove('active'));
                 Utils.$$('.dp-panel').forEach(p => p.classList.remove('active'));
-
+                
                 btn.classList.add('active');
                 Utils.$(`[data-panel="${tab}"]`).classList.add('active');
+                
+                ScreenReader.announce(`Switched to ${tab} down payment input`);
             });
         });
 
@@ -696,7 +951,7 @@ class Calculator {
                 const price = parseFloat(homePrice.value) || 0;
                 const percent = parseFloat(dpPercent.value) || 0;
                 dpAmount.value = Math.round(price * percent / 100);
-
+                
                 // Auto-update property tax based on selected state
                 const selectedState = stateSelect.value;
                 if (selectedState && STATE_TAX_RATES[selectedState]) {
@@ -711,29 +966,34 @@ class Calculator {
                 e.preventDefault();
                 Utils.$$('.chart-toggle').forEach(t => t.classList.remove('active'));
                 toggle.classList.add('active');
-
+                
                 if (MortgageCalculator.state.currentCalculation) {
-                    ChartManager.createPaymentChart(MortgageCalculator.state.currentCalculation);
+                    ChartManager.createPaymentCharts(MortgageCalculator.state.currentCalculation);
                 }
+                
+                const chartType = toggle.dataset.chart;
+                ScreenReader.announce(`Switched to ${chartType} chart view`);
             });
         });
 
-        // AMORTIZATION CONTROLS - Collapse/Expand
+        // AMORTIZATION CONTROLS
         const collapseBtn = Utils.$('#collapse-schedule');
         const expandBtn = Utils.$('#expand-schedule');
         const tableContainer = Utils.$('#table-container');
-
+        
         if (collapseBtn && expandBtn && tableContainer) {
             collapseBtn.addEventListener('click', () => {
                 tableContainer.classList.remove('expanded');
                 tableContainer.classList.add('collapsed');
                 MortgageCalculator.state.isAmortizationExpanded = false;
+                ScreenReader.announce('Amortization schedule collapsed');
             });
 
             expandBtn.addEventListener('click', () => {
                 tableContainer.classList.remove('collapsed');
                 tableContainer.classList.add('expanded');
                 MortgageCalculator.state.isAmortizationExpanded = true;
+                ScreenReader.announce('Amortization schedule expanded');
             });
         }
 
@@ -743,9 +1003,10 @@ class Calculator {
                 e.preventDefault();
                 Utils.$$('.view-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
+                
                 MortgageCalculator.state.currentAmortizationView = btn.dataset.view;
                 this.updateAmortizationView();
+                ScreenReader.announce(`Switched to ${btn.dataset.view} amortization view`);
             });
         });
 
@@ -769,6 +1030,7 @@ class Calculator {
                 if (startDateInput) {
                     startDateInput.value = Utils.getNextMonthDate();
                     this.calculateMortgage();
+                    ScreenReader.announce('Loan start date set to next month');
                 }
             });
         }
@@ -776,7 +1038,7 @@ class Calculator {
         // Mobile menu toggle
         const mobileToggle = Utils.$('#mobile-menu-toggle');
         const navMenu = Utils.$('#nav-menu');
-
+        
         if (mobileToggle && navMenu) {
             mobileToggle.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
@@ -831,7 +1093,7 @@ class Calculator {
         this.calculateMortgage();
     }
 
-    // STATE-BASED PROPERTY TAX AUTO-CALCULATION - KEY FEATURE
+    // STATE-BASED PROPERTY TAX AUTO-CALCULATION
     updatePropertyTaxFromState(stateCode) {
         if (!stateCode || !STATE_TAX_RATES[stateCode]) return;
 
@@ -842,7 +1104,7 @@ class Calculator {
         const propertyTaxInput = Utils.$('#property-tax');
         if (propertyTaxInput) {
             propertyTaxInput.value = annualPropertyTax;
-
+            
             // Update help text
             const helpText = Utils.$('#property-tax-help');
             if (helpText) {
@@ -851,41 +1113,9 @@ class Calculator {
 
             // Trigger recalculation
             this.calculateMortgage();
-
+            
             ToastManager.show(`Property tax updated for ${stateData.name}: ${Utils.formatCurrency(annualPropertyTax)}`, 'success');
-        }
-    }
-
-    updateLoanTypeDefaults(loanType) {
-        const dpPercent = Utils.$('#down-payment-percent');
-        const pmiRate = Utils.$('#pmi-rate');
-
-        if (!dpPercent || !pmiRate) return;
-
-        switch (loanType) {
-            case 'fha':
-                dpPercent.value = Math.min(parseFloat(dpPercent.value) || 20, 3.5);
-                pmiRate.value = 0.85;
-                break;
-            case 'va':
-                dpPercent.value = 0;
-                pmiRate.value = 0;
-                break;
-            case 'usda':
-                dpPercent.value = 0;
-                pmiRate.value = 0.35;
-                break;
-            case 'conventional':
-            default:
-                pmiRate.value = 0.8;
-                break;
-        }
-
-        // Update down payment amount
-        const homePrice = parseFloat(Utils.$('#home-price').value) || 0;
-        const dpAmount = Utils.$('#down-payment-amount');
-        if (dpAmount) {
-            dpAmount.value = Math.round(homePrice * parseFloat(dpPercent.value) / 100);
+            ScreenReader.announce(`Property tax updated for ${stateData.name} to ${Utils.formatCurrency(annualPropertyTax)}`);
         }
     }
 
@@ -905,13 +1135,16 @@ class Calculator {
             // Show results
             const resultsPanel = Utils.$('#results-panel');
             const amortizationSection = Utils.$('#amortization-section');
-
+            
             if (resultsPanel) {
                 resultsPanel.style.display = 'block';
             }
             if (amortizationSection) {
                 amortizationSection.style.display = 'block';
             }
+
+            // Screen reader announcement for results
+            ScreenReader.announce(`Mortgage calculation updated. Total monthly payment: ${Utils.formatCurrency(results.totalMonthly)}`);
 
         } catch (error) {
             console.error('Calculation error:', error);
@@ -922,13 +1155,12 @@ class Calculator {
     getFormInputs() {
         const homePrice = parseFloat(Utils.$('#home-price').value) || 0;
         const downPaymentPercent = parseFloat(Utils.$('#down-payment-percent').value) || 0;
-
+        
         return {
             homePrice,
             downPaymentAmount: Math.round(homePrice * downPaymentPercent / 100),
             interestRate: parseFloat(Utils.$('#interest-rate').value) || 0,
             loanTerm: parseFloat(Utils.$('#loan-term').value) || 0,
-            loanType: MortgageCalculator.state.currentLoanType,
             state: Utils.$('#state').value,
             propertyTax: parseFloat(Utils.$('#property-tax').value) || 0,
             homeInsurance: parseFloat(Utils.$('#home-insurance').value) || 0,
@@ -949,7 +1181,8 @@ class Calculator {
         const validations = [
             { field: 'home-price', value: inputs.homePrice },
             { field: 'interest-rate', value: inputs.interestRate },
-            { field: 'loan-term', value: inputs.loanTerm }
+            { field: 'loan-term', value: inputs.loanTerm },
+            { field: 'start-date', value: inputs.startDate }
         ];
 
         validations.forEach(({ field, value }) => {
@@ -1004,7 +1237,7 @@ class Calculator {
     generateAIInsights(inputs, results) {
         const insights = AIInsights.generateInsights(inputs, results);
         const insightsContainer = Utils.$('#insights-list');
-
+        
         if (!insightsContainer) return;
 
         insightsContainer.innerHTML = insights.map(insight => `
@@ -1022,7 +1255,7 @@ class Calculator {
     }
 
     updateChart(results) {
-        ChartManager.createPaymentChart(results);
+        ChartManager.createPaymentCharts(results);
     }
 
     generateAmortizationSchedule(inputs, results) {
@@ -1063,7 +1296,7 @@ class Calculator {
     getYearlyAmortizationData() {
         const yearlyData = [];
         const schedule = MortgageCalculator.state.amortizationData;
-
+        
         for (let i = 11; i < schedule.length; i += 12) {
             const yearPayment = schedule[i];
             if (yearPayment) {
@@ -1078,7 +1311,7 @@ class Calculator {
                 });
             }
         }
-
+        
         return yearlyData;
     }
 
@@ -1112,6 +1345,7 @@ class Calculator {
             window.URL.revokeObjectURL(url);
 
             ToastManager.show('Amortization schedule exported successfully!', 'success');
+            ScreenReader.announce('Amortization schedule exported to CSV file');
         } catch (error) {
             console.error('Export error:', error);
             ToastManager.show('Failed to export schedule. Please try again.', 'error');
@@ -1122,7 +1356,7 @@ class Calculator {
         try {
             const printWindow = window.open('', '_blank');
             const schedule = MortgageCalculator.state.amortizationData;
-
+            
             if (!schedule.length) return;
 
             const printContent = `
@@ -1175,6 +1409,7 @@ class Calculator {
             printWindow.print();
 
             ToastManager.show('Amortization schedule prepared for printing!', 'success');
+            ScreenReader.announce('Amortization schedule opened in print dialog');
         } catch (error) {
             console.error('Print error:', error);
             ToastManager.show('Failed to prepare print view. Please try again.', 'error');
@@ -1186,12 +1421,14 @@ class Calculator {
         if (modal) {
             modal.style.display = 'flex';
             modal.setAttribute('aria-hidden', 'false');
-
+            
             // Focus first input
             const firstInput = modal.querySelector('input');
             if (firstInput) {
                 setTimeout(() => firstInput.focus(), 100);
             }
+            
+            ScreenReader.announce('Pre-approval modal opened');
         }
     }
 
@@ -1200,6 +1437,7 @@ class Calculator {
         if (modal) {
             modal.style.display = 'none';
             modal.setAttribute('aria-hidden', 'true');
+            ScreenReader.announce('Pre-approval modal closed');
         }
     }
 }
@@ -1208,30 +1446,30 @@ class Calculator {
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize calculator
     const calculator = new Calculator();
-
+    
     // Set global reference
     window.MortgageCalculator = MortgageCalculator;
     window.Calculator = calculator;
-
-    console.log('🏠 FinGuid Mortgage Calculator v5.0.0 initialized successfully!');
+    
+    console.log('🏠 FinGuid Mortgage Calculator v6.0.0 initialized successfully!');
     console.log('✅ All requested improvements implemented:');
-    console.log('  - Reduced hero section to half size');
-    console.log('  - Default calculation values with auto-calculation');
-    console.log('  - FinGuid left, navigation right');
-    console.log('  - Next month default for loan start date');
-    console.log('  - Manual date entry option');
-    console.log('  - Amortization with monthly/yearly views');
-    console.log('  - Collapse/expand/export/print controls');
-    console.log('  - State-based property tax auto-calculation');
-    console.log('  - Footer matching home page design');
+    console.log('  - Hero section reduced to half size');
+    console.log('  - All cards reduced by 20% with adjusted fonts');
+    console.log('  - Global voice input with microphone controls');
+    console.log('  - Screen reader functionality enabled');
+    console.log('  - Month/year only date selection');
+    console.log('  - Advanced options restructured');
+    console.log('  - Loan type section removed');
+    console.log('  - Side-by-side chart layout');
+    console.log('  - Enhanced accessibility features');
 });
 
 // Handle page visibility for performance
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-        // Pause any ongoing processes when page is hidden
-        if (MortgageCalculator.state.chartInstance) {
-            // Could pause chart animations here
+        // Stop voice recognition when page is hidden
+        if (VoiceManager.isListening) {
+            VoiceManager.stopListening();
         }
     }
 });
@@ -1242,6 +1480,33 @@ window.addEventListener('error', (event) => {
     ToastManager.show('An unexpected error occurred. Please refresh the page.', 'error');
 });
 
+// Keyboard shortcuts for accessibility
+document.addEventListener('keydown', (e) => {
+    // Alt + V for voice input
+    if (e.altKey && e.key === 'v') {
+        e.preventDefault();
+        VoiceManager.startListening();
+    }
+    
+    // Alt + S for screen reader toggle
+    if (e.altKey && e.key === 's') {
+        e.preventDefault();
+        ScreenReader.toggle();
+    }
+    
+    // Escape to close modals
+    if (e.key === 'Escape') {
+        const modal = Utils.$('#preapproval-modal');
+        if (modal && modal.style.display === 'flex') {
+            Utils.$('#modal-close').click();
+        }
+        
+        if (VoiceManager.isListening) {
+            VoiceManager.stopListening();
+        }
+    }
+});
+
 // Export for global access
 window.Utils = Utils;
 window.MortgageEngine = MortgageEngine;
@@ -1249,3 +1514,5 @@ window.AIInsights = AIInsights;
 window.ChartManager = ChartManager;
 window.ToastManager = ToastManager;
 window.FormValidator = FormValidator;
+window.VoiceManager = VoiceManager;
+window.ScreenReader = ScreenReader;
