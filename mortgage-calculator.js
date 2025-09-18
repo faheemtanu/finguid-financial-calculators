@@ -1,806 +1,2132 @@
-// ===================================
-// MORTGAGE CALCULATOR JAVASCRIPT
-// ===================================
-
-class MortgageCalculator {
-    constructor() {
-        this.initializeElements();
-        this.bindEvents();
-        this.initializeDefaults();
-        this.initializeDatePicker();
-    }
-
-    initializeElements() {
-        // Form elements
-        this.form = document.getElementById('mortgageForm');
-        this.homePrice = document.getElementById('homePrice');
-        this.downPayment = document.getElementById('downPayment');
-        this.interestRate = document.getElementById('interestRate');
-        this.loanTerm = document.getElementById('loanTerm');
-        this.state = document.getElementById('state');
-        this.propertyTax = document.getElementById('propertyTax');
-        this.homeInsurance = document.getElementById('homeInsurance');
-        this.hoaFees = document.getElementById('hoaFees');
-        this.pmiRate = document.getElementById('pmiRate');
-        this.extraMonthly = document.getElementById('extraMonthly');
-        this.extraYearly = document.getElementById('extraYearly');
-        this.startDate = document.getElementById('startDate');
-
-        // Loan type cards
-        this.loanTypeCards = document.querySelectorAll('.loan-type-card');
-
-        // Term buttons
-        this.termButtons = document.querySelectorAll('.term-btn');
-
-        // Results elements
-        this.resultsSection = document.getElementById('resultsSection');
-        this.totalPayment = document.getElementById('totalPayment');
-        this.principalInterest = document.getElementById('principalInterest');
-        this.monthlyPropertyTax = document.getElementById('monthlyPropertyTax');
-        this.monthlyInsurance = document.getElementById('monthlyInsurance');
-        this.monthlyPMI = document.getElementById('monthlyPMI');
-        this.monthlyHOA = document.getElementById('monthlyHOA');
-        this.loanAmount = document.getElementById('loanAmount');
-        this.totalInterest = document.getElementById('totalInterest');
-        this.totalCost = document.getElementById('totalCost');
-
-        // PMI and HOA rows
-        this.pmiRow = document.getElementById('pmiRow');
-        this.hoaRow = document.getElementById('hoaRow');
-
-        // AI Insights
-        this.incomeRecommendation = document.getElementById('incomeRecommendation');
-        this.emergencyFund = document.getElementById('emergencyFund');
-        this.refinancingTip = document.getElementById('refinancingTip');
-
-        // Amortization
-        this.toggleSchedule = document.getElementById('toggleSchedule');
-        this.amortizationSchedule = document.getElementById('amortizationSchedule');
-        this.scheduleTableBody = document.getElementById('scheduleTableBody');
-
-        // Chart
-        this.paymentChart = document.getElementById('paymentChart');
-        this.chartLegend = document.getElementById('chartLegend');
-
-        // Mobile menu
-        this.mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        this.navMenu = document.querySelector('.nav-menu');
-    }
-
-    bindEvents() {
-        // Form submission
-        this.form.addEventListener('submit', (e) => this.handleFormSubmit(e));
-
-        // Real-time calculation on input change
-        this.form.addEventListener('input', (e) => this.handleInputChange(e));
-        this.form.addEventListener('change', (e) => this.handleInputChange(e));
-
-        // Loan type selection
-        this.loanTypeCards.forEach(card => {
-            card.addEventListener('click', (e) => this.handleLoanTypeChange(e));
-        });
-
-        // Term button selection
-        this.termButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => this.handleTermButtonClick(e));
-        });
-
-        // State change for auto property tax calculation
-        this.state.addEventListener('change', () => this.updatePropertyTaxFromState());
-
-        // Amortization schedule toggle
-        this.toggleSchedule.addEventListener('click', () => this.toggleAmortizationSchedule());
-
-        // Mobile menu toggle
-        if (this.mobileMenuBtn) {
-            this.mobileMenuBtn.addEventListener('click', () => this.toggleMobileMenu());
-        }
-
-        // Manual loan term input synchronization
-        this.loanTerm.addEventListener('input', () => this.syncTermButtons());
-    }
-
-    initializeDefaults() {
-        // Set default loan type as active
-        this.loanTypeCards[0].classList.add('active');
-
-        // Set default term button as active (30 years)
-        this.termButtons.forEach(btn => btn.classList.remove('active'));
-        const defaultTermBtn = document.querySelector('[data-term="30"]');
-        if (defaultTermBtn) {
-            defaultTermBtn.classList.add('active');
-        }
-
-        // Set default start date to current month
-        const now = new Date();
-        const currentMonth = now.toISOString().slice(0, 7) + '-01';
-        this.startDate.value = currentMonth;
-    }
-
-    initializeDatePicker() {
-        // Set minimum date to current month
-        const now = new Date();
-        const currentMonth = now.toISOString().slice(0, 7);
-        this.startDate.min = currentMonth + '-01';
-
-        // Set maximum date to 2 years from now
-        const maxDate = new Date(now.getFullYear() + 2, now.getMonth(), 1);
-        this.startDate.max = maxDate.toISOString().slice(0, 7) + '-01';
-    }
-
-    handleFormSubmit(e) {
-        e.preventDefault();
-        this.calculateMortgage();
-    }
-
-    handleInputChange(e) {
-        // Debounce real-time calculations
-        clearTimeout(this.debounceTimer);
-        this.debounceTimer = setTimeout(() => {
-            this.calculateMortgage();
-        }, 300);
-    }
-
-    handleLoanTypeChange(e) {
-        // Remove active class from all cards
-        this.loanTypeCards.forEach(card => card.classList.remove('active'));
-
-        // Add active class to clicked card
-        e.currentTarget.classList.add('active');
-
-        // Update loan parameters based on type
-        const loanType = e.currentTarget.dataset.type;
-        this.updateLoanTypeParameters(loanType);
-
-        // Recalculate
-        this.calculateMortgage();
-    }
-
-    handleTermButtonClick(e) {
-        e.preventDefault();
-
-        // Remove active class from all buttons
-        this.termButtons.forEach(btn => btn.classList.remove('active'));
-
-        // Add active class to clicked button
-        e.currentTarget.classList.add('active');
-
-        // Update loan term input
-        const term = e.currentTarget.dataset.term;
-        this.loanTerm.value = term;
-
-        // Recalculate
-        this.calculateMortgage();
-    }
-
-    syncTermButtons() {
-        const currentTerm = this.loanTerm.value;
-
-        // Remove active class from all buttons
-        this.termButtons.forEach(btn => btn.classList.remove('active'));
-
-        // Add active class to matching button
-        const matchingBtn = document.querySelector(`[data-term="${currentTerm}"]`);
-        if (matchingBtn) {
-            matchingBtn.classList.add('active');
-        }
-    }
-
-    updateLoanTypeParameters(loanType) {
-        switch (loanType) {
-            case 'fha':
-                this.downPayment.value = Math.min(parseFloat(this.downPayment.value) || 20, 3.5);
-                this.pmiRate.value = 0.85;
-                break;
-            case 'va':
-                this.downPayment.value = 0;
-                this.pmiRate.value = 0;
-                break;
-            case 'usda':
-                this.downPayment.value = 0;
-                this.pmiRate.value = 0.35;
-                break;
-            case 'conventional':
-            default:
-                this.pmiRate.value = 0.5;
-                break;
-        }
-    }
-
-    updatePropertyTaxFromState() {
-        const selectedOption = this.state.options[this.state.selectedIndex];
-        if (selectedOption && selectedOption.dataset.taxRate) {
-            const taxRate = parseFloat(selectedOption.dataset.taxRate);
-            const homeValue = parseFloat(this.homePrice.value) || 400000;
-            const annualPropertyTax = (homeValue * taxRate) / 100;
-            this.propertyTax.value = Math.round(annualPropertyTax);
-
-            // Trigger recalculation
-            this.calculateMortgage();
-        }
-    }
-
-    calculateMortgage() {
-        try {
-            const data = this.getFormData();
-            if (!this.validateData(data)) return;
-
-            const results = this.performCalculations(data);
-            this.displayResults(results);
-            this.generateAIInsights(results, data);
-            this.updatePaymentChart(results);
-            this.generateAmortizationSchedule(results, data);
-
-            // Show results section
-            this.resultsSection.style.display = 'block';
-            this.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        } catch (error) {
-            console.error('Calculation error:', error);
-            this.showError('An error occurred during calculation. Please check your inputs.');
-        }
-    }
-
-    getFormData() {
-        return {
-            homePrice: parseFloat(this.homePrice.value) || 0,
-            downPaymentPercent: parseFloat(this.downPayment.value) || 0,
-            interestRate: parseFloat(this.interestRate.value) || 0,
-            loanTermYears: parseFloat(this.loanTerm.value) || 0,
-            annualPropertyTax: parseFloat(this.propertyTax.value) || 0,
-            annualInsurance: parseFloat(this.homeInsurance.value) || 0,
-            monthlyHOA: parseFloat(this.hoaFees.value) || 0,
-            pmiRate: parseFloat(this.pmiRate.value) || 0,
-            extraMonthlyPayment: parseFloat(this.extraMonthly.value) || 0,
-            extraYearlyPayment: parseFloat(this.extraYearly.value) || 0,
-            startDate: this.startDate.value || new Date().toISOString().slice(0, 10)
-        };
-    }
-
-    validateData(data) {
-        if (data.homePrice <= 0) {
-            this.showError('Please enter a valid home price.');
-            return false;
-        }
-        if (data.downPaymentPercent < 0 || data.downPaymentPercent >= 100) {
-            this.showError('Down payment must be between 0% and 99%.');
-            return false;
-        }
-        if (data.interestRate <= 0 || data.interestRate > 30) {
-            this.showError('Please enter a valid interest rate.');
-            return false;
-        }
-        if (data.loanTermYears <= 0 || data.loanTermYears > 50) {
-            this.showError('Loan term must be between 1 and 50 years.');
-            return false;
-        }
-        return true;
-    }
-
-    performCalculations(data) {
-        // Basic calculations
-        const downPaymentAmount = (data.homePrice * data.downPaymentPercent) / 100;
-        const loanAmount = data.homePrice - downPaymentAmount;
-        const monthlyRate = data.interestRate / 100 / 12;
-        const numberOfPayments = data.loanTermYears * 12;
-
-        // Monthly principal and interest
-        let monthlyPI = 0;
-        if (monthlyRate > 0) {
-            monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
-                       (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
-        } else {
-            monthlyPI = loanAmount / numberOfPayments;
-        }
-
-        // PMI calculation
-        const needsPMI = data.downPaymentPercent < 20;
-        const monthlyPMI = needsPMI ? (loanAmount * data.pmiRate / 100) / 12 : 0;
-
-        // Other monthly costs
-        const monthlyPropertyTax = data.annualPropertyTax / 12;
-        const monthlyInsurance = data.annualInsurance / 12;
-        const monthlyHOA = data.monthlyHOA;
-
-        // Total monthly payment
-        const totalMonthlyPayment = monthlyPI + monthlyPMI + monthlyPropertyTax + 
-                                   monthlyInsurance + monthlyHOA;
-
-        // Total interest calculation
-        const totalInterest = (monthlyPI * numberOfPayments) - loanAmount;
-        const totalCost = loanAmount + totalInterest;
-
-        return {
-            loanAmount,
-            downPaymentAmount,
-            monthlyPI,
-            monthlyPMI,
-            monthlyPropertyTax,
-            monthlyInsurance,
-            monthlyHOA,
-            totalMonthlyPayment,
-            totalInterest,
-            totalCost,
-            needsPMI,
-            numberOfPayments,
-            monthlyRate
-        };
-    }
-
-    displayResults(results) {
-        // Format currency values
-        this.totalPayment.textContent = this.formatCurrency(results.totalMonthlyPayment);
-        this.principalInterest.textContent = this.formatCurrency(results.monthlyPI);
-        this.monthlyPropertyTax.textContent = this.formatCurrency(results.monthlyPropertyTax);
-        this.monthlyInsurance.textContent = this.formatCurrency(results.monthlyInsurance);
-        this.loanAmount.textContent = this.formatCurrency(results.loanAmount);
-        this.totalInterest.textContent = this.formatCurrency(results.totalInterest);
-        this.totalCost.textContent = this.formatCurrency(results.totalCost);
-
-        // PMI row visibility and value
-        if (results.needsPMI && results.monthlyPMI > 0) {
-            this.monthlyPMI.textContent = this.formatCurrency(results.monthlyPMI);
-            this.pmiRow.style.display = 'flex';
-        } else {
-            this.pmiRow.style.display = 'none';
-        }
-
-        // HOA row visibility and value
-        if (results.monthlyHOA > 0) {
-            this.monthlyHOA.textContent = this.formatCurrency(results.monthlyHOA);
-            this.hoaRow.style.display = 'flex';
-        } else {
-            this.hoaRow.style.display = 'none';
-        }
-    }
-
-    generateAIInsights(results, data) {
-        // Income recommendation (28% rule)
-        const recommendedIncome = results.totalMonthlyPayment / 0.28;
-        const annualIncome = recommendedIncome * 12;
-
-        this.incomeRecommendation.textContent = 
-            `For comfortable affordability (28% housing ratio), your gross monthly income should be at least ${this.formatCurrency(recommendedIncome)} (${this.formatCurrency(annualIncome)} annually).`;
-
-        // Emergency fund recommendation
-        const emergencyFundAmount = results.totalMonthlyPayment * 6;
-        this.emergencyFund.textContent = 
-            `Maintain an emergency fund of at least ${this.formatCurrency(emergencyFundAmount)} (6 months of housing payments) before purchasing.`;
-
-        // Refinancing tip
-        const breakEvenRate = data.interestRate - 1.5;
-        this.refinancingTip.textContent = 
-            `If rates drop to ${breakEvenRate.toFixed(1)}% or below, refinancing could potentially save you significant money. Monitor rates regularly.`;
-    }
-
-    updatePaymentChart(results) {
-        if (!this.paymentChart || !this.paymentChart.getContext) return;
-
-        const ctx = this.paymentChart.getContext('2d');
-        const data = [];
-        const labels = [];
-        const colors = ['#1e40af', '#059669', '#f59e0b', '#ef4444', '#8b5cf6'];
-
-        // Add data points
-        data.push(results.monthlyPI);
-        labels.push('Principal & Interest');
-
-        if (results.monthlyPropertyTax > 0) {
-            data.push(results.monthlyPropertyTax);
-            labels.push('Property Tax');
-        }
-
-        if (results.monthlyInsurance > 0) {
-            data.push(results.monthlyInsurance);
-            labels.push('Home Insurance');
-        }
-
-        if (results.monthlyPMI > 0) {
-            data.push(results.monthlyPMI);
-            labels.push('PMI');
-        }
-
-        if (results.monthlyHOA > 0) {
-            data.push(results.monthlyHOA);
-            labels.push('HOA Fees');
-        }
-
-        // Create simple pie chart
-        this.drawPieChart(ctx, data, labels, colors);
-        this.updateChartLegend(data, labels, colors);
-    }
-
-    drawPieChart(ctx, data, labels, colors) {
-        const centerX = 150;
-        const centerY = 150;
-        const radius = 120;
-        const total = data.reduce((sum, value) => sum + value, 0);
-
-        let startAngle = 0;
-
-        // Clear canvas
-        ctx.clearRect(0, 0, 300, 300);
-
-        data.forEach((value, index) => {
-            const sliceAngle = (value / total) * 2 * Math.PI;
-
-            // Draw slice
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
-            ctx.lineTo(centerX, centerY);
-            ctx.fillStyle = colors[index % colors.length];
-            ctx.fill();
-            ctx.stroke();
-
-            startAngle += sliceAngle;
-        });
-    }
-
-    updateChartLegend(data, labels, colors) {
-        const total = data.reduce((sum, value) => sum + value, 0);
-
-        this.chartLegend.innerHTML = labels.map((label, index) => {
-            const value = data[index];
-            const percentage = ((value / total) * 100).toFixed(1);
-            return `
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: ${colors[index % colors.length]}"></div>
-                    <span>${label}: ${this.formatCurrency(value)} (${percentage}%)</span>
-                </div>
-            `;
-        }).join('');
-    }
-
-    generateAmortizationSchedule(results, data) {
-        const schedule = this.calculateAmortizationSchedule(results, data);
-        this.populateScheduleTable(schedule);
-    }
-
-    calculateAmortizationSchedule(results, data) {
-        const schedule = [];
-        let balance = results.loanAmount;
-        const monthlyPayment = results.monthlyPI;
-        const monthlyRate = results.monthlyRate;
-        const startDate = new Date(data.startDate);
-
-        for (let payment = 1; payment <= Math.min(results.numberOfPayments, 360); payment++) {
-            const interestPayment = balance * monthlyRate;
-            const principalPayment = monthlyPayment - interestPayment;
-            balance -= principalPayment;
-
-            const paymentDate = new Date(startDate);
-            paymentDate.setMonth(paymentDate.getMonth() + payment - 1);
-
-            const equity = results.loanAmount - balance;
-
-            schedule.push({
-                paymentNumber: payment,
-                date: paymentDate,
-                payment: monthlyPayment,
-                principal: principalPayment,
-                interest: interestPayment,
-                balance: Math.max(0, balance),
-                equity: equity
-            });
-
-            if (balance <= 0) break;
-        }
-
-        return schedule;
-    }
-
-    populateScheduleTable(schedule) {
-        // Clear existing rows
-        this.scheduleTableBody.innerHTML = '';
-
-        // Add rows (limit to first 12 months for initial display)
-        const displayCount = Math.min(schedule.length, 12);
-
-        for (let i = 0; i < displayCount; i++) {
-            const payment = schedule[i];
-            const row = document.createElement('tr');
-
-            row.innerHTML = `
-                <td>${payment.paymentNumber}</td>
-                <td>${this.formatDate(payment.date)}</td>
-                <td>${this.formatCurrency(payment.payment)}</td>
-                <td>${this.formatCurrency(payment.principal)}</td>
-                <td>${this.formatCurrency(payment.interest)}</td>
-                <td>${this.formatCurrency(payment.balance)}</td>
-                <td>${this.formatCurrency(payment.equity)}</td>
-            `;
-
-            this.scheduleTableBody.appendChild(row);
-        }
-
-        // Add "show more" functionality if there are more payments
-        if (schedule.length > 12) {
-            const showMoreRow = document.createElement('tr');
-            showMoreRow.innerHTML = `
-                <td colspan="7" style="text-align: center; padding: 1rem;">
-                    <button type="button" class="show-more-btn" onclick="calculator.showFullSchedule()">
-                        Show All ${schedule.length} Payments
-                    </button>
-                </td>
-            `;
-            this.scheduleTableBody.appendChild(showMoreRow);
-        }
-
-        // Store full schedule for later use
-        this.fullSchedule = schedule;
-    }
-
-    showFullSchedule() {
-        if (!this.fullSchedule) return;
-
-        // Clear and populate with full schedule
-        this.scheduleTableBody.innerHTML = '';
-
-        this.fullSchedule.forEach(payment => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${payment.paymentNumber}</td>
-                <td>${this.formatDate(payment.date)}</td>
-                <td>${this.formatCurrency(payment.payment)}</td>
-                <td>${this.formatCurrency(payment.principal)}</td>
-                <td>${this.formatCurrency(payment.interest)}</td>
-                <td>${this.formatCurrency(payment.balance)}</td>
-                <td>${this.formatCurrency(payment.equity)}</td>
-            `;
-            this.scheduleTableBody.appendChild(row);
-        });
-    }
-
-    toggleAmortizationSchedule() {
-        const schedule = this.amortizationSchedule;
-        const button = this.toggleSchedule;
-        const icon = button.querySelector('i');
-
-        if (schedule.style.display === 'none' || !schedule.style.display) {
-            schedule.style.display = 'block';
-            schedule.classList.add('expanded');
-            button.classList.add('expanded');
-            icon.classList.remove('fa-chevron-down');
-            icon.classList.add('fa-chevron-up');
-        } else {
-            schedule.style.display = 'none';
-            schedule.classList.remove('expanded');
-            button.classList.remove('expanded');
-            icon.classList.remove('fa-chevron-up');
-            icon.classList.add('fa-chevron-down');
-        }
-    }
-
-    toggleMobileMenu() {
-        this.navMenu.classList.toggle('mobile-active');
-        const icon = this.mobileMenuBtn.querySelector('i');
-
-        if (this.navMenu.classList.contains('mobile-active')) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-        } else {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        }
-    }
-
-    formatCurrency(amount) {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(amount);
-    }
-
-    formatDate(date) {
-        return new Intl.DateTimeFormat('en-US', {
-            year: 'numeric',
-            month: 'short'
-        }).format(date);
-    }
-
-    showError(message) {
-        // Create or update error message display
-        let errorDiv = document.getElementById('calculatorError');
-        if (!errorDiv) {
-            errorDiv = document.createElement('div');
-            errorDiv.id = 'calculatorError';
-            errorDiv.style.cssText = `
-                background: #fee2e2;
-                border: 1px solid #fca5a5;
-                color: #dc2626;
-                padding: 1rem;
-                border-radius: 0.5rem;
-                margin: 1rem 0;
-                font-weight: 500;
-            `;
-            this.form.insertBefore(errorDiv, this.form.firstChild);
-        }
-
-        errorDiv.textContent = message;
-        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-        // Auto-hide after 5 seconds
-        setTimeout(() => {
-            if (errorDiv.parentNode) {
-                errorDiv.parentNode.removeChild(errorDiv);
-            }
-        }, 5000);
-    }
-}
-
-// ===================================
-// INITIALIZE CALCULATOR
-// ===================================
-
-// Wait for DOM to load
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the calculator
-    window.calculator = new MortgageCalculator();
-
-    // Add smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-
-    // Add intersection observer for fade-in animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-            }
-        });
-    }, observerOptions);
-
-    // Observe elements for animation
-    document.querySelectorAll('.calculator-card, .insight-card, .loan-type-card').forEach(el => {
-        observer.observe(el);
-    });
-
-    // Add loading state management
-    window.addEventListener('beforeunload', () => {
-        document.body.style.opacity = '0.7';
-    });
-
-    // Performance optimization: Preload critical resources
-    const preloadLinks = [
-        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
-    ];
-
-    preloadLinks.forEach(href => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'style';
-        link.href = href;
-        document.head.appendChild(link);
-    });
-
-    // Add keyboard navigation support
-    document.addEventListener('keydown', (e) => {
-        // ESC key to close mobile menu
-        if (e.key === 'Escape' && window.calculator.navMenu.classList.contains('mobile-active')) {
-            window.calculator.toggleMobileMenu();
-        }
-
-        // Enter key to calculate when form is focused
-        if (e.key === 'Enter' && e.target.form === window.calculator.form) {
-            e.preventDefault();
-            window.calculator.calculateMortgage();
-        }
-    });
-
-    // Add form validation feedback
-    const inputs = document.querySelectorAll('input[required], select[required]');
-    inputs.forEach(input => {
-        input.addEventListener('invalid', (e) => {
-            e.target.style.borderColor = '#dc2626';
-        });
-
-        input.addEventListener('input', (e) => {
-            if (e.target.checkValidity()) {
-                e.target.style.borderColor = '';
-            }
-        });
-    });
-
-    console.log('🏠 Mortgage Calculator initialized successfully!');
-});
-
-// ===================================
-// UTILITY FUNCTIONS
-// ===================================
-
-// Debounce function for performance
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Format number with commas
-function formatNumber(num) {
-    return new Intl.NumberFormat('en-US').format(num);
-}
-
-// Validate email format
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Get URL parameters
-function getUrlParameter(name) {
-    name = name.replace(/[\[]/, '\[').replace(/[\]]/, '\]');
-    const regex = new RegExp('[\?&]' + name + '=([^&#]*)');
-    const results = regex.exec(location.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-}
-
-// Local storage helpers
-const Storage = {
-    set: (key, value) => {
-        try {
-            localStorage.setItem(key, JSON.stringify(value));
-        } catch (e) {
-            console.warn('LocalStorage not available:', e);
+/**
+ * FinGuid Mortgage Calculator - Advanced AI-Enhanced Version 3.0.0
+ * Production-ready mortgage calculator with comprehensive features
+ * 
+ * Features:
+ * - Multiple loan type support (Conventional, FHA, VA, USDA)
+ * - AI-powered insights and recommendations
+ * - Real-time calculations with debouncing
+ * - Interactive charts and visualizations
+ * - Complete amortization schedule
+ * - Voice input capabilities
+ * - PDF/CSV export functionality
+ * - Lead generation and conversion optimization
+ * - Advanced error handling and validation
+ * - Performance optimization
+ * - Accessibility compliance
+ * - SEO optimization
+ */
+
+'use strict';
+
+// Global application state
+const MortgageCalculator = {
+    version: '3.0.0',
+    initialized: false,
+    state: {
+        currentCalculation: null,
+        chartInstance: null,
+        amortizationData: [],
+        voiceRecognition: null,
+        currentLoanType: 'conventional',
+        advancedMode: false,
+        validationErrors: new Map(),
+        performanceMetrics: {
+            calculationTime: 0,
+            renderTime: 0,
+            lastCalculated: null
         }
     },
-
-    get: (key) => {
-        try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : null;
-        } catch (e) {
-            console.warn('LocalStorage not available:', e);
-            return null;
-        }
-    },
-
-    remove: (key) => {
-        try {
-            localStorage.removeItem(key);
-        } catch (e) {
-            console.warn('LocalStorage not available:', e);
+    config: {
+        debounceDelay: 300,
+        animationDuration: 250,
+        chartColors: {
+            principal: '#21808d',
+            tax: '#f59e0b',
+            insurance: '#10b981',
+            pmi: '#ef4444',
+            hoa: '#8b5cf6'
+        },
+        loanTypes: {
+            conventional: {
+                name: 'Conventional Loan',
+                minDownPayment: 0.03,
+                maxLTV: 0.97,
+                pmiRequired: true,
+                pmiThreshold: 0.20
+            },
+            fha: {
+                name: 'FHA Loan',
+                minDownPayment: 0.035,
+                maxLTV: 0.965,
+                pmiRequired: true,
+                pmiThreshold: 0.10,
+                mipRate: 0.0085
+            },
+            va: {
+                name: 'VA Loan',
+                minDownPayment: 0,
+                maxLTV: 1.0,
+                pmiRequired: false,
+                fundingFee: 0.023
+            },
+            usda: {
+                name: 'USDA Loan',
+                minDownPayment: 0,
+                maxLTV: 1.0,
+                pmiRequired: true,
+                guaranteeFee: 0.0035
+            }
         }
     }
 };
 
-// Analytics tracking helper
-function trackEvent(category, action, label, value) {
-    if (typeof gtag !== 'undefined') {
-        gtag('event', action, {
-            event_category: category,
-            event_label: label,
-            value: value
+// State property tax rates for all 50 US states (2025 data)
+const STATE_TAX_RATES = {
+    'AL': { rate: 0.0041, name: 'Alabama', avgTax: 1649 },
+    'AK': { rate: 0.0119, name: 'Alaska', avgTax: 3117 },
+    'AZ': { rate: 0.0062, name: 'Arizona', avgTax: 1648 },
+    'AR': { rate: 0.0061, name: 'Arkansas', avgTax: 857 },
+    'CA': { rate: 0.0075, name: 'California', avgTax: 4456 },
+    'CO': { rate: 0.0051, name: 'Colorado', avgTax: 2204 },
+    'CT': { rate: 0.0214, name: 'Connecticut', avgTax: 6044 },
+    'DE': { rate: 0.0057, name: 'Delaware', avgTax: 1673 },
+    'FL': { rate: 0.0083, name: 'Florida', avgTax: 2338 },
+    'GA': { rate: 0.0089, name: 'Georgia', avgTax: 1773 },
+    'HI': { rate: 0.0028, name: 'Hawaii', avgTax: 1971 },
+    'ID': { rate: 0.0069, name: 'Idaho', avgTax: 1791 },
+    'IL': { rate: 0.0227, name: 'Illinois', avgTax: 4738 },
+    'IN': { rate: 0.0085, name: 'Indiana', avgTax: 1263 },
+    'IA': { rate: 0.0157, name: 'Iowa', avgTax: 2540 },
+    'KS': { rate: 0.0141, name: 'Kansas', avgTax: 2084 },
+    'KY': { rate: 0.0086, name: 'Kentucky', avgTax: 1257 },
+    'LA': { rate: 0.0055, name: 'Louisiana', avgTax: 1076 },
+    'ME': { rate: 0.0128, name: 'Maine', avgTax: 2792 },
+    'MD': { rate: 0.0109, name: 'Maryland', avgTax: 3684 },
+    'MA': { rate: 0.0117, name: 'Massachusetts', avgTax: 5570 },
+    'MI': { rate: 0.0154, name: 'Michigan', avgTax: 2185 },
+    'MN': { rate: 0.0112, name: 'Minnesota', avgTax: 2982 },
+    'MS': { rate: 0.0081, name: 'Mississippi', avgTax: 1062 },
+    'MO': { rate: 0.0097, name: 'Missouri', avgTax: 1569 },
+    'MT': { rate: 0.0084, name: 'Montana', avgTax: 2539 },
+    'NE': { rate: 0.0173, name: 'Nebraska', avgTax: 2907 },
+    'NV': { rate: 0.0053, name: 'Nevada', avgTax: 1695 },
+    'NH': { rate: 0.0209, name: 'New Hampshire', avgTax: 6296 },
+    'NJ': { rate: 0.0249, name: 'New Jersey', avgTax: 9112 },
+    'NM': { rate: 0.0080, name: 'New Mexico', avgTax: 1413 },
+    'NY': { rate: 0.0169, name: 'New York', avgTax: 5844 },
+    'NC': { rate: 0.0084, name: 'North Carolina', avgTax: 1749 },
+    'ND': { rate: 0.0142, name: 'North Dakota', avgTax: 2675 },
+    'OH': { rate: 0.0162, name: 'Ohio', avgTax: 2323 },
+    'OK': { rate: 0.0090, name: 'Oklahoma', avgTax: 1436 },
+    'OR': { rate: 0.0093, name: 'Oregon', avgTax: 3507 },
+    'PA': { rate: 0.0158, name: 'Pennsylvania', avgTax: 3239 },
+    'RI': { rate: 0.0153, name: 'Rhode Island', avgTax: 4706 },
+    'SC': { rate: 0.0057, name: 'South Carolina', avgTax: 1116 },
+    'SD': { rate: 0.0132, name: 'South Dakota', avgTax: 2540 },
+    'TN': { rate: 0.0064, name: 'Tennessee', avgTax: 1220 },
+    'TX': { rate: 0.0180, name: 'Texas', avgTax: 4153 },
+    'UT': { rate: 0.0066, name: 'Utah', avgTax: 2340 },
+    'VT': { rate: 0.0190, name: 'Vermont', avgTax: 4873 },
+    'VA': { rate: 0.0082, name: 'Virginia', avgTax: 2839 },
+    'WA': { rate: 0.0094, name: 'Washington', avgTax: 3668 },
+    'WV': { rate: 0.0059, name: 'West Virginia', avgTax: 764 },
+    'WI': { rate: 0.0185, name: 'Wisconsin', avgTax: 3595 },
+    'WY': { rate: 0.0062, name: 'Wyoming', avgTax: 1723 }
+};
+
+// Utility functions
+const Utils = {
+    // DOM manipulation
+    $(selector) {
+        return document.querySelector(selector);
+    },
+
+    $$(selector) {
+        return Array.from(document.querySelectorAll(selector));
+    },
+
+    // Formatting functions
+    formatCurrency(amount, decimals = 0) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }).format(amount);
+    },
+
+    formatNumber(num, decimals = 0) {
+        return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }).format(num);
+    },
+
+    formatPercentage(num, decimals = 2) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'percent',
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }).format(num / 100);
+    },
+
+    // Validation functions
+    isValidNumber(value, min = null, max = null) {
+        const num = parseFloat(value);
+        if (isNaN(num)) return false;
+        if (min !== null && num < min) return false;
+        if (max !== null && num > max) return false;
+        return true;
+    },
+
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    },
+
+    isValidPhone(phone) {
+        const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        return phoneRegex.test(phone.replace(/\s/g, ''));
+    },
+
+    // Performance utilities
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    },
+
+    throttle(func, limit) {
+        let inThrottle;
+        return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+                func.apply(context, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    },
+
+    // Date utilities
+    addMonths(date, months) {
+        const result = new Date(date);
+        result.setMonth(result.getMonth() + months);
+        return result;
+    },
+
+    formatDate(date, format = 'MMM YYYY') {
+        const options = format === 'MMM YYYY' 
+            ? { year: 'numeric', month: 'short' }
+            : { year: 'numeric', month: 'numeric', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+};
+
+// Form validation module
+const FormValidator = {
+    validators: {
+        required: (value) => value && value.toString().trim() !== '',
+        number: (value, min, max) => Utils.isValidNumber(value, min, max),
+        email: (value) => Utils.isValidEmail(value),
+        phone: (value) => Utils.isValidPhone(value),
+        minLength: (value, length) => value && value.length >= length,
+        maxLength: (value, length) => value && value.length <= length
+    },
+
+    rules: {
+        'home-price': [
+            { type: 'required', message: 'Home price is required' },
+            { type: 'number', min: 50000, max: 10000000, message: 'Home price must be between $50,000 and $10,000,000' }
+        ],
+        'interest-rate': [
+            { type: 'required', message: 'Interest rate is required' },
+            { type: 'number', min: 0.1, max: 20, message: 'Interest rate must be between 0.1% and 20%' }
+        ],
+        'state': [
+            { type: 'required', message: 'Please select your state' }
+        ],
+        'first-name': [
+            { type: 'required', message: 'First name is required' },
+            { type: 'minLength', length: 2, message: 'First name must be at least 2 characters' }
+        ],
+        'last-name': [
+            { type: 'required', message: 'Last name is required' },
+            { type: 'minLength', length: 2, message: 'Last name must be at least 2 characters' }
+        ],
+        'email': [
+            { type: 'required', message: 'Email is required' },
+            { type: 'email', message: 'Please enter a valid email address' }
+        ],
+        'phone': [
+            { type: 'required', message: 'Phone number is required' },
+            { type: 'phone', message: 'Please enter a valid phone number' }
+        ]
+    },
+
+    validateField(fieldId, value) {
+        const rules = this.rules[fieldId];
+        if (!rules) return { valid: true, message: '' };
+
+        for (const rule of rules) {
+            let isValid = false;
+            
+            switch (rule.type) {
+                case 'required':
+                    isValid = this.validators.required(value);
+                    break;
+                case 'number':
+                    isValid = this.validators.number(value, rule.min, rule.max);
+                    break;
+                case 'email':
+                    isValid = this.validators.email(value);
+                    break;
+                case 'phone':
+                    isValid = this.validators.phone(value);
+                    break;
+                case 'minLength':
+                    isValid = this.validators.minLength(value, rule.length);
+                    break;
+                case 'maxLength':
+                    isValid = this.validators.maxLength(value, rule.length);
+                    break;
+            }
+
+            if (!isValid) {
+                return { valid: false, message: rule.message };
+            }
+        }
+
+        return { valid: true, message: '' };
+    },
+
+    showError(fieldId, message) {
+        const field = Utils.$(`#${fieldId}`);
+        const errorElement = Utils.$(`#${fieldId}-error`);
+        
+        if (field) {
+            field.classList.add('error');
+            field.setAttribute('aria-invalid', 'true');
+        }
+        
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        MortgageCalculator.state.validationErrors.set(fieldId, message);
+    },
+
+    clearError(fieldId) {
+        const field = Utils.$(`#${fieldId}`);
+        const errorElement = Utils.$(`#${fieldId}-error`);
+        
+        if (field) {
+            field.classList.remove('error');
+            field.setAttribute('aria-invalid', 'false');
+        }
+        
+        if (errorElement) {
+            errorElement.textContent = '';
+            errorElement.style.display = 'none';
+        }
+
+        MortgageCalculator.state.validationErrors.delete(fieldId);
+    },
+
+    validateForm(formId) {
+        const form = Utils.$(`#${formId}`);
+        if (!form) return false;
+
+        let isValid = true;
+        const formData = new FormData(form);
+
+        // Clear all previous errors
+        MortgageCalculator.state.validationErrors.clear();
+
+        // Validate each field
+        for (const [fieldId, value] of formData.entries()) {
+            const validation = this.validateField(fieldId, value);
+            if (!validation.valid) {
+                this.showError(fieldId, validation.message);
+                isValid = false;
+            } else {
+                this.clearError(fieldId);
+            }
+        }
+
+        return isValid;
+    }
+};
+
+// Mortgage calculation engine
+const MortgageEngine = {
+    calculateMonthlyPayment(principal, annualRate, termYears) {
+        if (annualRate === 0) {
+            return principal / (termYears * 12);
+        }
+        
+        const monthlyRate = annualRate / 12;
+        const numPayments = termYears * 12;
+        
+        return principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+               (Math.pow(1 + monthlyRate, numPayments) - 1);
+    },
+
+    calculatePMI(loanAmount, downPaymentPercent, loanType, customRate = null) {
+        const loanConfig = MortgageCalculator.config.loanTypes[loanType];
+        
+        if (!loanConfig.pmiRequired) return 0;
+        if (loanType === 'va') return 0;
+        
+        if (downPaymentPercent >= loanConfig.pmiThreshold * 100) return 0;
+
+        let pmiRate = customRate || 0.008; // Default 0.8%
+        
+        // Adjust PMI rate based on loan type and down payment
+        if (loanType === 'fha') {
+            pmiRate = downPaymentPercent < 10 ? 0.0085 : 0.008;
+        } else if (loanType === 'usda') {
+            pmiRate = 0.0035; // USDA guarantee fee
+        }
+        
+        return (loanAmount * pmiRate) / 12;
+    },
+
+    calculateLoanDetails(inputs) {
+        const startTime = performance.now();
+        
+        try {
+            const {
+                homePrice,
+                downPaymentAmount,
+                interestRate,
+                loanTerm,
+                loanType,
+                propertyTax,
+                homeInsurance,
+                hoaFees,
+                pmiRate,
+                extraMonthly,
+                extraYearly
+            } = inputs;
+
+            // Calculate loan amount
+            const loanAmount = homePrice - downPaymentAmount;
+            const downPaymentPercent = (downPaymentAmount / homePrice) * 100;
+            
+            // Monthly principal and interest
+            const monthlyPI = this.calculateMonthlyPayment(loanAmount, interestRate / 100, loanTerm);
+            
+            // Calculate PMI
+            const monthlyPMI = this.calculatePMI(loanAmount, downPaymentPercent, loanType, pmiRate / 100);
+            
+            // Other monthly costs
+            const monthlyTax = propertyTax / 12;
+            const monthlyInsurance = homeInsurance / 12;
+            const monthlyHOA = hoaFees || 0;
+            
+            // Total monthly payment
+            const totalMonthly = monthlyPI + monthlyPMI + monthlyTax + monthlyInsurance + monthlyHOA;
+            
+            // Calculate totals
+            const totalPayments = monthlyPI * (loanTerm * 12);
+            const totalInterest = totalPayments - loanAmount;
+            const totalCost = homePrice + totalInterest;
+            
+            // Calculate with extra payments
+            const extraPaymentAnalysis = this.calculateExtraPayments(
+                loanAmount, interestRate / 100, loanTerm, monthlyPI, extraMonthly, extraYearly
+            );
+
+            const results = {
+                // Basic calculations
+                loanAmount,
+                downPaymentAmount,
+                downPaymentPercent,
+                monthlyPI,
+                monthlyPMI,
+                monthlyTax,
+                monthlyInsurance,
+                monthlyHOA,
+                totalMonthly,
+                totalInterest,
+                totalCost,
+                
+                // Extra payment analysis
+                extraPaymentAnalysis,
+                
+                // Loan details
+                effectiveInterestRate: interestRate,
+                loanToValue: (loanAmount / homePrice) * 100,
+                debtToIncomeRatio: null, // Will be calculated if income provided
+                
+                // Metadata
+                calculatedAt: new Date(),
+                loanType,
+                inputs
+            };
+
+            // Performance tracking
+            const endTime = performance.now();
+            MortgageCalculator.state.performanceMetrics.calculationTime = endTime - startTime;
+            MortgageCalculator.state.performanceMetrics.lastCalculated = new Date();
+
+            return results;
+            
+        } catch (error) {
+            console.error('Mortgage calculation error:', error);
+            throw new Error('Failed to calculate mortgage details. Please check your inputs.');
+        }
+    },
+
+    calculateExtraPayments(loanAmount, annualRate, termYears, regularPayment, extraMonthly = 0, extraYearly = 0) {
+        const monthlyRate = annualRate / 12;
+        let balance = loanAmount;
+        let totalInterest = 0;
+        let paymentCount = 0;
+        const maxPayments = termYears * 12;
+
+        while (balance > 0.01 && paymentCount < maxPayments) {
+            paymentCount++;
+            
+            const interestPayment = balance * monthlyRate;
+            let principalPayment = regularPayment - interestPayment + extraMonthly;
+            
+            // Add yearly extra payment if applicable
+            if (extraYearly > 0 && paymentCount % 12 === 0) {
+                principalPayment += extraYearly;
+            }
+            
+            // Don't overpay
+            if (principalPayment > balance) {
+                principalPayment = balance;
+            }
+            
+            balance -= principalPayment;
+            totalInterest += interestPayment;
+        }
+
+        const monthsSaved = (termYears * 12) - paymentCount;
+        const interestSaved = (regularPayment * termYears * 12) - loanAmount - totalInterest;
+
+        return {
+            payoffMonths: paymentCount,
+            monthsSaved,
+            totalInterest,
+            interestSaved: Math.max(0, interestSaved),
+            payoffDate: Utils.addMonths(new Date(), paymentCount)
+        };
+    },
+
+    generateAmortizationSchedule(inputs, results) {
+        const {
+            loanAmount,
+            monthlyPI,
+            extraMonthly = 0,
+            extraYearly = 0
+        } = { ...inputs, ...results };
+
+        const annualRate = inputs.interestRate / 100;
+        const monthlyRate = annualRate / 12;
+        const startDate = new Date(inputs.startDate || new Date());
+        
+        const schedule = [];
+        let balance = loanAmount;
+        let paymentNumber = 1;
+        let currentDate = new Date(startDate);
+        let totalInterest = 0;
+        let totalPrincipal = 0;
+
+        while (balance > 0.01 && paymentNumber <= (inputs.loanTerm * 12)) {
+            const interestPayment = balance * monthlyRate;
+            let principalPayment = monthlyPI - interestPayment + extraMonthly;
+            
+            // Add yearly extra payment
+            if (extraYearly > 0 && paymentNumber % 12 === 0) {
+                principalPayment += extraYearly;
+            }
+            
+            // Don't overpay
+            if (principalPayment > balance) {
+                principalPayment = balance;
+            }
+            
+            balance -= principalPayment;
+            totalInterest += interestPayment;
+            totalPrincipal += principalPayment;
+            
+            const homeValue = inputs.homePrice * Math.pow(1.03, (paymentNumber - 1) / 12); // Assume 3% appreciation
+            const equity = homeValue - balance;
+
+            schedule.push({
+                paymentNumber,
+                date: new Date(currentDate),
+                payment: interestPayment + principalPayment,
+                principal: principalPayment,
+                interest: interestPayment,
+                balance: Math.max(0, balance),
+                equity,
+                homeValue,
+                cumulativeInterest: totalInterest,
+                cumulativePrincipal: totalPrincipal
+            });
+            
+            paymentNumber++;
+            currentDate = Utils.addMonths(currentDate, 1);
+        }
+
+        return schedule;
+    }
+};
+
+// AI Insights engine
+const AIInsights = {
+    generateInsights(inputs, results) {
+        const insights = [];
+        
+        try {
+            // Down payment insights
+            if (results.downPaymentPercent < 20) {
+                const additionalDown = (inputs.homePrice * 0.2) - results.downPaymentAmount;
+                insights.push({
+                    type: 'warning',
+                    icon: 'fas fa-exclamation-triangle',
+                    title: 'PMI Elimination Opportunity',
+                    message: `Increasing your down payment by ${Utils.formatCurrency(additionalDown)} to reach 20% would eliminate PMI, saving you ${Utils.formatCurrency(results.monthlyPMI)} monthly (${Utils.formatCurrency(results.monthlyPMI * 12)} annually).`,
+                    action: 'Increase Down Payment',
+                    priority: 'high'
+                });
+            }
+
+            // Interest rate insights
+            if (inputs.interestRate > 7.5) {
+                insights.push({
+                    type: 'tip',
+                    icon: 'fas fa-chart-line',
+                    title: 'Rate Shopping Opportunity',
+                    message: `Your rate of ${inputs.interestRate}% is above the current market average. Shopping for a rate just 0.5% lower could save you approximately ${Utils.formatCurrency(this.calculateRateSavings(inputs, results, 0.5))} over the loan term.`,
+                    action: 'Compare Rates',
+                    priority: 'high'
+                });
+            }
+
+            // Extra payment insights
+            if (results.extraPaymentAnalysis && results.extraPaymentAnalysis.interestSaved > 10000) {
+                insights.push({
+                    type: 'success',
+                    icon: 'fas fa-piggy-bank',
+                    title: 'Extra Payment Benefits',
+                    message: `Making extra payments would save you ${Utils.formatCurrency(results.extraPaymentAnalysis.interestSaved)} in interest and pay off your loan ${Math.round(results.extraPaymentAnalysis.monthsSaved / 12)} years early.`,
+                    action: 'Set Up Extra Payments',
+                    priority: 'medium'
+                });
+            }
+
+            // Affordability insights
+            const monthlyIncome = this.estimateRequiredIncome(results.totalMonthly);
+            insights.push({
+                type: 'info',
+                icon: 'fas fa-calculator',
+                title: 'Income Recommendation',
+                message: `For comfortable affordability (28% housing ratio), your gross monthly income should be at least ${Utils.formatCurrency(monthlyIncome, 0)} (${Utils.formatCurrency(monthlyIncome * 12, 0)} annually).`,
+                action: 'Check Affordability',
+                priority: 'medium'
+            });
+
+            // Emergency fund insight
+            const emergencyFund = results.totalMonthly * 6;
+            insights.push({
+                type: 'info',
+                icon: 'fas fa-shield-alt',
+                title: 'Emergency Fund Recommendation',
+                message: `Maintain an emergency fund of at least ${Utils.formatCurrency(emergencyFund, 0)} (6 months of housing payments) before purchasing.`,
+                action: 'Calculate Emergency Fund',
+                priority: 'low'
+            });
+
+            // Refinancing insights
+            if (inputs.interestRate > 6.0) {
+                insights.push({
+                    type: 'tip',
+                    icon: 'fas fa-exchange-alt',
+                    title: 'Future Refinancing Opportunity',
+                    message: `If rates drop to 5.5% or below, refinancing could potentially save you significant money. Monitor rates regularly.`,
+                    action: 'Set Rate Alert',
+                    priority: 'low'
+                });
+            }
+
+            // Property tax insights
+            const stateData = STATE_TAX_RATES[inputs.state];
+            if (stateData && inputs.propertyTax > stateData.avgTax * 1.5) {
+                insights.push({
+                    type: 'warning',
+                    icon: 'fas fa-map-marker-alt',
+                    title: 'High Property Tax Alert',
+                    message: `Your property tax estimate is significantly higher than the ${stateData.name} average of ${Utils.formatCurrency(stateData.avgTax)}. Consider appealing your assessment.`,
+                    action: 'Learn About Tax Appeals',
+                    priority: 'medium'
+                });
+            }
+
+            return insights.sort((a, b) => {
+                const priorities = { high: 3, medium: 2, low: 1 };
+                return priorities[b.priority] - priorities[a.priority];
+            });
+
+        } catch (error) {
+            console.error('AI insights generation error:', error);
+            return [{
+                type: 'info',
+                icon: 'fas fa-lightbulb',
+                title: 'General Recommendation',
+                message: 'Consider comparing rates from multiple lenders to ensure you get the best deal.',
+                action: 'Get Rate Quotes',
+                priority: 'medium'
+            }];
+        }
+    },
+
+    calculateRateSavings(inputs, results, rateReduction) {
+        const newRate = inputs.interestRate - rateReduction;
+        const newMonthlyPI = MortgageEngine.calculateMonthlyPayment(
+            results.loanAmount,
+            newRate / 100,
+            inputs.loanTerm
+        );
+        
+        const monthlySavings = results.monthlyPI - newMonthlyPI;
+        return monthlySavings * inputs.loanTerm * 12;
+    },
+
+    estimateRequiredIncome(monthlyPayment) {
+        return monthlyPayment / 0.28; // 28% housing ratio
+    }
+};
+
+// Chart visualization
+const ChartManager = {
+    chart: null,
+    
+    createPaymentChart(results) {
+        const ctx = Utils.$('#payment-chart');
+        if (!ctx) return;
+
+        // Destroy existing chart
+        if (this.chart) {
+            this.chart.destroy();
+        }
+
+        const data = {
+            labels: ['Principal & Interest', 'Property Tax', 'Home Insurance'],
+            datasets: [{
+                data: [
+                    results.monthlyPI,
+                    results.monthlyTax,
+                    results.monthlyInsurance
+                ],
+                backgroundColor: [
+                    MortgageCalculator.config.chartColors.principal,
+                    MortgageCalculator.config.chartColors.tax,
+                    MortgageCalculator.config.chartColors.insurance
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        };
+
+        // Add PMI if applicable
+        if (results.monthlyPMI > 0) {
+            data.labels.push('PMI');
+            data.datasets[0].data.push(results.monthlyPMI);
+            data.datasets[0].backgroundColor.push(MortgageCalculator.config.chartColors.pmi);
+        }
+
+        // Add HOA if applicable
+        if (results.monthlyHOA > 0) {
+            data.labels.push('HOA Fees');
+            data.datasets[0].data.push(results.monthlyHOA);
+            data.datasets[0].backgroundColor.push(MortgageCalculator.config.chartColors.hoa);
+        }
+
+        const config = {
+            type: Utils.$('.chart-toggle.active')?.dataset.chart === 'bar' ? 'bar' : 'pie',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // We'll use custom legend
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = Utils.formatCurrency(context.parsed);
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return `${context.label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: MortgageCalculator.config.animationDuration
+                }
+            }
+        };
+
+        try {
+            this.chart = new Chart(ctx, config);
+            this.updateLegend(data);
+        } catch (error) {
+            console.error('Chart creation error:', error);
+            this.createSimpleChart(data, ctx.parentElement);
+        }
+    },
+
+    createSimpleChart(data, container) {
+        const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+        const chartHTML = data.labels.map((label, index) => {
+            const value = data.datasets[0].data[index];
+            const percentage = ((value / total) * 100).toFixed(1);
+            const color = data.datasets[0].backgroundColor[index];
+            
+            return `
+                <div class="chart-bar" style="margin-bottom: 8px;">
+                    <div class="chart-label" style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span style="color: ${color};">● ${label}</span>
+                        <span>${Utils.formatCurrency(value)} (${percentage}%)</span>
+                    </div>
+                    <div class="chart-progress" style="background: #e5e7eb; height: 8px; border-radius: 4px;">
+                        <div style="background: ${color}; height: 100%; width: ${percentage}%; border-radius: 4px; transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = chartHTML;
+    },
+
+    updateLegend(data) {
+        const legend = Utils.$('#chart-legend');
+        if (!legend) return;
+
+        const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+        const legendHTML = data.labels.map((label, index) => {
+            const value = data.datasets[0].data[index];
+            const percentage = ((value / total) * 100).toFixed(1);
+            const color = data.datasets[0].backgroundColor[index];
+            
+            return `
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: ${color}; width: 16px; height: 16px; border-radius: 2px;"></div>
+                    <span class="legend-label">${label}: ${Utils.formatCurrency(value)} (${percentage}%)</span>
+                </div>
+            `;
+        }).join('');
+
+        legend.innerHTML = legendHTML;
+    }
+};
+
+// Voice recognition module
+const VoiceManager = {
+    recognition: null,
+    isListening: false,
+    currentField: null,
+
+    init() {
+        try {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                this.hideVoiceButtons();
+                return;
+            }
+
+            this.recognition = new SpeechRecognition();
+            this.recognition.continuous = false;
+            this.recognition.interimResults = false;
+            this.recognition.lang = 'en-US';
+
+            this.recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript.toLowerCase();
+                this.processVoiceInput(transcript);
+            };
+
+            this.recognition.onerror = (event) => {
+                console.error('Voice recognition error:', event.error);
+                this.stopListening();
+                NotificationManager.show('Voice recognition error. Please try again.', 'error');
+            };
+
+            this.recognition.onend = () => {
+                this.stopListening();
+            };
+
+        } catch (error) {
+            console.warn('Voice recognition not available:', error);
+            this.hideVoiceButtons();
+        }
+    },
+
+    startListening(fieldId) {
+        if (!this.recognition || this.isListening) return;
+
+        this.currentField = fieldId;
+        this.isListening = true;
+        
+        try {
+            this.recognition.start();
+            this.showVoiceStatus();
+        } catch (error) {
+            console.error('Failed to start voice recognition:', error);
+            this.stopListening();
+        }
+    },
+
+    stopListening() {
+        this.isListening = false;
+        this.currentField = null;
+        this.hideVoiceStatus();
+    },
+
+    processVoiceInput(transcript) {
+        if (!this.currentField) return;
+
+        // Extract numbers from transcript
+        let value = this.extractNumberFromText(transcript);
+        
+        if (value !== null) {
+            const field = Utils.$(`#${this.currentField}`);
+            if (field) {
+                field.value = value;
+                field.dispatchEvent(new Event('input', { bubbles: true }));
+                NotificationManager.show(`Set ${this.currentField.replace('-', ' ')} to ${value}`, 'success');
+                
+                // Trigger validation
+                FormValidator.validateField(this.currentField, value);
+            }
+        } else {
+            NotificationManager.show('Could not understand the voice input. Please try again.', 'warning');
+        }
+    },
+
+    extractNumberFromText(text) {
+        // Handle various number formats and words
+        const numberWords = {
+            'zero': 0, 'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+            'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+            'twenty': 20, 'thirty': 30, 'forty': 40, 'fifty': 50,
+            'sixty': 60, 'seventy': 70, 'eighty': 80, 'ninety': 90,
+            'hundred': 100, 'thousand': 1000, 'million': 1000000
+        };
+
+        // First try to extract direct numbers
+        const numbers = text.match(/\d+(\.\d+)?/g);
+        if (numbers) {
+            let value = parseFloat(numbers[0]);
+            
+            // Handle multipliers
+            if (text.includes('thousand')) value *= 1000;
+            else if (text.includes('million')) value *= 1000000;
+            else if (text.includes('hundred')) value *= 100;
+            
+            return value;
+        }
+
+        // Try to parse word numbers (simplified)
+        for (const [word, num] of Object.entries(numberWords)) {
+            if (text.includes(word)) {
+                return num;
+            }
+        }
+
+        return null;
+    },
+
+    showVoiceStatus() {
+        const status = Utils.$('#voice-status');
+        if (status) {
+            status.classList.remove('hidden');
+            status.setAttribute('aria-hidden', 'false');
+        }
+    },
+
+    hideVoiceStatus() {
+        const status = Utils.$('#voice-status');
+        if (status) {
+            status.classList.add('hidden');
+            status.setAttribute('aria-hidden', 'true');
+        }
+    },
+
+    hideVoiceButtons() {
+        Utils.$$('.voice-btn').forEach(btn => {
+            btn.style.display = 'none';
         });
     }
+};
+
+// Notification system
+const NotificationManager = {
+    show(message, type = 'info', duration = 5000) {
+        const container = Utils.$('#toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'polite');
+        
+        const icons = {
+            success: 'fas fa-check-circle',
+            error: 'fas fa-exclamation-circle',
+            warning: 'fas fa-exclamation-triangle',
+            info: 'fas fa-info-circle'
+        };
+
+        toast.innerHTML = `
+            <div class="toast-content">
+                <i class="${icons[type]}" aria-hidden="true"></i>
+                <span class="toast-message">${message}</span>
+                <button type="button" class="toast-close" aria-label="Close notification">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+        `;
+
+        container.appendChild(toast);
+
+        // Animate in
+        setTimeout(() => toast.classList.add('show'), 100);
+
+        // Auto remove
+        const timeoutId = setTimeout(() => this.remove(toast), duration);
+
+        // Manual close
+        toast.querySelector('.toast-close').addEventListener('click', () => {
+            clearTimeout(timeoutId);
+            this.remove(toast);
+        });
+    },
+
+    remove(toast) {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }
+};
+
+// Export functionality
+const ExportManager = {
+    async exportToPDF(results) {
+        try {
+            // In production, integrate with jsPDF or similar library
+            const content = this.generatePDFContent(results);
+            
+            // For now, create a printable version
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(content);
+            printWindow.document.close();
+            printWindow.print();
+            
+            Analytics.trackEvent('export_pdf', {
+                loan_amount: results.loanAmount,
+                monthly_payment: results.totalMonthly
+            });
+            
+        } catch (error) {
+            console.error('PDF export error:', error);
+            NotificationManager.show('Failed to export PDF. Please try again.', 'error');
+        }
+    },
+
+    exportToCSV(scheduleData) {
+        try {
+            const headers = ['Payment #', 'Date', 'Payment', 'Principal', 'Interest', 'Balance', 'Equity'];
+            const csvContent = [
+                headers.join(','),
+                ...scheduleData.map(row => [
+                    row.paymentNumber,
+                    Utils.formatDate(row.date, 'MM/DD/YYYY'),
+                    row.payment.toFixed(2),
+                    row.principal.toFixed(2),
+                    row.interest.toFixed(2),
+                    row.balance.toFixed(2),
+                    row.equity.toFixed(2)
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mortgage-amortization-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            
+            window.URL.revokeObjectURL(url);
+            
+            Analytics.trackEvent('export_csv', {
+                rows: scheduleData.length
+            });
+            
+        } catch (error) {
+            console.error('CSV export error:', error);
+            NotificationManager.show('Failed to export CSV. Please try again.', 'error');
+        }
+    },
+
+    generatePDFContent(results) {
+        return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Mortgage Calculation Report</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                .header { text-align: center; margin-bottom: 30px; }
+                .summary { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+                .breakdown { margin-bottom: 30px; }
+                .breakdown table { width: 100%; border-collapse: collapse; }
+                .breakdown th, .breakdown td { padding: 8px; border: 1px solid #ddd; text-align: right; }
+                .breakdown th { background: #e9ecef; }
+                @media print { body { margin: 0; } }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>Mortgage Calculation Report</h1>
+                <p>Generated on ${new Date().toLocaleDateString()}</p>
+            </div>
+            
+            <div class="summary">
+                <h2>Loan Summary</h2>
+                <p><strong>Home Price:</strong> ${Utils.formatCurrency(results.inputs.homePrice)}</p>
+                <p><strong>Down Payment:</strong> ${Utils.formatCurrency(results.downPaymentAmount)} (${results.downPaymentPercent.toFixed(1)}%)</p>
+                <p><strong>Loan Amount:</strong> ${Utils.formatCurrency(results.loanAmount)}</p>
+                <p><strong>Interest Rate:</strong> ${results.inputs.interestRate}%</p>
+                <p><strong>Loan Term:</strong> ${results.inputs.loanTerm} years</p>
+            </div>
+            
+            <div class="breakdown">
+                <h2>Monthly Payment Breakdown</h2>
+                <table>
+                    <tr><th>Component</th><th>Monthly Amount</th></tr>
+                    <tr><td>Principal & Interest</td><td>${Utils.formatCurrency(results.monthlyPI)}</td></tr>
+                    <tr><td>Property Tax</td><td>${Utils.formatCurrency(results.monthlyTax)}</td></tr>
+                    <tr><td>Home Insurance</td><td>${Utils.formatCurrency(results.monthlyInsurance)}</td></tr>
+                    ${results.monthlyPMI > 0 ? `<tr><td>PMI</td><td>${Utils.formatCurrency(results.monthlyPMI)}</td></tr>` : ''}
+                    ${results.monthlyHOA > 0 ? `<tr><td>HOA Fees</td><td>${Utils.formatCurrency(results.monthlyHOA)}</td></tr>` : ''}
+                    <tr><td><strong>Total Monthly Payment</strong></td><td><strong>${Utils.formatCurrency(results.totalMonthly)}</strong></td></tr>
+                </table>
+            </div>
+            
+            <div class="totals">
+                <h2>Loan Totals</h2>
+                <p><strong>Total Interest Paid:</strong> ${Utils.formatCurrency(results.totalInterest)}</p>
+                <p><strong>Total Cost:</strong> ${Utils.formatCurrency(results.totalCost)}</p>
+            </div>
+        </body>
+        </html>
+        `;
+    }
+};
+
+// Analytics and tracking
+const Analytics = {
+    trackEvent(eventName, properties = {}) {
+        try {
+            // Google Analytics 4
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, {
+                    ...properties,
+                    app_version: MortgageCalculator.version
+                });
+            }
+
+            // Custom analytics
+            if (window.analytics && typeof window.analytics.track === 'function') {
+                window.analytics.track(eventName, properties);
+            }
+
+            console.log('Analytics event:', eventName, properties);
+        } catch (error) {
+            console.error('Analytics error:', error);
+        }
+    },
+
+    trackCalculation(inputs, results) {
+        this.trackEvent('mortgage_calculation', {
+            loan_amount: results.loanAmount,
+            home_price: inputs.homePrice,
+            down_payment_percent: results.downPaymentPercent,
+            interest_rate: inputs.interestRate,
+            loan_term: inputs.loanTerm,
+            loan_type: inputs.loanType,
+            state: inputs.state,
+            monthly_payment: results.totalMonthly,
+            calculation_time: MortgageCalculator.state.performanceMetrics.calculationTime
+        });
+    },
+
+    trackFormSubmission(formType, success = true) {
+        this.trackEvent('form_submission', {
+            form_type: formType,
+            success,
+            timestamp: new Date().toISOString()
+        });
+    },
+
+    trackPageLoad() {
+        this.trackEvent('page_view', {
+            page: 'mortgage_calculator',
+            user_agent: navigator.userAgent,
+            timestamp: new Date().toISOString()
+        });
+    }
+};
+
+// Main application controller
+const App = {
+    // Initialize the application
+    init() {
+        if (MortgageCalculator.initialized) return;
+
+        try {
+            console.log(`Initializing FinGuid Mortgage Calculator v${MortgageCalculator.version}`);
+            
+            // Initialize modules
+            this.initializeUI();
+            this.setupEventListeners();
+            this.populateStateDropdown();
+            VoiceManager.init();
+            
+            // Set default values
+            this.setDefaultValues();
+            
+            // Perform initial calculation
+            this.calculateMortgage();
+            
+            // Track page load
+            Analytics.trackPageLoad();
+            
+            MortgageCalculator.initialized = true;
+            console.log('Mortgage calculator initialized successfully');
+            
+        } catch (error) {
+            console.error('Initialization error:', error);
+            NotificationManager.show('Failed to initialize calculator. Please refresh the page.', 'error');
+        }
+    },
+
+    initializeUI() {
+        // Set up loan type selection
+        const loanTypeInputs = Utils.$$('input[name="loanType"]');
+        loanTypeInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                MortgageCalculator.state.currentLoanType = e.target.value;
+                this.updateLoanTypeUI(e.target.value);
+                this.calculateMortgage();
+            });
+        });
+
+        // Set up down payment tabs
+        this.setupDownPaymentTabs();
+        
+        // Set up loan term selection
+        this.setupLoanTermSelection();
+        
+        // Set up chart controls
+        this.setupChartControls();
+        
+        // Set up mobile menu
+        this.setupMobileMenu();
+        
+        // Set up modals
+        this.setupModals();
+    },
+
+    setupEventListeners() {
+        // Form submission
+        const mortgageForm = Utils.$('#mortgage-form');
+        if (mortgageForm) {
+            mortgageForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.calculateMortgage();
+            });
+        }
+
+        // Input changes with debouncing
+        const inputs = Utils.$$('.form-input, .form-select');
+        inputs.forEach(input => {
+            const debouncedCalculate = Utils.debounce(() => {
+                if (FormValidator.validateField(input.id, input.value).valid) {
+                    this.calculateMortgage();
+                }
+            }, MortgageCalculator.config.debounceDelay);
+            
+            input.addEventListener('input', debouncedCalculate);
+            input.addEventListener('change', debouncedCalculate);
+            
+            // Real-time validation
+            input.addEventListener('blur', () => {
+                const validation = FormValidator.validateField(input.id, input.value);
+                if (!validation.valid) {
+                    FormValidator.showError(input.id, validation.message);
+                } else {
+                    FormValidator.clearError(input.id);
+                }
+            });
+        });
+
+        // Voice input buttons
+        Utils.$$('.voice-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const fieldId = btn.dataset.field;
+                VoiceManager.startListening(fieldId);
+            });
+        });
+
+        // Action buttons
+        this.setupActionButtons();
+        
+        // State selection change
+        const stateSelect = Utils.$('#state');
+        if (stateSelect) {
+            stateSelect.addEventListener('change', (e) => {
+                this.updatePropertyTax(e.target.value);
+                this.calculateMortgage();
+            });
+        }
+
+        // Reset button
+        const resetBtn = Utils.$('#reset-btn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                this.resetForm();
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                this.calculateMortgage();
+            }
+        });
+    },
+
+    setupActionButtons() {
+        // Export PDF
+        const exportPDFBtn = Utils.$('#export-pdf-btn');
+        if (exportPDFBtn) {
+            exportPDFBtn.addEventListener('click', () => {
+                if (MortgageCalculator.state.currentCalculation) {
+                    ExportManager.exportToPDF(MortgageCalculator.state.currentCalculation);
+                } else {
+                    NotificationManager.show('Please calculate first before exporting.', 'warning');
+                }
+            });
+        }
+
+        // Export CSV
+        const exportScheduleBtn = Utils.$('#export-schedule-btn');
+        if (exportScheduleBtn) {
+            exportScheduleBtn.addEventListener('click', () => {
+                if (MortgageCalculator.state.amortizationData.length > 0) {
+                    ExportManager.exportToCSV(MortgageCalculator.state.amortizationData);
+                } else {
+                    NotificationManager.show('Please calculate first before exporting.', 'warning');
+                }
+            });
+        }
+
+        // Share button
+        const shareBtn = Utils.$('#share-btn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                this.shareResults();
+            });
+        }
+
+        // Email button
+        const emailBtn = Utils.$('#email-btn');
+        if (emailBtn) {
+            emailBtn.addEventListener('click', () => {
+                this.emailResults();
+            });
+        }
+
+        // Print button
+        const printBtn = Utils.$('#print-btn');
+        if (printBtn) {
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+        }
+
+        // Get quotes button
+        const getQuotesBtn = Utils.$('#get-quotes-btn');
+        if (getQuotesBtn) {
+            getQuotesBtn.addEventListener('click', () => {
+                this.showLeadModal();
+            });
+        }
+    },
+
+    setupDownPaymentTabs() {
+        const tabAmount = Utils.$('#tab-amount');
+        const tabPercent = Utils.$('#tab-percent');
+        const amountPanel = Utils.$('#dp-amount-panel');
+        const percentPanel = Utils.$('#dp-percent-panel');
+        const dpAmount = Utils.$('#dp-amount');
+        const dpPercent = Utils.$('#dp-percent');
+
+        if (!tabAmount || !tabPercent) return;
+
+        tabAmount.addEventListener('click', () => {
+            this.switchDownPaymentMode('amount');
+        });
+
+        tabPercent.addEventListener('click', () => {
+            this.switchDownPaymentMode('percent');
+        });
+
+        // Sync down payment inputs
+        if (dpAmount) {
+            dpAmount.addEventListener('input', () => {
+                this.syncDownPayment(false);
+            });
+        }
+
+        if (dpPercent) {
+            dpPercent.addEventListener('input', () => {
+                this.syncDownPayment(true);
+            });
+        }
+    },
+
+    setupLoanTermSelection() {
+        const termChips = Utils.$$('.term-chip');
+        const customTermInput = Utils.$('#loan-term-custom');
+
+        termChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const term = parseInt(chip.dataset.term);
+                this.setLoanTerm(term);
+                if (customTermInput) customTermInput.value = '';
+            });
+        });
+
+        if (customTermInput) {
+            customTermInput.addEventListener('input', (e) => {
+                const term = parseInt(e.target.value);
+                if (term >= 5 && term <= 50) {
+                    this.setLoanTerm(term, true);
+                }
+            });
+        }
+    },
+
+    setupChartControls() {
+        const chartToggles = Utils.$$('.chart-toggle');
+        chartToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const chartType = toggle.dataset.chart;
+                
+                // Update active state
+                chartToggles.forEach(t => t.classList.remove('active'));
+                toggle.classList.add('active');
+                
+                // Recreate chart
+                if (MortgageCalculator.state.currentCalculation) {
+                    ChartManager.createPaymentChart(MortgageCalculator.state.currentCalculation);
+                }
+            });
+        });
+    },
+
+    setupMobileMenu() {
+        const mobileToggle = Utils.$('#mobile-menu-toggle');
+        const navMenu = Utils.$('#nav-menu');
+
+        if (mobileToggle && navMenu) {
+            mobileToggle.addEventListener('click', () => {
+                const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
+                mobileToggle.setAttribute('aria-expanded', !isExpanded);
+                navMenu.classList.toggle('active');
+            });
+        }
+    },
+
+    setupModals() {
+        const leadModal = Utils.$('#lead-modal');
+        const leadForm = Utils.$('#lead-form');
+
+        if (leadModal) {
+            // Close modal on overlay click
+            leadModal.addEventListener('click', (e) => {
+                if (e.target === leadModal || e.target.hasAttribute('data-close-modal')) {
+                    this.hideLeadModal();
+                }
+            });
+
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !leadModal.hasAttribute('aria-hidden')) {
+                    this.hideLeadModal();
+                }
+            });
+        }
+
+        if (leadForm) {
+            leadForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleLeadSubmission();
+            });
+
+            // Phone number formatting
+            const phoneInput = Utils.$('#phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', (e) => {
+                    e.target.value = this.formatPhoneNumber(e.target.value);
+                });
+            }
+        }
+    },
+
+    populateStateDropdown() {
+        const stateSelect = Utils.$('#state');
+        if (!stateSelect) return;
+
+        // Clear existing options except first
+        while (stateSelect.children.length > 1) {
+            stateSelect.removeChild(stateSelect.lastChild);
+        }
+
+        // Add states
+        Object.entries(STATE_TAX_RATES).forEach(([code, data]) => {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = `${data.name} (${code})`;
+            stateSelect.appendChild(option);
+        });
+
+        // Set default to California
+        stateSelect.value = 'CA';
+    },
+
+    setDefaultValues() {
+        const defaults = {
+            'home-price': 400000,
+            'dp-amount': 80000,
+            'dp-percent': 20,
+            'interest-rate': 6.75,
+            'property-tax': 3000,
+            'home-insurance': 1200,
+            'hoa-fees': 0,
+            'pmi-rate': 0.8,
+            'extra-monthly': 0,
+            'extra-yearly': 0,
+            'start-date': new Date().toISOString().substr(0, 7) // Current month
+        };
+
+        Object.entries(defaults).forEach(([id, value]) => {
+            const element = Utils.$(`#${id}`);
+            if (element && !element.value) {
+                element.value = value;
+            }
+        });
+
+        // Set default loan term
+        this.setLoanTerm(30);
+        
+        // Set default state and update property tax
+        const stateSelect = Utils.$('#state');
+        if (stateSelect && stateSelect.value) {
+            this.updatePropertyTax(stateSelect.value);
+        }
+    },
+
+    // Core calculation method
+    calculateMortgage() {
+        try {
+            const startTime = performance.now();
+            
+            // Gather input values
+            const inputs = this.gatherInputs();
+            
+            // Validate inputs
+            if (!this.validateInputs(inputs)) {
+                return;
+            }
+
+            // Perform calculations
+            const results = MortgageEngine.calculateLoanDetails(inputs);
+            
+            // Generate AI insights
+            const insights = AIInsights.generateInsights(inputs, results);
+            
+            // Generate amortization schedule
+            const amortizationData = MortgageEngine.generateAmortizationSchedule(inputs, results);
+            
+            // Store results
+            MortgageCalculator.state.currentCalculation = results;
+            MortgageCalculator.state.amortizationData = amortizationData;
+            
+            // Update UI
+            this.updateResults(results);
+            this.updateInsights(insights);
+            this.updateAmortizationTable(amortizationData);
+            ChartManager.createPaymentChart(results);
+            
+            // Update PMI alert
+            this.updatePMIAlert(results);
+            
+            // Track analytics
+            Analytics.trackCalculation(inputs, results);
+            
+            const endTime = performance.now();
+            MortgageCalculator.state.performanceMetrics.renderTime = endTime - startTime;
+            
+            console.log(`Calculation completed in ${(endTime - startTime).toFixed(2)}ms`);
+            
+        } catch (error) {
+            console.error('Calculation error:', error);
+            NotificationManager.show('Error calculating mortgage. Please check your inputs and try again.', 'error');
+        }
+    },
+
+    gatherInputs() {
+        return {
+            homePrice: parseFloat(Utils.$('#home-price')?.value || 0),
+            downPaymentAmount: parseFloat(Utils.$('#dp-amount')?.value || 0),
+            downPaymentPercent: parseFloat(Utils.$('#dp-percent')?.value || 0),
+            interestRate: parseFloat(Utils.$('#interest-rate')?.value || 0),
+            loanTerm: this.getCurrentLoanTerm(),
+            loanType: MortgageCalculator.state.currentLoanType,
+            state: Utils.$('#state')?.value || '',
+            propertyTax: parseFloat(Utils.$('#property-tax')?.value || 0),
+            homeInsurance: parseFloat(Utils.$('#home-insurance')?.value || 0),
+            hoaFees: parseFloat(Utils.$('#hoa-fees')?.value || 0),
+            pmiRate: parseFloat(Utils.$('#pmi-rate')?.value || 0),
+            extraMonthly: parseFloat(Utils.$('#extra-monthly')?.value || 0),
+            extraYearly: parseFloat(Utils.$('#extra-yearly')?.value || 0),
+            startDate: Utils.$('#start-date')?.value || new Date().toISOString().substr(0, 7)
+        };
+    },
+
+    validateInputs(inputs) {
+        let isValid = true;
+
+        // Clear previous errors
+        MortgageCalculator.state.validationErrors.clear();
+
+        // Validate required fields
+        if (!inputs.homePrice || inputs.homePrice < 50000) {
+            FormValidator.showError('home-price', 'Home price must be at least $50,000');
+            isValid = false;
+        }
+
+        if (!inputs.interestRate || inputs.interestRate <= 0 || inputs.interestRate > 20) {
+            FormValidator.showError('interest-rate', 'Interest rate must be between 0.1% and 20%');
+            isValid = false;
+        }
+
+        if (!inputs.state) {
+            FormValidator.showError('state', 'Please select your state');
+            isValid = false;
+        }
+
+        // Validate down payment
+        if (inputs.downPaymentAmount >= inputs.homePrice) {
+            FormValidator.showError('dp-amount', 'Down payment cannot be greater than home price');
+            isValid = false;
+        }
+
+        // Validate loan type specific requirements
+        const loanConfig = MortgageCalculator.config.loanTypes[inputs.loanType];
+        const downPaymentPercent = (inputs.downPaymentAmount / inputs.homePrice) * 100;
+        
+        if (downPaymentPercent < loanConfig.minDownPayment * 100) {
+            FormValidator.showError('dp-amount', `${loanConfig.name} requires at least ${(loanConfig.minDownPayment * 100).toFixed(1)}% down payment`);
+            isValid = false;
+        }
+
+        return isValid;
+    },
+
+    updateResults(results) {
+        // Main payment display
+        Utils.$('#total-payment').textContent = Utils.formatCurrency(results.totalMonthly);
+        
+        // Payment breakdown
+        Utils.$('#pi-payment').textContent = Utils.formatCurrency(results.monthlyPI);
+        Utils.$('#tax-payment').textContent = Utils.formatCurrency(results.monthlyTax);
+        Utils.$('#insurance-payment').textContent = Utils.formatCurrency(results.monthlyInsurance);
+        Utils.$('#pmi-payment').textContent = Utils.formatCurrency(results.monthlyPMI);
+        Utils.$('#hoa-payment').textContent = Utils.formatCurrency(results.monthlyHOA);
+        
+        // Show/hide PMI and HOA rows
+        const pmiRow = Utils.$('#pmi-row');
+        const hoaRow = Utils.$('#hoa-row');
+        
+        if (pmiRow) {
+            pmiRow.style.display = results.monthlyPMI > 0 ? 'flex' : 'none';
+        }
+        
+        if (hoaRow) {
+            hoaRow.style.display = results.monthlyHOA > 0 ? 'flex' : 'none';
+        }
+        
+        // Summary stats
+        Utils.$('#loan-amount').textContent = Utils.formatCurrency(results.loanAmount);
+        Utils.$('#total-interest').textContent = Utils.formatCurrency(results.totalInterest);
+        Utils.$('#total-cost').textContent = Utils.formatCurrency(results.totalCost);
+    },
+
+    updateInsights(insights) {
+        const insightsList = Utils.$('#insights-list');
+        if (!insightsList) return;
+
+        if (insights.length === 0) {
+            insightsList.innerHTML = '<p class="no-insights">No specific insights available for your calculation.</p>';
+            return;
+        }
+
+        const insightsHTML = insights.map(insight => `
+            <div class="insight-item insight-${insight.type}">
+                <div class="insight-icon">
+                    <i class="${insight.icon}" aria-hidden="true"></i>
+                </div>
+                <div class="insight-content">
+                    <h4 class="insight-title">${insight.title}</h4>
+                    <p class="insight-message">${insight.message}</p>
+                    ${insight.action ? `<button type="button" class="insight-action">${insight.action}</button>` : ''}
+                </div>
+            </div>
+        `).join('');
+
+        insightsList.innerHTML = insightsHTML;
+
+        // Add click handlers for insight actions
+        insightsList.querySelectorAll('.insight-action').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const action = e.target.textContent;
+                this.handleInsightAction(action);
+            });
+        });
+    },
+
+    updateAmortizationTable(scheduleData) {
+        const tbody = Utils.$('#amortization-body');
+        if (!tbody || scheduleData.length === 0) return;
+
+        // Show first 5 years by default (60 payments)
+        const displayData = scheduleData.slice(0, 60);
+        
+        const tableHTML = displayData.map(payment => `
+            <tr>
+                <td>${payment.paymentNumber}</td>
+                <td>${Utils.formatDate(payment.date)}</td>
+                <td class="currency">${Utils.formatCurrency(payment.payment)}</td>
+                <td class="currency">${Utils.formatCurrency(payment.principal)}</td>
+                <td class="currency">${Utils.formatCurrency(payment.interest)}</td>
+                <td class="currency">${Utils.formatCurrency(payment.balance)}</td>
+                <td class="currency">${Utils.formatCurrency(payment.equity)}</td>
+            </tr>
+        `).join('');
+
+        tbody.innerHTML = tableHTML;
+    },
+
+    updatePMIAlert(results) {
+        const pmiAlert = Utils.$('#pmi-alert');
+        if (!pmiAlert) return;
+
+        if (results.monthlyPMI > 0) {
+            pmiAlert.classList.remove('hidden');
+            
+            // Calculate PMI removal date (when LTV reaches 80%)
+            const targetEquity = results.inputs.homePrice * 0.2;
+            const currentEquity = results.downPaymentAmount;
+            const monthlyPrincipal = results.monthlyPI - (results.loanAmount * (results.inputs.interestRate / 100 / 12));
+            const monthsToRemoval = Math.ceil((targetEquity - currentEquity) / monthlyPrincipal);
+            const removalDate = Utils.addMonths(new Date(), monthsToRemoval);
+            
+            pmiAlert.innerHTML = `
+                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                <div class="alert-content">
+                    <strong>PMI Required:</strong> ${Utils.formatCurrency(results.monthlyPMI)} monthly until you reach 20% equity.
+                    <br><small>Estimated PMI removal: ${Utils.formatDate(removalDate)}</small>
+                </div>
+            `;
+        } else {
+            pmiAlert.classList.add('hidden');
+        }
+    },
+
+    // Helper methods
+    switchDownPaymentMode(mode) {
+        const tabAmount = Utils.$('#tab-amount');
+        const tabPercent = Utils.$('#tab-percent');
+        const amountPanel = Utils.$('#dp-amount-panel');
+        const percentPanel = Utils.$('#dp-percent-panel');
+
+        if (mode === 'amount') {
+            tabAmount?.classList.add('active');
+            tabPercent?.classList.remove('active');
+            amountPanel?.classList.add('active');
+            percentPanel?.classList.remove('active');
+            
+            tabAmount?.setAttribute('aria-selected', 'true');
+            tabPercent?.setAttribute('aria-selected', 'false');
+        } else {
+            tabAmount?.classList.remove('active');
+            tabPercent?.classList.add('active');
+            amountPanel?.classList.remove('active');
+            percentPanel?.classList.add('active');
+            
+            tabAmount?.setAttribute('aria-selected', 'false');
+            tabPercent?.setAttribute('aria-selected', 'true');
+        }
+
+        this.syncDownPayment(mode === 'percent');
+    },
+
+    syncDownPayment(fromPercent) {
+        const homePrice = parseFloat(Utils.$('#home-price')?.value || 0);
+        const dpAmount = Utils.$('#dp-amount');
+        const dpPercent = Utils.$('#dp-percent');
+
+        if (!dpAmount || !dpPercent || homePrice === 0) return;
+
+        if (fromPercent) {
+            const percent = Math.min(100, Math.max(0, parseFloat(dpPercent.value || 0)));
+            const amount = Math.round(homePrice * percent / 100);
+            dpAmount.value = amount;
+        } else {
+            const amount = Math.min(homePrice, Math.max(0, parseFloat(dpAmount.value || 0)));
+            const percent = (amount / homePrice) * 100;
+            dpPercent.value = percent.toFixed(1);
+        }
+    },
+
+    setLoanTerm(years, isCustom = false) {
+        MortgageCalculator.state.activeTerm = years;
+
+        // Update term chip selection
+        if (!isCustom) {
+            Utils.$$('.term-chip').forEach(chip => {
+                const chipTerm = parseInt(chip.dataset.term);
+                chip.classList.toggle('active', chipTerm === years);
+            });
+        }
+    },
+
+    getCurrentLoanTerm() {
+        const customTerm = Utils.$('#loan-term-custom')?.value;
+        if (customTerm && parseInt(customTerm) >= 5) {
+            return parseInt(customTerm);
+        }
+        return MortgageCalculator.state.activeTerm || 30;
+    },
+
+    updateLoanTypeUI(loanType) {
+        // Update UI based on loan type
+        const loanConfig = MortgageCalculator.config.loanTypes[loanType];
+        
+        // Update PMI field visibility
+        const pmiGroup = Utils.$('#pmi-rate')?.closest('.form-group');
+        if (pmiGroup) {
+            pmiGroup.style.display = loanConfig.pmiRequired ? 'block' : 'none';
+        }
+
+        // Update down payment minimums
+        const dpAmountInput = Utils.$('#dp-amount');
+        const dpPercentInput = Utils.$('#dp-percent');
+        
+        if (dpAmountInput && dpPercentInput) {
+            const minPercent = loanConfig.minDownPayment * 100;
+            dpPercentInput.min = minPercent;
+            
+            // Update help text
+            const helpText = dpAmountInput.closest('.form-group')?.querySelector('.input-help');
+            if (helpText) {
+                helpText.innerHTML = `<i class="fas fa-info-circle" aria-hidden="true"></i> ${loanConfig.name} minimum: ${minPercent}%`;
+            }
+        }
+    },
+
+    updatePropertyTax(stateCode) {
+        const stateData = STATE_TAX_RATES[stateCode];
+        const homePrice = parseFloat(Utils.$('#home-price')?.value || 0);
+        const propertyTaxInput = Utils.$('#property-tax');
+
+        if (stateData && homePrice > 0 && propertyTaxInput) {
+            const estimatedTax = Math.round(homePrice * stateData.rate);
+            propertyTaxInput.value = estimatedTax;
+            
+            // Update help text
+            const helpElement = Utils.$('#property-tax-help');
+            if (helpElement) {
+                helpElement.innerHTML = `
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                    ${stateData.name} rate: ${Utils.formatPercentage(stateData.rate * 100)} | Average: ${Utils.formatCurrency(stateData.avgTax)}
+                `;
+            }
+        }
+    },
+
+    formatPhoneNumber(value) {
+        const phoneNumber = value.replace(/\D/g, '');
+        const phoneNumberLength = phoneNumber.length;
+        
+        if (phoneNumberLength < 4) return phoneNumber;
+        if (phoneNumberLength < 7) {
+            return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+        }
+        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+    },
+
+    resetForm() {
+        // Reset form fields
+        const form = Utils.$('#mortgage-form');
+        if (form) {
+            form.reset();
+        }
+
+        // Clear validation errors
+        MortgageCalculator.state.validationErrors.clear();
+        Utils.$$('.error').forEach(el => el.classList.remove('error'));
+        Utils.$$('.error-message').forEach(el => {
+            el.textContent = '';
+            el.style.display = 'none';
+        });
+
+        // Reset to defaults
+        this.setDefaultValues();
+        
+        // Recalculate
+        this.calculateMortgage();
+        
+        Analytics.trackEvent('form_reset');
+    },
+
+    // Lead generation and conversion
+    showLeadModal() {
+        const modal = Utils.$('#lead-modal');
+        if (modal) {
+            modal.setAttribute('aria-hidden', 'false');
+            modal.style.display = 'flex';
+            
+            // Focus first input
+            const firstInput = modal.querySelector('input');
+            if (firstInput) {
+                setTimeout(() => firstInput.focus(), 100);
+            }
+            
+            Analytics.trackEvent('lead_modal_opened');
+        }
+    },
+
+    hideLeadModal() {
+        const modal = Utils.$('#lead-modal');
+        if (modal) {
+            modal.setAttribute('aria-hidden', 'true');
+            modal.style.display = 'none';
+            
+            Analytics.trackEvent('lead_modal_closed');
+        }
+    },
+
+    async handleLeadSubmission() {
+        const form = Utils.$('#lead-form');
+        if (!form) return;
+
+        // Validate form
+        if (!FormValidator.validateForm('lead-form')) {
+            NotificationManager.show('Please correct the errors in the form.', 'error');
+            return;
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        try {
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Submitting...';
+            submitBtn.disabled = true;
+
+            // Gather form data
+            const formData = new FormData(form);
+            const leadData = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                creditScore: formData.get('creditScore'),
+                consent: formData.get('consent') === 'on',
+                calculationData: MortgageCalculator.state.currentCalculation,
+                timestamp: new Date().toISOString(),
+                source: 'mortgage_calculator'
+            };
+
+            // Submit lead (replace with actual API call)
+            await this.submitLead(leadData);
+            
+            // Success
+            NotificationManager.show('Thank you! We\'ll connect you with qualified lenders within 24 hours.', 'success');
+            this.hideLeadModal();
+            form.reset();
+            
+            Analytics.trackFormSubmission('lead_generation', true);
+            
+        } catch (error) {
+            console.error('Lead submission error:', error);
+            NotificationManager.show('There was an error submitting your information. Please try again.', 'error');
+            Analytics.trackFormSubmission('lead_generation', false);
+        } finally {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    },
+
+    async submitLead(leadData) {
+        // Simulate API call - replace with actual endpoint
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                console.log('Lead submitted:', leadData);
+                resolve({ success: true });
+            }, 1000);
+        });
+    },
+
+    // Social sharing and export
+    async shareResults() {
+        if (!MortgageCalculator.state.currentCalculation) {
+            NotificationManager.show('Please calculate first before sharing.', 'warning');
+            return;
+        }
+
+        const results = MortgageCalculator.state.currentCalculation;
+        const shareData = {
+            title: '🏠 My Mortgage Calculation Results',
+            text: `Monthly Payment: ${Utils.formatCurrency(results.totalMonthly)} | Total Interest: ${Utils.formatCurrency(results.totalInterest)}`,
+            url: window.location.href
+        };
+
+        try {
+            if (navigator.share && navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+                Analytics.trackEvent('native_share');
+            } else {
+                // Fallback to copying to clipboard
+                const shareText = `${shareData.title}\n${shareData.text}\n${shareData.url}`;
+                await navigator.clipboard.writeText(shareText);
+                NotificationManager.show('Results copied to clipboard!', 'success');
+                Analytics.trackEvent('clipboard_share');
+            }
+        } catch (error) {
+            console.error('Sharing failed:', error);
+            NotificationManager.show('Unable to share results. Please try again.', 'error');
+        }
+    },
+
+    emailResults() {
+        if (!MortgageCalculator.state.currentCalculation) {
+            NotificationManager.show('Please calculate first before emailing.', 'warning');
+            return;
+        }
+
+        const results = MortgageCalculator.state.currentCalculation;
+        const subject = encodeURIComponent('My Mortgage Calculator Results');
+        const body = encodeURIComponent(`
+My Mortgage Calculation Results:
+
+Home Price: ${Utils.formatCurrency(results.inputs.homePrice)}
+Down Payment: ${Utils.formatCurrency(results.downPaymentAmount)} (${results.downPaymentPercent.toFixed(1)}%)
+Loan Amount: ${Utils.formatCurrency(results.loanAmount)}
+Interest Rate: ${results.inputs.interestRate}%
+Loan Term: ${results.inputs.loanTerm} years
+
+Monthly Payment Breakdown:
+• Principal & Interest: ${Utils.formatCurrency(results.monthlyPI)}
+• Property Tax: ${Utils.formatCurrency(results.monthlyTax)}
+• Home Insurance: ${Utils.formatCurrency(results.monthlyInsurance)}
+${results.monthlyPMI > 0 ? `• PMI: ${Utils.formatCurrency(results.monthlyPMI)}` : ''}
+${results.monthlyHOA > 0 ? `• HOA: ${Utils.formatCurrency(results.monthlyHOA)}` : ''}
+
+Total Monthly Payment: ${Utils.formatCurrency(results.totalMonthly)}
+Total Interest Paid: ${Utils.formatCurrency(results.totalInterest)}
+Total Cost: ${Utils.formatCurrency(results.totalCost)}
+
+Calculated using FinGuid's AI-Enhanced Mortgage Calculator: ${window.location.href}
+        `);
+
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        
+        Analytics.trackEvent('email_results');
+    },
+
+    handleInsightAction(action) {
+        // Handle different insight actions
+        switch (action) {
+            case 'Increase Down Payment':
+                // Focus down payment input
+                Utils.$('#dp-amount')?.focus();
+                break;
+            case 'Compare Rates':
+                // Open rate comparison tool or show modal
+                NotificationManager.show('Rate comparison feature coming soon!', 'info');
+                break;
+            case 'Set Up Extra Payments':
+                // Focus extra payment input
+                Utils.$('#extra-monthly')?.focus();
+                break;
+            case 'Get Rate Quotes':
+                this.showLeadModal();
+                break;
+            default:
+                console.log('Unhandled insight action:', action);
+        }
+        
+        Analytics.trackEvent('insight_action_clicked', { action });
+    }
+};
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => App.init());
+} else {
+    App.init();
 }
 
-// Export for global access
+// Service Worker registration
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered:', registration.scope);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed:', registrationError);
+            });
+    });
+}
+
+// Export for global access (for debugging and testing)
 window.MortgageCalculator = MortgageCalculator;
-window.debounce = debounce;
-window.formatNumber = formatNumber;
-window.Storage = Storage;
-window.trackEvent = trackEvent;
+window.MortgageApp = App;
