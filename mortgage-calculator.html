@@ -35,14 +35,8 @@
     <!-- Styles -->
     <link rel="stylesheet" href="mortgage-calculator.css">
     
-    <!-- Chart.js with fallback -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
-    <script>
-        // Fallback if Chart.js doesn't load
-        if (typeof Chart === 'undefined') {
-            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"><\/script>');
-        }
-    </script>
     
     <!-- HTML2Canvas and jsPDF for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -643,7 +637,7 @@
                         <div class="calculator-icon">🔄</div>
                         <div class="calculator-content">
                             <h3 class="calculator-title">Refinance Calculator</h3>
-                            <p class="calculator-description">See if refinacing can save you money</p>
+                            <p class="calculator-description">See if refinancing can save you money</p>
                             <a href="/refinance-calculator" class="calculator-link">
                                 <span class="link-text">Calculate</span>
                                 <span class="link-arrow">→</span>
@@ -824,6 +818,6 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="mortgage-calculator-fixed.js"></script>
+    <script src="mortgage-calculator.js"></script>
 </body>
 </html>
