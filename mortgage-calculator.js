@@ -1,5 +1,5 @@
 /**
- * mortgage-calculator-improved.js
+ * mortgage-calculator.js
  * FinGuid AI-Enhanced Mortgage Calculator v9.0
  * Production Ready with Enhanced Features and Improvements
  * 
