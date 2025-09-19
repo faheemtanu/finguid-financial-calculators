@@ -1,454 +1,2082 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏠 AI-Enhanced Mortgage Calculator | FinGuid USA</title>
-    <meta name="description" content="Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights. World's first AI-enhanced mortgage calculator.">
+:root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+
+  /* RGB versions for opacity control */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+
+  /* Background color tokens (Light Mode) */
+  --color-bg-1: rgba(59, 130, 246, 0.08); /* Light blue */
+  --color-bg-2: rgba(245, 158, 11, 0.08); /* Light yellow */
+  --color-bg-3: rgba(34, 197, 94, 0.08); /* Light green */
+  --color-bg-4: rgba(239, 68, 68, 0.08); /* Light red */
+  --color-bg-5: rgba(147, 51, 234, 0.08); /* Light purple */
+  --color-bg-6: rgba(249, 115, 22, 0.08); /* Light orange */
+  --color-bg-7: rgba(236, 72, 153, 0.08); /* Light pink */
+  --color-bg-8: rgba(6, 182, 212, 0.08); /* Light cyan */
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+  /* Common style patterns */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  /* RGB versions for opacity control */
+  --color-success-rgb: 33, 128, 141;
+  --color-error-rgb: 192, 21, 47;
+  --color-warning-rgb: 168, 75, 47;
+  --color-info-rgb: 98, 108, 113;
+
+  /* Typography */
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
+    0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
+    0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* RGB versions for opacity control (Dark Mode) */
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+
+    /* Background color tokens (Dark Mode) */
+    --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
+    --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
+    --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
+    --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
+    --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
+    --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
+    --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
+    --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+
+    /* Semantic Color Tokens (Dark Mode) */
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+    /* Common style patterns - updated for dark mode */
+    --focus-ring: 0 0 0 3px var(--color-focus-ring);
+    --focus-outline: 2px solid var(--color-primary);
+    --status-bg-opacity: 0.15;
+    --status-border-opacity: 0.25;
+    --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+    /* RGB versions for dark mode */
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+/* Data attribute for manual theme switching */
+[data-color-scheme="dark"] {
+  /* RGB versions for opacity control (dark mode) */
+  --color-gray-400-rgb: 119, 124, 124;
+  --color-teal-300-rgb: 50, 184, 198;
+  --color-gray-300-rgb: 167, 169, 169;
+  --color-gray-200-rgb: 245, 245, 245;
+
+  /* Colorful background palette - Dark Mode */
+  --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
+  --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
+  --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
+  --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
+  --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
+  --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
+  --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
+  --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+
+  /* Semantic Color Tokens (Dark Mode) */
+  --color-background: var(--color-charcoal-700);
+  --color-surface: var(--color-charcoal-800);
+  --color-text: var(--color-gray-200);
+  --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+  --color-primary: var(--color-teal-300);
+  --color-primary-hover: var(--color-teal-400);
+  --color-primary-active: var(--color-teal-800);
+  --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+  --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+  --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+  --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+  --color-error: var(--color-red-400);
+  --color-success: var(--color-teal-300);
+  --color-warning: var(--color-orange-400);
+  --color-info: var(--color-gray-300);
+  --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+  --color-btn-primary-text: var(--color-slate-900);
+  --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
+  --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+  --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+  /* Common style patterns - updated for dark mode */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  /* RGB versions for dark mode */
+  --color-success-rgb: var(--color-teal-300-rgb);
+  --color-error-rgb: var(--color-red-400-rgb);
+  --color-warning-rgb: var(--color-orange-400-rgb);
+  --color-info-rgb: var(--color-gray-300-rgb);
+}
+
+[data-color-scheme="light"] {
+  /* RGB versions for opacity control (light mode) */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+
+  /* RGB versions for light mode */
+  --color-success-rgb: var(--color-teal-500-rgb);
+  --color-error-rgb: var(--color-red-500-rgb);
+  --color-warning-rgb: var(--color-orange-500-rgb);
+  --color-info-rgb: var(--color-slate-500-rgb);
+}
+
+/* Base styles */
+html {
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+}
+h2 {
+  font-size: var(--font-size-3xl);
+}
+h3 {
+  font-size: var(--font-size-2xl);
+}
+h4 {
+  font-size: var(--font-size-xl);
+}
+h5 {
+  font-size: var(--font-size-lg);
+}
+h6 {
+  font-size: var(--font-size-md);
+}
+
+p {
+  margin: 0 0 var(--space-16) 0;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+code,
+pre {
+  font-family: var(--font-family-mono);
+  font-size: calc(var(--font-size-base) * 0.95);
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-sm);
+}
+
+code {
+  padding: var(--space-1) var(--space-4);
+}
+
+pre {
+  padding: var(--space-16);
+  margin: var(--space-16) 0;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+  border: none;
+  text-decoration: none;
+  position: relative;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn--primary:active {
+  background: var(--color-primary-active);
+}
+
+.btn--secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover {
+  background: var(--color-secondary-hover);
+}
+
+.btn--secondary:active {
+  background: var(--color-secondary-active);
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--outline:hover {
+  background: var(--color-secondary);
+}
+
+.btn--sm {
+  padding: var(--space-4) var(--space-12);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+}
+
+.btn--lg {
+  padding: var(--space-10) var(--space-20);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-md);
+}
+
+.btn--full-width {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form elements */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: var(--space-8) var(--space-12);
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+textarea.form-control {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+}
+
+select.form-control {
+  padding: var(--space-8) var(--space-12);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: var(--select-caret-light);
+  background-repeat: no-repeat;
+  background-position: right var(--space-12) center;
+  background-size: 16px;
+  padding-right: var(--space-32);
+}
+
+/* Add a dark mode specific caret */
+@media (prefers-color-scheme: dark) {
+  select.form-control {
+    background-image: var(--select-caret-dark);
+  }
+}
+
+/* Also handle data-color-scheme */
+[data-color-scheme="dark"] select.form-control {
+  background-image: var(--select-caret-dark);
+}
+
+[data-color-scheme="light"] select.form-control {
+  background-image: var(--select-caret-light);
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  outline: var(--focus-outline);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-8);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.form-group {
+  margin-bottom: var(--space-16);
+}
+
+/* Card component */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card__body {
+  padding: var(--space-16);
+}
+
+.card__header,
+.card__footer {
+  padding: var(--space-16);
+  border-bottom: 1px solid var(--color-card-border-inner);
+}
+
+/* Status indicators - simplified with CSS variables */
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.status--success {
+  background-color: rgba(
+    var(--color-success-rgb, 33, 128, 141),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-success);
+  border: 1px solid
+    rgba(var(--color-success-rgb, 33, 128, 141), var(--status-border-opacity));
+}
+
+.status--error {
+  background-color: rgba(
+    var(--color-error-rgb, 192, 21, 47),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-error);
+  border: 1px solid
+    rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
+}
+
+.status--warning {
+  background-color: rgba(
+    var(--color-warning-rgb, 168, 75, 47),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-warning);
+  border: 1px solid
+    rgba(var(--color-warning-rgb, 168, 75, 47), var(--status-border-opacity));
+}
+
+.status--info {
+  background-color: rgba(
+    var(--color-info-rgb, 98, 108, 113),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-info);
+  border: 1px solid
+    rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
+}
+
+/* Container layout */
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: var(--space-16);
+  padding-left: var(--space-16);
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: var(--container-sm);
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: var(--container-md);
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: var(--container-lg);
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: var(--container-xl);
+  }
+}
+
+/* Utility classes */
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-8 {
+  gap: var(--space-8);
+}
+.gap-16 {
+  gap: var(--space-16);
+}
+
+.m-0 {
+  margin: 0;
+}
+.mt-8 {
+  margin-top: var(--space-8);
+}
+.mb-8 {
+  margin-bottom: var(--space-8);
+}
+.mx-8 {
+  margin-left: var(--space-8);
+  margin-right: var(--space-8);
+}
+.my-8 {
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.p-0 {
+  padding: 0;
+}
+.py-8 {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+}
+.px-8 {
+  padding-left: var(--space-8);
+  padding-right: var(--space-8);
+}
+.py-16 {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+.px-16 {
+  padding-left: var(--space-16);
+  padding-right: var(--space-16);
+}
+
+.block {
+  display: block;
+}
+.hidden {
+  display: none;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+/* Dark mode specifics */
+[data-color-scheme="dark"] .btn--outline {
+  border: 1px solid var(--color-border-secondary);
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
+    format('woff2');
+}
+
+/* END PERPLEXITY DESIGN SYSTEM */
+```css
+/* mortgage-calculator.css */
+/* FinGuid Mortgage Calculator - Production Ready v8.0 */
+
+/* ========== CSS VARIABLES ========== */
+:root {
+    /* Colors - Using design system tokens */
+    --color-primary: var(--color-primary);
+    --color-primary-light: var(--color-teal-300);
+    --color-primary-dark: var(--color-primary-hover);
+    --color-secondary: var(--color-orange-500);
+    --color-success: var(--color-success);
+    --color-error: var(--color-error);
+    --color-warning: var(--color-warning);
+    --color-info: var(--color-info);
     
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="AI-Enhanced Mortgage Calculator | FinGuid USA">
-    <meta property="og:description" content="Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.finguid.com/mortgage-calculator">
-    <meta property="og:image" content="https://www.finguid.com/images/mortgage-calculator-preview.jpg">
+    /* Backgrounds */
+    --color-bg-primary: var(--color-background);
+    --color-bg-secondary: var(--color-surface);
+    --color-bg-card: var(--color-surface);
+    --color-bg-alt: var(--color-secondary);
     
-    <!-- Stylesheets and Fonts -->
-    <link rel="stylesheet" href="mortgage-calculator.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    /* Text */
+    --color-text-primary: var(--color-text);
+    --color-text-secondary: var(--color-text-secondary);
+    --color-text-muted: var(--color-gray-400);
+    --color-text-light: var(--color-btn-primary-text);
     
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    /* Borders */
+    --color-border-light: var(--color-card-border);
+    --color-border-medium: var(--color-border);
+    --color-border-dark: var(--color-gray-400);
     
-    <!-- JSON-LD Schema for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "FinGuid AI-Enhanced Mortgage Calculator",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Web Browser",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "description": "AI-enhanced mortgage calculator with state-specific taxes, PMI calculations, and personalized insights for US homebuyers.",
-        "url": "https://www.finguid.com/mortgage-calculator",
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "reviewCount": "2847"
-        }
+    /* Shadows */
+    --shadow-sm: var(--shadow-sm);
+    --shadow-md: var(--shadow-md);
+    --shadow-lg: var(--shadow-lg);
+    --shadow-xl: var(--shadow-lg);
+    
+    /* Typography */
+    --font-family-base: var(--font-family-base);
+    --font-size-xs: var(--font-size-xs);
+    --font-size-sm: var(--font-size-sm);
+    --font-size-base: var(--font-size-base);
+    --font-size-lg: var(--font-size-lg);
+    --font-size-xl: var(--font-size-xl);
+    --font-size-2xl: var(--font-size-2xl);
+    --font-size-3xl: var(--font-size-3xl);
+    --font-size-4xl: var(--font-size-4xl);
+    --font-weight-normal: var(--font-weight-normal);
+    --font-weight-medium: var(--font-weight-medium);
+    --font-weight-semibold: var(--font-weight-semibold);
+    --font-weight-bold: var(--font-weight-bold);
+    --font-weight-extrabold: var(--font-weight-bold);
+    
+    /* Spacing */
+    --space-1: var(--space-4);
+    --space-2: var(--space-8);
+    --space-3: var(--space-12);
+    --space-4: var(--space-16);
+    --space-5: var(--space-20);
+    --space-6: var(--space-24);
+    --space-8: var(--space-32);
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+    
+    /* Border Radius */
+    --radius-sm: var(--radius-sm);
+    --radius-base: var(--radius-base);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+    --radius-xl: var(--radius-lg);
+    --radius-full: var(--radius-full);
+    
+    /* Transitions */
+    --transition-fast: var(--duration-fast) var(--ease-standard);
+    --transition-normal: var(--duration-normal) var(--ease-standard);
+    --transition-slow: 0.5s var(--ease-standard);
+    
+    /* Layout */
+    --max-width-container: var(--container-xl);
+    --max-width-content: var(--container-lg);
+    --header-height: 70px;
+}
+
+/* ========== BASE STYLES ========== */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: var(--font-family-base);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    background-color: var(--color-background);
+}
+
+/* ========== ACCESSIBILITY ========== */
+.skip-nav {
+    position: absolute;
+    top: -40px;
+    left: var(--space-6);
+    background: var(--color-primary);
+    color: var(--color-btn-primary-text);
+    padding: var(--space-2) var(--space-4);
+    text-decoration: none;
+    border-radius: var(--radius-base);
+    z-index: 1000;
+    transition: top var(--transition-fast);
+}
+
+.skip-nav:focus {
+    top: var(--space-6);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ========== HEADER ========== */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-card-border);
+    box-shadow: var(--shadow-sm);
+    z-index: 100;
+    height: var(--header-height);
+}
+
+.navbar {
+    height: 100%;
+    padding: 0;
+}
+
+.navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    max-width: var(--max-width-container);
+    margin: 0 auto;
+    padding: 0 var(--space-16);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+}
+
+.brand-icon {
+    margin-right: var(--space-8);
+    font-size: var(--font-size-2xl);
+}
+
+.nav-menu {
+    display: none;
+    gap: var(--space-32);
+    align-items: center;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    padding: var(--space-8) var(--space-12);
+    border-radius: var(--radius-base);
+    transition: all var(--transition-fast);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--color-primary);
+    background-color: var(--color-secondary);
+}
+
+.global-controls {
+    display: flex;
+    gap: var(--space-8);
+    align-items: center;
+}
+
+.global-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+}
+
+.global-btn:hover {
+    background: var(--color-secondary);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.global-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-btn-primary-text);
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-8);
+}
+
+.hamburger span {
+    width: 24px;
+    height: 3px;
+    background: var(--color-text);
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+}
+
+/* ========== HERO SECTION ========== */
+.hero-section {
+    padding: calc(var(--header-height) + var(--space-32)) 0 var(--space-12) 0;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-teal-300) 100%);
+    color: var(--color-btn-primary-text);
+    text-align: center;
+}
+
+.hero-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-16);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 var(--space-16) 0;
+    line-height: var(--line-height-tight);
+}
+
+.hero-icon {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+    background-size: 400% 400%;
+    animation: gradientShift 3s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: var(--font-size-4xl);
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.title-text {
+    background: linear-gradient(45deg, #ffffff, #f0f9ff, #dbeafe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-normal);
+    opacity: 0.95;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.4;
+}
+
+/* ========== MAIN LAYOUT ========== */
+.calculator-section {
+    padding: var(--space-12) 0;
+}
+
+.container {
+    max-width: var(--max-width-container);
+    margin: 0 auto;
+    padding: 0 var(--space-16);
+}
+
+.calculator-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-32);
+    align-items: start;
+}
+
+/* ========== PANEL STYLES ========== */
+.input-panel,
+.results-panel,
+.ad-panel {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-card-border);
+    box-shadow: var(--shadow-md);
+}
+
+.input-panel {
+    padding: var(--space-24);
+}
+
+.results-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+}
+
+.panel-header {
+    margin-bottom: var(--space-24);
+}
+
+.panel-header h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    margin: 0;
+}
+
+/* ========== FORM STYLES ========== */
+.form-section {
+    border: none;
+    padding: 0;
+    margin: 0 0 var(--space-24) 0;
+}
+
+.form-section legend {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-lg);
+    color: var(--color-text);
+    margin-bottom: var(--space-16);
+    padding: 0;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: var(--space-4);
+}
+
+.form-group {
+    margin-bottom: var(--space-16);
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    margin-bottom: var(--space-8);
+}
+
+.input-with-prefix,
+.input-with-suffix {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-prefix,
+.input-suffix {
+    position: absolute;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    z-index: 2;
+}
+
+.input-prefix {
+    left: var(--space-12);
+}
+
+.input-suffix {
+    right: var(--space-12);
+}
+
+.input-with-prefix input {
+    padding-left: var(--space-32);
+}
+
+.input-with-suffix input {
+    padding-right: var(--space-32);
+}
+
+input[type="number"],
+input[type="month"],
+select {
+    width: 100%;
+    padding: var(--space-12) var(--space-16);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition: all var(--transition-fast);
+}
+
+input:focus,
+select:focus {
+    outline: var(--focus-outline);
+    border-color: var(--color-primary);
+    box-shadow: var(--focus-ring);
+}
+
+input:invalid {
+    border-color: var(--color-error);
+}
+
+/* ========== TAB CONTROLS ========== */
+.tab-controls {
+    display: flex;
+    margin-bottom: var(--space-12);
+    background: var(--color-secondary);
+    border-radius: var(--radius-base);
+    overflow: hidden;
+    border: 1px solid var(--color-card-border);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: var(--space-8) var(--space-16);
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.tab-btn.active {
+    background: var(--color-primary);
+    color: var(--color-btn-primary-text);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ========== TERM CHIPS ========== */
+.term-chips {
+    display: flex;
+    gap: var(--space-8);
+    margin-bottom: var(--space-16);
+    flex-wrap: wrap;
+}
+
+.term-chip {
+    padding: var(--space-8) var(--space-16);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.term-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.term-chip.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-btn-primary-text);
+}
+
+/* ========== ADVANCED OPTIONS ========== */
+.advanced-options {
+    margin-top: var(--space-24);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.advanced-options summary {
+    padding: var(--space-16);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+    color: var(--color-btn-primary-text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--transition-normal);
+}
+
+.advanced-options summary:hover {
+    background: linear-gradient(135deg, var(--color-primary-hover), var(--color-primary));
+}
+
+.advanced-options summary::-webkit-details-marker {
+    display: none;
+}
+
+.advanced-content {
+    padding: var(--space-24);
+    background: var(--color-surface);
+}
+
+/* ========== RESULT CARDS ========== */
+.result-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    box-shadow: var(--shadow-md);
+}
+
+.result-card h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    margin: 0 0 var(--space-16) 0;
+}
+
+/* ========== MORTGAGE RESULTS ========== */
+.total-payment-section {
+    text-align: center;
+    margin-bottom: var(--space-24);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-card-border);
+}
+
+.total-label {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-8) 0;
+}
+
+.total-amount {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin: 0;
+    line-height: var(--line-height-tight);
+}
+
+.payment-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-12);
+    background: var(--color-secondary);
+    border-radius: var(--radius-base);
+    border-left: 4px solid var(--color-primary);
+}
+
+.breakdown-item span:first-child {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+}
+
+.breakdown-item span:last-child {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    font-size: var(--font-size-lg);
+}
+
+/* ========== MORTGAGE OVER TIME ========== */
+.over-time-summary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-16);
+    margin-bottom: var(--space-24);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-16);
+    background: var(--color-secondary);
+    border-radius: var(--radius-base);
+    border: 1px solid var(--color-card-border);
+}
+
+.summary-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+.summary-value {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.chart-container {
+    height: 300px;
+    margin: var(--space-16) 0;
+}
+
+/* ========== SHARE OPTIONS ========== */
+.share-actions {
+    display: flex;
+    gap: var(--space-12);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.share-btn-primary {
+    background: var(--color-primary);
+    color: var(--color-btn-primary-text);
+    border: none;
+    border-radius: var(--radius-full);
+    padding: var(--space-12) var(--space-24);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-md);
+}
+
+.share-btn-primary:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.action-btn {
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: var(--space-12) var(--space-20);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-1px);
+}
+
+/* ========== AI INSIGHTS ========== */
+.insights-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+}
+
+.insight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-12);
+    padding: var(--space-16);
+    background: var(--color-secondary);
+    border-radius: var(--radius-base);
+    border-left: 4px solid var(--color-info);
+}
+
+.insight-item.warning {
+    border-left-color: var(--color-warning);
+    background: rgba(var(--color-warning-rgb), var(--status-bg-opacity));
+}
+
+.insight-item.success {
+    border-left-color: var(--color-success);
+    background: rgba(var(--color-success-rgb), var(--status-bg-opacity));
+}
+
+.insight-item.error {
+    border-left-color: var(--color-error);
+    background: rgba(var(--color-error-rgb), var(--status-bg-opacity));
+}
+
+.insight-item i {
+    margin-top: var(--space-4);
+    font-size: var(--font-size-lg);
+}
+
+.insight-item .insight-content {
+    flex: 1;
+}
+
+.insight-item h4 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin: 0 0 var(--space-4) 0;
+}
+
+.insight-item p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: var(--line-height-normal);
+}
+
+/* ========== AMORTIZATION SCHEDULE ========== */
+.amortization-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.amortization-summary {
+    padding: var(--space-16) var(--space-24);
+    background: var(--color-secondary);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-card-border);
+}
+
+.amortization-summary h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.summary-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+}
+
+.amortization-btn {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    padding: var(--space-8) var(--space-12);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    transition: all var(--transition-fast);
+}
+
+.amortization-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.toggle-icon {
+    transition: transform var(--transition-normal);
+}
+
+.amortization-card[open] .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.amortization-content {
+    padding: var(--space-24);
+}
+
+.table-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-16);
+    gap: var(--space-16);
+}
+
+.view-controls {
+    display: flex;
+    gap: var(--space-8);
+}
+
+.view-btn {
+    background: var(--color-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    padding: var(--space-8) var(--space-16);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.view-btn.active,
+.view-btn:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-btn-primary-text);
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+.pagination-btn {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    padding: var(--space-8) var(--space-12);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.pagination-btn:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    margin: 0 var(--space-8);
+}
+
+.table-responsive {
+    overflow-x: auto;
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-base);
+}
+
+#amortization-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+}
+
+#amortization-table th,
+#amortization-table td {
+    padding: var(--space-12);
+    text-align: left;
+    border-bottom: 1px solid var(--color-card-border);
+}
+
+#amortization-table th {
+    background: var(--color-secondary);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    position: sticky;
+    top: 0;
+}
+
+#amortization-table td {
+    color: var(--color-text-secondary);
+}
+
+#amortization-table tr:hover td {
+    background: var(--color-secondary);
+}
+
+/* ========== AD PANEL ========== */
+.ad-panel {
+    padding: var(--space-24);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+}
+
+.ad-placeholder {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    text-align: center;
+    background: var(--color-secondary);
+}
+
+.ad-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    margin-bottom: var(--space-16);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+.ad-content h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin: 0 0 var(--space-8) 0;
+}
+
+.ad-content p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-16) 0;
+}
+
+.ad-cta {
+    background: var(--color-orange-500);
+    color: var(--color-btn-primary-text);
+    border: none;
+    border-radius: var(--radius-base);
+    padding: var(--space-12) var(--space-20);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.ad-cta:hover {
+    background: var(--color-orange-400);
+    transform: translateY(-1px);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+    background: var(--color-slate-900);
+    color: var(--color-gray-200);
+    padding: var(--space-16) 0 var(--space-8) 0;
+    margin-top: var(--space-20);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-32);
+    margin-bottom: var(--space-32);
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-teal-300);
+    margin-bottom: var(--space-16);
+}
+
+.footer-section h4 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-teal-300);
+    margin: 0 0 var(--space-16) 0;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: var(--space-8);
+}
+
+.footer-section a {
+    color: var(--color-gray-300);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    transition: color var(--transition-fast);
+}
+
+.footer-section a:hover {
+    color: var(--color-teal-300);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--color-gray-400);
+    padding-top: var(--space-24);
+    text-align: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-300);
+}
+
+/* ========== VOICE STATUS ========== */
+.voice-status {
+    position: fixed;
+    bottom: var(--space-24);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-slate-900);
+    color: var(--color-gray-200);
+    padding: var(--space-12) var(--space-20);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
+}
+
+#voice-close {
+    background: none;
+    border: none;
+    color: var(--color-gray-200);
+    cursor: pointer;
+    padding: var(--space-4);
+    margin-left: var(--space-8);
+}
+
+/* ========== TOAST NOTIFICATIONS ========== */
+.toast-container {
+    position: fixed;
+    top: calc(var(--header-height) + var(--space-16));
+    right: var(--space-16);
+    z-index: 1000;
+}
+
+.toast {
+    background: var(--color-surface);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-16);
+    margin-bottom: var(--space-8);
+    box-shadow: var(--shadow-lg);
+    animation: slideIn 0.3s ease-out;
+    max-width: 350px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
     }
-    </script>
-</head>
-<body>
-    <!-- Skip Navigation for Accessibility -->
-    <a href="#main-content" class="skip-nav">Skip to main content</a>
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ========== TOOLTIPS ========== */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]:hover::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + var(--space-8));
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-slate-900);
+    color: var(--color-gray-200);
+    padding: var(--space-8) var(--space-12);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+}
+
+[data-tooltip]:hover::after {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + var(--space-4));
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--color-slate-900);
+    z-index: 1000;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Mobile portrait - 480px breakpoint */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--space-12);
+    }
     
-    <!-- Header -->
-    <header class="header" role="banner">
-        <nav class="navbar" role="navigation">
-            <div class="container">
-                <a href="https://finguid.com/" class="nav-brand" aria-label="FinGuid Home">
-                    <i class="fas fa-calculator brand-icon" aria-hidden="true"></i>
-                    <span class="brand-text">FinGuid</span>
-                </a>
-                
-                <div class="nav-menu" id="nav-menu">
-                    <a href="https://finguid.com/" class="nav-link">Home</a>
-                    <a href="https://finguid.com/calculators" class="nav-link active" aria-current="page">Calculators</a>
-                    <a href="https://finguid.com/resources" class="nav-link">Resources</a>
-                    <a href="https://finguid.com/partners" class="nav-link">Partners</a>
-                    <a href="https://finguid.com/contact" class="nav-link">Contact</a>
-                </div>
-                
-                <!-- Global Controls -->
-                <div class="global-controls">
-                    <button id="screen-reader-btn" class="global-btn" 
-                            aria-label="Toggle Screen Reader Announcements" 
-                            title="Enable/Disable Screen Reader (Alt+R)">
-                        <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    </button>
-                    <button id="voice-command-btn" class="global-btn" 
-                            aria-label="Activate Voice Commands" 
-                            title="Voice Commands (Alt+V)">
-                        <i class="fas fa-microphone-alt" aria-hidden="true"></i>
-                    </button>
-                </div>
-                
-                <button class="hamburger" id="hamburger" aria-label="Toggle Menu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </nav>
-    </header>
+    .hero-title {
+        font-size: var(--font-size-2xl);
+        flex-direction: column;
+        gap: var(--space-8);
+    }
+    
+    .hero-subtitle {
+        font-size: var(--font-size-sm);
+    }
+    
+    .input-panel,
+    .result-card,
+    .ad-panel {
+        padding: var(--space-16);
+    }
+    
+    .calculator-layout {
+        gap: var(--space-16);
+    }
+    
+    .form-section {
+        margin-bottom: var(--space-16);
+    }
+    
+    .form-group {
+        margin-bottom: var(--space-12);
+    }
+    
+    .term-chips {
+        justify-content: center;
+        gap: var(--space-4);
+    }
+    
+    .term-chip {
+        padding: var(--space-6) var(--space-12);
+        font-size: var(--font-size-xs);
+    }
+    
+    .share-actions {
+        flex-direction: column;
+        gap: var(--space-8);
+    }
+    
+    .share-btn-primary,
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .table-controls {
+        flex-direction: column;
+        gap: var(--space-12);
+    }
+    
+    .over-time-summary {
+        gap: var(--space-8);
+    }
+    
+    .summary-item {
+        padding: var(--space-12);
+    }
+    
+    .payment-breakdown {
+        gap: var(--space-8);
+    }
+    
+    .breakdown-item {
+        padding: var(--space-8);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+    }
+    
+    .total-amount {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .insights-list {
+        gap: var(--space-12);
+    }
+    
+    .insight-item {
+        padding: var(--space-12);
+        gap: var(--space-8);
+    }
+    
+    .nav-menu {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        background: var(--color-surface);
+        flex-direction: column;
+        padding: var(--space-16);
+        gap: var(--space-8);
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-100%);
+        transition: transform var(--transition-normal);
+    }
+    
+    .nav-menu.active {
+        transform: translateY(0);
+    }
+    
+    .hamburger {
+        display: flex;
+    }
+    
+    [data-tooltip]:hover::before {
+        max-width: 250px;
+        white-space: normal;
+        text-align: center;
+        font-size: var(--font-size-xs);
+    }
+}
 
-    <!-- Main Content -->
-    <main id="main-content" role="main">
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="container">
-                <h1 class="hero-title">
-                    <i class="fas fa-home hero-icon" aria-hidden="true"></i>
-                    <span class="title-text">AI-Enhanced Mortgage Calculator</span>
-                </h1>
-                <p class="hero-subtitle">Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.</p>
-            </div>
-        </section>
+@media (min-width: 768px) {
+    .nav-menu {
+        display: flex;
+    }
+    
+    .hamburger {
+        display: none;
+    }
+    
+    .over-time-summary {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .share-actions {
+        justify-content: flex-start;
+    }
+    
+    .table-controls {
+        flex-direction: row;
+    }
+}
 
-        <!-- Calculator Section -->
-        <section class="calculator-section">
-            <div class="container">
-                <div class="calculator-layout">
-                    
-                    <!-- Left Panel: Input Form -->
-                    <div class="input-panel">
-                        <div class="panel-header">
-                            <h2><i class="fas fa-calculator" aria-hidden="true"></i> Mortgage Calculator</h2>
-                        </div>
-                        
-                        <form id="mortgage-form" novalidate>
-                            <!-- Home Details -->
-                            <fieldset class="form-section">
-                                <legend>1. Home Details</legend>
-                                
-                                <div class="form-group" data-tooltip="The total purchase price of the home">
-                                    <label for="home-price">Home Price</label>
-                                    <div class="input-with-prefix">
-                                        <span class="input-prefix">$</span>
-                                        <input type="number" id="home-price" value="400000" required aria-describedby="home-price-desc">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group" data-tooltip="Amount paid upfront. 20% or more avoids PMI">
-                                    <label>Down Payment</label>
-                                    <div class="tab-controls">
-                                        <button type="button" class="tab-btn active" data-tab="dollar">Amount ($)</button>
-                                        <button type="button" class="tab-btn" data-tab="percent">Percent (%)</button>
-                                    </div>
-                                    <div class="tab-content active" data-tab-content="dollar">
-                                        <div class="input-with-prefix">
-                                            <span class="input-prefix">$</span>
-                                            <input type="number" id="dp-amount" value="80000">
-                                        </div>
-                                    </div>
-                                    <div class="tab-content" data-tab-content="percent">
-                                        <div class="input-with-suffix">
-                                            <input type="number" id="dp-percent" value="20" step="0.1">
-                                            <span class="input-suffix">%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group" data-tooltip="Annual interest rate for your loan">
-                                    <label for="interest-rate">Interest Rate</label>
-                                    <div class="input-with-suffix">
-                                        <input type="number" id="interest-rate" value="6.75" step="0.01" required>
-                                        <span class="input-suffix">%</span>
-                                    </div>
-                                </div>
-                            </fieldset>
-                            
-                            <!-- Loan Term -->
-                            <fieldset class="form-section">
-                                <legend>2. Loan Term</legend>
-                                <div class="term-chips">
-                                    <button type="button" class="term-chip" data-term="10">10 yr</button>
-                                    <button type="button" class="term-chip" data-term="15">15 yr</button>
-                                    <button type="button" class="term-chip" data-term="20">20 yr</button>
-                                    <button type="button" class="term-chip active" data-term="30">30 yr</button>
-                                </div>
-                                <div class="form-group" data-tooltip="Custom loan term in years">
-                                    <label for="loan-term">Or Custom Term (Years)</label>
-                                    <input type="number" id="loan-term" value="30" min="1" max="50" required>
-                                </div>
-                            </fieldset>
-                            
-                            <!-- Advanced Options -->
-                            <details class="advanced-options">
-                                <summary>
-                                    <i class="fas fa-cog" aria-hidden="true"></i> Advanced Options
-                                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                                </summary>
-                                
-                                <div class="advanced-content">
-                                    <fieldset class="form-section">
-                                        <legend>Loan Start Date</legend>
-                                        <div class="form-group" data-tooltip="Month and year of your first payment">
-                                            <label for="start-date">First Payment Date</label>
-                                            <input type="month" id="start-date" required>
-                                        </div>
-                                    </fieldset>
-                                    
-                                    <fieldset class="form-section">
-                                        <legend>Location & Taxes</legend>
-                                        <div class="form-group" data-tooltip="Select your state for accurate property tax estimates">
-                                            <label for="state">State</label>
-                                            <select id="state" required>
-                                                <option value="">Select State</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group" data-tooltip="Annual property tax amount">
-                                            <label for="property-tax">Annual Property Tax</label>
-                                            <div class="input-with-prefix">
-                                                <span class="input-prefix">$</span>
-                                                <input type="number" id="property-tax" value="3000">
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    
-                                    <fieldset class="form-section">
-                                        <legend>Insurance & Additional Costs</legend>
-                                        <div class="form-group" data-tooltip="Annual homeowner's insurance cost">
-                                            <label for="home-insurance">Annual Home Insurance</label>
-                                            <div class="input-with-prefix">
-                                                <span class="input-prefix">$</span>
-                                                <input type="number" id="home-insurance" value="1700">
-                                            </div>
-                                        </div>
-                                        <div class="form-group" data-tooltip="Monthly HOA fees if applicable">
-                                            <label for="hoa-fees">Monthly HOA Fees</label>
-                                            <div class="input-with-prefix">
-                                                <span class="input-prefix">$</span>
-                                                <input type="number" id="hoa-fees" value="0">
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    
-                                    <fieldset class="form-section">
-                                        <legend>Extra Payments</legend>
-                                        <div class="form-group" data-tooltip="Extra amount paid monthly towards principal">
-                                            <label for="extra-monthly">Extra Monthly Payment</label>
-                                            <div class="input-with-prefix">
-                                                <span class="input-prefix">$</span>
-                                                <input type="number" id="extra-monthly" value="0">
-                                            </div>
-                                        </div>
-                                        <div class="form-group" data-tooltip="One-time extra payment towards principal">
-                                            <label for="extra-yearly">One-Time Extra Payment</label>
-                                            <div class="input-with-prefix">
-                                                <span class="input-prefix">$</span>
-                                                <input type="number" id="extra-yearly" value="0">
-                                            </div>
-                                        </div>
-                                        <div class="form-group" data-tooltip="When to make the one-time payment">
-                                            <label for="extra-yearly-date">One-Time Payment Date</label>
-                                            <input type="month" id="extra-yearly-date">
-                                        </div>
-                                    </fieldset>
-                                </div>
-                            </details>
-                        </form>
-                    </div>
-                    
-                    <!-- Center Panel: Results -->
-                    <div class="results-panel">
-                        
-                        <!-- 1. Your Mortgage Results -->
-                        <div class="result-card" id="mortgage-results">
-                            <h2><i class="fas fa-calculator" aria-hidden="true"></i> Your Mortgage Results</h2>
-                            <div class="total-payment-section">
-                                <p class="total-label">Total Monthly Payment</p>
-                                <div class="total-amount" id="total-payment" aria-live="polite">$0</div>
-                            </div>
-                            <div id="payment-breakdown" class="payment-breakdown"></div>
-                        </div>
-                        
-                        <!-- 2. Mortgage Over Time Chart -->
-                        <div class="result-card" id="mortgage-over-time">
-                            <h2><i class="fas fa-chart-line" aria-hidden="true"></i> Mortgage Over Time</h2>
-                            <div class="over-time-summary">
-                                <div class="summary-item">
-                                    <span class="summary-label">Remaining Mortgage Balance</span>
-                                    <span class="summary-value" id="remaining-balance">$383,033</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">Principal Paid</span>
-                                    <span class="summary-value" id="principal-paid">$16,967</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="summary-label">Interest Paid</span>
-                                    <span class="summary-value" id="interest-paid">$23,538</span>
-                                </div>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="mortgage-timeline-chart"></canvas>
-                            </div>
-                        </div>
-                        
-                        <!-- 3. Share Options -->
-                        <div class="result-card" id="share-options">
-                            <div class="share-actions">
-                                <button id="share-btn" class="share-btn-primary" title="Share your results">
-                                    <i class="fas fa-share-alt" aria-hidden="true"></i> Share
-                                </button>
-                                <button id="save-pdf-btn" class="action-btn" title="Save as PDF">
-                                    <i class="fas fa-file-pdf" aria-hidden="true"></i> Save PDF
-                                </button>
-                                <button id="print-btn" class="action-btn" title="Print results">
-                                    <i class="fas fa-print" aria-hidden="true"></i> Print
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- 4. AI-Powered Insights -->
-                        <div class="result-card" id="ai-insights">
-                            <h2><i class="fas fa-robot" aria-hidden="true"></i> AI-Powered Insights</h2>
-                            <div id="insights-list" class="insights-list"></div>
-                        </div>
-                        
-                        <!-- 5. Amortization Schedule -->
-                        <details class="amortization-card">
-                            <summary class="amortization-summary">
-                                <h2><i class="fas fa-table" aria-hidden="true"></i> Amortization Schedule</h2>
-                                <div class="summary-actions">
-                                    <button id="export-csv-btn" class="amortization-btn" title="Export to CSV">
-                                        <i class="fas fa-file-csv" aria-hidden="true"></i> Export CSV
-                                    </button>
-                                    <button id="print-schedule-btn" class="amortization-btn" title="Print schedule">
-                                        <i class="fas fa-print" aria-hidden="true"></i> Print
-                                    </button>
-                                    <i class="fas fa-chevron-down toggle-icon" aria-hidden="true"></i>
-                                </div>
-                            </summary>
-                            
-                            <div class="amortization-content">
-                                <div class="table-controls">
-                                    <div class="view-controls">
-                                        <button id="view-monthly" class="view-btn active">Monthly View</button>
-                                        <button id="view-yearly" class="view-btn">Yearly View</button>
-                                    </div>
-                                    <div class="pagination-controls">
-                                        <button id="prev-page" class="pagination-btn">&laquo; Previous</button>
-                                        <span id="page-info" class="page-info">Page 1 of 25</span>
-                                        <button id="next-page" class="pagination-btn">Next &raquo;</button>
-                                    </div>
-                                </div>
-                                
-                                <div class="table-responsive">
-                                    <table id="amortization-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Payment #</th>
-                                                <th>Date</th>
-                                                <th>Payment</th>
-                                                <th>Principal</th>
-                                                <th>Interest</th>
-                                                <th>Balance</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="amortization-tbody">
-                                            <!-- Populated by JavaScript -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </details>
-                        
-                    </div>
-                    
-                    <!-- Right Panel: Advertisement Placement -->
-                    <div class="ad-panel">
-                        <div class="ad-placeholder">
-                            <div class="ad-header">
-                                <i class="fas fa-bullhorn" aria-hidden="true"></i>
-                                <span>Sponsored</span>
-                            </div>
-                            <div class="ad-content">
-                                <h3>Get Pre-Approved Today</h3>
-                                <p>Compare rates from top lenders. No obligation, completely free.</p>
-                                <button class="ad-cta">Get Free Quotes</button>
-                            </div>
-                        </div>
-                        
-                        <div class="ad-placeholder">
-                            <div class="ad-header">
-                                <i class="fas fa-home" aria-hidden="true"></i>
-                                <span>Partner Offer</span>
-                            </div>
-                            <div class="ad-content">
-                                <h3>Home Insurance Quotes</h3>
-                                <p>Save up to 30% on home insurance with our partners.</p>
-                                <button class="ad-cta">Compare Quotes</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </section>
-    </main>
+@media (min-width: 1024px) {
+    .calculator-layout {
+        grid-template-columns: 1fr 1.5fr 0.8fr;
+        gap: var(--space-10);
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: var(--font-size-xl);
+    }
+}
 
-    <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-brand">
-                        <i class="fas fa-calculator" aria-hidden="true"></i>
-                        <span>FinGuid</span>
-                    </div>
-                    <p>World's first AI-enhanced financial calculator platform specifically designed for Americans. Make smarter financial decisions with intelligent tools.</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Calculators</h4>
-                    <ul>
-                        <li><a href="/mortgage-calculator">Mortgage Calculator</a></li>
-                        <li><a href="/auto-loan-calculator">Auto Loan Calculator</a></li>
-                        <li><a href="/investment-calculator">Investment Calculator</a></li>
-                        <li><a href="/retirement-calculator">Retirement Calculator</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="/financial-blog">Financial Blog</a></li>
-                        <li><a href="/guides">How-to Guides</a></li>
-                        <li><a href="/faq">FAQ</a></li>
-                        <li><a href="/mortgage-rates">Current Rates</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                        <li><a href="/partners">Partners</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 FinGuid. All rights reserved. Built with ❤️ for American homebuyers. Calculations are estimates for informational purposes only.</p>
-            </div>
-        </div>
-    </footer>
+@media (min-width: 1280px) {
+    .calculator-layout {
+        grid-template-columns: 1fr 1.8fr 1fr;
+    }
+}
 
-    <!-- Voice Status Indicator -->
-    <div id="voice-status" class="voice-status" aria-live="assertive" style="display: none;">
-        <i class="fas fa-microphone-alt" aria-hidden="true"></i>
-        <span>Listening...</span>
-        <button id="voice-close" aria-label="Stop voice command">
-            <i class="fas fa-times" aria-hidden="true"></i>
-        </button>
-    </div>
+/* Mobile optimizations for larger screens */
+@media (max-width: 767px) {
+    .ad-panel {
+        order: -1;
+    }
+    
+    .over-time-summary {
+        grid-template-columns: 1fr;
+    }
+}
 
-    <!-- Screen Reader Announcements -->
-    <div id="sr-announcements" class="sr-only" aria-live="assertive"></div>
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    :root {
+        --color-border-light: var(--color-black);
+        --color-border-medium: var(--color-black);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+}
 
-    <!-- Toast Notifications -->
-    <div id="toast-container" class="toast-container"></div>
-
-    <!-- JavaScript -->
-    <script src="mortgage-calculator.js"></script>
-</body>
-</html>
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .hero-icon {
+        animation: none;
+        background: var(--color-primary);
+        -webkit-background-clip: initial;
+        -webkit-text-fill-color: initial;
+        background-clip: initial;
+        color: var(--color-primary);
+    }
+    
+    .voice-status {
+        animation: none;
+    }
+}
+```
