@@ -28,11 +28,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mortgage-calculator.css">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <script type="application/ld+json">
@@ -52,7 +51,7 @@
     }
     </script>
 </head>
-<body>
+<body data-color-scheme="light">
     <a href="#main-content" class="skip-nav">Skip to main content</a>
     
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
@@ -66,10 +65,10 @@
                 </a>
                 
                 <div class="nav-menu" id="nav-menu">
-                    <a href="/calculators" class="nav-link">Calculators</a>
-                    <a href="/guides" class="nav-link">Guides</a>
-                    <a href="/tools" class="nav-link">Tools</a>
-                    <a href="/about" class="nav-link">About</a>
+                    <a href="#" class="nav-link">Calculators</a>
+                    <a href="#" class="nav-link">Guides</a>
+                    <a href="#" class="nav-link">Tools</a>
+                    <a href="#" class="nav-link">About</a>
                 </div>
                 
                 <div class="global-controls">
@@ -107,359 +106,299 @@
                 <div class="input-panel">
                     <div class="panel-header">
                         <h2 class="panel-title">
-                            <span class="panel-icon">📊</span> Mortgage Calculator
+                            <span class="panel-icon">📊</span>
+                            Mortgage Details
                         </h2>
-                        <p class="panel-description">
-                            Enter your loan details to calculate monthly payments and total costs
-                        </p>
                     </div>
+
                     <form class="calculator-form" id="mortgage-form" novalidate>
                         <div class="form-section">
-                            <h3 class="section-title">
-                                <span class="section-icon">💰</span> Loan Details
-                            </h3>
+                            <h3 class="section-title"><span class="section-icon">💰</span>Loan Details</h3>
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="home-price" class="form-label">Home Price</label>
                                     <div class="input-group">
                                         <span class="input-prefix">$ </span>
-                                        <input type="text" id="home-price" name="homePrice" class="form-control" placeholder="350,000" aria-labelledby="home-price-label" inputmode="numeric">
+                                        <input type="text" id="home-price" name="homePrice" class="form-control" value="400,000" required>
                                     </div>
-                                    <div id="home-price-error" class="error-message" role="alert" aria-live="polite"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="down-payment" class="form-label">Down Payment</label>
                                     <div class="input-group">
                                         <span class="input-prefix">$ </span>
-                                        <input type="text" id="down-payment" name="downPayment" class="form-control" placeholder="70,000" aria-labelledby="down-payment-label" inputmode="numeric">
+                                        <input type="text" id="down-payment" name="downPayment" class="form-control" value="80,000" required>
                                     </div>
-                                    <div id="down-payment-error" class="error-message" role="alert" aria-live="polite"></div>
+                                    <div class="down-payment-percentage">
+                                        <span id="down-payment-percent">20.0%</span>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="loan-amount" class="form-label">Loan Amount</label>
                                     <div class="input-group">
                                         <span class="input-prefix">$ </span>
-                                        <input type="text" id="loan-amount" name="loanAmount" class="form-control" placeholder="280,000" aria-labelledby="loan-amount-label" readonly>
+                                        <input type="text" id="loan-amount" name="loanAmount" class="form-control" value="320,000" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="interest-rate" class="form-label">Interest Rate</label>
                                     <div class="input-group">
-                                        <input type="text" id="interest-rate" name="interestRate" class="form-control" placeholder="6.5" aria-labelledby="interest-rate-label" inputmode="decimal">
+                                        <input type="number" id="interest-rate" name="interestRate" class="form-control" value="6.5" step="0.01" min="0.1" max="20" required>
                                         <span class="input-suffix">%</span>
                                     </div>
-                                    <div id="interest-rate-error" class="error-message" role="alert" aria-live="polite"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="loan-term" class="form-label">Loan Term</label>
+                                    <select id="loan-term" name="loanTerm" class="form-control" required>
+                                        <option value="15">15 years</option>
+                                        <option value="20">20 years</option>
+                                        <option value="30" selected>30 years</option>
+                                    </select>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="extra-payment" class="form-label">Extra Monthly Payment</label>
                                     <div class="input-group">
-                                        <input type="number" id="loan-term" name="loanTerm" class="form-control" placeholder="30" value="30" aria-labelledby="loan-term-label" min="1" max="50">
-                                        <span class="input-suffix">years</span>
+                                        <span class="input-prefix">$ </span>
+                                        <input type="text" id="extra-payment" name="extraPayment" class="form-control" value="0">
                                     </div>
-                                    <div id="loan-term-error" class="error-message" role="alert" aria-live="polite"></div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-section">
-                            <h3 class="section-title">
-                                <span class="section-icon">💸</span> Monthly Costs
-                            </h3>
+                            <h3 class="section-title"><span class="section-icon">🏘️</span>Property Details</h3>
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label for="property-tax" class="form-label">Property Tax</label>
-                                    <div class="input-group">
-                                        <span class="input-prefix">$ </span>
-                                        <input type="text" id="property-tax" name="propertyTax" class="form-control" placeholder="3,500" aria-labelledby="property-tax-label" inputmode="numeric">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="state" class="form-label">State</label>
-                                    <select id="state" name="state" class="form-control">
-                                        <option value="">(Select a State)</option>
-                                        <option value="AL">Alabama</option>
-                                        <option value="AK">Alaska</option>
-                                        <option value="AZ">Arizona</option>
-                                        <option value="AR">Arkansas</option>
-                                        <option value="CA">California</option>
-                                        <option value="CO">Colorado</option>
-                                        <option value="CT">Connecticut</option>
-                                        <option value="DE">Delaware</option>
-                                        <option value="FL">Florida</option>
-                                        <option value="GA">Georgia</option>
-                                        <option value="HI">Hawaii</option>
-                                        <option value="ID">Idaho</option>
-                                        <option value="IL">Illinois</option>
-                                        <option value="IN">Indiana</option>
-                                        <option value="IA">Iowa</option>
-                                        <option value="KS">Kansas</option>
-                                        <option value="KY">Kentucky</option>
-                                        <option value="LA">Louisiana</option>
-                                        <option value="ME">Maine</option>
-                                        <option value="MD">Maryland</option>
-                                        <option value="MA">Massachusetts</option>
-                                        <option value="MI">Michigan</option>
-                                        <option value="MN">Minnesota</option>
-                                        <option value="MS">Mississippi</option>
-                                        <option value="MO">Missouri</option>
-                                        <option value="MT">Montana</option>
-                                        <option value="NE">Nebraska</option>
-                                        <option value="NV">Nevada</option>
-                                        <option value="NH">New Hampshire</option>
-                                        <option value="NJ">New Jersey</option>
-                                        <option value="NM">New Mexico</option>
-                                        <option value="NY">New York</option>
-                                        <option value="NC">North Carolina</option>
-                                        <option value="ND">North Dakota</option>
-                                        <option value="OH">Ohio</option>
-                                        <option value="OK">Oklahoma</option>
-                                        <option value="OR">Oregon</option>
-                                        <option value="PA">Pennsylvania</option>
-                                        <option value="RI">Rhode Island</option>
-                                        <option value="SC">South Carolina</option>
-                                        <option value="SD">South Dakota</option>
-                                        <option value="TN">Tennessee</option>
-                                        <option value="TX">Texas</option>
-                                        <option value="UT">Utah</option>
-                                        <option value="VT">Vermont</option>
-                                        <option value="VA">Virginia</option>
-                                        <option value="WA">Washington</option>
-                                        <option value="WV">West Virginia</option>
-                                        <option value="WI">Wisconsin</option>
-                                        <option value="WY">Wyoming</option>
+                                    <label for="property-state" class="form-label">Property State</label>
+                                    <select id="property-state" name="propertyState" class="form-control" required>
+                                        <option value="">Select State</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="home-insurance" class="form-label">Home Insurance</label>
+                                    <label for="property-tax" class="form-label">Annual Property Tax</label>
                                     <div class="input-group">
                                         <span class="input-prefix">$ </span>
-                                        <input type="text" id="home-insurance" name="homeInsurance" class="form-control" placeholder="1,200" aria-labelledby="home-insurance-label" inputmode="numeric">
+                                        <input type="text" id="property-tax" name="propertyTax" class="form-control" value="3,000">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pmi" class="form-label">PMI (per year)</label>
+                                    <label for="home-insurance" class="form-label">Annual Home Insurance</label>
                                     <div class="input-group">
                                         <span class="input-prefix">$ </span>
-                                        <input type="text" id="pmi" name="pmi" class="form-control" placeholder="1,000" aria-labelledby="pmi-label" inputmode="numeric">
+                                        <input type="text" id="home-insurance" name="homeInsurance" class="form-control" value="1,200">
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="pmi" class="form-label">Annual PMI</label>
+                                    <div class="input-group">
+                                        <span class="input-prefix">$ </span>
+                                        <input type="text" id="pmi" name="pmi" class="form-control" value="0">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="hoa-fees" class="form-label">HOA Fees (per month)</label>
+                                    <label for="hoa-fees" class="form-label">HOA Fees (Monthly)</label>
                                     <div class="input-group">
                                         <span class="input-prefix">$ </span>
-                                        <input type="text" id="hoa-fees" name="hoaFees" class="form-control" placeholder="100" aria-labelledby="hoa-fees-label" inputmode="numeric">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="extra-payment" class="form-label">Extra Payment (per month)</label>
-                                    <div class="input-group">
-                                        <span class="input-prefix">$ </span>
-                                        <input type="text" id="extra-payment" name="extraPayment" class="form-control" placeholder="0" aria-labelledby="extra-payment-label" inputmode="numeric">
+                                        <input type="text" id="hoa-fees" name="hoaFees" class="form-control" value="0">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn--primary" id="calculate-btn">
-                                <span class="btn-icon">➡️</span>
-                                <span class="btn-text">Calculate</span>
-                            </button>
-                            <button type="button" class="btn btn--secondary" id="reset-btn">
-                                <span class="btn-icon">🔄</span>
-                                <span class="btn-text">Reset</span>
-                            </button>
                         </div>
                     </form>
                 </div>
 
-                <div class="output-panel">
-                    <div class="panel-header">
-                        <h2 class="panel-title">
-                            <span class="panel-icon">📈</span> Your Results
-                        </h2>
-                        <p class="panel-description">
-                            Comprehensive breakdown of your mortgage payment and total costs
-                        </p>
-                    </div>
-
-                    <div class="results-container">
-                        <div class="result-card result-card--main" id="results-card">
-                            <div class="result-group">
-                                <h4 class="result-label">Monthly Payment</h4>
-                                <div class="result-value" id="monthly-payment-value">$ 0</div>
-                            </div>
-                            <div class="result-breakdown" id="monthly-breakdown">
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">Principal & Interest</span>
-                                    <span class="breakdown-value" id="pi-value">$ 0</span>
-                                </div>
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">Property Tax</span>
-                                    <span class="breakdown-value" id="tax-value">$ 0</span>
-                                </div>
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">Home Insurance</span>
-                                    <span class="breakdown-value" id="insurance-value">$ 0</span>
-                                </div>
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">PMI</span>
-                                    <span class="breakdown-value" id="pmi-value">$ 0</span>
-                                </div>
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">HOA Fees</span>
-                                    <span class="breakdown-value" id="hoa-value">$ 0</span>
-                                </div>
+                <div class="results-panel" id="results-panel">
+                    <div class="result-section" id="mortgage-results">
+                        <div class="section-header">
+                            <h2 class="section-title"><span class="section-icon">💰</span>Your Mortgage Results</h2>
+                            <div class="global-share-actions">
+                                <button class="btn btn--outline btn--sm share-btn" id="share-results-btn" title="Share Results">
+                                    <span class="btn-icon">📤</span> Share
+                                </button>
+                                <button class="btn btn--outline btn--sm" id="save-pdf-btn" title="Save as PDF">
+                                    <span class="btn-icon">📄</span> PDF
+                                </button>
+                                <button class="btn btn--outline btn--sm" id="print-btn" title="Print Results">
+                                    <span class="btn-icon">🖨️</span> Print
+                                </button>
                             </div>
                         </div>
-
-                        <div class="result-card-grid">
-                            <div class="result-card">
-                                <h4 class="result-label">Total Interest Paid</h4>
-                                <div class="result-value" id="total-interest-value">$ 0</div>
+                        <div class="results-grid">
+                            <div class="result-card primary-result">
+                                <div class="result-icon">🏠</div>
+                                <div class="result-content">
+                                    <div class="result-label">Total Monthly Payment</div>
+                                    <div class="result-value" id="total-payment">$0</div>
+                                    <div class="result-breakdown" id="payment-breakdown">
+                                        <span>Principal & Interest: $0</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="result-card">
-                                <h4 class="result-label">Total Cost</h4>
-                                <div class="result-value" id="total-cost-value">$ 0</div>
-                            </div>
-                            <div class="result-card">
-                                <h4 class="result-label">Interest Rate</h4>
-                                <div class="result-value" id="interest-rate-value">0%</div>
-                            </div>
-                            <div class="result-card">
-                                <h4 class="result-label">Loan Term</h4>
-                                <div class="result-value" id="loan-term-value">0 years</div>
-                            </div>
+                            <div class="result-card"><div class="result-icon">📊</div><div class="result-content"><div class="result-label">Principal & Interest</div><div class="result-value" id="principal-interest">$0</div></div></div>
+                            <div class="result-card"><div class="result-icon">🏛️</div><div class="result-content"><div class="result-label">Property Tax</div><div class="result-value" id="monthly-property-tax">$0</div></div></div>
+                            <div class="result-card"><div class="result-icon">🛡️</div><div class="result-content"><div class="result-label">Home Insurance</div><div class="result-value" id="monthly-insurance">$0</div></div></div>
+                            <div class="result-card"><div class="result-icon">🏦</div><div class="result-content"><div class="result-label">PMI</div><div class="result-value" id="monthly-pmi">$0</div></div></div>
+                            <div class="result-card"><div class="result-icon">🏘️</div><div class="result-content"><div class="result-label">HOA Fees</div><div class="result-value" id="monthly-hoa">$0</div></div></div>
+                            <div class="result-card summary-card"><div class="result-icon">💸</div><div class="result-content"><div class="result-label">Total Interest Paid</div><div class="result-value" id="total-interest">$0</div></div></div>
+                            <div class="result-card summary-card"><div class="result-icon">💰</div><div class="result-content"><div class="result-label">Total Loan Cost</div><div class="result-value" id="total-cost">$0</div></div></div>
                         </div>
-                    </div>
-                    
-                    <div class="extra-payment-impact hidden" id="extra-payment-section">
-                        <div class="insight-card insight-card--success">
-                            <div class="insight-header">
-                                <span class="insight-icon">💰</span>
-                                <h3 class="insight-title">Extra Payment Impact</h3>
-                            </div>
-                            <div class="insight-content">
-                                <p>By paying an extra <span id="extra-payment-amount"></span> per month, you will:</p>
-                                <ul>
-                                    <li>Save a total of <strong id="interest-savings-value"></strong> in interest.</li>
-                                    <li>Pay off your loan <strong id="time-savings-value"></strong> early.</li>
-                                    <li>Your loan will be paid off on: <strong id="payoff-date-value"></strong>.</li>
-                                </ul>
+                        <div class="extra-payment-impact" id="extra-payment-impact" style="display: none;">
+                            <h3 class="impact-title"><span class="section-icon">⚡</span>Extra Payment Impact</h3>
+                            <div class="impact-grid">
+                                <div class="impact-card"><div class="impact-label">Interest Savings</div><div class="impact-value" id="interest-savings">$0</div></div>
+                                <div class="impact-card"><div class="impact-label">Time Saved</div><div class="impact-value" id="time-saved">0 years</div></div>
+                                <div class="impact-card"><div class="impact-label">Payoff Date</div><div class="impact-value" id="payoff-date">-</div></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="ai-insights hidden" id="ai-insights-container">
-                        <h3 class="insights-title">
-                            <span class="insights-icon">💡</span> AI Insights
-                        </h3>
-                        <div class="insights-grid" id="insights-grid">
+                    <div class="result-section" id="amortization-section">
+                        <div class="section-header collapsible-header" role="button" tabindex="0" aria-expanded="false" aria-controls="amortization-content">
+                            <h2 class="section-title"><span class="section-icon">📋</span>Amortization Schedule</h2>
+                            <span class="collapse-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content" id="amortization-content" style="display: none;">
+                            <div class="amortization-controls">
+                                <div class="view-toggle">
+                                    <button class="toggle-btn active" data-view="yearly">Yearly</button>
+                                    <button class="toggle-btn" data-view="monthly">Monthly</button>
+                                </div>
+                                <div class="pagination-info"><span id="pagination-text">Page 1 of 1</span></div>
                             </div>
-                    </div>
-                    
-                    <div class="chart-container" id="chart-container">
-                        <h3 class="chart-title">Amortization Over Time</h3>
-                        <div class="chart-canvas-wrapper">
-                            <canvas id="timelineChart"></canvas>
-                        </div>
-                        <div class="chart-controls">
-                            <button id="view-toggle" class="btn btn--outline" aria-label="Toggle view between yearly and monthly">
-                                <span class="toggle-icon">📅</span>
-                                <span id="toggle-label">View Monthly</span>
-                            </button>
-                            <div class="chart-slider-container" id="chart-slider-container">
-                                <label for="year-slider" class="visually-hidden">Year Selector</label>
-                                <input type="range" id="year-slider" class="chart-slider" min="1" max="30" value="1" step="1">
-                                <span class="year-label" id="slider-year-label">Year 1</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="amortization-schedule-container" id="amortization-container">
-                        <div class="collapsible-header" role="button" aria-expanded="false" aria-controls="amortization-content" tabindex="0">
-                            <h3 class="schedule-title">
-                                <span class="schedule-icon">🗓️</span>
-                                Amortization Schedule
-                            </h3>
-                            <span class="toggle-icon">▼</span>
-                        </div>
-                        <div class="collapsible-content" id="amortization-content">
-                            <div class="amortization-table-wrapper">
-                                <table class="amortization-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Month</th>
-                                            <th>Payment</th>
-                                            <th>Principal</th>
-                                            <th>Interest</th>
-                                            <th>Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="amortization-table-body">
-                                        </tbody>
+                            <div class="table-container">
+                                <table class="amortization-table" id="amortization-table">
+                                    <thead><tr><th>Year/Month</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+                                    <tbody id="amortization-tbody"></tbody>
                                 </table>
                             </div>
                             <div class="amortization-pagination">
-                                <button class="btn btn--outline" id="prev-page-btn" disabled>Previous</button>
-                                <span id="page-info">Page 1 of 1</span>
-                                <button class="btn btn--outline" id="next-page-btn" disabled>Next</button>
+                                <button class="btn btn--outline btn--sm" id="prev-page" disabled>Previous</button>
+                                <span class="page-info" id="page-info">Page 1 of 1</span>
+                                <button class="btn btn--outline btn--sm" id="next-page" disabled>Next</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="share-container">
-                        <h3 class="share-title">Share Your Results</h3>
-                        <div class="share-options-container">
-                            <button class="share-option" data-method="print">
-                                <span class="share-icon">🖨️</span>
-                                <span class="share-label">Print</span>
-                            </button>
-                            <button class="share-option" data-method="pdf" id="save-pdf-btn">
-                                <span class="share-icon">📄</span>
-                                <span class="share-label">Save as PDF</span>
-                            </button>
-                            <button class="share-option" data-method="share-native">
-                                <span class="share-icon">🔗</span>
-                                <span class="share-label">Share</span>
-                            </button>
-                            <button class="share-option" data-method="email">
-                                <span class="share-icon">📧</span>
-                                <span class="share-label">Email</span>
-                            </button>
-                            <button class="share-option" data-method="twitter">
-                                <span class="share-icon">🐦</span>
-                                <span class="share-label">Twitter</span>
-                            </button>
-                            <button class="share-option" data-method="linkedin">
-                                <span class="share-icon">💼</span>
-                                <span class="share-label">LinkedIn</span>
-                            </button>
-                            <button class="share-option" data-method="whatsapp">
-                                <span class="share-icon">💬</span>
-                                <span class="share-label">WhatsApp</span>
-                            </button>
-                        </div>
-                        <div class="share-url-container">
-                            <label for="share-url">Share URL:</label>
-                            <div class="url-input-group">
-                                <input type="text" id="share-url" readonly>
-                                <button class="copy-url-btn">Copy</button>
+                    <div class="result-section" id="ai-insights-section">
+                        <div class="section-header"><h2 class="section-title"><span class="section-icon">🤖</span>AI-Powered Insights</h2></div>
+                        <div class="insights-container" id="insights-container"></div>
+                    </div>
+                    
+                    <div class="result-section" id="timeline-section">
+                        <div class="section-header"><h2 class="section-title"><span class="section-icon">📈</span>Mortgage Over Time</h2></div>
+                        <div class="timeline-container">
+                            <div class="timeline-stats" id="timeline-stats">
+                                <div class="timeline-stat"><div class="stat-label">Remaining Balance</div><div class="stat-value" id="remaining-balance">$0</div></div>
+                                <div class="timeline-stat"><div class="stat-label">Principal Paid</div><div class="stat-value" id="principal-paid">$0</div></div>
+                                <div class="timeline-stat"><div class="stat-label">Interest Paid</div><div class="stat-value" id="interest-paid">$0</div></div>
+                            </div>
+                            <div class="chart-container"><canvas id="timeline-chart" aria-label="Mortgage payment timeline chart"></canvas></div>
+                            <div class="timeline-controls">
+                                <div class="year-slider-container">
+                                    <div class="slider-wrapper">
+                                        <input type="range" id="year-slider" class="year-slider" min="1" max="30" value="1" step="1" aria-label="Select year to view mortgage breakdown">
+                                        <div class="slider-labels">
+                                            <span>Year 1</span>
+                                            <span id="current-year-display">Year 1</span>
+                                            <span id="max-year-display">Year 30</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <div class="ad-panel">
+                    <div class="ad-placeholder">
+                        <div class="ad-header"><span>Sponsored</span></div>
+                        <div class="ad-content">
+                            <h3>Get Pre-Approved Today</h3>
+                            <p>Compare rates from top lenders. No obligation, completely free.</p>
+                            <button class="ad-cta">Get Free Quotes</button>
+                        </div>
+                    </div>
+                    <div class="ad-placeholder">
+                         <div class="ad-header"><span>Partner Offer</span></div>
+                        <div class="ad-content">
+                            <h3>Home Insurance Quotes</h3>
+                            <p>Save up to 30% on home insurance with our partners.</p>
+                            <button class="ad-cta">Compare Quotes</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <section class="related-calculators-section" id="related-calculators">
+                <div class="section-header">
+                    <h2 class="section-title"><span class="section-icon">🧮</span>Related Calculators</h2>
+                    <p class="section-description">Explore more financial calculators to make informed decisions</p>
+                </div>
+                <div class="calculators-grid">
+                    <a href="#" class="calculator-card">
+                        <div class="calculator-icon">🔄</div>
+                        <div class="calculator-content"><h3 class="calculator-title">Refinance Calculator</h3><p class="calculator-description">See if refinancing can save you money</p></div>
+                        <div class="calculator-link"><span class="link-text">Calculate</span><span class="link-arrow">→</span></div>
+                    </a>
+                    <a href="#" class="calculator-card">
+                        <div class="calculator-icon">🏠</div>
+                        <div class="calculator-content"><h3 class="calculator-title">Affordability Calculator</h3><p class="calculator-description">How much house can you afford?</p></div>
+                        <div class="calculator-link"><span class="link-text">Calculate</span><span class="link-arrow">→</span></div>
+                    </a>
+                    <a href="#" class="calculator-card">
+                        <div class="calculator-icon">⚖️</div>
+                        <div class="calculator-content"><h3 class="calculator-title">Rent vs Buy Calculator</h3><p class="calculator-description">Compare the costs of renting vs buying</p></div>
+                        <div class="calculator-link"><span class="link-text">Calculate</span><span class="link-arrow">→</span></div>
+                    </a>
+                </div>
+            </section>
         </div>
     </main>
 
-    <div class="loading-overlay" id="loading-overlay" style="display: none;">
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <p class="loading-text">Calculating your mortgage...</p>
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand"><span class="brand-icon">🏠</span><span class="brand-text">FinGuid</span></div>
+                    <p class="footer-description">Professional financial calculators and tools to help you make informed financial decisions.</p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Calculators</h3>
+                    <ul class="footer-links"><li><a href="#">Mortgage Calculator</a></li><li><a href="#">Refinance Calculator</a></li><li><a href="#">Affordability Calculator</a></li></ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Resources</h3>
+                    <ul class="footer-links"><li><a href="#">Financial Guides</a></li><li><a href="#">Blog</a></li><li><a href="#">FAQ</a></li></ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Company</h3>
+                    <ul class="footer-links"><li><a href="#">About Us</a></li><li><a href="#">Contact</a></li><li><a href="#">Privacy Policy</a></li></ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2025 FinGuid. All rights reserved. | <a href="#" class="disclaimer-link">Financial Disclaimer</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal" id="share-modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header"><h3 class="modal-title">Share Your Results</h3><button class="modal-close" aria-label="Close modal">&times;</button></div>
+            <div class="modal-body">
+                <div class="share-options-grid">
+                    <button class="share-option" data-method="email"><span class="share-icon">📧</span><span class="share-label">Email</span></button>
+                    <button class="share-option" data-method="copy"><span class="share-icon">📋</span><span class="share-label">Copy Link</span></button>
+                    <button class="share-option" data-method="facebook"><span class="share-icon">📘</span><span class="share-label">Facebook</span></button>
+                    <button class="share-option" data-method="twitter"><span class="share-icon">🐦</span><span class="share-label">Twitter</span></button>
+                </div>
+                <div class="share-url-container"><label for="share-url">Share URL:</label><div class="url-input-group"><input type="text" id="share-url" readonly><button class="copy-url-btn">Copy</button></div></div>
+            </div>
         </div>
     </div>
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-spinner"><div class="spinner"></div><p class="loading-text">Calculating your mortgage...</p></div>
+    </div>
 
-    <script src="script.js"></script>
+    <script src="mortgage-calculator.js"></script>
 </body>
 </html>
