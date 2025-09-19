@@ -1,12 +1,12 @@
 /**
  * mortgage-calculator.js
- * FinGuid AI-Enhanced Mortgage Calculator v9.0
- * Production Ready with Enhanced Features
+ * FinGuid AI-Enhanced Mortgage Calculator v9.1
+ * Production Ready with Fixed Chart Display
  * 
  * Features:
  * - Real-time mortgage calculations with extra payment impact
  * - State-based property tax calculations
- * - Interactive mortgage over time chart with year dragging
+ * - Interactive mortgage over time chart with year dragging (FIXED)
  * - AI-powered insights
  * - Collapsible amortization schedule with pagination
  * - Comprehensive sharing functionality (Share, Save PDF, Print)
@@ -39,13 +39,15 @@ const CONFIG = {
 const STATE = {
     currentCalculation: null,
     amortizationData: [],
+    timelineData: [],
     currentView: 'yearly',
     currentPage: 1,
     totalPages: 1,
     timelineChart: null,
     currentYear: 1,
     maxYears: 30,
-    isCalculating: false
+    isCalculating: false,
+    chartInitialized: false
 };
 
 // US States with property tax rates (2024 data)
@@ -390,16 +392,216 @@ const MortgageCalculator = {
     }
 };
 
+// ========== CHART MANAGEMENT ==========
+const ChartManager = {
+    // Initialize chart with proper error handling
+    initializeChart: () => {
+        console.log('🎯 Initializing timeline chart...');
+        
+        const canvas = Utils.$('#timeline-chart');
+        if (!canvas) {
+            console.error('❌ Timeline chart canvas not found');
+            return false;
+        }
+
+        // Wait for Chart.js to be available
+        if (typeof Chart === 'undefined') {
+            console.error('❌ Chart.js not loaded');
+            Utils.showToast('Chart library not loaded. Please refresh the page.', 'error');
+            return false;
+        }
+
+        try {
+            // Destroy existing chart if it exists
+            if (STATE.timelineChart) {
+                STATE.timelineChart.destroy();
+                STATE.timelineChart = null;
+            }
+
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size explicitly
+            canvas.style.width = '100%';
+            canvas.style.height = '400px';
+            
+            STATE.timelineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Remaining Balance',
+                            data: [],
+                            borderColor: CONFIG.colors.remaining,
+                            backgroundColor: CONFIG.colors.remaining + '20',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            fill: false,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Principal Paid',
+                            data: [],
+                            borderColor: CONFIG.colors.principal,
+                            backgroundColor: CONFIG.colors.principal + '20',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            fill: false,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Interest Paid',
+                            data: [],
+                            borderColor: CONFIG.colors.interest,
+                            backgroundColor: CONFIG.colors.interest + '20',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            fill: false,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Years',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                display: true,
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amount ($)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                display: true,
+                                color: 'rgba(0,0,0,0.1)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: CONFIG.colors.primary,
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + Utils.formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    onHover: (event, activeElements) => {
+                        if (activeElements.length > 0) {
+                            const dataIndex = activeElements[0].index;
+                            const year = dataIndex + 1;
+                            UI.updateYearSlider(year);
+                        }
+                    },
+                    onClick: (event, activeElements) => {
+                        if (activeElements.length > 0) {
+                            const dataIndex = activeElements[0].index;
+                            const year = dataIndex + 1;
+                            UI.updateYearSlider(year);
+                        }
+                    }
+                }
+            });
+
+            STATE.chartInitialized = true;
+            console.log('✅ Timeline chart initialized successfully');
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error initializing chart:', error);
+            Utils.showToast('Failed to initialize chart. Please refresh the page.', 'error');
+            return false;
+        }
+    },
+
+    // Update chart with new data
+    updateChart: (timelineData) => {
+        if (!STATE.timelineChart || !timelineData || timelineData.length === 0) {
+            console.log('⚠️ Chart or data not available for update');
+            return false;
+        }
+
+        try {
+            const labels = timelineData.map(d => `Year ${d.year}`);
+            const remainingBalance = timelineData.map(d => d.remainingBalance);
+            const principalPaid = timelineData.map(d => d.principalPaid);
+            const interestPaid = timelineData.map(d => d.interestPaid);
+
+            STATE.timelineChart.data.labels = labels;
+            STATE.timelineChart.data.datasets[0].data = remainingBalance;
+            STATE.timelineChart.data.datasets[1].data = principalPaid;
+            STATE.timelineChart.data.datasets[2].data = interestPaid;
+
+            STATE.timelineChart.update('none');
+            console.log('✅ Chart updated successfully with', timelineData.length, 'data points');
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error updating chart:', error);
+            return false;
+        }
+    }
+};
+
 // ========== UI MANAGEMENT ==========
 const UI = {
     // Initialize all UI components
     init: () => {
+        console.log('🚀 Initializing Mortgage Calculator UI...');
         UI.populateStates();
         UI.bindEvents();
         UI.setupCollapsibleSections();
-        UI.initializeChart();
         UI.setupFormValidation();
         UI.loadSavedData();
+        
+        // Initialize chart after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            ChartManager.initializeChart();
+        }, 100);
     },
 
     // Populate state dropdown
@@ -654,6 +856,8 @@ const UI = {
                 extraPayment: Utils.parseCurrency(Utils.$('#extra-payment')?.value)
             };
 
+            console.log('💰 Calculating mortgage with inputs:', inputs);
+
             // Validate inputs
             if (inputs.homePrice <= 0 || inputs.interestRate <= 0 || inputs.loanTerm <= 0) {
                 Utils.showToast('Please fill in all required fields with valid values', 'error');
@@ -663,6 +867,8 @@ const UI = {
             // Calculate mortgage
             const results = MortgageCalculator.calculate(inputs);
             STATE.currentCalculation = { inputs, results };
+
+            console.log('✅ Mortgage calculation completed:', results);
 
             // Update UI
             await UI.updateResults(results);
@@ -677,7 +883,7 @@ const UI = {
             Utils.showToast('Mortgage calculated successfully!', 'success');
 
         } catch (error) {
-            console.error('Calculation error:', error);
+            console.error('❌ Calculation error:', error);
             Utils.showToast('Error calculating mortgage. Please check your inputs.', 'error');
         } finally {
             STATE.isCalculating = false;
@@ -821,100 +1027,11 @@ const UI = {
         }
     },
 
-    // Initialize timeline chart
-    initializeChart: () => {
-        const canvas = Utils.$('#timeline-chart');
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        
-        STATE.timelineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [
-                    {
-                        label: 'Remaining Balance',
-                        data: [],
-                        borderColor: CONFIG.colors.remaining,
-                        backgroundColor: CONFIG.colors.remaining + '20',
-                        borderWidth: 3,
-                        tension: 0.1,
-                        fill: false
-                    },
-                    {
-                        label: 'Principal Paid',
-                        data: [],
-                        borderColor: CONFIG.colors.principal,
-                        backgroundColor: CONFIG.colors.principal + '20',
-                        borderWidth: 3,
-                        tension: 0.1,
-                        fill: false
-                    },
-                    {
-                        label: 'Interest Paid',
-                        data: [],
-                        borderColor: CONFIG.colors.interest,
-                        backgroundColor: CONFIG.colors.interest + '20',
-                        borderWidth: 3,
-                        tension: 0.1,
-                        fill: false
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Years'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Amount ($)'
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value.toLocaleString();
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + Utils.formatCurrency(context.parsed.y);
-                            }
-                        }
-                    }
-                },
-                onHover: (event, activeElements) => {
-                    if (activeElements.length > 0) {
-                        const dataIndex = activeElements[0].index;
-                        const year = dataIndex + 1;
-                        UI.updateYearSlider(year);
-                    }
-                }
-            }
-        });
-    },
-
     // Update timeline chart
     updateTimelineChart: async (inputs) => {
-        if (!STATE.timelineChart) return;
-
+        console.log('📈 Updating timeline chart...');
+        
+        // Generate timeline data
         const timelineData = MortgageCalculator.generateTimelineData(
             inputs.loanAmount,
             inputs.interestRate,
@@ -922,15 +1039,26 @@ const UI = {
             inputs.extraPayment
         );
 
-        const labels = timelineData.map(d => `Year ${d.year}`);
-        const remainingBalance = timelineData.map(d => d.remainingBalance);
-        const principalPaid = timelineData.map(d => d.principalPaid);
-        const interestPaid = timelineData.map(d => d.interestPaid);
+        console.log('📊 Generated timeline data:', timelineData.length, 'points');
 
-        STATE.timelineChart.data.labels = labels;
-        STATE.timelineChart.data.datasets[0].data = remainingBalance;
-        STATE.timelineChart.data.datasets[1].data = principalPaid;
-        STATE.timelineChart.data.datasets[2].data = interestPaid;
+        // Store timeline data
+        STATE.timelineData = timelineData;
+
+        // Initialize chart if not already done
+        if (!STATE.chartInitialized) {
+            console.log('🔄 Chart not initialized, initializing now...');
+            if (!ChartManager.initializeChart()) {
+                console.error('❌ Failed to initialize chart');
+                return;
+            }
+        }
+
+        // Update chart with new data
+        if (ChartManager.updateChart(timelineData)) {
+            console.log('✅ Chart updated successfully');
+        } else {
+            console.error('❌ Failed to update chart');
+        }
 
         // Update slider max value
         STATE.maxYears = Math.min(timelineData.length, inputs.loanTerm);
@@ -946,11 +1074,6 @@ const UI = {
             maxYearDisplay.textContent = `Year ${STATE.maxYears}`;
         }
 
-        STATE.timelineChart.update('none');
-
-        // Store timeline data for slider updates
-        STATE.timelineData = timelineData;
-
         // Update initial display
         UI.updateTimelineDisplay();
     },
@@ -958,7 +1081,10 @@ const UI = {
     // Update timeline display based on slider
     updateTimelineDisplay: () => {
         const yearSlider = Utils.$('#year-slider');
-        if (!yearSlider || !STATE.timelineData) return;
+        if (!yearSlider || !STATE.timelineData || STATE.timelineData.length === 0) {
+            console.log('⚠️ Timeline display update skipped - missing data');
+            return;
+        }
 
         const year = parseInt(yearSlider.value);
         const yearData = STATE.timelineData.find(d => d.year === year);
@@ -974,6 +1100,12 @@ const UI = {
             if (principalPaid) principalPaid.textContent = Utils.formatCurrency(yearData.principalPaid);
             if (interestPaid) interestPaid.textContent = Utils.formatCurrency(yearData.interestPaid);
             if (currentYearDisplay) currentYearDisplay.textContent = `Year ${year}`;
+
+            console.log('📊 Updated timeline display for year', year, ':', {
+                remaining: yearData.remainingBalance,
+                principal: yearData.principalPaid,
+                interest: yearData.interestPaid
+            });
         }
 
         STATE.currentYear = year;
@@ -1531,7 +1663,7 @@ const AI = {
 
 // ========== INITIALIZATION ==========
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🏠 FinGuid Mortgage Calculator v9.0 - Production Ready');
+    console.log('🏠 FinGuid Mortgage Calculator v9.1 - Chart Display Fixed');
     
     // Initialize the application
     UI.init();
@@ -1558,6 +1690,7 @@ if (typeof module !== 'undefined' && module.exports) {
         UI, 
         AI, 
         STATE, 
-        CONFIG 
+        CONFIG,
+        ChartManager
     };
 }
