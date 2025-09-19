@@ -1,3 +1,41 @@
+// Wait for Chart.js to load before initializing
+function checkChartJsLoaded() {
+    if (typeof Chart !== 'undefined') {
+        console.log('Chart.js loaded successfully');
+        return true;
+    } else {
+        console.warn('Chart.js not loaded, retrying...');
+        setTimeout(checkChartJsLoaded, 100);
+        return false;
+    }
+}
+
+// Modify the initialization to wait for Chart.js
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🏠 FinGuid Mortgage Calculator v9.1 - Chart Display Fixed');
+    
+    // Check if Chart.js is loaded before initializing
+    if (checkChartJsLoaded()) {
+        UI.init();
+    } else {
+        // If not loaded yet, wait and try again
+        setTimeout(() => {
+            if (checkChartJsLoaded()) {
+                UI.init();
+            } else {
+                console.error('Chart.js failed to load');
+                Utils.showToast('Chart library failed to load. Please refresh the page.', 'error');
+            }
+        }, 1000);
+    }
+    
+    // Trigger initial calculation if form has default values
+    setTimeout(() => {
+        if (UI.isFormValid()) {
+            UI.calculateMortgage();
+        }
+    }, 500);
+});
 // DOM Elements
 const annualIncomeInput = document.getElementById('annualIncome');
 const monthlyDebtsInput = document.getElementById('monthlyDebts');
