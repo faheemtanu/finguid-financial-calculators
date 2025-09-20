@@ -1,4 +1,4 @@
-/* Filename: mortgage-calculator-enhanced.js */
+/* Filename: mortgage-calculator.js */
 
 // Mortgage Calculator Enhanced JS
 // Handles inputs, results rendering, tabs, chart, sharing, extra payments, feedback API integration
