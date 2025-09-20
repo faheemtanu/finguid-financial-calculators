@@ -1,5 +1,5 @@
 /**
- * mortgage-calculator-enhanced.js
+ * mortgage-calculator.js
  * Enhanced Mortgage Calculator with all requested features
  * Features: Auto PMI calculation, better chart, extra payments, sharing, UI improvements
  */
