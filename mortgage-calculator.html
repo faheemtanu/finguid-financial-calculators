@@ -8,26 +8,15 @@
     <meta name="author" content="AI Financial Calculators">
     <title>World's First AI-Enhanced Mortgage Calculator - Smart Home Loan Analysis</title>
     
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css"/>
     
     <link rel="stylesheet" href="mortgage-calculator.css">
     
-    <meta name="theme-color" content="#21808d">
+    <meta name="theme-color" content="#0D9488">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -42,21 +31,8 @@
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Web Browser",
       "browserRequirements": "HTML5, JavaScript",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "featureList": [
-        "Interactive mortgage calculations",
-        "Voice command support",
-        "Screen reader accessibility", 
-        "Dark/Light mode",
-        "AI-powered insights",
-        "Interactive charts",
-        "PDF export",
-        "Amortization schedules"
-      ]
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [ "Interactive mortgage calculations", "Voice command support", "Screen reader accessibility", "Dark/Light mode", "AI-powered insights", "Interactive charts", "PDF export", "Amortization schedules" ]
     }
     </script>
 </head>
@@ -66,35 +42,15 @@
     
     <div class="global-controls" role="toolbar" aria-label="Global accessibility and theme controls">
         <div class="controls-container">
-            <button id="theme-toggle" class="control-btn" 
-                    data-tippy-content="Switch between light and dark themes"
-                    aria-label="Toggle theme">
-                <i class="fas fa-moon" id="theme-icon"></i>
-                <span>Dark Mode</span>
+            <button id="theme-toggle" class="control-btn" data-tippy-content="Switch between light and dark themes" aria-label="Toggle theme">
+                <i class="fas fa-moon" id="theme-icon"></i> <span>Theme</span>
             </button>
-            
-            <button id="voice-toggle" class="control-btn" 
-                    data-tippy-content="Enable voice commands for hands-free calculation"
-                    aria-label="Toggle voice commands">
-                <i class="fas fa-microphone" id="voice-icon"></i>
-                <span>Voice Control</span>
+            <button id="voice-toggle" class="control-btn" data-tippy-content="Enable voice commands (Feature coming soon)" aria-label="Toggle voice commands">
+                <i class="fas fa-microphone" id="voice-icon"></i> <span>Voice</span>
             </button>
-            
-            <button id="screen-reader-toggle" class="control-btn" 
-                    data-tippy-content="Enhanced screen reader announcements"
-                    aria-label="Toggle screen reader enhancements">
-                <i class="fas fa-universal-access" id="reader-icon"></i>
-                <span>Screen Reader</span>
+            <button id="screen-reader-toggle" class="control-btn" data-tippy-content="Enhanced screen reader announcements (Feature coming soon)" aria-label="Toggle screen reader enhancements">
+                <i class="fas fa-universal-access" id="reader-icon"></i> <span>Reader</span>
             </button>
-            
-            <div class="font-size-controls" data-tippy-content="Adjust text size for better readability">
-                <button id="font-smaller" class="control-btn" aria-label="Decrease font size">
-                    <i class="fas fa-minus"></i>A-
-                </button>
-                <button id="font-larger" class="control-btn" aria-label="Increase font size">
-                    <i class="fas fa-plus"></i>A+
-                </button>
-            </div>
         </div>
     </div>
 
@@ -105,33 +61,13 @@
         </div>
     </div>
 
-    <div id="toast-container" class="toast-container" role="alert" aria-live="assertive"></div>
-
-    <div id="voice-status" class="voice-status" style="display: none;" role="status" aria-live="polite">
-        <i class="fas fa-microphone-alt"></i>
-        <span>Listening... Speak your mortgage details</span>
-        <div class="voice-wave"></div>
-    </div>
-
     <header class="app-header" role="banner">
         <div class="header-content">
-            <div class="header-main">
-                <h1 class="header-title" data-tippy-content="World's most advanced AI-powered mortgage calculator">
-                    <span class="ai-badge">AI</span>
-                    Enhanced Mortgage Calculator
-                </h1>
-                <p class="header-subtitle">Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.</p>
-            </div>
-            <div class="header-stats">
-                <div class="stat-item" data-tippy-content="Calculations performed today">
-                    <span class="stat-number" id="calc-count">12,847</span>
-                    <span class="stat-label">Calculations Today</span>
-                </div>
-                <div class="stat-item" data-tippy-content="Average savings discovered">
-                    <span class="stat-number">$45K</span>
-                    <span class="stat-label">Avg. Savings Found</span>
-                </div>
-            </div>
+            <h1 class="header-title" data-tippy-content="World's most advanced AI-powered mortgage calculator">
+                <span class="ai-badge">AI</span>
+                Enhanced Mortgage Calculator
+            </h1>
+            <p class="header-subtitle">Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.</p>
         </div>
     </header>
 
@@ -141,490 +77,335 @@
             <section class="calculator-input-column" role="form" aria-labelledby="input-header">
                 <div class="card input-card">
                     <div class="panel-header" id="input-header">
-                        <h2 data-tippy-content="Enter your home and loan details for accurate calculations">
-                            <i class="fas fa-calculator"></i>
-                            Mortgage Calculator
-                        </h2>
-                        <div class="header-actions">
-                            <button id="reset-form" class="btn btn--ghost btn--sm" 
-                                    data-tippy-content="Reset all fields to default values">
-                                <i class="fas fa-undo"></i> Reset
-                            </button>
-                            <button id="voice-input" class="btn btn--secondary btn--sm" 
-                                    data-tippy-content="Use voice to fill in your loan details">
-                                <i class="fas fa-microphone"></i> Voice Input
-                            </button>
-                        </div>
+                        <h2 data-tippy-content="Enter your home and loan details for accurate calculations"><i class="fas fa-calculator"></i> Mortgage Details</h2>
+                        <button id="reset-form" class="btn btn--ghost btn--sm" data-tippy-content="Reset all fields to default values">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
                     </div>
                     
                     <form id="mortgage-form" class="mortgage-form" novalidate>
-                        
-                        <fieldset class="form-section" role="group" aria-labelledby="home-details-legend">
-                            <legend id="home-details-legend">
-                                <span class="section-number">1</span>
-                                Home Details
-                                <i class="fas fa-home section-icon" data-tippy-content="Basic information about your home purchase"></i>
-                            </legend>
-                            
+                        <fieldset class="form-section">
+                            <legend><span class="section-number">1</span> Home & Loan</legend>
                             <div class="form-group">
-                                <label for="home-price" class="form-label" 
-                                       data-tippy-content="The total purchase price of the property you want to buy">
-                                    Home Price
-                                    <span class="required" aria-label="required">*</span>
-                                </label>
+                                <label for="home-price" class="form-label" data-tippy-content="The total purchase price of the property">Home Price <span class="required">*</span></label>
                                 <div class="input-with-prefix">
                                     <span class="input-prefix">$</span>
-                                    <input type="number" id="home-price" name="homePrice" 
-                                           class="form-control" value="400000" min="50000" max="10000000" step="1000"
-                                           data-tippy-content="Enter the total cost of the home you want to purchase"
-                                           required aria-describedby="home-price-help">
-                                </div>
-                                <small id="home-price-help" class="form-help">Typical range: $100K - $2M+</small>
-                                <div class="input-suggestions">
-                                    <button type="button" class="suggestion-chip" data-value="300000">$300K</button>
-                                    <button type="button" class="suggestion-chip" data-value="500000">$500K</button>
-                                    <button type="button" class="suggestion-chip" data-value="750000">$750K</button>
+                                    <input type="number" id="home-price" class="form-control" value="400000" min="0" step="1000" required>
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="down-payment" class="form-label" 
-                                       data-tippy-content="Amount you'll pay upfront - higher down payment means lower monthly payments">
-                                    Down Payment
-                                    <span class="required" aria-label="required">*</span>
-                                </label>
+                                <label for="down-payment" class="form-label" data-tippy-content="Amount you'll pay upfront. 20% or more avoids PMI.">Down Payment <span class="required">*</span></label>
                                 <div class="down-payment-controls">
-                                    <div class="toggle-group" role="radiogroup" aria-labelledby="down-payment">
-                                        <button type="button" class="btn toggle-btn active" id="amount-toggle" 
-                                                role="radio" aria-checked="true" 
-                                                data-tippy-content="Enter down payment as dollar amount">
-                                            Amount ($)
-                                        </button>
-                                        <button type="button" class="btn toggle-btn" id="percent-toggle" 
-                                                role="radio" aria-checked="false"
-                                                data-tippy-content="Enter down payment as percentage of home price">
-                                            Percent (%)
-                                        </button>
+                                    <div class="toggle-group" role="radiogroup">
+                                        <button type="button" class="btn toggle-btn active" id="amount-toggle" role="radio" aria-checked="true" data-tippy-content="Enter down payment as a dollar amount">Amount ($)</button>
+                                        <button type="button" class="btn toggle-btn" id="percent-toggle" role="radio" aria-checked="false" data-tippy-content="Enter down payment as a percentage of home price">Percent (%)</button>
                                     </div>
                                     <div class="input-with-prefix" id="amount-input">
                                         <span class="input-prefix">$</span>
-                                        <input type="number" id="down-payment" name="downPayment" class="form-control" value="80000" min="0" step="1000" data-tippy-content="Minimum recommended: 3% of home price" aria-describedby="down-payment-help">
+                                        <input type="number" id="down-payment" class="form-control" value="80000" min="0" step="1000">
                                     </div>
                                     <div class="input-with-suffix" id="percent-input" style="display: none;">
-                                        <input type="number" id="down-payment-percent" name="downPaymentPercent" class="form-control" value="20" min="0" max="100" step="0.5" data-tippy-content="20% or more eliminates PMI requirement">
+                                        <input type="number" id="down-payment-percent" class="form-control" value="20" min="0" max="100" step="0.5">
                                         <span class="input-suffix">%</span>
                                     </div>
                                 </div>
-                                <small id="down-payment-help" class="form-help">20%+ eliminates PMI requirement</small>
-                                <div class="pmi-warning" id="pmi-warning" style="display: none;">
-                                    <i class="fas fa-exclamation-triangle"></i> PMI required for down payments under 20%
+                                <div class="pmi-warning" id="pmi-warning" style="display: none;" data-tippy-content="Private Mortgage Insurance (PMI) is typically required when the down payment is less than 20% of the home price.">
+                                    <i class="fas fa-exclamation-triangle"></i> PMI may be required
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="interest-rate" class="form-label" 
-                                       data-tippy-content="Annual percentage rate (APR) offered by your lender">
-                                    Interest Rate (APR)
-                                    <span class="required" aria-label="required">*</span>
-                                </label>
+                                <label for="interest-rate" class="form-label" data-tippy-content="Annual percentage rate (APR) offered by your lender">Interest Rate (%) <span class="required">*</span></label>
                                 <div class="input-with-suffix">
-                                    <input type="number" id="interest-rate" name="interestRate" 
-                                           class="form-control" value="6.75" min="1" max="15" step="0.125"
-                                           data-tippy-content="Current average mortgage rates: 6.5% - 7.5%"
-                                           required aria-describedby="interest-rate-help">
+                                    <input type="number" id="interest-rate" class="form-control" value="6.75" min="0" max="25" step="0.01" required>
                                     <span class="input-suffix">%</span>
                                 </div>
-                                <small id="interest-rate-help" class="form-help">Lower rates save you thousands over the loan term</small>
-                                <div class="input-suggestions">
-                                    <button type="button" class="suggestion-chip" data-value="5.5">5.5%</button>
-                                    <button type="button" class="suggestion-chip" data-value="6.25">6.25%</button>
-                                    <button type="button" class="suggestion-chip" data-value="7.0">7.0%</button>
-                                </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="loan-term" class="form-label" 
-                                       data-tippy-content="The number of years you have to pay off the loan">
-                                    Loan Term (Years)
-                                    <span class="required" aria-label="required">*</span>
-                                </label>
-                                <div class="input-with-suffix">
-                                    <input type="number" id="loan-term" name="loanTerm" 
-                                           class="form-control" value="30" min="5" max="50" step="1"
-                                           data-tippy-content="Common terms are 15 or 30 years"
-                                           required aria-describedby="loan-term-help">
-                                    <span class="input-suffix">Years</span>
-                                </div>
-                                <small id="loan-term-help" class="form-help">Longer terms mean lower payments but more interest</small>
-                                <div class="input-suggestions">
-                                    <button type="button" class="suggestion-chip" data-value="15">15 yr</button>
-                                    <button type="button" class="suggestion-chip" data-value="20">20 yr</button>
-                                    <button type="button" class="suggestion-chip" data-value="30">30 yr</button>
+                                <label for="loan-term-manual" class="form-label" data-tippy-content="Length of time to repay the loan in years">Loan Term (Years) <span class="required">*</span></label>
+                                <div class="term-controls">
+                                    <div class="term-chips" role="radiogroup">
+                                        <button type="button" class="term-chip" data-term="15" role="radio">15</button>
+                                        <button type="button" class="term-chip" data-term="20" role="radio">20</button>
+                                        <button type="button" class="term-chip active" data-term="30" role="radio">30</button>
+                                    </div>
+                                    <input type="number" id="loan-term-manual" class="form-control" value="30" min="1" max="50" required>
                                 </div>
                             </div>
                         </fieldset>
 
-                        <fieldset class="form-section" role="group" aria-labelledby="other-costs-legend">
-                            <legend id="other-costs-legend">
-                                <span class="section-number">2</span>
-                                Other Costs
-                                <i class="fas fa-hand-holding-usd section-icon" data-tippy-content="Additional costs that are part of your monthly payment"></i>
-                            </legend>
-
+                        <fieldset class="form-section">
+                            <legend><span class="section-number">2</span> Taxes & Insurance</legend>
                             <div class="form-group">
-                                <label for="property-state" class="form-label"
-                                       data-tippy-content="Select the state to get an accurate property tax rate">
-                                    Property State
-                                    <span class="required" aria-label="required">*</span>
-                                </label>
-                                <select id="property-state" name="propertyState" class="form-control" required>
-                                    <option value="">Select a State</option>
-                                    </select>
-                                <small class="form-help">Property taxes vary significantly by state</small>
+                                <label for="property-state" class="form-label" data-tippy-content="Select your state to auto-calculate estimated property taxes">State</label>
+                                <div class="select-wrapper">
+                                    <select id="property-state" class="form-control"><option value="">Select State...</option></select>
+                                    <i class="fas fa-chevron-down select-icon"></i>
+                                </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="property-tax" class="form-label" 
-                                       data-tippy-content="Annual property taxes, calculated automatically based on state and home price">
-                                    Annual Property Tax
-                                </label>
+                                <label for="property-tax" class="form-label" data-tippy-content="Annual property tax. Auto-filled based on state average, or can be entered manually.">Property Tax (Annual)</label>
                                 <div class="input-with-prefix">
                                     <span class="input-prefix">$</span>
-                                    <input type="number" id="property-tax" name="propertyTax" class="form-control" value="" readonly data-tippy-content="This value is automatically calculated">
+                                    <input type="number" id="property-tax" class="form-control" value="4400" min="0" step="50">
                                 </div>
-                                <small class="form-help">Automatically calculated based on state tax rate</small>
+                                <small id="tax-rate-display" class="form-help"></small>
                             </div>
-
                             <div class="form-group">
-                                <label for="home-insurance" class="form-label" 
-                                       data-tippy-content="Annual homeowner's insurance premium">
-                                    Annual Home Insurance
-                                </label>
+                                <label for="home-insurance" class="form-label" data-tippy-content="Annual homeowner's insurance premium">Home Insurance (Annual)</label>
                                 <div class="input-with-prefix">
                                     <span class="input-prefix">$</span>
-                                    <input type="number" id="home-insurance" name="homeInsurance" 
-                                           class="form-control" value="1200" min="0" step="100"
-                                           data-tippy-content="Typical range: $600 - $3000 per year"
-                                           aria-describedby="home-insurance-help">
+                                    <input type="number" id="home-insurance" class="form-control" value="1700" min="0" step="50">
                                 </div>
-                                <small id="home-insurance-help" class="form-help">Often bundled into your monthly payment</small>
                             </div>
                         </fieldset>
 
-                        <fieldset class="form-section" role="group" aria-labelledby="extra-payments-legend">
-                            <legend id="extra-payments-legend">
-                                <span class="section-number">3</span>
-                                Extra Payments
-                                <i class="fas fa-money-bill-wave section-icon" data-tippy-content="Make extra payments to pay off your loan faster and save interest"></i>
-                            </legend>
-
-                            <div class="form-group">
-                                <label for="extra-monthly" class="form-label" 
-                                       data-tippy-content="An additional amount you can pay each month to reduce your loan term">
-                                    Extra Monthly Payment
-                                </label>
-                                <div class="input-with-prefix">
-                                    <span class="input-prefix">$</span>
-                                    <input type="number" id="extra-monthly" name="extraMonthly" 
-                                           class="form-control" value="0" min="0" step="10"
-                                           data-tippy-content="e.g., $100 per month"
-                                           aria-describedby="extra-monthly-help">
+                        <details class="advanced-options" open>
+                            <summary class="advanced-summary" data-tippy-content="Add extra payments to see how much you can save in interest and shorten your loan term">
+                                <span><span class="section-number">3</span> Extra Payments & Savings</span>
+                                <span class="expand-icon"><i class="fas fa-chevron-down"></i></span>
+                            </summary>
+                            <div class="advanced-content">
+                                <div class="form-group">
+                                    <label for="extra-monthly" class="form-label" data-tippy-content="Additional amount paid towards principal each month">Extra Monthly Payment</label>
+                                    <div class="input-with-prefix">
+                                        <span class="input-prefix">$</span>
+                                        <input type="number" id="extra-monthly" class="form-control" value="0" min="0" step="25">
+                                    </div>
+                                    <small class="form-help">Tip: Even $50 extra a month can save thousands!</small>
                                 </div>
-                                <small id="extra-monthly-help" class="form-help">Reduces total interest and shortens loan term</small>
-                            </div>
-                             
-                            <div class="form-group">
-                                <label for="extra-onetime" class="form-label" 
-                                       data-tippy-content="A single lump-sum payment to significantly reduce your loan principal">
-                                    One-Time Extra Payment
-                                </label>
-                                <div class="input-with-prefix">
-                                    <span class="input-prefix">$</span>
-                                    <input type="number" id="extra-onetime" name="extraOnetime" 
-                                           class="form-control" value="0" min="0" step="100"
-                                           data-tippy-content="e.g., $5,000 from a bonus or inheritance"
-                                           aria-describedby="extra-onetime-help">
+                                <div class="form-group">
+                                    <label for="extra-onetime" class="form-label" data-tippy-content="A single lump-sum payment applied towards principal">One-Time Extra Payment</label>
+                                    <div class="input-with-prefix">
+                                        <span class="input-prefix">$</span>
+                                        <input type="number" id="extra-onetime" class="form-control" value="0" min="0" step="500">
+                                    </div>
+                                    <small class="form-help">Tip: Use a bonus or tax refund to shorten your loan.</small>
                                 </div>
-                                <small id="extra-onetime-help" class="form-help">Make a large payment at any time</small>
+                                <div class="extra-impact-preview" id="extra-impact" style="display: none;">
+                                    <h4><i class="fas fa-chart-line"></i> Impact of Extra Payments</h4>
+                                    <div class="impact-stats">
+                                        <div class="impact-item"><span class="impact-label">Interest Saved</span><span class="impact-value" id="interest-savings">$0</span></div>
+                                        <div class="impact-item"><span class="impact-label">Time Saved</span><span class="impact-value" id="time-savings">0 years</span></div>
+                                        <div class="impact-item"><span class="impact-label">New Payoff</span><span class="impact-value" id="new-payoff">--</span></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="extra-payment-warning" id="extra-payment-impact-text" style="display:none;"></div>
-                        </fieldset>
-
+                        </details>
                     </form>
                 </div>
             </section>
 
             <section class="calculator-results-column" role="region" aria-labelledby="results-header">
-                <div class="card results-card">
+                <div class="card result-card">
                     <div class="panel-header" id="results-header">
-                        <h2 data-tippy-content="See a detailed breakdown of your mortgage payment and loan summary">
-                            <i class="fas fa-chart-bar"></i>
-                            Your Mortgage Results
-                        </h2>
+                        <h2 data-tippy-content="A complete breakdown of your estimated mortgage payment and loan details"><i class="fas fa-chart-pie"></i> Your Mortgage Results</h2>
+                    </div>
+                    
+                    <div class="total-payment-highlight" data-tippy-content="Your complete monthly housing payment including taxes and insurance">
+                        <div class="payment-label">Total Monthly Payment</div>
+                        <div class="payment-amount" id="total-payment" role="status" aria-live="polite">$0</div>
                     </div>
 
-                    <div class="results-summary">
-                        <div class="summary-item main-result" data-tippy-content="The total estimated monthly payment including all costs">
-                            <span class="summary-label">Total Monthly Payment</span>
-                            <span class="summary-value" id="total-monthly-payment">$0</span>
+                    <div class="payment-breakdown">
+                        <div class="breakdown-row">
+                            <div class="breakdown-item"><span class="breakdown-label"><i class="fas fa-home breakdown-icon principal"></i> Principal & Interest</span><span class="breakdown-value" id="principal-interest">$0</span></div>
+                            <div class="breakdown-bar"><div class="breakdown-fill principal-fill" id="pi-fill"></div></div>
                         </div>
-                        <div class="summary-breakdown">
-                            <div class="breakdown-item" data-tippy-content="The payment for your loan's principal and interest">
-                                <span class="breakdown-label">Principal & Interest</span>
-                                <span class="breakdown-value" id="p-i-payment">$0</span>
-                            </div>
-                            <div class="breakdown-item" data-tippy-content="Monthly contribution to your annual property tax">
-                                <span class="breakdown-label">Property Tax</span>
-                                <span class="breakdown-value" id="tax-payment">$0</span>
-                            </div>
-                            <div class="breakdown-item" data-tippy-content="Monthly contribution to your annual home insurance">
-                                <span class="breakdown-label">Home Insurance</span>
-                                <span class="breakdown-value" id="insurance-payment">$0</span>
-                            </div>
-                            <div class="breakdown-item" id="pmi-row" data-tippy-content="Private Mortgage Insurance (PMI) is required if your down payment is less than 20%">
-                                <span class="breakdown-label">PMI</span>
-                                <span class="breakdown-value" id="pmi-payment">$0</span>
-                            </div>
+                        <div class="breakdown-row">
+                            <div class="breakdown-item"><span class="breakdown-label"><i class="fas fa-receipt breakdown-icon tax"></i> Property Tax</span><span class="breakdown-value" id="monthly-tax">$0</span></div>
+                            <div class="breakdown-bar"><div class="breakdown-fill tax-fill" id="tax-fill"></div></div>
+                        </div>
+                        <div class="breakdown-row">
+                            <div class="breakdown-item"><span class="breakdown-label"><i class="fas fa-shield-alt breakdown-icon insurance"></i> Home Insurance</span><span class="breakdown-value" id="monthly-insurance">$0</span></div>
+                            <div class="breakdown-bar"><div class="breakdown-fill insurance-fill" id="ins-fill"></div></div>
+                        </div>
+                        <div class="breakdown-row" id="pmi-breakdown-row" style="display: none;">
+                            <div class="breakdown-item"><span class="breakdown-label"><i class="fas fa-umbrella breakdown-icon pmi"></i> PMI</span><span class="breakdown-value" id="monthly-pmi">$0</span></div>
+                            <div class="breakdown-bar"><div class="breakdown-fill pmi-fill" id="pmi-fill"></div></div>
                         </div>
                     </div>
-
-                    <div class="results-meta-data" data-tippy-content="A complete summary of your loan's financial metrics">
-                        <div class="meta-item">
-                            <span class="meta-label">Loan Amount</span>
-                            <span class="meta-value" id="loan-amount-value">$0</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Total Interest Paid</span>
-                            <span class="meta-value" id="total-interest-value">$0</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Total Cost of Loan</span>
-                            <span class="meta-value" id="total-cost-value">$0</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Payoff Date</span>
-                            <span class="meta-value" id="payoff-date-value">--</span>
+                    
+                    <div class="loan-summary-section">
+                        <h3><i class="fas fa-file-invoice-dollar"></i> Loan Summary</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item" data-tippy-content="Total amount borrowed from the lender"><div class="summary-label">Loan Amount</div><div class="summary-value" id="display-loan-amount">$0</div></div>
+                            <div class="summary-item" data-tippy-content="Total interest you'll pay over the life of the loan"><div class="summary-label">Total Interest Paid</div><div class="summary-value" id="display-total-interest">$0</div></div>
+                            <div class="summary-item" data-tippy-content="Total amount you'll pay including principal, interest, taxes, etc."><div class="summary-label">Total Cost of Loan</div><div class="summary-value" id="display-total-cost">$0</div></div>
+                            <div class="summary-item" data-tippy-content="The date your final mortgage payment will be made"><div class="summary-label">Payoff Date</div><div class="summary-value" id="display-payoff-date">--</div></div>
                         </div>
                     </div>
 
-                    <div class="result-tabs" role="tablist">
-                        <button class="tab-btn active" role="tab" aria-selected="true" id="tab-graph" data-tippy-content="Visualize your loan balance and payments over time">Mortgage Over Time</button>
-                        <button class="tab-btn" role="tab" aria-selected="false" id="tab-ai-insights" data-tippy-content="Get AI-powered insights and tips on your mortgage">AI-Powered Insights</button>
-                    </div>
-
-                    <div class="tab-content" id="graph-content" role="tabpanel">
-                        <div class="mortgage-over-time-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Remaining Balance</span>
-                                <span class="stat-value" id="graph-remaining-balance">$0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Principal Paid</span>
-                                <span class="stat-value" id="graph-principal-paid">$0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Interest Paid</span>
-                                <span class="stat-value" id="graph-interest-paid">$0</span>
+                    <div class="tabbed-section">
+                        <div class="tab-controls" role="tablist">
+                            <button type="button" class="tab-btn active" data-tab="chart" role="tab" aria-selected="true" data-tippy-content="Interactive chart showing loan balance over time"><i class="fas fa-chart-line"></i> Mortgage Over Time</button>
+                            <button type="button" class="tab-btn" data-tab="insights" role="tab" aria-selected="false" data-tippy-content="AI-powered recommendations and insights"><i class="fas fa-brain"></i> AI-Powered Insights</button>
+                        </div>
+                        
+                        <div class="tab-content active" id="chart-panel" role="tabpanel">
+                            <div class="mortgage-chart-section">
+                                <div class="chart-legend-values">
+                                    <div class="legend-item"><span class="legend-color balance"></span><div><span class="legend-label">Remaining Balance</span><span class="legend-value" id="remaining-balance">$0</span></div></div>
+                                    <div class="legend-item"><span class="legend-color principal"></span><div><span class="legend-label">Principal Paid</span><span class="legend-value" id="principal-paid">$0</span></div></div>
+                                    <div class="legend-item"><span class="legend-color interest"></span><div><span class="legend-label">Interest Paid</span><span class="legend-value" id="interest-paid">$0</span></div></div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="mortgage-timeline-chart" role="img" aria-label="Mortgage over time chart showing principal, interest, and remaining balance"></canvas>
+                                </div>
+                                <div class="chart-controls">
+                                    <label for="year-range" class="slider-label">View up to year:</label>
+                                    <div class="slider-wrapper">
+                                        <input type="range" id="year-range" class="year-slider" min="1" max="30" value="30" step="1" aria-label="Select year to view">
+                                        <div class="slider-labels"><span>1</span><span id="max-year-label">30</span></div>
+                                    </div>
+                                    <div class="year-display" id="year-display">Year 30</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="chart-container">
-                            <canvas id="mortgage-chart"></canvas>
-                        </div>
-                    </div>
 
-                    <div class="tab-content" id="ai-insights-content" role="tabpanel" style="display: none;">
-                        <div class="ai-insights-panel">
-                            <div class="ai-insight-card" id="bi-weekly-insight" style="display: none;">
-                                <h3>Bi-Weekly Payment Impact <i class="fas fa-chart-line"></i></h3>
-                                <p id="bi-weekly-text"></p>
-                            </div>
-                            <div class="ai-insight-card" id="extra-payment-insight" style="display: none;">
-                                <h3>Extra Payments Impact <i class="fas fa-piggy-bank"></i></h3>
-                                <p id="extra-payment-text"></p>
-                            </div>
-                            <div class="ai-insight-card" id="loan-term-insight" style="display: none;">
-                                <h3>Loan Term Analysis <i class="fas fa-calendar-alt"></i></h3>
-                                <p id="loan-term-text"></p>
+                        <div class="tab-content" id="insights-panel" role="tabpanel">
+                            <div class="ai-insights-section">
+                                <div class="insights-header">
+                                    <h4><i class="fas fa-brain"></i> Smart Recommendations</h4>
+                                    <div class="ai-badge-small"><i class="fas fa-robot"></i> AI Powered</div>
+                                </div>
+                                <div class="insights-list" id="ai-insights-content">
+                                    <div class="insight-item info"><div class="insight-icon"><i class="fas fa-info-circle"></i></div><div class="insight-content">Enter your loan details to get personalized AI insights.</div></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="amortization-schedule-container collapsible-section" data-tippy-content="See a detailed month-by-month or year-by-year breakdown of your payments">
-                        <div class="collapsible-header" id="amortization-header">
+                    
+                    <details class="amortization-details">
+                        <summary class="section-header" data-tippy-content="Click to view the detailed payment-by-payment schedule for your loan">
                             <h3><i class="fas fa-table"></i> Amortization Schedule</h3>
-                            <button class="toggle-btn" aria-expanded="false" aria-controls="amortization-table">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                        <div id="amortization-table" class="collapsible-content">
-                            <div class="table-controls">
-                                <div class="toggle-group" role="radiogroup" aria-labelledby="amortization-view">
-                                    <button type="button" class="btn toggle-btn active" id="view-yearly" role="radio" aria-checked="true">Yearly</button>
-                                    <button type="button" class="btn toggle-btn" id="view-monthly" role="radio" aria-checked="false">Monthly</button>
+                            <span class="expand-icon"><i class="fas fa-chevron-down"></i></span>
+                        </summary>
+                        <div class="amortization-content">
+                            <div class="amortization-controls">
+                                <div class="view-toggle" role="radiogroup">
+                                    <button type="button" class="toggle-btn active" data-view="monthly" role="radio" aria-checked="true">Monthly</button>
+                                    <button type="button" class="toggle-btn" data-view="yearly" role="radio" aria-checked="false">Yearly</button>
                                 </div>
-                                <div class="pagination">
-                                    <button class="btn btn--ghost" id="prev-page" disabled><i class="fas fa-chevron-left"></i> Prev</button>
-                                    <span id="page-info">Page 1 of 1</span>
-                                    <button class="btn btn--ghost" id="next-page" disabled>Next <i class="fas fa-chevron-right"></i></button>
-                                </div>
+                                <div id="pagination-text"></div>
                             </div>
-                            <div class="table-scroll-wrapper">
-                                <table class="amortization-table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Date</th>
-                                            <th>Payment</th>
-                                            <th>Principal</th>
-                                            <th>Interest</th>
-                                            <th>Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="amortization-body">
-                                        </tbody>
-                                </table>
+                            <div class="table-container"><table id="amortization-table"></table></div>
+                            <div class="pagination-controls" id="pagination-controls" style="display: none;">
+                                <button type="button" id="prev-page" class="btn btn--outline btn--sm" data-tippy-content="Previous page"><i class="fas fa-angle-left"></i></button>
+                                <span id="page-info"></span>
+                                <button type="button" id="next-page" class="btn btn--outline btn--sm" data-tippy-content="Next page"><i class="fas fa-angle-right"></i></button>
                             </div>
                         </div>
-                    </div>
+                    </details>
 
-                    <div class="share-options" data-tippy-content="Share, print, or download a PDF report of your results">
-                        <button class="btn share-btn" id="share-results">
-                            <i class="fas fa-share-alt"></i> Share
-                        </button>
-                        <button class="btn share-btn" id="download-pdf">
-                            <i class="fas fa-file-pdf"></i> Download PDF
-                        </button>
-                        <button class="btn share-btn" id="print-results">
-                            <i class="fas fa-print"></i> Print
-                        </button>
+                    <div class="sharing-section">
+                        <h3><i class="fas fa-share-alt"></i> Share Your Results</h3>
+                        <div class="share-actions">
+                            <button type="button" id="share-btn" class="btn btn--primary share-btn" data-tippy-content="Share a link to your calculation"><i class="fas fa-share-alt"></i> Share</button>
+                            <button type="button" id="pdf-btn" class="btn btn--secondary" data-tippy-content="Download a comprehensive PDF report"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                            <button type="button" id="print-btn" class="btn btn--outline" data-tippy-content="Print a summary of your results"><i class="fas fa-print"></i> Print</button>
+                        </div>
                     </div>
-
                 </div>
             </section>
-            
-            <section class="calculator-sponsor-column">
+
+            <aside class="calculator-sponsor-column" role="complementary">
                 <div class="card sponsor-card">
-                    <div class="ad-banner">
-                        <i class="fas fa-ad"></i>
-                        <p><strong><span class="ai-badge">AI</span> Smart Lender Match</strong></p>
-                        <p>Get personalized loan offers from top lenders. Our AI analyzes your data to find the best rates for you.</p>
-                        <button class="btn btn--secondary btn--full">Find Your Rate</button>
+                    <div class="panel-header"><h3><i class="fas fa-handshake"></i> Sponsored Offers</h3></div>
+                    <div class="sponsor-content">
+                        <div class="sponsor-item featured" data-tippy-content="Get pre-approved with our top-rated lending partners">
+                            <div class="sponsor-badge">Featured</div>
+                            <div class="sponsor-icon"><i class="fas fa-university"></i></div>
+                            <h4>Get Pre-Approved Today</h4>
+                            <p>Compare rates from top lenders. No obligation, completely free.</p>
+                            <button class="btn btn--primary btn--sm sponsor-cta"><i class="fas fa-rocket"></i> Get Free Quotes</button>
+                        </div>
+                        <div class="sponsor-item" data-tippy-content="Save money on home insurance with our partners">
+                            <div class="sponsor-icon"><i class="fas fa-shield-alt"></i></div>
+                            <h4>Home Insurance Quotes</h4>
+                            <p>Save up to 30% with our partners.</p>
+                            <button class="btn btn--secondary btn--sm"><i class="fas fa-calculator"></i> Compare Quotes</button>
+                        </div>
                     </div>
                 </div>
-                <div class="card market-card">
-                    <div class="market-insights">
-                        <i class="fas fa-chart-line"></i>
-                        <h3>Market Insights</h3>
-                        <p><strong>Avg. U.S. 30-yr Fixed Rate:</strong> 6.85%</p>
-                        <p><strong>Recent Trend:</strong> Rates are stabilizing after a slight increase.</p>
-                        <a href="#" class="btn btn--ghost btn--full">View Live Rates</a>
-                    </div>
-                </div>
-            </section>
+            </aside>
         </div>
     </main>
 
-    <section class="related-calculators">
+    <section class="related-calculators" role="region" aria-labelledby="related-header">
         <div class="section-container">
-            <div class="section-header">
-                <h2>Related Calculators <i class="fas fa-arrow-right"></i></h2>
-            </div>
-            <div class="calculator-grid-cards">
-                <a href="#" class="calculator-card" data-tippy-content="Calculate the total interest you can save with extra payments">
-                    <div class="calculator-icon">
-                        <i class="fas fa-piggy-bank"></i>
-                    </div>
-                    <h3>Extra Payment Calculator</h3>
-                    <p>See how extra payments save you money.</p>
-                </a>
-                <a href="#" class="calculator-card" data-tippy-content="Compare two different mortgage loan scenarios side-by-side">
-                    <div class="calculator-icon">
-                        <i class="fas fa-balance-scale"></i>
-                    </div>
-                    <h3>Loan Comparison Tool</h3>
-                    <p>Compare two loans and find the best fit.</p>
-                </a>
-                <a href="#" class="calculator-card" data-tippy-content="Calculate your affordability based on your income and debts">
-                    <div class="calculator-icon">
-                        <i class="fas fa-user-check"></i>
-                    </div>
+            <h2 id="related-header">Related Calculators</h2>
+            <div class="related-grid">
+                <a href="#" class="calculator-card" data-tippy-content="Determine how much house you can afford based on your income and debts">
+                    <i class="fas fa-home"></i>
                     <h3>Affordability Calculator</h3>
-                    <p>How much home can you afford?</p>
+                    <p>How much house can you afford?</p>
                 </a>
-                <a href="#" class="calculator-card" data-tippy-content="Calculate your closing costs and total funds needed at closing">
-                    <div class="calculator-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    <h3>Closing Cost Calculator</h3>
-                    <p>Estimate the closing costs for your loan.</p>
+                <a href="#" class="calculator-card" data-tippy-content="See if refinancing your mortgage could save you money">
+                    <i class="fas fa-sync-alt"></i>
+                    <h3>Refinance Calculator</h3>
+                    <p>Could you save by refinancing?</p>
+                </a>
+                <a href="#" class="calculator-card" data-tippy-content="Compare the costs and benefits of renting vs buying">
+                    <i class="fas fa-balance-scale"></i>
+                    <h3>Rent vs Buy Calculator</h3>
+                    <p>Is it better to rent or buy?</p>
                 </a>
             </div>
         </div>
     </section>
 
-    <footer class="app-footer">
-        <div class="footer-container">
-            <div class="footer-top">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <span class="logo-ai-badge">AI</span>
-                        <span class="logo-text">Financial Calculators</span>
-                    </div>
-                    <p class="brand-tagline">Your AI-powered partner for smart financial decisions.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link" data-tippy-content="Follow us on Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link" data-tippy-content="Connect with us on LinkedIn">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="#" class="social-link" data-tippy-content="Like us on Facebook">
-                            <i class="fab fa-facebook"></i>
-                        </a>
-                    </div>
+    <footer class="app-footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="#">Mortgage Calculator</a></li>
+                        <li><a href="#">Affordability Calculator</a></li>
+                        <li><a href="#">Refinance Calculator</a></li>
+                        <li><a href="#">Retirement Calculator</a></li>
+                    </ul>
                 </div>
-                <div class="footer-links-group">
-                    <div class="footer-links">
-                        <h5>Company</h5>
-                        <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-links">
-                        <h5>Resources</h5>
-                        <ul>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">FAQs</a></li>
-                            <li><a href="#">Partners</a></li>
-                        </ul>
-                    </div>
-                    <div class="newsletter">
-                        <h5>Stay Updated</h5>
-                        <div class="newsletter-form">
-                            <input type="email" placeholder="Your email" class="newsletter-input">
-                            <button class="newsletter-btn" data-tippy-content="Subscribe to updates">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Mortgage Guide</a></li>
+                        <li><a href="#">Home Buying Tips</a></li>
+                        <li><a href="#">Interest Rate Trends</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Twitter" data-tippy-content="Follow us on Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="LinkedIn" data-tippy-content="Connect on LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link" aria-label="Facebook" data-tippy-content="Like us on Facebook"><i class="fab fa-facebook"></i></a>
                     </div>
                 </div>
             </div>
-            
             <div class="footer-bottom">
-                <div class="footer-info">
-                    <p>&copy; 2024 AI Financial Calculators. All rights reserved.</p>
-                    <p>Powered by advanced AI algorithms for accurate financial analysis.</p>
-                </div>
-                <div class="footer-disclaimer">
-                    <p><strong>Disclaimer:</strong> This calculator provides estimates only. Consult with financial professionals for official advice. Results are based on information provided and current market conditions.</p>
-                </div>
+                <p class="footer-disclaimer"><strong>Disclaimer:</strong> This calculator provides estimates for informational purposes only and is not an offer for a loan. Consult a qualified financial advisor for professional advice.</p>
+                <p>&copy; 2025 AI Financial Calculators. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
-
-    <script src="mortgage-calculator.js"></script>
     
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="mortgage-calculator.js"></script>
 </body>
 </html>
