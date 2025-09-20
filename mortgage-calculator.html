@@ -11,18 +11,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Font imports -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     
-    <!-- jsPDF for PDF generation -->
+    <!-- jsPDF and html2canvas for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
-    <!-- Stylesheet -->
+    <!-- Original stylesheet -->
     <link rel="stylesheet" href="mortgage-calculator.css">
     
     <!-- Structured Data for SEO -->
@@ -32,7 +29,6 @@
       "@type": "WebApplication",
       "name": "AI-Enhanced Mortgage Calculator",
       "description": "Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.",
-      "url": "https://yourdomain.com/mortgage-calculator",
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Web Browser",
       "offers": {
@@ -45,8 +41,8 @@
 </head>
 
 <body>
-    <!-- Skip to content for accessibility -->
-    <a href="#main-content" class="skip-link" tabindex="1">Skip to main content</a>
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     
     <!-- Loading overlay -->
     <div id="loading-overlay" class="loading-overlay" style="display: none;">
@@ -54,528 +50,434 @@
         <p>Calculating your mortgage...</p>
     </div>
 
-    <!-- Toast container for notifications -->
+    <!-- Toast container -->
     <div id="toast-container"></div>
 
-    <div class="app-layout">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <h1 class="header-title">
-                    <span class="icon">🏠</span>
-                    AI-Enhanced Mortgage Calculator
-                </h1>
-                <p class="header-subtitle">Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.</p>
-            </div>
-        </header>
+    <!-- Header (matching the original design from screenshot) -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1>AI-Enhanced Mortgage Calculator</h1>
+            <p>Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.</p>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main id="main-content" class="main-container">
-            <div class="calculator-grid">
-                
-                <!-- Left Column - Input Form -->
-                <div class="input-section">
-                    <div class="card input-card">
-                        <div class="panel-header">
-                            <h2>
-                                <span class="icon">🧮</span>
-                                Mortgage Calculator
-                            </h2>
-                        </div>
+    <!-- Main Calculator Layout (3-column as shown in screenshot) -->
+    <main id="main-content" class="calculator-container">
+        <div class="calculator-grid">
+            
+            <!-- LEFT COLUMN - Mortgage Calculator Form -->
+            <div class="calculator-input-column">
+                <div class="card input-card">
+                    <div class="panel-header">
+                        <h2>Mortgage Calculator</h2>
+                    </div>
+                    
+                    <form id="mortgage-form" class="mortgage-form">
                         
-                        <form id="mortgage-form" class="mortgage-form" novalidate>
-                            <!-- Basic Loan Information -->
-                            <fieldset class="form-section">
-                                <legend>Loan Details</legend>
-                                
-                                <div class="form-group">
-                                    <label for="home-price" class="form-label">Home Price</label>
+                        <!-- 1. Home Details Section -->
+                        <fieldset class="form-section">
+                            <legend>1. Home Details</legend>
+                            
+                            <div class="form-group">
+                                <label for="home-price">Home Price</label>
+                                <div class="input-with-prefix">
+                                    <span class="input-prefix">$</span>
+                                    <input type="number" id="home-price" name="homePrice" 
+                                           value="400000" min="50000" max="10000000" step="1000">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="down-payment">Down Payment</label>
+                                <div class="down-payment-controls">
+                                    <div class="toggle-group">
+                                        <button type="button" class="btn toggle-btn active" id="amount-toggle">Amount ($)</button>
+                                        <button type="button" class="btn toggle-btn" id="percent-toggle">Percent (%)</button>
+                                    </div>
                                     <div class="input-with-prefix">
                                         <span class="input-prefix">$</span>
-                                        <input type="number" id="home-price" name="homePrice" 
-                                               class="form-control" value="400000" min="50000" max="10000000" step="1000" 
-                                               required aria-describedby="home-price-help">
+                                        <input type="number" id="down-payment" name="downPayment" 
+                                               value="80000" min="0" step="1000">
                                     </div>
-                                    <small id="home-price-help" class="form-help">The total purchase price of the home</small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="down-payment" class="form-label">Down Payment</label>
-                                    <div class="dual-input-group">
-                                        <div class="input-with-prefix">
-                                            <span class="input-prefix">$</span>
-                                            <input type="number" id="down-payment" name="downPayment" 
-                                                   class="form-control" value="80000" min="0" step="1000" 
-                                                   aria-describedby="down-payment-help">
-                                        </div>
-                                        <span class="input-separator">or</span>
-                                        <div class="input-with-suffix">
-                                            <input type="number" id="down-payment-percent" name="downPaymentPercent" 
-                                                   class="form-control" value="20" min="0" max="100" step="0.5">
-                                            <span class="input-suffix">%</span>
-                                        </div>
-                                    </div>
-                                    <small id="down-payment-help" class="form-help">Amount paid upfront (typically 10-20%)</small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="interest-rate" class="form-label">Interest Rate (APR)</label>
-                                    <div class="input-with-suffix">
-                                        <input type="number" id="interest-rate" name="interestRate" 
-                                               class="form-control" value="6.5" min="1" max="15" step="0.125" 
-                                               required aria-describedby="interest-rate-help">
+                                    <div class="input-with-suffix" style="display: none;">
+                                        <input type="number" id="down-payment-percent" name="downPaymentPercent" 
+                                               value="20" min="0" max="100" step="0.5">
                                         <span class="input-suffix">%</span>
                                     </div>
-                                    <small id="interest-rate-help" class="form-help">Annual percentage rate</small>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label for="loan-term" class="form-label">Loan Term</label>
-                                    <select id="loan-term" name="loanTerm" class="form-control" aria-describedby="loan-term-help">
-                                        <option value="10">10 years</option>
-                                        <option value="15">15 years</option>
-                                        <option value="20">20 years</option>
-                                        <option value="25">25 years</option>
-                                        <option value="30" selected>30 years</option>
-                                        <option value="40">40 years</option>
-                                    </select>
-                                    <small id="loan-term-help" class="form-help">Length of the mortgage loan</small>
+                            <div class="form-group">
+                                <label for="interest-rate">Interest Rate</label>
+                                <div class="input-with-suffix">
+                                    <input type="number" id="interest-rate" name="interestRate" 
+                                           value="6.75" min="1" max="15" step="0.125">
+                                    <span class="input-suffix">%</span>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label for="loan-start-date" class="form-label">Loan Start Date</label>
-                                    <input type="month" id="loan-start-date" name="loanStartDate" 
-                                           class="form-control" aria-describedby="start-date-help">
-                                    <small id="start-date-help" class="form-help">When you plan to start the mortgage</small>
-                                </div>
-                            </fieldset>
-
-                            <!-- Property Information -->
-                            <fieldset class="form-section">
-                                <legend>Property Information</legend>
+                            <div class="form-group">
+                                <label for="loan-term">Loan Term</label>
                                 
-                                <div class="form-group">
-                                    <label for="property-state" class="form-label">State</label>
-                                    <select id="property-state" name="propertyState" class="form-control" aria-describedby="state-help">
-                                        <option value="">Select State...</option>
-                                        <!-- States populated by JavaScript -->
-                                    </select>
-                                    <small id="state-help" class="form-help">Used for property tax calculations</small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="property-tax" class="form-label">Annual Property Tax</label>
-                                    <div class="input-with-prefix">
-                                        <span class="input-prefix">$</span>
-                                        <input type="number" id="property-tax" name="propertyTax" 
-                                               class="form-control" value="3000" min="0" step="100" 
-                                               aria-describedby="property-tax-help">
-                                    </div>
-                                    <small id="property-tax-help" class="form-help">Auto-calculated based on state, or enter custom amount</small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="home-insurance" class="form-label">Home Insurance</label>
-                                    <div class="input-with-prefix">
-                                        <span class="input-prefix">$</span>
-                                        <input type="number" id="home-insurance" name="homeInsurance" 
-                                               class="form-control" value="1200" min="0" step="50" 
-                                               aria-describedby="insurance-help">
-                                    </div>
-                                    <small id="insurance-help" class="form-help">Annual home insurance premium</small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="pmi" class="form-label">PMI (Private Mortgage Insurance)</label>
-                                    <div class="input-with-prefix">
-                                        <span class="input-prefix">$</span>
-                                        <input type="number" id="pmi" name="pmi" 
-                                               class="form-control" value="200" min="0" step="25" 
-                                               aria-describedby="pmi-help">
-                                    </div>
-                                    <small id="pmi-help" class="form-help">Required if down payment is less than 20%</small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="hoa-fees" class="form-label">HOA Fees (Monthly)</label>
-                                    <div class="input-with-prefix">
-                                        <span class="input-prefix">$</span>
-                                        <input type="number" id="hoa-fees" name="hoaFees" 
-                                               class="form-control" value="0" min="0" step="25" 
-                                               aria-describedby="hoa-help">
-                                    </div>
-                                    <small id="hoa-help" class="form-help">Monthly homeowners association fees</small>
-                                </div>
-                            </fieldset>
-
-                            <!-- Extra Payments Section -->
-                            <details class="advanced-options">
-                                <summary class="advanced-summary">
-                                    <span class="icon">💰</span>
-                                    Extra Payments
-                                    <span class="expand-icon">▼</span>
-                                </summary>
-                                <div class="advanced-content">
-                                    <div class="form-group">
-                                        <label for="extra-monthly" class="form-label">Extra Monthly Payment</label>
-                                        <div class="input-with-prefix">
-                                            <span class="input-prefix">$</span>
-                                            <input type="number" id="extra-monthly" name="extraMonthly" 
-                                                   class="form-control" value="0" min="0" step="50" 
-                                                   aria-describedby="extra-monthly-help">
-                                        </div>
-                                        <small id="extra-monthly-help" class="form-help">Additional amount paid each month toward principal</small>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="extra-yearly" class="form-label">Extra Yearly Payment</label>
-                                        <div class="input-with-prefix">
-                                            <span class="input-prefix">$</span>
-                                            <input type="number" id="extra-yearly" name="extraYearly" 
-                                                   class="form-control" value="0" min="0" step="100" 
-                                                   aria-describedby="extra-yearly-help">
-                                        </div>
-                                        <small id="extra-yearly-help" class="form-help">Lump sum payment made once per year</small>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="start-extra-payment" class="form-label">Start Extra Payments</label>
-                                        <input type="month" id="start-extra-payment" name="startExtraPayment" 
-                                               class="form-control" aria-describedby="start-extra-help">
-                                        <small id="start-extra-help" class="form-help">When to begin making extra payments</small>
-                                    </div>
-                                </div>
-                            </details>
-
-                            <!-- Voice Commands -->
-                            <div class="voice-controls">
-                                <button type="button" id="voice-btn" class="btn btn--secondary btn--full-width" 
-                                        aria-label="Start voice input" title="Click and speak your loan details">
-                                    <span class="voice-icon">🎤</span>
-                                    Voice Input
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Middle Column - Results -->
-                <div class="results-section">
-                    <div class="card result-card">
-                        <!-- Results Header -->
-                        <div class="panel-header">
-                            <h2>
-                                <span class="icon">📊</span>
-                                Your Mortgage Results
-                            </h2>
-                        </div>
-
-                        <!-- Monthly Payment Summary -->
-                        <div class="total-payment-section">
-                            <div class="total-label">Total Monthly Payment</div>
-                            <div class="total-amount" id="total-payment">$0</div>
-                        </div>
-
-                        <div class="payment-breakdown">
-                            <div class="breakdown-item">
-                                <span>Principal & Interest</span>
-                                <span id="principal-interest">$0</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span>Property Tax</span>
-                                <span id="monthly-tax">$0</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span>Home Insurance</span>
-                                <span id="monthly-insurance">$0</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span>PMI</span>
-                                <span id="monthly-pmi">$0</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span>HOA Fees</span>
-                                <span id="monthly-hoa">$0</span>
-                            </div>
-                        </div>
-
-                        <!-- User Input Summary - FIRST as requested -->
-                        <div class="loan-summary-section">
-                            <h3>Loan Summary</h3>
-                            <div class="over-time-summary">
-                                <div class="summary-item">
-                                    <div class="summary-label">Loan Amount</div>
-                                    <div class="summary-value" id="display-loan-amount">$0</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="summary-label">Total Interest Paid</div>
-                                    <div class="summary-value" id="display-total-interest">$0</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="summary-label">Total Cost of Loan</div>
-                                    <div class="summary-value" id="display-total-cost">$0</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="summary-label">Payoff Date</div>
-                                    <div class="summary-value" id="display-payoff-date">--</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- SECOND: Amortization Schedule - Collapsible as requested -->
-                        <details class="amortization-details">
-                            <summary class="section-header">
-                                <h3>
-                                    <span class="icon">📅</span>
-                                    Amortization Schedule
-                                </h3>
-                                <span class="expand-icon">▼</span>
-                            </summary>
-                            <div class="amortization-content">
-                                <div class="view-controls">
-                                    <div class="view-toggle">
-                                        <button type="button" class="toggle-btn active" data-view="monthly">Monthly</button>
-                                        <button type="button" class="toggle-btn" data-view="yearly">Yearly</button>
-                                    </div>
-                                    <div class="pagination-info">
-                                        <span id="pagination-text">Page 1 of 1</span>
-                                    </div>
+                                <!-- Term Chips (like in original design) -->
+                                <div class="term-chips">
+                                    <button type="button" class="term-chip" data-term="15">15 years</button>
+                                    <button type="button" class="term-chip" data-term="20">20 years</button>
+                                    <button type="button" class="term-chip active" data-term="30">30 years</button>
                                 </div>
                                 
-                                <div class="table-container">
-                                    <table id="amortization-table" class="amortization-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Payment #</th>
-                                                <th>Date</th>
-                                                <th>Payment</th>
-                                                <th>Principal</th>
-                                                <th>Interest</th>
-                                                <th>Balance</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colspan="6" class="no-data">Calculate mortgage to view schedule</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <!-- Hidden select for form submission -->
+                                <select id="loan-term" name="loanTerm" style="display: none;">
+                                    <option value="15">15 years</option>
+                                    <option value="20">20 years</option>
+                                    <option value="30" selected>30 years</option>
+                                </select>
+                            </div>
+                        </fieldset>
+
+                        <!-- 2. Location & Taxes -->
+                        <fieldset class="form-section">
+                            <legend>2. Location & Taxes</legend>
+                            
+                            <div class="form-group">
+                                <label for="property-state">State</label>
+                                <select id="property-state" name="propertyState">
+                                    <option value="">Select State...</option>
+                                    <!-- Populated by JavaScript -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="property-tax">Property Tax (Annual)</label>
+                                <div class="input-with-prefix">
+                                    <span class="input-prefix">$</span>
+                                    <input type="number" id="property-tax" name="propertyTax" 
+                                           value="3000" min="0" step="100">
                                 </div>
-                                
-                                <div class="pagination-controls">
-                                    <button type="button" id="prev-page" class="btn btn--outline btn--sm">Previous</button>
-                                    <button type="button" id="next-page" class="btn btn--outline btn--sm">Next</button>
+                            </div>
+                        </fieldset>
+
+                        <!-- 3. Insurance & PMI -->
+                        <fieldset class="form-section">
+                            <legend>3. Insurance & PMI</legend>
+                            
+                            <div class="form-group">
+                                <label for="home-insurance">Home Insurance (Annual)</label>
+                                <div class="input-with-prefix">
+                                    <span class="input-prefix">$</span>
+                                    <input type="number" id="home-insurance" name="homeInsurance" 
+                                           value="1700" min="0" step="50">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pmi">PMI (Monthly)</label>
+                                <div class="input-with-prefix">
+                                    <span class="input-prefix">$</span>
+                                    <input type="number" id="pmi" name="pmi" 
+                                           value="0" min="0" step="25" readonly>
+                                </div>
+                                <small class="form-help">Auto-calculated for down payments &lt; 20%</small>
+                            </div>
+                        </fieldset>
+
+                        <!-- 4. Extra Payments (Collapsible) -->
+                        <details class="advanced-options">
+                            <summary>4. Extra Payments</summary>
+                            <div class="advanced-content">
+                                <div class="form-group">
+                                    <label for="extra-monthly">Extra Monthly Payment</label>
+                                    <div class="input-with-prefix">
+                                        <span class="input-prefix">$</span>
+                                        <input type="number" id="extra-monthly" name="extraMonthly" 
+                                               value="0" min="0" step="50">
+                                    </div>
+                                    <small class="form-help">Additional amount toward principal each month</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="extra-onetime">One-Time Extra Payment</label>
+                                    <div class="input-with-prefix">
+                                        <span class="input-prefix">$</span>
+                                        <input type="number" id="extra-onetime" name="extraOnetime" 
+                                               value="0" min="0" step="100">
+                                    </div>
+                                    <small class="form-help">Lump sum payment (applied in month 12)</small>
                                 </div>
                             </div>
                         </details>
+                    </form>
+                </div>
+            </div>
 
-                        <!-- THIRD: Tabbed Content - Chart shown by default, AI insights tab -->
-                        <div class="tabbed-section">
-                            <div class="tab-header">
-                                <button type="button" class="tab-btn active" data-tab="chart">Mortgage Over Time</button>
-                                <button type="button" class="tab-btn" data-tab="insights">AI-Powered Insights</button>
+            <!-- MIDDLE COLUMN - Your Mortgage Results -->
+            <div class="calculator-results-column">
+                <div class="card result-card">
+                    <!-- Results Header -->
+                    <div class="panel-header">
+                        <h2>Your Mortgage Results</h2>
+                    </div>
+                    
+                    <!-- Total Monthly Payment (Prominent Display) -->
+                    <div class="total-payment-highlight">
+                        <div class="payment-label">Total Monthly Payment</div>
+                        <div class="payment-amount" id="total-payment">$2,467.18</div>
+                    </div>
+
+                    <!-- Payment Breakdown -->
+                    <div class="payment-breakdown">
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Principal & Interest</span>
+                            <span class="breakdown-value" id="principal-interest">$2,075.51</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Property Tax</span>
+                            <span class="breakdown-value" id="monthly-tax">$250.00</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Home Insurance</span>
+                            <span class="breakdown-value" id="monthly-insurance">$141.67</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">PMI</span>
+                            <span class="breakdown-value" id="monthly-pmi">$0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- FIRST: Loan Summary (as requested) -->
+                    <div class="loan-summary-section">
+                        <h3>Loan Summary</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="summary-label">Loan Amount</div>
+                                <div class="summary-value" id="display-loan-amount">$320,000</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Total Interest Paid</div>
+                                <div class="summary-value" id="display-total-interest">$427,183</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Total Cost of Loan</div>
+                                <div class="summary-value" id="display-total-cost">$747,183</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Payoff Date</div>
+                                <div class="summary-value" id="display-payoff-date">Sep 2054</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECOND: Amortization Schedule (Collapsible as requested) -->
+                    <details class="amortization-details">
+                        <summary class="section-header">
+                            <h3>Amortization Schedule</h3>
+                            <span class="expand-icon">▼</span>
+                        </summary>
+                        <div class="amortization-content">
+                            <div class="view-controls">
+                                <div class="view-toggle">
+                                    <button type="button" class="toggle-btn active" data-view="monthly">Monthly</button>
+                                    <button type="button" class="toggle-btn" data-view="yearly">Yearly</button>
+                                </div>
+                                <div class="pagination-info">
+                                    <span id="pagination-text">Page 1 of 25</span>
+                                </div>
                             </div>
                             
-                            <!-- Mortgage Over Time Tab - shown by default -->
-                            <div class="tab-content active" id="chart-tab">
-                                <div class="chart-section">
-                                    <div class="chart-container">
-                                        <canvas id="mortgage-timeline-chart"></canvas>
+                            <div class="table-container">
+                                <table id="amortization-table" class="amortization-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Payment #</th>
+                                            <th>Date</th>
+                                            <th>Payment</th>
+                                            <th>Principal</th>
+                                            <th>Interest</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">Calculate mortgage to view schedule</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="pagination-controls">
+                                <button type="button" id="prev-page" class="btn btn--outline btn--sm">Previous</button>
+                                <button type="button" id="next-page" class="btn btn--outline btn--sm">Next</button>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- THIRD: Tabbed Content (Chart shown by default as requested) -->
+                    <div class="tabbed-section">
+                        <div class="tab-controls">
+                            <button type="button" class="tab-btn active" data-tab="chart">Mortgage Over Time</button>
+                            <button type="button" class="tab-btn" data-tab="insights">AI-Powered Insights</button>
+                        </div>
+                        
+                        <!-- Mortgage Over Time Tab (shown by default) -->
+                        <div class="tab-content active" id="chart-tab">
+                            <div class="mortgage-chart-section">
+                                <div class="chart-container">
+                                    <canvas id="mortgage-timeline-chart"></canvas>
+                                </div>
+                                <div class="chart-controls">
+                                    <div class="year-slider-container">
+                                        <label for="year-range">View up to year:</label>
+                                        <input type="range" id="year-range" min="5" max="50" value="30" step="1">
+                                        <span id="year-display">30</span>
                                     </div>
-                                    <div class="chart-controls">
-                                        <div class="year-slider-container">
-                                            <label for="year-range">View Year Range:</label>
-                                            <input type="range" id="year-range" min="1" max="30" value="30" step="1">
-                                            <span id="year-display">Year 30</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Insights Tab -->
+                        <div class="tab-content" id="insights-tab">
+                            <div class="ai-insights-section">
+                                <div class="insights-list" id="ai-insights-content">
+                                    <div class="insight-item">
+                                        <span class="insight-icon">💡</span>
+                                        <div class="insight-content">
+                                            <strong>Calculate your mortgage to see personalized AI insights</strong>
+                                            <p>Get smart recommendations about your loan terms, extra payments, and savings opportunities.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- AI Insights Tab -->
-                            <div class="tab-content" id="insights-tab">
-                                <div class="ai-insights-section">
-                                    <div class="insights-list">
-                                        <div class="insight-item">
-                                            <span class="insight-icon">💡</span>
-                                            <div class="insight-content">
-                                                <strong>Smart Recommendations</strong>
-                                                <div id="ai-insights-content">
-                                                    <p>Calculate your mortgage to see personalized AI insights and recommendations.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- FOURTH: Universal Sharing Options -->
-                        <div class="sharing-section">
-                            <h3>Share Results</h3>
-                            <div class="share-actions">
-                                <button type="button" id="share-btn" class="share-btn-primary">
-                                    <span>📤</span> Share
-                                </button>
-                                <button type="button" id="pdf-btn" class="action-btn">
-                                    <span>📄</span> Download PDF
-                                </button>
-                                <button type="button" id="print-btn" class="action-btn">
-                                    <span>🖨️</span> Print
-                                </button>
-                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Right Column - Advertising/Sponsors -->
-                <div class="sponsor-section">
-                    <div class="card sponsor-card">
-                        <div class="panel-header">
-                            <h3>Sponsored</h3>
-                        </div>
-                        <div class="sponsor-content">
-                            <div class="sponsor-item">
-                                <h4>🏦 Get Pre-Approved Today</h4>
-                                <p>Compare rates from top lenders. No obligation, completely free.</p>
-                                <a href="#" class="btn btn--primary btn--sm">Get Quotes</a>
-                            </div>
-                            
-                            <div class="sponsor-item">
-                                <h4>🏠 Home Insurance Quotes</h4>
-                                <p>Save up to 30% on home insurance with our partners.</p>
-                                <a href="#" class="btn btn--secondary btn--sm">Compare Rates</a>
-                            </div>
-                            
-                            <div class="sponsor-item">
-                                <h4>📈 Investment Planning</h4>
-                                <p>Maximize your savings with expert financial planning.</p>
-                                <a href="#" class="btn btn--outline btn--sm">Learn More</a>
-                            </div>
+                    <!-- FOURTH: Sharing Options (as requested) -->
+                    <div class="sharing-section">
+                        <h3>Share Results</h3>
+                        <div class="share-actions">
+                            <button type="button" id="share-btn" class="btn btn--primary">
+                                <span>📤</span> Share
+                            </button>
+                            <button type="button" id="pdf-btn" class="btn btn--secondary">
+                                <span>📄</span> Download PDF
+                            </button>
+                            <button type="button" id="print-btn" class="btn btn--outline">
+                                <span>🖨️</span> Print
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
 
-        <!-- Related Calculators Section -->
-        <section class="related-calculators">
-            <div class="section-header">
-                <h2>Related Calculators</h2>
-                <p>Explore more financial tools to help with your home buying journey</p>
+            <!-- RIGHT COLUMN - Sponsored Content -->
+            <div class="calculator-sponsor-column">
+                <div class="card sponsor-card">
+                    <div class="panel-header">
+                        <h3>Sponsored</h3>
+                    </div>
+                    <div class="sponsor-content">
+                        <div class="sponsor-item">
+                            <h4>Get Pre-Approved Today</h4>
+                            <p>Compare rates from top lenders. No obligation, completely free.</p>
+                            <button class="btn btn--primary btn--sm">Get Free Quotes</button>
+                        </div>
+                        
+                        <div class="sponsor-item partner-offer">
+                            <h4>Partner Offer</h4>
+                            <h4>Home Insurance Quotes</h4>
+                            <p>Save up to 30% on home insurance with our partners.</p>
+                            <button class="btn btn--secondary btn--sm">Compare Quotes</button>
+                        </div>
+                        
+                        <div class="sponsor-item">
+                            <h4>Real Estate Services</h4>
+                            <p>Connect with top-rated real estate agents in your area.</p>
+                            <button class="btn btn--outline btn--sm">Find Agents</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Related Calculators Section (before footer as requested) -->
+    <section class="related-calculators">
+        <div class="section-header">
+            <h2>Related Calculators</h2>
+            <p>Explore more financial tools to help with your home buying journey</p>
+        </div>
+        
+        <div class="calculator-grid">
+            <div class="calculator-card">
+                <div class="calculator-icon">🏠</div>
+                <h3>Home Affordability</h3>
+                <p>Calculate how much house you can afford based on your income</p>
+                <button class="btn btn--outline btn--sm">Calculate</button>
             </div>
             
-            <div class="calculator-grid">
-                <div class="calculator-card">
-                    <div class="calculator-icon">🏠</div>
-                    <h3>Home Affordability</h3>
-                    <p>Calculate how much house you can afford based on your income</p>
-                    <a href="#" class="btn btn--outline btn--sm">Calculate</a>
-                </div>
-                
-                <div class="calculator-card">
-                    <div class="calculator-icon">💰</div>
-                    <h3>Refinance Calculator</h3>
-                    <p>See if refinancing your mortgage could save you money</p>
-                    <a href="#" class="btn btn--outline btn--sm">Calculate</a>
-                </div>
-                
-                <div class="calculator-card">
-                    <div class="calculator-icon">📊</div>
-                    <h3>Property Tax Calculator</h3>
-                    <p>Estimate property taxes for any location in the US</p>
-                    <a href="#" class="btn btn--outline btn--sm">Calculate</a>
-                </div>
-                
-                <div class="calculator-card">
-                    <div class="calculator-icon">🔢</div>
-                    <h3>Loan Comparison</h3>
-                    <p>Compare multiple loan offers side by side</p>
-                    <a href="#" class="btn btn--outline btn--sm">Calculate</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Customer Feedback Section -->
-        <section class="feedback-section">
-            <div class="card feedback-card">
-                <div class="panel-header">
-                    <h3>💬 Help Us Improve</h3>
-                    <p>Your feedback helps us make better financial tools</p>
-                </div>
-                <form id="feedback-form" class="feedback-form">
-                    <div class="form-group">
-                        <label for="feedback-type" class="form-label">Feedback Type</label>
-                        <select id="feedback-type" name="type" class="form-control" required>
-                            <option value="">Select type...</option>
-                            <option value="bug">Bug Report</option>
-                            <option value="feature">Feature Request</option>
-                            <option value="improvement">Improvement Suggestion</option>
-                            <option value="general">General Feedback</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="feedback-message" class="form-label">Your Feedback</label>
-                        <textarea id="feedback-message" name="message" rows="4" class="form-control"
-                                  placeholder="Tell us what you think..." required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="feedback-email" class="form-label">Email (optional)</label>
-                        <input type="email" id="feedback-email" name="email" class="form-control"
-                               placeholder="your.email@example.com">
-                    </div>
-                    
-                    <button type="submit" class="btn btn--primary btn--full-width">
-                        Submit Feedback
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="app-footer">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Financial Calculators</h4>
-                    <ul>
-                        <li><a href="#">Mortgage Calculator</a></li>
-                        <li><a href="#">Loan Calculator</a></li>
-                        <li><a href="#">Investment Calculator</a></li>
-                        <li><a href="#">Retirement Calculator</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#">Mortgage Guide</a></li>
-                        <li><a href="#">Home Buying Tips</a></li>
-                        <li><a href="#">Interest Rate Trends</a></li>
-                        <li><a href="#">Financial Planning</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
+            <div class="calculator-card">
+                <div class="calculator-icon">💰</div>
+                <h3>Refinance Calculator</h3>
+                <p>See if refinancing your mortgage could save you money</p>
+                <button class="btn btn--outline btn--sm">Calculate</button>
             </div>
             
-            <div class="footer-bottom">
-                <p>&copy; 2024 AI Financial Calculators. All rights reserved.</p>
-                <p>Disclaimer: This calculator provides estimates only. Consult with financial professionals for official advice.</p>
+            <div class="calculator-card">
+                <div class="calculator-icon">📊</div>
+                <h3>Property Tax Calculator</h3>
+                <p>Estimate property taxes for any location in the US</p>
+                <button class="btn btn--outline btn--sm">Calculate</button>
             </div>
-        </footer>
-    </div>
+            
+            <div class="calculator-card">
+                <div class="calculator-icon">🔢</div>
+                <h3>Loan Comparison</h3>
+                <p>Compare multiple loan offers side by side</p>
+                <button class="btn btn--outline btn--sm">Calculate</button>
+            </div>
+        </div>
+    </section>
 
-    <!-- Scripts -->
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Financial Calculators</h4>
+                <ul>
+                    <li><a href="#">Mortgage Calculator</a></li>
+                    <li><a href="#">Loan Calculator</a></li>
+                    <li><a href="#">Investment Calculator</a></li>
+                    <li><a href="#">Retirement Calculator</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Mortgage Guide</a></li>
+                    <li><a href="#">Home Buying Tips</a></li>
+                    <li><a href="#">Interest Rate Trends</a></li>
+                    <li><a href="#">Financial Planning</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 AI Financial Calculators. All rights reserved.</p>
+            <p>Disclaimer: This calculator provides estimates only. Consult with financial professionals for official advice.</p>
+        </div>
+    </footer>
+
+    <!-- Enhanced JavaScript -->
     <script src="mortgage-calculator.js"></script>
 </body>
 </html>
