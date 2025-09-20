@@ -1,5 +1,5 @@
 /**
- * mortgage-calculator-complete.js
+ * mortgage-calculator.js
  * World's First AI-Enhanced Mortgage Calculator
  * Features: Voice commands, screen reader, dark/light mode, AI insights, interactive charts
  */
