@@ -26,7 +26,510 @@
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     
-    <link rel="stylesheet" href="mortgage-calculator.css">
+    <style>
+    /**
+     * mortgage-calculator.css
+     * Unified and Refactored Stylesheet for the AI-Enhanced Mortgage Calculator
+     */
+
+    /* ========== DESIGN SYSTEM: TOKENS & VARIABLES ========== */
+    :root {
+      /* Color Primitives */
+      --color-white: #FFFFFF; --color-black: #000000;
+      --color-slate-50: #F8FAFC; --color-slate-100: #F1F5F9; --color-slate-200: #E2E8F0;
+      --color-slate-300: #CBD5E1; --color-slate-400: #94A3B8; --color-slate-500: #64748B;
+      --color-slate-600: #475569; --color-slate-700: #334155; --color-slate-800: #1E293B;
+      --color-slate-900: #0F172A;
+      --color-teal-500: #14B8A6; --color-teal-600: #0D9488;
+      --color-orange-500: #F97316;
+      --color-blue-500: #3B82F6;
+      --color-red-500: #EF4444;
+
+      /* Semantic Tokens (Light Mode) */
+      --bg-primary: var(--color-white);
+      --bg-secondary: var(--color-slate-50);
+      --bg-tertiary: var(--color-slate-100);
+      --text-primary: var(--color-slate-800);
+      --text-secondary: var(--color-slate-500);
+      --text-inverse: var(--color-white);
+      --border-primary: var(--color-slate-200);
+      --color-primary: #0D9488; /* Darker Teal for better contrast */
+      --color-primary-hover: #0F766E;
+      --color-secondary: var(--color-orange-500);
+      --color-focus-ring: rgba(20, 184, 166, 0.3);
+
+      /* Chart Colors */
+      --chart-balance: #F97316; /* Orange */
+      --chart-principal: #10B981; /* Green */
+      --chart-interest: #3B82F6; /* Blue */
+      --chart-grid: rgba(0,0,0,0.05);
+
+      /* Layout & Sizing */
+      --font-family: 'Inter', sans-serif;
+      --font-size-base: 14px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ========== DARK MODE ========== */
+    [data-theme="dark"] {
+      --bg-primary: var(--color-slate-800);
+      --bg-secondary: var(--color-slate-900);
+      --bg-tertiary: #1A2436;
+      --text-primary: var(--color-slate-200);
+      --text-secondary: var(--color-slate-400);
+      --border-primary: var(--color-slate-700);
+      --color-primary: var(--color-teal-500);
+      --color-primary-hover: #10B981;
+      --color-focus-ring: rgba(20, 184, 166, 0.4);
+      --chart-grid: rgba(255,255,255,0.1);
+    }
+
+    /* ========== FONT SCALING ========== */
+    [data-font-size="small"] { --font-size-base: 13px; }
+    [data-font-size="large"] { --font-size-base: 15px; }
+    [data-font-size="extra-large"] { --font-size-base: 16px; }
+
+
+    /* ========== BASE & GLOBAL STYLES ========== */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      font-size: var(--font-size-base);
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: background-color var(--transition), color var(--transition);
+      -webkit-font-smoothing: antialiased;
+    }
+    .skip-link { position: absolute; top: -100px; left: 10px; z-index: 9999; padding: 10px; background: var(--color-primary); color: var(--text-inverse); border-radius: var(--radius-md); transition: top var(--transition); }
+    .skip-link:focus { top: 10px; }
+
+    /* ========== LAYOUT ========== */
+    .calculator-container { max-width: 1500px; margin: 0 auto; padding: 2rem 1rem; }
+    .calculator-grid { display: grid; grid-template-columns: minmax(350px, 1fr) 2fr minmax(300px, 1fr); gap: 1.5rem; align-items: start; }
+    .card { background: var(--bg-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-primary); }
+    .panel-header h2 { font-size: 1.25rem; margin: 0; display: flex; align-items: center; gap: 0.5rem; }
+    .panel-header h2 i { color: var(--color-primary); }
+
+    /* ========== GLOBAL CONTROLS ========== */
+    .global-controls { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-primary); }
+    [data-theme="dark"] .global-controls { background: rgba(15, 23, 42, 0.7); }
+    .controls-container { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; max-width: 1500px; margin: 0 auto; padding: 0.5rem 1rem; }
+    .control-btn { background: transparent; border: 1px solid var(--border-primary); color: var(--text-secondary); padding: 0.4rem 0.8rem; border-radius: 99px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; transition: var(--transition); }
+    .control-btn:hover, .control-btn.active { background: var(--color-primary); color: var(--text-inverse); border-color: var(--color-primary); }
+    .font-size-controls { display: flex; }
+    .font-size-controls button:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right: none; }
+    .font-size-controls button:last-child { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+
+    /* ========== HEADER ========== */
+    .app-header { padding: 3rem 1rem; text-align: center; }
+    .header-title { font-size: 2.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 1rem; }
+    .ai-badge { background: var(--color-primary); color: var(--text-inverse); width: 4rem; height: 4rem; border-radius: var(--radius-lg); display: grid; place-items: center; font-size: 1.5rem; }
+    .header-subtitle { max-width: 600px; margin: 1rem auto 0; color: var(--text-secondary); }
+    .header-stats { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
+    .stat-number { font-size: 1.5rem; font-weight: 700; }
+    .stat-label { font-size: 0.8rem; color: var(--text-secondary); }
+
+    /* ========== FORM STYLES (LEFT COLUMN) ========== */
+    .input-card { position: sticky; top: 80px; }
+    .mortgage-form { padding: 1.5rem; }
+    .form-section legend { font-size: 1.1rem; font-weight: 600; padding-bottom: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-primary); display: flex; align-items: center; gap: 0.5rem; }
+    .section-number { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; background: var(--color-primary); color: var(--text-inverse); border-radius: 50%; font-size: 0.8rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .form-control { width: 100%; padding: 0.75rem; border: 1px solid var(--border-primary); background: var(--bg-secondary); border-radius: var(--radius-md); color: var(--text-primary); transition: var(--transition); }
+    .form-control:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-focus-ring); }
+    .input-with-prefix { position: relative; }
+    .input-prefix { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
+    .input-with-prefix .form-control { padding-left: 2.5rem !important; /* Added spacing */ }
+    .input-with-suffix { position: relative; }
+    .input-suffix { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
+    .input-with-suffix .form-control { padding-right: 2.5rem; }
+    .form-help { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; }
+    .suggestion-chip { background: var(--bg-tertiary); border: none; padding: 0.25rem 0.75rem; border-radius: 99px; cursor: pointer; transition: var(--transition); }
+    .suggestion-chip:hover { background-color: var(--color-primary); color: var(--text-inverse); }
+    .toggle-group { display: flex; background: var(--bg-tertiary); padding: 0.25rem; border-radius: var(--radius-md); }
+    .toggle-btn { flex: 1; background: transparent; border: none; padding: 0.5rem; border-radius: 6px; cursor: pointer; color: var(--text-secondary); }
+    .toggle-btn.active { background: var(--bg-primary); color: var(--text-primary); box-shadow: var(--shadow-md); }
+    .term-chips { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+    .term-chip { border: 1px solid var(--border-primary); background: transparent; padding: 0.75rem; border-radius: var(--radius-md); cursor: pointer; text-align: center; }
+    .term-chip.active { background: var(--color-primary); color: var(--text-inverse); border-color: var(--color-primary); }
+    .pmi-warning { color: var(--color-orange-500); font-size: 0.8rem; display: flex; align-items: center; gap: 0.25rem; margin-top: 0.5rem; }
+    .advanced-options summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: var(--bg-tertiary); border-radius: var(--radius-md); }
+    .advanced-options summary::-webkit-details-marker { display: none; }
+    .advanced-options[open] summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    .expand-icon { transition: transform var(--transition); }
+    .advanced-options[open] .expand-icon { transform: rotate(180deg); }
+    .advanced-content { padding: 1rem; border: 1px solid var(--border-primary); border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); }
+    .extra-impact-preview { background: var(--color-primary); color: var(--text-inverse); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem; }
+    .impact-stats { display: flex; justify-content: space-between; text-align: center; margin-top: 0.5rem; }
+    .impact-label { font-size: 0.8rem; opacity: 0.8; }
+    .impact-value { font-weight: 600; font-size: 1.2rem; }
+    .form-actions { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-primary); }
+
+    /* ========== BUTTON STYLES ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn--primary {
+      background-color: var(--color-primary);
+      color: var(--text-inverse);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn--primary:hover {
+      background-color: var(--color-primary-hover);
+    }
+    .btn--secondary {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      border-color: var(--border-primary);
+    }
+    .btn--secondary:hover {
+      background-color: var(--bg-secondary);
+    }
+    .btn--outline {
+      background-color: transparent;
+      color: var(--text-primary);
+      border-color: var(--border-primary);
+    }
+    .btn--outline:hover {
+      background-color: var(--bg-tertiary);
+    }
+    .btn--ghost {
+      background-color: transparent;
+      color: var(--text-primary);
+      border-color: transparent;
+    }
+    .btn--ghost:hover {
+      background-color: var(--bg-tertiary);
+    }
+    .btn--sm {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+    }
+    .btn--large {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+    }
+    .btn--full {
+      width: 100%;
+    }
+    .btn-shine {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+      opacity: 0;
+    }
+    @keyframes shine {
+      0% {
+        opacity: 0;
+        transform: rotate(30deg) translate(-50%, -50%);
+      }
+      20% {
+        opacity: 1;
+      }
+      40% {
+        opacity: 0;
+        transform: rotate(30deg) translate(50%, 50%);
+      }
+      100% {
+        opacity: 0;
+        transform: rotate(30deg) translate(50%, 50%);
+      }
+    }
+
+    /* ========== RESULTS STYLES (MIDDLE COLUMN) ========== */
+    .total-payment-highlight { padding: 1.5rem; text-align: center; }
+    .payment-label { color: var(--text-secondary); }
+    .payment-amount { font-size: 3rem; font-weight: 800; color: var(--color-primary); line-height: 1; }
+    .payment-breakdown { padding: 1.5rem; }
+    .breakdown-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+    .breakdown-list { display: flex; flex-direction: column; gap: 1rem; }
+    .breakdown-item { display: flex; justify-content: space-between; align-items: baseline; }
+    .breakdown-label { color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
+    .breakdown-value { font-weight: 600; }
+    .breakdown-bar {
+      height: 8px;
+      background-color: var(--bg-tertiary);
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .breakdown-fill {
+      height: 100%;
+      border-radius: 4px;
+      background-color: var(--color-primary);
+      transition: width 0.5s ease;
+    }
+    .loan-summary-section { padding: 1.5rem; border-top: 1px solid var(--border-primary); }
+    .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .summary-item { background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); }
+    .summary-label { font-size: 0.8rem; color: var(--text-secondary); }
+    .summary-value { font-size: 1.25rem; font-weight: 600; }
+    .tabbed-section { border-top: 1px solid var(--border-primary); }
+    .tab-controls { display: flex; border-bottom: 1px solid var(--border-primary); }
+    .tab-btn { flex: 1; padding: 1rem; border: none; background: transparent; cursor: pointer; color: var(--text-secondary); font-weight: 500; border-bottom: 3px solid transparent; }
+    .tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+    .tab-content { display: none; padding: 1.5rem; }
+    .tab-content.active { display: block; }
+
+    /* Chart Section */
+    .chart-header { text-align: center; margin-bottom: 1rem; }
+    .chart-legend-values { display: flex; justify-content: space-around; gap: 1rem; }
+    .legend-item { text-align: center; }
+    .legend-label { font-size: 0.8rem; color: var(--text-secondary); }
+    .legend-value { font-size: 1.2rem; font-weight: 600; }
+    .legend-color { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 0.5rem; }
+    .chart-container { position: relative; height: 350px; }
+    .year-indicator { position: absolute; top: 1rem; right: 1rem; z-index: 10; }
+    .year-badge { background: var(--color-primary); color: var(--text-inverse); padding: 0.25rem 0.75rem; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; }
+    .year-slider { width: 100%; margin-top: 1rem; }
+
+    /* AI Insights Section */
+    .insights-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .insights-list { display: flex; flex-direction: column; gap: 1rem; }
+    .insight-item { padding: 1rem; border-left: 4px solid; border-radius: var(--radius-md); background: var(--bg-secondary); }
+    .insight-item.success { border-color: var(--color-teal-500); }
+    .insight-item.warning { border-color: var(--color-orange-500); }
+    .insight-item.info { border-color: var(--color-blue-500); }
+
+    /* Amortization Section */
+    .amortization-details { border-top: 1px solid var(--border-primary); }
+    .amortization-details summary { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; cursor: pointer; list-style: none; }
+    .amortization-details summary::-webkit-details-marker { display: none; }
+    .amortization-content { padding: 1.5rem; }
+    .amortization-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .table-container { overflow-x: auto; border: 1px solid var(--border-primary); border-radius: var(--radius-md); }
+    .amortization-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    .amortization-table th, .amortization-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-primary); }
+    .amortization-table thead { background: var(--bg-tertiary); }
+    .pagination-controls { display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+
+    /* Sharing Section */
+    .sharing-section { padding: 1.5rem; border-top: 1px solid var(--border-primary); }
+    .share-actions { display: flex; gap: 1rem; }
+
+    /* ========== SPONSOR & MARKET (RIGHT COLUMN) ========== */
+    .sponsor-card { position: sticky; top: 80px; }
+    .sponsor-content { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .sponsor-item { background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-primary); }
+    .sponsor-item.featured { border-color: var(--color-primary); background: linear-gradient(45deg, var(--bg-secondary), var(--color-primary)); color: var(--text-inverse); }
+    .sponsor-item.featured h4, .sponsor-item.featured p { color: var(--text-inverse); }
+    .market-card { margin-top: 1.5rem; }
+    .market-content { padding: 1.5rem; display: flex; justify-content: space-around; text-align: center; }
+
+    /* ========== RELATED CALCULATORS ========== */
+    .related-calculators { padding: 3rem 1rem; background: var(--bg-tertiary); }
+    .section-container { max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 2rem; }
+    .section-header h2 { font-size: 2rem; font-weight: 700; }
+    .calculator-card { background: var(--bg-primary); padding: 1.5rem; text-align: center; transition: var(--transition); }
+    .calculator-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+    .calculator-icon { width: 4rem; height: 4rem; margin: 0 auto 1rem; background: var(--color-primary); color: var(--text-inverse); border-radius: 50%; display: grid; place-items: center; font-size: 1.5rem; }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1200px) {
+      .calculator-grid { grid-template-columns: 1fr 1.5fr; }
+      .calculator-sponsor-column { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+      .sponsor-card, .market-card { margin-top: 0; }
+    }
+    @media (max-width: 900px) {
+      .calculator-grid { grid-template-columns: 1fr; }
+      .input-card, .sponsor-card { position: static; }
+      .calculator-sponsor-column { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      body { padding-top: 4rem; }
+      .global-controls { justify-content: center; }
+      .control-btn span { display: none; }
+      .header-title { font-size: 1.75rem; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .share-actions { flex-direction: column; }
+      .chart-legend-values { flex-direction: column; gap: 0.5rem; }
+      .impact-stats { flex-direction: column; gap: 0.5rem; }
+    }
+
+    /* ========== UTILITY CLASSES ========== */
+    .text-warning { color: var(--color-orange-500); }
+    .text-success { color: var(--color-teal-500); }
+    .text-info { color: var(--color-blue-500); }
+    .no-data { text-align: center; padding: 2rem; color: var(--text-secondary); }
+
+    /* ========== LOADING & TOAST ========== */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .spinner-container {
+      text-align: center;
+      color: white;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--color-primary);
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+    }
+    .toast {
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: toast-in 0.3s ease-out;
+    }
+    @keyframes toast-in {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .toast.success { border-left: 4px solid var(--color-teal-500); }
+    .toast.error { border-left: 4px solid var(--color-red-500); }
+    .toast.warning { border-left: 4px solid var(--color-orange-500); }
+    .voice-status {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--color-primary);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+    }
+    .voice-wave {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: 0.5rem;
+    }
+    .voice-wave span {
+      width: 3px;
+      background-color: white;
+      border-radius: 2px;
+      animation: voice-wave 1.2s infinite ease-in-out;
+    }
+    .voice-wave span:nth-child(2) { animation-delay: 0.2s; }
+    .voice-wave span:nth-child(3) { animation-delay: 0.4s; }
+    .voice-wave span:nth-child(4) { animation-delay: 0.6s; }
+    @keyframes voice-wave {
+      0%, 100% { height: 5px; }
+      50% { height: 15px; }
+    }
+
+    /* ========== SELECT STYLES ========== */
+    .select-wrapper {
+      position: relative;
+    }
+    .select-icon {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--text-secondary);
+    }
+    .select-wrapper select {
+      appearance: none;
+    }
+
+    /* ========== TOGGLE SWITCH ========== */
+    .toggle-section {
+      margin: 1rem 0;
+    }
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .toggle-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      background-color: var(--bg-tertiary);
+      border-radius: 34px;
+      margin-right: 0.75rem;
+      transition: background-color var(--transition);
+    }
+    .toggle-slider:before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform var(--transition);
+    }
+    .toggle-input:checked + .toggle-slider {
+      background-color: var(--color-primary);
+    }
+    .toggle-input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+    .toggle-text {
+      font-weight: 500;
+    }
+    </style>
     
     <meta name="theme-color" content="#21808d">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -99,13 +602,7 @@
         </div>
     </div>
 
-    <div id="loading-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
-  <div class="spinner"></div>
-</div>
-<div class="no-data" style="display:none;text-align:center;margin-top:1rem;">
-  No amortization data available.
-</div>
- <div id="loading-overlay" class="loading-overlay" style="display: none;" role="status" aria-live="polite">
+    <div id="loading-overlay" class="loading-overlay" style="display: none;" role="status" aria-live="polite">
         <div class="spinner-container">
             <div class="spinner"></div>
             <p>Calculating your mortgage with AI insights...</p>
@@ -785,7 +1282,7 @@
                                 </button>
                             </div>
                         </div>
-                    </details>
+                        </details>
 
                     <div class="sharing-section">
                         <h3 data-tippy-content="Share or save your complete mortgage analysis">
@@ -1107,7 +1604,1146 @@
         </div>
     </footer>
 
-    <script src="mortgage-calculator.js"></script>
+    <script>
+    // ========== MORTGAGE CALCULATOR JAVASCRIPT ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        'use strict';
+
+        // State management
+        let currentCalculation = null;
+        let amortizationData = [];
+        let currentPage = 1;
+        const itemsPerPage = 12;
+        let mortgageChart = null;
+        let stateTaxRates = {};
+        
+        // DOM Elements
+        const elements = {
+            // Form elements
+            mortgageForm: document.getElementById('mortgage-form'),
+            homePrice: document.getElementById('home-price'),
+            downPayment: document.getElementById('down-payment'),
+            downPaymentPercent: document.getElementById('down-payment-percent'),
+            amountToggle: document.getElementById('amount-toggle'),
+            percentToggle: document.getElementById('percent-toggle'),
+            amountInput: document.getElementById('amount-input'),
+            percentInput: document.getElementById('percent-input'),
+            interestRate: document.getElementById('interest-rate'),
+            loanTerm: document.getElementById('loan-term'),
+            propertyState: document.getElementById('property-state'),
+            propertyTax: document.getElementById('property-tax'),
+            homeInsurance: document.getElementById('home-insurance'),
+            pmi: document.getElementById('pmi'),
+            extraMonthly: document.getElementById('extra-monthly'),
+            extraOnetime: document.getElementById('extra-onetime'),
+            biWeekly: document.getElementById('bi-weekly'),
+            
+            // Result elements
+            totalPayment: document.getElementById('total-payment'),
+            principalInterest: document.getElementById('principal-interest'),
+            monthlyTax: document.getElementById('monthly-tax'),
+            monthlyInsurance: document.getElementById('monthly-insurance'),
+            monthlyPmi: document.getElementById('monthly-pmi'),
+            displayLoanAmount: document.getElementById('display-loan-amount'),
+            displayTotalInterest: document.getElementById('display-total-interest'),
+            displayTotalCost: document.getElementById('display-total-cost'),
+            displayPayoffDate: document.getElementById('display-payoff-date'),
+            interestSavings: document.getElementById('interest-savings'),
+            timeSavings: document.getElementById('time-savings'),
+            newPayoff: document.getElementById('new-payoff'),
+            
+            // Buttons
+            calculateBtn: document.getElementById('calculate-btn'),
+            resetForm: document.getElementById('reset-form'),
+            saveCalculation: document.getElementById('save-calculation'),
+            downloadSchedule: document.getElementById('download-schedule'),
+            
+            // Other UI elements
+            pmiWarning: document.getElementById('pmi-warning'),
+            pmiStatus: document.getElementById('pmi-status'),
+            taxRateDisplay: document.getElementById('tax-rate-display'),
+            extraImpact: document.getElementById('extra-impact'),
+            savingsPreview: document.getElementById('savings-preview'),
+            amortizationTable: document.getElementById('amortization-table'),
+            paymentCount: document.getElementById('payment-count'),
+            paginationText: document.getElementById('pagination-text'),
+            gotoPage: document.getElementById('goto-page'),
+            firstPage: document.getElementById('first-page'),
+            prevPage: document.getElementById('prev-page'),
+            nextPage: document.getElementById('next-page'),
+            lastPage: document.getElementById('last-page'),
+            
+            // Chart elements
+            mortgageTimelineChart: document.getElementById('mortgage-timeline-chart'),
+            yearRange: document.getElementById('year-range'),
+            yearDisplay: document.getElementById('year-display'),
+            currentYear: document.getElementById('current-year'),
+            remainingBalance: document.getElementById('remaining-balance'),
+            principalPaid: document.getElementById('principal-paid'),
+            interestPaid: document.getElementById('interest-paid'),
+            chartLoanAmount: document.getElementById('chart-loan-amount'),
+            
+            // Tab elements
+            tabBtns: document.querySelectorAll('.tab-btn'),
+            tabContents: document.querySelectorAll('.tab-content'),
+            
+            // Theme and accessibility
+            themeToggle: document.getElementById('theme-toggle'),
+            themeIcon: document.getElementById('theme-icon'),
+            voiceToggle: document.getElementById('voice-toggle'),
+            voiceIcon: document.getElementById('voice-icon'),
+            screenReaderToggle: document.getElementById('screen-reader-toggle'),
+            readerIcon: document.getElementById('reader-icon'),
+            fontSmaller: document.getElementById('font-smaller'),
+            fontLarger: document.getElementById('font-larger'),
+            
+            // Loading and toast
+            loadingOverlay: document.getElementById('loading-overlay'),
+            toastContainer: document.getElementById('toast-container'),
+            voiceStatus: document.getElementById('voice-status'),
+            
+            // Breakdown bars
+            breakdownFills: document.querySelectorAll('.breakdown-fill')
+        };
+
+        // Initialize the application
+        function init() {
+            // Load state tax rates
+            loadStateTaxRates();
+            
+            // Populate state dropdown
+            populateStateDropdown();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Set up tooltips
+            setupTooltips();
+            
+            // Perform initial calculation
+            calculateMortgage();
+        }
+
+        // Load state tax rates (simplified)
+        function loadStateTaxRates() {
+            // This is a simplified version - in production you would use actual data
+            stateTaxRates = {
+                'CA': 0.76, 'TX': 1.9, 'FL': 0.98, 'NY': 1.72, 'IL': 2.16,
+                'PA': 1.58, 'OH': 1.56, 'GA': 0.92, 'NC': 0.84, 'MI': 1.54,
+                'NJ': 2.42, 'VA': 0.82, 'WA': 0.98, 'AZ': 0.72, 'MA': 1.23,
+                'TN': 0.71, 'IN': 0.85, 'MO': 0.97, 'MD': 1.09, 'WI': 1.68,
+                'CO': 0.55, 'MN': 1.12, 'SC': 0.57, 'AL': 0.41, 'LA': 0.55,
+                'KY': 0.86, 'OR': 0.97, 'OK': 0.90, 'CT': 2.14, 'IA': 1.57,
+                'UT': 0.66, 'AR': 0.62, 'NV': 0.64, 'MS': 0.81, 'KS': 1.41,
+                'NM': 0.80, 'NE': 1.73, 'WV': 0.59, 'ID': 0.69, 'HI': 0.28,
+                'NH': 2.18, 'ME': 1.36, 'RI': 1.63, 'MT': 0.84, 'DE': 0.57,
+                'SD': 1.31, 'ND': 0.98, 'AK': 1.19, 'VT': 1.90, 'WY': 0.61
+            };
+        }
+
+        // Populate state dropdown
+        function populateStateDropdown() {
+            const states = [
+                {value: '', text: 'Select your state...'},
+                {value: 'AL', text: 'Alabama'}, {value: 'AK', text: 'Alaska'}, {value: 'AZ', text: 'Arizona'},
+                {value: 'AR', text: 'Arkansas'}, {value: 'CA', text: 'California'}, {value: 'CO', text: 'Colorado'},
+                {value: 'CT', text: 'Connecticut'}, {value: 'DE', text: 'Delaware'}, {value: 'FL', text: 'Florida'},
+                {value: 'GA', text: 'Georgia'}, {value: 'HI', text: 'Hawaii'}, {value: 'ID', text: 'Idaho'},
+                {value: 'IL', text: 'Illinois'}, {value: 'IN', text: 'Indiana'}, {value: 'IA', text: 'Iowa'},
+                {value: 'KS', text: 'Kansas'}, {value: 'KY', text: 'Kentucky'}, {value: 'LA', text: 'Louisiana'},
+                {value: 'ME', text: 'Maine'}, {value: 'MD', text: 'Maryland'}, {value: 'MA', text: 'Massachusetts'},
+                {value: 'MI', text: 'Michigan'}, {value: 'MN', text: 'Minnesota'}, {value: 'MS', text: 'Mississippi'},
+                {value: 'MO', text: 'Missouri'}, {value: 'MT', text: 'Montana'}, {value: 'NE', text: 'Nebraska'},
+                {value: 'NV', text: 'Nevada'}, {value: 'NH', text: 'New Hampshire'}, {value: 'NJ', text: 'New Jersey'},
+                {value: 'NM', text: 'New Mexico'}, {value: 'NY', text: 'New York'}, {value: 'NC', text: 'North Carolina'},
+                {value: 'ND', text: 'North Dakota'}, {value: 'OH', text: 'Ohio'}, {value: 'OK', text: 'Oklahoma'},
+                {value: 'OR', text: 'Oregon'}, {value: 'PA', text: 'Pennsylvania'}, {value: 'RI', text: 'Rhode Island'},
+                {value: 'SC', text: 'South Carolina'}, {value: 'SD', text: 'South Dakota'}, {value: 'TN', text: 'Tennessee'},
+                {value: 'TX', text: 'Texas'}, {value: 'UT', text: 'Utah'}, {value: 'VT', text: 'Vermont'},
+                {value: 'VA', text: 'Virginia'}, {value: 'WA', text: 'Washington'}, {value: 'WV', text: 'West Virginia'},
+                {value: 'WI', text: 'Wisconsin'}, {value: 'WY', text: 'Wyoming'}
+            ];
+            
+            states.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state.value;
+                option.textContent = state.text;
+                elements.propertyState.appendChild(option);
+            });
+            
+            // Set default state to California
+            elements.propertyState.value = 'CA';
+            updatePropertyTaxFromState();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Form input changes
+            elements.homePrice.addEventListener('input', handleHomePriceChange);
+            elements.downPayment.addEventListener('input', handleDownPaymentChange);
+            elements.downPaymentPercent.addEventListener('input', handleDownPaymentPercentChange);
+            elements.amountToggle.addEventListener('click', () => toggleDownPaymentView('amount'));
+            elements.percentToggle.addEventListener('click', () => toggleDownPaymentView('percent'));
+            elements.interestRate.addEventListener('input', calculateMortgage);
+            document.querySelectorAll('.term-chip').forEach(chip => {
+                chip.addEventListener('click', handleTermChipClick);
+            });
+            elements.propertyState.addEventListener('change', handleStateChange);
+            elements.propertyTax.addEventListener('input', calculateMortgage);
+            elements.homeInsurance.addEventListener('input', calculateMortgage);
+            elements.extraMonthly.addEventListener('input', calculateMortgage);
+            elements.extraOnetime.addEventListener('input', calculateMortgage);
+            elements.biWeekly.addEventListener('change', calculateMortgage);
+            
+            // Button clicks
+            elements.calculateBtn.addEventListener('click', calculateMortgage);
+            elements.resetForm.addEventListener('click', resetForm);
+            elements.saveCalculation.addEventListener('click', saveCalculation);
+            elements.downloadSchedule.addEventListener('click', downloadSchedule);
+            
+            // Suggestion chips
+            document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                chip.addEventListener('click', handleSuggestionChipClick);
+            });
+            
+            // Pagination controls
+            elements.firstPage.addEventListener('click', () => goToPage(1));
+            elements.prevPage.addEventListener('click', goToPrevPage);
+            elements.nextPage.addEventListener('click', goToNextPage);
+            elements.lastPage.addEventListener('click', goToLastPage);
+            elements.gotoPage.addEventListener('input', handleGotoPageInput);
+            elements.gotoPage.addEventListener('change', handleGotoPageChange);
+            
+            // Chart controls
+            elements.yearRange.addEventListener('input', updateChartFromSlider);
+            
+            // Tab controls
+            elements.tabBtns.forEach(btn => {
+                btn.addEventListener('click', handleTabClick);
+            });
+            
+            // Theme and accessibility controls
+            elements.themeToggle.addEventListener('click', toggleTheme);
+            elements.voiceToggle.addEventListener('click', toggleVoiceControl);
+            elements.screenReaderToggle.addEventListener('click', toggleScreenReader);
+            elements.fontSmaller.addEventListener('click', decreaseFontSize);
+            elements.fontLarger.addEventListener('click', increaseFontSize);
+        }
+
+        // Set up tooltips
+        function setupTooltips() {
+            // Initialize Tippy.js for all elements with data-tippy-content
+            tippy('[data-tippy-content]', {
+                placement: 'top',
+                animation: 'scale',
+                theme: 'light-border',
+                delay: [100, 0],
+                duration: [200, 200],
+                interactive: true,
+            });
+        }
+
+        // Handle home price change
+        function handleHomePriceChange() {
+            updateDownPaymentPercent();
+            updatePropertyTaxFromState();
+            calculateMortgage();
+        }
+
+        // Handle down payment change (amount)
+        function handleDownPaymentChange() {
+            updateDownPaymentPercent();
+            updatePmi();
+            calculateMortgage();
+        }
+
+        // Handle down payment change (percent)
+        function handleDownPaymentPercentChange() {
+            updateDownPaymentAmount();
+            updatePmi();
+            calculateMortgage();
+        }
+
+        // Toggle between amount and percent view for down payment
+        function toggleDownPaymentView(view) {
+            if (view === 'amount') {
+                elements.amountToggle.classList.add('active');
+                elements.percentToggle.classList.remove('active');
+                elements.amountInput.style.display = 'block';
+                elements.percentInput.style.display = 'none';
+                elements.amountToggle.setAttribute('aria-checked', 'true');
+                elements.percentToggle.setAttribute('aria-checked', 'false');
+            } else {
+                elements.amountToggle.classList.remove('active');
+                elements.percentToggle.classList.add('active');
+                elements.amountInput.style.display = 'none';
+                elements.percentInput.style.display = 'block';
+                elements.amountToggle.setAttribute('aria-checked', 'false');
+                elements.percentToggle.setAttribute('aria-checked', 'true');
+            }
+        }
+
+        // Update down payment amount based on percent
+        function updateDownPaymentAmount() {
+            const homePrice = parseFloat(elements.homePrice.value) || 0;
+            const percent = parseFloat(elements.downPaymentPercent.value) || 0;
+            const amount = (homePrice * percent) / 100;
+            elements.downPayment.value = Math.round(amount);
+        }
+
+        // Update down payment percent based on amount
+        function updateDownPaymentPercent() {
+            const homePrice = parseFloat(elements.homePrice.value) || 0;
+            const amount = parseFloat(elements.downPayment.value) || 0;
+            const percent = homePrice > 0 ? (amount / homePrice) * 100 : 0;
+            elements.downPaymentPercent.value = percent.toFixed(1);
+        }
+
+        // Handle term chip click
+        function handleTermChipClick(e) {
+            const term = e.target.getAttribute('data-term');
+            
+            // Update active state
+            document.querySelectorAll('.term-chip').forEach(chip => {
+                chip.classList.remove('active');
+                chip.setAttribute('aria-checked', 'false');
+            });
+            e.target.classList.add('active');
+            e.target.setAttribute('aria-checked', 'true');
+            
+            // Update hidden select
+            elements.loanTerm.value = term;
+            
+            // Recalculate
+            calculateMortgage();
+        }
+
+        // Handle state change
+        function handleStateChange() {
+            updatePropertyTaxFromState();
+            calculateMortgage();
+        }
+
+        // Update property tax based on selected state
+        function updatePropertyTaxFromState() {
+            const state = elements.propertyState.value;
+            const homePrice = parseFloat(elements.homePrice.value) || 0;
+            
+            if (state && stateTaxRates[state] && homePrice > 0) {
+                const taxRate = stateTaxRates[state];
+                const annualTax = (homePrice * taxRate) / 100;
+                elements.propertyTax.value = Math.round(annualTax);
+                elements.taxRateDisplay.textContent = `${taxRate}%`;
+            }
+        }
+
+        // Update PMI based on down payment
+        function updatePmi() {
+            const homePrice = parseFloat(elements.homePrice.value) || 0;
+            const downPayment = parseFloat(elements.downPayment.value) || 0;
+            const downPaymentPercent = (downPayment / homePrice) * 100;
+            
+            if (downPaymentPercent < 20) {
+                // PMI is typically 0.5% to 1% of loan amount annually
+                const loanAmount = homePrice - downPayment;
+                const annualPmi = loanAmount * 0.005; // 0.5% of loan amount
+                const monthlyPmi = annualPmi / 12;
+                
+                elements.pmi.value = Math.round(monthlyPmi);
+                elements.pmiWarning.style.display = 'block';
+                elements.pmiStatus.textContent = `PMI required (${downPaymentPercent.toFixed(1)}% down payment)`;
+            } else {
+                elements.pmi.value = 0;
+                elements.pmiWarning.style.display = 'none';
+                elements.pmiStatus.textContent = 'No PMI required (20%+ down payment)';
+            }
+        }
+
+        // Handle suggestion chip click
+        function handleSuggestionChipClick(e) {
+            const value = e.target.getAttribute('data-value');
+            const input = e.target.getAttribute('data-input');
+            
+            if (input) {
+                // For input-specific chips (like extra payments)
+                document.getElementById(input).value = value;
+            } else {
+                // For general chips (like home price)
+                elements.homePrice.value = value;
+            }
+            
+            calculateMortgage();
+        }
+
+        // Calculate mortgage
+        function calculateMortgage() {
+            // Show loading
+            showLoading();
+            
+            // Get form values
+            const homePrice = parseFloat(elements.homePrice.value) || 0;
+            const downPayment = parseFloat(elements.downPayment.value) || 0;
+            const interestRate = parseFloat(elements.interestRate.value) || 0;
+            const loanTerm = parseInt(elements.loanTerm.value) || 30;
+            const propertyTax = parseFloat(elements.propertyTax.value) || 0;
+            const homeInsurance = parseFloat(elements.homeInsurance.value) || 0;
+            const pmi = parseFloat(elements.pmi.value) || 0;
+            const extraMonthly = parseFloat(elements.extraMonthly.value) || 0;
+            const extraOnetime = parseFloat(elements.extraOnetime.value) || 0;
+            const biWeekly = elements.biWeekly.checked;
+            
+            // Validate inputs
+            if (homePrice <= 0 || downPayment < 0 || interestRate <= 0 || loanTerm <= 0) {
+                showToast('Please enter valid values for all required fields', 'error');
+                hideLoading();
+                return;
+            }
+            
+            if (downPayment >= homePrice) {
+                showToast('Down payment cannot be greater than home price', 'error');
+                hideLoading();
+                return;
+            }
+            
+            // Calculate loan amount
+            const loanAmount = homePrice - downPayment;
+            
+            // Calculate monthly interest rate
+            const monthlyRate = interestRate / 100 / 12;
+            
+            // Calculate number of payments
+            const numberOfPayments = loanTerm * 12;
+            
+            // Calculate monthly payment (principal + interest)
+            let monthlyPayment = 0;
+            if (interestRate > 0) {
+                monthlyPayment = loanAmount * 
+                    (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                    (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+            } else {
+                monthlyPayment = loanAmount / numberOfPayments;
+            }
+            
+            // Calculate monthly taxes and insurance
+            const monthlyTax = propertyTax / 12;
+            const monthlyInsurance = homeInsurance / 12;
+            
+            // Calculate total monthly payment
+            const totalMonthlyPayment = monthlyPayment + monthlyTax + monthlyInsurance + pmi;
+            
+            // Calculate total interest
+            const totalInterest = (monthlyPayment * numberOfPayments) - loanAmount;
+            
+            // Calculate total cost
+            const totalCost = loanAmount + totalInterest + propertyTax * loanTerm + homeInsurance * loanTerm + pmi * numberOfPayments;
+            
+            // Calculate payoff date
+            const payoffDate = calculatePayoffDate(loanTerm);
+            
+            // Update UI with results
+            updateResultsUI({
+                totalMonthlyPayment,
+                monthlyPayment,
+                monthlyTax,
+                monthlyInsurance,
+                pmi,
+                loanAmount,
+                totalInterest,
+                totalCost,
+                payoffDate,
+                numberOfPayments
+            });
+            
+            // Generate amortization schedule
+            generateAmortizationSchedule({
+                loanAmount,
+                monthlyPayment,
+                monthlyRate,
+                numberOfPayments,
+                extraMonthly,
+                extraOnetime,
+                biWeekly
+            });
+            
+            // Update chart
+            updateChart({
+                loanAmount,
+                totalInterest,
+                numberOfPayments
+            });
+            
+            // Generate AI insights
+            generateAIInsights({
+                homePrice,
+                downPayment,
+                interestRate,
+                loanTerm,
+                loanAmount,
+                totalInterest,
+                monthlyPayment,
+                totalMonthlyPayment
+            });
+            
+            // Hide loading
+            hideLoading();
+            
+            // Show toast
+            showToast('Calculation completed successfully!', 'success');
+        }
+
+        // Calculate payoff date
+        function calculatePayoffDate(loanTerm) {
+            const today = new Date();
+            today.setMonth(today.getMonth() + (loanTerm * 12));
+            return today.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        }
+
+        // Update results UI
+        function updateResultsUI(results) {
+            // Format currency
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+            
+            const detailedFormatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+            // Update payment breakdown
+            elements.totalPayment.textContent = formatter.format(results.totalMonthlyPayment);
+            elements.principalInterest.textContent = formatter.format(results.monthlyPayment);
+            elements.monthlyTax.textContent = formatter.format(results.monthlyTax);
+            elements.monthlyInsurance.textContent = formatter.format(results.monthlyInsurance);
+            elements.monthlyPmi.textContent = formatter.format(results.pmi);
+            
+            // Update loan summary
+            elements.displayLoanAmount.textContent = formatter.format(results.loanAmount);
+            elements.displayTotalInterest.textContent = formatter.format(results.totalInterest);
+            elements.displayTotalCost.textContent = formatter.format(results.totalCost);
+            elements.displayPayoffDate.textContent = results.payoffDate;
+            elements.paymentCount.textContent = `${results.numberOfPayments} payments`;
+            
+            // Update breakdown bars
+            updateBreakdownBars(results);
+            
+            // Store current calculation
+            currentCalculation = results;
+        }
+
+        // Update breakdown bars
+        function updateBreakdownBars(results) {
+            const total = results.totalMonthlyPayment;
+            const percentages = {
+                principal: (results.monthlyPayment / total) * 100,
+                tax: (results.monthlyTax / total) * 100,
+                insurance: (results.monthlyInsurance / total) * 100,
+                pmi: (results.pmi / total) * 100
+            };
+            
+            // Update bar widths
+            document.querySelector('[data-percentage]').style.width = `${percentages.principal}%`;
+            document.querySelectorAll('[data-percentage]')[1].style.width = `${percentages.tax}%`;
+            document.querySelectorAll('[data-percentage]')[2].style.width = `${percentages.insurance}%`;
+            document.querySelectorAll('[data-percentage]')[3].style.width = `${percentages.pmi}%`;
+        }
+
+        // Generate amortization schedule
+        function generateAmortizationSchedule(params) {
+            const { loanAmount, monthlyPayment, monthlyRate, numberOfPayments, extraMonthly, extraOnetime, biWeekly } = params;
+            
+            let balance = loanAmount;
+            const schedule = [];
+            let month = 1;
+            let year = 1;
+            let totalInterest = 0;
+            let totalPrincipal = 0;
+            
+            // Calculate actual payment amount if bi-weekly
+            const actualPayment = biWeekly ? monthlyPayment / 2 : monthlyPayment;
+            const paymentFrequency = biWeekly ? 26 : 12;
+            
+            for (let i = 1; i <= numberOfPayments && balance > 0; i++) {
+                // Calculate interest for this period
+                const interest = balance * monthlyRate;
+                totalInterest += interest;
+                
+                // Calculate principal for this period
+                let principal = actualPayment - interest;
+                
+                // Apply extra payments
+                if (extraMonthly > 0) {
+                    principal += extraMonthly;
+                }
+                
+                // Apply one-time extra payment in month 12
+                if (i === 12 && extraOnetime > 0) {
+                    principal += extraOnetime;
+                }
+                
+                // Ensure we don't pay more than the remaining balance
+                if (principal > balance) {
+                    principal = balance;
+                }
+                
+                totalPrincipal += principal;
+                balance -= principal;
+                
+                // If balance becomes negative, adjust
+                if (balance < 0) {
+                    principal += balance; // Reduce principal by the overpayment
+                    balance = 0;
+                }
+                
+                // Add to schedule
+                const paymentDate = new Date();
+                paymentDate.setMonth(paymentDate.getMonth() + i);
+                
+                schedule.push({
+                    paymentNumber: i,
+                    date: paymentDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+                    payment: actualPayment + (biWeekly ? 0 : extraMonthly) + (i === 12 ? extraOnetime : 0),
+                    principal: principal,
+                    interest: interest,
+                    balance: balance
+                });
+                
+                // Update month and year counters
+                month++;
+                if (month > paymentFrequency) {
+                    month = 1;
+                    year++;
+                }
+            }
+            
+            // Store amortization data
+            amortizationData = schedule;
+            
+            // Update pagination
+            updatePagination();
+            
+            // Display current page
+            displayAmortizationPage(currentPage);
+        }
+
+        // Update pagination
+        function updatePagination() {
+            const totalPages = Math.ceil(amortizationData.length / itemsPerPage);
+            elements.paginationText.textContent = `Page ${currentPage} of ${totalPages}`;
+            elements.gotoPage.setAttribute('max', totalPages);
+            
+            // Enable/disable pagination buttons
+            elements.firstPage.disabled = currentPage === 1;
+            elements.prevPage.disabled = currentPage === 1;
+            elements.nextPage.disabled = currentPage === totalPages;
+            elements.lastPage.disabled = currentPage === totalPages;
+        }
+
+        // Display amortization page
+        function displayAmortizationPage(page) {
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, amortizationData.length);
+            const pageData = amortizationData.slice(startIndex, endIndex);
+            
+            // Clear table body
+            const tbody = elements.amortizationTable.querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            // Add rows
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="no-data">No data available</td></tr>';
+                return;
+            }
+            
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+            pageData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.paymentNumber}</td>
+                    <td>${item.date}</td>
+                    <td>${formatter.format(item.payment)}</td>
+                    <td>${formatter.format(item.principal)}</td>
+                    <td>${formatter.format(item.interest)}</td>
+                    <td>${formatter.format(item.balance)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Go to specific page
+        function goToPage(page) {
+            const totalPages = Math.ceil(amortizationData.length / itemsPerPage);
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            
+            currentPage = page;
+            elements.gotoPage.value = page;
+            updatePagination();
+            displayAmortizationPage(page);
+        }
+
+        // Go to previous page
+        function goToPrevPage() {
+            goToPage(currentPage - 1);
+        }
+
+        // Go to next page
+        function goToNextPage() {
+            goToPage(currentPage + 1);
+        }
+
+        // Go to last page
+        function goToLastPage() {
+            const totalPages = Math.ceil(amortizationData.length / itemsPerPage);
+            goToPage(totalPages);
+        }
+
+        // Handle goto page input
+        function handleGotoPageInput(e) {
+            // Validate input
+            const value = parseInt(e.target.value);
+            const totalPages = Math.ceil(amortizationData.length / itemsPerPage);
+            
+            if (isNaN(value) || value < 1) {
+                e.target.value = 1;
+            } else if (value > totalPages) {
+                e.target.value = totalPages;
+            }
+        }
+
+        // Handle goto page change
+        function handleGotoPageChange(e) {
+            const page = parseInt(e.target.value);
+            goToPage(page);
+        }
+
+        // Update chart
+        function updateChart(data) {
+            const { loanAmount, totalInterest, numberOfPayments } = data;
+            
+            // Update chart labels
+            elements.chartLoanAmount.textContent = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(loanAmount);
+            
+            elements.remainingBalance.textContent = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(loanAmount * 0.15); // Simulated value
+            
+            elements.principalPaid.textContent = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(loanAmount * 0.85); // Simulated value
+            
+            elements.interestPaid.textContent = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(totalInterest);
+            
+            // Initialize or update Chart.js chart
+            if (!mortgageChart) {
+                initializeChart(loanAmount, totalInterest, numberOfPayments);
+            } else {
+                updateChartData(loanAmount, totalInterest, numberOfPayments);
+            }
+        }
+
+        // Initialize chart
+        function initializeChart(loanAmount, totalInterest, numberOfPayments) {
+            const ctx = elements.mortgageTimelineChart.getContext('2d');
+            
+            // Sample data for the chart
+            const years = Array.from({length: numberOfPayments / 12}, (_, i) => i + 1);
+            const principalData = years.map(year => loanAmount * (year / (numberOfPayments / 12)));
+            const interestData = years.map(year => totalInterest * (year / (numberOfPayments / 12)));
+            const balanceData = years.map(year => loanAmount - principalData[year - 1]);
+            
+            mortgageChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [
+                        {
+                            label: 'Remaining Balance',
+                            data: balanceData,
+                            borderColor: '#f97316',
+                            backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Principal Paid',
+                            data: principalData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Interest Paid',
+                            data: interestData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0
+                                    }).format(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Years'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amount ($)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0
+                                    }).format(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update chart data
+        function updateChartData(loanAmount, totalInterest, numberOfPayments) {
+            const years = Array.from({length: numberOfPayments / 12}, (_, i) => i + 1);
+            const principalData = years.map(year => loanAmount * (year / (numberOfPayments / 12)));
+            const interestData = years.map(year => totalInterest * (year / (numberOfPayments / 12)));
+            const balanceData = years.map(year => loanAmount - principalData[year - 1]);
+            
+            mortgageChart.data.labels = years;
+            mortgageChart.data.datasets[0].data = balanceData;
+            mortgageChart.data.datasets[1].data = principalData;
+            mortgageChart.data.datasets[2].data = interestData;
+            mortgageChart.update();
+        }
+
+        // Update chart from slider
+        function updateChartFromSlider() {
+            const year = parseInt(elements.yearRange.value);
+            elements.yearDisplay.textContent = `Year ${year}`;
+            elements.currentYear.textContent = year;
+            
+            // Update chart display based on selected year
+            if (mortgageChart) {
+                // This would ideally filter the chart data to show up to the selected year
+                // For simplicity, we're just updating the display text
+            }
+        }
+
+        // Generate AI insights
+        function generateAIInsights(data) {
+            const insights = [];
+            
+            // Analyze down payment
+            const downPaymentPercent = (data.downPayment / data.homePrice) * 100;
+            if (downPaymentPercent < 20) {
+                insights.push({
+                    type: 'warning',
+                    title: 'Consider a Larger Down Payment',
+                    text: `Your down payment is ${downPaymentPercent.toFixed(1)}% of the home price. Increasing it to 20% would eliminate PMI and save you money.`
+                });
+            } else {
+                insights.push({
+                    type: 'success',
+                    title: 'Great Down Payment!',
+                    text: `Your ${downPaymentPercent.toFixed(1)}% down payment eliminates PMI requirements and gives you better equity from the start.`
+                });
+            }
+            
+            // Analyze interest rate
+            if (data.interestRate > 7) {
+                insights.push({
+                    type: 'warning',
+                    title: 'High Interest Rate',
+                    text: `Your interest rate of ${data.interestRate}% is above current market averages. Consider shopping around for better rates or improving your credit score.`
+                });
+            } else if (data.interestRate < 5) {
+                insights.push({
+                    type: 'success',
+                    title: 'Excellent Interest Rate!',
+                    text: `Your interest rate of ${data.interestRate}% is well below market averages. This will save you thousands over the life of your loan.`
+                });
+            }
+            
+            // Analyze loan term
+            if (data.loanTerm === 30) {
+                insights.push({
+                    type: 'info',
+                    title: 'Consider a Shorter Term',
+                    text: 'A 30-year term offers lower monthly payments but more interest over time. If you can afford higher payments, a 15-year term could save you significant interest.'
+                });
+            }
+            
+            // Analyze debt-to-income ratio (simplified)
+            const monthlyIncome = 10000; // Example assumption
+            const debtToIncome = (data.totalMonthlyPayment / monthlyIncome) * 100;
+            if (debtToIncome > 28) {
+                insights.push({
+                    type: 'warning',
+                    title: 'High Housing Expense Ratio',
+                    text: `Your mortgage payment represents ${debtToIncome.toFixed(1)}% of your income (based on example). Lenders typically recommend keeping this below 28%.`
+                });
+            }
+            
+            // Update insights UI
+            updateInsightsUI(insights);
+        }
+
+        // Update insights UI
+        function updateInsightsUI(insights) {
+            const insightsContainer = document.getElementById('ai-insights-content');
+            insightsContainer.innerHTML = '';
+            
+            if (insights.length === 0) {
+                insightsContainer.innerHTML = `
+                    <div class="insight-item info">
+                        <div class="insight-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="insight-content">
+                            <div class="insight-title">No Specific Recommendations</div>
+                            <div class="insight-text">Your mortgage details look good based on our analysis.</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            insights.forEach(insight => {
+                const insightEl = document.createElement('div');
+                insightEl.className = `insight-item ${insight.type}`;
+                
+                let icon = 'fa-info-circle';
+                if (insight.type === 'success') icon = 'fa-check-circle';
+                if (insight.type === 'warning') icon = 'fa-exclamation-triangle';
+                
+                insightEl.innerHTML = `
+                    <div class="insight-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="insight-content">
+                        <div class="insight-title">${insight.title}</div>
+                        <div class="insight-text">${insight.text}</div>
+                    </div>
+                `;
+                
+                insightsContainer.appendChild(insightEl);
+            });
+        }
+
+        // Handle tab click
+        function handleTabClick(e) {
+            const tab = e.target.getAttribute('data-tab');
+            
+            // Update active tab
+            elements.tabBtns.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            e.target.classList.add('active');
+            e.target.setAttribute('aria-selected', 'true');
+            
+            // Show corresponding content
+            elements.tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tab}-panel`).classList.add('active');
+        }
+
+        // Reset form
+        function resetForm() {
+            elements.mortgageForm.reset();
+            elements.propertyState.value = 'CA';
+            document.querySelectorAll('.term-chip').forEach(chip => {
+                chip.classList.remove('active');
+                chip.setAttribute('aria-checked', 'false');
+            });
+            document.querySelector('.term-chip[data-term="30"]').classList.add('active');
+            document.querySelector('.term-chip[data-term="30"]').setAttribute('aria-checked', 'true');
+            toggleDownPaymentView('amount');
+            updatePropertyTaxFromState();
+            calculateMortgage();
+            showToast('Form has been reset to default values', 'success');
+        }
+
+        // Save calculation
+        function saveCalculation() {
+            // In a real application, this would save to localStorage or a database
+            showToast('Calculation saved successfully!', 'success');
+        }
+
+        // Download schedule
+        function downloadSchedule() {
+            // In a real application, this would generate a PDF
+            showToast('Amortization schedule download started', 'success');
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            elements.themeIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            elements.themeToggle.querySelector('span').textContent = newTheme === 'light' ? 'Dark Mode' : 'Light Mode';
+            
+            // Update theme color meta tag
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', newTheme === 'light' ? '#21808d' : '#0F172A');
+            
+            showToast(`${newTheme === 'light' ? 'Light' : 'Dark'} mode enabled`, 'success');
+        }
+
+        // Toggle voice control
+        function toggleVoiceControl() {
+            // In a real application, this would enable voice recognition
+            const isActive = elements.voiceStatus.style.display === 'flex';
+            
+            if (isActive) {
+                elements.voiceStatus.style.display = 'none';
+                elements.voiceIcon.className = 'fas fa-microphone';
+                elements.voiceToggle.querySelector('span').textContent = 'Voice Control';
+            } else {
+                elements.voiceStatus.style.display = 'flex';
+                elements.voiceIcon.className = 'fas fa-microphone-slash';
+                elements.voiceToggle.querySelector('span').textContent = 'Stop Listening';
+            }
+            
+            showToast(`Voice control ${isActive ? 'disabled' : 'enabled'}`, 'success');
+        }
+
+        // Toggle screen reader
+        function toggleScreenReader() {
+            // In a real application, this would enhance screen reader announcements
+            const isActive = elements.readerIcon.classList.contains('active');
+            
+            if (isActive) {
+                elements.readerIcon.classList.remove('active');
+                elements.screenReaderToggle.querySelector('span').textContent = 'Screen Reader';
+            } else {
+                elements.readerIcon.classList.add('active');
+                elements.screenReaderToggle.querySelector('span').textContent = 'Screen Reader On';
+            }
+            
+            showToast(`Screen reader enhancements ${isActive ? 'disabled' : 'enabled'}`, 'success');
+        }
+
+        // Decrease font size
+        function decreaseFontSize() {
+            const currentSize = document.body.getAttribute('data-font-size') || 'normal';
+            let newSize = 'normal';
+            
+            if (currentSize === 'extra-large') newSize = 'large';
+            else if (currentSize === 'large') newSize = 'normal';
+            else if (currentSize === 'normal') newSize = 'small';
+            
+            document.body.setAttribute('data-font-size', newSize);
+            showToast(`Font size decreased`, 'success');
+        }
+
+        // Increase font size
+        function increaseFontSize() {
+            const currentSize = document.body.getAttribute('data-font-size') || 'normal';
+            let newSize = 'normal';
+            
+            if (currentSize === 'small') newSize = 'normal';
+            else if (currentSize === 'normal') newSize = 'large';
+            else if (currentSize === 'large') newSize = 'extra-large';
+            
+            document.body.setAttribute('data-font-size', newSize);
+            showToast(`Font size increased`, 'success');
+        }
+
+        // Show loading
+        function showLoading() {
+            elements.loadingOverlay.style.display = 'flex';
+        }
+
+        // Hide loading
+        function hideLoading() {
+            elements.loadingOverlay.style.display = 'none';
+        }
+
+        // Show toast message
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            elements.toastContainer.appendChild(toast);
+            
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'toast-out 0.3s ease-out forwards';
+                setTimeout(() => {
+                    elements.toastContainer.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize the application
+        init();
+    });
+    </script>
     
 </body>
 </html>
