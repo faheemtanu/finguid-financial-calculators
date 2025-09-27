@@ -1,7 +1,7 @@
 /**
- * World's First AI-Enhanced Mortgage Calculator JavaScript - IMPROVED
- * COMPREHENSIVE FUNCTIONALITY WITH FIXES
- * Features: Fixed voice control, screen reader, A-/A+, amount chips, down payment sync
+ * World's First AI-Enhanced Mortgage Calculator JavaScript - FINAL VERSION
+ * COMPREHENSIVE FUNCTIONALITY WITH ALL FIXES
+ * Features: Fixed A-/A+, Screen reader, Voice control, Chat, UI/UX improvements
  */
 
 'use strict';
@@ -38,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPages: 1,
         amortizationData: [],
         screenReaderEnhanced: false,
-        isVoiceSupported: false
+        isVoiceSupported: false,
+        chatOpen: false
     };
 
     // ========== UTILITY FUNCTIONS ==========
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const announcer = document.getElementById('sr-announcements');
             if (announcer) {
                 announcer.textContent = message;
-                setTimeout(() => announcer.textContent = '', 1000);
+                setTimeout(() => announcer.textContent = '', 1500);
             }
         },
 
@@ -146,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         voiceStatus: document.getElementById('voice-status'),
         voiceText: document.getElementById('voice-text'),
 
-        // Accessibility
+        // Accessibility - FIXED
         fontSmaller: document.getElementById('font-smaller'),
         fontLarger: document.getElementById('font-larger'),
         themeToggle: document.getElementById('theme-toggle'),
@@ -160,16 +161,238 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Suggestion chips
         suggestionChips: document.querySelectorAll('.suggestion-chip'),
-        termChips: document.querySelectorAll('.term-chip')
+        termChips: document.querySelectorAll('.term-chip'),
+
+        // Chat
+        chatToggle: document.getElementById('chat-toggle'),
+        chatWidget: document.getElementById('chat-widget'),
+        chatMinimize: document.getElementById('chat-minimize'),
+        chatInput: document.getElementById('chat-input'),
+        chatSend: document.getElementById('chat-send'),
+        chatMessages: document.getElementById('chat-messages'),
+
+        // Navigation
+        hamburger: document.getElementById('hamburger'),
+        navMenu: document.getElementById('nav-menu')
     };
 
-    // ========== VOICE CONTROL FUNCTIONS ==========
+    // ========== ACCESSIBILITY FUNCTIONS - FIXED ==========
+    const accessibility = {
+        init: () => {
+            accessibility.setupFontControls();
+            accessibility.setupThemeControl();
+            accessibility.setupScreenReader();
+            accessibility.setupKeyboardNavigation();
+        },
+
+        setupFontControls: () => {
+            console.log('Setting up font controls...');
+            
+            if (elements.fontSmaller) {
+                elements.fontSmaller.addEventListener('click', () => {
+                    console.log('Font smaller clicked, current size:', STATE.currentFontSize);
+                    if (STATE.currentFontSize > CONFIG.minFontSize) {
+                        STATE.currentFontSize -= 10;
+                        accessibility.applyFontSize();
+                        utils.announceToScreenReader(`Font size decreased to ${STATE.currentFontSize}%`);
+                        utils.showToast(`Font size: ${STATE.currentFontSize}%`, 'info');
+                    }
+                });
+            }
+
+            if (elements.fontLarger) {
+                elements.fontLarger.addEventListener('click', () => {
+                    console.log('Font larger clicked, current size:', STATE.currentFontSize);
+                    if (STATE.currentFontSize < CONFIG.maxFontSize) {
+                        STATE.currentFontSize += 10;
+                        accessibility.applyFontSize();
+                        utils.announceToScreenReader(`Font size increased to ${STATE.currentFontSize}%`);
+                        utils.showToast(`Font size: ${STATE.currentFontSize}%`, 'info');
+                    }
+                });
+            }
+
+            // Apply initial font size
+            accessibility.applyFontSize();
+        },
+
+        applyFontSize: () => {
+            console.log('Applying font size:', STATE.currentFontSize);
+            
+            // Remove existing font scale classes
+            document.body.classList.remove(
+                'font-scale-80', 'font-scale-90', 'font-scale-100', 
+                'font-scale-110', 'font-scale-120', 'font-scale-130', 
+                'font-scale-140', 'font-scale-150'
+            );
+            
+            // Add new font scale class
+            document.body.classList.add(`font-scale-${STATE.currentFontSize}`);
+            
+            // Update button states
+            if (elements.fontSmaller) {
+                elements.fontSmaller.disabled = STATE.currentFontSize <= CONFIG.minFontSize;
+                if (STATE.currentFontSize <= CONFIG.minFontSize) {
+                    elements.fontSmaller.classList.add('disabled');
+                } else {
+                    elements.fontSmaller.classList.remove('disabled');
+                }
+            }
+            
+            if (elements.fontLarger) {
+                elements.fontLarger.disabled = STATE.currentFontSize >= CONFIG.maxFontSize;
+                if (STATE.currentFontSize >= CONFIG.maxFontSize) {
+                    elements.fontLarger.classList.add('disabled');
+                } else {
+                    elements.fontLarger.classList.remove('disabled');
+                }
+            }
+        },
+
+        setupThemeControl: () => {
+            if (elements.themeToggle) {
+                elements.themeToggle.addEventListener('click', () => {
+                    STATE.theme = STATE.theme === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', STATE.theme);
+                    
+                    if (elements.themeIcon) {
+                        elements.themeIcon.className = STATE.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                    }
+                    
+                    utils.announceToScreenReader(`Switched to ${STATE.theme} mode`);
+                    utils.showToast(`${STATE.theme} mode activated`, 'info');
+                    localStorage.setItem('theme', STATE.theme);
+                });
+
+                // Load saved theme
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme) {
+                    STATE.theme = savedTheme;
+                    document.documentElement.setAttribute('data-theme', STATE.theme);
+                    if (elements.themeIcon) {
+                        elements.themeIcon.className = STATE.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                    }
+                }
+            }
+        },
+
+        setupScreenReader: () => {
+            if (elements.screenReaderToggle) {
+                elements.screenReaderToggle.addEventListener('click', () => {
+                    STATE.screenReaderEnhanced = !STATE.screenReaderEnhanced;
+                    elements.screenReaderToggle.classList.toggle('active', STATE.screenReaderEnhanced);
+                    
+                    if (STATE.screenReaderEnhanced) {
+                        accessibility.enhanceForScreenReader();
+                        utils.announceToScreenReader('Screen reader enhancements activated. All form fields now have detailed descriptions and live updates will be announced.');
+                        utils.showToast('Screen reader enhancements activated', 'success');
+                    } else {
+                        accessibility.removeScreenReaderEnhancements();
+                        utils.announceToScreenReader('Screen reader enhancements deactivated');
+                        utils.showToast('Screen reader enhancements deactivated', 'info');
+                    }
+                });
+            }
+        },
+
+        enhanceForScreenReader: () => {
+            console.log('Enhancing for screen reader...');
+            
+            // Add comprehensive ARIA labels and descriptions
+            document.querySelectorAll('input, select, button').forEach(element => {
+                const label = element.closest('.form-group')?.querySelector('label');
+                const help = element.closest('.form-group')?.querySelector('.form-help');
+                
+                if (label && !element.getAttribute('aria-label')) {
+                    const labelText = label.textContent.replace(/\s+/g, ' ').trim();
+                    element.setAttribute('aria-label', labelText);
+                }
+                
+                if (help && !element.getAttribute('aria-describedby')) {
+                    const helpId = `help-${element.id || Math.random().toString(36).substr(2, 9)}`;
+                    help.id = helpId;
+                    element.setAttribute('aria-describedby', helpId);
+                }
+            });
+
+            // Add live regions for dynamic content
+            const resultsPanel = document.querySelector('.results-panel');
+            if (resultsPanel) {
+                resultsPanel.setAttribute('aria-live', 'polite');
+                resultsPanel.setAttribute('aria-atomic', 'false');
+            }
+
+            // Add role descriptions for custom elements
+            document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                chip.setAttribute('role', 'button');
+                chip.setAttribute('aria-label', `Set ${chip.getAttribute('data-input')} to ${chip.textContent}`);
+            });
+
+            document.querySelectorAll('.term-chip').forEach(chip => {
+                chip.setAttribute('role', 'button');
+                chip.setAttribute('aria-label', `Set loan term to ${chip.textContent}`);
+            });
+
+            // Enhanced button descriptions
+            document.querySelectorAll('button').forEach(btn => {
+                if (!btn.getAttribute('aria-label') && btn.textContent) {
+                    btn.setAttribute('aria-label', btn.textContent.trim());
+                }
+            });
+
+            // Add landmark roles
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                if (!section.getAttribute('role')) {
+                    section.setAttribute('role', 'region');
+                }
+            });
+        },
+
+        removeScreenReaderEnhancements: () => {
+            // Remove added ARIA attributes
+            document.querySelectorAll('[aria-live="polite"]').forEach(el => {
+                if (el.id !== 'sr-announcements') {
+                    el.removeAttribute('aria-live');
+                    el.removeAttribute('aria-atomic');
+                }
+            });
+        },
+
+        setupKeyboardNavigation: () => {
+            // Add keyboard support for custom elements
+            document.querySelectorAll('.suggestion-chip, .term-chip, .toggle-btn').forEach(element => {
+                element.setAttribute('tabindex', '0');
+                element.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        element.click();
+                    }
+                });
+            });
+
+            // Hamburger menu keyboard support
+            if (elements.hamburger) {
+                elements.hamburger.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        elements.hamburger.click();
+                    }
+                });
+            }
+        }
+    };
+
+    // ========== VOICE CONTROL FUNCTIONS - FIXED ==========
     const voiceControl = {
         init: () => {
+            console.log('Initializing voice control...');
+            
             // Check for browser support
             if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
                 STATE.isVoiceSupported = true;
                 voiceControl.setupRecognition();
+                utils.showToast('Voice control available', 'success');
             } else {
                 // Hide voice controls if not supported
                 if (elements.voiceInput) elements.voiceInput.style.display = 'none';
@@ -188,20 +411,24 @@ document.addEventListener('DOMContentLoaded', () => {
             STATE.globalVoiceRecognition.lang = 'en-US';
 
             STATE.globalVoiceRecognition.onstart = () => {
+                console.log('Global voice recognition started');
                 STATE.isGlobalListening = true;
                 if (elements.voiceIcon) elements.voiceIcon.className = 'fas fa-microphone-slash';
+                if (elements.voiceToggle) elements.voiceToggle.classList.add('active');
                 if (elements.voiceStatus) {
                     elements.voiceStatus.style.display = 'block';
                     elements.voiceText.textContent = 'Listening for commands...';
                 }
-                utils.announceToScreenReader('Voice recognition started');
+                utils.announceToScreenReader('Global voice recognition started. You can now speak commands like "set home price to 400000" or "calculate mortgage"');
             };
 
             STATE.globalVoiceRecognition.onend = () => {
+                console.log('Global voice recognition ended');
                 STATE.isGlobalListening = false;
                 if (elements.voiceIcon) elements.voiceIcon.className = 'fas fa-microphone';
+                if (elements.voiceToggle) elements.voiceToggle.classList.remove('active');
                 if (elements.voiceStatus) elements.voiceStatus.style.display = 'none';
-                utils.announceToScreenReader('Voice recognition stopped');
+                utils.announceToScreenReader('Global voice recognition stopped');
             };
 
             STATE.globalVoiceRecognition.onerror = (event) => {
@@ -213,6 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = event.results[event.results.length - 1];
                 if (result.isFinal) {
                     const command = result[0].transcript.toLowerCase().trim();
+                    console.log('Voice command received:', command);
                     voiceControl.processCommand(command);
                 }
             };
@@ -225,12 +453,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             STATE.localVoiceRecognition.onresult = (event) => {
                 const result = event.results[0][0].transcript;
+                console.log('Local voice input:', result);
                 voiceControl.processInputCommand(result);
+            };
+
+            STATE.localVoiceRecognition.onerror = (event) => {
+                console.error('Local voice recognition error:', event.error);
+                voiceControl.handleError(event.error);
             };
         },
 
         processCommand: (command) => {
-            console.log('Voice command:', command);
+            console.log('Processing voice command:', command);
             utils.announceToScreenReader(`Processing command: ${command}`);
 
             // Home price commands
@@ -286,8 +520,15 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (command.includes('show schedule') || command.includes('show amortization')) {
                 tabControl.showTab('amortization');
             }
+            // Chat commands
+            else if (command.includes('open chat') || command.includes('show chat')) {
+                chatControl.openChat();
+            }
+            else if (command.includes('close chat') || command.includes('hide chat')) {
+                chatControl.closeChat();
+            }
             else {
-                utils.announceToScreenReader('Command not recognized');
+                utils.announceToScreenReader('Command not recognized. Try saying "set home price to 400000", "calculate mortgage", or "open chat"');
                 utils.showToast('Command not recognized. Try "set home price to 400000" or "calculate mortgage"', 'info');
             }
         },
@@ -300,6 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (focusedElement && focusedElement.tagName === 'INPUT') {
                     focusedElement.value = utils.formatNumber(number);
                     focusedElement.dispatchEvent(new Event('input'));
+                    utils.announceToScreenReader(`Input set to ${number}`);
                 }
             }
         },
@@ -332,16 +574,16 @@ document.addEventListener('DOMContentLoaded', () => {
             let message = 'Voice recognition error';
             switch (error) {
                 case 'no-speech':
-                    message = 'No speech detected';
+                    message = 'No speech detected. Please try again.';
                     break;
                 case 'audio-capture':
-                    message = 'No microphone found';
+                    message = 'No microphone found. Please check your microphone settings.';
                     break;
                 case 'not-allowed':
-                    message = 'Microphone permission denied';
+                    message = 'Microphone permission denied. Please allow microphone access.';
                     break;
                 case 'network':
-                    message = 'Network error occurred';
+                    message = 'Network error occurred. Please check your connection.';
                     break;
             }
             utils.showToast(message, 'error');
@@ -359,6 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 try {
                     STATE.globalVoiceRecognition.start();
+                    utils.showToast('Say "set home price to 400000" or "calculate mortgage"', 'info');
                 } catch (error) {
                     console.error('Voice recognition start error:', error);
                     voiceControl.handleError('not-allowed');
@@ -382,147 +625,131 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // ========== ACCESSIBILITY FUNCTIONS ==========
-    const accessibility = {
+    // ========== CHAT CONTROL ==========
+    const chatControl = {
         init: () => {
-            accessibility.setupFontControls();
-            accessibility.setupThemeControl();
-            accessibility.setupScreenReader();
-            accessibility.setupKeyboardNavigation();
-        },
-
-        setupFontControls: () => {
-            if (elements.fontSmaller) {
-                elements.fontSmaller.addEventListener('click', () => {
-                    if (STATE.currentFontSize > CONFIG.minFontSize) {
-                        STATE.currentFontSize -= 10;
-                        accessibility.applyFontSize();
-                        utils.announceToScreenReader(`Font size decreased to ${STATE.currentFontSize}%`);
-                    }
-                });
+            if (elements.chatToggle) {
+                elements.chatToggle.addEventListener('click', chatControl.toggleChat);
             }
 
-            if (elements.fontLarger) {
-                elements.fontLarger.addEventListener('click', () => {
-                    if (STATE.currentFontSize < CONFIG.maxFontSize) {
-                        STATE.currentFontSize += 10;
-                        accessibility.applyFontSize();
-                        utils.announceToScreenReader(`Font size increased to ${STATE.currentFontSize}%`);
+            if (elements.chatMinimize) {
+                elements.chatMinimize.addEventListener('click', chatControl.closeChat);
+            }
+
+            if (elements.chatSend) {
+                elements.chatSend.addEventListener('click', chatControl.sendMessage);
+            }
+
+            if (elements.chatInput) {
+                elements.chatInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        chatControl.sendMessage();
                     }
                 });
             }
         },
 
-        applyFontSize: () => {
-            document.documentElement.style.fontSize = `${STATE.currentFontSize}%`;
+        toggleChat: () => {
+            if (STATE.chatOpen) {
+                chatControl.closeChat();
+            } else {
+                chatControl.openChat();
+            }
+        },
+
+        openChat: () => {
+            if (elements.chatWidget) {
+                elements.chatWidget.classList.add('open');
+                STATE.chatOpen = true;
+                if (elements.chatInput) {
+                    elements.chatInput.focus();
+                }
+                utils.announceToScreenReader('Chat opened. You can ask questions about mortgages.');
+            }
+        },
+
+        closeChat: () => {
+            if (elements.chatWidget) {
+                elements.chatWidget.classList.remove('open');
+                STATE.chatOpen = false;
+                utils.announceToScreenReader('Chat closed');
+            }
+        },
+
+        sendMessage: () => {
+            const input = elements.chatInput;
+            if (!input || !input.value.trim()) return;
+
+            const message = input.value.trim();
+            chatControl.addMessage(message, 'user');
+            input.value = '';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const response = chatControl.generateResponse(message);
+                chatControl.addMessage(response, 'bot');
+            }, 1000);
+        },
+
+        addMessage: (text, sender) => {
+            if (!elements.chatMessages) return;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
             
-            // Update button states
-            if (elements.fontSmaller) {
-                elements.fontSmaller.disabled = STATE.currentFontSize <= CONFIG.minFontSize;
-            }
-            if (elements.fontLarger) {
-                elements.fontLarger.disabled = STATE.currentFontSize >= CONFIG.maxFontSize;
-            }
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = sender === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = `<p>${text}</p>`;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            elements.chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+
+            // Announce to screen reader
+            utils.announceToScreenReader(`${sender === 'bot' ? 'AI Assistant' : 'You'}: ${text}`);
         },
 
-        setupThemeControl: () => {
-            if (elements.themeToggle) {
-                elements.themeToggle.addEventListener('click', () => {
-                    STATE.theme = STATE.theme === 'light' ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', STATE.theme);
-                    
-                    if (elements.themeIcon) {
-                        elements.themeIcon.className = STATE.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-                    }
-                    
-                    utils.announceToScreenReader(`Switched to ${STATE.theme} mode`);
-                    localStorage.setItem('theme', STATE.theme);
-                });
-
-                // Load saved theme
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme) {
-                    STATE.theme = savedTheme;
-                    document.documentElement.setAttribute('data-theme', STATE.theme);
-                    if (elements.themeIcon) {
-                        elements.themeIcon.className = STATE.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-                    }
-                }
+        generateResponse: (message) => {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('monthly payment') || lowerMessage.includes('payment')) {
+                const payment = elements.totalPayment?.textContent || '$2,467';
+                return `Based on your current inputs, your monthly payment would be ${payment}. This includes principal, interest, taxes, and insurance. Would you like me to explain how this is calculated?`;
             }
-        },
-
-        setupScreenReader: () => {
-            if (elements.screenReaderToggle) {
-                elements.screenReaderToggle.addEventListener('click', () => {
-                    STATE.screenReaderEnhanced = !STATE.screenReaderEnhanced;
-                    elements.screenReaderToggle.classList.toggle('active', STATE.screenReaderEnhanced);
-                    
-                    if (STATE.screenReaderEnhanced) {
-                        accessibility.enhanceForScreenReader();
-                        utils.announceToScreenReader('Screen reader enhancements activated');
-                    } else {
-                        accessibility.removeScreenReaderEnhancements();
-                        utils.announceToScreenReader('Screen reader enhancements deactivated');
-                    }
-                });
+            
+            if (lowerMessage.includes('interest rate') || lowerMessage.includes('rate')) {
+                return `Current mortgage rates are around 6.2% - 7.3%. Your rate depends on your credit score, down payment, and loan term. A lower rate can significantly reduce your monthly payment and total interest paid.`;
             }
-        },
-
-        enhanceForScreenReader: () => {
-            // Add more descriptive labels and ARIA attributes
-            document.querySelectorAll('input').forEach(input => {
-                if (!input.getAttribute('aria-describedby')) {
-                    const label = input.closest('.form-group')?.querySelector('label');
-                    if (label) {
-                        input.setAttribute('aria-label', label.textContent.replace(/\s+/g, ' ').trim());
-                    }
-                }
-            });
-
-            // Add live regions for dynamic content
-            const resultsPanel = document.querySelector('.results-panel');
-            if (resultsPanel) {
-                resultsPanel.setAttribute('aria-live', 'polite');
-                resultsPanel.setAttribute('aria-atomic', 'true');
+            
+            if (lowerMessage.includes('down payment')) {
+                return `A larger down payment reduces your loan amount and may eliminate PMI (Private Mortgage Insurance). If you put down less than 20%, you'll typically need to pay PMI, which adds to your monthly cost.`;
             }
-
-            // Enhance button descriptions
-            document.querySelectorAll('button').forEach(btn => {
-                if (!btn.getAttribute('aria-label') && btn.textContent) {
-                    btn.setAttribute('aria-label', btn.textContent.trim());
-                }
-            });
-        },
-
-        removeScreenReaderEnhancements: () => {
-            // Remove added ARIA attributes
-            document.querySelectorAll('[aria-live="polite"]').forEach(el => {
-                el.removeAttribute('aria-live');
-                el.removeAttribute('aria-atomic');
-            });
-        },
-
-        setupKeyboardNavigation: () => {
-            // Add keyboard support for custom elements
-            document.querySelectorAll('.suggestion-chip, .term-chip, .toggle-btn').forEach(element => {
-                element.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        element.click();
-                    }
-                });
-            });
-
-            // Hamburger menu keyboard support
-            const hamburger = document.querySelector('.hamburger');
-            if (hamburger) {
-                hamburger.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        hamburger.click();
-                    }
-                });
+            
+            if (lowerMessage.includes('pmi')) {
+                return `PMI (Private Mortgage Insurance) is required when your down payment is less than 20%. It typically costs 0.2% to 2% of your loan amount annually. You can remove PMI once you have 20% equity in your home.`;
             }
+            
+            if (lowerMessage.includes('refinance') || lowerMessage.includes('refi')) {
+                return `Refinancing can lower your monthly payment if rates have dropped or your credit has improved. Consider refinancing if you can get a rate that's at least 0.5% lower than your current rate.`;
+            }
+            
+            if (lowerMessage.includes('afford') || lowerMessage.includes('budget')) {
+                return `A good rule of thumb is that your monthly housing payment shouldn't exceed 28% of your gross monthly income. This includes principal, interest, taxes, and insurance (PITI).`;
+            }
+            
+            if (lowerMessage.includes('help') || lowerMessage.includes('how')) {
+                return `I can help you understand mortgage calculations, rates, down payments, PMI, and home affordability. Just ask me specific questions like "How does PMI work?" or "What affects my interest rate?"`;
+            }
+            
+            return `That's a great question! While I can provide general mortgage guidance, I recommend speaking with a qualified mortgage professional for personalized advice. Is there anything specific about mortgage calculations I can help explain?`;
         }
     };
 
@@ -561,19 +788,31 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         showAmount: () => {
-            if (elements.amountToggle) elements.amountToggle.classList.add('active');
-            if (elements.percentToggle) elements.percentToggle.classList.remove('active');
+            if (elements.amountToggle) {
+                elements.amountToggle.classList.add('active');
+                elements.amountToggle.setAttribute('aria-selected', 'true');
+            }
+            if (elements.percentToggle) {
+                elements.percentToggle.classList.remove('active');
+                elements.percentToggle.setAttribute('aria-selected', 'false');
+            }
             if (elements.amountInput) elements.amountInput.style.display = 'block';
             if (elements.percentInput) elements.percentInput.style.display = 'none';
-            utils.announceToScreenReader('Switched to amount input');
+            utils.announceToScreenReader('Switched to dollar amount input for down payment');
         },
 
         showPercent: () => {
-            if (elements.percentToggle) elements.percentToggle.classList.add('active');
-            if (elements.amountToggle) elements.amountToggle.classList.remove('active');
+            if (elements.percentToggle) {
+                elements.percentToggle.classList.add('active');
+                elements.percentToggle.setAttribute('aria-selected', 'true');
+            }
+            if (elements.amountToggle) {
+                elements.amountToggle.classList.remove('active');
+                elements.amountToggle.setAttribute('aria-selected', 'false');
+            }
             if (elements.percentInput) elements.percentInput.style.display = 'block';
             if (elements.amountInput) elements.amountInput.style.display = 'none';
-            utils.announceToScreenReader('Switched to percentage input');
+            utils.announceToScreenReader('Switched to percentage input for down payment');
         },
 
         syncFromAmount: () => {
@@ -608,20 +847,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // ========== SUGGESTION CHIPS ==========
+    // ========== SUGGESTION CHIPS - FIXED ==========
     const suggestionChips = {
         init: () => {
+            console.log('Initializing suggestion chips...');
             elements.suggestionChips.forEach(chip => {
                 chip.addEventListener('click', () => {
                     const value = chip.getAttribute('data-value');
                     const inputId = chip.getAttribute('data-input');
                     const input = document.getElementById(inputId);
                     
+                    console.log('Chip clicked:', { value, inputId, input });
+                    
                     if (input && value) {
-                        input.value = utils.formatNumber(parseInt(value));
-                        input.dispatchEvent(new Event('input'));
+                        const numericValue = parseInt(value);
+                        input.value = utils.formatNumber(numericValue);
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
                         chip.focus(); // Maintain focus for accessibility
-                        utils.announceToScreenReader(`Set ${inputId.replace('-', ' ')} to ${utils.formatCurrency(parseInt(value))}`);
+                        utils.announceToScreenReader(`Set ${inputId.replace('-', ' ')} to ${utils.formatCurrency(numericValue)}`);
+                        utils.showToast(`${inputId.replace('-', ' ')} set to ${utils.formatCurrency(numericValue)}`, 'success');
+                        
+                        // Trigger calculation after a brief delay
+                        setTimeout(() => {
+                            calculations.calculate();
+                        }, 100);
                     }
                 });
             });
@@ -645,7 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             customGroup.style.display = 'block';
                             elements.customTerm.focus();
                         }
-                        utils.announceToScreenReader('Custom term input activated');
+                        utils.announceToScreenReader('Custom term input activated. Please enter loan term in years.');
                     } else {
                         const customGroup = document.getElementById('custom-term-group');
                         if (customGroup) customGroup.style.display = 'none';
@@ -686,8 +935,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update buttons
             elements.tabBtns.forEach(btn => {
                 btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
                 if (btn.getAttribute('data-tab') === tabId) {
                     btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
                 }
             });
 
@@ -706,6 +957,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========== CALCULATIONS ==========
     const calculations = {
         calculate: () => {
+            console.log('Calculating mortgage...');
             const inputs = calculations.getInputs();
             
             if (!calculations.validateInputs(inputs)) {
@@ -718,7 +970,13 @@ document.addEventListener('DOMContentLoaded', () => {
             calculations.generateAmortizationTable(results);
             
             STATE.currentCalculation = results;
-            utils.announceToScreenReader('Mortgage calculation completed');
+            
+            if (STATE.screenReaderEnhanced) {
+                const payment = utils.formatCurrency(results.totalMonthlyPayment);
+                utils.announceToScreenReader(`Mortgage calculation completed. Your monthly payment is ${payment}. This includes principal and interest of ${utils.formatCurrency(results.monthlyPI)}, property tax of ${utils.formatCurrency(results.monthlyTax)}, and home insurance of ${utils.formatCurrency(results.monthlyInsurance)}.`);
+            } else {
+                utils.announceToScreenReader('Mortgage calculation completed');
+            }
         },
 
         getInputs: () => {
@@ -763,8 +1021,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalPayments = inputs.loanTerm * 12;
 
             // Monthly principal and interest
-            const monthlyPI = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / 
-                              (Math.pow(1 + monthlyRate, totalPayments) - 1);
+            const monthlyPI = loanAmount === 0 ? 0 : 
+                (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / 
+                (Math.pow(1 + monthlyRate, totalPayments) - 1);
 
             // Other monthly costs
             const monthlyTax = inputs.propertyTax / 12;
@@ -836,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const pmiWarning = document.getElementById('pmi-warning');
             
             if (results.monthlyPmi > 0) {
-                if (pmiStatus) pmiStatus.textContent = `PMI: ${utils.formatCurrency(results.monthlyPmi)}/month`;
+                if (pmiStatus) pmiStatus.textContent = `PMI: ${utils.formatCurrency(results.monthlyPmi)}/month (can be removed at 20% equity)`;
                 if (pmiWarning) pmiWarning.style.display = 'block';
             } else {
                 if (pmiStatus) pmiStatus.textContent = 'No PMI required (20%+ down payment)';
@@ -1026,19 +1285,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             numberInputs.forEach(input => {
                 input.addEventListener('blur', () => utils.formatNumberInput(input));
-                input.addEventListener('input', utils.debounce(calculations.calculate, CONFIG.debounceDelay));
+                input.addEventListener('input', utils.debounce(() => {
+                    if (input === elements.homePrice) {
+                        formControls.updateDependentFields();
+                    }
+                    calculations.calculate();
+                }, CONFIG.debounceDelay));
             });
 
             // Interest rate input
             if (elements.interestRate) {
                 elements.interestRate.addEventListener('input', utils.debounce(calculations.calculate, CONFIG.debounceDelay));
-            }
-
-            // Auto-calculate property tax and insurance
-            if (elements.homePrice) {
-                elements.homePrice.addEventListener('input', () => {
-                    formControls.updateDependentFields();
-                });
             }
 
             // Pagination buttons
@@ -1117,6 +1374,7 @@ document.addEventListener('DOMContentLoaded', () => {
             calculations.calculate();
 
             utils.announceToScreenReader('Form has been reset to default values');
+            utils.showToast('Form reset to default values', 'info');
         }
     };
 
@@ -1132,19 +1390,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Hamburger menu
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-        
-        if (hamburger && navMenu) {
-            hamburger.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
+        if (elements.hamburger && elements.navMenu) {
+            elements.hamburger.addEventListener('click', () => {
+                elements.navMenu.classList.toggle('active');
+                const isOpen = elements.navMenu.classList.contains('active');
+                elements.hamburger.setAttribute('aria-expanded', isOpen.toString());
+                utils.announceToScreenReader(isOpen ? 'Menu opened' : 'Menu closed');
             });
         }
 
         // Modal controls
         document.querySelectorAll('.modal-close').forEach(closeBtn => {
             closeBtn.addEventListener('click', (e) => {
-                e.target.closest('.modal').style.display = 'none';
+                const modal = e.target.closest('.modal');
+                modal.style.display = 'none';
+                utils.announceToScreenReader('Modal closed');
             });
         });
 
@@ -1153,36 +1413,22 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.style.display = 'none';
+                    utils.announceToScreenReader('Modal closed');
                 }
             });
         });
 
-        // Escape key to close modals
+        // Escape key to close modals and chat
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 document.querySelectorAll('.modal').forEach(modal => {
                     modal.style.display = 'none';
                 });
+                if (STATE.chatOpen) {
+                    chatControl.closeChat();
+                }
             }
         });
-    };
-
-    // ========== INITIALIZATION ==========
-    const init = () => {
-        console.log('Initializing AI Mortgage Calculator...');
-        
-        // Initialize all modules
-        voiceControl.init();
-        accessibility.init();
-        downPaymentControl.init();
-        suggestionChips.init();
-        termChips.init();
-        tabControl.init();
-        formControls.init();
-        setupEventListeners();
-
-        // Perform initial calculation
-        calculations.calculate();
 
         // Update stats periodically
         setInterval(() => {
@@ -1192,11 +1438,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 calcCount.textContent = utils.formatNumber(STATE.calculationsToday);
             }
         }, CONFIG.calculationsUpdateInterval);
-
-        console.log('AI Mortgage Calculator initialized successfully');
-        utils.announceToScreenReader('Mortgage calculator loaded and ready');
     };
 
-    // Start initialization
-    init();
+    // ========== INITIALIZATION ==========
+    const init = () => {
+        console.log('Initializing World\'s First AI Mortgage Calculator...');
+        
+        try {
+            // Initialize all modules
+            voiceControl.init();
+            accessibility.init();
+            downPaymentControl.init();
+            suggestionChips.init();
+            termChips.init();
+            tabControl.init();
+            formControls.init();
+            chatControl.init();
+            setupEventListeners();
+
+            // Perform initial calculation
+            calculations.calculate();
+
+            console.log('AI Mortgage Calculator initialized successfully');
+            utils.announceToScreenReader('World\'s first AI mortgage calculator loaded and ready. All accessibility features are available.');
+            utils.showToast('Calculator loaded successfully! Try the voice commands or accessibility features.', 'success');
+        } catch (error) {
+            console.error('Initialization error:', error);
+            utils.showToast('There was an error loading the calculator. Please refresh the page.', 'error');
+        }
+    };
+
+    // Start initialization when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 });
