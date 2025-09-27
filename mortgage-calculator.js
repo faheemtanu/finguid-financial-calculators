@@ -1,5 +1,5 @@
 /**
- * World's First AI-Enhanced Mortgage Calculator - ULTIMATE JavaScript
+ * World's First AI-Enhanced Mortgage Calculator JavaScript
  * COMPREHENSIVE FUNCTIONALITY FOR ALL FEATURES
  * Features: Global voice control, real-time calculations, AI insights, amortization table,
  * down payment sync, PMI auto-calc, state-based taxes, comparison tools, accessibility
