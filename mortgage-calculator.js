@@ -1246,7 +1246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 preview.textContent = 'Potential savings: $0';
                 preview.style.color = '';
-                $('#extra-impact')?.style.display = 'none';
+                $('#extra-impact')?.style.display == 'none';
             }
         },
 
