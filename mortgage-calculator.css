@@ -205,4 +205,13 @@ body {
 @media (max-width: 900px) {
     body { padding-top: 100px; } .main-header { top: 40px; }
     .calculator-grid { grid-template-columns: 1fr; } .input-card { position: static; }
-    .header-nav { display: none; } .mobile-menu-toggle { display: flex; flex
+    .header-nav { display: none; } .mobile-menu-toggle { display: flex; flex-direction: column; gap: 4px; background: none; border: none; cursor: pointer; padding: var(--spacing-sm); }
+    .hamburger-line { width: 24px; height: 2px; background: var(--text-primary); border-radius: 1px; }
+}
+@media (max-width: 480px) {
+    body { padding-top: 80px; } .main-header { top: 32px; } .payment-amount { font-size: 2.5rem; }
+    .controls-container { flex-wrap: wrap; justify-content: center; }
+    .control-btn span { display: none; }
+}
+@media print { .global-controls, .main-header, .result-actions, .app-footer, .advanced-options, .tab-controls { display: none !important; } body { padding-top: 0; } .card { box-shadow: none; border: 1px solid #ccc; } .calculator-grid { grid-template-columns: 1fr; } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
