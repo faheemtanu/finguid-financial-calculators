@@ -1,25 +1,20 @@
 /**
- * World's First AI-Enhanced Mortgage Calculator JavaScript - FINAL VERSION
- * COMPREHENSIVE FUNCTIONALITY WITH ALL FIXES
- * Features: Fixed A-/A+, Screen reader, Voice control, Chat, UI/UX improvements
- */
+* Enhanced Mortgage Calculator JavaScript - Production Ready
+* Features: Complete calculations, voice control, AI insights, charts, accessibility
+*/
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ========== CONFIGURATION & STATE ==========
+    // ======= CONFIGURATION & STATE =======
     const CONFIG = {
-        debounceDelay: 300,
+        debounceDelay: 350,
         defaultInsuranceRate: 0.002, // 0.2% of home value
-        calculationsUpdateInterval: 5000, // 5 seconds
-        savingsUpdateInterval: 7000, // 7 seconds
-        voiceTimeout: 15000, // 15 seconds
+        calculationsUpdateInterval: 3000, // 3 seconds
+        savingsUpdateInterval: 5000, // 5 seconds
+        voiceTimeout: 10000, // 10 seconds
         maxSliderYear: 30,
-        pmiRate: 0.005, // 0.5% annually
-        apiUpdateInterval: 15 * 60 * 1000, // 15 minutes
-        paymentsPerPage: 12,
-        minFontSize: 80,
-        maxFontSize: 150
+        paymentsPerPage: 12
     };
 
     const STATE = {
@@ -33,40 +28,34 @@ document.addEventListener('DOMContentLoaded', () => {
         currentFontSize: 100,
         theme: 'light',
         calculationsToday: 12847,
-        avgSavings: 45,
+        avgSavings: 45000,
+        screenReaderActive: false,
         currentPage: 1,
-        totalPages: 1,
-        amortizationData: [],
-        screenReaderEnhanced: false,
-        isVoiceSupported: false,
-        chatOpen: false
+        totalPages: 1
     };
 
-    // ========== UTILITY FUNCTIONS ==========
-    const utils = {
-        formatCurrency: (amount) => {
+    // ======= DOM ELEMENT SELECTORS =======
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => document.querySelectorAll(selector);
+
+    // ======= UTILITIES =======
+    const Utils = {
+        formatCurrency: (amount, decimals = 0) => {
             return new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(amount);
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            }).format(amount || 0);
         },
 
         formatNumber: (num) => {
-            return new Intl.NumberFormat('en-US').format(num);
+            return new Intl.NumberFormat('en-US').format(num || 0);
         },
 
         parseNumber: (str) => {
-            if (typeof str === 'number') return str;
-            return parseFloat(str.replace(/[,$%]/g, '')) || 0;
-        },
-
-        formatNumberInput: (input) => {
-            const value = utils.parseNumber(input.value);
-            if (value > 0) {
-                input.value = utils.formatNumber(value);
-            }
+            if (!str) return 0;
+            return parseFloat(str.toString().replace(/[^\d.-]/g, '')) || 0;
         },
 
         debounce: (func, wait) => {
@@ -81,1100 +70,1130 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         },
 
-        announceToScreenReader: (message) => {
-            const announcer = document.getElementById('sr-announcements');
-            if (announcer) {
-                announcer.textContent = message;
-                setTimeout(() => announcer.textContent = '', 1500);
-            }
-        },
-
         showToast: (message, type = 'info') => {
-            const container = document.getElementById('toast-container');
+            const container = $('#toast-container');
             if (!container) return;
 
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 
-                    type === 'error' ? 'exclamation-circle' : 
-                    type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
-                <span>${message}</span>
-            `;
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
 
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 5000);
+
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 4000);
+        },
+
+        announceToScreenReader: (message) => {
+            if (!STATE.screenReaderActive) return;
+            const announcements = $('#sr-announcements');
+            if (announcements) {
+                announcements.textContent = message;
+            }
+        },
+
+        generateId: () => {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
         }
     };
 
-    // ========== DOM ELEMENTS ==========
-    const elements = {
-        homePrice: document.getElementById('home-price'),
-        downPayment: document.getElementById('down-payment'),
-        downPaymentPercent: document.getElementById('down-payment-percent'),
-        interestRate: document.getElementById('interest-rate'),
-        loanTerm: document.getElementById('loan-term'),
-        customTerm: document.getElementById('custom-term'),
-        propertyTax: document.getElementById('property-tax'),
-        homeInsurance: document.getElementById('home-insurance'),
-        pmi: document.getElementById('pmi'),
-        extraMonthly: document.getElementById('extra-monthly'),
-        extraOnetime: document.getElementById('extra-onetime'),
-        
-        // Results
-        totalPayment: document.getElementById('total-payment'),
-        principalInterest: document.getElementById('principal-interest'),
-        monthlyTax: document.getElementById('monthly-tax'),
-        monthlyInsurance: document.getElementById('monthly-insurance'),
-        monthlyPmi: document.getElementById('monthly-pmi'),
-        displayLoanAmount: document.getElementById('display-loan-amount'),
-        displayTotalInterest: document.getElementById('display-total-interest'),
-        displayTotalCost: document.getElementById('display-total-cost'),
-        displayPayoffDate: document.getElementById('display-payoff-date'),
-
-        // Controls
-        calculateBtn: document.getElementById('calculate-btn'),
-        resetForm: document.getElementById('reset-form'),
-        amountToggle: document.getElementById('amount-toggle'),
-        percentToggle: document.getElementById('percent-toggle'),
-        amountInput: document.getElementById('amount-input'),
-        percentInput: document.getElementById('percent-input'),
-
-        // Voice controls
-        voiceInput: document.getElementById('voice-input'),
-        voiceToggle: document.getElementById('voice-toggle'),
-        voiceIcon: document.getElementById('voice-icon'),
-        voiceStatus: document.getElementById('voice-status'),
-        voiceText: document.getElementById('voice-text'),
-
-        // Accessibility - FIXED
-        fontSmaller: document.getElementById('font-smaller'),
-        fontLarger: document.getElementById('font-larger'),
-        themeToggle: document.getElementById('theme-toggle'),
-        themeIcon: document.getElementById('theme-icon'),
-        screenReaderToggle: document.getElementById('screen-reader-toggle'),
-
-        // Charts and tabs
-        mortgageChart: document.getElementById('mortgage-chart'),
-        tabBtns: document.querySelectorAll('.tab-btn'),
-        tabContents: document.querySelectorAll('.tab-content'),
-        
-        // Suggestion chips
-        suggestionChips: document.querySelectorAll('.suggestion-chip'),
-        termChips: document.querySelectorAll('.term-chip'),
-
-        // Chat
-        chatToggle: document.getElementById('chat-toggle'),
-        chatWidget: document.getElementById('chat-widget'),
-        chatMinimize: document.getElementById('chat-minimize'),
-        chatInput: document.getElementById('chat-input'),
-        chatSend: document.getElementById('chat-send'),
-        chatMessages: document.getElementById('chat-messages'),
-
-        // Navigation
-        hamburger: document.getElementById('hamburger'),
-        navMenu: document.getElementById('nav-menu')
-    };
-
-    // ========== ACCESSIBILITY FUNCTIONS - FIXED ==========
-    const accessibility = {
-        init: () => {
-            accessibility.setupFontControls();
-            accessibility.setupThemeControl();
-            accessibility.setupScreenReader();
-            accessibility.setupKeyboardNavigation();
+    // ======= DYNAMIC STATS UPDATER =======
+    const StatsUpdater = {
+        init() {
+            this.updateCalculationsCounter();
+            this.updateSavingsCounter();
+            setInterval(() => this.updateCalculationsCounter(), CONFIG.calculationsUpdateInterval);
+            setInterval(() => this.updateSavingsCounter(), CONFIG.savingsUpdateInterval);
         },
 
-        setupFontControls: () => {
-            console.log('Setting up font controls...');
-            
-            if (elements.fontSmaller) {
-                elements.fontSmaller.addEventListener('click', () => {
-                    console.log('Font smaller clicked, current size:', STATE.currentFontSize);
-                    if (STATE.currentFontSize > CONFIG.minFontSize) {
-                        STATE.currentFontSize -= 10;
-                        accessibility.applyFontSize();
-                        utils.announceToScreenReader(`Font size decreased to ${STATE.currentFontSize}%`);
-                        utils.showToast(`Font size: ${STATE.currentFontSize}%`, 'info');
-                    }
-                });
-            }
-
-            if (elements.fontLarger) {
-                elements.fontLarger.addEventListener('click', () => {
-                    console.log('Font larger clicked, current size:', STATE.currentFontSize);
-                    if (STATE.currentFontSize < CONFIG.maxFontSize) {
-                        STATE.currentFontSize += 10;
-                        accessibility.applyFontSize();
-                        utils.announceToScreenReader(`Font size increased to ${STATE.currentFontSize}%`);
-                        utils.showToast(`Font size: ${STATE.currentFontSize}%`, 'info');
-                    }
-                });
-            }
-
-            // Apply initial font size
-            accessibility.applyFontSize();
-        },
-
-        applyFontSize: () => {
-            console.log('Applying font size:', STATE.currentFontSize);
-            
-            // Remove existing font scale classes
-            document.body.classList.remove(
-                'font-scale-80', 'font-scale-90', 'font-scale-100', 
-                'font-scale-110', 'font-scale-120', 'font-scale-130', 
-                'font-scale-140', 'font-scale-150'
-            );
-            
-            // Add new font scale class
-            document.body.classList.add(`font-scale-${STATE.currentFontSize}`);
-            
-            // Update button states
-            if (elements.fontSmaller) {
-                elements.fontSmaller.disabled = STATE.currentFontSize <= CONFIG.minFontSize;
-                if (STATE.currentFontSize <= CONFIG.minFontSize) {
-                    elements.fontSmaller.classList.add('disabled');
-                } else {
-                    elements.fontSmaller.classList.remove('disabled');
-                }
-            }
-            
-            if (elements.fontLarger) {
-                elements.fontLarger.disabled = STATE.currentFontSize >= CONFIG.maxFontSize;
-                if (STATE.currentFontSize >= CONFIG.maxFontSize) {
-                    elements.fontLarger.classList.add('disabled');
-                } else {
-                    elements.fontLarger.classList.remove('disabled');
-                }
+        updateCalculationsCounter() {
+            const increment = Math.floor(Math.random() * 8) + 2; // 2-9 increment
+            STATE.calculationsToday += increment;
+            const element = $('#calculations-today');
+            if (element) {
+                element.textContent = Utils.formatNumber(STATE.calculationsToday);
             }
         },
 
-        setupThemeControl: () => {
-            if (elements.themeToggle) {
-                elements.themeToggle.addEventListener('click', () => {
-                    STATE.theme = STATE.theme === 'light' ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', STATE.theme);
-                    
-                    if (elements.themeIcon) {
-                        elements.themeIcon.className = STATE.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-                    }
-                    
-                    utils.announceToScreenReader(`Switched to ${STATE.theme} mode`);
-                    utils.showToast(`${STATE.theme} mode activated`, 'info');
-                    localStorage.setItem('theme', STATE.theme);
-                });
-
-                // Load saved theme
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme) {
-                    STATE.theme = savedTheme;
-                    document.documentElement.setAttribute('data-theme', STATE.theme);
-                    if (elements.themeIcon) {
-                        elements.themeIcon.className = STATE.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-                    }
-                }
-            }
-        },
-
-        setupScreenReader: () => {
-            if (elements.screenReaderToggle) {
-                elements.screenReaderToggle.addEventListener('click', () => {
-                    STATE.screenReaderEnhanced = !STATE.screenReaderEnhanced;
-                    elements.screenReaderToggle.classList.toggle('active', STATE.screenReaderEnhanced);
-                    
-                    if (STATE.screenReaderEnhanced) {
-                        accessibility.enhanceForScreenReader();
-                        utils.announceToScreenReader('Screen reader enhancements activated. All form fields now have detailed descriptions and live updates will be announced.');
-                        utils.showToast('Screen reader enhancements activated', 'success');
-                    } else {
-                        accessibility.removeScreenReaderEnhancements();
-                        utils.announceToScreenReader('Screen reader enhancements deactivated');
-                        utils.showToast('Screen reader enhancements deactivated', 'info');
-                    }
-                });
-            }
-        },
-
-        enhanceForScreenReader: () => {
-            console.log('Enhancing for screen reader...');
-            
-            // Add comprehensive ARIA labels and descriptions
-            document.querySelectorAll('input, select, button').forEach(element => {
-                const label = element.closest('.form-group')?.querySelector('label');
-                const help = element.closest('.form-group')?.querySelector('.form-help');
-                
-                if (label && !element.getAttribute('aria-label')) {
-                    const labelText = label.textContent.replace(/\s+/g, ' ').trim();
-                    element.setAttribute('aria-label', labelText);
-                }
-                
-                if (help && !element.getAttribute('aria-describedby')) {
-                    const helpId = `help-${element.id || Math.random().toString(36).substr(2, 9)}`;
-                    help.id = helpId;
-                    element.setAttribute('aria-describedby', helpId);
-                }
-            });
-
-            // Add live regions for dynamic content
-            const resultsPanel = document.querySelector('.results-panel');
-            if (resultsPanel) {
-                resultsPanel.setAttribute('aria-live', 'polite');
-                resultsPanel.setAttribute('aria-atomic', 'false');
-            }
-
-            // Add role descriptions for custom elements
-            document.querySelectorAll('.suggestion-chip').forEach(chip => {
-                chip.setAttribute('role', 'button');
-                chip.setAttribute('aria-label', `Set ${chip.getAttribute('data-input')} to ${chip.textContent}`);
-            });
-
-            document.querySelectorAll('.term-chip').forEach(chip => {
-                chip.setAttribute('role', 'button');
-                chip.setAttribute('aria-label', `Set loan term to ${chip.textContent}`);
-            });
-
-            // Enhanced button descriptions
-            document.querySelectorAll('button').forEach(btn => {
-                if (!btn.getAttribute('aria-label') && btn.textContent) {
-                    btn.setAttribute('aria-label', btn.textContent.trim());
-                }
-            });
-
-            // Add landmark roles
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
-                if (!section.getAttribute('role')) {
-                    section.setAttribute('role', 'region');
-                }
-            });
-        },
-
-        removeScreenReaderEnhancements: () => {
-            // Remove added ARIA attributes
-            document.querySelectorAll('[aria-live="polite"]').forEach(el => {
-                if (el.id !== 'sr-announcements') {
-                    el.removeAttribute('aria-live');
-                    el.removeAttribute('aria-atomic');
-                }
-            });
-        },
-
-        setupKeyboardNavigation: () => {
-            // Add keyboard support for custom elements
-            document.querySelectorAll('.suggestion-chip, .term-chip, .toggle-btn').forEach(element => {
-                element.setAttribute('tabindex', '0');
-                element.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        element.click();
-                    }
-                });
-            });
-
-            // Hamburger menu keyboard support
-            if (elements.hamburger) {
-                elements.hamburger.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        elements.hamburger.click();
-                    }
-                });
+        updateSavingsCounter() {
+            const increment = Math.floor(Math.random() * 2000) + 500; // 500-2500 increment
+            STATE.avgSavings += increment;
+            const element = $('#avg-savings');
+            if (element) {
+                element.textContent = Utils.formatCurrency(STATE.avgSavings, 0);
             }
         }
     };
 
-    // ========== VOICE CONTROL FUNCTIONS - FIXED ==========
-    const voiceControl = {
-        init: () => {
-            console.log('Initializing voice control...');
-            
-            // Check for browser support
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                STATE.isVoiceSupported = true;
-                voiceControl.setupRecognition();
-                utils.showToast('Voice control available', 'success');
-            } else {
-                // Hide voice controls if not supported
-                if (elements.voiceInput) elements.voiceInput.style.display = 'none';
-                if (elements.voiceToggle) elements.voiceToggle.style.display = 'none';
-                utils.showToast('Voice recognition not supported in this browser', 'warning');
-            }
-        },
+    // ======= GLOBAL VOICE CONTROL =======
+    const GlobalVoiceControl = {
+        init() {
+            const globalVoiceBtn = $('#global-voice-toggle');
+            if (!globalVoiceBtn) return;
 
-        setupRecognition: () => {
+            if (!window.speechRecognitionSupported) {
+                globalVoiceBtn.disabled = true;
+                globalVoiceBtn.title = 'Voice control not supported in this browser';
+                return;
+            }
+
+            // Initialize Global Speech Recognition
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
-            // Global voice recognition
             STATE.globalVoiceRecognition = new SpeechRecognition();
             STATE.globalVoiceRecognition.continuous = true;
             STATE.globalVoiceRecognition.interimResults = false;
             STATE.globalVoiceRecognition.lang = 'en-US';
 
-            STATE.globalVoiceRecognition.onstart = () => {
-                console.log('Global voice recognition started');
-                STATE.isGlobalListening = true;
-                if (elements.voiceIcon) elements.voiceIcon.className = 'fas fa-microphone-slash';
-                if (elements.voiceToggle) elements.voiceToggle.classList.add('active');
-                if (elements.voiceStatus) {
-                    elements.voiceStatus.style.display = 'block';
-                    elements.voiceText.textContent = 'Listening for commands...';
+            // Event listeners
+            STATE.globalVoiceRecognition.onstart = () => this.onGlobalStart();
+            STATE.globalVoiceRecognition.onresult = (event) => this.onGlobalResult(event);
+            STATE.globalVoiceRecognition.onerror = (event) => this.onGlobalError(event);
+            STATE.globalVoiceRecognition.onend = () => this.onGlobalEnd();
+
+            globalVoiceBtn.addEventListener('click', () => this.toggleGlobal());
+        },
+
+        toggleGlobal() {
+            if (STATE.isGlobalListening) {
+                this.stopGlobal();
+            } else {
+                this.startGlobal();
+            }
+        },
+
+        startGlobal() {
+            if (!STATE.globalVoiceRecognition || STATE.isGlobalListening) return;
+
+            try {
+                STATE.globalVoiceRecognition.start();
+                Utils.announceToScreenReader('Global voice control started. You can now speak commands for any field.');
+            } catch (error) {
+                Utils.showToast('Global voice recognition failed to start', 'error');
+                console.error('Global voice error:', error);
+            }
+        },
+
+        stopGlobal() {
+            if (!STATE.globalVoiceRecognition || !STATE.isGlobalListening) return;
+            STATE.globalVoiceRecognition.stop();
+        },
+
+        onGlobalStart() {
+            STATE.isGlobalListening = true;
+            const btn = $('#global-voice-toggle');
+            const icon = $('#global-voice-icon');
+            const feedback = $('#global-voice-feedback');
+
+            if (btn) btn.classList.add('active');
+            if (icon) icon.className = 'fas fa-microphone-slash';
+            if (feedback) {
+                feedback.style.display = 'flex';
+                $('#global-voice-text').textContent = 'Global Voice Active - Speak any command...';
+            }
+
+            Utils.announceToScreenReader('Global voice listening activated');
+        },
+
+        onGlobalResult(event) {
+            const result = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+            const textElement = $('#global-voice-text');
+            if (textElement) {
+                textElement.textContent = `Heard: "${result}"`;
+            }
+
+            setTimeout(() => {
+                this.processGlobalCommand(result);
+            }, 500);
+        },
+
+        onGlobalError(event) {
+            console.error('Global voice recognition error:', event.error);
+            Utils.showToast(`Global voice error: ${event.error}`, 'error');
+            this.stopGlobal();
+        },
+
+        onGlobalEnd() {
+            STATE.isGlobalListening = false;
+            const btn = $('#global-voice-toggle');
+            const icon = $('#global-voice-icon');
+            const feedback = $('#global-voice-feedback');
+
+            if (btn) btn.classList.remove('active');
+            if (icon) icon.className = 'fas fa-microphone';
+            if (feedback) feedback.style.display = 'none';
+
+            Utils.announceToScreenReader('Global voice listening stopped');
+        },
+
+        processGlobalCommand(command) {
+            console.log('Processing global command:', command);
+
+            // Global navigation commands
+            if (command.includes('go to home') || command.includes('navigate home')) {
+                window.location.href = '/';
+                return;
+            }
+
+            // Theme commands
+            if (command.includes('dark mode') || command.includes('dark theme')) {
+                AccessibilityControls.setTheme('dark');
+                return;
+            }
+
+            if (command.includes('light mode') || command.includes('light theme')) {
+                AccessibilityControls.setTheme('light');
+                return;
+            }
+
+            // Font size commands
+            if (command.includes('increase font') || command.includes('bigger text')) {
+                AccessibilityControls.adjustFontSize(10);
+                return;
+            }
+
+            if (command.includes('decrease font') || command.includes('smaller text')) {
+                AccessibilityControls.adjustFontSize(-10);
+                return;
+            }
+
+            // Calculator commands
+            if (command.includes('calculate') || command.includes('compute mortgage')) {
+                MortgageCalculator.calculate();
+                Utils.announceToScreenReader('Mortgage calculation updated');
+                return;
+            }
+
+            if (command.includes('reset') || command.includes('clear all')) {
+                this.resetAllFields();
+                return;
+            }
+
+            // Tab switching
+            if (command.includes('show chart') || command.includes('mortgage over time')) {
+                MortgageCalculator.switchTab('mortgage-over-time');
+                return;
+            }
+
+            if (command.includes('show insights') || command.includes('ai insights')) {
+                MortgageCalculator.switchTab('ai-insights');
+                return;
+            }
+
+            if (command.includes('show schedule') || command.includes('amortization')) {
+                MortgageCalculator.switchTab('amortization');
+                return;
+            }
+
+            // Field-specific commands - delegate to form voice control
+            const fieldCommands = [
+                'home price', 'house price', 'property price',
+                'down payment', 'interest rate', 'loan term',
+                'property tax', 'home insurance', 'extra monthly', 'extra payment'
+            ];
+
+            const matchedField = fieldCommands.find(field => command.includes(field));
+            if (matchedField) {
+                FormVoiceControl.processCommand(command);
+                return;
+            }
+
+            // If no command matched
+            Utils.showToast(`Command "${command}" not recognized. Try "calculate", "dark mode", or field names with values.`, 'info');
+        },
+
+        resetAllFields() {
+            $$('input[type="text"], input[type="number"]').forEach(field => {
+                if (field.id !== 'interest-rate') {
+                    field.value = '';
+                    field.dispatchEvent(new Event('input'));
                 }
-                utils.announceToScreenReader('Global voice recognition started. You can now speak commands like "set home price to 400000" or "calculate mortgage"');
-            };
+            });
+            Utils.announceToScreenReader('All fields cleared');
+            Utils.showToast('All fields cleared', 'success');
+        }
+    };
 
-            STATE.globalVoiceRecognition.onend = () => {
-                console.log('Global voice recognition ended');
-                STATE.isGlobalListening = false;
-                if (elements.voiceIcon) elements.voiceIcon.className = 'fas fa-microphone';
-                if (elements.voiceToggle) elements.voiceToggle.classList.remove('active');
-                if (elements.voiceStatus) elements.voiceStatus.style.display = 'none';
-                utils.announceToScreenReader('Global voice recognition stopped');
-            };
+    // ======= FORM VOICE CONTROL =======
+    const FormVoiceControl = {
+        init() {
+            const localVoiceBtn = $('#voice-control-btn');
+            if (!localVoiceBtn) return;
 
-            STATE.globalVoiceRecognition.onerror = (event) => {
-                console.error('Voice recognition error:', event.error);
-                voiceControl.handleError(event.error);
-            };
+            if (!window.speechRecognitionSupported) {
+                localVoiceBtn.disabled = true;
+                localVoiceBtn.title = 'Voice control not supported in this browser';
+                return;
+            }
 
-            STATE.globalVoiceRecognition.onresult = (event) => {
-                const result = event.results[event.results.length - 1];
-                if (result.isFinal) {
-                    const command = result[0].transcript.toLowerCase().trim();
-                    console.log('Voice command received:', command);
-                    voiceControl.processCommand(command);
-                }
-            };
-
-            // Local voice recognition for single input
+            // Initialize Local Speech Recognition for form fields
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             STATE.localVoiceRecognition = new SpeechRecognition();
             STATE.localVoiceRecognition.continuous = false;
             STATE.localVoiceRecognition.interimResults = false;
             STATE.localVoiceRecognition.lang = 'en-US';
 
-            STATE.localVoiceRecognition.onresult = (event) => {
-                const result = event.results[0][0].transcript;
-                console.log('Local voice input:', result);
-                voiceControl.processInputCommand(result);
-            };
+            // Event listeners
+            STATE.localVoiceRecognition.onstart = () => this.onLocalStart();
+            STATE.localVoiceRecognition.onresult = (event) => this.onLocalResult(event);
+            STATE.localVoiceRecognition.onerror = (event) => this.onLocalError(event);
+            STATE.localVoiceRecognition.onend = () => this.onLocalEnd();
 
-            STATE.localVoiceRecognition.onerror = (event) => {
-                console.error('Local voice recognition error:', event.error);
-                voiceControl.handleError(event.error);
-            };
+            localVoiceBtn.addEventListener('click', () => this.toggleLocal());
         },
 
-        processCommand: (command) => {
-            console.log('Processing voice command:', command);
-            utils.announceToScreenReader(`Processing command: ${command}`);
-
-            // Home price commands
-            if (command.includes('home price') || command.includes('house price')) {
-                const price = voiceControl.extractNumber(command);
-                if (price > 0) {
-                    elements.homePrice.value = utils.formatNumber(price);
-                    utils.announceToScreenReader(`Home price set to ${utils.formatCurrency(price)}`);
-                    calculations.calculate();
-                }
-            }
-            // Down payment commands
-            else if (command.includes('down payment')) {
-                const amount = voiceControl.extractNumber(command);
-                if (amount > 0) {
-                    if (command.includes('percent') || command.includes('%')) {
-                        downPaymentControl.setPercent(amount);
-                        utils.announceToScreenReader(`Down payment set to ${amount} percent`);
-                    } else {
-                        elements.downPayment.value = utils.formatNumber(amount);
-                        downPaymentControl.syncFromAmount();
-                        utils.announceToScreenReader(`Down payment set to ${utils.formatCurrency(amount)}`);
-                    }
-                    calculations.calculate();
-                }
-            }
-            // Interest rate commands
-            else if (command.includes('interest rate') || command.includes('rate')) {
-                const rate = voiceControl.extractNumber(command);
-                if (rate > 0) {
-                    elements.interestRate.value = rate;
-                    utils.announceToScreenReader(`Interest rate set to ${rate} percent`);
-                    calculations.calculate();
-                }
-            }
-            // Calculate command
-            else if (command.includes('calculate') || command.includes('compute')) {
-                calculations.calculate();
-                utils.announceToScreenReader('Calculating mortgage');
-            }
-            // Reset command
-            else if (command.includes('reset') || command.includes('clear')) {
-                formControls.reset();
-                utils.announceToScreenReader('Form reset');
-            }
-            // Navigation commands
-            else if (command.includes('show chart')) {
-                tabControl.showTab('chart');
-            }
-            else if (command.includes('show insights') || command.includes('show ai')) {
-                tabControl.showTab('insights');
-            }
-            else if (command.includes('show schedule') || command.includes('show amortization')) {
-                tabControl.showTab('amortization');
-            }
-            // Chat commands
-            else if (command.includes('open chat') || command.includes('show chat')) {
-                chatControl.openChat();
-            }
-            else if (command.includes('close chat') || command.includes('hide chat')) {
-                chatControl.closeChat();
-            }
-            else {
-                utils.announceToScreenReader('Command not recognized. Try saying "set home price to 400000", "calculate mortgage", or "open chat"');
-                utils.showToast('Command not recognized. Try "set home price to 400000" or "calculate mortgage"', 'info');
-            }
-        },
-
-        processInputCommand: (command) => {
-            const number = voiceControl.extractNumber(command);
-            if (number > 0) {
-                // Logic to determine which input to fill based on context
-                const focusedElement = document.activeElement;
-                if (focusedElement && focusedElement.tagName === 'INPUT') {
-                    focusedElement.value = utils.formatNumber(number);
-                    focusedElement.dispatchEvent(new Event('input'));
-                    utils.announceToScreenReader(`Input set to ${number}`);
-                }
-            }
-        },
-
-        extractNumber: (text) => {
-            // Extract numbers from voice command
-            const matches = text.match(/(\d+(?:,\d{3})*(?:\.\d+)?)/g);
-            if (matches) {
-                return utils.parseNumber(matches[0]);
-            }
-            
-            // Handle written numbers
-            const wordNumbers = {
-                'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
-                'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
-                'twenty': 20, 'thirty': 30, 'forty': 40, 'fifty': 50,
-                'hundred': 100, 'thousand': 1000, 'million': 1000000
-            };
-            
-            for (const [word, num] of Object.entries(wordNumbers)) {
-                if (text.includes(word)) {
-                    return num;
-                }
-            }
-            
-            return 0;
-        },
-
-        handleError: (error) => {
-            let message = 'Voice recognition error';
-            switch (error) {
-                case 'no-speech':
-                    message = 'No speech detected. Please try again.';
-                    break;
-                case 'audio-capture':
-                    message = 'No microphone found. Please check your microphone settings.';
-                    break;
-                case 'not-allowed':
-                    message = 'Microphone permission denied. Please allow microphone access.';
-                    break;
-                case 'network':
-                    message = 'Network error occurred. Please check your connection.';
-                    break;
-            }
-            utils.showToast(message, 'error');
-            utils.announceToScreenReader(message);
-        },
-
-        toggleGlobal: () => {
-            if (!STATE.isVoiceSupported) {
-                utils.showToast('Voice recognition not supported', 'error');
-                return;
-            }
-
-            if (STATE.isGlobalListening) {
-                STATE.globalVoiceRecognition.stop();
+        toggleLocal() {
+            if (STATE.isLocalListening) {
+                this.stopLocal();
             } else {
-                try {
-                    STATE.globalVoiceRecognition.start();
-                    utils.showToast('Say "set home price to 400000" or "calculate mortgage"', 'info');
-                } catch (error) {
-                    console.error('Voice recognition start error:', error);
-                    voiceControl.handleError('not-allowed');
-                }
+                this.startLocal();
             }
         },
 
-        startLocal: () => {
-            if (!STATE.isVoiceSupported) {
-                utils.showToast('Voice recognition not supported', 'error');
-                return;
-            }
+        startLocal() {
+            if (!STATE.localVoiceRecognition || STATE.isLocalListening) return;
 
             try {
                 STATE.localVoiceRecognition.start();
-                utils.showToast('Speak now to input a value', 'info');
+                Utils.announceToScreenReader('Form voice input started. Speak field names with values.');
             } catch (error) {
-                console.error('Local voice recognition error:', error);
-                voiceControl.handleError('not-allowed');
-            }
-        }
-    };
-
-    // ========== CHAT CONTROL ==========
-    const chatControl = {
-        init: () => {
-            if (elements.chatToggle) {
-                elements.chatToggle.addEventListener('click', chatControl.toggleChat);
-            }
-
-            if (elements.chatMinimize) {
-                elements.chatMinimize.addEventListener('click', chatControl.closeChat);
-            }
-
-            if (elements.chatSend) {
-                elements.chatSend.addEventListener('click', chatControl.sendMessage);
-            }
-
-            if (elements.chatInput) {
-                elements.chatInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        chatControl.sendMessage();
-                    }
-                });
+                Utils.showToast('Form voice recognition failed to start', 'error');
             }
         },
 
-        toggleChat: () => {
-            if (STATE.chatOpen) {
-                chatControl.closeChat();
-            } else {
-                chatControl.openChat();
-            }
+        stopLocal() {
+            if (!STATE.localVoiceRecognition || !STATE.isLocalListening) return;
+            STATE.localVoiceRecognition.stop();
         },
 
-        openChat: () => {
-            if (elements.chatWidget) {
-                elements.chatWidget.classList.add('open');
-                STATE.chatOpen = true;
-                if (elements.chatInput) {
-                    elements.chatInput.focus();
-                }
-                utils.announceToScreenReader('Chat opened. You can ask questions about mortgages.');
-            }
+        onLocalStart() {
+            STATE.isLocalListening = true;
+            $('#voice-control-btn .voice-status').textContent = 'Listening';
+            $('#voice-control-btn i').className = 'fas fa-microphone-slash';
+            $('#voice-feedback').style.display = 'flex';
+            $('#voice-text').textContent = 'Form Voice Listening...';
         },
 
-        closeChat: () => {
-            if (elements.chatWidget) {
-                elements.chatWidget.classList.remove('open');
-                STATE.chatOpen = false;
-                utils.announceToScreenReader('Chat closed');
-            }
-        },
+        onLocalResult(event) {
+            const result = event.results[0][0].transcript.toLowerCase().trim();
+            $('#voice-text').textContent = `Heard: "${result}"`;
 
-        sendMessage: () => {
-            const input = elements.chatInput;
-            if (!input || !input.value.trim()) return;
-
-            const message = input.value.trim();
-            chatControl.addMessage(message, 'user');
-            input.value = '';
-
-            // Simulate AI response
             setTimeout(() => {
-                const response = chatControl.generateResponse(message);
-                chatControl.addMessage(response, 'bot');
+                this.processCommand(result);
+                this.stopLocal();
             }, 1000);
         },
 
-        addMessage: (text, sender) => {
-            if (!elements.chatMessages) return;
+        onLocalError(event) {
+            console.error('Local voice recognition error:', event.error);
+            Utils.showToast(`Form voice input error: ${event.error}`, 'error');
+            this.stopLocal();
+        },
 
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${sender}`;
-            
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.innerHTML = sender === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
-            
-            const content = document.createElement('div');
-            content.className = 'message-content';
-            content.innerHTML = `<p>${text}</p>`;
-            
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(content);
-            elements.chatMessages.appendChild(messageDiv);
-            
-            // Scroll to bottom
-            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+        onLocalEnd() {
+            STATE.isLocalListening = false;
+            $('#voice-control-btn .voice-status').textContent = 'Off';
+            $('#voice-control-btn i').className = 'fas fa-microphone';
+            $('#voice-feedback').style.display = 'none';
+        },
+
+        processCommand(command) {
+            const commands = {
+                'home price': this.extractNumber,
+                'house price': this.extractNumber,
+                'property price': this.extractNumber,
+                'down payment': this.extractNumber,
+                'interest rate': this.extractNumber,
+                'loan term': this.extractNumber,
+                'property tax': this.extractNumber,
+                'home insurance': this.extractNumber,
+                'extra monthly': this.extractNumber,
+                'extra payment': this.extractNumber,
+                'extra one time payment': this.extractNumber
+            };
+
+            let processed = false;
+
+            for (const [trigger, handler] of Object.entries(commands)) {
+                if (command.includes(trigger)) {
+                    const value = handler(command);
+                    if (value !== null) {
+                        this.updateField(trigger, value);
+                        processed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!processed) {
+                Utils.showToast('Command not recognized. Try saying field names with values like "home price 500000".', 'info');
+            }
+        },
+
+        extractNumber(command) {
+            // Extract numbers from voice command
+            const patterns = [
+                /\b(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:thousand|k)\b/gi,
+                /\b(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m)\b/gi,
+                /\b(\d+(?:,\d+)*(?:\.\d+)?)\b/g
+            ];
+
+            for (const pattern of patterns) {
+                const matches = command.match(pattern);
+                if (matches) {
+                    let value = parseFloat(matches[0].replace(/[^\d.]/g, ''));
+                    if (command.includes('thousand') || command.includes('k')) {
+                        value *= 1000;
+                    } else if (command.includes('million') || command.includes('m')) {
+                        value *= 1000000;
+                    }
+                    return value;
+                }
+            }
+
+            return null;
+        },
+
+        updateField(fieldName, value) {
+            const fieldMap = {
+                'home price': '#home-price',
+                'house price': '#home-price',
+                'property price': '#home-price',
+                'down payment': '#down-payment',
+                'interest rate': '#interest-rate',
+                'loan term': '#custom-term',
+                'property tax': '#property-tax',
+                'home insurance': '#home-insurance',
+                'extra monthly': '#extra-monthly',
+                'extra payment': '#extra-monthly',
+                'extra one time payment': '#extra-yearly'
+            };
+
+            const fieldSelector = fieldMap[fieldName];
+            const field = $(fieldSelector);
+
+            if (field) {
+                if (fieldName === 'interest rate') {
+                    field.value = value;
+                } else if (fieldName === 'loan term') {
+                    $('#custom-term-group').style.display = 'block';
+                    $$('.term-chip').forEach(chip => chip.classList.remove('active'));
+                    $('[data-years="custom"]')?.classList.add('active');
+                    field.value = value;
+                    $('#loan-term').value = value;
+                } else {
+                    field.value = Utils.formatNumber(value);
+                }
+
+                field.dispatchEvent(new Event('input'));
+                Utils.announceToScreenReader(`${fieldName} set to ${value}`);
+                Utils.showToast(`${fieldName} updated to ${fieldName === 'interest rate' ? value + '%' : Utils.formatCurrency(value)}`, 'success');
+            }
+        }
+    };
+
+    // ======= ACCESSIBILITY CONTROLS =======
+    const AccessibilityControls = {
+        init() {
+            $('#font-smaller')?.addEventListener('click', () => this.adjustFontSize(-10));
+            $('#font-larger')?.addEventListener('click', () => this.adjustFontSize(10));
+            $('#theme-toggle')?.addEventListener('click', () => this.toggleTheme());
+            $('#screen-reader-toggle')?.addEventListener('click', () => this.toggleScreenReader());
+        },
+
+        adjustFontSize(change) {
+            STATE.currentFontSize += change;
+            STATE.currentFontSize = Math.max(80, Math.min(150, STATE.currentFontSize));
+            document.documentElement.style.fontSize = `${STATE.currentFontSize}%`;
+
+            Utils.announceToScreenReader(`Font size ${change > 0 ? 'increased' : 'decreased'} to ${STATE.currentFontSize}%`);
+            Utils.showToast(`Font size ${change > 0 ? 'increased' : 'decreased'} to ${STATE.currentFontSize}%`, 'success');
+        },
+
+        toggleTheme() {
+            STATE.theme = STATE.theme === 'light' ? 'dark' : 'light';
+            this.setTheme(STATE.theme);
+        },
+
+        setTheme(theme) {
+            STATE.theme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            document.body.setAttribute('data-theme', theme);
+
+            const icon = $('#theme-icon');
+            const span = $('#theme-toggle span');
+
+            if (icon && span) {
+                if (theme === 'light') {
+                    icon.className = 'fas fa-moon';
+                    span.textContent = 'Dark Mode';
+                } else {
+                    icon.className = 'fas fa-sun';
+                    span.textContent = 'Light Mode';
+                }
+            }
+
+            Utils.announceToScreenReader(`Switched to ${theme} mode`);
+            Utils.showToast(`Switched to ${theme} mode`, 'success');
+        },
+
+        toggleScreenReader() {
+            STATE.screenReaderActive = !STATE.screenReaderActive;
+            const btn = $('#screen-reader-toggle');
+
+            if (btn) {
+                if (STATE.screenReaderActive) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+
+            const message = STATE.screenReaderActive ? 'Screen reader enhancements enabled' : 'Screen reader enhancements disabled';
+            Utils.announceToScreenReader(message);
+            Utils.showToast(message, 'success');
+        }
+    };
+
+    // ======= MORTGAGE CALCULATOR CORE =======
+    const MortgageCalculator = {
+        init() {
+            this.bindEvents();
+            this.setDefaultInsurance();
+            this.updateDateTime();
+            this.calculate();
+            setInterval(() => this.updateDateTime(), 60000); // Update every minute
+        },
+
+        bindEvents() {
+            const debouncedCalculate = Utils.debounce(() => this.calculate(), CONFIG.debounceDelay);
+
+            // Input field listeners
+            $$('input[type="text"], input[type="number"]').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    if (e.target.type === 'text' && e.target.id !== 'custom-term') {
+                        this.formatNumberInput(e.target);
+                    }
+                    debouncedCalculate();
+                });
+            });
+
+            // Toggle buttons
+            $$('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleToggle(e.target);
+                    debouncedCalculate();
+                });
+            });
+
+            // Term chips
+            $$('.term-chip').forEach(chip => {
+                chip.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleTermSelection(e.target);
+                    debouncedCalculate();
+                });
+            });
+
+            // Tab controls
+            $$('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    this.switchTab(e.target.dataset.tab);
+                });
+            });
+
+            // Enhanced Year range slider
+            $('#year-range')?.addEventListener('input', (e) => {
+                YearSliderManager.updateFromSlider(parseInt(e.target.value));
+            });
+
+            // Action buttons
+            $('#compare-btn')?.addEventListener('click', () => this.showComparison());
+            $('#share-btn')?.addEventListener('click', () => this.showShareOptions());
+            $('#pdf-download-btn')?.addEventListener('click', () => this.downloadPDF());
+            $('#print-btn')?.addEventListener('click', () => this.printResults());
+            $('#view-current-rates')?.addEventListener('click', () => this.showCurrentRates());
+            $('#reset-form')?.addEventListener('click', () => this.resetForm());
+
+            // Modal close buttons
+            $$('.modal-close').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.closest('.modal').style.display = 'none';
+                });
+            });
+        },
+
+        setDefaultInsurance() {
+            const homePriceInput = $('#home-price');
+            const insuranceInput = $('#home-insurance');
+
+            if (homePriceInput && insuranceInput) {
+                const updateInsurance = () => {
+                    const homePrice = Utils.parseNumber(homePriceInput.value);
+                    if (homePrice > 0 && (!insuranceInput.value.trim() || Utils.parseNumber(insuranceInput.value) === 0)) {
+                        const defaultInsurance = homePrice * CONFIG.defaultInsuranceRate;
+                        insuranceInput.value = Utils.formatNumber(Math.round(defaultInsurance));
+                    }
+                };
+
+                homePriceInput.addEventListener('input', Utils.debounce(updateInsurance, 500));
+                updateInsurance(); // Set initial value
+            }
+        },
+
+        updateDateTime() {
+            const now = new Date();
+            const dateTimeString = now.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+
+            const dateTimeElement = $('#current-date-time');
+            if (dateTimeElement) {
+                dateTimeElement.textContent = `• Updated ${dateTimeString}`;
+            }
+        },
+
+        formatNumberInput(input) {
+            const value = Utils.parseNumber(input.value);
+            if (value > 0) {
+                input.value = Utils.formatNumber(value);
+            }
+        },
+
+        handleToggle(button) {
+            const group = button.parentElement;
+            group.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        },
+
+        handleTermSelection(chip) {
+            $$('.term-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            const years = chip.dataset.years;
+            const customGroup = $('#custom-term-group');
+
+            if (years === 'custom') {
+                customGroup.style.display = 'block';
+                $('#custom-term').focus();
+            } else {
+                customGroup.style.display = 'none';
+                $('#loan-term').value = years;
+                $('#custom-term').value = '';
+            }
+        },
+
+        switchTab(tabName) {
+            // Update tab buttons
+            $$('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            $(`[data-tab="${tabName}"]`)?.classList.add('active');
+
+            // Update tab content
+            $$('.tab-content').forEach(content => content.classList.remove('active'));
+            $(`#${tabName}`)?.classList.add('active');
 
             // Announce to screen reader
-            utils.announceToScreenReader(`${sender === 'bot' ? 'AI Assistant' : 'You'}: ${text}`);
+            const tabNames = {
+                'mortgage-over-time': 'Mortgage Over Time',
+                'ai-insights': 'AI Powered Insights',
+                'amortization': 'Amortization Schedule'
+            };
+
+            Utils.announceToScreenReader(`Switched to ${tabNames[tabName]} tab`);
         },
 
-        generateResponse: (message) => {
-            const lowerMessage = message.toLowerCase();
-            
-            if (lowerMessage.includes('monthly payment') || lowerMessage.includes('payment')) {
-                const payment = elements.totalPayment?.textContent || '$2,467';
-                return `Based on your current inputs, your monthly payment would be ${payment}. This includes principal, interest, taxes, and insurance. Would you like me to explain how this is calculated?`;
-            }
-            
-            if (lowerMessage.includes('interest rate') || lowerMessage.includes('rate')) {
-                return `Current mortgage rates are around 6.2% - 7.3%. Your rate depends on your credit score, down payment, and loan term. A lower rate can significantly reduce your monthly payment and total interest paid.`;
-            }
-            
-            if (lowerMessage.includes('down payment')) {
-                return `A larger down payment reduces your loan amount and may eliminate PMI (Private Mortgage Insurance). If you put down less than 20%, you'll typically need to pay PMI, which adds to your monthly cost.`;
-            }
-            
-            if (lowerMessage.includes('pmi')) {
-                return `PMI (Private Mortgage Insurance) is required when your down payment is less than 20%. It typically costs 0.2% to 2% of your loan amount annually. You can remove PMI once you have 20% equity in your home.`;
-            }
-            
-            if (lowerMessage.includes('refinance') || lowerMessage.includes('refi')) {
-                return `Refinancing can lower your monthly payment if rates have dropped or your credit has improved. Consider refinancing if you can get a rate that's at least 0.5% lower than your current rate.`;
-            }
-            
-            if (lowerMessage.includes('afford') || lowerMessage.includes('budget')) {
-                return `A good rule of thumb is that your monthly housing payment shouldn't exceed 28% of your gross monthly income. This includes principal, interest, taxes, and insurance (PITI).`;
-            }
-            
-            if (lowerMessage.includes('help') || lowerMessage.includes('how')) {
-                return `I can help you understand mortgage calculations, rates, down payments, PMI, and home affordability. Just ask me specific questions like "How does PMI work?" or "What affects my interest rate?"`;
-            }
-            
-            return `That's a great question! While I can provide general mortgage guidance, I recommend speaking with a qualified mortgage professional for personalized advice. Is there anything specific about mortgage calculations I can help explain?`;
-        }
-    };
+        calculate() {
+            try {
+                const params = this.getCalculationParams();
+                if (!this.validateParams(params)) return;
 
-    // ========== DOWN PAYMENT CONTROL ==========
-    const downPaymentControl = {
-        init: () => {
-            if (elements.amountToggle) {
-                elements.amountToggle.addEventListener('click', () => {
-                    downPaymentControl.showAmount();
-                });
-            }
+                const result = this.performCalculation(params);
+                if (!result) return;
 
-            if (elements.percentToggle) {
-                elements.percentToggle.addEventListener('click', () => {
-                    downPaymentControl.showPercent();
-                });
-            }
+                STATE.currentCalculation = result;
 
-            if (elements.downPayment) {
-                elements.downPayment.addEventListener('input', utils.debounce(() => {
-                    downPaymentControl.syncFromAmount();
-                    calculations.calculate();
-                }, CONFIG.debounceDelay));
+                this.updateResults(result);
+                this.updateSavingsPreview(result);
+                ChartManager.render(result);
+                YearSliderManager.init(result);
+                AIInsights.render(result);
+                AmortizationTable.render(result);
 
-                elements.downPayment.addEventListener('blur', () => {
-                    utils.formatNumberInput(elements.downPayment);
-                });
-            }
-
-            if (elements.downPaymentPercent) {
-                elements.downPaymentPercent.addEventListener('input', utils.debounce(() => {
-                    downPaymentControl.syncFromPercent();
-                    calculations.calculate();
-                }, CONFIG.debounceDelay));
+                Utils.announceToScreenReader('Mortgage calculation updated with new results');
+            } catch (error) {
+                console.error('Calculation error:', error);
+                Utils.showToast('Error in calculation. Please check your inputs.', 'error');
             }
         },
 
-        showAmount: () => {
-            if (elements.amountToggle) {
-                elements.amountToggle.classList.add('active');
-                elements.amountToggle.setAttribute('aria-selected', 'true');
-            }
-            if (elements.percentToggle) {
-                elements.percentToggle.classList.remove('active');
-                elements.percentToggle.setAttribute('aria-selected', 'false');
-            }
-            if (elements.amountInput) elements.amountInput.style.display = 'block';
-            if (elements.percentInput) elements.percentInput.style.display = 'none';
-            utils.announceToScreenReader('Switched to dollar amount input for down payment');
-        },
+        getCalculationParams() {
+            const homePrice = Utils.parseNumber($('#home-price').value);
+            const downPayment = Utils.parseNumber($('#down-payment').value);
+            const rate = parseFloat($('#interest-rate').value) || 0;
 
-        showPercent: () => {
-            if (elements.percentToggle) {
-                elements.percentToggle.classList.add('active');
-                elements.percentToggle.setAttribute('aria-selected', 'true');
-            }
-            if (elements.amountToggle) {
-                elements.amountToggle.classList.remove('active');
-                elements.amountToggle.setAttribute('aria-selected', 'false');
-            }
-            if (elements.percentInput) elements.percentInput.style.display = 'block';
-            if (elements.amountInput) elements.amountInput.style.display = 'none';
-            utils.announceToScreenReader('Switched to percentage input for down payment');
-        },
-
-        syncFromAmount: () => {
-            const homePrice = utils.parseNumber(elements.homePrice.value);
-            const downPayment = utils.parseNumber(elements.downPayment.value);
-            
-            if (homePrice > 0 && downPayment >= 0) {
-                const percentage = (downPayment / homePrice) * 100;
-                if (elements.downPaymentPercent) {
-                    elements.downPaymentPercent.value = Math.min(percentage, 100).toFixed(1);
-                }
-            }
-        },
-
-        syncFromPercent: () => {
-            const homePrice = utils.parseNumber(elements.homePrice.value);
-            const percentage = utils.parseNumber(elements.downPaymentPercent.value);
-            
-            if (homePrice > 0 && percentage >= 0) {
-                const amount = (homePrice * percentage) / 100;
-                if (elements.downPayment) {
-                    elements.downPayment.value = utils.formatNumber(amount);
-                }
-            }
-        },
-
-        setPercent: (percent) => {
-            if (elements.downPaymentPercent) {
-                elements.downPaymentPercent.value = percent;
-                downPaymentControl.syncFromPercent();
-            }
-        }
-    };
-
-    // ========== SUGGESTION CHIPS - FIXED ==========
-    const suggestionChips = {
-        init: () => {
-            console.log('Initializing suggestion chips...');
-            elements.suggestionChips.forEach(chip => {
-                chip.addEventListener('click', () => {
-                    const value = chip.getAttribute('data-value');
-                    const inputId = chip.getAttribute('data-input');
-                    const input = document.getElementById(inputId);
-                    
-                    console.log('Chip clicked:', { value, inputId, input });
-                    
-                    if (input && value) {
-                        const numericValue = parseInt(value);
-                        input.value = utils.formatNumber(numericValue);
-                        input.dispatchEvent(new Event('input', { bubbles: true }));
-                        chip.focus(); // Maintain focus for accessibility
-                        utils.announceToScreenReader(`Set ${inputId.replace('-', ' ')} to ${utils.formatCurrency(numericValue)}`);
-                        utils.showToast(`${inputId.replace('-', ' ')} set to ${utils.formatCurrency(numericValue)}`, 'success');
-                        
-                        // Trigger calculation after a brief delay
-                        setTimeout(() => {
-                            calculations.calculate();
-                        }, 100);
-                    }
-                });
-            });
-        }
-    };
-
-    // ========== TERM CHIPS ==========
-    const termChips = {
-        init: () => {
-            elements.termChips.forEach(chip => {
-                chip.addEventListener('click', () => {
-                    const years = chip.getAttribute('data-years');
-                    
-                    // Remove active class from all chips
-                    elements.termChips.forEach(c => c.classList.remove('active'));
-                    chip.classList.add('active');
-                    
-                    if (years === 'custom') {
-                        const customGroup = document.getElementById('custom-term-group');
-                        if (customGroup) {
-                            customGroup.style.display = 'block';
-                            elements.customTerm.focus();
-                        }
-                        utils.announceToScreenReader('Custom term input activated. Please enter loan term in years.');
-                    } else {
-                        const customGroup = document.getElementById('custom-term-group');
-                        if (customGroup) customGroup.style.display = 'none';
-                        
-                        if (elements.loanTerm) {
-                            elements.loanTerm.value = years;
-                        }
-                        utils.announceToScreenReader(`Loan term set to ${years} years`);
-                        calculations.calculate();
-                    }
-                });
-            });
-
-            if (elements.customTerm) {
-                elements.customTerm.addEventListener('input', () => {
-                    const years = parseInt(elements.customTerm.value);
-                    if (years > 0 && years <= 40) {
-                        elements.loanTerm.value = years;
-                        calculations.calculate();
-                    }
-                });
-            }
-        }
-    };
-
-    // ========== TAB CONTROL ==========
-    const tabControl = {
-        init: () => {
-            elements.tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tabId = btn.getAttribute('data-tab');
-                    tabControl.showTab(tabId);
-                });
-            });
-        },
-
-        showTab: (tabId) => {
-            // Update buttons
-            elements.tabBtns.forEach(btn => {
-                btn.classList.remove('active');
-                btn.setAttribute('aria-selected', 'false');
-                if (btn.getAttribute('data-tab') === tabId) {
-                    btn.classList.add('active');
-                    btn.setAttribute('aria-selected', 'true');
-                }
-            });
-
-            // Update content
-            elements.tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabId) {
-                    content.classList.add('active');
-                }
-            });
-
-            utils.announceToScreenReader(`Switched to ${tabId} tab`);
-        }
-    };
-
-    // ========== CALCULATIONS ==========
-    const calculations = {
-        calculate: () => {
-            console.log('Calculating mortgage...');
-            const inputs = calculations.getInputs();
-            
-            if (!calculations.validateInputs(inputs)) {
-                return;
-            }
-
-            const results = calculations.computeMortgage(inputs);
-            calculations.displayResults(results);
-            calculations.updateCharts(results);
-            calculations.generateAmortizationTable(results);
-            
-            STATE.currentCalculation = results;
-            
-            if (STATE.screenReaderEnhanced) {
-                const payment = utils.formatCurrency(results.totalMonthlyPayment);
-                utils.announceToScreenReader(`Mortgage calculation completed. Your monthly payment is ${payment}. This includes principal and interest of ${utils.formatCurrency(results.monthlyPI)}, property tax of ${utils.formatCurrency(results.monthlyTax)}, and home insurance of ${utils.formatCurrency(results.monthlyInsurance)}.`);
+            // Get loan term
+            let term;
+            const activeTermChip = $('.term-chip.active');
+            if (activeTermChip && activeTermChip.dataset.years === 'custom') {
+                term = parseInt($('#custom-term').value) || 30;
+            } else if (activeTermChip) {
+                term = parseInt(activeTermChip.dataset.years) || 30;
             } else {
-                utils.announceToScreenReader('Mortgage calculation completed');
+                term = 30;
             }
-        },
 
-        getInputs: () => {
+            const propertyTax = Utils.parseNumber($('#property-tax').value);
+            const homeInsurance = Utils.parseNumber($('#home-insurance').value);
+            const extraMonthly = Utils.parseNumber($('#extra-monthly').value);
+            const extraYearly = Utils.parseNumber($('#extra-yearly').value);
+
             return {
-                homePrice: utils.parseNumber(elements.homePrice?.value || 0),
-                downPayment: utils.parseNumber(elements.downPayment?.value || 0),
-                interestRate: utils.parseNumber(elements.interestRate?.value || 0),
-                loanTerm: parseInt(elements.loanTerm?.value || 30),
-                propertyTax: utils.parseNumber(elements.propertyTax?.value || 0),
-                homeInsurance: utils.parseNumber(elements.homeInsurance?.value || 0),
-                pmi: utils.parseNumber(elements.pmi?.value || 0),
-                extraMonthly: utils.parseNumber(elements.extraMonthly?.value || 0),
-                extraYearly: utils.parseNumber(elements.extraOnetime?.value || 0)
+                homePrice,
+                downPayment,
+                rate,
+                term,
+                propertyTax,
+                homeInsurance,
+                extraMonthly,
+                extraYearly
             };
         },
 
-        validateInputs: (inputs) => {
-            if (inputs.homePrice <= 0) {
-                utils.showToast('Please enter a valid home price', 'error');
-                elements.homePrice?.focus();
+        validateParams(params) {
+            if (params.homePrice <= 0) {
+                Utils.showToast('Please enter a valid home price', 'error');
                 return false;
             }
 
-            if (inputs.downPayment >= inputs.homePrice) {
-                utils.showToast('Down payment cannot exceed home price', 'error');
-                elements.downPayment?.focus();
+            if (params.rate <= 0) {
+                Utils.showToast('Please enter a valid interest rate', 'error');
                 return false;
             }
 
-            if (inputs.interestRate <= 0 || inputs.interestRate > 30) {
-                utils.showToast('Please enter a valid interest rate (0.01% - 30%)', 'error');
-                elements.interestRate?.focus();
+            if (params.downPayment >= params.homePrice) {
+                Utils.showToast('Down payment cannot be greater than home price', 'error');
                 return false;
             }
 
             return true;
         },
 
-        computeMortgage: (inputs) => {
-            const loanAmount = inputs.homePrice - inputs.downPayment;
-            const monthlyRate = inputs.interestRate / 100 / 12;
-            const totalPayments = inputs.loanTerm * 12;
+        performCalculation(params) {
+            const loanAmount = params.homePrice - params.downPayment;
+            const monthlyRate = params.rate / 100 / 12;
+            const numPayments = params.term * 12;
 
-            // Monthly principal and interest
-            const monthlyPI = loanAmount === 0 ? 0 : 
-                (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / 
-                (Math.pow(1 + monthlyRate, totalPayments) - 1);
+            if (monthlyRate <= 0 || numPayments <= 0) return null;
 
-            // Other monthly costs
-            const monthlyTax = inputs.propertyTax / 12;
-            const monthlyInsurance = inputs.homeInsurance / 12;
-            const monthlyPmi = inputs.downPayment < inputs.homePrice * 0.20 ? 
-                              (loanAmount * CONFIG.pmiRate / 12) : 0;
+            // Calculate base monthly payment (P&I)
+            const monthlyPI = (loanAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numPayments));
 
-            const totalMonthlyPayment = monthlyPI + monthlyTax + monthlyInsurance + monthlyPmi;
-            const totalInterest = (monthlyPI * totalPayments) - loanAmount;
-            const totalCost = inputs.homePrice + totalInterest;
+            // PMI calculation (if down payment < 20%)
+            const downPaymentPercent = (params.downPayment / params.homePrice) * 100;
+            const pmi = downPaymentPercent < 20 ? (loanAmount * 0.005) / 12 : 0;
 
-            const payoffDate = new Date();
-            payoffDate.setFullYear(payoffDate.getFullYear() + inputs.loanTerm);
+            // Monthly costs
+            const monthlyTax = params.propertyTax / 12;
+            const monthlyInsurance = params.homeInsurance / 12;
+            const totalMonthlyPayment = monthlyPI + monthlyTax + monthlyInsurance + pmi;
+
+            // Generate amortization schedule
+            const schedule = this.generateAmortizationSchedule(
+                loanAmount,
+                monthlyRate,
+                numPayments,
+                params.extraMonthly,
+                params.extraYearly
+            );
+
+            const totalInterest = schedule.reduce((sum, payment) => sum + payment.interest, 0);
+            const totalCost = loanAmount + totalInterest;
+
+            // Calculate savings from extra payments
+            const baseSchedule = this.generateAmortizationSchedule(loanAmount, monthlyRate, numPayments, 0, 0);
+            const baseInterest = baseSchedule.reduce((sum, payment) => sum + payment.interest, 0);
+            const interestSavings = baseInterest - totalInterest;
+            const timeSavingsMonths = baseSchedule.length - schedule.length;
+
+            const payoffDate = schedule.length > 0 ? schedule[schedule.length - 1].date : new Date();
 
             return {
-                inputs,
+                params,
                 loanAmount,
-                monthlyPI: monthlyPI,
+                monthlyPI,
                 monthlyTax,
                 monthlyInsurance,
-                monthlyPmi,
+                pmi,
                 totalMonthlyPayment,
                 totalInterest,
                 totalCost,
                 payoffDate,
-                totalPayments,
-                monthlyRate
+                schedule,
+                interestSavings,
+                timeSavingsMonths,
+                downPaymentPercent
             };
         },
 
-        displayResults: (results) => {
-            if (elements.totalPayment) {
-                elements.totalPayment.textContent = utils.formatCurrency(results.totalMonthlyPayment);
-            }
-            if (elements.principalInterest) {
-                elements.principalInterest.textContent = utils.formatCurrency(results.monthlyPI);
-            }
-            if (elements.monthlyTax) {
-                elements.monthlyTax.textContent = utils.formatCurrency(results.monthlyTax);
-            }
-            if (elements.monthlyInsurance) {
-                elements.monthlyInsurance.textContent = utils.formatCurrency(results.monthlyInsurance);
-            }
-            if (elements.monthlyPmi) {
-                elements.monthlyPmi.textContent = utils.formatCurrency(results.monthlyPmi);
-            }
-            if (elements.displayLoanAmount) {
-                elements.displayLoanAmount.textContent = utils.formatCurrency(results.loanAmount);
-            }
-            if (elements.displayTotalInterest) {
-                elements.displayTotalInterest.textContent = utils.formatCurrency(results.totalInterest);
-            }
-            if (elements.displayTotalCost) {
-                elements.displayTotalCost.textContent = utils.formatCurrency(results.totalCost);
-            }
-            if (elements.displayPayoffDate) {
-                elements.displayPayoffDate.textContent = results.payoffDate.toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    year: 'numeric' 
+        generateAmortizationSchedule(principal, monthlyRate, numPayments, extraMonthly = 0, extraYearly = 0) {
+            const schedule = [];
+            let remainingBalance = principal;
+            const basePayment = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numPayments));
+            const startDate = new Date();
+
+            for (let paymentNum = 1; paymentNum <= numPayments && remainingBalance > 0.01; paymentNum++) {
+                const interestPayment = remainingBalance * monthlyRate;
+
+                // Apply extra yearly payment in January (payment 1, 13, 25, etc.)
+                const isYearlyPayment = extraYearly > 0 && ((paymentNum - 1) % 12 === 0);
+                const extraThisMonth = extraMonthly + (isYearlyPayment ? extraYearly : 0);
+
+                let principalPayment = basePayment - interestPayment + extraThisMonth;
+
+                // Don't overpay
+                if (principalPayment > remainingBalance) {
+                    principalPayment = remainingBalance;
+                }
+
+                remainingBalance -= principalPayment;
+
+                const paymentDate = new Date(startDate);
+                paymentDate.setMonth(paymentDate.getMonth() + paymentNum - 1);
+
+                schedule.push({
+                    paymentNumber: paymentNum,
+                    date: paymentDate,
+                    payment: basePayment + extraThisMonth,
+                    principal: principalPayment,
+                    interest: interestPayment,
+                    balance: Math.max(0, remainingBalance)
                 });
+
+                if (remainingBalance <= 0.01) break;
             }
 
-            // Update PMI status
-            calculations.updatePmiStatus(results);
+            return schedule;
         },
 
-        updatePmiStatus: (results) => {
-            const pmiStatus = document.getElementById('pmi-status');
-            const pmiWarning = document.getElementById('pmi-warning');
-            
-            if (results.monthlyPmi > 0) {
-                if (pmiStatus) pmiStatus.textContent = `PMI: ${utils.formatCurrency(results.monthlyPmi)}/month (can be removed at 20% equity)`;
-                if (pmiWarning) pmiWarning.style.display = 'block';
+        updateResults(calc) {
+            $('#total-monthly-payment').textContent = Utils.formatCurrency(calc.totalMonthlyPayment);
+            $('#principal-interest').textContent = Utils.formatCurrency(calc.monthlyPI);
+            $('#monthly-tax').textContent = Utils.formatCurrency(calc.monthlyTax);
+            $('#monthly-insurance').textContent = Utils.formatCurrency(calc.monthlyInsurance);
+            $('#monthly-pmi').textContent = Utils.formatCurrency(calc.pmi);
+
+            $('#loan-amount').textContent = Utils.formatCurrency(calc.loanAmount);
+            $('#total-interest').textContent = Utils.formatCurrency(calc.totalInterest);
+            $('#total-cost').textContent = Utils.formatCurrency(calc.totalCost);
+            $('#payoff-date').textContent = calc.payoffDate.toLocaleDateString('en-US', {
+                month: 'short',
+                year: 'numeric'
+            });
+
+            // Update chart loan amount
+            $('#chart-loan-amount').textContent = `Based on a ${Utils.formatCurrency(calc.params.homePrice)} mortgage`;
+        },
+
+        updateSavingsPreview(calc) {
+            const preview = $('#savings-preview');
+            if (preview && calc.interestSavings > 0) {
+                const years = Math.floor(calc.timeSavingsMonths / 12);
+                const months = calc.timeSavingsMonths % 12;
+
+                let timeText = '';
+                if (years > 0) timeText += `${years} year${years > 1 ? 's' : ''}`;
+                if (months > 0) {
+                    if (timeText) timeText += ' ';
+                    timeText += `${months} month${months > 1 ? 's' : ''}`;
+                }
+
+                preview.innerHTML = `Potential savings:
+                <strong>${Utils.formatCurrency(calc.interestSavings)}</strong> in interest, pay off <strong>${timeText}</strong> sooner`;
+                preview.style.color = 'var(--color-green-500)';
             } else {
-                if (pmiStatus) pmiStatus.textContent = 'No PMI required (20%+ down payment)';
-                if (pmiWarning) pmiWarning.style.display = 'none';
+                preview.textContent = 'Potential savings: $0';
+                preview.style.color = '';
             }
         },
 
-        updateCharts: (results) => {
-            if (!elements.mortgageChart) return;
+        resetForm() {
+            // Reset form fields to defaults
+            $('#home-price').value = '400,000';
+            $('#down-payment').value = '80,000';
+            $('#interest-rate').value = '6.5';
+            $('#property-tax').value = '3,000';
+            $('#home-insurance').value = '1,700';
+            $('#extra-monthly').value = '';
+            $('#extra-yearly').value = '';
 
-            const ctx = elements.mortgageChart.getContext('2d');
-            
+            // Reset term to 30 years
+            $$('.term-chip').forEach(c => c.classList.remove('active'));
+            $('[data-years="30"]')?.classList.add('active');
+            $('#custom-term-group').style.display = 'none';
+            $('#loan-term').value = '30';
+
+            this.calculate();
+            Utils.showToast('Form reset to default values', 'success');
+            Utils.announceToScreenReader('Form reset to default values');
+        },
+
+        showComparison() {
+            const modal = $('#comparison-modal');
+            if (modal) {
+                modal.style.display = 'block';
+                Utils.announceToScreenReader('Comparison modal opened');
+            }
+        },
+
+        showShareOptions() {
+            const modal = $('#share-modal');
+            if (modal) {
+                modal.style.display = 'block';
+                Utils.announceToScreenReader('Share options opened');
+            }
+        },
+
+        async downloadPDF() {
+            try {
+                Utils.showToast('Generating PDF...', 'info');
+                Utils.announceToScreenReader('Generating PDF report');
+
+                // Basic PDF generation - would need full jsPDF implementation
+                if (window.jspdf) {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF();
+                    pdf.text('Mortgage Calculation Results', 20, 20);
+                    // Add more content here
+                    pdf.save('mortgage-calculation.pdf');
+                    Utils.showToast('PDF downloaded successfully!', 'success');
+                } else {
+                    Utils.showToast('PDF library not loaded', 'error');
+                }
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                Utils.showToast('Failed to generate PDF', 'error');
+            }
+        },
+
+        printResults() {
+            window.print();
+            Utils.announceToScreenReader('Print dialog opened');
+        },
+
+        showCurrentRates() {
+            const panel = $('#current-rates');
+            if (panel) {
+                const isVisible = panel.style.display === 'block';
+                panel.style.display = isVisible ? 'none' : 'block';
+                Utils.announceToScreenReader(isVisible ? 'Current rates hidden' : 'Current rates displayed');
+            }
+        }
+    };
+
+    // ======= ENHANCED YEAR SLIDER MANAGER =======
+    const YearSliderManager = {
+        init(calculation) {
+            if (!calculation || !calculation.schedule) return;
+
+            this.calculation = calculation;
+            this.generateYearlyData();
+            this.setupSlider();
+            this.updateFromSlider(Math.min(28, this.yearlyData.length)); // Default to year 28 or max available
+        },
+
+        generateYearlyData() {
+            const schedule = this.calculation.schedule;
+            this.yearlyData = [];
+
+            let totalPrincipal = 0;
+            let totalInterest = 0;
+            const loanAmount = this.calculation.loanAmount;
+
+            for (let year = 1; year <= this.calculation.params.term; year++) {
+                const endOfYearIndex = Math.min(year * 12 - 1, schedule.length - 1);
+
+                if (endOfYearIndex >= 0 && schedule[endOfYearIndex]) {
+                    const payment = schedule[endOfYearIndex];
+
+                    // Calculate totals for this year
+                    const yearPayments = schedule.slice((year - 1) * 12, year * 12);
+                    const yearPrincipal = yearPayments.reduce((sum, p) => sum + p.principal, 0);
+                    const yearInterest = yearPayments.reduce((sum, p) => sum + p.interest, 0);
+
+                    totalPrincipal += yearPrincipal;
+                    totalInterest += yearInterest;
+
+                    this.yearlyData.push({
+                        year,
+                        balance: payment.balance,
+                        totalPrincipal,
+                        totalInterest,
+                        yearPrincipal,
+                        yearInterest,
+                        monthlyPayment: this.calculation.totalMonthlyPayment,
+                        percentPaid: ((loanAmount - payment.balance) / loanAmount) * 100
+                    });
+
+                    // Stop if loan is paid off
+                    if (payment.balance <= 0) break;
+                }
+            }
+        },
+
+        setupSlider() {
+            const slider = $('#year-range');
+            const maxYearLabel = $('#max-year-label');
+
+            if (slider && this.yearlyData.length > 0) {
+                slider.min = '1';
+                slider.max = this.yearlyData.length.toString();
+                slider.value = Math.min(28, this.yearlyData.length).toString();
+
+                if (maxYearLabel) {
+                    maxYearLabel.textContent = this.yearlyData.length;
+                }
+            }
+        },
+
+        updateFromSlider(year) {
+            if (!this.yearlyData || year < 1 || year > this.yearlyData.length) return;
+
+            const data = this.yearlyData[year - 1];
+            if (!data) return;
+
+            // Update year indicator
+            $('#year-label').textContent = `Year ${year}`;
+
+            // Update legend values
+            $('#remaining-balance-display').textContent = Utils.formatCurrency(data.balance);
+            $('#principal-paid-display').textContent = Utils.formatCurrency(data.totalPrincipal);
+            $('#interest-paid-display').textContent = Utils.formatCurrency(data.totalInterest);
+
+            // Update detailed year analysis
+            $('#year-monthly-payment').textContent = Utils.formatCurrency(data.monthlyPayment);
+            $('#year-end-balance').textContent = Utils.formatCurrency(data.balance);
+            $('#year-principal-paid').textContent = Utils.formatCurrency(data.yearPrincipal);
+            $('#year-interest-paid').textContent = Utils.formatCurrency(data.yearInterest);
+
+            // Update chart if it exists
+            if (STATE.chart) {
+                ChartManager.updateHighlight(year);
+            }
+        }
+    };
+
+    // ======= CHART MANAGER =======
+    const ChartManager = {
+        render(calculation) {
+            const ctx = document.getElementById('mortgage-chart');
+            if (!ctx) return;
+
+            // Destroy existing chart
             if (STATE.chart) {
                 STATE.chart.destroy();
             }
 
-            // Generate yearly data for chart
-            const yearlyData = [];
-            let balance = results.loanAmount;
-            
-            for (let year = 1; year <= results.inputs.loanTerm; year++) {
-                let yearlyPrincipal = 0;
-                let yearlyInterest = 0;
-                
-                for (let month = 1; month <= 12; month++) {
-                    if (balance <= 0) break;
-                    
-                    const interestPayment = balance * results.monthlyRate;
-                    const principalPayment = results.monthlyPI - interestPayment;
-                    
-                    yearlyPrincipal += principalPayment;
-                    yearlyInterest += interestPayment;
-                    balance -= principalPayment;
-                    
-                    if (balance < 0) balance = 0;
-                }
-                
-                yearlyData.push({
-                    year,
-                    principal: yearlyPrincipal,
-                    interest: yearlyInterest,
-                    balance
-                });
-            }
+            const yearlyData = YearSliderManager.yearlyData || [];
+            if (yearlyData.length === 0) return;
 
-            STATE.yearlyData = yearlyData;
+            const years = yearlyData.map(d => d.year);
+            const balanceData = yearlyData.map(d => d.balance);
+            const principalData = yearlyData.map(d => d.totalPrincipal);
+            const interestData = yearlyData.map(d => d.totalInterest);
 
             STATE.chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: yearlyData.map(d => `Year ${d.year}`),
+                    labels: years,
                     datasets: [{
                         label: 'Remaining Balance',
-                        data: yearlyData.map(d => d.balance),
-                        borderColor: '#0d9488',
-                        backgroundColor: 'rgba(13, 148, 136, 0.1)',
-                        fill: true,
+                        data: balanceData,
+                        borderColor: 'var(--chart-balance)',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4
+                    }, {
+                        label: 'Principal Paid',
+                        data: principalData,
+                        borderColor: 'var(--chart-principal)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4
+                    }, {
+                        label: 'Interest Paid',
+                        data: interestData,
+                        borderColor: 'var(--chart-interest)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: false,
                         tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
                     plugins: {
-                        title: {
-                            display: true,
-                            text: 'Loan Balance Over Time'
-                        },
                         legend: {
-                            display: false
+                            display: false // We have custom legend
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'var(--color-primary)',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            callbacks: {
+                                title: (items) => `Year ${items[0].label}`,
+                                label: (item) => {
+                                    const value = Utils.formatCurrency(item.raw);
+                                    return `${item.dataset.label}: ${value}`;
+                                }
+                            }
                         }
                     },
                     scales: {
-                        y: {
-                            beginAtZero: true,
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Year',
+                                color: 'var(--text-secondary)'
+                            },
                             ticks: {
+                                color: 'var(--text-secondary)'
+                            },
+                            grid: {
+                                color: 'var(--chart-grid)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amount ($)',
+                                color: 'var(--text-secondary)'
+                            },
+                            ticks: {
+                                color: 'var(--text-secondary)',
                                 callback: function(value) {
-                                    return utils.formatCurrency(value);
+                                    return Utils.formatCurrency(value, 0);
                                 }
+                            },
+                            grid: {
+                                color: 'var(--chart-grid)'
                             }
                         }
                     }
@@ -1182,296 +1201,254 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         },
 
-        generateAmortizationTable: (results) => {
-            const tbody = document.getElementById('amortization-body');
-            if (!tbody) return;
+        updateHighlight(year) {
+            if (!STATE.chart) return;
 
-            STATE.amortizationData = [];
-            let balance = results.loanAmount;
-            const startDate = new Date();
+            // This would add visual highlighting for the selected year
+            // Implementation depends on specific Chart.js version and features
+        }
+    };
 
-            for (let payment = 1; payment <= results.totalPayments; payment++) {
-                if (balance <= 0) break;
+    // ======= AI INSIGHTS =======
+    const AIInsights = {
+        render(calculation) {
+            const container = $('#ai-recommendations');
+            if (!container) return;
 
-                const interestPayment = balance * results.monthlyRate;
-                const principalPayment = Math.min(results.monthlyPI - interestPayment, balance);
-                balance -= principalPayment;
+            // Show loading initially
+            this.showLoading(container);
 
-                if (balance < 0) balance = 0;
+            // Generate insights after a delay to simulate AI processing
+            setTimeout(() => {
+                this.generateInsights(container, calculation);
+            }, 2000);
+        },
 
-                const paymentDate = new Date(startDate);
-                paymentDate.setMonth(paymentDate.getMonth() + payment - 1);
+        showLoading(container) {
+            container.innerHTML = `
+                <div class="ai-loading">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing your loan...</p>
+                    <p class="loading-detail">AI is calculating personalized recommendations based on your loan details.</p>
+                </div>
+            `;
+        },
 
-                STATE.amortizationData.push({
-                    payment,
-                    date: paymentDate,
-                    totalPayment: results.monthlyPI,
-                    principal: principalPayment,
-                    interest: interestPayment,
-                    balance
+        generateInsights(container, calc) {
+            const insights = this.calculateInsights(calc);
+
+            container.innerHTML = insights.map(insight => `
+                <div class="recommendation-card">
+                    <h4>
+                        <i class="${insight.icon}"></i>
+                        ${insight.title}
+                    </h4>
+                    <p>${insight.description}</p>
+                    <div class="recommendation-actions">
+                        <button class="recommendation-btn" onclick="AIInsights.applyRecommendation('${insight.action}')">
+                            <i class="fas fa-magic"></i>
+                            ${insight.actionText}
+                        </button>
+                        <a href="#" class="recommendation-btn secondary">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        },
+
+        calculateInsights(calc) {
+            const insights = [];
+
+            // PMI Insight
+            if (calc.downPaymentPercent < 20) {
+                insights.push({
+                    icon: 'fas fa-shield-alt',
+                    title: 'Eliminate PMI',
+                    description: `You're paying $${Utils.formatCurrency(calc.pmi * 12, 0)} annually in PMI. Consider increasing your down payment to 20% to eliminate this cost.`,
+                    action: 'increaseDowm',
+                    actionText: 'Increase Down Payment'
                 });
             }
 
-            STATE.totalPages = Math.ceil(STATE.amortizationData.length / CONFIG.paymentsPerPage);
-            calculations.displayAmortizationPage(1);
+            // Extra Payment Insight
+            if (calc.extraMonthly === 0 && calc.extraYearly === 0) {
+                const extraPayment = Math.round(calc.monthlyPI * 0.1); // 10% of P&I
+                insights.push({
+                    icon: 'fas fa-rocket',
+                    title: 'Accelerate Payoff',
+                    description: `Adding just $${extraPayment}/month could save you thousands in interest and years of payments.`,
+                    action: 'addExtra',
+                    actionText: 'Add Extra Payment'
+                });
+            }
+
+            // Refinance Insight
+            if (calc.params.rate > 6.0) {
+                insights.push({
+                    icon: 'fas fa-exchange-alt',
+                    title: 'Consider Refinancing',
+                    description: `Current rates may be lower than your ${calc.params.rate}%. Refinancing could reduce your monthly payment significantly.`,
+                    action: 'refinance',
+                    actionText: 'Check Rates'
+                });
+            }
+
+            // Investment Insight
+            if (calc.params.term === 30) {
+                insights.push({
+                    icon: 'fas fa-chart-line',
+                    title: '15-Year Option',
+                    description: `Consider a 15-year loan to save significantly on interest, though your monthly payment would be higher.`,
+                    action: 'compare15',
+                    actionText: 'Compare Terms'
+                });
+            }
+
+            return insights.slice(0, 4); // Show max 4 insights
         },
 
-        displayAmortizationPage: (page) => {
-            const tbody = document.getElementById('amortization-body');
-            if (!tbody) return;
+        applyRecommendation(action) {
+            switch (action) {
+                case 'increaseDowm':
+                    this.increaseDownPayment();
+                    break;
+                case 'addExtra':
+                    this.addExtraPayment();
+                    break;
+                case 'refinance':
+                    Utils.showToast('Opening refinance calculator...', 'info');
+                    break;
+                case 'compare15':
+                    this.compareTo15Year();
+                    break;
+                default:
+                    Utils.showToast('Feature coming soon!', 'info');
+            }
+        },
 
-            const start = (page - 1) * CONFIG.paymentsPerPage;
-            const end = Math.min(start + CONFIG.paymentsPerPage, STATE.amortizationData.length);
-            
-            tbody.innerHTML = '';
+        increaseDownPayment() {
+            const homePrice = Utils.parseNumber($('#home-price').value);
+            const newDownPayment = homePrice * 0.2; // 20%
+            $('#down-payment').value = Utils.formatNumber(newDownPayment);
+            $('#down-payment').dispatchEvent(new Event('input'));
+            Utils.showToast('Down payment increased to 20%', 'success');
+        },
 
-            if (STATE.amortizationData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="no-data">Calculate mortgage to view schedule</td></tr>';
+        addExtraPayment() {
+            const monthlyPI = STATE.currentCalculation?.monthlyPI || 0;
+            const extraPayment = Math.round(monthlyPI * 0.1);
+            $('#extra-monthly').value = Utils.formatNumber(extraPayment);
+            $('#extra-monthly').dispatchEvent(new Event('input'));
+            Utils.showToast(`Added $${extraPayment} extra monthly payment`, 'success');
+        },
+
+        compareTo15Year() {
+            $$('.term-chip').forEach(c => c.classList.remove('active'));
+            $('[data-years="15"]')?.classList.add('active');
+            $('#loan-term').value = '15';
+            MortgageCalculator.calculate();
+            Utils.showToast('Loan term changed to 15 years', 'success');
+        }
+    };
+
+    // ======= AMORTIZATION TABLE =======
+    const AmortizationTable = {
+        render(calculation) {
+            if (!calculation || !calculation.schedule) return;
+
+            this.calculation = calculation;
+            STATE.totalPages = Math.ceil(calculation.schedule.length / CONFIG.paymentsPerPage);
+            STATE.currentPage = 1;
+
+            this.updateTable();
+            this.updatePagination();
+        },
+
+        updateTable() {
+            const table = $('#amortization-table tbody');
+            if (!table) return;
+
+            const schedule = this.calculation.schedule;
+            const startIndex = (STATE.currentPage - 1) * CONFIG.paymentsPerPage;
+            const endIndex = Math.min(startIndex + CONFIG.paymentsPerPage, schedule.length);
+            const pagePayments = schedule.slice(startIndex, endIndex);
+
+            if (pagePayments.length === 0) {
+                table.innerHTML = '<tr><td colspan="6" class="empty-state">No payments to display</td></tr>';
                 return;
             }
 
-            for (let i = start; i < end; i++) {
-                const payment = STATE.amortizationData[i];
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${payment.payment}</td>
+            table.innerHTML = pagePayments.map(payment => `
+                <tr>
+                    <td>${payment.paymentNumber}</td>
                     <td>${payment.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</td>
-                    <td>${utils.formatCurrency(payment.totalPayment)}</td>
-                    <td>${utils.formatCurrency(payment.principal)}</td>
-                    <td>${utils.formatCurrency(payment.interest)}</td>
-                    <td>${utils.formatCurrency(payment.balance)}</td>
-                `;
-                tbody.appendChild(row);
+                    <td>${Utils.formatCurrency(payment.payment)}</td>
+                    <td>${Utils.formatCurrency(payment.principal)}</td>
+                    <td>${Utils.formatCurrency(payment.interest)}</td>
+                    <td>${Utils.formatCurrency(payment.balance)}</td>
+                </tr>
+            `).join('');
+        },
+
+        updatePagination() {
+            const paymentCount = $('#payment-count');
+            const pageInfo = $('#page-info');
+            const currentPageDisplay = $('#current-page-display');
+            const prevBtn = $('#prev-page');
+            const nextBtn = $('#next-page');
+
+            if (paymentCount) {
+                paymentCount.textContent = `${this.calculation.schedule.length} payments`;
             }
 
-            // Update pagination
-            const pageInfo = document.getElementById('page-info');
             if (pageInfo) {
-                pageInfo.textContent = `Page ${page} of ${STATE.totalPages} (${STATE.amortizationData.length} payments)`;
+                pageInfo.textContent = `Page ${STATE.currentPage} of ${STATE.totalPages}`;
             }
 
-            const prevBtn = document.getElementById('prev-page');
-            const nextBtn = document.getElementById('next-page');
-            
-            if (prevBtn) prevBtn.disabled = page === 1;
-            if (nextBtn) nextBtn.disabled = page === STATE.totalPages;
-
-            STATE.currentPage = page;
-        }
-    };
-
-    // ========== FORM CONTROLS ==========
-    const formControls = {
-        init: () => {
-            // Calculate button
-            if (elements.calculateBtn) {
-                elements.calculateBtn.addEventListener('click', calculations.calculate);
+            if (currentPageDisplay) {
+                currentPageDisplay.textContent = `Page ${STATE.currentPage}`;
             }
-
-            // Reset button
-            if (elements.resetForm) {
-                elements.resetForm.addEventListener('click', formControls.reset);
-            }
-
-            // Input formatting and validation
-            const numberInputs = [
-                elements.homePrice,
-                elements.downPayment,
-                elements.propertyTax,
-                elements.homeInsurance,
-                elements.extraMonthly,
-                elements.extraOnetime
-            ].filter(Boolean);
-
-            numberInputs.forEach(input => {
-                input.addEventListener('blur', () => utils.formatNumberInput(input));
-                input.addEventListener('input', utils.debounce(() => {
-                    if (input === elements.homePrice) {
-                        formControls.updateDependentFields();
-                    }
-                    calculations.calculate();
-                }, CONFIG.debounceDelay));
-            });
-
-            // Interest rate input
-            if (elements.interestRate) {
-                elements.interestRate.addEventListener('input', utils.debounce(calculations.calculate, CONFIG.debounceDelay));
-            }
-
-            // Pagination buttons
-            const prevBtn = document.getElementById('prev-page');
-            const nextBtn = document.getElementById('next-page');
 
             if (prevBtn) {
-                prevBtn.addEventListener('click', () => {
-                    if (STATE.currentPage > 1) {
-                        calculations.displayAmortizationPage(STATE.currentPage - 1);
-                    }
-                });
+                prevBtn.disabled = STATE.currentPage <= 1;
+                prevBtn.onclick = () => this.goToPage(STATE.currentPage - 1);
             }
 
             if (nextBtn) {
-                nextBtn.addEventListener('click', () => {
-                    if (STATE.currentPage < STATE.totalPages) {
-                        calculations.displayAmortizationPage(STATE.currentPage + 1);
-                    }
-                });
+                nextBtn.disabled = STATE.currentPage >= STATE.totalPages;
+                nextBtn.onclick = () => this.goToPage(STATE.currentPage + 1);
             }
         },
 
-        updateDependentFields: () => {
-            const homePrice = utils.parseNumber(elements.homePrice?.value || 0);
-            
-            if (homePrice > 0) {
-                // Update property tax (0.76% of home value as default for CA)
-                if (elements.propertyTax) {
-                    elements.propertyTax.value = utils.formatNumber(homePrice * 0.0076);
-                }
+        goToPage(page) {
+            if (page < 1 || page > STATE.totalPages) return;
 
-                // Update home insurance (0.2% of home value)
-                if (elements.homeInsurance) {
-                    elements.homeInsurance.value = utils.formatNumber(homePrice * CONFIG.defaultInsuranceRate);
-                }
+            STATE.currentPage = page;
+            this.updateTable();
+            this.updatePagination();
 
-                // Sync down payment if in percentage mode
-                if (elements.percentInput?.style.display !== 'none') {
-                    downPaymentControl.syncFromPercent();
-                } else {
-                    downPaymentControl.syncFromAmount();
-                }
-            }
-        },
-
-        reset: () => {
-            // Reset all form inputs to defaults
-            if (elements.homePrice) elements.homePrice.value = '400,000';
-            if (elements.downPayment) elements.downPayment.value = '80,000';
-            if (elements.downPaymentPercent) elements.downPaymentPercent.value = '20';
-            if (elements.interestRate) elements.interestRate.value = '6.75';
-            if (elements.loanTerm) elements.loanTerm.value = '30';
-            if (elements.propertyTax) elements.propertyTax.value = '3,040';
-            if (elements.homeInsurance) elements.homeInsurance.value = '800';
-            if (elements.pmi) elements.pmi.value = '0';
-            if (elements.extraMonthly) elements.extraMonthly.value = '';
-            if (elements.extraOnetime) elements.extraOnetime.value = '';
-
-            // Reset term chips
-            elements.termChips.forEach(chip => {
-                chip.classList.remove('active');
-                if (chip.getAttribute('data-years') === '30') {
-                    chip.classList.add('active');
-                }
-            });
-
-            // Hide custom term input
-            const customGroup = document.getElementById('custom-term-group');
-            if (customGroup) customGroup.style.display = 'none';
-
-            // Reset to amount input for down payment
-            downPaymentControl.showAmount();
-
-            // Recalculate
-            calculations.calculate();
-
-            utils.announceToScreenReader('Form has been reset to default values');
-            utils.showToast('Form reset to default values', 'info');
+            Utils.announceToScreenReader(`Viewing page ${page} of amortization schedule`);
         }
     };
 
-    // ========== EVENT LISTENERS ==========
-    const setupEventListeners = () => {
-        // Voice control buttons
-        if (elements.voiceToggle) {
-            elements.voiceToggle.addEventListener('click', voiceControl.toggleGlobal);
-        }
-
-        if (elements.voiceInput) {
-            elements.voiceInput.addEventListener('click', voiceControl.startLocal);
-        }
-
-        // Hamburger menu
-        if (elements.hamburger && elements.navMenu) {
-            elements.hamburger.addEventListener('click', () => {
-                elements.navMenu.classList.toggle('active');
-                const isOpen = elements.navMenu.classList.contains('active');
-                elements.hamburger.setAttribute('aria-expanded', isOpen.toString());
-                utils.announceToScreenReader(isOpen ? 'Menu opened' : 'Menu closed');
-            });
-        }
-
-        // Modal controls
-        document.querySelectorAll('.modal-close').forEach(closeBtn => {
-            closeBtn.addEventListener('click', (e) => {
-                const modal = e.target.closest('.modal');
-                modal.style.display = 'none';
-                utils.announceToScreenReader('Modal closed');
-            });
-        });
-
-        // Click outside modal to close
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                    utils.announceToScreenReader('Modal closed');
-                }
-            });
-        });
-
-        // Escape key to close modals and chat
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.style.display = 'none';
-                });
-                if (STATE.chatOpen) {
-                    chatControl.closeChat();
-                }
-            }
-        });
-
-        // Update stats periodically
-        setInterval(() => {
-            STATE.calculationsToday += Math.floor(Math.random() * 5) + 1;
-            const calcCount = document.getElementById('calc-count');
-            if (calcCount) {
-                calcCount.textContent = utils.formatNumber(STATE.calculationsToday);
-            }
-        }, CONFIG.calculationsUpdateInterval);
-    };
-
-    // ========== INITIALIZATION ==========
+    // ======= INITIALIZATION =======
     const init = () => {
-        console.log('Initializing World\'s First AI Mortgage Calculator...');
-        
         try {
-            // Initialize all modules
-            voiceControl.init();
-            accessibility.init();
-            downPaymentControl.init();
-            suggestionChips.init();
-            termChips.init();
-            tabControl.init();
-            formControls.init();
-            chatControl.init();
-            setupEventListeners();
+            // Initialize all components
+            StatsUpdater.init();
+            GlobalVoiceControl.init();
+            FormVoiceControl.init();
+            AccessibilityControls.init();
+            MortgageCalculator.init();
 
-            // Perform initial calculation
-            calculations.calculate();
-
-            console.log('AI Mortgage Calculator initialized successfully');
-            utils.announceToScreenReader('World\'s first AI mortgage calculator loaded and ready. All accessibility features are available.');
-            utils.showToast('Calculator loaded successfully! Try the voice commands or accessibility features.', 'success');
+            console.log('Enhanced Mortgage Calculator initialized successfully');
         } catch (error) {
             console.error('Initialization error:', error);
-            utils.showToast('There was an error loading the calculator. Please refresh the page.', 'error');
+            Utils.showToast('Application failed to initialize properly', 'error');
         }
     };
 
-    // Start initialization when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    // Start the application
+    init();
 });
