@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 
-    <link rel="stylesheet" href="mortgage-calculator.css">
+    <link rel="stylesheet" href="mortgage-calculator-ultimate.css">
 
     <meta name="theme-color" content="#1D9A9A">
 </head>
@@ -41,6 +41,10 @@
                 <button id="voice-toggle" class="control-btn" aria-label="Toggle voice commands">
                     <i class="fa-solid fa-microphone" id="voice-icon"></i>
                     <span class="control-text">Voice</span>
+                </button>
+                 <button id="screen-reader-toggle" class="control-btn" aria-label="Toggle screen reader enhancements">
+                    <i class="fa-solid fa-universal-access"></i>
+                    <span class="control-text">Reader</span>
                 </button>
                 <div class="font-size-controls">
                     <button id="font-smaller" class="control-btn font-btn" aria-label="Decrease font size">A-</button>
@@ -137,7 +141,6 @@
                                 <input type="hidden" id="loan-term" value="30">
                             </div>
                         </fieldset>
-
                         <fieldset class="form-section">
                             <legend class="section-legend">Additional Costs</legend>
                             <div class="form-group">
@@ -171,7 +174,6 @@
                                 <small id="pmi-status" class="form-help"></small>
                             </div>
                         </fieldset>
-                        
                         <details class="advanced-options">
                             <summary class="advanced-summary">
                                 <span><i class="fa-solid fa-piggy-bank"></i> Extra Payments</span>
@@ -194,7 +196,6 @@
                                 </div>
                             </div>
                         </details>
-                        
                         <div class="form-actions">
                             <button type="button" id="calculate-btn" class="btn btn-primary btn-large"><i class="fa-solid fa-wand-magic-sparkles"></i> Calculate</button>
                         </div>
@@ -212,52 +213,27 @@
                         <div class="total-payment-amount" id="total-payment" role="status" aria-live="polite">$0</div>
                     </div>
                     <div class="payment-breakdown">
-                        <div class="breakdown-item">
-                            <span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-primary-accent);"></i> Principal & Interest</span>
-                            <span class="breakdown-value" id="principal-interest">$0</span>
-                        </div>
+                        <div class="breakdown-item"><span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-primary-accent);"></i> Principal & Interest</span><span class="breakdown-value" id="principal-interest">$0</span></div>
                         <div class="breakdown-bar"><div class="breakdown-fill" id="pi-fill" style="width: 0%; background-color: var(--color-primary-accent);"></div></div>
-                        <div class="breakdown-item">
-                            <span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-info);"></i> Property Tax</span>
-                            <span class="breakdown-value" id="monthly-tax">$0</span>
-                        </div>
+                        <div class="breakdown-item"><span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-info);"></i> Property Tax</span><span class="breakdown-value" id="monthly-tax">$0</span></div>
                         <div class="breakdown-bar"><div class="breakdown-fill" id="tax-fill" style="width: 0%; background-color: var(--color-info);"></div></div>
-                        <div class="breakdown-item">
-                            <span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-warning);"></i> Home Insurance</span>
-                            <span class="breakdown-value" id="monthly-insurance">$0</span>
-                        </div>
-                         <div class="breakdown-bar"><div class="breakdown-fill" id="insurance-fill" style="width: 0%; background-color: var(--color-warning);"></div></div>
-                        <div class="breakdown-item">
-                            <span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-error);"></i> PMI</span>
-                            <span class="breakdown-value" id="monthly-pmi">$0</span>
-                        </div>
-                         <div class="breakdown-bar"><div class="breakdown-fill" id="pmi-fill" style="width: 0%; background-color: var(--color-error);"></div></div>
+                        <div class="breakdown-item"><span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-warning);"></i> Home Insurance</span><span class="breakdown-value" id="monthly-insurance">$0</span></div>
+                        <div class="breakdown-bar"><div class="breakdown-fill" id="insurance-fill" style="width: 0%; background-color: var(--color-warning);"></div></div>
+                        <div class="breakdown-item"><span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-error);"></i> PMI</span><span class="breakdown-value" id="monthly-pmi">$0</span></div>
+                        <div class="breakdown-bar"><div class="breakdown-fill" id="pmi-fill" style="width: 0%; background-color: var(--color-error);"></div></div>
                     </div>
                 </div>
                 <div class="card-body cost-breakdown-section">
                     <div class="cost-chart-container">
                         <canvas id="cost-breakdown-chart"></canvas>
-                        <div class="cost-chart-center-text">
-                            <label>Total Cost</label>
-                            <strong id="display-total-cost">$0</strong>
-                        </div>
+                        <div class="cost-chart-center-text"><label>Total Cost</label><strong id="display-total-cost">$0</strong></div>
                     </div>
                     <div class="loan-summary">
-                        <div class="summary-item">
-                            <label><i class="fa-solid fa-circle" style="color: var(--color-primary);"></i> Loan Principal</label>
-                            <strong id="display-loan-amount">$0</strong>
-                        </div>
-                        <div class="summary-item">
-                            <label><i class="fa-solid fa-circle" style="color: var(--color-primary-accent);"></i> Total Interest</label>
-                            <strong id="display-total-interest">$0</strong>
-                        </div>
-                         <div class="summary-item">
-                            <label><i class="fa-solid fa-calendar-check"></i> Payoff Date</label>
-                            <strong id="display-payoff-date">-</strong>
-                        </div>
+                        <div class="summary-item"><label><i class="fa-solid fa-circle" style="color: var(--color-primary);"></i> Loan Principal</label><strong id="display-loan-amount">$0</strong></div>
+                        <div class="summary-item"><label><i class="fa-solid fa-circle" style="color: var(--color-primary-accent);"></i> Total Interest</label><strong id="display-total-interest">$0</strong></div>
+                        <div class="summary-item"><label><i class="fa-solid fa-calendar-check"></i> Payoff Date</label><strong id="display-payoff-date">-</strong></div>
                     </div>
                 </div>
-
                 <div class="tab-container">
                     <div class="tab-controls" role="tablist">
                         <button class="tab-btn active" data-tab="insights" role="tab" aria-selected="true"><i class="fa-solid fa-lightbulb"></i> AI Insights</button>
@@ -265,31 +241,21 @@
                         <button class="tab-btn" data-tab="amortization" role="tab" aria-selected="false"><i class="fa-solid fa-table-list"></i> Schedule</button>
                     </div>
                     <div id="insights" class="tab-content active" role="tabpanel">
-                       <div id="ai-insights" class="insights-list">
-                            <div class="insight-item info">
-                                <i class="fa-solid fa-robot insight-icon"></i>
-                                <div>
-                                    <h5>Awaiting Calculation</h5>
-                                    <p>Enter your loan details and click calculate to get personalized AI recommendations.</p>
-                                </div>
-                            </div>
+                        <div id="ai-insights" class="insights-list">
+                            <div class="insight-item info"><i class="fa-solid fa-robot insight-icon"></i><div><h5>Awaiting Calculation</h5><p>Enter details and click calculate for AI recommendations.</p></div></div>
                         </div>
                     </div>
                     <div id="chart" class="tab-content" role="tabpanel">
-                        <div class="chart-header">
-                            <h4>Loan Balance Over Time</h4>
-                        </div>
-                         <div class="chart-container"><canvas id="mortgage-timeline-chart"></canvas></div>
-                         <div class="year-slider-group">
+                        <div class="chart-header"><h4>Loan Balance Over Time</h4></div>
+                        <div class="chart-container"><canvas id="mortgage-timeline-chart"></canvas></div>
+                        <div class="year-slider-group">
                             <label for="year-range" id="year-label">Year 1</label>
                             <input type="range" id="year-range" class="year-slider" min="1" max="30" value="1">
-                            <div class="year-data-preview">
-                                <span>Balance: <strong id="remaining-balance">$0</strong></span>
-                            </div>
-                         </div>
+                            <div class="year-data-preview"><span>Balance: <strong id="remaining-balance">$0</strong></span></div>
+                        </div>
                     </div>
                     <div id="amortization" class="tab-content" role="tabpanel">
-                         <div class="table-container">
+                        <div class="table-container">
                             <table id="amortization-table" class="amortization-table">
                                 <thead><tr><th>#</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
                                 <tbody><tr><td colspan="5" class="empty-state">Calculate to view schedule</td></tr></tbody>
@@ -306,26 +272,10 @@
 
             <div class="right-column">
                 <section class="card" aria-labelledby="sponsor-header">
-                    <header class="card-header" id="sponsor-header">
-                        <h3><i class="fa-solid fa-star"></i> Featured Lenders</h3>
-                    </header>
+                    <header class="card-header" id="sponsor-header"><h3><i class="fa-solid fa-star"></i> Featured Lenders</h3></header>
                     <div class="card-body">
-                       <div class="sponsor-item">
-                            <div class="sponsor-logo"><i class="fa-solid fa-building-columns"></i></div>
-                            <div class="sponsor-content">
-                                <h4>Get Pre-Approved</h4>
-                                <p>See today's best rates and get matched with a top lender in minutes.</p>
-                                <a href="#" class="btn btn-primary btn-sm">View Rates</a>
-                            </div>
-                       </div>
-                       <div class="sponsor-item">
-                            <div class="sponsor-logo"><i class="fa-solid fa-shield-halved"></i></div>
-                            <div class="sponsor-content">
-                                <h4>Save on Insurance</h4>
-                                <p>Bundle your home and auto insurance to find significant savings.</p>
-                                <a href="#" class="btn btn-secondary btn-sm">Get Quotes</a>
-                            </div>
-                       </div>
+                        <div class="sponsor-item"><div class="sponsor-logo"><i class="fa-solid fa-building-columns"></i></div><div class="sponsor-content"><h4>Get Pre-Approved</h4><p>See today's best rates from top lenders.</p><a href="#" class="btn btn-primary btn-sm">View Rates</a></div></div>
+                        <div class="sponsor-item"><div class="sponsor-logo"><i class="fa-solid fa-shield-halved"></i></div><div class="sponsor-content"><h4>Save on Insurance</h4><p>Bundle home and auto insurance.</p><a href="#" class="btn btn-secondary btn-sm">Get Quotes</a></div></div>
                     </div>
                 </section>
             </div>
@@ -339,6 +289,6 @@
         </div>
     </footer>
 
-    <script src="mortgage-calculator.js"></script>
+    <script src="mortgage-calculator-ultimate.js"></script>
 </body>
 </html>
