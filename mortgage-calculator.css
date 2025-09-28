@@ -2234,3 +2234,14 @@ input:invalid {
         height: 250px;
     }
 }
+.hero-section {
+  /* Make hero take up about 25% of the viewport height */
+  min-height: 25vh;
+  padding: calc(70px + 2vh) 0 2vh 0;  /* Adjust top offset for fixed header */
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-teal-300) 100%);
+  color: var(--color-btn-primary-text);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
