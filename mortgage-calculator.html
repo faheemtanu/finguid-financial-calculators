@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
-    <link rel="stylesheet" href="mortgage-calculator.css">
+    <link rel="stylesheet" href="mortgage-calculator-ultimate.css">
 
     <meta name="theme-color" content="#1D9A9A">
     <meta property="og:title" content="AI-Enhanced Mortgage Calculator">
@@ -85,6 +85,10 @@
                 <div class="ai-badge"><i class="fa-solid fa-brain"></i> AI ENHANCED</div>
                 <h1>Mortgage Calculator</h1>
                 <p class="subtitle">Instantly calculate payments and discover savings with AI insights.</p>
+                 <div class="hero-actions">
+                    <button id="scroll-to-calculator" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> Start Calculating</button>
+                    <button id="voice-demo" class="btn btn-secondary"><i class="fa-solid fa-microphone-lines"></i> Try Voice Demo</button>
+                </div>
             </div>
         </section>
 
@@ -281,7 +285,6 @@
                     </div>
                 </div>
 
-
                 <div class="tab-container">
                     <div class="tab-controls" role="tablist">
                         <button class="tab-btn active" id="chart-tab" data-tab="chart" role="tab" aria-selected="true"><i class="fa-solid fa-chart-line"></i> Timeline</button>
@@ -357,20 +360,20 @@
                 <section class="card" aria-labelledby="market-header">
                     <header class="card-header" id="market-header">
                         <h3><i class="fa-solid fa-arrow-trend-up"></i> Market Rates</h3>
-                        <small id="rate-update-time" class="rate-update">...</small>
+                        <small id="rate-update-time" class="rate-update">Live</small>
                     </header>
                     <div class="card-body">
                         <div class="market-item">
                             <span>30-Year Fixed</span>
-                            <strong id="market-30yr">...</strong>
+                            <strong id="market-30yr" class="market-rate-value">...</strong>
                         </div>
                         <div class="market-item">
                             <span>15-Year Fixed</span>
-                            <strong id="market-15yr">...</strong>
+                            <strong id="market-15yr" class="market-rate-value">...</strong>
                         </div>
                         <div class="market-item">
                             <span>5/1 ARM</span>
-                            <strong id="market-arm">...</strong>
+                            <strong id="market-arm" class="market-rate-value">...</strong>
                         </div>
                     </div>
                 </section>
@@ -378,21 +381,5 @@
         </div>
     </main>
     
-    <footer class="app-footer">
-        <div class="footer-container">
-            <div class="footer-links">
-                <a href="#">About</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Use</a>
-                <a href="#">Contact</a>
-            </div>
-            <div class="footer-copyright">
-                <p>&copy; 2025 AI Mortgage Calculator. All Rights Reserved.</p>
-                <p class="disclaimer">This tool is for informational purposes only. Consult a qualified financial professional before making decisions.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="mortgage-calculator.js"></script>
 </body>
 </html>
