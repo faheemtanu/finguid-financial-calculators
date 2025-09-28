@@ -14,37 +14,21 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
-    <link rel="stylesheet" href="mortgage-calculator.css">
-    <script src="mortgage-calculator.js"></script>
-</body>
-</html>
+
+    <link rel="stylesheet" href="mortgage-calculator-ultimate.css">
 
     <meta name="theme-color" content="#1D9A9A">
-    <meta property="og:title" content="AI-Enhanced Mortgage Calculator">
-    <meta property="og:description" content="Calculate your mortgage with AI insights, voice commands, and interactive charts.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourdomain.com/mortgage-calculator">
-    <meta property="og:image" content="https://yourdomain.com/images/og-image.png">
-    <meta name="twitter:card" content="summary_large_image">
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "AI-Enhanced Mortgage Calculator",
-        "description": "Calculate your mortgage with voice commands, AI insights, and screen reader support.",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Web Browser",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
-    }
-    </script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <header class="global-controls" role="toolbar" aria-label="Global Controls">
-        <div class="controls-container">
+    <header class="app-header">
+        <div class="header-container">
             <div class="logo">
                 <i class="fa-solid fa-house-chimney-window"></i>
                 <span>AI Mortgage Calc</span>
@@ -52,15 +36,11 @@
             <div class="control-group">
                 <button id="theme-toggle" class="control-btn" aria-label="Toggle theme">
                     <i class="fa-solid fa-moon" id="theme-icon"></i>
-                    <span class="control-text">Dark Mode</span>
+                    <span class="control-text">Dark</span>
                 </button>
                 <button id="voice-toggle" class="control-btn" aria-label="Toggle voice commands">
                     <i class="fa-solid fa-microphone" id="voice-icon"></i>
                     <span class="control-text">Voice</span>
-                </button>
-                <button id="screen-reader-toggle" class="control-btn" aria-label="Toggle screen reader enhancements">
-                    <i class="fa-solid fa-universal-access"></i>
-                    <span class="control-text">Reader</span>
                 </button>
                 <div class="font-size-controls">
                     <button id="font-smaller" class="control-btn font-btn" aria-label="Decrease font size">A-</button>
@@ -72,7 +52,7 @@
 
     <div id="loading-overlay" class="loading-overlay" style="display: none;" role="status" aria-live="polite">
         <div class="spinner"></div>
-        <span>Calculating with AI...</span>
+        <span id="loading-text">Calculating...</span>
     </div>
 
     <div id="toast-container" class="toast-container" role="alert" aria-live="assertive"></div>
@@ -88,9 +68,19 @@
                 <div class="ai-badge"><i class="fa-solid fa-brain"></i> AI ENHANCED</div>
                 <h1>Mortgage Calculator</h1>
                 <p class="subtitle">Instantly calculate payments and discover savings with AI insights.</p>
-                 <div class="hero-actions">
-                    <button id="scroll-to-calculator" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> Start Calculating</button>
-                    <button id="voice-demo" class="btn btn-secondary"><i class="fa-solid fa-microphone-lines"></i> Try Voice Demo</button>
+                <div class="market-rates-hero">
+                    <div class="market-item-hero">
+                        <span>30-Yr Fixed</span>
+                        <strong id="market-30yr" class="market-rate-value">...</strong>
+                    </div>
+                     <div class="market-item-hero">
+                        <span>15-Yr Fixed</span>
+                        <strong id="market-15yr" class="market-rate-value">...</strong>
+                    </div>
+                     <div class="market-item-hero">
+                        <span>5/1 ARM</span>
+                        <strong id="market-arm" class="market-rate-value">...</strong>
+                    </div>
                 </div>
             </div>
         </section>
@@ -101,7 +91,6 @@
                     <h3><i class="fa-solid fa-keyboard"></i> Loan Details</h3>
                     <div class="header-actions">
                         <button id="reset-form" class="btn btn-tertiary btn-sm"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
-                        <button id="voice-input" class="btn btn-secondary btn-sm"><i class="fa-solid fa-microphone"></i> Voice</button>
                     </div>
                 </header>
                 <div class="card-body">
@@ -203,65 +192,46 @@
                                         <input type="text" id="extra-onetime" inputmode="numeric" class="form-control" value="0">
                                     </div>
                                 </div>
-                                 <div class="form-group toggle-switch-group">
-                                    <label for="bi-weekly" class="toggle-label">Bi-Weekly Payments</label>
-                                    <input type="checkbox" id="bi-weekly" class="toggle-input">
-                                    <span class="toggle-slider"></span>
-                                </div>
-                                <small id="savings-preview" class="form-help savings-preview"></small>
                             </div>
                         </details>
                         
                         <div class="form-actions">
                             <button type="button" id="calculate-btn" class="btn btn-primary btn-large"><i class="fa-solid fa-wand-magic-sparkles"></i> Calculate</button>
-                            <button type="button" id="save-calculation" class="btn btn-secondary btn-large"><i class="fa-solid fa-bookmark"></i> Save</button>
                         </div>
                     </form>
                 </div>
             </section>
 
-            <section class="card results-card" aria-labelledby="results-header">
+            <section class="card results-card" id="results-section" aria-labelledby="results-header">
                 <header class="card-header" id="results-header">
                     <h3><i class="fa-solid fa-chart-pie"></i> Your Results</h3>
-                    <div class="header-actions">
-                         <button id="compare-btn" class="btn btn-tertiary btn-sm"><i class="fa-solid fa-table-columns"></i> Compare</button>
-                    </div>
                 </header>
                 <div class="card-body">
                     <div class="total-payment-section">
                         <label>Total Monthly Payment</label>
                         <div class="total-payment-amount" id="total-payment" role="status" aria-live="polite">$0</div>
                     </div>
-
                     <div class="payment-breakdown">
                         <div class="breakdown-item">
                             <span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-primary-accent);"></i> Principal & Interest</span>
                             <span class="breakdown-value" id="principal-interest">$0</span>
                         </div>
-                        <div class="breakdown-bar">
-                            <div class="breakdown-fill" id="pi-fill" style="width: 0%; background-color: var(--color-primary-accent);"></div>
-                        </div>
+                        <div class="breakdown-bar"><div class="breakdown-fill" id="pi-fill" style="width: 0%; background-color: var(--color-primary-accent);"></div></div>
                         <div class="breakdown-item">
                             <span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-info);"></i> Property Tax</span>
                             <span class="breakdown-value" id="monthly-tax">$0</span>
                         </div>
-                        <div class="breakdown-bar">
-                            <div class="breakdown-fill" id="tax-fill" style="width: 0%; background-color: var(--color-info);"></div>
-                        </div>
+                        <div class="breakdown-bar"><div class="breakdown-fill" id="tax-fill" style="width: 0%; background-color: var(--color-info);"></div></div>
                         <div class="breakdown-item">
                             <span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-warning);"></i> Home Insurance</span>
                             <span class="breakdown-value" id="monthly-insurance">$0</span>
                         </div>
-                         <div class="breakdown-bar">
-                            <div class="breakdown-fill" id="insurance-fill" style="width: 0%; background-color: var(--color-warning);"></div>
-                        </div>
+                         <div class="breakdown-bar"><div class="breakdown-fill" id="insurance-fill" style="width: 0%; background-color: var(--color-warning);"></div></div>
                         <div class="breakdown-item">
                             <span class="breakdown-label"><i class="fa-solid fa-circle" style="color: var(--color-error);"></i> PMI</span>
                             <span class="breakdown-value" id="monthly-pmi">$0</span>
                         </div>
-                         <div class="breakdown-bar">
-                            <div class="breakdown-fill" id="pmi-fill" style="width: 0%; background-color: var(--color-error);"></div>
-                        </div>
+                         <div class="breakdown-bar"><div class="breakdown-fill" id="pmi-fill" style="width: 0%; background-color: var(--color-error);"></div></div>
                     </div>
                 </div>
                 <div class="card-body cost-breakdown-section">
@@ -290,26 +260,11 @@
 
                 <div class="tab-container">
                     <div class="tab-controls" role="tablist">
-                        <button class="tab-btn active" id="chart-tab" data-tab="chart" role="tab" aria-selected="true"><i class="fa-solid fa-chart-line"></i> Timeline</button>
-                        <button class="tab-btn" id="insights-tab" data-tab="insights" role="tab" aria-selected="false"><i class="fa-solid fa-lightbulb"></i> AI Insights</button>
-                        <button class="tab-btn" id="schedule-tab" data-tab="amortization" role="tab" aria-selected="false"><i class="fa-solid fa-table-list"></i> Schedule</button>
+                        <button class="tab-btn active" data-tab="insights" role="tab" aria-selected="true"><i class="fa-solid fa-lightbulb"></i> AI Insights</button>
+                        <button class="tab-btn" data-tab="chart" role="tab" aria-selected="false"><i class="fa-solid fa-chart-line"></i> Timeline</button>
+                        <button class="tab-btn" data-tab="amortization" role="tab" aria-selected="false"><i class="fa-solid fa-table-list"></i> Schedule</button>
                     </div>
-                    <div id="chart" class="tab-content active" role="tabpanel" aria-labelledby="chart-tab">
-                        <div class="chart-header">
-                            <h4 id="chart-loan-amount">Loan Balance Over Time</h4>
-                        </div>
-                         <div class="chart-container"><canvas id="mortgage-timeline-chart"></canvas></div>
-                         <div class="year-slider-group">
-                            <label for="year-range" id="year-label">Year 1</label>
-                            <input type="range" id="year-range" class="year-slider" min="1" max="30" value="1">
-                            <div class="year-data-preview">
-                                <span>Balance: <strong id="remaining-balance">$0</strong></span>
-                                <span>Principal: <strong id="principal-paid">$0</strong></span>
-                                <span>Interest: <strong id="interest-paid">$0</strong></span>
-                            </div>
-                         </div>
-                    </div>
-                    <div id="insights" class="tab-content" role="tabpanel" aria-labelledby="insights-tab">
+                    <div id="insights" class="tab-content active" role="tabpanel">
                        <div id="ai-insights" class="insights-list">
                             <div class="insight-item info">
                                 <i class="fa-solid fa-robot insight-icon"></i>
@@ -320,11 +275,24 @@
                             </div>
                         </div>
                     </div>
-                    <div id="amortization" class="tab-content" role="tabpanel" aria-labelledby="schedule-tab">
+                    <div id="chart" class="tab-content" role="tabpanel">
+                        <div class="chart-header">
+                            <h4>Loan Balance Over Time</h4>
+                        </div>
+                         <div class="chart-container"><canvas id="mortgage-timeline-chart"></canvas></div>
+                         <div class="year-slider-group">
+                            <label for="year-range" id="year-label">Year 1</label>
+                            <input type="range" id="year-range" class="year-slider" min="1" max="30" value="1">
+                            <div class="year-data-preview">
+                                <span>Balance: <strong id="remaining-balance">$0</strong></span>
+                            </div>
+                         </div>
+                    </div>
+                    <div id="amortization" class="tab-content" role="tabpanel">
                          <div class="table-container">
                             <table id="amortization-table" class="amortization-table">
-                                <thead><tr><th>#</th><th>Date</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
-                                <tbody><tr><td colspan="6" class="empty-state">Calculate to view schedule</td></tr></tbody>
+                                <thead><tr><th>#</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+                                <tbody><tr><td colspan="5" class="empty-state">Calculate to view schedule</td></tr></tbody>
                             </table>
                         </div>
                     </div>
@@ -360,29 +328,17 @@
                        </div>
                     </div>
                 </section>
-                <section class="card" aria-labelledby="market-header">
-                    <header class="card-header" id="market-header">
-                        <h3><i class="fa-solid fa-arrow-trend-up"></i> Market Rates</h3>
-                        <small id="rate-update-time" class="rate-update">Live</small>
-                    </header>
-                    <div class="card-body">
-                        <div class="market-item">
-                            <span>30-Year Fixed</span>
-                            <strong id="market-30yr" class="market-rate-value">...</strong>
-                        </div>
-                        <div class="market-item">
-                            <span>15-Year Fixed</span>
-                            <strong id="market-15yr" class="market-rate-value">...</strong>
-                        </div>
-                        <div class="market-item">
-                            <span>5/1 ARM</span>
-                            <strong id="market-arm" class="market-rate-value">...</strong>
-                        </div>
-                    </div>
-                </section>
             </div>
         </div>
     </main>
     
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p>&copy; 2025 AI Mortgage Calculator. All Rights Reserved.</p>
+            <p class="disclaimer">This tool is for informational purposes only. Consult a qualified financial professional.</p>
+        </div>
+    </footer>
+
+    <script src="mortgage-calculator-ultimate.js"></script>
 </body>
 </html>
