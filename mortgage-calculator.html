@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="World's First AI-Enhanced Mortgage Calculator with interactive charts, voice commands, screen reader support, and comprehensive analysis. Calculate monthly payments, extra payment benefits, and loan comparisons.">
+    <meta name="description" content="AI-Enhanced Mortgage Calculator with interactive charts, voice commands, and comprehensive analysis.">
     <meta name="keywords" content="mortgage calculator, AI calculator, home loan, monthly payment, amortization, property tax, PMI calculator, voice commands, accessibility">
     <meta name="author" content="AI Financial Calculators">
-    <title>World's First AI-Enhanced Mortgage Calculator - Smart Home Loan Analysis</title>
+    <title>AI-Enhanced Mortgage Calculator - Smart Home Loan Analysis</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,11 +15,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
-    <link rel="stylesheet" href="mortgage-calculator.css">
+    <link rel="stylesheet" href="mortgage-calculator-ultimate.css">
 
     <meta name="theme-color" content="#1D9A9A">
-    <meta property="og:title" content="World's First AI-Enhanced Mortgage Calculator">
-    <meta property="og:description" content="Calculate your mortgage with AI insights, voice commands, and interactive charts. Free, accurate, and accessible.">
+    <meta property="og:title" content="AI-Enhanced Mortgage Calculator">
+    <meta property="og:description" content="Calculate your mortgage with AI insights, voice commands, and interactive charts.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yourdomain.com/mortgage-calculator">
     <meta property="og:image" content="https://yourdomain.com/images/og-image.png">
@@ -83,22 +83,8 @@
         <section class="hero">
             <div class="hero-content">
                 <div class="ai-badge"><i class="fa-solid fa-brain"></i> AI ENHANCED</div>
-                <h1>The Ultimate Mortgage Calculator</h1>
-                <p class="subtitle">Navigate your home financing with unparalleled clarity, AI-powered insights, and voice-activated controls.</p>
-                <div class="stats-container">
-                    <div class="stat-item">
-                        <strong id="calc-count">12,847</strong>
-                        <span>Calculations Today</span>
-                    </div>
-                    <div class="stat-item">
-                        <strong id="avg-savings">$45K</strong>
-                        <span>Avg. Savings Found</span>
-                    </div>
-                </div>
-                <div class="hero-actions">
-                    <button id="scroll-to-calculator" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> Start Calculating</button>
-                    <button id="voice-demo" class="btn btn-secondary"><i class="fa-solid fa-microphone-lines"></i> Try Voice Demo</button>
-                </div>
+                <h1>Mortgage Calculator</h1>
+                <p class="subtitle">Instantly calculate payments and discover savings with AI insights.</p>
             </div>
         </section>
 
@@ -270,70 +256,70 @@
                             <div class="breakdown-fill" id="pmi-fill" style="width: 0%; background-color: var(--color-error);"></div>
                         </div>
                     </div>
-
-                    <div class="loan-summary">
-                        <div class="summary-item">
-                            <label>Loan Amount</label>
-                            <strong id="display-loan-amount">$0</strong>
-                        </div>
-                        <div class="summary-item">
-                            <label>Total Interest</label>
-                            <strong id="display-total-interest">$0</strong>
-                        </div>
-                         <div class="summary-item">
+                </div>
+                <div class="card-body cost-breakdown-section">
+                    <div class="cost-chart-container">
+                        <canvas id="cost-breakdown-chart"></canvas>
+                        <div class="cost-chart-center-text">
                             <label>Total Cost</label>
                             <strong id="display-total-cost">$0</strong>
                         </div>
+                    </div>
+                    <div class="loan-summary">
+                        <div class="summary-item">
+                            <label><i class="fa-solid fa-circle" style="color: var(--color-primary);"></i> Loan Principal</label>
+                            <strong id="display-loan-amount">$0</strong>
+                        </div>
+                        <div class="summary-item">
+                            <label><i class="fa-solid fa-circle" style="color: var(--color-primary-accent);"></i> Total Interest</label>
+                            <strong id="display-total-interest">$0</strong>
+                        </div>
                          <div class="summary-item">
-                            <label>Payoff Date</label>
+                            <label><i class="fa-solid fa-calendar-check"></i> Payoff Date</label>
                             <strong id="display-payoff-date">-</strong>
                         </div>
                     </div>
+                </div>
 
-                    <div class="tab-container">
-                        <div class="tab-controls" role="tablist">
-                            <button class="tab-btn active" id="chart-tab" data-tab="chart" role="tab" aria-selected="true"><i class="fa-solid fa-chart-line"></i> Chart</button>
-                            <button class="tab-btn" id="insights-tab" data-tab="insights" role="tab" aria-selected="false"><i class="fa-solid fa-lightbulb"></i> AI Insights</button>
-                            <button class="tab-btn" id="schedule-tab" data-tab="amortization" role="tab" aria-selected="false"><i class="fa-solid fa-table-list"></i> Schedule</button>
+
+                <div class="tab-container">
+                    <div class="tab-controls" role="tablist">
+                        <button class="tab-btn active" id="chart-tab" data-tab="chart" role="tab" aria-selected="true"><i class="fa-solid fa-chart-line"></i> Timeline</button>
+                        <button class="tab-btn" id="insights-tab" data-tab="insights" role="tab" aria-selected="false"><i class="fa-solid fa-lightbulb"></i> AI Insights</button>
+                        <button class="tab-btn" id="schedule-tab" data-tab="amortization" role="tab" aria-selected="false"><i class="fa-solid fa-table-list"></i> Schedule</button>
+                    </div>
+                    <div id="chart" class="tab-content active" role="tabpanel" aria-labelledby="chart-tab">
+                        <div class="chart-header">
+                            <h4 id="chart-loan-amount">Loan Balance Over Time</h4>
                         </div>
-                        <div id="chart" class="tab-content active" role="tabpanel" aria-labelledby="chart-tab">
-                            <div class="chart-header">
-                                <h4 id="chart-loan-amount">Loan Balance Over Time</h4>
-                                <div class="chart-legend">
-                                    <div class="legend-item"><i class="fa-solid fa-circle" style="color: var(--color-primary-accent);"></i> Balance</div>
-                                    <div class="legend-item"><i class="fa-solid fa-circle" style="color: var(--color-success);"></i> Principal</div>
-                                    <div class="legend-item"><i class="fa-solid fa-circle" style="color: var(--color-info);"></i> Interest</div>
-                                </div>
+                         <div class="chart-container"><canvas id="mortgage-timeline-chart"></canvas></div>
+                         <div class="year-slider-group">
+                            <label for="year-range" id="year-label">Year 1</label>
+                            <input type="range" id="year-range" class="year-slider" min="1" max="30" value="1">
+                            <div class="year-data-preview">
+                                <span>Balance: <strong id="remaining-balance">$0</strong></span>
+                                <span>Principal: <strong id="principal-paid">$0</strong></span>
+                                <span>Interest: <strong id="interest-paid">$0</strong></span>
                             </div>
-                             <div class="chart-container"><canvas id="mortgage-timeline-chart"></canvas></div>
-                             <div class="year-slider-group">
-                                <label for="year-range" id="year-label">Year 1</label>
-                                <input type="range" id="year-range" class="year-slider" min="1" max="30" value="1">
-                                <div class="year-data-preview">
-                                    <span>Balance: <strong id="remaining-balance">$0</strong></span>
-                                    <span>Principal: <strong id="principal-paid">$0</strong></span>
-                                    <span>Interest: <strong id="interest-paid">$0</strong></span>
-                                </div>
-                             </div>
-                        </div>
-                        <div id="insights" class="tab-content" role="tabpanel" aria-labelledby="insights-tab">
-                           <div id="ai-insights" class="insights-list">
-                                <div class="insight-item info">
-                                    <i class="fa-solid fa-robot insight-icon"></i>
-                                    <div>
-                                        <h5>Awaiting Calculation</h5>
-                                        <p>Enter your loan details and click calculate to get personalized AI recommendations.</p>
-                                    </div>
+                         </div>
+                    </div>
+                    <div id="insights" class="tab-content" role="tabpanel" aria-labelledby="insights-tab">
+                       <div id="ai-insights" class="insights-list">
+                            <div class="insight-item info">
+                                <i class="fa-solid fa-robot insight-icon"></i>
+                                <div>
+                                    <h5>Awaiting Calculation</h5>
+                                    <p>Enter your loan details and click calculate to get personalized AI recommendations.</p>
                                 </div>
                             </div>
                         </div>
-                        <div id="amortization" class="tab-content" role="tabpanel" aria-labelledby="schedule-tab">
-                             <div class="table-container">
-                                <table id="amortization-table" class="amortization-table">
-                                    <thead><tr><th>#</th><th>Date</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
-                                    <tbody><tr><td colspan="6" class="empty-state">Calculate to view schedule</td></tr></tbody>
-                                </table>
-                            </div>
+                    </div>
+                    <div id="amortization" class="tab-content" role="tabpanel" aria-labelledby="schedule-tab">
+                         <div class="table-container">
+                            <table id="amortization-table" class="amortization-table">
+                                <thead><tr><th>#</th><th>Date</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+                                <tbody><tr><td colspan="6" class="empty-state">Calculate to view schedule</td></tr></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -407,6 +393,6 @@
         </div>
     </footer>
 
-    <script src="mortgage-calculator.js"></script>
+    <script src="mortgage-calculator-ultimate.js"></script>
 </body>
 </html>
