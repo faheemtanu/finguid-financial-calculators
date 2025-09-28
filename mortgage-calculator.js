@@ -1,6 +1,6 @@
 /**
- * World's First AI-Enhanced Mortgage Calculator - FINAL PRODUCTION JAVASCRIPT
- * Complete functionality with state-based taxes, AI insights, interactive charts, and universal sharing
+ * AI-Enhanced Mortgage Calculator - ENHANCED PRODUCTION JAVASCRIPT  
+ * Improved UI/UX with perfect year-dragging chart interaction and all features preserved
  */
 
 'use strict';
@@ -37,7 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPage: 1,
         totalPages: 1,
         amortizationData: [],
-        isVoiceSupported: false
+        isVoiceSupported: false,
+        chartHighlightLine: null
     };
 
     // Enhanced State Tax Rates (property tax as percentage of home value)
@@ -609,6 +610,379 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             Utils.announceToScreenReader(`Switched to ${tabNames[tabId]} tab`);
+
+            // If switching to chart tab, update chart size
+            if (tabId === 'chart' && STATE.chart) {
+                setTimeout(() => {
+                    STATE.chart.resize();
+                }, 100);
+            }
+        }
+    };
+
+    // ===== ENHANCED YEAR SLIDER MANAGER =====
+    const YearSliderManager = {
+        init(calculation) {
+            if (!calculation || !calculation.schedule) return;
+
+            this.calculation = calculation;
+            this.generateYearlyData();
+            this.setupSlider();
+            // Default to showing year 1 initially
+            this.updateFromSlider(1);
+        },
+
+        generateYearlyData() {
+            const schedule = this.calculation.schedule;
+            this.yearlyData = [];
+
+            let totalPrincipal = 0;
+            let totalInterest = 0;
+            const loanAmount = this.calculation.loanAmount;
+
+            // Generate data for each year of the loan term
+            for (let year = 1; year <= this.calculation.params.term; year++) {
+                const startIndex = (year - 1) * 12;
+                const endIndex = Math.min(year * 12 - 1, schedule.length - 1);
+
+                if (endIndex >= 0 && schedule[endIndex]) {
+                    const payment = schedule[endIndex];
+
+                    // Calculate totals for this year
+                    const yearPayments = schedule.slice(startIndex, endIndex + 1);
+                    const yearPrincipal = yearPayments.reduce((sum, p) => sum + p.principal, 0);
+                    const yearInterest = yearPayments.reduce((sum, p) => sum + p.interest, 0);
+
+                    totalPrincipal += yearPrincipal;
+                    totalInterest += yearInterest;
+
+                    this.yearlyData.push({
+                        year,
+                        balance: payment.balance,
+                        totalPrincipal,
+                        totalInterest,
+                        yearPrincipal,
+                        yearInterest,
+                        percentPaid: ((loanAmount - payment.balance) / loanAmount) * 100
+                    });
+
+                    // Stop if loan is paid off
+                    if (payment.balance <= 0) break;
+                }
+            }
+
+            // Store in STATE for chart access
+            STATE.yearlyData = this.yearlyData;
+        },
+
+        setupSlider() {
+            const slider = $('#year-range');
+
+            if (slider && this.yearlyData.length > 0) {
+                slider.min = '1';
+                slider.max = this.yearlyData.length.toString();
+                slider.value = '1';
+
+                // Enhanced slider interaction
+                slider.addEventListener('input', (e) => {
+                    this.updateFromSlider(parseInt(e.target.value));
+                });
+
+                // Add touch/mouse interaction feedback
+                slider.addEventListener('mousedown', () => {
+                    slider.style.cursor = 'grabbing';
+                });
+
+                slider.addEventListener('mouseup', () => {
+                    slider.style.cursor = 'grab';
+                });
+            }
+        },
+
+        updateFromSlider(year) {
+            if (!this.yearlyData || year < 1 || year > this.yearlyData.length) return;
+
+            const data = this.yearlyData[year - 1];
+            if (!data) return;
+
+            // Update year indicator
+            const yearLabel = $('#year-label');
+            if (yearLabel) {
+                yearLabel.textContent = `Year ${year} of ${this.calculation.params.term}`;
+            }
+
+            // Update legend values with animation
+            this.updateLegendValue('#remaining-balance-display', data.balance);
+            this.updateLegendValue('#principal-paid-display', data.totalPrincipal);
+            this.updateLegendValue('#interest-paid-display', data.totalInterest);
+
+            // Update chart highlight
+            if (STATE.chart) {
+                ChartManager.updateHighlight(year);
+            }
+
+            // Update year details
+            const yearDetails = $('.current-year');
+            if (yearDetails) {
+                const percentComplete = ((year / this.calculation.params.term) * 100).toFixed(1);
+                yearDetails.textContent = `${percentComplete}% of loan term completed`;
+            }
+
+            // Announce to screen reader
+            Utils.announceToScreenReader(
+                `Year ${year}: Remaining balance ${Utils.formatCurrency(data.balance)}, Principal paid ${Utils.formatCurrency(data.totalPrincipal)}, Interest paid ${Utils.formatCurrency(data.totalInterest)}`
+            );
+        },
+
+        updateLegendValue(selector, value) {
+            const element = $(selector);
+            if (!element) return;
+
+            // Add smooth transition
+            element.style.transition = 'all 0.3s ease';
+            element.style.transform = 'scale(1.05)';
+            element.textContent = Utils.formatCurrency(value);
+
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 300);
+        }
+    };
+
+    // ===== ENHANCED CHART MANAGER WITH PERFECT YEAR HIGHLIGHTING =====
+    const ChartManager = {
+        render(calculation) {
+            const ctx = $('#mortgage-chart');
+            if (!ctx) return;
+
+            // Destroy existing chart
+            if (STATE.chart) {
+                STATE.chart.destroy();
+            }
+
+            const yearlyData = STATE.yearlyData || [];
+            if (yearlyData.length === 0) return;
+
+            const years = yearlyData.map(d => d.year);
+            const balanceData = yearlyData.map(d => d.balance);
+            const principalData = yearlyData.map(d => d.totalPrincipal);
+            const interestData = yearlyData.map(d => d.totalInterest);
+
+            STATE.chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: 'Remaining Balance',
+                        data: balanceData,
+                        borderColor: 'var(--chart-balance)',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: 'var(--chart-balance)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }, {
+                        label: 'Principal Paid',
+                        data: principalData,
+                        borderColor: 'var(--chart-principal)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: 'var(--chart-principal)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }, {
+                        label: 'Interest Paid',
+                        data: interestData,
+                        borderColor: 'var(--chart-interest)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: 'var(--chart-interest)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuart'
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // We have custom legend
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'var(--color-primary)',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: true,
+                            callbacks: {
+                                title: (items) => `Year ${items[0].label}`,
+                                label: (item) => {
+                                    const value = Utils.formatCurrency(item.raw);
+                                    return `${item.dataset.label}: ${value}`;
+                                },
+                                afterBody: (items) => {
+                                    if (items.length > 0) {
+                                        const year = parseInt(items[0].label);
+                                        const data = STATE.yearlyData[year - 1];
+                                        if (data) {
+                                            return [
+                                                '',
+                                                `Year ${year} payments:`,
+                                                `Principal: ${Utils.formatCurrency(data.yearPrincipal || 0)}`,
+                                                `Interest: ${Utils.formatCurrency(data.yearInterest || 0)}`
+                                            ];
+                                        }
+                                    }
+                                    return [];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Year',
+                                color: 'var(--text-secondary)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: 'var(--text-secondary)',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: 'var(--chart-grid)',
+                                lineWidth: 1
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amount ($)',
+                                color: 'var(--text-secondary)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: 'var(--text-secondary)',
+                                font: {
+                                    size: 12
+                                },
+                                callback: function(value) {
+                                    return Utils.formatCurrency(value, 0);
+                                }
+                            },
+                            grid: {
+                                color: 'var(--chart-grid)',
+                                lineWidth: 1
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const elementIndex = elements[0].index;
+                            const year = elementIndex + 1;
+
+                            // Update slider position
+                            const slider = $('#year-range');
+                            if (slider) {
+                                slider.value = year;
+                            }
+
+                            // Update display
+                            YearSliderManager.updateFromSlider(year);
+                        }
+                    }
+                }
+            });
+
+            // Initial highlight at year 1
+            this.updateHighlight(1);
+        },
+
+        updateHighlight(year) {
+            if (!STATE.chart || !STATE.yearlyData) return;
+
+            const yearIndex = year - 1;
+            if (yearIndex < 0 || yearIndex >= STATE.yearlyData.length) return;
+
+            // Remove existing highlight line
+            if (STATE.chartHighlightLine) {
+                STATE.chart.data.datasets = STATE.chart.data.datasets.filter(
+                    dataset => dataset.label !== 'Current Year'
+                );
+            }
+
+            // Add vertical line at current year
+            const highlightData = new Array(STATE.yearlyData.length).fill(null);
+            const maxValue = Math.max(...STATE.chart.data.datasets[0].data);
+            highlightData[yearIndex] = maxValue;
+
+            STATE.chartHighlightLine = {
+                label: 'Current Year',
+                data: highlightData,
+                borderColor: 'rgba(13, 148, 136, 0.8)',
+                backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                borderWidth: 3,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 8,
+                pointHoverRadius: 12,
+                pointBackgroundColor: 'var(--color-primary)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 3,
+                tension: 0
+            };
+
+            STATE.chart.data.datasets.push(STATE.chartHighlightLine);
+
+            // Update chart with animation
+            STATE.chart.update('active');
+
+            // Flash the point briefly
+            setTimeout(() => {
+                const meta = STATE.chart.getDatasetMeta(STATE.chart.data.datasets.length - 1);
+                const point = meta.data[yearIndex];
+                if (point) {
+                    point.options.pointRadius = 12;
+                    STATE.chart.update('none');
+
+                    setTimeout(() => {
+                        point.options.pointRadius = 8;
+                        STATE.chart.update('none');
+                    }, 200);
+                }
+            }, 100);
         }
     };
 
@@ -683,11 +1057,6 @@ document.addEventListener('DOMContentLoaded', () => {
             $('#share-btn')?.addEventListener('click', () => this.shareResults());
             $('#pdf-download-btn')?.addEventListener('click', () => this.downloadPDF());
             $('#print-btn')?.addEventListener('click', () => this.printResults());
-
-            // Year range slider
-            $('#year-range')?.addEventListener('input', (e) => {
-                YearSliderManager.updateFromSlider(parseInt(e.target.value));
-            });
         },
 
         populateStates() {
@@ -980,7 +1349,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 year: 'numeric'
             });
 
-            // Update chart loan amount
+            // Update chart loan amount display
             $('#chart-loan-amount').textContent = `Based on a ${Utils.formatCurrency(calc.params.homePrice)} mortgage`;
         },
 
@@ -1098,201 +1467,6 @@ document.addEventListener('DOMContentLoaded', () => {
         printResults() {
             window.print();
             Utils.announceToScreenReader('Print dialog opened');
-        }
-    };
-
-    // ===== YEAR SLIDER MANAGER =====
-    const YearSliderManager = {
-        init(calculation) {
-            if (!calculation || !calculation.schedule) return;
-
-            this.calculation = calculation;
-            this.generateYearlyData();
-            this.setupSlider();
-            this.updateFromSlider(Math.min(28, this.yearlyData.length)); // Default to year 28 or max available
-        },
-
-        generateYearlyData() {
-            const schedule = this.calculation.schedule;
-            this.yearlyData = [];
-
-            let totalPrincipal = 0;
-            let totalInterest = 0;
-            const loanAmount = this.calculation.loanAmount;
-
-            for (let year = 1; year <= this.calculation.params.term; year++) {
-                const endOfYearIndex = Math.min(year * 12 - 1, schedule.length - 1);
-
-                if (endOfYearIndex >= 0 && schedule[endOfYearIndex]) {
-                    const payment = schedule[endOfYearIndex];
-
-                    // Calculate totals for this year
-                    const yearPayments = schedule.slice((year - 1) * 12, year * 12);
-                    const yearPrincipal = yearPayments.reduce((sum, p) => sum + p.principal, 0);
-                    const yearInterest = yearPayments.reduce((sum, p) => sum + p.interest, 0);
-
-                    totalPrincipal += yearPrincipal;
-                    totalInterest += yearInterest;
-
-                    this.yearlyData.push({
-                        year,
-                        balance: payment.balance,
-                        totalPrincipal,
-                        totalInterest,
-                        percentPaid: ((loanAmount - payment.balance) / loanAmount) * 100
-                    });
-
-                    // Stop if loan is paid off
-                    if (payment.balance <= 0) break;
-                }
-            }
-        },
-
-        setupSlider() {
-            const slider = $('#year-range');
-
-            if (slider && this.yearlyData.length > 0) {
-                slider.min = '1';
-                slider.max = this.yearlyData.length.toString();
-                slider.value = Math.min(28, this.yearlyData.length).toString();
-            }
-        },
-
-        updateFromSlider(year) {
-            if (!this.yearlyData || year < 1 || year > this.yearlyData.length) return;
-
-            const data = this.yearlyData[year - 1];
-            if (!data) return;
-
-            // Update year indicator
-            $('#year-label').textContent = `Year ${year}`;
-
-            // Update legend values
-            $('#remaining-balance-display').textContent = Utils.formatCurrency(data.balance);
-            $('#principal-paid-display').textContent = Utils.formatCurrency(data.totalPrincipal);
-            $('#interest-paid-display').textContent = Utils.formatCurrency(data.totalInterest);
-
-            // Update chart if it exists
-            if (STATE.chart) {
-                ChartManager.updateHighlight(year);
-            }
-        }
-    };
-
-    // ===== CHART MANAGER =====
-    const ChartManager = {
-        render(calculation) {
-            const ctx = $('#mortgage-chart');
-            if (!ctx) return;
-
-            // Destroy existing chart
-            if (STATE.chart) {
-                STATE.chart.destroy();
-            }
-
-            const yearlyData = YearSliderManager.yearlyData || [];
-            if (yearlyData.length === 0) return;
-
-            const years = yearlyData.map(d => d.year);
-            const balanceData = yearlyData.map(d => d.balance);
-            const principalData = yearlyData.map(d => d.totalPrincipal);
-            const interestData = yearlyData.map(d => d.totalInterest);
-
-            STATE.chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: years,
-                    datasets: [{
-                        label: 'Remaining Balance',
-                        data: balanceData,
-                        borderColor: 'var(--chart-balance)',
-                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                        borderWidth: 3,
-                        fill: false,
-                        tension: 0.4
-                    }, {
-                        label: 'Principal Paid',
-                        data: principalData,
-                        borderColor: 'var(--chart-principal)',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        borderWidth: 3,
-                        fill: false,
-                        tension: 0.4
-                    }, {
-                        label: 'Interest Paid',
-                        data: interestData,
-                        borderColor: 'var(--chart-interest)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 3,
-                        fill: false,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false // We have custom legend
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            borderColor: 'var(--color-primary)',
-                            borderWidth: 1,
-                            cornerRadius: 8,
-                            callbacks: {
-                                title: (items) => `Year ${items[0].label}`,
-                                label: (item) => {
-                                    const value = Utils.formatCurrency(item.raw);
-                                    return `${item.dataset.label}: ${value}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Year',
-                                color: 'var(--text-secondary)'
-                            },
-                            ticks: {
-                                color: 'var(--text-secondary)'
-                            },
-                            grid: {
-                                color: 'var(--chart-grid)'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Amount ($)',
-                                color: 'var(--text-secondary)'
-                            },
-                            ticks: {
-                                color: 'var(--text-secondary)',
-                                callback: function(value) {
-                                    return Utils.formatCurrency(value, 0);
-                                }
-                            },
-                            grid: {
-                                color: 'var(--chart-grid)'
-                            }
-                        }
-                    }
-                }
-            });
-        },
-
-        updateHighlight(year) {
-            // This would add visual highlighting for the selected year
-            // Implementation depends on specific Chart.js version and features
         }
     };
 
