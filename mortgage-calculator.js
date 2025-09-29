@@ -1,2690 +1,1251 @@
-:root {
-  /* Primitive Color Tokens */
-  --color-white: rgba(255, 255, 255, 1);
-  --color-black: rgba(0, 0, 0, 1);
-  --color-cream-50: rgba(252, 252, 249, 1);
-  --color-cream-100: rgba(255, 255, 253, 1);
-  --color-gray-200: rgba(245, 245, 245, 1);
-  --color-gray-300: rgba(167, 169, 169, 1);
-  --color-gray-400: rgba(119, 124, 124, 1);
-  --color-slate-500: rgba(98, 108, 113, 1);
-  --color-brown-600: rgba(94, 82, 64, 1);
-  --color-charcoal-700: rgba(31, 33, 33, 1);
-  --color-charcoal-800: rgba(38, 40, 40, 1);
-  --color-slate-900: rgba(19, 52, 59, 1);
-  --color-teal-300: rgba(50, 184, 198, 1);
-  --color-teal-400: rgba(45, 166, 178, 1);
-  --color-teal-500: rgba(33, 128, 141, 1);
-  --color-teal-600: rgba(29, 116, 128, 1);
-  --color-teal-700: rgba(26, 104, 115, 1);
-  --color-teal-800: rgba(41, 150, 161, 1);
-  --color-red-400: rgba(255, 84, 89, 1);
-  --color-red-500: rgba(192, 21, 47, 1);
-  --color-orange-400: rgba(230, 129, 97, 1);
-  --color-orange-500: rgba(168, 75, 47, 1);
-
-  /* RGB versions for opacity control */
-  --color-brown-600-rgb: 94, 82, 64;
-  --color-teal-500-rgb: 33, 128, 141;
-  --color-slate-900-rgb: 19, 52, 59;
-  --color-slate-500-rgb: 98, 108, 113;
-  --color-red-500-rgb: 192, 21, 47;
-  --color-red-400-rgb: 255, 84, 89;
-  --color-orange-500-rgb: 168, 75, 47;
-  --color-orange-400-rgb: 230, 129, 97;
-
-  /* Background color tokens (Light Mode) */
-  --color-bg-1: rgba(59, 130, 246, 0.08); /* Light blue */
-  --color-bg-2: rgba(245, 158, 11, 0.08); /* Light yellow */
-  --color-bg-3: rgba(34, 197, 94, 0.08); /* Light green */
-  --color-bg-4: rgba(239, 68, 68, 0.08); /* Light red */
-  --color-bg-5: rgba(147, 51, 234, 0.08); /* Light purple */
-  --color-bg-6: rgba(249, 115, 22, 0.08); /* Light orange */
-  --color-bg-7: rgba(236, 72, 153, 0.08); /* Light pink */
-  --color-bg-8: rgba(6, 182, 212, 0.08); /* Light cyan */
-
-  /* Semantic Color Tokens (Light Mode) */
-  --color-background: var(--color-cream-50);
-  --color-surface: var(--color-cream-100);
-  --color-text: var(--color-slate-900);
-  --color-text-secondary: var(--color-slate-500);
-  --color-primary: var(--color-teal-500);
-  --color-primary-hover: var(--color-teal-600);
-  --color-primary-active: var(--color-teal-700);
-  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-btn-primary-text: var(--color-cream-50);
-  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-error: var(--color-red-500);
-  --color-success: var(--color-teal-500);
-  --color-warning: var(--color-orange-500);
-  --color-info: var(--color-slate-500);
-  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
-  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
-
-  /* Common style patterns */
-  --focus-ring: 0 0 0 3px var(--color-focus-ring);
-  --focus-outline: 2px solid var(--color-primary);
-  --status-bg-opacity: 0.15;
-  --status-border-opacity: 0.25;
-  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-
-  /* RGB versions for opacity control */
-  --color-success-rgb: 33, 128, 141;
-  --color-error-rgb: 192, 21, 47;
-  --color-warning-rgb: 168, 75, 47;
-  --color-info-rgb: 98, 108, 113;
-
-  /* Typography */
-  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
-    Monaco, Consolas, monospace;
-  --font-size-xs: 11px;
-  --font-size-sm: 12px;
-  --font-size-base: 14px;
-  --font-size-md: 14px;
-  --font-size-lg: 16px;
-  --font-size-xl: 18px;
-  --font-size-2xl: 20px;
-  --font-size-3xl: 24px;
-  --font-size-4xl: 30px;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 550;
-  --font-weight-bold: 600;
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.5;
-  --letter-spacing-tight: -0.01em;
-
-  /* Spacing */
-  --space-0: 0;
-  --space-1: 1px;
-  --space-2: 2px;
-  --space-4: 4px;
-  --space-6: 6px;
-  --space-8: 8px;
-  --space-10: 10px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-20: 20px;
-  --space-24: 24px;
-  --space-32: 32px;
-
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-base: 8px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-full: 9999px;
-
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
-    0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
-    0 4px 6px -2px rgba(0, 0, 0, 0.02);
-  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
-
-  /* Animation */
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Layout */
-  --container-sm: 640px;
-  --container-md: 768px;
-  --container-lg: 1024px;
-  --container-xl: 1280px;
-}
-
-/* Dark mode colors */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* RGB versions for opacity control (Dark Mode) */
-    --color-gray-400-rgb: 119, 124, 124;
-    --color-teal-300-rgb: 50, 184, 198;
-    --color-gray-300-rgb: 167, 169, 169;
-    --color-gray-200-rgb: 245, 245, 245;
-
-    /* Background color tokens (Dark Mode) */
-    --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
-    --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
-    --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
-    --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
-    --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
-    --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
-    --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
-    --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
-
-    /* Semantic Color Tokens (Dark Mode) */
-    --color-background: var(--color-charcoal-700);
-    --color-surface: var(--color-charcoal-800);
-    --color-text: var(--color-gray-200);
-    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-    --color-primary: var(--color-teal-300);
-    --color-primary-hover: var(--color-teal-400);
-    --color-primary-active: var(--color-teal-800);
-    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
-    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
-    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-    --color-error: var(--color-red-400);
-    --color-success: var(--color-teal-300);
-    --color-warning: var(--color-orange-400);
-    --color-info: var(--color-gray-300);
-    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
-    --color-btn-primary-text: var(--color-slate-900);
-    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
-    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
-    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-    --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-    --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
-
-    /* Common style patterns - updated for dark mode */
-    --focus-ring: 0 0 0 3px var(--color-focus-ring);
-    --focus-outline: 2px solid var(--color-primary);
-    --status-bg-opacity: 0.15;
-    --status-border-opacity: 0.25;
-    --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-
-    /* RGB versions for dark mode */
-    --color-success-rgb: var(--color-teal-300-rgb);
-    --color-error-rgb: var(--color-red-400-rgb);
-    --color-warning-rgb: var(--color-orange-400-rgb);
-    --color-info-rgb: var(--color-gray-300-rgb);
-  }
-}
-
-/* Data attribute for manual theme switching */
-[data-color-scheme="dark"] {
-  /* RGB versions for opacity control (dark mode) */
-  --color-gray-400-rgb: 119, 124, 124;
-  --color-teal-300-rgb: 50, 184, 198;
-  --color-gray-300-rgb: 167, 169, 169;
-  --color-gray-200-rgb: 245, 245, 245;
-
-  /* Colorful background palette - Dark Mode */
-  --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
-  --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
-  --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
-  --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
-  --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
-  --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
-  --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
-  --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
-
-  /* Semantic Color Tokens (Dark Mode) */
-  --color-background: var(--color-charcoal-700);
-  --color-surface: var(--color-charcoal-800);
-  --color-text: var(--color-gray-200);
-  --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-  --color-primary: var(--color-teal-300);
-  --color-primary-hover: var(--color-teal-400);
-  --color-primary-active: var(--color-teal-800);
-  --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
-  --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-  --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
-  --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-  --color-error: var(--color-red-400);
-  --color-success: var(--color-teal-300);
-  --color-warning: var(--color-orange-400);
-  --color-info: var(--color-gray-300);
-  --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
-  --color-btn-primary-text: var(--color-slate-900);
-  --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
-  --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
-  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-  --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-  --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
-
-  /* Common style patterns - updated for dark mode */
-  --focus-ring: 0 0 0 3px var(--color-focus-ring);
-  --focus-outline: 2px solid var(--color-primary);
-  --status-bg-opacity: 0.15;
-  --status-border-opacity: 0.25;
-  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-
-  /* RGB versions for dark mode */
-  --color-success-rgb: var(--color-teal-300-rgb);
-  --color-error-rgb: var(--color-red-400-rgb);
-  --color-warning-rgb: var(--color-orange-400-rgb);
-  --color-info-rgb: var(--color-gray-300-rgb);
-}
-
-[data-color-scheme="light"] {
-  /* RGB versions for opacity control (light mode) */
-  --color-brown-600-rgb: 94, 82, 64;
-  --color-teal-500-rgb: 33, 128, 141;
-  --color-slate-900-rgb: 19, 52, 59;
-
-  /* Semantic Color Tokens (Light Mode) */
-  --color-background: var(--color-cream-50);
-  --color-surface: var(--color-cream-100);
-  --color-text: var(--color-slate-900);
-  --color-text-secondary: var(--color-slate-500);
-  --color-primary: var(--color-teal-500);
-  --color-primary-hover: var(--color-teal-600);
-  --color-primary-active: var(--color-teal-700);
-  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-btn-primary-text: var(--color-cream-50);
-  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-error: var(--color-red-500);
-  --color-success: var(--color-teal-500);
-  --color-warning: var(--color-orange-500);
-  --color-info: var(--color-slate-500);
-  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
-
-  /* RGB versions for light mode */
-  --color-success-rgb: var(--color-teal-500-rgb);
-  --color-error-rgb: var(--color-red-500-rgb);
-  --color-warning-rgb: var(--color-orange-500-rgb);
-  --color-info-rgb: var(--color-slate-500-rgb);
-}
-
-/* Base styles */
-html {
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  line-height: var(--line-height-normal);
-  color: var(--color-text);
-  background-color: var(--color-background);
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
-  color: var(--color-text);
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-h1 {
-  font-size: var(--font-size-4xl);
-}
-h2 {
-  font-size: var(--font-size-3xl);
-}
-h3 {
-  font-size: var(--font-size-2xl);
-}
-h4 {
-  font-size: var(--font-size-xl);
-}
-h5 {
-  font-size: var(--font-size-lg);
-}
-h6 {
-  font-size: var(--font-size-md);
-}
-
-p {
-  margin: 0 0 var(--space-16) 0;
-}
-
-a {
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-standard);
-}
-
-a:hover {
-  color: var(--color-primary-hover);
-}
-
-code,
-pre {
-  font-family: var(--font-family-mono);
-  font-size: calc(var(--font-size-base) * 0.95);
-  background-color: var(--color-secondary);
-  border-radius: var(--radius-sm);
-}
-
-code {
-  padding: var(--space-1) var(--space-4);
-}
-
-pre {
-  padding: var(--space-16);
-  margin: var(--space-16) 0;
-  overflow: auto;
-  border: 1px solid var(--color-border);
-}
-
-pre code {
-  background: none;
-  padding: 0;
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-8) var(--space-16);
-  border-radius: var(--radius-base);
-  font-size: var(--font-size-base);
-  font-weight: 500;
-  line-height: 1.5;
-  cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-standard);
-  border: none;
-  text-decoration: none;
-  position: relative;
-}
-
-.btn:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-.btn--primary {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-}
-
-.btn--primary:hover {
-  background: var(--color-primary-hover);
-}
-
-.btn--primary:active {
-  background: var(--color-primary-active);
-}
-
-.btn--secondary {
-  background: var(--color-secondary);
-  color: var(--color-text);
-}
-
-.btn--secondary:hover {
-  background: var(--color-secondary-hover);
-}
-
-.btn--secondary:active {
-  background: var(--color-secondary-active);
-}
-
-.btn--outline {
-  background: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-}
-
-.btn--outline:hover {
-  background: var(--color-secondary);
-}
-
-.btn--sm {
-  padding: var(--space-4) var(--space-12);
-  font-size: var(--font-size-sm);
-  border-radius: var(--radius-sm);
-}
-
-.btn--lg {
-  padding: var(--space-10) var(--space-20);
-  font-size: var(--font-size-lg);
-  border-radius: var(--radius-md);
-}
-
-.btn--full-width {
-  width: 100%;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Form elements */
-.form-control {
-  display: block;
-  width: 100%;
-  padding: var(--space-8) var(--space-12);
-  font-size: var(--font-size-md);
-  line-height: 1.5;
-  color: var(--color-text);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-  transition: border-color var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard);
-}
-
-textarea.form-control {
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-}
-
-select.form-control {
-  padding: var(--space-8) var(--space-12);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: var(--select-caret-light);
-  background-repeat: no-repeat;
-  background-position: right var(--space-12) center;
-  background-size: 16px;
-  padding-right: var(--space-32);
-}
-
-/* Add a dark mode specific caret */
-@media (prefers-color-scheme: dark) {
-  select.form-control {
-    background-image: var(--select-caret-dark);
-  }
-}
-
-/* Also handle data-color-scheme */
-[data-color-scheme="dark"] select.form-control {
-  background-image: var(--select-caret-dark);
-}
-
-[data-color-scheme="light"] select.form-control {
-  background-image: var(--select-caret-light);
-}
-
-.form-control:focus {
-  border-color: var(--color-primary);
-  outline: var(--focus-outline);
-}
-
-.form-label {
-  display: block;
-  margin-bottom: var(--space-8);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-}
-
-.form-group {
-  margin-bottom: var(--space-16);
-}
-
-/* Card component */
-.card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-card-border);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  transition: box-shadow var(--duration-normal) var(--ease-standard);
-}
-
-.card:hover {
-  box-shadow: var(--shadow-md);
-}
-
-.card__body {
-  padding: var(--space-16);
-}
-
-.card__header,
-.card__footer {
-  padding: var(--space-16);
-  border-bottom: 1px solid var(--color-card-border-inner);
-}
-
-/* Status indicators - simplified with CSS variables */
-.status {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-6) var(--space-12);
-  border-radius: var(--radius-full);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-}
-
-.status--success {
-  background-color: rgba(
-    var(--color-success-rgb, 33, 128, 141),
-    var(--status-bg-opacity)
-  );
-  color: var(--color-success);
-  border: 1px solid
-    rgba(var(--color-success-rgb, 33, 128, 141), var(--status-border-opacity));
-}
-
-.status--error {
-  background-color: rgba(
-    var(--color-error-rgb, 192, 21, 47),
-    var(--status-bg-opacity)
-  );
-  color: var(--color-error);
-  border: 1px solid
-    rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
-}
-
-.status--warning {
-  background-color: rgba(
-    var(--color-warning-rgb, 168, 75, 47),
-    var(--status-bg-opacity)
-  );
-  color: var(--color-warning);
-  border: 1px solid
-    rgba(var(--color-warning-rgb, 168, 75, 47), var(--status-border-opacity));
-}
-
-.status--info {
-  background-color: rgba(
-    var(--color-info-rgb, 98, 108, 113),
-    var(--status-bg-opacity)
-  );
-  color: var(--color-info);
-  border: 1px solid
-    rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
-}
-
-/* Container layout */
-.container {
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: var(--space-16);
-  padding-left: var(--space-16);
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: var(--container-sm);
-  }
-}
-@media (min-width: 768px) {
-  .container {
-    max-width: var(--container-md);
-  }
-}
-@media (min-width: 1024px) {
-  .container {
-    max-width: var(--container-lg);
-  }
-}
-@media (min-width: 1280px) {
-  .container {
-    max-width: var(--container-xl);
-  }
-}
-
-/* Utility classes */
-.flex {
-  display: flex;
-}
-.flex-col {
-  flex-direction: column;
-}
-.items-center {
-  align-items: center;
-}
-.justify-center {
-  justify-content: center;
-}
-.justify-between {
-  justify-content: space-between;
-}
-.gap-4 {
-  gap: var(--space-4);
-}
-.gap-8 {
-  gap: var(--space-8);
-}
-.gap-16 {
-  gap: var(--space-16);
-}
-
-.m-0 {
-  margin: 0;
-}
-.mt-8 {
-  margin-top: var(--space-8);
-}
-.mb-8 {
-  margin-bottom: var(--space-8);
-}
-.mx-8 {
-  margin-left: var(--space-8);
-  margin-right: var(--space-8);
-}
-.my-8 {
-  margin-top: var(--space-8);
-  margin-bottom: var(--space-8);
-}
-
-.p-0 {
-  padding: 0;
-}
-.py-8 {
-  padding-top: var(--space-8);
-  padding-bottom: var(--space-8);
-}
-.px-8 {
-  padding-left: var(--space-8);
-  padding-right: var(--space-8);
-}
-.py-16 {
-  padding-top: var(--space-16);
-  padding-bottom: var(--space-16);
-}
-.px-16 {
-  padding-left: var(--space-16);
-  padding-right: var(--space-16);
-}
-
-.block {
-  display: block;
-}
-.hidden {
-  display: none;
-}
-
-/* Accessibility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: 2px;
-}
-
-/* Dark mode specifics */
-[data-color-scheme="dark"] .btn--outline {
-  border: 1px solid var(--color-border-secondary);
-}
-
-@font-face {
-  font-family: 'FKGroteskNeue';
-  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
-    format('woff2');
-}
-
-/* END PERPLEXITY DESIGN SYSTEM */
-```css
-/* FinGuid Mortgage Calculator CSS - Enhanced v5.0.0 */
-/* Based on design system */
-
-/* Import design system variables */
-:root {
-    /* Primitive Color Tokens */
-    --color-white: rgba(255, 255, 255, 1);
-    --color-black: rgba(0, 0, 0, 1);
-    --color-cream-50: rgba(252, 252, 249, 1);
-    --color-cream-100: rgba(255, 255, 253, 1);
-    --color-gray-200: rgba(245, 245, 245, 1);
-    --color-gray-300: rgba(167, 169, 169, 1);
-    --color-gray-400: rgba(119, 124, 124, 1);
-    --color-slate-500: rgba(98, 108, 113, 1);
-    --color-brown-600: rgba(94, 82, 64, 1);
-    --color-charcoal-700: rgba(31, 33, 33, 1);
-    --color-charcoal-800: rgba(38, 40, 40, 1);
-    --color-slate-900: rgba(19, 52, 59, 1);
-    --color-teal-300: rgba(50, 184, 198, 1);
-    --color-teal-400: rgba(45, 166, 178, 1);
-    --color-teal-500: rgba(33, 128, 141, 1);
-    --color-teal-600: rgba(29, 116, 128, 1);
-    --color-teal-700: rgba(26, 104, 115, 1);
-    --color-teal-800: rgba(41, 150, 161, 1);
-    --color-red-400: rgba(255, 84, 89, 1);
-    --color-red-500: rgba(192, 21, 47, 1);
-    --color-orange-400: rgba(230, 129, 97, 1);
-    --color-orange-500: rgba(168, 75, 47, 1);
-
-    /* RGB versions for opacity control */
-    --color-brown-600-rgb: 94, 82, 64;
-    --color-teal-500-rgb: 33, 128, 141;
-    --color-slate-900-rgb: 19, 52, 59;
-    --color-slate-500-rgb: 98, 108, 113;
-    --color-red-500-rgb: 192, 21, 47;
-    --color-red-400-rgb: 255, 84, 89;
-    --color-orange-500-rgb: 168, 75, 47;
-    --color-orange-400-rgb: 230, 129, 97;
-
-    /* Background color tokens (Light Mode) */
-    --color-bg-1: rgba(59, 130, 246, 0.08);
-    --color-bg-2: rgba(245, 158, 11, 0.08);
-    --color-bg-3: rgba(34, 197, 94, 0.08);
-    --color-bg-4: rgba(239, 68, 68, 0.08);
-    --color-bg-5: rgba(147, 51, 234, 0.08);
-    --color-bg-6: rgba(249, 115, 22, 0.08);
-    --color-bg-7: rgba(236, 72, 153, 0.08);
-    --color-bg-8: rgba(6, 182, 212, 0.08);
-
-    /* Semantic Color Tokens (Light Mode) */
-    --color-background: var(--color-cream-50);
-    --color-surface: var(--color-cream-100);
-    --color-text: var(--color-slate-900);
-    --color-text-secondary: var(--color-slate-500);
-    --color-primary: var(--color-teal-500);
-    --color-primary-hover: var(--color-teal-600);
-    --color-primary-active: var(--color-teal-700);
-    --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-    --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-    --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-    --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-    --color-btn-primary-text: var(--color-cream-50);
-    --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-    --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-    --color-error: var(--color-red-500);
-    --color-success: var(--color-teal-500);
-    --color-warning: var(--color-orange-500);
-    --color-info: var(--color-slate-500);
-    --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
-    --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
-
-    /* Common style patterns */
-    --focus-ring: 0 0 0 3px var(--color-focus-ring);
-    --focus-outline: 2px solid var(--color-primary);
-    --status-bg-opacity: 0.15;
-    --status-border-opacity: 0.25;
-    --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-
-    /* RGB versions for opacity control */
-    --color-success-rgb: 33, 128, 141;
-    --color-error-rgb: 192, 21, 47;
-    --color-warning-rgb: 168, 75, 47;
-    --color-info-rgb: 98, 108, 113;
-
-    /* Typography */
-    --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    --font-size-xs: 11px;
-    --font-size-sm: 12px;
-    --font-size-base: 14px;
-    --font-size-md: 14px;
-    --font-size-lg: 16px;
-    --font-size-xl: 18px;
-    --font-size-2xl: 20px;
-    --font-size-3xl: 24px;
-    --font-size-4xl: 30px;
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 550;
-    --font-weight-bold: 600;
-    --line-height-tight: 1.2;
-    --line-height-normal: 1.5;
-    --letter-spacing-tight: -0.01em;
-
-    /* Spacing */
-    --space-0: 0;
-    --space-1: 1px;
-    --space-2: 2px;
-    --space-4: 4px;
-    --space-6: 6px;
-    --space-8: 8px;
-    --space-10: 10px;
-    --space-12: 12px;
-    --space-16: 16px;
-    --space-20: 20px;
-    --space-24: 24px;
-    --space-32: 32px;
-
-    /* Border Radius */
-    --radius-sm: 6px;
-    --radius-base: 8px;
-    --radius-md: 10px;
-    --radius-lg: 12px;
-    --radius-full: 9999px;
-
-    /* Shadows */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
-
-    /* Animation */
-    --duration-fast: 150ms;
-    --duration-normal: 250ms;
-    --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-
-    /* Layout */
-    --container-sm: 640px;
-    --container-md: 768px;
-    --container-lg: 1024px;
-    --container-xl: 1280px;
-}
-
-/* Dark mode colors */
-@media (prefers-color-scheme: dark) {
-    :root {
-        /* RGB versions for opacity control (Dark Mode) */
-        --color-gray-400-rgb: 119, 124, 124;
-        --color-teal-300-rgb: 50, 184, 198;
-        --color-gray-300-rgb: 167, 169, 169;
-        --color-gray-200-rgb: 245, 245, 245;
-
-        /* Background color tokens (Dark Mode) */
-        --color-bg-1: rgba(29, 78, 216, 0.15);
-        --color-bg-2: rgba(180, 83, 9, 0.15);
-        --color-bg-3: rgba(21, 128, 61, 0.15);
-        --color-bg-4: rgba(185, 28, 28, 0.15);
-        --color-bg-5: rgba(107, 33, 168, 0.15);
-        --color-bg-6: rgba(194, 65, 12, 0.15);
-        --color-bg-7: rgba(190, 24, 93, 0.15);
-        --color-bg-8: rgba(8, 145, 178, 0.15);
-
-        /* Semantic Color Tokens (Dark Mode) */
-        --color-background: var(--color-charcoal-700);
-        --color-surface: var(--color-charcoal-800);
-        --color-text: var(--color-gray-200);
-        --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-        --color-primary: var(--color-teal-300);
-        --color-primary-hover: var(--color-teal-400);
-        --color-primary-active: var(--color-teal-800);
-        --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
-        --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-        --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
-        --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-        --color-error: var(--color-red-400);
-        --color-success: var(--color-teal-300);
-        --color-warning: var(--color-orange-400);
-        --color-info: var(--color-gray-300);
-        --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
-        --color-btn-primary-text: var(--color-slate-900);
-        --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
-        --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
-        --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-        --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-        --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-        --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
-
-        /* RGB versions for dark mode */
-        --color-success-rgb: var(--color-teal-300-rgb);
-        --color-error-rgb: var(--color-red-400-rgb);
-        --color-warning-rgb: var(--color-orange-400-rgb);
-        --color-info-rgb: var(--color-gray-300-rgb);
+/**
+ * FinGuid Mortgage Calculator - Enhanced Version 5.0.0
+ * Production-ready mortgage calculator with all requested improvements
+ * 
+ * Key Features:
+ * - Reduced hero section to half size
+ * - Default calculation values
+ * - Auto-calculation functionality
+ * - Next month default for loan start date
+ * - Manual date entry option
+ * - Amortization with monthly/yearly views
+ * - Collapse/expand/export/print controls
+ * - State-based property tax auto-calculation
+ * - Enhanced UI matching style.css design system
+ */
+
+'use strict';
+
+// Global application state
+const MortgageCalculator = {
+    version: '5.0.0',
+    initialized: false,
+    state: {
+        currentCalculation: null,
+        chartInstance: null,
+        amortizationData: [],
+        currentLoanType: 'conventional',
+        validationErrors: new Map(),
+        isAmortizationExpanded: true,
+        currentAmortizationView: 'monthly',
+        currentPage: 1,
+        pageSize: 12
+    },
+    config: {
+        debounceDelay: 300,
+        animationDuration: 250,
+        chartColors: {
+            principal: '#21808d',
+            tax: '#f59e0b',
+            insurance: '#10b981',
+            pmi: '#ef4444',
+            hoa: '#8b5cf6'
+        }
+    }
+};
+
+// State property tax rates for all 50 US states
+const STATE_TAX_RATES = {
+    'AL': { rate: 0.0041, name: 'Alabama', avgTax: 1649 },
+    'AK': { rate: 0.0119, name: 'Alaska', avgTax: 3117 },
+    'AZ': { rate: 0.0062, name: 'Arizona', avgTax: 1648 },
+    'AR': { rate: 0.0061, name: 'Arkansas', avgTax: 857 },
+    'CA': { rate: 0.0075, name: 'California', avgTax: 4456 },
+    'CO': { rate: 0.0051, name: 'Colorado', avgTax: 2204 },
+    'CT': { rate: 0.0214, name: 'Connecticut', avgTax: 6044 },
+    'DE': { rate: 0.0057, name: 'Delaware', avgTax: 1673 },
+    'FL': { rate: 0.0083, name: 'Florida', avgTax: 2338 },
+    'GA': { rate: 0.0089, name: 'Georgia', avgTax: 1773 },
+    'HI': { rate: 0.0028, name: 'Hawaii', avgTax: 1971 },
+    'ID': { rate: 0.0069, name: 'Idaho', avgTax: 1791 },
+    'IL': { rate: 0.0227, name: 'Illinois', avgTax: 4738 },
+    'IN': { rate: 0.0085, name: 'Indiana', avgTax: 1263 },
+    'IA': { rate: 0.0157, name: 'Iowa', avgTax: 2540 },
+    'KS': { rate: 0.0141, name: 'Kansas', avgTax: 2084 },
+    'KY': { rate: 0.0086, name: 'Kentucky', avgTax: 1257 },
+    'LA': { rate: 0.0055, name: 'Louisiana', avgTax: 1076 },
+    'ME': { rate: 0.0128, name: 'Maine', avgTax: 2792 },
+    'MD': { rate: 0.0109, name: 'Maryland', avgTax: 3684 },
+    'MA': { rate: 0.0117, name: 'Massachusetts', avgTax: 5570 },
+    'MI': { rate: 0.0154, name: 'Michigan', avgTax: 2185 },
+    'MN': { rate: 0.0112, name: 'Minnesota', avgTax: 2982 },
+    'MS': { rate: 0.0081, name: 'Mississippi', avgTax: 1062 },
+    'MO': { rate: 0.0097, name: 'Missouri', avgTax: 1569 },
+    'MT': { rate: 0.0084, name: 'Montana', avgTax: 2539 },
+    'NE': { rate: 0.0173, name: 'Nebraska', avgTax: 2907 },
+    'NV': { rate: 0.0053, name: 'Nevada', avgTax: 1695 },
+    'NH': { rate: 0.0209, name: 'New Hampshire', avgTax: 6296 },
+    'NJ': { rate: 0.0249, name: 'New Jersey', avgTax: 9112 },
+    'NM': { rate: 0.0080, name: 'New Mexico', avgTax: 1413 },
+    'NY': { rate: 0.0169, name: 'New York', avgTax: 5844 },
+    'NC': { rate: 0.0084, name: 'North Carolina', avgTax: 1749 },
+    'ND': { rate: 0.0142, name: 'North Dakota', avgTax: 2675 },
+    'OH': { rate: 0.0162, name: 'Ohio', avgTax: 2323 },
+    'OK': { rate: 0.0090, name: 'Oklahoma', avgTax: 1436 },
+    'OR': { rate: 0.0093, name: 'Oregon', avgTax: 3507 },
+    'PA': { rate: 0.0158, name: 'Pennsylvania', avgTax: 3239 },
+    'RI': { rate: 0.0153, name: 'Rhode Island', avgTax: 4706 },
+    'SC': { rate: 0.0057, name: 'South Carolina', avgTax: 1116 },
+    'SD': { rate: 0.0132, name: 'South Dakota', avgTax: 2540 },
+    'TN': { rate: 0.0064, name: 'Tennessee', avgTax: 1220 },
+    'TX': { rate: 0.0180, name: 'Texas', avgTax: 4153 },
+    'UT': { rate: 0.0066, name: 'Utah', avgTax: 2340 },
+    'VT': { rate: 0.0190, name: 'Vermont', avgTax: 4873 },
+    'VA': { rate: 0.0082, name: 'Virginia', avgTax: 2839 },
+    'WA': { rate: 0.0094, name: 'Washington', avgTax: 3668 },
+    'WV': { rate: 0.0059, name: 'West Virginia', avgTax: 764 },
+    'WI': { rate: 0.0185, name: 'Wisconsin', avgTax: 3595 },
+    'WY': { rate: 0.0062, name: 'Wyoming', avgTax: 1723 }
+};
+
+// Utility functions
+const Utils = {
+    // DOM manipulation
+    $(selector) {
+        return document.querySelector(selector);
+    },
+
+    $$(selector) {
+        return Array.from(document.querySelectorAll(selector));
+    },
+
+    // Formatting functions
+    formatCurrency(amount, decimals = 0) {
+        if (isNaN(amount)) return '$0';
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }).format(amount);
+    },
+
+    formatNumber(num, decimals = 0) {
+        if (isNaN(num)) return '0';
+        return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }).format(num);
+    },
+
+    formatPercentage(num, decimals = 2) {
+        if (isNaN(num)) return '0%';
+        return new Intl.NumberFormat('en-US', {
+            style: 'percent',
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }).format(num / 100);
+    },
+
+    // Validation functions
+    isValidNumber(value, min = null, max = null) {
+        const num = parseFloat(value);
+        if (isNaN(num)) return false;
+        if (min !== null && num < min) return false;
+        if (max !== null && num > max) return false;
+        return true;
+    },
+
+    // Performance utilities
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    },
+
+    // Date utilities
+    addMonths(date, months) {
+        const result = new Date(date);
+        result.setMonth(result.getMonth() + months);
+        return result;
+    },
+
+    formatDate(date, format = 'MMM YYYY') {
+        const options = format === 'MMM YYYY' 
+            ? { year: 'numeric', month: 'short' }
+            : { year: 'numeric', month: 'numeric', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    },
+
+    // Get next month date for default loan start
+    getNextMonthDate() {
+        const today = new Date();
+        const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+        return nextMonth.toISOString().split('T')[0];
+    }
+};
+
+// Mortgage calculation engine
+const MortgageEngine = {
+    calculateMonthlyPayment(principal, annualRate, termYears) {
+        if (annualRate === 0) {
+            return principal / (termYears * 12);
+        }
+        const monthlyRate = annualRate / 12;
+        const numPayments = termYears * 12;
+        return principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+               (Math.pow(1 + monthlyRate, numPayments) - 1);
+    },
+
+    calculatePMI(loanAmount, downPaymentPercent, loanType) {
+        if (loanType === 'va') return 0;
+        if (downPaymentPercent >= 20) return 0;
+
+        let pmiRate = 0.008; // Default 0.8%
+
+        if (loanType === 'fha') {
+            pmiRate = downPaymentPercent < 10 ? 0.0085 : 0.008;
+        } else if (loanType === 'usda') {
+            pmiRate = 0.0035;
+        }
+
+        return (loanAmount * pmiRate) / 12;
+    },
+
+    calculateLoanDetails(inputs) {
+        const {
+            homePrice, downPaymentAmount, interestRate, loanTerm,
+            loanType, propertyTax, homeInsurance, hoaFees,
+            extraMonthly, extraYearly
+        } = inputs;
+
+        // Calculate loan amount
+        const loanAmount = homePrice - downPaymentAmount;
+        const downPaymentPercent = (downPaymentAmount / homePrice) * 100;
+
+        // Monthly principal and interest
+        const monthlyPI = this.calculateMonthlyPayment(
+            loanAmount, 
+            interestRate / 100, 
+            loanTerm
+        );
+
+        // Calculate PMI
+        const monthlyPMI = this.calculatePMI(
+            loanAmount, 
+            downPaymentPercent, 
+            loanType
+        );
+
+        // Other monthly costs
+        const monthlyTax = propertyTax / 12;
+        const monthlyInsurance = homeInsurance / 12;
+        const monthlyHOA = hoaFees || 0;
+
+        // Total monthly payment
+        const totalMonthly = monthlyPI + monthlyPMI + monthlyTax + 
+                           monthlyInsurance + monthlyHOA;
+
+        // Calculate totals
+        const totalPayments = monthlyPI * (loanTerm * 12);
+        const totalInterest = totalPayments - loanAmount;
+        const totalCost = homePrice + totalInterest;
+
+        return {
+            loanAmount,
+            downPaymentAmount,
+            downPaymentPercent,
+            monthlyPI,
+            monthlyPMI,
+            monthlyTax,
+            monthlyInsurance,
+            monthlyHOA,
+            totalMonthly,
+            totalInterest,
+            totalCost,
+            loanType,
+            inputs
+        };
+    },
+
+    generateAmortizationSchedule(inputs, results) {
+        const { loanAmount, monthlyPI, extraMonthly = 0, extraYearly = 0 } = 
+              { ...inputs, ...results };
+        const annualRate = inputs.interestRate / 100;
+        const monthlyRate = annualRate / 12;
+        const startDate = new Date(inputs.startDate || Utils.getNextMonthDate());
+
+        const schedule = [];
+        let balance = loanAmount;
+        let paymentNumber = 1;
+        let currentDate = new Date(startDate);
+        let totalInterest = 0;
+
+        while (balance > 0.01 && paymentNumber <= (inputs.loanTerm * 12)) {
+            const interestPayment = balance * monthlyRate;
+            let principalPayment = monthlyPI - interestPayment + extraMonthly;
+
+            // Add yearly extra payment
+            if (extraYearly > 0 && paymentNumber % 12 === 0) {
+                principalPayment += extraYearly;
+            }
+
+            // Don't overpay
+            if (principalPayment > balance) {
+                principalPayment = balance;
+            }
+
+            balance -= principalPayment;
+            totalInterest += interestPayment;
+
+            const equity = inputs.homePrice - balance;
+
+            schedule.push({
+                paymentNumber,
+                date: new Date(currentDate),
+                payment: interestPayment + principalPayment,
+                principal: principalPayment,
+                interest: interestPayment,
+                balance: Math.max(0, balance),
+                equity,
+                cumulativeInterest: totalInterest
+            });
+
+            paymentNumber++;
+            currentDate = Utils.addMonths(currentDate, 1);
+        }
+
+        return schedule;
+    }
+};
+
+// AI Insights engine
+const AIInsights = {
+    generateInsights(inputs, results) {
+        const insights = [];
+
+        try {
+            // Down payment insights
+            if (results.downPaymentPercent < 20) {
+                const additionalDown = (inputs.homePrice * 0.2) - results.downPaymentAmount;
+                insights.push({
+                    type: 'warning',
+                    icon: 'fas fa-exclamation-triangle',
+                    title: 'PMI Elimination Opportunity',
+                    message: `Increasing your down payment by ${Utils.formatCurrency(additionalDown)} to reach 20% would eliminate PMI, saving you ${Utils.formatCurrency(results.monthlyPMI)} monthly.`,
+                    action: 'Increase Down Payment'
+                });
+            }
+
+            // Interest rate insights
+            if (inputs.interestRate > 7.5) {
+                insights.push({
+                    type: 'tip',
+                    icon: 'fas fa-chart-line',
+                    title: 'Rate Shopping Opportunity',
+                    message: `Your rate of ${inputs.interestRate}% is above market average. Shopping for a rate just 0.5% lower could save significant money over the loan term.`,
+                    action: 'Compare Rates'
+                });
+            }
+
+            // Affordability insights
+            const monthlyIncome = results.totalMonthly / 0.28;
+            insights.push({
+                type: 'info',
+                icon: 'fas fa-calculator',
+                title: 'Income Recommendation',
+                message: `For comfortable affordability (28% housing ratio), your gross monthly income should be at least ${Utils.formatCurrency(monthlyIncome, 0)} (${Utils.formatCurrency(monthlyIncome * 12, 0)} annually).`,
+                action: 'Check Affordability'
+            });
+
+            // Emergency fund insight
+            const emergencyFund = results.totalMonthly * 6;
+            insights.push({
+                type: 'info',
+                icon: 'fas fa-shield-alt',
+                title: 'Emergency Fund Recommendation',
+                message: `Maintain an emergency fund of at least ${Utils.formatCurrency(emergencyFund, 0)} (6 months of housing payments) before purchasing.`,
+                action: 'Calculate Emergency Fund'
+            });
+
+            return insights;
+        } catch (error) {
+            console.error('AI insights generation error:', error);
+            return [{
+                type: 'info',
+                icon: 'fas fa-lightbulb',
+                title: 'General Recommendation',
+                message: 'Consider comparing rates from multiple lenders to ensure you get the best deal.',
+                action: 'Get Rate Quotes'
+            }];
+        }
+    }
+};
+
+// Chart visualization
+const ChartManager = {
+    chart: null,
+
+    createPaymentChart(results) {
+        const ctx = Utils.$('#payment-chart');
+        if (!ctx) return;
+
+        // Destroy existing chart
+        if (this.chart) {
+            this.chart.destroy();
+        }
+
+        const data = {
+            labels: ['Principal & Interest', 'Property Tax', 'Home Insurance'],
+            datasets: [{
+                data: [
+                    results.monthlyPI,
+                    results.monthlyTax,
+                    results.monthlyInsurance
+                ],
+                backgroundColor: [
+                    MortgageCalculator.config.chartColors.principal,
+                    MortgageCalculator.config.chartColors.tax,
+                    MortgageCalculator.config.chartColors.insurance
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        };
+
+        // Add PMI if applicable
+        if (results.monthlyPMI > 0) {
+            data.labels.push('PMI');
+            data.datasets[0].data.push(results.monthlyPMI);
+            data.datasets[0].backgroundColor.push(MortgageCalculator.config.chartColors.pmi);
+        }
+
+        // Add HOA if applicable
+        if (results.monthlyHOA > 0) {
+            data.labels.push('HOA Fees');
+            data.datasets[0].data.push(results.monthlyHOA);
+            data.datasets[0].backgroundColor.push(MortgageCalculator.config.chartColors.hoa);
+        }
+
+        const chartType = Utils.$('.chart-toggle.active')?.dataset.chart || 'pie';
+
+        const config = {
+            type: chartType,
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = Utils.formatCurrency(context.parsed);
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return `${context.label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        try {
+            this.chart = new Chart(ctx, config);
+            this.updateLegend(data);
+        } catch (error) {
+            console.error('Chart creation error:', error);
+        }
+    },
+
+    updateLegend(data) {
+        const legendContainer = Utils.$('#chart-legend');
+        if (!legendContainer) return;
+
+        const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+
+        legendContainer.innerHTML = data.labels.map((label, index) => {
+            const value = data.datasets[0].data[index];
+            const percentage = ((value / total) * 100).toFixed(1);
+            const color = data.datasets[0].backgroundColor[index];
+
+            return `
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: ${color}"></div>
+                    <span>${label}: ${Utils.formatCurrency(value)} (${percentage}%)</span>
+                </div>
+            `;
+        }).join('');
+    }
+};
+
+// Toast notification manager
+const ToastManager = {
+    show(message, type = 'info', duration = 3000) {
+        const container = Utils.$('#toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+            <div class="toast-message">${message}</div>
+            <button type="button" class="toast-close" aria-label="Close notification">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        `;
+
+        container.appendChild(toast);
+
+        // Show toast
+        setTimeout(() => toast.classList.add('show'), 10);
+
+        // Auto-hide
+        const timeoutId = setTimeout(() => this.hide(toast), duration);
+
+        // Close button
+        const closeBtn = toast.querySelector('.toast-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                clearTimeout(timeoutId);
+                this.hide(toast);
+            });
+        }
+    },
+
+    hide(toast) {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }
+};
+
+// Form validation module
+const FormValidator = {
+    validateField(fieldId, value) {
+        const validationRules = {
+            'home-price': { min: 50000, max: 10000000, required: true },
+            'interest-rate': { min: 0.1, max: 20, required: true },
+            'loan-term': { min: 1, max: 50, required: true },
+            'state': { required: true }
+        };
+
+        const rules = validationRules[fieldId];
+        if (!rules) return { valid: true, message: '' };
+
+        if (rules.required && (!value || value.toString().trim() === '')) {
+            return { valid: false, message: 'This field is required' };
+        }
+
+        if (rules.min !== undefined || rules.max !== undefined) {
+            const num = parseFloat(value);
+            if (isNaN(num)) {
+                return { valid: false, message: 'Please enter a valid number' };
+            }
+            if (rules.min !== undefined && num < rules.min) {
+                return { valid: false, message: `Value must be at least ${rules.min}` };
+            }
+            if (rules.max !== undefined && num > rules.max) {
+                return { valid: false, message: `Value must be no more than ${rules.max}` };
+            }
+        }
+
+        return { valid: true, message: '' };
+    },
+
+    showError(fieldId, message) {
+        const field = Utils.$(`#${fieldId}`);
+        const errorElement = Utils.$(`#${fieldId}-error`);
+
+        if (field) {
+            field.classList.add('error');
+            field.setAttribute('aria-invalid', 'true');
+        }
+
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    },
+
+    clearError(fieldId) {
+        const field = Utils.$(`#${fieldId}`);
+        const errorElement = Utils.$(`#${fieldId}-error`);
+
+        if (field) {
+            field.classList.remove('error');
+            field.setAttribute('aria-invalid', 'false');
+        }
+
+        if (errorElement) {
+            errorElement.textContent = '';
+            errorElement.style.display = 'none';
+        }
+    }
+};
+
+// Main calculator class
+class Calculator {
+    constructor() {
+        this.debounceTimer = null;
+        this.init();
+    }
+
+    init() {
+        this.bindEvents();
+        this.initializeForm();
+        this.setDefaultStartDate();
+        this.setInitialPropertyTax();
+        this.calculateMortgage(); // Trigger initial calculation with default values
+    }
+
+    bindEvents() {
+        // Form submission
+        const form = Utils.$('#calculator-form');
+        if (form) {
+            form.addEventListener('submit', (e) => this.handleFormSubmit(e));
+        }
+
+        // AUTO-CALCULATION on input change
+        form.addEventListener('input', Utils.debounce((e) => {
+            this.calculateMortgage();
+        }, MortgageCalculator.config.debounceDelay));
+
+        // Loan type selection
+        Utils.$$('input[name="loan-type"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                MortgageCalculator.state.currentLoanType = e.target.value;
+                this.updateLoanTypeDefaults(e.target.value);
+                this.calculateMortgage();
+            });
+        });
+
+        // Term chips - ORDERED 10, 15, 20, 30
+        Utils.$$('.term-chip').forEach(chip => {
+            chip.addEventListener('click', (e) => {
+                e.preventDefault();
+                Utils.$$('.term-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+
+                const term = chip.dataset.term;
+                const termInput = Utils.$('#loan-term');
+                if (termInput) {
+                    termInput.value = term;
+                    this.calculateMortgage();
+                }
+            });
+        });
+
+        // Manual term input synchronization
+        const termInput = Utils.$('#loan-term');
+        if (termInput) {
+            termInput.addEventListener('input', (e) => {
+                const value = e.target.value;
+                Utils.$$('.term-chip').forEach(chip => {
+                    chip.classList.toggle('active', chip.dataset.term === value);
+                });
+            });
+        }
+
+        // STATE-BASED PROPERTY TAX AUTO-CALCULATION
+        const stateSelect = Utils.$('#state');
+        if (stateSelect) {
+            stateSelect.addEventListener('change', (e) => {
+                this.updatePropertyTaxFromState(e.target.value);
+            });
+        }
+
+        // Down payment tabs
+        Utils.$$('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tab = btn.dataset.tab;
+
+                Utils.$$('.tab-btn').forEach(b => b.classList.remove('active'));
+                Utils.$$('.dp-panel').forEach(p => p.classList.remove('active'));
+
+                btn.classList.add('active');
+                Utils.$(`[data-panel="${tab}"]`).classList.add('active');
+            });
+        });
+
+        // Down payment synchronization
+        const dpPercent = Utils.$('#down-payment-percent');
+        const dpAmount = Utils.$('#down-payment-amount');
+        const homePrice = Utils.$('#home-price');
+
+        if (dpPercent && dpAmount && homePrice) {
+            dpPercent.addEventListener('input', () => {
+                const price = parseFloat(homePrice.value) || 0;
+                const percent = parseFloat(dpPercent.value) || 0;
+                dpAmount.value = Math.round(price * percent / 100);
+                this.calculateMortgage();
+            });
+
+            dpAmount.addEventListener('input', () => {
+                const price = parseFloat(homePrice.value) || 0;
+                const amount = parseFloat(dpAmount.value) || 0;
+                if (price > 0) {
+                    dpPercent.value = ((amount / price) * 100).toFixed(1);
+                }
+                this.calculateMortgage();
+            });
+
+            homePrice.addEventListener('input', () => {
+                const price = parseFloat(homePrice.value) || 0;
+                const percent = parseFloat(dpPercent.value) || 0;
+                dpAmount.value = Math.round(price * percent / 100);
+
+                // Auto-update property tax based on selected state
+                const selectedState = stateSelect.value;
+                if (selectedState && STATE_TAX_RATES[selectedState]) {
+                    this.updatePropertyTaxFromState(selectedState);
+                }
+            });
+        }
+
+        // Chart toggle
+        Utils.$$('.chart-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                Utils.$$('.chart-toggle').forEach(t => t.classList.remove('active'));
+                toggle.classList.add('active');
+
+                if (MortgageCalculator.state.currentCalculation) {
+                    ChartManager.createPaymentChart(MortgageCalculator.state.currentCalculation);
+                }
+            });
+        });
+
+        // AMORTIZATION CONTROLS - Collapse/Expand
+        const collapseBtn = Utils.$('#collapse-schedule');
+        const expandBtn = Utils.$('#expand-schedule');
+        const tableContainer = Utils.$('#table-container');
+
+        if (collapseBtn && expandBtn && tableContainer) {
+            collapseBtn.addEventListener('click', () => {
+                tableContainer.classList.remove('expanded');
+                tableContainer.classList.add('collapsed');
+                MortgageCalculator.state.isAmortizationExpanded = false;
+            });
+
+            expandBtn.addEventListener('click', () => {
+                tableContainer.classList.remove('collapsed');
+                tableContainer.classList.add('expanded');
+                MortgageCalculator.state.isAmortizationExpanded = true;
+            });
+        }
+
+        // MONTHLY/YEARLY VIEW CONTROLS
+        Utils.$$('.view-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                Utils.$$('.view-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                MortgageCalculator.state.currentAmortizationView = btn.dataset.view;
+                this.updateAmortizationView();
+            });
+        });
+
+        // Export and Print functionality
+        const exportBtn = Utils.$('#export-schedule');
+        const printBtn = Utils.$('#print-schedule');
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => this.exportAmortizationSchedule());
+        }
+
+        if (printBtn) {
+            printBtn.addEventListener('click', () => this.printAmortizationSchedule());
+        }
+
+        // Next month button for loan start date
+        const btnToday = Utils.$('#btn-today');
+        if (btnToday) {
+            btnToday.addEventListener('click', () => {
+                const startDateInput = Utils.$('#start-date');
+                if (startDateInput) {
+                    startDateInput.value = Utils.getNextMonthDate();
+                    this.calculateMortgage();
+                }
+            });
+        }
+
+        // Mobile menu toggle
+        const mobileToggle = Utils.$('#mobile-menu-toggle');
+        const navMenu = Utils.$('#nav-menu');
+
+        if (mobileToggle && navMenu) {
+            mobileToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                const isExpanded = navMenu.classList.contains('active');
+                mobileToggle.setAttribute('aria-expanded', isExpanded);
+            });
+        }
+
+        // Modal handling
+        const preapprovalBtns = Utils.$$('#cta-get-started');
+        const modal = Utils.$('#preapproval-modal');
+        const modalClose = Utils.$('#modal-close');
+        const modalOverlay = Utils.$('.modal-overlay');
+
+        preapprovalBtns.forEach(btn => {
+            btn.addEventListener('click', () => this.openModal());
+        });
+
+        if (modalClose) {
+            modalClose.addEventListener('click', () => this.closeModal());
+        }
+
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', () => this.closeModal());
+        }
+    }
+
+    setDefaultStartDate() {
+        const startDateInput = Utils.$('#start-date');
+        if (startDateInput) {
+            startDateInput.value = Utils.getNextMonthDate();
+        }
+    }
+
+    setInitialPropertyTax() {
+        // Set default property tax for California (default selected state)
+        const stateSelect = Utils.$('#state');
+        if (stateSelect && stateSelect.value === 'CA') {
+            this.updatePropertyTaxFromState('CA');
+        }
+    }
+
+    initializeForm() {
+        // Trigger initial calculation with default values
+        setTimeout(() => {
+            this.calculateMortgage();
+        }, 100);
+    }
+
+    handleFormSubmit(e) {
+        e.preventDefault();
+        this.calculateMortgage();
+    }
+
+    // STATE-BASED PROPERTY TAX AUTO-CALCULATION - KEY FEATURE
+    updatePropertyTaxFromState(stateCode) {
+        if (!stateCode || !STATE_TAX_RATES[stateCode]) return;
+
+        const stateData = STATE_TAX_RATES[stateCode];
+        const homePrice = parseFloat(Utils.$('#home-price').value) || 400000;
+        const annualPropertyTax = Math.round(homePrice * stateData.rate);
+
+        const propertyTaxInput = Utils.$('#property-tax');
+        if (propertyTaxInput) {
+            propertyTaxInput.value = annualPropertyTax;
+
+            // Update help text
+            const helpText = Utils.$('#property-tax-help');
+            if (helpText) {
+                helpText.textContent = `Auto-calculated for ${stateData.name}: ${(stateData.rate * 100).toFixed(2)}% rate`;
+            }
+
+            // Trigger recalculation
+            this.calculateMortgage();
+
+            ToastManager.show(`Property tax updated for ${stateData.name}: ${Utils.formatCurrency(annualPropertyTax)}`, 'success');
+        }
+    }
+
+    updateLoanTypeDefaults(loanType) {
+        const dpPercent = Utils.$('#down-payment-percent');
+        const pmiRate = Utils.$('#pmi-rate');
+
+        if (!dpPercent || !pmiRate) return;
+
+        switch (loanType) {
+            case 'fha':
+                dpPercent.value = Math.min(parseFloat(dpPercent.value) || 20, 3.5);
+                pmiRate.value = 0.85;
+                break;
+            case 'va':
+                dpPercent.value = 0;
+                pmiRate.value = 0;
+                break;
+            case 'usda':
+                dpPercent.value = 0;
+                pmiRate.value = 0.35;
+                break;
+            case 'conventional':
+            default:
+                pmiRate.value = 0.8;
+                break;
+        }
+
+        // Update down payment amount
+        const homePrice = parseFloat(Utils.$('#home-price').value) || 0;
+        const dpAmount = Utils.$('#down-payment-amount');
+        if (dpAmount) {
+            dpAmount.value = Math.round(homePrice * parseFloat(dpPercent.value) / 100);
+        }
+    }
+
+    calculateMortgage() {
+        try {
+            const inputs = this.getFormInputs();
+            if (!this.validateInputs(inputs)) return;
+
+            const results = MortgageEngine.calculateLoanDetails(inputs);
+            MortgageCalculator.state.currentCalculation = results;
+
+            this.displayResults(results);
+            this.generateAIInsights(inputs, results);
+            this.updateChart(results);
+            this.generateAmortizationSchedule(inputs, results);
+
+            // Show results
+            const resultsPanel = Utils.$('#results-panel');
+            const amortizationSection = Utils.$('#amortization-section');
+
+            if (resultsPanel) {
+                resultsPanel.style.display = 'block';
+            }
+            if (amortizationSection) {
+                amortizationSection.style.display = 'block';
+            }
+
+        } catch (error) {
+            console.error('Calculation error:', error);
+            ToastManager.show('An error occurred during calculation. Please check your inputs.', 'error');
+        }
+    }
+
+    getFormInputs() {
+        const homePrice = parseFloat(Utils.$('#home-price').value) || 0;
+        const downPaymentPercent = parseFloat(Utils.$('#down-payment-percent').value) || 0;
+
+        return {
+            homePrice,
+            downPaymentAmount: Math.round(homePrice * downPaymentPercent / 100),
+            interestRate: parseFloat(Utils.$('#interest-rate').value) || 0,
+            loanTerm: parseFloat(Utils.$('#loan-term').value) || 0,
+            loanType: MortgageCalculator.state.currentLoanType,
+            state: Utils.$('#state').value,
+            propertyTax: parseFloat(Utils.$('#property-tax').value) || 0,
+            homeInsurance: parseFloat(Utils.$('#home-insurance').value) || 0,
+            hoaFees: parseFloat(Utils.$('#hoa-fees').value) || 0,
+            extraMonthly: parseFloat(Utils.$('#extra-monthly').value) || 0,
+            extraYearly: parseFloat(Utils.$('#extra-yearly').value) || 0,
+            startDate: Utils.$('#start-date').value || Utils.getNextMonthDate()
+        };
+    }
+
+    validateInputs(inputs) {
+        let isValid = true;
+
+        // Clear previous errors
+        MortgageCalculator.state.validationErrors.clear();
+
+        // Validate required fields
+        const validations = [
+            { field: 'home-price', value: inputs.homePrice },
+            { field: 'interest-rate', value: inputs.interestRate },
+            { field: 'loan-term', value: inputs.loanTerm }
+        ];
+
+        validations.forEach(({ field, value }) => {
+            const validation = FormValidator.validateField(field, value);
+            if (!validation.valid) {
+                FormValidator.showError(field, validation.message);
+                isValid = false;
+            } else {
+                FormValidator.clearError(field);
+            }
+        });
+
+        return isValid;
+    }
+
+    displayResults(results) {
+        // Update main payment display
+        const totalPaymentEl = Utils.$('#total-payment');
+        if (totalPaymentEl) {
+            totalPaymentEl.textContent = Utils.formatCurrency(results.totalMonthly);
+        }
+
+        // Update payment breakdown
+        const breakdownItems = [
+            { id: 'principal-interest', value: results.monthlyPI },
+            { id: 'monthly-property-tax', value: results.monthlyTax },
+            { id: 'monthly-insurance', value: results.monthlyInsurance }
+        ];
+
+        breakdownItems.forEach(({ id, value }) => {
+            const el = Utils.$(`#${id}`);
+            if (el) {
+                el.textContent = Utils.formatCurrency(value);
+            }
+        });
+
+        // Update summary stats
+        const summaryStats = [
+            { id: 'loan-amount', value: results.loanAmount },
+            { id: 'total-interest', value: results.totalInterest },
+            { id: 'total-cost', value: results.totalCost }
+        ];
+
+        summaryStats.forEach(({ id, value }) => {
+            const el = Utils.$(`#${id}`);
+            if (el) {
+                el.textContent = Utils.formatCurrency(value);
+            }
+        });
+    }
+
+    generateAIInsights(inputs, results) {
+        const insights = AIInsights.generateInsights(inputs, results);
+        const insightsContainer = Utils.$('#insights-list');
+
+        if (!insightsContainer) return;
+
+        insightsContainer.innerHTML = insights.map(insight => `
+            <div class="insight-item insight-${insight.type}">
+                <div class="insight-icon">
+                    <i class="${insight.icon}" aria-hidden="true"></i>
+                </div>
+                <div class="insight-content">
+                    <h4 class="insight-title">${insight.title}</h4>
+                    <p class="insight-message">${insight.message}</p>
+                    <button type="button" class="insight-action">${insight.action}</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    updateChart(results) {
+        ChartManager.createPaymentChart(results);
+    }
+
+    generateAmortizationSchedule(inputs, results) {
+        const schedule = MortgageEngine.generateAmortizationSchedule(inputs, results);
+        MortgageCalculator.state.amortizationData = schedule;
+        this.updateAmortizationView();
+    }
+
+    // MONTHLY/YEARLY AMORTIZATION VIEW
+    updateAmortizationView() {
+        const tbody = Utils.$('#amortization-tbody');
+        if (!tbody || !MortgageCalculator.state.amortizationData.length) return;
+
+        const view = MortgageCalculator.state.currentAmortizationView;
+        const data = view === 'yearly' 
+            ? this.getYearlyAmortizationData() 
+            : this.getMonthlyAmortizationData();
+
+        tbody.innerHTML = data.map(row => `
+            <tr>
+                <td>${row.paymentNumber}</td>
+                <td>${Utils.formatDate(row.date)}</td>
+                <td class="currency">${Utils.formatCurrency(row.payment)}</td>
+                <td class="currency">${Utils.formatCurrency(row.principal)}</td>
+                <td class="currency">${Utils.formatCurrency(row.interest)}</td>
+                <td class="currency">${Utils.formatCurrency(row.balance)}</td>
+                <td class="currency">${Utils.formatCurrency(row.equity)}</td>
+            </tr>
+        `).join('');
+    }
+
+    getMonthlyAmortizationData() {
+        const startIndex = (MortgageCalculator.state.currentPage - 1) * MortgageCalculator.state.pageSize;
+        const endIndex = startIndex + MortgageCalculator.state.pageSize;
+        return MortgageCalculator.state.amortizationData.slice(startIndex, endIndex);
+    }
+
+    getYearlyAmortizationData() {
+        const yearlyData = [];
+        const schedule = MortgageCalculator.state.amortizationData;
+
+        for (let i = 11; i < schedule.length; i += 12) {
+            const yearPayment = schedule[i];
+            if (yearPayment) {
+                yearlyData.push({
+                    paymentNumber: Math.floor(i / 12) + 1,
+                    date: yearPayment.date,
+                    payment: schedule.slice(i - 11, i + 1).reduce((sum, p) => sum + p.payment, 0),
+                    principal: schedule.slice(i - 11, i + 1).reduce((sum, p) => sum + p.principal, 0),
+                    interest: schedule.slice(i - 11, i + 1).reduce((sum, p) => sum + p.interest, 0),
+                    balance: yearPayment.balance,
+                    equity: yearPayment.equity
+                });
+            }
+        }
+
+        return yearlyData;
+    }
+
+    exportAmortizationSchedule() {
+        try {
+            const schedule = MortgageCalculator.state.amortizationData;
+            if (!schedule.length) return;
+
+            // Create CSV content
+            const headers = ['Payment #', 'Date', 'Payment', 'Principal', 'Interest', 'Balance', 'Equity'];
+            const csvContent = [
+                headers.join(','),
+                ...schedule.map(row => [
+                    row.paymentNumber,
+                    row.date.toLocaleDateString(),
+                    row.payment.toFixed(2),
+                    row.principal.toFixed(2),
+                    row.interest.toFixed(2),
+                    row.balance.toFixed(2),
+                    row.equity.toFixed(2)
+                ].join(','))
+            ].join('\n');
+
+            // Download CSV
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amortization-schedule.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+
+            ToastManager.show('Amortization schedule exported successfully!', 'success');
+        } catch (error) {
+            console.error('Export error:', error);
+            ToastManager.show('Failed to export schedule. Please try again.', 'error');
+        }
+    }
+
+    printAmortizationSchedule() {
+        try {
+            const printWindow = window.open('', '_blank');
+            const schedule = MortgageCalculator.state.amortizationData;
+
+            if (!schedule.length) return;
+
+            const printContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Amortization Schedule</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+                        th { background-color: #f2f2f2; }
+                        .currency { text-align: right; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Amortization Schedule</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Payment #</th>
+                                <th>Date</th>
+                                <th>Payment</th>
+                                <th>Principal</th>
+                                <th>Interest</th>
+                                <th>Balance</th>
+                                <th>Equity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${schedule.map(row => `
+                                <tr>
+                                    <td>${row.paymentNumber}</td>
+                                    <td>${row.date.toLocaleDateString()}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.payment)}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.principal)}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.interest)}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.balance)}</td>
+                                    <td class="currency">${Utils.formatCurrency(row.equity)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.print();
+
+            ToastManager.show('Amortization schedule prepared for printing!', 'success');
+        } catch (error) {
+            console.error('Print error:', error);
+            ToastManager.show('Failed to prepare print view. Please try again.', 'error');
+        }
+    }
+
+    openModal() {
+        const modal = Utils.$('#preapproval-modal');
+        if (modal) {
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+
+            // Focus first input
+            const firstInput = modal.querySelector('input');
+            if (firstInput) {
+                setTimeout(() => firstInput.focus(), 100);
+            }
+        }
+    }
+
+    closeModal() {
+        const modal = Utils.$('#preapproval-modal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        }
     }
 }
 
-/* Data attribute for manual theme switching */
-[data-color-scheme="dark"] {
-    /* RGB versions for opacity control (dark mode) */
-    --color-gray-400-rgb: 119, 124, 124;
-    --color-teal-300-rgb: 50, 184, 198;
-    --color-gray-300-rgb: 167, 169, 169;
-    --color-gray-200-rgb: 245, 245, 245;
+// Initialize the application
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize calculator
+    const calculator = new Calculator();
 
-    /* Colorful background palette - Dark Mode */
-    --color-bg-1: rgba(29, 78, 216, 0.15);
-    --color-bg-2: rgba(180, 83, 9, 0.15);
-    --color-bg-3: rgba(21, 128, 61, 0.15);
-    --color-bg-4: rgba(185, 28, 28, 0.15);
-    --color-bg-5: rgba(107, 33, 168, 0.15);
-    --color-bg-6: rgba(194, 65, 12, 0.15);
-    --color-bg-7: rgba(190, 24, 93, 0.15);
-    --color-bg-8: rgba(8, 145, 178, 0.15);
+    // Set global reference
+    window.MortgageCalculator = MortgageCalculator;
+    window.Calculator = calculator;
 
-    /* Semantic Color Tokens (Dark Mode) */
-    --color-background: var(--color-charcoal-700);
-    --color-surface: var(--color-charcoal-800);
-    --color-text: var(--color-gray-200);
-    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-    --color-primary: var(--color-teal-300);
-    --color-primary-hover: var(--color-teal-400);
-    --color-primary-active: var(--color-teal-800);
-    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
-    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
-    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-    --color-error: var(--color-red-400);
-    --color-success: var(--color-teal-300);
-    --color-warning: var(--color-orange-400);
-    --color-info: var(--color-gray-300);
-    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
-    --color-btn-primary-text: var(--color-slate-900);
-    --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
-    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
-    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-    --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
-    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+    console.log('🏠 FinGuid Mortgage Calculator v5.0.0 initialized successfully!');
+    console.log('✅ All requested improvements implemented:');
+    console.log('  - Reduced hero section to half size');
+    console.log('  - Default calculation values with auto-calculation');
+    console.log('  - FinGuid left, navigation right');
+    console.log('  - Next month default for loan start date');
+    console.log('  - Manual date entry option');
+    console.log('  - Amortization with monthly/yearly views');
+    console.log('  - Collapse/expand/export/print controls');
+    console.log('  - State-based property tax auto-calculation');
+    console.log('  - Footer matching home page design');
+});
 
-    /* RGB versions for dark mode */
-    --color-success-rgb: var(--color-teal-300-rgb);
-    --color-error-rgb: var(--color-red-400-rgb);
-    --color-warning-rgb: var(--color-orange-400-rgb);
-    --color-info-rgb: var(--color-gray-300-rgb);
-}
-
-[data-color-scheme="light"] {
-    /* RGB versions for opacity control (light mode) */
-    --color-brown-600-rgb: 94, 82, 64;
-    --color-teal-500-rgb: 33, 128, 141;
-    --color-slate-900-rgb: 19, 52, 59;
-
-    /* Semantic Color Tokens (Light Mode) */
-    --color-background: var(--color-cream-50);
-    --color-surface: var(--color-cream-100);
-    --color-text: var(--color-slate-900);
-    --color-text-secondary: var(--color-slate-500);
-    --color-primary: var(--color-teal-500);
-    --color-primary-hover: var(--color-teal-600);
-    --color-primary-active: var(--color-teal-700);
-    --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-    --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-    --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-    --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-    --color-btn-primary-text: var(--color-cream-50);
-    --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-    --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-    --color-error: var(--color-red-500);
-    --color-success: var(--color-teal-500);
-    --color-warning: var(--color-orange-500);
-    --color-info: var(--color-slate-500);
-    --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
-
-    /* RGB versions for light mode */
-    --color-success-rgb: var(--color-teal-500-rgb);
-    --color-error-rgb: var(--color-red-500-rgb);
-    --color-warning-rgb: var(--color-orange-500-rgb);
-    --color-info-rgb: var(--color-slate-500-rgb);
-}
-
-/* Base styles */
-* {
-    box-sizing: border-box;
-}
-
-*::before,
-*::after {
-    box-sizing: inherit;
-}
-
-html {
-    font-size: var(--font-size-base);
-    font-family: var(--font-family-base);
-    line-height: var(--line-height-normal);
-    color: var(--color-text);
-    background-color: var(--color-background);
-    -webkit-font-smoothing: antialiased;
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-}
-
-/* Container */
-.container {
-    width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: var(--space-16);
-    padding-left: var(--space-16);
-}
-
-@media (min-width: 640px) {
-    .container {
-        max-width: var(--container-sm);
+// Handle page visibility for performance
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        // Pause any ongoing processes when page is hidden
+        if (MortgageCalculator.state.chartInstance) {
+            // Could pause chart animations here
+        }
     }
-}
-
-@media (min-width: 768px) {
-    .container {
-        max-width: var(--container-md);
-    }
-}
-
-@media (min-width: 1024px) {
-    .container {
-        max-width: var(--container-lg);
-    }
-}
-
-@media (min-width: 1280px) {
-    .container {
-        max-width: var(--container-xl);
-    }
-}
-
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    color: var(--color-text);
-    letter-spacing: var(--letter-spacing-tight);
-}
-
-h1 { font-size: var(--font-size-4xl); }
-h2 { font-size: var(--font-size-3xl); }
-h3 { font-size: var(--font-size-2xl); }
-h4 { font-size: var(--font-size-xl); }
-h5 { font-size: var(--font-size-lg); }
-h6 { font-size: var(--font-size-md); }
-
-p {
-    margin: 0 0 var(--space-16) 0;
-}
-
-a {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-standard);
-}
-
-a:hover {
-    color: var(--color-primary-hover);
-}
-
-/* Header and Navigation */
-.header {
-    background: var(--color-surface);
-    box-shadow: var(--shadow-sm);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.navbar {
-    padding: var(--space-16) 0;
-}
-
-.navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-brand {
-    display: flex;
-    align-items: center;
-}
-
-.brand-link {
-    display: flex;
-    align-items: center;
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color var(--duration-normal) var(--ease-standard);
-}
-
-.brand-link:hover {
-    color: var(--color-primary-hover);
-}
-
-.brand-icon {
-    margin-right: var(--space-8);
-    font-size: var(--font-size-2xl);
-}
-
-.brand-text {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* Right-side navigation */
-.nav-menu {
-    display: flex;
-    gap: var(--space-32);
-    align-items: center;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: var(--color-text-secondary);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-base);
-    transition: color var(--duration-normal) var(--ease-standard);
-    position: relative;
-}
-
-.nav-link:hover {
-    color: var(--color-primary);
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: var(--space-2);
-    bottom: -5px;
-    left: 50%;
-    background: var(--color-primary);
-    transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.nav-link:hover::after {
-    width: 100%;
-    left: 0;
-}
-
-.mobile-menu-toggle {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: var(--space-8);
-}
-
-.hamburger-line {
-    width: 25px;
-    height: 3px;
-    background: var(--color-text);
-    margin: 3px 0;
-    transition: var(--duration-normal);
-}
-
-/* Hero Section */
-.hero-section {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-    color: var(--color-btn-primary-text);
-    padding: 60px 0 var(--space-32);
-    text-align: center;
-    margin-top: 80px;
-}
-
-.hero-title {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-16);
-    color: var(--color-btn-primary-text);
-    line-height: var(--line-height-tight);
-}
-
-.hero-subtitle {
-    font-size: var(--font-size-lg);
-    margin-bottom: var(--space-24);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    opacity: 0.95;
-    line-height: var(--line-height-normal);
-}
-
-/* Main Content */
-.main-content {
-    padding: var(--space-32) 0;
-}
-
-.calculator-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-32);
-}
-
-@media (min-width: 1024px) {
-    .calculator-layout {
-        grid-template-columns: 1fr 1fr;
-        gap: var(--space-32);
-    }
-}
-
-/* Calculator Panel */
-.calculator-panel {
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    padding: var(--space-24);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-card-border);
-}
-
-.panel-header {
-    margin-bottom: var(--space-24);
-    text-align: center;
-}
-
-.panel-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-8);
-    color: var(--color-primary);
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-8);
-}
-
-.panel-subtitle {
-    color: var(--color-text-secondary);
-    margin: 0;
-    font-size: var(--font-size-base);
-}
-
-/* Form Elements */
-.calculator-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-24);
-}
-
-.form-section {
-    border: none;
-    padding: 0;
-    margin: 0;
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    margin-bottom: var(--space-16);
-    color: var(--color-text);
-}
-
-.form-group {
-    margin-bottom: var(--space-16);
-}
-
-.form-label {
-    display: block;
-    margin-bottom: var(--space-8);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-sm);
-    color: var(--color-text);
-}
-
-.form-input {
-    display: block;
-    width: 100%;
-    padding: var(--space-8) var(--space-12);
-    font-size: var(--font-size-md);
-    line-height: 1.5;
-    color: var(--color-text);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-base);
-    transition: border-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard);
-}
-
-.form-input:focus {
-    border-color: var(--color-primary);
-    outline: var(--focus-outline);
-    box-shadow: var(--focus-ring);
-}
-
-.form-select {
-    display: block;
-    width: 100%;
-    padding: var(--space-8) var(--space-12);
-    font-size: var(--font-size-md);
-    line-height: 1.5;
-    color: var(--color-text);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-base);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: var(--select-caret-light);
-    background-repeat: no-repeat;
-    background-position: right var(--space-12) center;
-    background-size: 16px;
-    padding-right: var(--space-32);
-    transition: border-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard);
-}
-
-.form-select:focus {
-    border-color: var(--color-primary);
-    outline: var(--focus-outline);
-    box-shadow: var(--focus-ring);
-}
-
-@media (prefers-color-scheme: dark) {
-    .form-select {
-        background-image: var(--select-caret-dark);
-    }
-}
-
-[data-color-scheme="dark"] .form-select {
-    background-image: var(--select-caret-dark);
-}
-
-[data-color-scheme="light"] .form-select {
-    background-image: var(--select-caret-light);
-}
-
-/* Results Panel */
-.results-panel {
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-card-border);
-    overflow: hidden;
-}
-
-.results-header {
-    padding: var(--space-24);
-    background: var(--color-secondary);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.results-title {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    color: var(--color-primary);
-    margin: 0;
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-}
-
-/* Results Summary */
-.results-summary {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-    color: var(--color-btn-primary-text);
-    padding: var(--space-32);
-}
-
-.summary-main {
-    text-align: center;
-    margin-bottom: var(--space-24);
-}
-
-.main-payment {
-    margin-bottom: var(--space-20);
-}
-
-.payment-label {
-    font-size: var(--font-size-lg);
-    opacity: 0.9;
-    margin-bottom: var(--space-8);
-}
-
-.payment-amount {
-    font-size: calc(var(--font-size-4xl) * 1.5);
-    font-weight: var(--font-weight-bold);
-    margin: 0;
-    line-height: var(--line-height-tight);
-}
-
-.payment-breakdown {
-    display: grid;
-    gap: var(--space-8);
-}
-
-.breakdown-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-8);
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-md);
-    backdrop-filter: blur(10px);
-}
-
-.breakdown-label {
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-sm);
-}
-
-.breakdown-value {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-base);
-}
-
-.summary-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--space-16);
-}
-
-.stat-item {
-    text-align: center;
-    padding: var(--space-16);
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-md);
-    backdrop-filter: blur(10px);
-}
-
-.stat-label {
-    font-size: var(--font-size-sm);
-    opacity: 0.8;
-    margin-bottom: var(--space-4);
-}
-
-.stat-value {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
-    margin: 0;
-}
-
-/* AI Insights */
-.ai-insights {
-    padding: var(--space-24);
-    background: var(--color-secondary);
-    border-top: 1px solid var(--color-border);
-}
-
-.insights-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-16);
-}
-
-.insights-title {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    margin: 0;
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-}
-
-.insights-badge {
-    padding: var(--space-4) var(--space-8);
-    background: var(--color-success);
-    color: var(--color-btn-primary-text);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
-    border-radius: var(--radius-full);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.insights-list {
-    display: grid;
-    gap: var(--space-16);
-}
-
-.insight-item {
-    display: flex;
-    gap: var(--space-16);
-    padding: var(--space-16);
-    background: var(--color-surface);
-    border-radius: var(--radius-md);
-    border-left: 4px solid var(--color-primary);
-    box-shadow: var(--shadow-sm);
-}
-
-/* Chart Section */
-.chart-section {
-    padding: var(--space-24);
-    border-top: 1px solid var(--color-border);
-}
-
-.chart-container {
-    position: relative;
-    height: 300px;
-    margin-bottom: var(--space-16);
-}
-
-.chart-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-16);
-}
-
-.chart-title {
-    margin: 0;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-}
-
-.chart-controls {
-    display: flex;
-    gap: var(--space-4);
-}
-
-.chart-toggle {
-    padding: var(--space-6) var(--space-12);
-    background: var(--color-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-standard);
-}
-
-.chart-toggle.active {
-    background: var(--color-primary);
-    color: var(--color-btn-primary-text);
-    border-color: var(--color-primary);
-}
-
-.chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-16);
-    justify-content: center;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    font-size: var(--font-size-sm);
-}
-
-.legend-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-    flex-shrink: 0;
-}
-
-/* Amortization Section */
-.amortization-section {
-    margin-top: var(--space-32);
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-card-border);
-    overflow: hidden;
-}
-
-.section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-24);
-    background: var(--color-secondary);
-    border-bottom: 1px solid var(--color-border);
-    flex-wrap: wrap;
-    gap: var(--space-16);
-}
-
-.section-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--space-16);
-    flex-wrap: wrap;
-}
-
-.view-controls {
-    display: flex;
-    gap: var(--space-4);
-}
-
-.view-btn {
-    padding: var(--space-6) var(--space-12);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-standard);
-}
-
-.view-btn.active {
-    background: var(--color-primary);
-    color: var(--color-btn-primary-text);
-    border-color: var(--color-primary);
-}
-
-.action-controls {
-    display: flex;
-    gap: var(--space-8);
-    flex-wrap: wrap;
-}
-
-.table-container {
-    overflow-x: auto;
-    transition: max-height var(--duration-normal) var(--ease-standard);
-}
-
-.table-container.collapsed {
-    max-height: 0;
-    overflow: hidden;
-}
-
-.table-container.expanded {
-    max-height: 600px;
-    overflow-y: auto;
-}
-
-.amortization-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-sm);
-}
-
-.amortization-table th {
-    background: var(--color-secondary);
-    padding: var(--space-12);
-    text-align: left;
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text);
-    border-bottom: 2px solid var(--color-border);
-    position: sticky;
-    top: 0;
-}
-
-.amortization-table td {
-    padding: var(--space-12);
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-}
-
-.amortization-table tr:hover {
-    background: var(--color-secondary);
-}
-
-.table-pagination {
-    padding: var(--space-16);
-    background: var(--color-secondary);
-    border-top: 1px solid var(--color-border);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-16);
-}
-
-.page-info {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-}
-
-/* Button styles */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-8) var(--space-16);
-    border-radius: var(--radius-base);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-    cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-standard);
-    border: none;
-    text-decoration: none;
-    position: relative;
-    gap: var(--space-4);
-}
-
-.btn:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-}
-
-.btn-primary {
-    background: var(--color-primary);
-    color: var(--color-btn-primary-text);
-    border: none;
-}
-
-.btn-primary:hover {
-    background: var(--color-primary-hover);
-}
-
-.btn-primary:active {
-    background: var(--color-primary-active);
-}
-
-.btn-secondary {
-    background: var(--color-secondary);
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-}
-
-.btn-secondary:hover {
-    background: var(--color-secondary-hover);
-}
-
-.btn-secondary:active {
-    background: var(--color-secondary-active);
-}
-
-.btn-sm {
-    padding: var(--space-6) var(--space-12);
-    font-size: var(--font-size-sm);
-    border-radius: var(--radius-sm);
-}
-
-.btn-lg {
-    padding: var(--space-12) var(--space-24);
-    font-size: var(--font-size-lg);
-    border-radius: var(--radius-md);
-}
-
-.btn-full-width {
-    width: 100%;
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Input Group */
-.input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.input-prefix,
-.input-suffix {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    padding: 0 var(--space-12);
-    color: var(--color-text-secondary);
-    pointer-events: none;
-    font-weight: var(--font-weight-medium);
-}
-
-.input-prefix {
-    left: 0;
-}
-
-.input-suffix {
-    right: 0;
-}
-
-.input-group .form-input {
-    padding-left: calc(var(--space-12) * 2 + 8px);
-}
-
-/* Loan Type Grid */
-.loan-type-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-12);
-}
-
-@media (min-width: 640px) {
-    .loan-type-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-16);
-    }
-}
-
-.loan-type-card {
-    position: relative;
-    cursor: pointer;
-}
-
-.loan-type-card input {
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    cursor: pointer;
-}
-
-.card-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: var(--space-12);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
-    transition: all var(--duration-normal) var(--ease-standard);
-    min-height: 100px;
-}
-
-.loan-type-card input:checked + .card-content {
-    border-color: var(--color-primary);
-    background: rgba(var(--color-teal-500-rgb), 0.1);
-}
-
-.card-content i {
-    font-size: var(--font-size-lg);
-    color: var(--color-primary);
-    margin-bottom: var(--space-8);
-}
-
-.card-content h3 {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    margin: 0 0 var(--space-4);
-    line-height: var(--line-height-tight);
-}
-
-.card-content p {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
-    margin: 0;
-    line-height: var(--line-height-normal);
-}
-
-/* Down Payment Tabs */
-.dp-tabs {
-    display: flex;
-    background: var(--color-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    margin-bottom: var(--space-12);
-}
-
-.tab-btn {
-    flex: 1;
-    padding: var(--space-8) var(--space-12);
-    background: none;
-    border: none;
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-standard);
-    font-size: var(--font-size-sm);
-}
-
-.tab-btn.active {
-    background: var(--color-surface);
-    color: var(--color-primary);
-}
-
-.dp-panel {
-    display: none;
-}
-
-.dp-panel.active {
-    display: block;
-}
-
-/* Term Selection */
-.term-selection {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-12);
-}
-
-.term-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-8);
-}
-
-.term-chip {
-    padding: var(--space-8) var(--space-16);
-    background: var(--color-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-standard);
-}
-
-.term-chip:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-}
-
-.term-chip.active {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-btn-primary-text);
-}
-
-.custom-term {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-}
-
-.term-or {
-    color: var(--color-text-secondary);
-    font-style: italic;
-    font-size: var(--font-size-sm);
-}
-
-.term-input {
-    max-width: 80px;
-}
-
-/* Date Selection */
-.date-selection {
-    display: flex;
-    gap: var(--space-8);
-    align-items: center;
-}
-
-.date-selection input {
-    flex: 1;
-}
-
-.btn-today {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-4);
-    padding: var(--space-8) var(--space-12);
-    background: var(--color-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-base);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-standard);
-    white-space: nowrap;
-}
-
-.btn-today:hover {
-    background: var(--color-secondary-hover);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-}
-
-/* Advanced Options */
-.advanced-section {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-}
-
-.advanced-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: var(--space-16);
-    background: var(--color-secondary);
-    border: none;
-    cursor: pointer;
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
-    font-size: var(--font-size-base);
-}
-
-.advanced-toggle:hover {
-    background: var(--color-secondary-hover);
-}
-
-.toggle-icon {
-    transition: transform var(--duration-normal) var(--ease-standard);
-}
-
-.advanced-section[open] .toggle-icon {
-    transform: rotate(180deg);
-}
-
-.advanced-content {
-    padding: var(--space-16);
-    background: var(--color-surface);
-}
-
-.label-help {
-    display: block;
-    font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
-    margin-top: var(--space-4);
-    line-height: var(--line-height-normal);
-}
-
-.error-message {
-    color: var(--color-error);
-    font-size: var(--font-size-xs);
-    margin-top: var(--space-4);
-    display: none;
-}
-
-.error-message:not(:empty) {
-    display: block;
-}
-
-/* Lead CTA Section */
-.lead-cta-section {
-    margin-top: var(--space-32);
-}
-
-.cta-card {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-    color: var(--color-btn-primary-text);
-    border-radius: var(--radius-lg);
-    padding: var(--space-32);
-    text-align: center;
-    box-shadow: var(--shadow-lg);
-}
-
-.cta-title {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-16);
-}
-
-.cta-subtitle {
-    font-size: var(--font-size-lg);
-    opacity: 0.9;
-    margin-bottom: var(--space-24);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.cta-benefits {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-24);
-    margin-bottom: var(--space-32);
-    flex-wrap: wrap;
-}
-
-.benefit-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    font-weight: var(--font-weight-medium);
-}
-
-.cta-btn {
-    background: var(--color-btn-primary-text);
-    color: var(--color-primary);
-    border: none;
-    font-size: var(--font-size-lg);
-    padding: var(--space-16) var(--space-32);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    font-weight: var(--font-weight-semibold);
-}
-
-.cta-btn:hover {
-    background: var(--color-secondary);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-/* Related Calculators */
-.related-section {
-    margin-top: var(--space-32);
-}
-
-.related-section h2 {
-    text-align: center;
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-32);
-    color: var(--color-text);
-}
-
-.related-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-24);
-    margin-top: var(--space-24);
-}
-
-.related-card {
-    display: flex;
-    flex-direction: column;
-    padding: var(--space-24);
-    background: var(--color-surface);
-    border: 1px solid var(--color-card-border);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    color: inherit;
-    transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.related-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary);
-}
-
-.related-card .card-icon {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-    color: var(--color-btn-primary-text);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-xl);
-    margin-bottom: var(--space-16);
-}
-
-.related-card h3 {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    margin: 0 0 var(--space-8);
-}
-
-.related-card p {
-    color: var(--color-text-secondary);
-    margin: 0 0 var(--space-16);
-    flex-grow: 1;
-    font-size: var(--font-size-sm);
-}
-
-.card-arrow {
-    align-self: flex-end;
-    color: var(--color-primary);
-    transition: transform var(--duration-fast) var(--ease-standard);
-}
-
-.related-card:hover .card-arrow {
-    transform: translateX(4px);
-}
-
-/* Footer */
-.footer {
-    background: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--space-32);
-    padding: var(--space-32) 0 var(--space-24);
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-32);
-    margin-bottom: var(--space-32);
-}
-
-.footer-brand {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-16);
-}
-
-.footer-tagline {
-    color: var(--color-text-secondary);
-    line-height: var(--line-height-normal);
-    font-size: var(--font-size-base);
-}
-
-.social-links {
-    display: flex;
-    gap: var(--space-8);
-}
-
-.social-links a {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
-    color: var(--color-text-secondary);
-    transition: all var(--duration-fast) var(--ease-standard);
-}
-
-.social-links a:hover {
-    background: var(--color-primary);
-    color: var(--color-btn-primary-text);
-    border-color: var(--color-primary);
-}
-
-.footer-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--space-32);
-}
-
-.footer-col h3 {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    margin-bottom: var(--space-16);
-}
-
-.footer-col a {
-    display: block;
-    padding: var(--space-4) 0;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    font-size: var(--font-size-sm);
-    transition: color var(--duration-fast) var(--ease-standard);
-}
-
-.footer-col a:hover {
-    color: var(--color-primary);
-}
-
-.footer-bottom {
-    margin-top: var(--space-32);
-    padding-top: var(--space-24);
-    border-top: 1px solid var(--color-border);
-}
-
-.footer-bottom-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    flex-wrap: wrap;
-    gap: var(--space-16);
-}
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-16);
-}
-
-.modal[aria-hidden="false"] {
-    display: flex;
-}
-
-.modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-}
-
-.modal-content {
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    max-width: 500px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    z-index: 1;
-}
-
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-24);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.modal-title {
-    margin: 0;
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-semibold);
-}
-
-.modal-close {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-standard);
-}
-
-.modal-close:hover {
-    background: var(--color-secondary-hover);
-}
-
-.modal-body {
-    padding: var(--space-24);
-}
-
-.lead-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-16);
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-8);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-}
-
-.checkbox-label input[type="checkbox"] {
-    margin-top: 2px;
-}
-
-/* Toast notifications */
-.toast-container {
-    position: fixed;
-    top: var(--space-16);
-    right: var(--space-16);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-8);
-    max-width: 350px;
-}
-
-.toast {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    padding: var(--space-16);
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-8);
-    transform: translateX(100%);
-    transition: transform var(--duration-normal) var(--ease-standard);
-}
-
-.toast.show {
-    transform: translateX(0);
-}
-
-.toast-success {
-    border-left: 4px solid var(--color-success);
-}
-
-.toast-error {
-    border-left: 4px solid var(--color-error);
-}
-
-.toast-warning {
-    border-left: 4px solid var(--color-warning);
-}
-
-.toast-info {
-    border-left: 4px solid var(--color-info);
-}
-
-.toast-message {
-    flex: 1;
-    font-size: var(--font-size-sm);
-}
-
-.toast-close {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-}
-
-.toast-close:hover {
-    background: var(--color-secondary);
-}
-
-.disclaimer {
-    opacity: 0.8;
-    font-style: italic;
-}
-
-/* Utility classes */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* Focus styles for accessibility */
-:focus-visible {
-    outline: var(--focus-outline);
-    outline-offset: 2px;
-}
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-    outline: var(--focus-outline);
-    outline-offset: 2px;
-    box-shadow: var(--focus-ring);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .mobile-menu-toggle {
-        display: flex;
-    }
-
-    .nav-menu {
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        background: var(--color-surface);
-        border-top: 1px solid var(--color-border);
-        flex-direction: column;
-        padding: var(--space-16);
-        gap: var(--space-8);
-        transform: translateY(-100%);
-        transition: transform var(--duration-normal) var(--ease-standard);
-        box-shadow: var(--shadow-md);
-    }
-
-    .nav-menu.active {
-        transform: translateY(0);
-    }
-
-    .hero-title {
-        font-size: var(--font-size-2xl);
-    }
-
-    .hero-subtitle {
-        font-size: var(--font-size-base);
-    }
-
-    .calculator-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .section-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .section-controls {
-        justify-content: center;
-    }
-
-    .summary-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .footer-bottom-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .cta-benefits {
-        flex-direction: column;
-        gap: var(--space-8);
-    }
-}
-
-@media (max-width: 640px) {
-    .loan-type-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .footer-links {
-        grid-template-columns: 1fr;
-    }
-
-    .related-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .action-controls {
-        flex-direction: column;
-        width: 100%;
-    }
-}
-
-/* Mobile responsive breakpoint at 480px */
-@media (max-width: 480px) {
-    .container {
-        padding-right: var(--space-12);
-        padding-left: var(--space-12);
-    }
-
-    .hero-section {
-        padding: var(--space-32) 0 var(--space-24);
-    }
-
-    .hero-title {
-        font-size: var(--font-size-xl);
-        margin-bottom: var(--space-12);
-    }
-
-    .hero-subtitle {
-        font-size: var(--font-size-sm);
-        margin-bottom: var(--space-16);
-    }
-
-    .calculator-panel,
-    .results-panel {
-        padding: var(--space-16);
-    }
-
-    .panel-title {
-        font-size: var(--font-size-xl);
-    }
-
-    .payment-amount {
-        font-size: var(--font-size-3xl);
-    }
-
-    .loan-type-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-8);
-    }
-
-    .card-content {
-        min-height: 80px;
-        padding: var(--space-8);
-    }
-
-    .dp-tabs {
-        flex-direction: column;
-    }
-
-    .tab-btn {
-        text-align: center;
-    }
-
-    .term-chips {
-        justify-content: center;
-    }
-
-    .date-selection {
-        flex-direction: column;
-    }
-
-    .footer-content {
-        gap: var(--space-24);
-    }
-
-    .cta-card {
-        padding: var(--space-24);
-    }
-
-    .cta-title {
-        font-size: var(--font-size-2xl);
-    }
-
-    .cta-subtitle {
-        font-size: var(--font-size-base);
-    }
-
-    .modal-content {
-        margin: var(--space-8);
-    }
-
-    .modal-header,
-    .modal-body {
-        padding: var(--space-16);
-    }
-
-    .related-card {
-        padding: var(--space-16);
-    }
-
-    .amortization-table {
-        font-size: var(--font-size-xs);
-    }
-
-    .amortization-table th,
-    .amortization-table td {
-        padding: var(--space-8);
-    }
-}
-
-/* Print styles */
-@media print {
-    .header,
-    .lead-cta-section,
-    .related-section,
-    .footer {
-        display: none !important;
-    }
-
-    .calculator-layout {
-        grid-template-columns: 1fr !important;
-    }
-
-    .calculator-panel,
-    .results-panel {
-        box-shadow: none;
-        border: 1px solid #ccc;
-    }
-}
-```
+});
+
+// Handle errors globally
+window.addEventListener('error', (event) => {
+    console.error('Global error:', event.error);
+    ToastManager.show('An unexpected error occurred. Please refresh the page.', 'error');
+});
+
+// Export for global access
+window.Utils = Utils;
+window.MortgageEngine = MortgageEngine;
+window.AIInsights = AIInsights;
+window.ChartManager = ChartManager;
+window.ToastManager = ToastManager;
+window.FormValidator = FormValidator;
