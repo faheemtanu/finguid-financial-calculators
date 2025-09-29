@@ -1,21 +1,17 @@
 /**
  * AI-Enhanced Mortgage Calculator - Complete JavaScript
- * Version: 5.1 - Production Ready & Fully Functional
+ * Version: 6.0 - Professional Design System Integration
  */
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ==========================================================================
-    // CONFIGURATION & STATE MANAGEMENT
-    // ==========================================================================
-
     const CONFIG = {
         debounceDelay: 300,
         defaultInsuranceRate: 0.004,
         pmiRate: 0.005,
-        apiUpdateInterval: 5000,
+        apiUpdateInterval: 7000,
     };
 
     const STATE = {
@@ -23,15 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
         donutChart: null,
         yearlyData: [],
         currentCalculation: null,
-        globalVoiceRecognition: null,
-        isGlobalListening: false,
         currentFontSize: 100,
         theme: 'light',
-        marketRates: { 
-            "30yr": { rate: 6.75, trend: 0 }, 
-            "15yr": { rate: 6.25, trend: 0 },
-            "arm": { rate: 5.95, trend: 0 }
-        },
     };
 
     const STATE_TAX_RATES = { 'AL': 0.41, 'AK': 1.19, 'AZ': 0.72, 'AR': 0.62, 'CA': 0.76, 'CO': 0.55, 'CT': 2.14, 'DE': 0.57, 'FL': 0.98, 'GA': 0.92, 'HI': 0.28, 'ID': 0.69, 'IL': 2.16, 'IN': 0.85, 'IA': 1.57, 'KS': 1.41, 'KY': 0.86, 'LA': 0.55, 'ME': 1.36, 'MD': 1.09, 'MA': 1.23, 'MI': 1.54, 'MN': 1.12, 'MS': 0.81, 'MO': 0.97, 'MT': 0.84, 'NE': 1.73, 'NV': 0.64, 'NH': 2.18, 'NJ': 2.42, 'NM': 0.80, 'NY': 1.72, 'NC': 0.84, 'ND': 0.98, 'OH': 1.56, 'OK': 0.90, 'OR': 0.97, 'PA': 1.58, 'RI': 1.63, 'SC': 0.57, 'SD': 1.31, 'TN': 0.71, 'TX': 1.90, 'UT': 0.66, 'VT': 1.90, 'VA': 0.82, 'WA': 0.98, 'WV': 0.59, 'WI': 1.68, 'WY': 0.61 };
@@ -46,33 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
         $$: (selector) => document.querySelectorAll(selector),
         showToast: (message, type = 'info') => {
             const container = Utils.$('#toast-container'); if (!container) return;
-            const toast = document.createElement('div'); toast.className = `toast ${type}`;
-            const iconMap = { success: 'check-circle', error: 'triangle-exclamation', info: 'circle-info' };
-            toast.innerHTML = `<i class="fa-solid fa-${iconMap[type] || 'circle-info'}"></i><span>${message}</span>`;
+            const toast = document.createElement('div'); toast.className = `alert alert-${type}`;
+            const iconMap = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+            toast.innerHTML = `<i class="fas ${iconMap[type]}"></i><span>${message}</span>`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 5000);
         },
         showLoading: (show = true, text = 'Calculating...') => {
             const el = Utils.$('#loading-overlay'); if (el) { el.style.display = show ? 'grid' : 'none'; Utils.$('#loading-text').textContent = text; }
-        }
-    };
-
-    const StatsUpdater = {
-        init() { this.updateMarketRates(); setInterval(() => this.updateMarketRates(), CONFIG.apiUpdateInterval); },
-        updateMarketRates() {
-            Object.keys(STATE.marketRates).forEach(rateType => {
-                const current = STATE.marketRates[rateType]; const oldRate = current.rate;
-                const variation = (Math.random() - 0.5) * 0.05; const newRate = Math.max(4.0, Math.min(9.0, oldRate + variation));
-                current.trend = newRate > oldRate ? 1 : (newRate < oldRate ? -1 : 0); current.rate = newRate;
-                const el = Utils.$(`#market-${rateType}`); const itemEl = el?.closest('.market-item-hero');
-                if (el) {
-                    let trendIcon = '';
-                    if (current.trend === 1) trendIcon = `<i class="fa-solid fa-arrow-up trend-up"></i>`;
-                    if (current.trend === -1) trendIcon = `<i class="fa-solid fa-arrow-down trend-down"></i>`;
-                    el.innerHTML = `${current.rate.toFixed(2)}% ${trendIcon}`;
-                    if (itemEl && current.trend !== 0) { itemEl.classList.remove('flash-update'); void itemEl.offsetWidth; itemEl.classList.add('flash-update'); }
-                }
-            });
         }
     };
 
@@ -83,14 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
             Utils.$('#font-larger')?.addEventListener('click', () => this.adjustFontSize(5));
             Utils.$('#theme-toggle')?.addEventListener('click', () => this.toggleTheme());
         },
-        loadSavedSettings() { this.setTheme(localStorage.getItem('mortgageCalc_theme') || 'light'); STATE.currentFontSize = parseInt(localStorage.getItem('mortgageCalc_fontSize') || '100'); document.documentElement.style.fontSize = `${STATE.currentFontSize}%`; },
-        adjustFontSize(change) { STATE.currentFontSize = Math.max(90, Math.min(120, STATE.currentFontSize + change)); document.documentElement.style.fontSize = `${STATE.currentFontSize}%`; localStorage.setItem('mortgageCalc_fontSize', STATE.currentFontSize); },
+        loadSavedSettings() {
+            const savedTheme = localStorage.getItem('mortgageCalc_theme') || 'light';
+            this.setTheme(savedTheme);
+            STATE.currentFontSize = parseInt(localStorage.getItem('mortgageCalc_fontSize') || '100');
+            document.body.style.fontSize = `${STATE.currentFontSize}%`;
+        },
+        adjustFontSize(change) {
+            STATE.currentFontSize = Math.max(90, Math.min(120, STATE.currentFontSize + change));
+            document.body.style.fontSize = `${STATE.currentFontSize}%`;
+            localStorage.setItem('mortgageCalc_fontSize', STATE.currentFontSize);
+        },
         toggleTheme() { this.setTheme(STATE.theme === 'light' ? 'dark' : 'light'); },
         setTheme(theme) {
-            STATE.theme = theme; document.documentElement.setAttribute('data-theme', theme); localStorage.setItem('mortgageCalc_theme', theme); this.updateThemeButton();
+            STATE.theme = theme; document.body.setAttribute('data-theme', theme); localStorage.setItem('mortgageCalc_theme', theme); this.updateThemeButton();
             if (STATE.currentCalculation) { DonutChartManager.render(STATE.currentCalculation); ChartManager.render(STATE.currentCalculation); }
         },
-        updateThemeButton() { const icon = Utils.$('#theme-icon'); if(icon) icon.className = `fa-solid fa-${STATE.theme === 'light' ? 'moon' : 'sun'}`; }
+        updateThemeButton() { const icon = Utils.$('#theme-icon'); if(icon) icon.className = `fas fa-${STATE.theme === 'light' ? 'moon' : 'sun'}`; }
     };
 
     const MortgageCalculator = {
@@ -104,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const debouncedCalculate = Utils.debounce(() => this.calculate(), CONFIG.debounceDelay);
             Utils.$$('#mortgage-form input, #mortgage-form select').forEach(el => el.addEventListener('input', () => { this.handleInputChange(el); debouncedCalculate(); }));
             Utils.$$('input[type="text"]').forEach(input => input.addEventListener('blur', (e) => this.formatInputValue(e.target)));
-            Utils.$$('.term-chip').forEach(c => c.addEventListener('click', e => { this.handleTermSelection(e.target); debouncedCalculate(); }));
+            Utils.$$('.term-chip').forEach(c => c.addEventListener('click', e => { this.handleTermSelection(e.currentTarget); debouncedCalculate(); }));
             Utils.$$('#amount-toggle, #percent-toggle').forEach(btn => btn.addEventListener('click', e => this.switchDownPaymentMode(e.currentTarget.id.includes('amount') ? 'amount' : 'percent')));
             Utils.$$('.tab-btn').forEach(btn => btn.addEventListener('click', (e) => this.switchTab(e.currentTarget.dataset.tab)));
             Utils.$('#year-range')?.addEventListener('input', e => YearSliderManager.updateFromSlider(parseInt(e.target.value)));
@@ -118,10 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const stateSelect = Utils.$('#property-state'); if (!stateSelect) return;
             stateSelect.innerHTML = '';
             Object.keys(STATE_NAMES).forEach(abbr => {
-                if (STATE_TAX_RATES[abbr]) {
-                    const option = new Option(STATE_NAMES[abbr], abbr);
-                    stateSelect.add(option);
-                }
+                if (STATE_TAX_RATES[abbr]) { const option = new Option(STATE_NAMES[abbr], abbr); stateSelect.add(option); }
             });
             stateSelect.value = 'CA';
         },
@@ -136,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setInitialValues() { Utils.$('#interest-rate').value = (6.75).toFixed(2); this.updateDependentCosts(); },
         switchDownPaymentMode(mode) {
             const isAmount = mode === 'amount';
-            Utils.$('#amount-input').style.display = isAmount ? 'flex' : 'none';
-            Utils.$('#percent-input').style.display = isAmount ? 'none' : 'flex';
+            Utils.$('#amount-input').style.display = isAmount ? 'block' : 'none';
+            Utils.$('#percent-input').style.display = isAmount ? 'none' : 'block';
             Utils.$('#amount-toggle').classList.toggle('active', isAmount);
             Utils.$('#percent-toggle').classList.toggle('active', !isAmount);
         },
@@ -221,8 +197,38 @@ document.addEventListener('DOMContentLoaded', () => {
             Utils.$$('.term-chip').forEach(c => c.classList.toggle('active', c.dataset.term === '30')); Utils.$('#loan-term').value = '30';
             setTimeout(() => this.calculate(), 100); Utils.showToast('Form reset', 'success');
         },
-        async shareResults() { /* ... unchanged ... */ },
-        async downloadPDF() { /* ... unchanged ... */ }
+        async shareResults() {
+            if (!STATE.currentCalculation) { Utils.showToast('Calculate first to share.', 'info'); return; }
+            const { totalMonthlyPayment, params } = STATE.currentCalculation;
+            const shareData = {
+                title: 'My Mortgage Calculation',
+                text: `My mortgage estimate: ${Utils.formatCurrency(totalMonthlyPayment)}/mo for a ${Utils.formatCurrency(params.homePrice)} home.`,
+                url: window.location.href,
+            };
+            try {
+                if (navigator.share) { await navigator.share(shareData); } 
+                else { await navigator.clipboard.writeText(`${shareData.text} \n${shareData.url}`); Utils.showToast('Results copied to clipboard!', 'success'); }
+            } catch (err) { Utils.showToast('Could not share results.', 'error'); }
+        },
+        async downloadPDF() {
+            if (!STATE.currentCalculation) { Utils.showToast('Calculate first to generate PDF.', 'info'); return; }
+            Utils.showLoading(true, 'Generating PDF...');
+            try {
+                const { jsPDF } = window.jspdf; const doc = new jsPDF(); const resultsEl = Utils.$('#results-section');
+                doc.setFontSize(22); doc.text("Mortgage Calculation Summary", 14, 22);
+                doc.setFontSize(12); doc.setTextColor(100); doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+                const canvas = await html2canvas(resultsEl, { scale: 2, windowWidth: 1200 });
+                const imgData = canvas.toDataURL('image/png');
+                const imgProps = doc.getImageProperties(imgData); const pdfWidth = doc.internal.pageSize.getWidth() - 28;
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                doc.addImage(imgData, 'PNG', 14, 40, pdfWidth, pdfHeight);
+                doc.addPage(); doc.setFontSize(18); doc.text("Full Amortization Schedule", 14, 22);
+                const tableData = STATE.currentCalculation.schedule.map(p => [ p.paymentNumber, p.date.toLocaleDateString(), Utils.formatCurrency(p.payment), Utils.formatCurrency(p.principal), Utils.formatCurrency(p.interest), Utils.formatCurrency(p.balance) ]);
+                doc.autoTable({ head: [['#', 'Date', 'Payment', 'Principal', 'Interest', 'Balance']], body: tableData, startY: 30, theme: 'grid', headStyles: { fillColor: [29, 116, 128] } });
+                doc.save(`Mortgage-Summary-${Date.now()}.pdf`);
+            } catch (error) { console.error("PDF Generation Error:", error); Utils.showToast('Failed to generate PDF.', 'error'); } 
+            finally { Utils.showLoading(false); }
+        }
     };
 
     const DonutChartManager = {
@@ -326,8 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!repo || repo === 'YOUR_USERNAME/YOUR_REPO') { Utils.showToast('Feedback system not configured.', 'error'); return; }
             button.disabled = true; button.innerHTML = '<div class="spinner-small"></div> Submitting...';
             try {
-                // NOTE: This requires a backend proxy to securely handle the PAT. Exposing a PAT client-side is a security risk.
-                // This is a simplified example for demonstration.
+                // NOTE: This requires a backend proxy to securely handle a PAT. Exposing a PAT client-side is a security risk.
                 const response = await fetch(`https://api.github.com/repos/${repo}/issues`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `token YOUR_GITHUB_PAT_HERE`}, body: JSON.stringify({ title: 'New Calculator Feedback', body: text }) });
                 if (response.ok) { Utils.showToast('Thank you for your feedback!', 'success'); form.reset(); } 
                 else { throw new Error('Failed to submit feedback.'); }
@@ -343,7 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
             MortgageCalculator.init();
             StatsUpdater.init();
             FeedbackHandler.init();
-            Utils.showToast('Welcome to the AI Mortgage Calculator!', 'info');
+            if (typeof tippy !== 'undefined') {
+                tippy('[data-tippy-content]');
+            }
         } catch (error) {
             console.error('Initialization error:', error);
             Utils.showToast('Failed to initialize calculator.', 'error');
