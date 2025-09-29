@@ -2,33 +2,32 @@
    AI MORTGAGE CALCULATOR - ELEGANT & REFINED STYLESHEET
    ============================================================================ */
 
-/* === DESIGN SYSTEM TOKENS === */
+/* === DESIGN SYSTEM TOKENS (FROM PROVIDED CSS) === */
 :root {
   --color-white: rgba(255, 255, 255, 1); --color-cream-50: rgba(252, 252, 249, 1);
-  --color-charcoal-700: #1f2121; --color-charcoal-800: #262828;
-  --color-slate-900: #13343b; --color-teal-500: #21808d;
-  --color-teal-600: #1d707c; --color-teal-700: #1a626d;
-  --color-teal-300: #32b8c6;
-  --color-red-500: #c0152f; --color-orange-500: #a84b2f;
-  --color-gray-200: #f5f5f5; --color-slate-500: #626c71;
+  --color-charcoal-700: rgba(31, 33, 33, 1); --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1); --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1); --color-teal-700: rgba(26, 104, 115, 1);
+  --color-red-500: rgba(192, 21, 47, 1); --color-orange-500: rgba(168, 75, 47, 1);
+  --color-gray-200: rgba(245, 245, 245, 1); --color-slate-500: rgba(98, 108, 113, 1);
   --color-brown-600-rgb: 94, 82, 64; --color-teal-500-rgb: 33, 128, 141;
 
   --color-background: var(--color-cream-50); --color-surface: var(--color-white);
   --color-text: var(--color-slate-900); --color-text-secondary: var(--color-slate-500);
   --color-primary: var(--color-teal-500); --color-primary-hover: var(--color-teal-600);
-  --color-secondary: rgba(var(--color-brown-600-rgb), 0.08);
-  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.15);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
   --color-border: rgba(var(--color-brown-600-rgb), 0.2);
   --color-btn-primary-text: var(--color-white);
   --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.08);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
   --color-error: var(--color-red-500); --color-success: var(--color-teal-500);
   --color-warning: var(--color-orange-500); --color-info: var(--color-slate-500);
   --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
 
   --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-size-sm: 12px; --font-size-base: 14px; --font-size-lg: 16px; --font-size-xl: 18px;
-  --font-size-2xl: 20px; --font-size-3xl: 24px; --font-size-4xl: 36px;
+  --font-size-2xl: 20px; --font-size-3xl: 24px; --font-size-4xl: 30px;
   --font-weight-medium: 500; --font-weight-semibold: 550; --font-weight-bold: 600;
   --line-height-tight: 1.2; --line-height-normal: 1.5;
   --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px;
@@ -40,17 +39,17 @@
   --z-fixed: 1030; --z-modal: 1040;
 }
 
-body[data-theme="dark"] {
+[data-theme="dark"] {
   --color-background: var(--color-charcoal-700); --color-surface: var(--color-charcoal-800);
   --color-text: var(--color-gray-200); --color-text-secondary: rgba(167, 169, 169, 0.7);
   --color-border: rgba(167, 169, 169, 0.3); --color-card-border: rgba(167, 169, 169, 0.2);
   --color-card-border-inner: rgba(167, 169, 169, 0.15);
-  --color-btn-primary-text: var(--color-slate-900); --color-primary: var(--color-teal-300);
+  --color-btn-primary-text: var(--color-slate-900); --color-primary: #32b8c6;
 }
 
 /* === BASE & LAYOUT === */
 *, *::before, *::after { box-sizing: border-box; }
-body { font-family: var(--font-family-base); background-color: var(--color-background); color: var(--color-text); transition: background-color var(--duration-normal), color var(--duration-normal); margin: 0; }
+body { font-family: var(--font-family-base); background-color: var(--color-background); color: var(--color-text); transition: background-color var(--duration-normal), color var(--duration-normal); }
 .container { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-24); }
 
 /* === HEADER & FOOTER === */
@@ -61,38 +60,38 @@ body { font-family: var(--font-family-base); background-color: var(--color-backg
 .nav-brand i { margin-right: var(--space-8); }
 .brand-text { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .global-controls { display: flex; align-items: center; gap: var(--space-8); }
-.control-btn { background: transparent; border: 1px solid var(--color-border); color: var(--color-text-secondary); padding: var(--space-8); border-radius: var(--radius-full); cursor: pointer; width: 36px; height: 36px; display: grid; place-items: center; }
+.control-btn { background: transparent; border: 1px solid var(--color-border); color: var(--color-text-secondary); padding: var(--space-4) var(--space-8); border-radius: var(--radius-full); cursor: pointer; }
 .control-btn:hover { background: var(--color-secondary); }
-.font-size-controls { display: flex; border-radius: var(--radius-full); border: 1px solid var(--color-border); overflow: hidden; }
-.font-size-controls .control-btn { border-radius: 0; border: none; }
-.font-size-controls .control-btn:first-child { border-right: 1px solid var(--color-border); }
+.font-size-controls { display: flex; }
+.font-size-controls .control-btn:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.font-size-controls .control-btn:last-child { border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+
 .footer { background: var(--color-charcoal-700); color: var(--color-gray-200); padding: var(--space-32) 0 var(--space-16); }
-.footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-32); margin-bottom: var(--space-32); }
+.footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-32); margin-bottom: var(--space-32); }
 .footer-section h4 { color: var(--color-white); margin-bottom: var(--space-16); }
 .footer-brand { color: var(--color-primary); }
 .footer-section p { color: var(--color-gray-300); }
-.footer-section ul { list-style: none; padding: 0; } .footer-section ul li { margin-bottom: var(--space-8); }
+.footer-section ul { list-style: none; } .footer-section ul li { margin-bottom: var(--space-8); }
 .footer-section ul a { color: var(--color-gray-200); } .footer-section ul a:hover { color: var(--color-primary); }
 .footer-bottom { border-top: 1px solid var(--color-slate-500); padding-top: var(--space-24); text-align: center; }
 
 /* === HERO SECTION === */
-.hero { background: var(--color-background); padding: var(--space-24) 0; text-align: center; position: relative; overflow: hidden; border-bottom: 1px solid var(--color-border); }
-.hero-background { position: absolute; inset: 0; background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-surface) 100%); animation: gradient-animation 15s ease infinite alternate; background-size: 200% 200%; }
+.hero { background: var(--color-background); padding: var(--space-32) 0; text-align: center; position: relative; overflow: hidden; }
+.hero-background { position: absolute; inset: 0; background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-surface) 100%); animation: gradient-animation 15s ease infinite; }
 @keyframes gradient-animation { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 .hero-content { position: relative; z-index: 1; }
-.hero-title { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); margin-bottom: var(--space-12); }
+.hero-title { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); margin-bottom: var(--space-16); }
 .hero-description { font-size: var(--font-size-lg); color: var(--color-text-secondary); max-width: 600px; margin: 0 auto var(--space-24); }
 .market-stats-hero { display: flex; justify-content: center; gap: var(--space-24); background: rgba(var(--color-brown-600-rgb), 0.05); padding: var(--space-12); border-radius: var(--radius-lg); max-width: 500px; margin: 0 auto; }
 .market-stat-item { text-align: center; }
 .market-stat-item span { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
 .market-stat-item strong { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--color-text); display: flex; align-items: center; justify-content: center; gap: var(--space-4); }
-.trend-up { color: var(--color-error); } .trend-down { color: var(--color-success); }
 
 /* === CALCULATOR GRID & CARDS === */
 .calculator-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-24); margin-top: var(--space-32); }
 @media (min-width: 1024px) { .calculator-grid { grid-template-columns: 400px 1fr; } }
 .card { background: var(--color-surface); border: 1px solid var(--color-card-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
-.calculator-input-column { position: sticky; top: 80px; }
+.input-card { position: sticky; top: 80px; }
 .panel-header { padding: var(--space-16); border-bottom: 1px solid var(--color-card-border-inner); display: flex; justify-content: space-between; align-items: center; }
 .panel-header h2 { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); }
 .mortgage-form { padding: var(--space-24); }
@@ -109,8 +108,6 @@ body { font-family: var(--font-family-base); background-color: var(--color-backg
 .term-chip { border: 2px solid var(--color-border); padding: var(--space-10); border-radius: var(--radius-base); text-align: center; }
 .term-chip.active { background: var(--color-primary); color: var(--color-btn-primary-text); border-color: var(--color-primary); }
 .advanced-options summary { list-style: none; cursor: pointer; padding: var(--space-12); background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-base); }
-.advanced-options .expand-icon { transition: transform var(--duration-normal); }
-.advanced-options[open] .expand-icon { transform: rotate(180deg); }
 .advanced-content { padding: var(--space-16); border: 1px solid var(--color-border); border-top: none; border-radius: 0 0 var(--radius-base) var(--radius-base); }
 .form-help { font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-top: var(--space-4); display: block; }
 .btn { padding: var(--space-12) var(--space-24); font-weight: var(--font-weight-semibold); border-radius: var(--radius-base); }
@@ -156,21 +153,3 @@ body { font-family: var(--font-family-base); background-color: var(--color-backg
 .cta-content { display: flex; justify-content: space-between; align-items: center; gap: var(--space-32); }
 .cta-form { display: flex; gap: var(--space-12); }
 .cta-form input { min-width: 280px; }
-
-/* === OVERLAYS & UTILS === */
-.loading-overlay { position: fixed; inset: 0; z-index: var(--z-modal); background-color: rgba(0,0,0,0.7); display: grid; place-items: center; backdrop-filter: blur(4px); }
-.spinner-container { text-align: center; color: var(--color-white); }
-.spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.2); border-top-color: var(--color-white); border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.toast-container { position: fixed; top: 80px; right: var(--space-24); z-index: var(--z-modal); display: flex; flex-direction: column; gap: var(--space-12); }
-.toast { padding: var(--space-16); border-radius: var(--radius-base); background: var(--color-surface); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: var(--space-12); animation: toast-in 0.3s ease; }
-@keyframes toast-in { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-/* === PRINT STYLES === */
-@media print {
-    body { background: #fff; color: #000; }
-    .header, .global-controls, .footer, .calculator-input-column, .sharing-section, .hero { display: none !important; }
-    .calculator-grid { grid-template-columns: 1fr; }
-    .card { box-shadow: none; border: 1px solid #ccc; }
-    .tab-content { display: block !important; }
-}
