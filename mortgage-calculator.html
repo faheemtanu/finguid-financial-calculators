@@ -3,1197 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mortgage Calculator | Smart Home Loan Payment Calculator</title>
-    
-    <!-- Fonts -->
+    <meta name="description" content="Advanced AI-Enhanced Mortgage Calculator with interactive charts, PDF export, and GitHub feedback integration.">
+    <title>AI-Enhanced Mortgage Calculator - Production Ready</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <style>
-        /* CSS Variables for Light Mode */
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --secondary: #64748b;
-            --accent: #0ea5e9;
-            --background: #f8fafc;
-            --surface: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --radius: 8px;
-            --transition: all 0.3s ease;
-        }
-
-        /* Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.05"><path d="M0 70l50 30 50-30 50 30 50-30 50 30 50-30 50 30 50-30 50 30 50-30 50 30 50-30 50 30 50-30 50 30 50-30 50 30 50-30v100H0z"/></svg>');
-            background-size: cover;
-            animation: wave 20s linear infinite;
-        }
-
-        @keyframes wave {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100px); }
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto 30px;
-            opacity: 0.9;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius);
-            padding: 15px 20px;
-            min-width: 150px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        /* Calculator Layout */
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 24px;
-            margin: 40px 0;
-        }
-
-        @media (max-width: 1024px) {
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Cards */
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        .card-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-header h2 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            transition: var(--transition);
-            background-color: var(--surface);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .input-group {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-prefix, .input-suffix {
-            position: absolute;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .input-prefix {
-            left: 15px;
-        }
-
-        .input-suffix {
-            right: 15px;
-        }
-
-        .input-with-prefix .form-control {
-            padding-left: 40px;
-        }
-
-        .input-with-suffix .form-control {
-            padding-right: 40px;
-        }
-
-        .toggle-group {
-            display: flex;
-            background: var(--background);
-            border-radius: var(--radius);
-            padding: 4px;
-            margin-bottom: 15px;
-        }
-
-        .toggle-btn {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            background: transparent;
-            border: none;
-            border-radius: calc(var(--radius) - 2px);
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-
-        .toggle-btn.active {
-            background: var(--surface);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .term-chips {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .term-chip {
-            padding: 12px;
-            text-align: center;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-
-        .term-chip.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .suggestions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .suggestion-chip {
-            padding: 6px 12px;
-            background: var(--background);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .suggestion-chip:hover {
-            background: var(--primary-light);
-            color: white;
-        }
-
-        /* Results Section */
-        .payment-highlight {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .payment-label {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .payment-amount {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .payment-change {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .breakdown-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .breakdown-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .breakdown-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .summary-item {
-            text-align: center;
-            padding: 15px;
-            background: var(--background);
-            border-radius: var(--radius);
-        }
-
-        .summary-label {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 5px;
-        }
-
-        .summary-value {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        /* Tabs */
-        .tab-controls {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            border-bottom: 2px solid transparent;
-            transition: var(--transition);
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-
-        .tab-content {
-            padding: 20px;
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-secondary {
-            background: var(--background);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-
-        .btn-full {
-            width: 100%;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        /* Sponsor Section */
-        .sponsor-item {
-            padding: 20px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 15px;
-            transition: var(--transition);
-        }
-
-        .sponsor-item:hover {
-            border-color: var(--primary);
-        }
-
-        .sponsor-item.featured {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-color: var(--accent);
-        }
-
-        .sponsor-logo {
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .sponsor-item h4 {
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .sponsor-item p {
-            color: var(--text-light);
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-
-        .sponsor-features {
-            margin-bottom: 15px;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-        }
-
-        /* Market Section */
-        .market-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .market-label {
-            font-weight: 500;
-        }
-
-        .market-rate {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .market-trend {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .trend-up {
-            color: var(--error);
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .trend-down {
-            color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-
-        .footer-section h4 {
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 8px;
-        }
-
-        .footer-section ul li a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-section ul li a:hover {
-            color: var(--primary);
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
-
-        @media (max-width: 768px) {
-            .footer-bottom {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-        }
-
-        /* Utility Classes */
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-20 {
-            margin-top: 20px;
-        }
-
-        .mb-20 {
-            margin-bottom: 20px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .stats {
-                gap: 15px;
-            }
-            
-            .stat-item {
-                min-width: 120px;
-                padding: 12px 15px;
-            }
-            
-            .calculator-grid {
-                gap: 20px;
-            }
-            
-            .term-chips {
-                grid-template-columns: 1fr;
-            }
-            
-            .summary-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+    <link rel="stylesheet" href="mortgage-calculator.css">
 </head>
-<body>
-    <!-- Header Section -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <h1>Mortgage Calculator</h1>
-                <p>Calculate your monthly payments and understand your home loan with our easy-to-use mortgage calculator</p>
-                
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="calc-count">12,847</div>
-                        <div class="stat-label">Calculations Today</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="avg-savings">$45K</div>
-                        <div class="stat-label">Average Savings Found</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">6.75%</div>
-                        <div class="stat-label">Current 30-Year Rate</div>
-                    </div>
-                </div>
+<body data-theme="light">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="global-controls" role="toolbar">
+        <div class="controls-container">
+            <button id="theme-toggle" class="control-btn" data-tippy-content="Toggle Dark/Light Mode"><i class="fas fa-moon" id="theme-icon"></i><span>Theme</span></button>
+            <button id="voice-toggle" class="control-btn" data-tippy-content="Enable Voice Commands"><i class="fas fa-microphone" id="voice-icon"></i><span>Voice</span></button>
+            <button id="screen-reader-toggle" class="control-btn" data-tippy-content="Toggle Screen Reader Enhancements"><i class="fas fa-universal-access" id="reader-icon"></i><span>Reader</span></button>
+            <div class="font-size-controls" data-tippy-content="Adjust font size">
+                <button id="font-smaller" class="control-btn"><i class="fas fa-minus"></i>A-</button>
+                <button id="font-larger" class="control-btn"><i class="fas fa-plus"></i>A+</button>
             </div>
         </div>
+    </div>
+    
+    <header class="header">
+        <nav class="navbar container">
+            <a href="#" class="nav-brand">
+                <i class="fas fa-brain"></i>
+                <span class="brand-text">AI Mortgage Calc</span>
+            </a>
+            <div class="hamburger"><span></span><span></span><span></span></div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link">Home</a></li>
+                <li><a href="#" class="nav-link">Calculators</a></li>
+                <li><a href="#" class="nav-link">About</a></li>
+                <li><a href="#" class="btn btn--primary btn--sm">Get Rates</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <!-- Main Calculator -->
-    <main class="container">
-        <div class="calculator-grid">
-            <!-- Left Column: Input Form -->
-            <div class="card input-card">
-                <div class="card-header">
-                    <h2><i class="fas fa-home"></i> Mortgage Details</h2>
-                    <button class="btn btn-secondary btn-sm" id="reset-form">
-                        <i class="fas fa-undo"></i> Reset
-                    </button>
+    <div id="loading-overlay" class="loading-overlay" style="display: none;"><div class="spinner-container"><div class="spinner"></div><p id="loading-text">Calculating...</p></div></div>
+    <div id="toast-container" class="toast-container"></div>
+    <div id="sr-announcements" class="sr-only"></div>
+
+    <main id="main-content">
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">The Smartest Way to Calculate Your Mortgage</h1>
+                <p class="hero-description">Get a clear picture of your home loan with our AI-powered calculator. See your exact monthly payments, discover hidden savings, and plan for the future.</p>
+                <div class="hero-features">
+                    <div class="feature"><i class="fas fa-chart-pie"></i><span>Accurate PITI</span></div>
+                    <div class="feature"><i class="fas fa-lightbulb"></i><span>AI Insights</span></div>
+                    <div class="feature"><i class="fas fa-piggy-bank"></i><span>Savings Analysis</span></div>
+                    <div class="feature"><i class="fas fa-file-pdf"></i><span>PDF Reports</span></div>
                 </div>
-                <div class="card-body">
-                    <form class="mortgage-form">
+            </div>
+        </section>
+
+        <div class="calculator-grid container">
+            <section class="calculator-input-column" role="form" aria-labelledby="input-header">
+                <div class="card input-card">
+                    <div class="panel-header" id="input-header">
+                        <h2><i class="fas fa-calculator"></i>Loan Details</h2>
+                        <button id="reset-form" class="btn btn--secondary btn--sm"><i class="fas fa-undo"></i>Reset</button>
+                    </div>
+                    <form id="mortgage-form" class="mortgage-form" novalidate>
                         <div class="form-group">
                             <label for="home-price" class="form-label">Home Price</label>
-                            <div class="input-group input-with-prefix">
-                                <span class="input-prefix">$</span>
-                                <input type="text" id="home-price" class="form-control" placeholder="400,000" value="400,000">
-                            </div>
-                            <div class="suggestions">
-                                <div class="suggestion-chip" data-value="300000">$300K</div>
-                                <div class="suggestion-chip" data-value="500000">$500K</div>
-                                <div class="suggestion-chip" data-value="750000">$750K</div>
-                            </div>
+                            <div class="input-with-prefix"><span class="input-prefix">$</span><input type="text" id="home-price" inputmode="numeric" class="form-input" value="450,000"></div>
                         </div>
-
                         <div class="form-group">
-                            <label class="form-label">Down Payment</label>
-                            <div class="toggle-group">
-                                <button type="button" class="toggle-btn active" id="amount-toggle">Amount ($)</button>
-                                <button type="button" class="toggle-btn" id="percent-toggle">Percentage (%)</button>
-                            </div>
-                            
-                            <div id="amount-input">
-                                <div class="input-group input-with-prefix">
-                                    <span class="input-prefix">$</span>
-                                    <input type="text" id="down-payment" class="form-control" placeholder="80,000" value="80,000">
-                                </div>
-                            </div>
-                            
-                            <div id="percent-input" class="hidden">
-                                <div class="input-group input-with-suffix">
-                                    <input type="number" id="down-payment-percent" class="form-control" placeholder="20" min="0" max="100" step="0.1" value="20">
-                                    <span class="input-suffix">%</span>
-                                </div>
-                            </div>
+                            <label for="down-payment" class="form-label">Down Payment</label>
+                            <div class="toggle-group"><button type="button" class="btn toggle-btn active" id="amount-toggle">$</button><button type="button" class="btn toggle-btn" id="percent-toggle">%</button></div>
+                            <div id="amount-input" class="input-with-prefix"><span class="input-prefix">$</span><input type="text" id="down-payment" inputmode="numeric" class="form-input" value="90,000"></div>
+                            <div id="percent-input" style="display: none;" class="input-with-suffix"><input type="text" id="down-payment-percent" inputmode="decimal" class="form-input" value="20"><span class="input-suffix">%</span></div>
                         </div>
-                        
                         <div class="form-group">
-                            <label for="interest-rate" class="form-label">Interest Rate</label>
-                            <div class="input-group input-with-suffix">
-                                <input type="number" id="interest-rate" class="form-control" placeholder="6.75" step="0.001" min="0" max="20" value="6.75">
-                                <span class="input-suffix">%</span>
-                            </div>
-                            <div class="suggestions">
-                                <div class="suggestion-chip" data-value="5.5">5.5%</div>
-                                <div class="suggestion-chip" data-value="6.75">6.75%</div>
-                                <div class="suggestion-chip" data-value="7.5">7.5%</div>
-                            </div>
+                            <label for="interest-rate" class="form-label">Interest Rate (APR)</label>
+                            <div class="input-with-suffix"><input type="text" id="interest-rate" inputmode="decimal" class="form-input" value="6.75"><span class="input-suffix">%</span></div>
                         </div>
-                        
                         <div class="form-group">
                             <label class="form-label">Loan Term</label>
-                            <div class="term-chips">
-                                <div class="term-chip active" data-term="15">15 Years</div>
-                                <div class="term-chip" data-term="20">20 Years</div>
-                                <div class="term-chip" data-term="30">30 Years</div>
-                            </div>
+                            <div class="term-chips"><button type="button" class="term-chip" data-term="15">15 yr</button><button type="button" class="term-chip" data-term="20">20 yr</button><button type="button" class="term-chip active" data-term="30">30 yr</button></div>
+                            <input type="hidden" id="loan-term" value="30">
                         </div>
-
                         <div class="form-group">
-                            <label for="property-tax" class="form-label">Annual Property Tax</label>
-                            <div class="input-group input-with-prefix">
-                                <span class="input-prefix">$</span>
-                                <input type="text" id="property-tax" class="form-control" placeholder="3,000" value="3,000">
-                            </div>
+                            <label for="property-state" class="form-label">Property State</label>
+                            <div class="select-wrapper"><select id="property-state" class="form-input"></select><i class="fas fa-chevron-down select-icon"></i></div>
+                            <small id="tax-help" class="form-help"></small>
                         </div>
-
                         <div class="form-group">
-                            <label for="home-insurance" class="form-label">Annual Home Insurance</label>
-                            <div class="input-group input-with-prefix">
-                                <span class="input-prefix">$</span>
-                                <input type="text" id="home-insurance" class="form-control" placeholder="1,600" value="1,600">
+                            <label for="home-insurance" class="form-label">Home Insurance (Annual)</label>
+                            <div class="input-with-prefix"><span class="input-prefix">$</span><input type="text" id="home-insurance" inputmode="numeric" class="form-input"></div>
+                            <small id="insurance-help" class="form-help"></small>
+                        </div>
+                        <details class="advanced-options">
+                            <summary class="advanced-summary"><span><i class="fas fa-piggy-bank"></i> Extra Payments</span><i class="fas fa-chevron-down expand-icon"></i></summary>
+                            <div class="advanced-content">
+                                <div class="form-group"><label for="extra-monthly" class="form-label">Extra Monthly</label><div class="input-with-prefix"><span class="input-prefix">$</span><input type="text" id="extra-monthly" inputmode="numeric" class="form-input" value="0"></div></div>
+                                <div class="form-group"><label for="extra-onetime" class="form-label">One-Time (in 1yr)</label><div class="input-with-prefix"><span class="input-prefix">$</span><input type="text" id="extra-onetime" inputmode="numeric" class="form-input" value="0"></div></div>
                             </div>
-                        </div>
-
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary btn-full" id="calculate-btn">
-                                <i class="fas fa-calculator"></i> Calculate Mortgage
-                            </button>
-                        </div>
+                        </details>
+                        <div class="form-actions"><button type="button" id="calculate-btn" class="btn btn-primary btn--full-width"><i class="fas fa-calculator"></i> Calculate</button></div>
                     </form>
                 </div>
-            </div>
+            </section>
 
-            <!-- Middle Column: Results -->
-            <div class="card results-card">
-                <div class="payment-highlight">
-                    <div class="payment-label">Total Monthly Payment</div>
-                    <div class="payment-amount" id="total-payment">$2,467</div>
-                    <div class="payment-change">
-                        <i class="fas fa-sync-alt"></i> Updated in real-time
+            <section class="calculator-results-column" role="region" aria-labelledby="results-header">
+                <div class="card result-card" id="results-section">
+                    <div class="total-payment-highlight">
+                        <div class="payment-header"><span class="payment-label">Total Monthly Payment</span></div>
+                        <div class="payment-amount" id="total-payment">$0</div>
                     </div>
-                </div>
-
-                <div class="card-body">
-                    <h3 class="mb-20">Monthly Payment Breakdown</h3>
-                    
-                    <div class="breakdown-list">
-                        <div class="breakdown-item">
-                            <div class="breakdown-label">
-                                <i class="fas fa-home" style="color: var(--primary);"></i>
-                                Principal & Interest
-                            </div>
-                            <div class="breakdown-value" id="principal-interest">$2,075</div>
-                        </div>
-                        
-                        <div class="breakdown-item">
-                            <div class="breakdown-label">
-                                <i class="fas fa-receipt" style="color: var(--warning);"></i>
-                                Property Tax
-                            </div>
-                            <div class="breakdown-value" id="monthly-tax">$250</div>
-                        </div>
-                        
-                        <div class="breakdown-item">
-                            <div class="breakdown-label">
-                                <i class="fas fa-shield-alt" style="color: var(--accent);"></i>
-                                Home Insurance
-                            </div>
-                            <div class="breakdown-value" id="monthly-insurance">$133</div>
-                        </div>
-                        
-                        <div class="breakdown-item">
-                            <div class="breakdown-label">
-                                <i class="fas fa-umbrella" style="color: var(--secondary);"></i>
-                                PMI
-                            </div>
-                            <div class="breakdown-value" id="monthly-pmi">$0</div>
+                    <div class="loan-summary-section">
+                        <div class="summary-grid">
+                            <div class="summary-item"><div class="summary-label">Loan Principal</div><div class="summary-value" id="display-loan-amount">$0</div></div>
+                            <div class="summary-item"><div class="summary-label">Total Interest</div><div class="summary-value" id="display-total-interest">$0</div></div>
+                            <div class="summary-item"><div class="summary-label">Total Cost</div><div class="summary-value" id="display-total-cost">$0</div></div>
+                            <div class="summary-item"><div class="summary-label">Payoff Date</div><div class="summary-value" id="display-payoff-date">-</div></div>
                         </div>
                     </div>
-
-                    <div class="summary-grid">
-                        <div class="summary-item">
-                            <div class="summary-label">Loan Amount</div>
-                            <div class="summary-value" id="display-loan-amount">$320,000</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">Total Interest</div>
-                            <div class="summary-value" id="display-total-interest">$427,183</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">Total Cost</div>
-                            <div class="summary-value" id="display-total-cost">$747,183</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-label">Payoff Date</div>
-                            <div class="summary-value" id="display-payoff-date">Sep 2054</div>
-                        </div>
-                    </div>
-
                     <div class="tabbed-section">
                         <div class="tab-controls">
-                            <button class="tab-btn active" data-tab="chart">Chart</button>
-                            <button class="tab-btn" data-tab="schedule">Schedule</button>
-                            <button class="tab-btn" data-tab="insights">Insights</button>
+                            <button class="tab-btn active" data-tab="chart"><i class="fas fa-chart-line"></i> Mortgage Over Time</button>
+                            <button class="tab-btn" data-tab="insights"><i class="fas fa-brain"></i> AI-Powered Insights</button>
+                            <button class="tab-btn" data-tab="amortization"><i class="fas fa-table"></i> Amortization</button>
                         </div>
-
                         <div id="chart" class="tab-content active">
-                            <div class="text-center mt-20">
-                                <p>Visual chart showing mortgage payment breakdown over time</p>
-                                <div style="height: 200px; background: var(--background); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin-top: 20px;">
-                                    <p>Chart visualization area</p>
+                            <div class="chart-header"><h4>Loan Balance Over Time</h4></div>
+                            <div class="chart-container"><canvas id="mortgage-timeline-chart"></canvas></div>
+                            <div class="chart-controls">
+                                <label for="year-range" class="slider-label" id="year-label">Year 1</label>
+                                <input type="range" id="year-range" class="year-slider" min="1" max="30" value="1">
+                                <div class="year-details" id="year-data-preview">
+                                    <span>P. Paid: <strong id="principal-paid">$0</strong></span>
+                                    <span>I. Paid: <strong id="interest-paid">$0</strong></span>
+                                    <span>Balance: <strong id="remaining-balance">$0</strong></span>
                                 </div>
                             </div>
                         </div>
-
-                        <div id="schedule" class="tab-content">
-                            <div class="text-center mt-20">
-                                <p>Amortization schedule showing payment details</p>
-                                <div style="height: 200px; background: var(--background); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin-top: 20px;">
-                                    <p>Payment schedule area</p>
-                                </div>
-                            </div>
-                        </div>
-
                         <div id="insights" class="tab-content">
-                            <div class="text-center mt-20">
-                                <p>Smart insights about your mortgage</p>
-                                <div style="height: 200px; background: var(--background); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; margin-top: 20px;">
-                                    <p>Insights area</p>
-                                </div>
+                            <div class="insights-header"><h4>AI-Powered Smart Recommendations</h4><span class="ai-badge"><i class="fas fa-brain"></i>AI</span></div>
+                            <div id="ai-insights" class="insights-list"></div>
+                        </div>
+                        <div id="amortization" class="tab-content">
+                            <div class="table-container">
+                                <table id="amortization-table" class="amortization-table">
+                                    <thead><tr><th>#</th><th>Date</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
+                        </div>
+                    </div>
+                    <div class="sharing-section">
+                        <div class="share-actions">
+                            <button id="share-btn" class="btn btn--outline btn--sm"><i class="fas fa-share-alt"></i>Share</button>
+                            <button id="pdf-download-btn" class="btn btn--outline btn--sm"><i class="fas fa-file-pdf"></i>Download PDF</button>
+                            <button id="print-btn" class="btn btn--outline btn--sm"><i class="fas fa-print"></i>Print</button>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Right Column: Sponsor & Market Info -->
-            <div class="sponsor-column">
-                <div class="card sponsor-card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-handshake"></i> Sponsored Offers</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="sponsor-item featured">
-                            <div class="sponsor-logo">
-                                <i class="fas fa-university"></i>
-                            </div>
-                            <h4>Get Pre-Approved Today</h4>
-                            <p>See rates as low as 5.99% APR. Compare offers from top lenders instantly.</p>
-                            <div class="sponsor-features">
-                                <div class="feature">
-                                    <i class="fas fa-check" style="color: var(--success);"></i>
-                                    <span>No credit score impact</span>
-                                </div>
-                                <div class="feature">
-                                    <i class="fas fa-check" style="color: var(--success);"></i>
-                                    <span>Instant approval</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary btn-full">
-                                <i class="fas fa-external-link-alt"></i> Get Pre-Approved
-                            </button>
-                        </div>
-                        
-                        <div class="sponsor-item">
-                            <div class="sponsor-logo">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <h4>Save on Home Insurance</h4>
-                            <p>Bundle your mortgage and insurance for maximum savings.</p>
-                            <button class="btn btn-secondary btn-full">
-                                <i class="fas fa-calculator"></i> Compare Quotes
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card market-card mt-20">
-                    <div class="card-header">
-                        <h2><i class="fas fa-chart-line"></i> Market Rates</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="market-item">
-                            <div class="market-label">30-Year Fixed</div>
-                            <div class="market-rate">6.75%</div>
-                            <div class="market-trend trend-up">
-                                <i class="fas fa-arrow-up"></i> +0.12%
-                            </div>
-                        </div>
-                        
-                        <div class="market-item">
-                            <div class="market-label">15-Year Fixed</div>
-                            <div class="market-rate">6.25%</div>
-                            <div class="market-trend trend-down">
-                                <i class="fas fa-arrow-down"></i> -0.05%
-                            </div>
-                        </div>
-                        
-                        <div class="market-item">
-                            <div class="market-label">5/1 ARM</div>
-                            <div class="market-rate">5.95%</div>
-                            <div class="market-trend trend-up">
-                                <i class="fas fa-arrow-up"></i> +0.08%
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
         </div>
+
+        <section class="calculators-preview">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Related Calculators</h2>
+                    <p>Explore other financial tools to help you on your home ownership journey.</p>
+                </div>
+                <div class="calculator-grid">
+                    <a href="#" class="calculator-card"><div class="card-icon"><i class="fas fa-arrows-rotate"></i></div><h3>Refinance Calculator</h3><p>See if you can lower your monthly payment by refinancing your current mortgage.</p></a>
+                    <a href="#" class="calculator-card"><div class="card-icon"><i class="fas fa-house-circle-check"></i></div><h3>Affordability Calculator</h3><p>Determine how much house you can comfortably afford based on your income and debts.</p></a>
+                    <a href="#" class="calculator-card"><div class="card-icon"><i class="fas fa-sack-dollar"></i></div><h3>Extra Payment Calculator</h3><p>Discover how making extra payments can shorten your loan term and save interest.</p></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="feedback-section partnership-cta">
+             <div class="container cta-content">
+                <div class="cta-text">
+                    <h2>Have Feedback?</h2>
+                    <p>Help us improve! Your feedback creates an issue in our public GitHub repository.</p>
+                </div>
+                <form id="feedback-form" class="cta-form" data-repo="YOUR_USERNAME/YOUR_REPO">
+                    <input id="feedback-text" class="form-input" placeholder="Enter your feedback..." required />
+                    <button type="submit" class="btn btn-secondary">Submit</button>
+                </form>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <div class="footer-logo">
-                        <i class="fas fa-calculator" style="color: var(--primary);"></i>
-                        <span>Mortgage Calculator</span>
-                    </div>
-                    <p>Make smarter home buying decisions with our easy-to-use mortgage calculator. Get accurate payment estimates instantly.</p>
+                    <a href="#" class="footer-brand"><i class="fas fa-brain"></i><span>AI Mortgage Calc</span></a>
+                    <p>The world's most advanced mortgage calculator with AI-powered insights and comprehensive analysis.</p>
                 </div>
-                
-                <div class="footer-section">
-                    <h4>Tools</h4>
-                    <ul>
-                        <li><a href="#">Mortgage Calculator</a></li>
-                        <li><a href="#">Refinance Calculator</a></li>
-                        <li><a href="#">Affordability Calculator</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#">Mortgage Guide</a></li>
-                        <li><a href="#">First Time Buyers</a></li>
-                        <li><a href="#">Market Trends</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                    </ul>
-                </div>
+                <div class="footer-section"><h4>Resources</h4><ul><li><a href="#">Mortgage Guide</a></li><li><a href="#">Rate Trends</a></li><li><a href="#">First-Time Buyers</a></li></ul></div>
+                <div class="footer-section"><h4>Tools</h4><ul><li><a href="#">Refinance Calculator</a></li><li><a href="#">Affordability Calculator</a></li><li><a href="#">PMI Calculator</a></li></ul></div>
+                <div class="footer-section"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul></div>
             </div>
-            
-            <div class="footer-bottom">
-                <div class="footer-copyright">
-                    <p>&copy; 2024 Mortgage Calculator. All rights reserved.</p>
-                </div>
-                <div class="footer-badges">
-                    <span>SSL Secured</span>
-                </div>
-            </div>
+            <div class="footer-bottom"><p>&copy; 2025 AI Mortgage Calculator. All rights reserved.</p></div>
         </div>
     </footer>
-
+    
+    <script src="mortgage-calculator.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Format number with commas
-            function formatNumber(num) {
-                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            if (typeof tippy !== 'undefined') {
+                tippy('[data-tippy-content]', { theme: 'light-border', arrow: true, placement: 'top' });
             }
-
-            // Parse number from formatted string
-            function parseNumber(str) {
-                return parseFloat(str.replace(/,/g, '')) || 0;
-            }
-
-            // Format currency
-            function formatCurrency(amount) {
-                return '$' + formatNumber(Math.round(amount));
-            }
-
-            // Calculate mortgage
-            function calculateMortgage() {
-                const homePrice = parseNumber(document.getElementById('home-price').value);
-                const downPayment = parseNumber(document.getElementById('down-payment').value);
-                const interestRate = parseFloat(document.getElementById('interest-rate').value) / 100;
-                const loanTerm = parseInt(document.querySelector('.term-chip.active').dataset.term);
-                const propertyTax = parseNumber(document.getElementById('property-tax').value);
-                const homeInsurance = parseNumber(document.getElementById('home-insurance').value);
-                
-                const loanAmount = homePrice - downPayment;
-                const monthlyRate = interestRate / 12;
-                const numberOfPayments = loanTerm * 12;
-                
-                // Calculate monthly principal and interest
-                const monthlyPI = loanAmount * 
-                    (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
-                    (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
-                
-                // Calculate additional monthly costs
-                const monthlyTax = propertyTax / 12;
-                const monthlyInsurance = homeInsurance / 12;
-                const monthlyPMI = downPayment / homePrice < 0.2 ? loanAmount * 0.005 / 12 : 0;
-                
-                const totalMonthlyPayment = monthlyPI + monthlyTax + monthlyInsurance + monthlyPMI;
-                
-                // Calculate totals
-                const totalInterest = (monthlyPI * numberOfPayments) - loanAmount;
-                const totalCost = homePrice + totalInterest;
-                
-                // Calculate payoff date
-                const payoffDate = new Date();
-                payoffDate.setMonth(payoffDate.getMonth() + numberOfPayments);
-                
-                // Update UI
-                document.getElementById('total-payment').textContent = formatCurrency(totalMonthlyPayment);
-                document.getElementById('principal-interest').textContent = formatCurrency(monthlyPI);
-                document.getElementById('monthly-tax').textContent = formatCurrency(monthlyTax);
-                document.getElementById('monthly-insurance').textContent = formatCurrency(monthlyInsurance);
-                document.getElementById('monthly-pmi').textContent = formatCurrency(monthlyPMI);
-                document.getElementById('display-loan-amount').textContent = formatCurrency(loanAmount);
-                document.getElementById('display-total-interest').textContent = formatCurrency(totalInterest);
-                document.getElementById('display-total-cost').textContent = formatCurrency(totalCost);
-                document.getElementById('display-payoff-date').textContent = payoffDate.toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    year: 'numeric' 
-                });
-            }
-
-            // Initialize event listeners
-            function initEventListeners() {
-                // Calculate button
-                document.getElementById('calculate-btn').addEventListener('click', calculateMortgage);
-                
-                // Reset form
-                document.getElementById('reset-form').addEventListener('click', function() {
-                    document.getElementById('home-price').value = '400,000';
-                    document.getElementById('down-payment').value = '80,000';
-                    document.getElementById('interest-rate').value = '6.75';
-                    document.getElementById('property-tax').value = '3,000';
-                    document.getElementById('home-insurance').value = '1,600';
-                    
-                    // Reset term chips
-                    document.querySelectorAll('.term-chip').forEach(chip => {
-                        chip.classList.remove('active');
-                    });
-                    document.querySelector('[data-term="30"]').classList.add('active');
-                    
-                    // Reset down payment toggle
-                    document.getElementById('amount-toggle').classList.add('active');
-                    document.getElementById('percent-toggle').classList.remove('active');
-                    document.getElementById('amount-input').classList.remove('hidden');
-                    document.getElementById('percent-input').classList.add('hidden');
-                    
-                    calculateMortgage();
-                });
-                
-                // Down payment toggle
-                document.getElementById('amount-toggle').addEventListener('click', function() {
-                    this.classList.add('active');
-                    document.getElementById('percent-toggle').classList.remove('active');
-                    document.getElementById('amount-input').classList.remove('hidden');
-                    document.getElementById('percent-input').classList.add('hidden');
-                });
-                
-                document.getElementById('percent-toggle').addEventListener('click', function() {
-                    this.classList.add('active');
-                    document.getElementById('amount-toggle').classList.remove('active');
-                    document.getElementById('amount-input').classList.add('hidden');
-                    document.getElementById('percent-input').classList.remove('hidden');
-                });
-                
-                // Term chips
-                document.querySelectorAll('.term-chip').forEach(chip => {
-                    chip.addEventListener('click', function() {
-                        document.querySelectorAll('.term-chip').forEach(c => {
-                            c.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        calculateMortgage();
-                    });
-                });
-                
-                // Suggestion chips
-                document.querySelectorAll('.suggestion-chip').forEach(chip => {
-                    chip.addEventListener('click', function() {
-                        const value = this.getAttribute('data-value');
-                        const input = this.closest('.form-group').querySelector('input');
-                        
-                        if (input.id === 'home-price' || input.id === 'down-payment') {
-                            input.value = formatNumber(value);
-                        } else {
-                            input.value = value;
-                        }
-                        
-                        calculateMortgage();
-                    });
-                });
-                
-                // Input changes
-                document.querySelectorAll('input').forEach(input => {
-                    input.addEventListener('input', function() {
-                        // Format number inputs as user types
-                        if (this.id === 'home-price' || this.id === 'down-payment' || 
-                            this.id === 'property-tax' || this.id === 'home-insurance') {
-                            const cursorPosition = this.selectionStart;
-                            const value = parseNumber(this.value);
-                            this.value = formatNumber(value);
-                            
-                            // Restore cursor position
-                            this.setSelectionRange(cursorPosition, cursorPosition);
-                        }
-                        
-                        calculateMortgage();
-                    });
-                });
-                
-                // Tab controls
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const tabName = this.getAttribute('data-tab');
-                        
-                        // Update active tab button
-                        document.querySelectorAll('.tab-btn').forEach(b => {
-                            b.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        
-                        // Show active tab content
-                        document.querySelectorAll('.tab-content').forEach(content => {
-                            content.classList.remove('active');
-                        });
-                        document.getElementById(tabName).classList.add('active');
-                    });
-                });
-            }
-
-            // Initialize the application
-            function init() {
-                initEventListeners();
-                calculateMortgage();
-                
-                // Update stats counters (simulated)
-                setInterval(() => {
-                    const calcCount = document.getElementById('calc-count');
-                    let count = parseNumber(calcCount.textContent);
-                    count += Math.floor(Math.random() * 5) + 1;
-                    calcCount.textContent = formatNumber(count);
-                }, 5000);
-            }
-
-            // Start the application
-            init();
         });
     </script>
 </body>
