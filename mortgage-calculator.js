@@ -1,1216 +1,454 @@
-/**
- * mortgage-calculator.js
- * FinGuid AI-Enhanced Mortgage Calculator v8.0
- * Production Ready with Enhanced Features
- * 
- * Features:
- * - Real-time mortgage calculations
- * - State-based property tax calculations
- * - Voice commands and screen reader support
- * - Interactive mortgage over time chart
- * - AI-powered insights
- * - Amortization schedule with pagination
- * - Share functionality
- * - Mobile responsive
- */
-
-'use strict';
-
-// ========== CONFIGURATION & STATE ==========
-const CONFIG = {
-    debounceDelay: 300,
-    amortizationPageSize: 12,
-    chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    usePointStyle: true,
-                    padding: 20
-                }
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 AI-Enhanced Mortgage Calculator | FinGuid USA</title>
+    <meta name="description" content="Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights. World's first AI-enhanced mortgage calculator.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="AI-Enhanced Mortgage Calculator | FinGuid USA">
+    <meta property="og:description" content="Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.finguid.com/mortgage-calculator">
+    <meta property="og:image" content="https://www.finguid.com/images/mortgage-calculator-preview.jpg">
+    
+    <!-- Stylesheets and Fonts -->
+    <link rel="stylesheet" href="mortgage-calculator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- JSON-LD Schema for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "FinGuid AI-Enhanced Mortgage Calculator",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "description": "AI-enhanced mortgage calculator with state-specific taxes, PMI calculations, and personalized insights for US homebuyers.",
+        "url": "https://www.finguid.com/mortgage-calculator",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "2847"
         }
-    },
-    colors: {
-        primary: '#21808d',
-        secondary: '#f59e0b',
-        success: '#10b981',
-        warning: '#f59e0b',
-        error: '#ef4444',
-        info: '#3b82f6'
     }
-};
-
-const STATE = {
-    currentCalculation: null,
-    amortizationData: [],
-    currentView: 'monthly',
-    currentPage: 1,
-    isListening: false,
-    screenReaderEnabled: false,
-    speechRecognition: null,
-    timelineChart: null
-};
-
-// US States with property tax rates (2024 data)
-const STATE_TAX_RATES = {
-    'AL': { name: 'Alabama', rate: 0.0041 },
-    'AK': { name: 'Alaska', rate: 0.0119 },
-    'AZ': { name: 'Arizona', rate: 0.0062 },
-    'AR': { name: 'Arkansas', rate: 0.0061 },
-    'CA': { name: 'California', rate: 0.0075 },
-    'CO': { name: 'Colorado', rate: 0.0051 },
-    'CT': { name: 'Connecticut', rate: 0.0214 },
-    'DE': { name: 'Delaware', rate: 0.0057 },
-    'FL': { name: 'Florida', rate: 0.0083 },
-    'GA': { name: 'Georgia', rate: 0.0089 },
-    'HI': { name: 'Hawaii', rate: 0.0028 },
-    'ID': { name: 'Idaho', rate: 0.0069 },
-    'IL': { name: 'Illinois', rate: 0.0227 },
-    'IN': { name: 'Indiana', rate: 0.0085 },
-    'IA': { name: 'Iowa', rate: 0.0157 },
-    'KS': { name: 'Kansas', rate: 0.0141 },
-    'KY': { name: 'Kentucky', rate: 0.0086 },
-    'LA': { name: 'Louisiana', rate: 0.0055 },
-    'ME': { name: 'Maine', rate: 0.0128 },
-    'MD': { name: 'Maryland', rate: 0.0109 },
-    'MA': { name: 'Massachusetts', rate: 0.0117 },
-    'MI': { name: 'Michigan', rate: 0.0154 },
-    'MN': { name: 'Minnesota', rate: 0.0112 },
-    'MS': { name: 'Mississippi', rate: 0.0081 },
-    'MO': { name: 'Missouri', rate: 0.0097 },
-    'MT': { name: 'Montana', rate: 0.0084 },
-    'NE': { name: 'Nebraska', rate: 0.0173 },
-    'NV': { name: 'Nevada', rate: 0.0053 },
-    'NH': { name: 'New Hampshire', rate: 0.0209 },
-    'NJ': { name: 'New Jersey', rate: 0.0249 },
-    'NM': { name: 'New Mexico', rate: 0.0080 },
-    'NY': { name: 'New York', rate: 0.0169 },
-    'NC': { name: 'North Carolina', rate: 0.0084 },
-    'ND': { name: 'North Dakota', rate: 0.0142 },
-    'OH': { name: 'Ohio', rate: 0.0162 },
-    'OK': { name: 'Oklahoma', rate: 0.0090 },
-    'OR': { name: 'Oregon', rate: 0.0093 },
-    'PA': { name: 'Pennsylvania', rate: 0.0158 },
-    'RI': { name: 'Rhode Island', rate: 0.0153 },
-    'SC': { name: 'South Carolina', rate: 0.0057 },
-    'SD': { name: 'South Dakota', rate: 0.0132 },
-    'TN': { name: 'Tennessee', rate: 0.0064 },
-    'TX': { name: 'Texas', rate: 0.0180 },
-    'UT': { name: 'Utah', rate: 0.0066 },
-    'VT': { name: 'Vermont', rate: 0.0190 },
-    'VA': { name: 'Virginia', rate: 0.0082 },
-    'WA': { name: 'Washington', rate: 0.0094 },
-    'WV': { name: 'West Virginia', rate: 0.0059 },
-    'WI': { name: 'Wisconsin', rate: 0.0185 },
-    'WY': { name: 'Wyoming', rate: 0.0062 }
-};
-
-// ========== UTILITY FUNCTIONS ==========
-const Utils = {
-    // DOM selection helpers
-    $: (selector) => document.querySelector(selector),
-    $$: (selector) => document.querySelectorAll(selector),
-
-    // Currency formatting
-    formatCurrency: (amount, decimals = 0) => {
-        if (isNaN(amount) || amount === null) return '$0';
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals
-        }).format(amount);
-    },
-
-    // Number formatting
-    formatNumber: (num) => {
-        if (isNaN(num)) return '0';
-        return new Intl.NumberFormat('en-US').format(num);
-    },
-
-    // Date formatting
-    formatDate: (date) => {
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short'
-        });
-    },
-
-    // Debounce function
-    debounce: (func, delay) => {
-        let timeoutId;
-        return function (...args) {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => func.apply(this, args), delay);
-        };
-    },
-
-    // Show toast notification
-    showToast: (message, type = 'info') => {
-        const container = Utils.$('#toast-container');
-        if (!container) return;
-
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.innerHTML = `
-            <div class="toast-content">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                <span>${message}</span>
-            </div>
-            <button class="toast-close" onclick="this.parentElement.remove()">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
-
-        container.appendChild(toast);
-
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            if (toast.parentElement) {
-                toast.remove();
-            }
-        }, 5000);
-    }
-};
-
-// ========== SCREEN READER & ACCESSIBILITY ==========
-const AccessibilityManager = {
-    announce: (message) => {
-        if (!STATE.screenReaderEnabled) return;
-        
-        const announcer = Utils.$('#sr-announcements');
-        if (announcer) {
-            announcer.textContent = '';
-            setTimeout(() => {
-                announcer.textContent = message;
-            }, 100);
-        }
-    },
-
-    toggle: () => {
-        STATE.screenReaderEnabled = !STATE.screenReaderEnabled;
-        const btn = Utils.$('#screen-reader-btn');
-        if (btn) {
-            btn.classList.toggle('active', STATE.screenReaderEnabled);
-            btn.setAttribute('aria-pressed', STATE.screenReaderEnabled);
-        }
-        
-        AccessibilityManager.announce(
-            `Screen reader ${STATE.screenReaderEnabled ? 'enabled' : 'disabled'}`
-        );
-        
-        Utils.showToast(
-            `Screen reader ${STATE.screenReaderEnabled ? 'enabled' : 'disabled'}`,
-            'info'
-        );
-    }
-};
-
-// ========== VOICE COMMANDS ==========
-const VoiceManager = {
-    setup: () => {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            console.warn('Speech recognition not supported');
-            return;
-        }
-
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        STATE.speechRecognition = new SpeechRecognition();
-        
-        STATE.speechRecognition.continuous = false;
-        STATE.speechRecognition.interimResults = false;
-        STATE.speechRecognition.lang = 'en-US';
-
-        STATE.speechRecognition.onstart = () => {
-            STATE.isListening = true;
-            const voiceStatus = Utils.$('#voice-status');
-            const voiceBtn = Utils.$('#voice-command-btn');
-            
-            if (voiceStatus) voiceStatus.style.display = 'flex';
-            if (voiceBtn) voiceBtn.classList.add('active');
-            
-            AccessibilityManager.announce('Voice command activated. Listening...');
-        };
-
-        STATE.speechRecognition.onend = () => {
-            STATE.isListening = false;
-            const voiceStatus = Utils.$('#voice-status');
-            const voiceBtn = Utils.$('#voice-command-btn');
-            
-            if (voiceStatus) voiceStatus.style.display = 'none';
-            if (voiceBtn) voiceBtn.classList.remove('active');
-        };
-
-        STATE.speechRecognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript.toLowerCase();
-            VoiceManager.processCommand(transcript);
-        };
-
-        STATE.speechRecognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-            AccessibilityManager.announce('Voice recognition error. Please try again.');
-        };
-    },
-
-    toggle: () => {
-        if (!STATE.speechRecognition) {
-            Utils.showToast('Voice recognition not available in this browser', 'error');
-            return;
-        }
-
-        if (STATE.isListening) {
-            STATE.speechRecognition.stop();
-        } else {
-            STATE.speechRecognition.start();
-        }
-    },
-
-    processCommand: (command) => {
-        console.log('Voice command:', command);
-        
-        // Extract numbers from command
-        const numberMatch = command.match(/(\d+(?:,\d{3})*(?:\.\d+)?)/);
-        const number = numberMatch ? parseFloat(numberMatch[1].replace(/,/g, '')) : null;
-
-        if (!number && !command.includes('calculate')) {
-            AccessibilityManager.announce('No number detected in voice command');
-            return;
-        }
-
-        // Command mapping
-        const commandMap = {
-            'home price': '#home-price',
-            'house price': '#home-price',
-            'down payment': '#dp-amount',
-            'interest rate': '#interest-rate',
-            'loan term': '#loan-term',
-            'property tax': '#property-tax',
-            'insurance': '#home-insurance',
-            'hoa fees': '#hoa-fees'
-        };
-
-        // Process commands
-        for (const [phrase, selector] of Object.entries(commandMap)) {
-            if (command.includes(phrase)) {
-                const element = Utils.$(selector);
-                if (element && number) {
-                    element.value = number;
-                    element.dispatchEvent(new Event('input', { bubbles: true }));
-                    AccessibilityManager.announce(`${phrase} set to ${Utils.formatNumber(number)}`);
-                    return;
-                }
-            }
-        }
-
-        // Special commands
-        if (command.includes('calculate')) {
-            CalculationEngine.calculate();
-            AccessibilityManager.announce('Calculation updated');
-            return;
-        }
-
-        AccessibilityManager.announce('Voice command not recognized. Try saying "home price 400000" or similar.');
-    }
-};
-
-// ========== CALCULATION ENGINE ==========
-const CalculationEngine = {
-    getInputs: () => {
-        const homePrice = parseFloat(Utils.$('#home-price').value) || 0;
-        const dpAmount = parseFloat(Utils.$('#dp-amount').value) || 0;
-        const dpPercent = parseFloat(Utils.$('#dp-percent').value) || 0;
-        
-        // Determine which down payment value to use
-        const activeTab = Utils.$('.tab-btn.active')?.dataset.tab || 'dollar';
-        const downPayment = activeTab === 'percent' ? (homePrice * dpPercent / 100) : dpAmount;
-
-        return {
-            homePrice,
-            downPayment,
-            interestRate: parseFloat(Utils.$('#interest-rate').value) || 0,
-            loanTerm: parseInt(Utils.$('#loan-term').value) || 0,
-            startDate: Utils.$('#start-date').value,
-            state: Utils.$('#state').value,
-            propertyTax: parseFloat(Utils.$('#property-tax').value) || 0,
-            homeInsurance: parseFloat(Utils.$('#home-insurance').value) || 0,
-            hoaFees: parseFloat(Utils.$('#hoa-fees').value) || 0,
-            extraMonthly: parseFloat(Utils.$('#extra-monthly').value) || 0,
-            extraYearly: parseFloat(Utils.$('#extra-yearly').value) || 0,
-            extraYearlyDate: Utils.$('#extra-yearly-date')?.value || ''
-        };
-    },
-
-    calculate: Utils.debounce(() => {
-        try {
-            const inputs = CalculationEngine.getInputs();
-            const results = CalculationEngine.calculateMortgage(inputs);
-            
-            STATE.currentCalculation = results;
-            STATE.amortizationData = CalculationEngine.generateAmortization(inputs, results);
-            
-            // Update all UI components
-            UIManager.displayResults(results, inputs);
-            UIManager.displayOverTimeChart(results, inputs);
-            AIInsights.generate(inputs, results);
-            AmortizationManager.display();
-            
-            // Announce to screen reader
-            AccessibilityManager.announce(
-                `Monthly payment updated: ${Utils.formatCurrency(results.totalMonthly)}`
-            );
-            
-        } catch (error) {
-            console.error('Calculation error:', error);
-            Utils.showToast('Error calculating mortgage. Please check your inputs.', 'error');
-        }
-    }, CONFIG.debounceDelay),
-
-    calculateMortgage: (inputs) => {
-        const { homePrice, downPayment, interestRate, loanTerm, propertyTax, homeInsurance, hoaFees } = inputs;
-        
-        // Validate inputs
-        if (homePrice <= 0 || loanTerm <= 0) {
-            return CalculationEngine.getEmptyResult();
-        }
-
-        const loanAmount = Math.max(0, homePrice - downPayment);
-        const downPaymentPercent = homePrice > 0 ? (downPayment / homePrice) * 100 : 0;
-
-        if (loanAmount <= 0) {
-            return CalculationEngine.getEmptyResult();
-        }
-
-        // Calculate monthly payment (Principal & Interest)
-        const monthlyRate = (interestRate / 100) / 12;
-        const numPayments = loanTerm * 12;
-        
-        let monthlyPI = 0;
-        if (monthlyRate > 0) {
-            monthlyPI = loanAmount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -numPayments));
-        } else {
-            monthlyPI = loanAmount / numPayments; // 0% interest case
-        }
-
-        // Calculate PMI (if down payment < 20%)
-        const monthlyPMI = downPaymentPercent < 20 ? (loanAmount * 0.005) / 12 : 0;
-
-        // Calculate other monthly costs
-        const monthlyTax = propertyTax / 12;
-        const monthlyInsurance = homeInsurance / 12;
-        const monthlyHOA = hoaFees;
-
-        // Calculate totals
-        const totalMonthly = monthlyPI + monthlyPMI + monthlyTax + monthlyInsurance + monthlyHOA;
-        const totalInterest = (monthlyPI * numPayments) - loanAmount;
-        const totalPaid = loanAmount + totalInterest;
-
-        return {
-            loanAmount,
-            downPaymentPercent,
-            monthlyPI: isNaN(monthlyPI) ? 0 : monthlyPI,
-            monthlyPMI,
-            monthlyTax,
-            monthlyInsurance,
-            monthlyHOA,
-            totalMonthly: isNaN(totalMonthly) ? 0 : totalMonthly,
-            totalInterest: isNaN(totalInterest) ? 0 : totalInterest,
-            totalPaid: isNaN(totalPaid) ? 0 : totalPaid
-        };
-    },
-
-    getEmptyResult: () => ({
-        loanAmount: 0,
-        downPaymentPercent: 0,
-        monthlyPI: 0,
-        monthlyPMI: 0,
-        monthlyTax: 0,
-        monthlyInsurance: 0,
-        monthlyHOA: 0,
-        totalMonthly: 0,
-        totalInterest: 0,
-        totalPaid: 0
-    }),
-
-    generateAmortization: (inputs, results) => {
-        const { loanAmount, monthlyPI } = results;
-        const { extraMonthly, extraYearly, extraYearlyDate, interestRate, loanTerm } = inputs;
-        
-        if (loanAmount <= 0 || monthlyPI <= 0) return [];
-
-        const schedule = [];
-        const monthlyRate = (interestRate / 100) / 12;
-        let balance = loanAmount;
-        let paymentNum = 1;
-        let currentDate = new Date(inputs.startDate + '-01');
-
-        // Calculate when to apply yearly extra payment
-        let extraYearlyPaymentMonth = -1;
-        if (extraYearlyDate && extraYearly > 0) {
-            const extraDate = new Date(extraYearlyDate + '-01');
-            const startDate = new Date(inputs.startDate + '-01');
-            extraYearlyPaymentMonth = ((extraDate.getFullYear() - startDate.getFullYear()) * 12) + 
-                                    (extraDate.getMonth() - startDate.getMonth()) + 1;
-        }
-
-        // Generate schedule
-        while (balance > 0.01 && paymentNum <= (loanTerm * 12 + 60)) { // Safety limit
-            const interestPayment = balance * monthlyRate;
-            let principalPayment = monthlyPI - interestPayment;
-            
-            // Add extra payments
-            let totalExtraPayment = extraMonthly;
-            if (paymentNum === extraYearlyPaymentMonth) {
-                totalExtraPayment += extraYearly;
-            }
-            
-            principalPayment += totalExtraPayment;
-            
-            // Don't overpay
-            if (principalPayment > balance) {
-                principalPayment = balance;
-            }
-            
-            balance -= principalPayment;
-            
-            schedule.push({
-                paymentNumber: paymentNum,
-                date: new Date(currentDate),
-                payment: interestPayment + principalPayment,
-                principal: principalPayment,
-                interest: interestPayment,
-                balance: Math.max(0, balance),
-                extraPayment: totalExtraPayment
-            });
-            
-            paymentNum++;
-            currentDate.setMonth(currentDate.getMonth() + 1);
-        }
-        
-        return schedule;
-    }
-};
-
-// ========== UI MANAGER ==========
-const UIManager = {
-    displayResults: (results, inputs) => {
-        // Update total payment
-        const totalElement = Utils.$('#total-payment');
-        if (totalElement) {
-            totalElement.textContent = Utils.formatCurrency(results.totalMonthly, 2);
-        }
-
-        // Update breakdown
-        const breakdownElement = Utils.$('#payment-breakdown');
-        if (breakdownElement) {
-            let html = `
-                <div class="breakdown-item">
-                    <span>Principal & Interest</span>
-                    <span>${Utils.formatCurrency(results.monthlyPI, 2)}</span>
-                </div>
-            `;
-
-            if (results.monthlyPMI > 0) {
-                html += `
-                    <div class="breakdown-item">
-                        <span>PMI</span>
-                        <span>${Utils.formatCurrency(results.monthlyPMI, 2)}</span>
-                    </div>
-                `;
-            }
-
-            html += `
-                <div class="breakdown-item">
-                    <span>Property Tax</span>
-                    <span>${Utils.formatCurrency(results.monthlyTax, 2)}</span>
-                </div>
-                <div class="breakdown-item">
-                    <span>Home Insurance</span>
-                    <span>${Utils.formatCurrency(results.monthlyInsurance, 2)}</span>
-                </div>
-            `;
-
-            if (results.monthlyHOA > 0) {
-                html += `
-                    <div class="breakdown-item">
-                        <span>HOA Fees</span>
-                        <span>${Utils.formatCurrency(results.monthlyHOA, 2)}</span>
-                    </div>
-                `;
-            }
-
-            breakdownElement.innerHTML = html;
-        }
-    },
-
-    displayOverTimeChart: (results, inputs) => {
-        // Update summary values (first year example)
-        const schedule = STATE.amortizationData;
-        if (schedule.length > 0) {
-            const firstYear = schedule.slice(0, 12);
-            const remainingBalance = schedule[11]?.balance || results.loanAmount;
-            const principalPaid = firstYear.reduce((sum, p) => sum + p.principal, 0);
-            const interestPaid = firstYear.reduce((sum, p) => sum + p.interest, 0);
-
-            const remainingElement = Utils.$('#remaining-balance');
-            const principalElement = Utils.$('#principal-paid');
-            const interestElement = Utils.$('#interest-paid');
-
-            if (remainingElement) remainingElement.textContent = Utils.formatCurrency(remainingBalance, 0);
-            if (principalElement) principalElement.textContent = Utils.formatCurrency(principalPaid, 0);
-            if (interestElement) interestElement.textContent = Utils.formatCurrency(interestPaid, 0);
-        }
-
-        // Create timeline chart
-        UIManager.createTimelineChart(results, inputs);
-    },
-
-    createTimelineChart: (results, inputs) => {
-        const canvas = Utils.$('#mortgage-timeline-chart');
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        
-        // Destroy existing chart
-        if (STATE.timelineChart) {
-            STATE.timelineChart.destroy();
-        }
-
-        // Generate data for chart (yearly data points)
-        const schedule = STATE.amortizationData;
-        const yearlyData = [];
-        const labels = [];
-        const balanceData = [];
-        const principalData = [];
-        const interestData = [];
-
-        // Group by years
-        for (let year = 1; year <= inputs.loanTerm && year <= 30; year += 5) { // Show every 5 years
-            const yearIndex = (year - 1) * 12;
-            if (schedule[yearIndex]) {
-                labels.push(`Year ${year}`);
-                balanceData.push(schedule[yearIndex].balance);
+    </script>
+</head>
+<body>
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="header" role="banner">
+        <nav class="navbar" role="navigation">
+            <div class="container">
+                <a href="https://finguid.com/" class="nav-brand" aria-label="FinGuid Home">
+                    <i class="fas fa-calculator brand-icon" aria-hidden="true"></i>
+                    <span class="brand-text">FinGuid</span>
+                </a>
                 
-                const yearPayments = schedule.slice(Math.max(0, yearIndex - 11), yearIndex + 1);
-                principalData.push(yearPayments.reduce((sum, p) => sum + p.principal, 0));
-                interestData.push(yearPayments.reduce((sum, p) => sum + p.interest, 0));
-            }
-        }
-
-        STATE.timelineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Remaining Balance',
-                        data: balanceData,
-                        borderColor: CONFIG.colors.error,
-                        backgroundColor: CONFIG.colors.error + '20',
-                        fill: false,
-                        tension: 0.1
-                    },
-                    {
-                        label: 'Principal Paid (Cumulative)',
-                        data: principalData,
-                        borderColor: CONFIG.colors.success,
-                        backgroundColor: CONFIG.colors.success + '20',
-                        fill: false,
-                        tension: 0.1
-                    },
-                    {
-                        label: 'Interest Paid (Cumulative)',
-                        data: interestData,
-                        borderColor: CONFIG.colors.primary,
-                        backgroundColor: CONFIG.colors.primary + '20',
-                        fill: false,
-                        tension: 0.1
-                    }
-                ]
-            },
-            options: {
-                ...CONFIG.chartOptions,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return Utils.formatCurrency(value, 0);
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    ...CONFIG.chartOptions.plugins,
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + Utils.formatCurrency(context.parsed.y, 2);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-};
-
-// ========== AI INSIGHTS ==========
-const AIInsights = {
-    generate: (inputs, results) => {
-        const insights = [];
-        
-        // PMI Warning
-        if (results.monthlyPMI > 0) {
-            const additionalDown = (inputs.homePrice * 0.2) - inputs.downPayment;
-            insights.push({
-                type: 'warning',
-                icon: 'fas fa-exclamation-triangle',
-                title: 'PMI Alert',
-                content: `You're paying ${Utils.formatCurrency(results.monthlyPMI, 0)}/month in PMI. Consider increasing your down payment by ${Utils.formatCurrency(additionalDown, 0)} to reach 20% and eliminate PMI.`
-            });
-        }
-
-        // Interest Rate Analysis
-        if (inputs.interestRate > 7.5) {
-            insights.push({
-                type: 'warning',
-                icon: 'fas fa-chart-line',
-                title: 'High Interest Rate',
-                content: `Your rate of ${inputs.interestRate}% is above current market averages. Consider shopping around for better rates or improving your credit score.`
-            });
-        } else if (inputs.interestRate < 5.0) {
-            insights.push({
-                type: 'success',
-                icon: 'fas fa-thumbs-up',
-                title: 'Great Rate!',
-                content: `Your ${inputs.interestRate}% rate is excellent and below market average. You're saving significant money on interest.`
-            });
-        }
-
-        // Affordability Rule
-        const recommendedIncome = results.totalMonthly / 0.28;
-        insights.push({
-            type: 'info',
-            icon: 'fas fa-calculator',
-            title: 'Income Recommendation',
-            content: `For comfortable affordability (28% rule), your gross monthly income should be at least ${Utils.formatCurrency(recommendedIncome, 0)}.`
-        });
-
-        // Property Tax Analysis
-        const stateInfo = STATE_TAX_RATES[inputs.state];
-        if (stateInfo && stateInfo.rate > 0.015) {
-            insights.push({
-                type: 'warning',
-                icon: 'fas fa-home',
-                title: 'High Property Tax State',
-                content: `${stateInfo.name} has above-average property taxes at ${(stateInfo.rate * 100).toFixed(2)}%. Budget accordingly for annual increases.`
-            });
-        }
-
-        // Extra Payment Benefits
-        if (inputs.extraMonthly > 0) {
-            const schedule = STATE.amortizationData;
-            const originalTermMonths = inputs.loanTerm * 12;
-            const actualTermMonths = schedule.length;
-            const monthsSaved = originalTermMonths - actualTermMonths;
-            const yearsSaved = monthsSaved / 12;
-            
-            if (yearsSaved > 0.5) {
-                insights.push({
-                    type: 'success',
-                    icon: 'fas fa-rocket',
-                    title: 'Extra Payment Impact',
-                    content: `Your extra ${Utils.formatCurrency(inputs.extraMonthly, 0)}/month payment will save you approximately ${yearsSaved.toFixed(1)} years and thousands in interest!`
-                });
-            }
-        }
-
-        // Debt-to-Income Consideration
-        const monthlyDebtPayment = results.totalMonthly;
-        const maxRecommendedDebt = recommendedIncome * 0.36; // 36% DTI rule
-        if (monthlyDebtPayment > maxRecommendedDebt * 0.8) {
-            insights.push({
-                type: 'warning',
-                icon: 'fas fa-balance-scale',
-                title: 'Debt-to-Income Consideration',
-                content: `This payment represents a significant portion of recommended debt-to-income ratio. Ensure you have room for other monthly obligations.`
-            });
-        }
-
-        // Display insights
-        AIInsights.display(insights);
-    },
-
-    display: (insights) => {
-        const container = Utils.$('#insights-list');
-        if (!container) return;
-
-        const html = insights.map(insight => `
-            <div class="insight-item ${insight.type}">
-                <i class="${insight.icon}" aria-hidden="true"></i>
-                <div class="insight-content">
-                    <h4>${insight.title}</h4>
-                    <p>${insight.content}</p>
+                <div class="nav-menu" id="nav-menu">
+                    <a href="https://finguid.com/" class="nav-link">Home</a>
+                    <a href="https://finguid.com/calculators" class="nav-link active" aria-current="page">Calculators</a>
+                    <a href="https://finguid.com/resources" class="nav-link">Resources</a>
+                    <a href="https://finguid.com/partners" class="nav-link">Partners</a>
+                    <a href="https://finguid.com/contact" class="nav-link">Contact</a>
                 </div>
+                
+                <!-- Global Controls -->
+                <div class="global-controls">
+                    <button id="screen-reader-btn" class="global-btn" 
+                            aria-label="Toggle Screen Reader Announcements" 
+                            title="Enable/Disable Screen Reader (Alt+R)">
+                        <i class="fas fa-volume-up" aria-hidden="true"></i>
+                    </button>
+                    <button id="voice-command-btn" class="global-btn" 
+                            aria-label="Activate Voice Commands" 
+                            title="Voice Commands (Alt+V)">
+                        <i class="fas fa-microphone-alt" aria-hidden="true"></i>
+                    </button>
+                </div>
+                
+                <button class="hamburger" id="hamburger" aria-label="Toggle Menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-        `).join('');
+        </nav>
+    </header>
 
-        container.innerHTML = html;
-    }
-};
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">
+                    <i class="fas fa-home hero-icon" aria-hidden="true"></i>
+                    <span class="title-text">AI-Enhanced Mortgage Calculator</span>
+                </h1>
+                <p class="hero-subtitle">Calculate your exact monthly mortgage payment with state-specific taxes, PMI, insurance, and personalized AI insights.</p>
+            </div>
+        </section>
 
-// ========== AMORTIZATION MANAGER ==========
-const AmortizationManager = {
-    display: () => {
-        const thead = Utils.$('#amortization-table thead');
-        const tbody = Utils.$('#amortization-table tbody');
-        
-        if (!thead || !tbody) return;
-
-        // Set up table headers
-        thead.innerHTML = `
-            <tr>
-                <th>Payment #</th>
-                <th>Date</th>
-                <th>Payment</th>
-                <th>Principal</th>
-                <th>Interest</th>
-                <th>Balance</th>
-            </tr>
-        `;
-
-        // Get current page data
-        const data = AmortizationManager.getCurrentPageData();
-        
-        // Display data
-        tbody.innerHTML = data.map(row => `
-            <tr>
-                <td>${row.paymentNumber}</td>
-                <td>${Utils.formatDate(row.date)}</td>
-                <td>${Utils.formatCurrency(row.payment, 2)}</td>
-                <td>${Utils.formatCurrency(row.principal, 2)}</td>
-                <td>${Utils.formatCurrency(row.interest, 2)}</td>
-                <td>${Utils.formatCurrency(row.balance, 2)}</td>
-            </tr>
-        `).join('');
-
-        // Update pagination
-        AmortizationManager.updatePagination();
-    },
-
-    getCurrentPageData: () => {
-        let data = STATE.amortizationData;
-        
-        if (STATE.currentView === 'yearly') {
-            data = AmortizationManager.getYearlyData();
-        }
-        
-        const startIndex = (STATE.currentPage - 1) * CONFIG.amortizationPageSize;
-        const endIndex = startIndex + CONFIG.amortizationPageSize;
-        
-        return data.slice(startIndex, endIndex);
-    },
-
-    getYearlyData: () => {
-        const yearlyData = [];
-        const schedule = STATE.amortizationData;
-        
-        for (let i = 11; i < schedule.length; i += 12) {
-            if (schedule[i]) {
-                const yearPayments = schedule.slice(Math.max(0, i - 11), i + 1);
-                yearlyData.push({
-                    paymentNumber: Math.floor(i / 12) + 1,
-                    date: schedule[i].date,
-                    payment: yearPayments.reduce((sum, p) => sum + p.payment, 0),
-                    principal: yearPayments.reduce((sum, p) => sum + p.principal, 0),
-                    interest: yearPayments.reduce((sum, p) => sum + p.interest, 0),
-                    balance: schedule[i].balance
-                });
-            }
-        }
-        
-        return yearlyData;
-    },
-
-    updatePagination: () => {
-        const totalData = STATE.currentView === 'yearly' 
-            ? AmortizationManager.getYearlyData().length 
-            : STATE.amortizationData.length;
-        const totalPages = Math.ceil(totalData / CONFIG.amortizationPageSize);
-        
-        const pageInfo = Utils.$('#page-info');
-        const prevBtn = Utils.$('#prev-page');
-        const nextBtn = Utils.$('#next-page');
-        
-        if (pageInfo) {
-            pageInfo.textContent = `Page ${STATE.currentPage} of ${totalPages}`;
-        }
-        
-        if (prevBtn) {
-            prevBtn.disabled = STATE.currentPage === 1;
-        }
-        
-        if (nextBtn) {
-            nextBtn.disabled = STATE.currentPage === totalPages;
-        }
-    },
-
-    switchView: (view) => {
-        STATE.currentView = view;
-        STATE.currentPage = 1;
-        
-        // Update view buttons
-        Utils.$$('.view-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.id === `view-${view}`);
-        });
-        
-        AmortizationManager.display();
-        AccessibilityManager.announce(`Switched to ${view} view`);
-    },
-
-    changePage: (direction) => {
-        const totalData = STATE.currentView === 'yearly' 
-            ? AmortizationManager.getYearlyData().length 
-            : STATE.amortizationData.length;
-        const totalPages = Math.ceil(totalData / CONFIG.amortizationPageSize);
-        
-        const newPage = STATE.currentPage + direction;
-        if (newPage >= 1 && newPage <= totalPages) {
-            STATE.currentPage = newPage;
-            AmortizationManager.display();
-        }
-    },
-
-    exportCSV: () => {
-        if (!STATE.amortizationData.length) {
-            Utils.showToast('No data to export', 'warning');
-            return;
-        }
-
-        const csvHeader = 'Payment #,Date,Payment,Principal,Interest,Balance,Extra Payment\n';
-        const csvData = STATE.amortizationData.map(row => 
-            `${row.paymentNumber},${Utils.formatDate(row.date)},${row.payment.toFixed(2)},${row.principal.toFixed(2)},${row.interest.toFixed(2)},${row.balance.toFixed(2)},${row.extraPayment.toFixed(2)}`
-        ).join('\n');
-
-        const blob = new Blob([csvHeader + csvData], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'amortization-schedule.csv';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        Utils.showToast('Amortization schedule exported successfully', 'success');
-        AccessibilityManager.announce('Amortization schedule exported to CSV');
-    }
-};
-
-// ========== FORM HANDLERS ==========
-const FormHandlers = {
-    setupTabControls: () => {
-        Utils.$$('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const targetTab = e.target.dataset.tab;
-                if (!targetTab) return;
-
-                // Update tab buttons
-                const tabGroup = e.target.closest('.tab-controls');
-                tabGroup.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-
-                // Update tab content
-                const container = tabGroup.nextElementSibling.parentElement;
-                container.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                container.querySelector(`[data-tab-content="${targetTab}"]`)?.classList.add('active');
-
-                // Sync down payment values
-                FormHandlers.syncDownPayment();
-                AccessibilityManager.announce(`Switched to ${targetTab} down payment input`);
-            });
-        });
-    },
-
-    setupTermChips: () => {
-        Utils.$$('.term-chip').forEach(chip => {
-            chip.addEventListener('click', (e) => {
-                const termValue = e.target.dataset.term;
-                if (!termValue) return;
-
-                // Update active chip
-                Utils.$$('.term-chip').forEach(c => c.classList.remove('active'));
-                e.target.classList.add('active');
-
-                // Update input value
-                const loanTermInput = Utils.$('#loan-term');
-                if (loanTermInput) {
-                    loanTermInput.value = termValue;
-                }
-
-                CalculationEngine.calculate();
-                AccessibilityManager.announce(`Loan term set to ${termValue} years`);
-            });
-        });
-    },
-
-    syncDownPayment: () => {
-        const homePrice = parseFloat(Utils.$('#home-price').value) || 0;
-        const dpAmount = parseFloat(Utils.$('#dp-amount').value) || 0;
-        const dpPercent = parseFloat(Utils.$('#dp-percent').value) || 0;
-
-        const activeTab = Utils.$('.tab-btn.active')?.dataset.tab;
-
-        if (activeTab === 'percent') {
-            // Update dollar amount based on percentage
-            const calculatedAmount = (homePrice * dpPercent) / 100;
-            const dpAmountInput = Utils.$('#dp-amount');
-            if (dpAmountInput) {
-                dpAmountInput.value = Math.round(calculatedAmount);
-            }
-        } else {
-            // Update percentage based on dollar amount
-            const calculatedPercent = homePrice > 0 ? (dpAmount / homePrice) * 100 : 0;
-            const dpPercentInput = Utils.$('#dp-percent');
-            if (dpPercentInput) {
-                dpPercentInput.value = calculatedPercent.toFixed(1);
-            }
-        }
-    },
-
-    setupPropertyTaxSync: () => {
-        const stateSelect = Utils.$('#state');
-        const propertyTaxInput = Utils.$('#property-tax');
-        const homePriceInput = Utils.$('#home-price');
-
-        if (stateSelect) {
-            stateSelect.addEventListener('change', () => {
-                const selectedState = stateSelect.value;
-                const homePrice = parseFloat(homePriceInput?.value) || 0;
-
-                if (selectedState && STATE_TAX_RATES[selectedState] && homePrice > 0) {
-                    const stateData = STATE_TAX_RATES[selectedState];
-                    const annualTax = Math.round(homePrice * stateData.rate);
+        <!-- Calculator Section -->
+        <section class="calculator-section">
+            <div class="container">
+                <div class="calculator-layout">
                     
-                    if (propertyTaxInput) {
-                        propertyTaxInput.value = annualTax;
-                    }
+                    <!-- Left Panel: Input Form -->
+                    <div class="input-panel">
+                        <div class="panel-header">
+                            <h2><i class="fas fa-calculator" aria-hidden="true"></i> Mortgage Calculator</h2>
+                        </div>
+                        
+                        <form id="mortgage-form" novalidate>
+                            <!-- Home Details -->
+                            <fieldset class="form-section">
+                                <legend>1. Home Details</legend>
+                                
+                                <div class="form-group" data-tooltip="The total purchase price of the home">
+                                    <label for="home-price">Home Price</label>
+                                    <div class="input-with-prefix">
+                                        <span class="input-prefix">$</span>
+                                        <input type="number" id="home-price" value="400000" required aria-describedby="home-price-desc">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" data-tooltip="Amount paid upfront. 20% or more avoids PMI">
+                                    <label>Down Payment</label>
+                                    <div class="tab-controls">
+                                        <button type="button" class="tab-btn active" data-tab="dollar">Amount ($)</button>
+                                        <button type="button" class="tab-btn" data-tab="percent">Percent (%)</button>
+                                    </div>
+                                    <div class="tab-content active" data-tab-content="dollar">
+                                        <div class="input-with-prefix">
+                                            <span class="input-prefix">$</span>
+                                            <input type="number" id="dp-amount" value="80000">
+                                        </div>
+                                    </div>
+                                    <div class="tab-content" data-tab-content="percent">
+                                        <div class="input-with-suffix">
+                                            <input type="number" id="dp-percent" value="20" step="0.1">
+                                            <span class="input-suffix">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" data-tooltip="Annual interest rate for your loan">
+                                    <label for="interest-rate">Interest Rate</label>
+                                    <div class="input-with-suffix">
+                                        <input type="number" id="interest-rate" value="6.75" step="0.01" required>
+                                        <span class="input-suffix">%</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            
+                            <!-- Loan Term -->
+                            <fieldset class="form-section">
+                                <legend>2. Loan Term</legend>
+                                <div class="term-chips">
+                                    <button type="button" class="term-chip" data-term="10">10 yr</button>
+                                    <button type="button" class="term-chip" data-term="15">15 yr</button>
+                                    <button type="button" class="term-chip" data-term="20">20 yr</button>
+                                    <button type="button" class="term-chip active" data-term="30">30 yr</button>
+                                </div>
+                                <div class="form-group" data-tooltip="Custom loan term in years">
+                                    <label for="loan-term">Or Custom Term (Years)</label>
+                                    <input type="number" id="loan-term" value="30" min="1" max="50" required>
+                                </div>
+                            </fieldset>
+                            
+                            <!-- Advanced Options -->
+                            <details class="advanced-options">
+                                <summary>
+                                    <i class="fas fa-cog" aria-hidden="true"></i> Advanced Options
+                                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                                </summary>
+                                
+                                <div class="advanced-content">
+                                    <fieldset class="form-section">
+                                        <legend>Loan Start Date</legend>
+                                        <div class="form-group" data-tooltip="Month and year of your first payment">
+                                            <label for="start-date">First Payment Date</label>
+                                            <input type="month" id="start-date" required>
+                                        </div>
+                                    </fieldset>
+                                    
+                                    <fieldset class="form-section">
+                                        <legend>Location & Taxes</legend>
+                                        <div class="form-group" data-tooltip="Select your state for accurate property tax estimates">
+                                            <label for="state">State</label>
+                                            <select id="state" required>
+                                                <option value="">Select State</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" data-tooltip="Annual property tax amount">
+                                            <label for="property-tax">Annual Property Tax</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix">$</span>
+                                                <input type="number" id="property-tax" value="3000">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    
+                                    <fieldset class="form-section">
+                                        <legend>Insurance & Additional Costs</legend>
+                                        <div class="form-group" data-tooltip="Annual homeowner's insurance cost">
+                                            <label for="home-insurance">Annual Home Insurance</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix">$</span>
+                                                <input type="number" id="home-insurance" value="1700">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" data-tooltip="Monthly HOA fees if applicable">
+                                            <label for="hoa-fees">Monthly HOA Fees</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix">$</span>
+                                                <input type="number" id="hoa-fees" value="0">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    
+                                    <fieldset class="form-section">
+                                        <legend>Extra Payments</legend>
+                                        <div class="form-group" data-tooltip="Extra amount paid monthly towards principal">
+                                            <label for="extra-monthly">Extra Monthly Payment</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix">$</span>
+                                                <input type="number" id="extra-monthly" value="0">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" data-tooltip="One-time extra payment towards principal">
+                                            <label for="extra-yearly">One-Time Extra Payment</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix">$</span>
+                                                <input type="number" id="extra-yearly" value="0">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" data-tooltip="When to make the one-time payment">
+                                            <label for="extra-yearly-date">One-Time Payment Date</label>
+                                            <input type="month" id="extra-yearly-date">
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </details>
+                        </form>
+                    </div>
+                    
+                    <!-- Center Panel: Results -->
+                    <div class="results-panel">
+                        
+                        <!-- 1. Your Mortgage Results -->
+                        <div class="result-card" id="mortgage-results">
+                            <h2><i class="fas fa-calculator" aria-hidden="true"></i> Your Mortgage Results</h2>
+                            <div class="total-payment-section">
+                                <p class="total-label">Total Monthly Payment</p>
+                                <div class="total-amount" id="total-payment" aria-live="polite">$0</div>
+                            </div>
+                            <div id="payment-breakdown" class="payment-breakdown"></div>
+                        </div>
+                        
+                        <!-- 2. Mortgage Over Time Chart -->
+                        <div class="result-card" id="mortgage-over-time">
+                            <h2><i class="fas fa-chart-line" aria-hidden="true"></i> Mortgage Over Time</h2>
+                            <div class="over-time-summary">
+                                <div class="summary-item">
+                                    <span class="summary-label">Remaining Mortgage Balance</span>
+                                    <span class="summary-value" id="remaining-balance">$383,033</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Principal Paid</span>
+                                    <span class="summary-value" id="principal-paid">$16,967</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Interest Paid</span>
+                                    <span class="summary-value" id="interest-paid">$23,538</span>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="mortgage-timeline-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- 3. Share Options -->
+                        <div class="result-card" id="share-options">
+                            <div class="share-actions">
+                                <button id="share-btn" class="share-btn-primary" title="Share your results">
+                                    <i class="fas fa-share-alt" aria-hidden="true"></i> Share
+                                </button>
+                                <button id="save-pdf-btn" class="action-btn" title="Save as PDF">
+                                    <i class="fas fa-file-pdf" aria-hidden="true"></i> Save PDF
+                                </button>
+                                <button id="print-btn" class="action-btn" title="Print results">
+                                    <i class="fas fa-print" aria-hidden="true"></i> Print
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 4. AI-Powered Insights -->
+                        <div class="result-card" id="ai-insights">
+                            <h2><i class="fas fa-robot" aria-hidden="true"></i> AI-Powered Insights</h2>
+                            <div id="insights-list" class="insights-list"></div>
+                        </div>
+                        
+                        <!-- 5. Amortization Schedule -->
+                        <details class="amortization-card">
+                            <summary class="amortization-summary">
+                                <h2><i class="fas fa-table" aria-hidden="true"></i> Amortization Schedule</h2>
+                                <div class="summary-actions">
+                                    <button id="export-csv-btn" class="amortization-btn" title="Export to CSV">
+                                        <i class="fas fa-file-csv" aria-hidden="true"></i> Export CSV
+                                    </button>
+                                    <button id="print-schedule-btn" class="amortization-btn" title="Print schedule">
+                                        <i class="fas fa-print" aria-hidden="true"></i> Print
+                                    </button>
+                                    <i class="fas fa-chevron-down toggle-icon" aria-hidden="true"></i>
+                                </div>
+                            </summary>
+                            
+                            <div class="amortization-content">
+                                <div class="table-controls">
+                                    <div class="view-controls">
+                                        <button id="view-monthly" class="view-btn active">Monthly View</button>
+                                        <button id="view-yearly" class="view-btn">Yearly View</button>
+                                    </div>
+                                    <div class="pagination-controls">
+                                        <button id="prev-page" class="pagination-btn">&laquo; Previous</button>
+                                        <span id="page-info" class="page-info">Page 1 of 25</span>
+                                        <button id="next-page" class="pagination-btn">Next &raquo;</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table id="amortization-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Payment #</th>
+                                                <th>Date</th>
+                                                <th>Payment</th>
+                                                <th>Principal</th>
+                                                <th>Interest</th>
+                                                <th>Balance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="amortization-tbody">
+                                            <!-- Populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </details>
+                        
+                    </div>
+                    
+                    <!-- Right Panel: Advertisement Placement -->
+                    <div class="ad-panel">
+                        <div class="ad-placeholder">
+                            <div class="ad-header">
+                                <i class="fas fa-bullhorn" aria-hidden="true"></i>
+                                <span>Sponsored</span>
+                            </div>
+                            <div class="ad-content">
+                                <h3>Get Pre-Approved Today</h3>
+                                <p>Compare rates from top lenders. No obligation, completely free.</p>
+                                <button class="ad-cta">Get Free Quotes</button>
+                            </div>
+                        </div>
+                        
+                        <div class="ad-placeholder">
+                            <div class="ad-header">
+                                <i class="fas fa-home" aria-hidden="true"></i>
+                                <span>Partner Offer</span>
+                            </div>
+                            <div class="ad-content">
+                                <h3>Home Insurance Quotes</h3>
+                                <p>Save up to 30% on home insurance with our partners.</p>
+                                <button class="ad-cta">Compare Quotes</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
 
-                    AccessibilityManager.announce(
-                        `Property tax updated for ${stateData.name}: ${Utils.formatCurrency(annualTax)}`
-                    );
-                }
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator" aria-hidden="true"></i>
+                        <span>FinGuid</span>
+                    </div>
+                    <p>World's first AI-enhanced financial calculator platform specifically designed for Americans. Make smarter financial decisions with intelligent tools.</p>
+                </div>
                 
-                CalculationEngine.calculate();
-            });
-        }
-    },
-
-    setupLoanTermSync: () => {
-        const loanTermInput = Utils.$('#loan-term');
-        if (loanTermInput) {
-            loanTermInput.addEventListener('input', (e) => {
-                const value = e.target.value;
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator">Mortgage Calculator</a></li>
+                        <li><a href="/auto-loan-calculator">Auto Loan Calculator</a></li>
+                        <li><a href="/investment-calculator">Investment Calculator</a></li>
+                        <li><a href="/retirement-calculator">Retirement Calculator</a></li>
+                    </ul>
+                </div>
                 
-                // Update term chips
-                Utils.$$('.term-chip').forEach(chip => {
-                    chip.classList.toggle('active', chip.dataset.term === value);
-                });
-            });
-        }
-    }
-};
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/financial-blog">Financial Blog</a></li>
+                        <li><a href="/guides">How-to Guides</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/mortgage-rates">Current Rates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/partners">Partners</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 FinGuid. All rights reserved. Built with ❤️ for American homebuyers. Calculations are estimates for informational purposes only.</p>
+            </div>
+        </div>
+    </footer>
 
-// ========== INITIALIZATION ==========
-const App = {
-    init: () => {
-        App.setupDefaults();
-        App.setupEventListeners();
-        App.populateStateDropdown();
-        VoiceManager.setup();
-        FormHandlers.setupTabControls();
-        FormHandlers.setupTermChips();
-        FormHandlers.setupPropertyTaxSync();
-        FormHandlers.setupLoanTermSync();
-        CalculationEngine.calculate();
-    },
+    <!-- Voice Status Indicator -->
+    <div id="voice-status" class="voice-status" aria-live="assertive" style="display: none;">
+        <i class="fas fa-microphone-alt" aria-hidden="true"></i>
+        <span>Listening...</span>
+        <button id="voice-close" aria-label="Stop voice command">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
 
-    setupDefaults: () => {
-        // Set default form values
-        const defaults = {
-            '#home-price': '400000',
-            '#dp-amount': '80000',
-            '#dp-percent': '20',
-            '#interest-rate': '6.75',
-            '#loan-term': '30',
-            '#property-tax': '3000',
-            '#home-insurance': '1700',
-            '#hoa-fees': '0',
-            '#extra-monthly': '0',
-            '#extra-yearly': '0'
-        };
+    <!-- Screen Reader Announcements -->
+    <div id="sr-announcements" class="sr-only" aria-live="assertive"></div>
 
-        Object.entries(defaults).forEach(([selector, value]) => {
-            const element = Utils.$(selector);
-            if (element && !element.value) {
-                element.value = value;
-            }
-        });
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
 
-        // Set default start date to next month
-        const startDateInput = Utils.$('#start-date');
-        if (startDateInput && !startDateInput.value) {
-            const nextMonth = new Date();
-            nextMonth.setMonth(nextMonth.getMonth() + 1);
-            startDateInput.value = nextMonth.toISOString().slice(0, 7);
-        }
-
-        // Set default extra yearly payment date to next year
-        const extraYearlyDateInput = Utils.$('#extra-yearly-date');
-        if (extraYearlyDateInput && !extraYearlyDateInput.value) {
-            const nextYear = new Date();
-            nextYear.setFullYear(nextYear.getFullYear() + 1);
-            extraYearlyDateInput.value = nextYear.toISOString().slice(0, 7);
-        }
-    },
-
-    setupEventListeners: () => {
-        // Form input changes trigger calculations
-        const form = Utils.$('#mortgage-form');
-        if (form) {
-            form.addEventListener('input', (e) => {
-                if (e.target.type === 'number' || e.target.type === 'month') {
-                    FormHandlers.syncDownPayment();
-                    CalculationEngine.calculate();
-                }
-            });
-        }
-
-        // Global controls
-        const screenReaderBtn = Utils.$('#screen-reader-btn');
-        if (screenReaderBtn) {
-            screenReaderBtn.addEventListener('click', AccessibilityManager.toggle);
-        }
-
-        const voiceBtn = Utils.$('#voice-command-btn');
-        if (voiceBtn) {
-            voiceBtn.addEventListener('click', VoiceManager.toggle);
-        }
-
-        // Voice status close button
-        const voiceClose = Utils.$('#voice-close');
-        if (voiceClose) {
-            voiceClose.addEventListener('click', () => {
-                if (STATE.speechRecognition && STATE.isListening) {
-                    STATE.speechRecognition.stop();
-                }
-            });
-        }
-
-        // Amortization controls
-        const viewMonthly = Utils.$('#view-monthly');
-        const viewYearly = Utils.$('#view-yearly');
-        const prevPage = Utils.$('#prev-page');
-        const nextPage = Utils.$('#next-page');
-        const exportCSV = Utils.$('#export-csv-btn');
-        const printSchedule = Utils.$('#print-schedule-btn');
-
-        if (viewMonthly) viewMonthly.addEventListener('click', () => AmortizationManager.switchView('monthly'));
-        if (viewYearly) viewYearly.addEventListener('click', () => AmortizationManager.switchView('yearly'));
-        if (prevPage) prevPage.addEventListener('click', () => AmortizationManager.changePage(-1));
-        if (nextPage) nextPage.addEventListener('click', () => AmortizationManager.changePage(1));
-        if (exportCSV) exportCSV.addEventListener('click', AmortizationManager.exportCSV);
-        if (printSchedule) printSchedule.addEventListener('click', () => window.print());
-
-        // Share buttons
-        const shareBtn = Utils.$('#share-btn');
-        const savePdfBtn = Utils.$('#save-pdf-btn');
-        const printBtn = Utils.$('#print-btn');
-
-        if (shareBtn) shareBtn.addEventListener('click', App.shareResults);
-        if (savePdfBtn) savePdfBtn.addEventListener('click', App.savePDF);
-        if (printBtn) printBtn.addEventListener('click', () => window.print());
-
-        // Mobile menu
-        const hamburger = Utils.$('#hamburger');
-        const navMenu = Utils.$('#nav-menu');
-        if (hamburger && navMenu) {
-            hamburger.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-                hamburger.setAttribute('aria-expanded', navMenu.classList.contains('active'));
-            });
-        }
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.altKey) {
-                switch (e.key.toLowerCase()) {
-                    case 'v':
-                        e.preventDefault();
-                        VoiceManager.toggle();
-                        break;
-                    case 'r':
-                        e.preventDefault();
-                        AccessibilityManager.toggle();
-                        break;
-                }
-            }
-        });
-    },
-
-    populateStateDropdown: () => {
-        const stateSelect = Utils.$('#state');
-        if (!stateSelect) return;
-
-        stateSelect.innerHTML = '<option value="">Select State</option>';
-        
-        Object.entries(STATE_TAX_RATES).forEach(([code, data]) => {
-            const option = document.createElement('option');
-            option.value = code;
-            option.textContent = data.name;
-            if (code === 'CA') option.selected = true; // Default to California
-            stateSelect.appendChild(option);
-        });
-    },
-
-    shareResults: () => {
-        if (!STATE.currentCalculation) {
-            Utils.showToast('No results to share', 'warning');
-            return;
-        }
-
-        const shareData = {
-            title: 'My Mortgage Calculation - FinGuid',
-            text: `Monthly Payment: ${Utils.formatCurrency(STATE.currentCalculation.totalMonthly)}`,
-            url: window.location.href
-        };
-
-        if (navigator.share) {
-            navigator.share(shareData).catch(console.error);
-        } else {
-            // Fallback: copy to clipboard
-            navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`)
-                .then(() => {
-                    Utils.showToast('Results copied to clipboard', 'success');
-                    AccessibilityManager.announce('Results copied to clipboard');
-                })
-                .catch(() => {
-                    Utils.showToast('Unable to share results', 'error');
-                });
-        }
-    },
-
-    savePDF: () => {
-        // In a real implementation, you would use a library like jsPDF
-        Utils.showToast('PDF save functionality would be implemented here', 'info');
-        AccessibilityManager.announce('PDF save functionality would be implemented with a PDF library');
-    }
-};
-
-// ========== START APPLICATION ==========
-document.addEventListener('DOMContentLoaded', App.init);
+    <!-- JavaScript -->
+    <script src="mortgage-calculator.js"></script>
+</body>
+</html>
