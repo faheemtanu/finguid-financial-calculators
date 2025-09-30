@@ -1,7 +1,7 @@
 /* ============================================================================
    WORLD'S #1 AI-ENHANCED MORTGAGE CALCULATOR - PRODUCTION JAVASCRIPT
    Advanced Features: AI Insights, Voice Control, Real-Time Updates
-   Version: 3.1 Production Ready
+   Version: 3.2 Production Ready
    ============================================================================ */
 
 (function() {
@@ -131,6 +131,7 @@
         }
 
         static calculatePMI(loanAmount, homePrice) {
+            if (homePrice <= 0) return 0;
             const ltvRatio = loanAmount / homePrice;
             if (ltvRatio <= 0.8 || loanAmount <= 0) return 0;
             let pmiRate = 0.005; // 0.5% annually
@@ -148,7 +149,7 @@
             let balance = principal;
             let month = 1;
 
-            while (balance > 0.01 && month <= termYears * 12 * 2) {
+            while (balance > 0.01 && month <= termYears * 12 * 2) { // Failsafe for 2x term length
                 const interestPayment = balance * monthlyRate;
                 let principalPayment = originalPayment - interestPayment;
                 
@@ -157,7 +158,10 @@
                 }
                 principalPayment += extraMonthly;
 
-                if (principalPayment + interestPayment < 0) break;
+                if (originalPayment + extraMonthly < interestPayment && month > 1) { 
+                    // Break if payments don't cover interest (prevents infinite loops on weird inputs)
+                    break;
+                }
                 if (principalPayment > balance) principalPayment = balance;
 
                 balance -= principalPayment;
@@ -174,13 +178,14 @@
     class AIInsights {
         static generateInsights(calculations, formData) {
             const insights = [];
-            const { ltvRatio, monthlyPMI, loanAmount, interestRate, loanTerm, totalMonthly } = calculations;
+            const icons = { success: 'fa-check-circle', warning: 'fa-exclamation-triangle', info: 'fa-lightbulb' };
+            const { ltvRatio, monthlyPMI, loanAmount, interestRate, loanTerm } = calculations;
 
             // Down payment insight
             if (ltvRatio <= 0.8) {
-                insights.push({ type: 'success', title: 'Excellent Down Payment!', message: `Your ${Utils.formatNumber((1 - ltvRatio) * 100, 1)}% down payment eliminates PMI, saving you money each month.` });
+                insights.push({ type: 'success', title: 'Excellent Down Payment!', message: `Your ${Utils.formatNumber((1 - ltvRatio) * 100, 1)}% down payment eliminates PMI, saving you money each month.`, icon: icons.success });
             } else {
-                insights.push({ type: 'info', title: 'PMI Required', message: `With a ${Utils.formatNumber((1-ltvRatio) * 100, 1)}% down payment, your estimated monthly PMI is ${Utils.formatCurrency(monthlyPMI)}. Reaching 20% equity will remove this cost.` });
+                insights.push({ type: 'info', title: 'PMI Required', message: `With a ${Utils.formatNumber((1-ltvRatio) * 100, 1)}% down payment, your estimated monthly PMI is ${Utils.formatCurrency(monthlyPMI)}. Reaching 20% equity will remove this cost.`, icon: icons.info });
             }
 
             // Extra payment suggestion
@@ -188,13 +193,13 @@
             if(extraPaymentAmount > 0) {
                 const savings = this.calculateExtraPaymentSavings(loanAmount, interestRate, loanTerm, extraPaymentAmount);
                  if (savings.savings > 0) {
-                     insights.push({ type: 'success', title: 'Accelerated Payoff!', message: `By adding ${Utils.formatCurrency(formData.extraPayment)} ${state.extraPaymentFrequency}, you could save over ${Utils.formatCurrency(savings.savings)} in interest and pay off your loan ${savings.timeSaved} years early!` });
+                     insights.push({ type: 'success', title: 'Accelerated Payoff!', message: `By adding ${Utils.formatCurrency(formData.extraPayment)} ${state.extraPaymentFrequency}, you could save over ${Utils.formatCurrency(savings.savings)} in interest and pay off your loan ${savings.timeSaved} years early!`, icon: icons.success });
                  }
             } else {
                  const suggestedExtra = 200;
                  const savings = this.calculateExtraPaymentSavings(loanAmount, interestRate, loanTerm, suggestedExtra);
                  if (savings.savings > 10000) {
-                     insights.push({ type: 'info', title: 'Extra Payment Opportunity', message: `Adding just ${Utils.formatCurrency(suggestedExtra)}/month extra could save you over ${Utils.formatCurrency(savings.savings)} in interest and pay off your loan ${savings.timeSaved} years early.` });
+                     insights.push({ type: 'info', title: 'Extra Payment Opportunity', message: `Adding just ${Utils.formatCurrency(suggestedExtra)}/month extra could save you over ${Utils.formatCurrency(savings.savings)} in interest and pay off your loan ${savings.timeSaved} years early.`, icon: icons.info });
                  }
             }
             
@@ -202,9 +207,9 @@
             if (state.marketRates['30yr']) {
                 const marketAverage = state.marketRates['30yr'];
                 if (interestRate > marketAverage + 0.25) {
-                    insights.push({ type: 'warning', title: 'Rate Shopping Opportunity', message: `Your rate is ${(interestRate - marketAverage).toFixed(2)}% above the market average. Shopping with multiple lenders could save you thousands.` });
+                    insights.push({ type: 'warning', title: 'Rate Shopping Opportunity', message: `Your rate is ${(interestRate - marketAverage).toFixed(2)}% above the market average. Shopping with multiple lenders could save you thousands.`, icon: icons.warning });
                 } else if (interestRate < marketAverage - 0.1) {
-                    insights.push({ type: 'success', title: 'Great Interest Rate!', message: `Your rate is ${(marketAverage - interestRate).toFixed(2)}% below the market average. You've secured an excellent deal!` });
+                    insights.push({ type: 'success', title: 'Great Interest Rate!', message: `Your rate is ${(marketAverage - interestRate).toFixed(2)}% below the market average. You've secured an excellent deal!`, icon: icons.success });
                 }
             }
 
@@ -307,7 +312,6 @@
         
         formatDecimalInput(input) {
             let value = input.value;
-            // Allow only one dot and numbers
             value = value.replace(/[^0-9.]/g, '');
             const parts = value.split('.');
             if (parts.length > 2) {
@@ -317,16 +321,10 @@
         }
 
         toggleDownPaymentMode(mode) {
-            const amountInputDiv = document.getElementById('amount-input');
-            const percentInputDiv = document.getElementById('percent-input');
-            const amountToggle = document.getElementById('amount-toggle');
-            const percentToggle = document.getElementById('percent-toggle');
-
-            amountInputDiv.style.display = (mode === 'amount') ? 'block' : 'none';
-            percentInputDiv.style.display = (mode === 'percent') ? 'block' : 'none';
-            amountToggle.classList.toggle('active', mode === 'amount');
-            percentToggle.classList.toggle('active', mode === 'percent');
-            
+            document.getElementById('amount-input').style.display = (mode === 'amount') ? 'block' : 'none';
+            document.getElementById('percent-input').style.display = (mode === 'percent') ? 'block' : 'none';
+            document.getElementById('amount-toggle').classList.toggle('active', mode === 'amount');
+            document.getElementById('percent-toggle').classList.toggle('active', mode === 'percent');
             this.handleDownPaymentChange();
         }
 
@@ -342,7 +340,7 @@
                     this.inputs['down-payment'].value = Utils.formatNumber(newAmount, 0);
                 } else {
                     const newPercent = (dpAmount / homePrice) * 100;
-                    this.inputs['down-payment-percent'].value = isNaN(newPercent) ? '' : Utils.formatNumber(newPercent, 2);
+                    this.inputs['down-payment-percent'].value = isNaN(newPercent) || !isFinite(newPercent) ? '' : Utils.formatNumber(newPercent, 2);
                 }
             }
             this.updatePMI();
@@ -356,7 +354,7 @@
             const pmiWarning = document.getElementById('pmi-warning');
             const monthlyPMI = MortgageEngine.calculatePMI(loanAmount, homePrice);
 
-            this.inputs['pmi'].value = Utils.formatNumber(monthlyPMI, 0);
+            this.inputs['pmi'].value = Utils.formatCurrency(monthlyPMI).replace('$', '');
 
             if(pmiWarning) {
                 pmiWarning.style.display = (monthlyPMI > 0) ? 'flex' : 'none';
@@ -365,11 +363,12 @@
 
         selectLoanTerm(term) {
             const termVal = parseInt(term);
-            this.inputs['loan-term'].value = isNaN(termVal) ? 30 : termVal;
+            this.inputs['loan-term'].value = isNaN(termVal) || termVal <= 0 ? 30 : termVal;
 
             document.querySelectorAll('.term-chip').forEach(chip => {
-                chip.classList.toggle('active', chip.dataset.term === String(termVal));
+                chip.classList.toggle('active', chip.dataset.term === String(this.inputs['loan-term'].value));
             });
+
             if (![15, 20, 30].includes(termVal)) {
                 this.inputs['custom-term'].value = term;
             } else {
@@ -440,9 +439,15 @@
             this.inputs['down-payment'].value = '80,000';
             this.inputs['down-payment-percent'].value = '20';
             this.inputs['interest-rate'].value = '6.43';
+            this.inputs['property-tax'].value = '';
+            this.inputs['home-insurance'].value = '';
+            this.inputs['extra-payment-amount'].value = '';
+            this.inputs['extra-onetime'].value = '';
+
             this.selectLoanTerm('30');
             this.toggleDownPaymentMode('amount');
             this.setExtraPaymentFrequency('monthly');
+            this.handleDownPaymentChange(); // This will also call updatePMI
             document.dispatchEvent(new CustomEvent('calculate'));
             Utils.showToast('Form has been reset', 'info');
         }
@@ -470,7 +475,7 @@
         }
         
         updateSummary(calc) {
-            this.elements['total-payment'].textContent = Utils.formatCurrency(calc.totalMonthly);
+            this.elements['total-payment'].textContent = Utils.formatCurrency(calc.totalMonthly, true);
             this.elements['display-loan-amount'].textContent = Utils.formatCurrency(calc.loanAmount);
             this.elements['display-total-interest'].textContent = Utils.formatCurrency(calc.totalInterest);
             this.elements['display-total-cost'].textContent = Utils.formatCurrency(calc.totalCost);
@@ -479,10 +484,10 @@
         }
 
         updateBreakdown(calc) {
-            this.elements['principal-interest'].textContent = Utils.formatCurrency(calc.monthlyPI);
-            this.elements['monthly-tax'].textContent = Utils.formatCurrency(calc.monthlyTax);
-            this.elements['monthly-insurance'].textContent = Utils.formatCurrency(calc.monthlyInsurance);
-            this.elements['monthly-pmi'].textContent = Utils.formatCurrency(calc.monthlyPMI);
+            this.elements['principal-interest'].textContent = Utils.formatCurrency(calc.monthlyPI, true);
+            this.elements['monthly-tax'].textContent = Utils.formatCurrency(calc.monthlyTax, true);
+            this.elements['monthly-insurance'].textContent = Utils.formatCurrency(calc.monthlyInsurance, true);
+            this.elements['monthly-pmi'].textContent = Utils.formatCurrency(calc.monthlyPMI, true);
 
             const total = calc.totalMonthly > 0 ? calc.totalMonthly : 1;
             this.elements['pi-fill'].style.width = `${(calc.monthlyPI / total) * 100}%`;
@@ -492,10 +497,11 @@
         }
 
         updateAIInsights(calculations, formData) {
+            if (!this.elements['ai-insights']) return;
             const insights = AIInsights.generateInsights(calculations, formData);
             this.elements['ai-insights'].innerHTML = insights.map(insight => `
                 <div class="insight-item ${insight.type}">
-                    <div class="insight-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="insight-icon"><i class="fas ${insight.icon}"></i></div>
                     <div class="insight-content">
                         <h5>${insight.title}</h5>
                         <p>${insight.message}</p>
@@ -512,6 +518,7 @@
 
         renderAmortizationPage() {
             const { amortizationData, currentPage, itemsPerPage } = state;
+            if (!this.elements['amortization-table-body']) return;
             const totalPages = Math.ceil(amortizationData.length / itemsPerPage);
             
             const start = (currentPage - 1) * itemsPerPage;
@@ -539,7 +546,7 @@
             this.elements['current-page'].textContent = currentPage;
             this.elements['total-pages'].textContent = totalPages > 0 ? totalPages : 1;
             this.elements['prev-page'].disabled = currentPage === 1;
-            this.elements['next-page'].disabled = currentPage === totalPages || totalPages === 0;
+            this.elements['next-page'].disabled = currentPage >= totalPages;
         }
 
         changeAmortizationPage(direction) {
@@ -566,13 +573,21 @@
         }
 
         updateChart(amortizationData, loanAmount) {
-            if (!this.ctx || !amortizationData.length) return;
+            if (!this.ctx || !amortizationData || amortizationData.length === 0) {
+                 if (state.chartInstance) state.chartInstance.destroy();
+                 return;
+            }
 
             if (state.chartInstance) state.chartInstance.destroy();
             
-            const labels = amortizationData.map(d => d.month);
-            const balanceData = amortizationData.map(d => d.balance);
-            const principalPaidData = amortizationData.map(d => loanAmount - d.balance);
+            // For performance, sample the data if the loan is very long
+            const step = Math.ceil(amortizationData.length / 360);
+            const sampledData = amortizationData.filter((_, i) => i % step === 0);
+
+            const labels = sampledData.map(d => d.month);
+            const balanceData = sampledData.map(d => d.balance);
+            const principalPaidData = sampledData.map(d => loanAmount - d.balance);
+            
             const interestPaidData = amortizationData.reduce((acc, d) => {
                 acc.push((acc.length > 0 ? acc[acc.length - 1] : 0) + d.interest);
                 return acc;
@@ -583,8 +598,8 @@
                 data: {
                     labels,
                     datasets: [
-                        { label: 'Remaining Balance', data: balanceData, borderColor: 'var(--chart-balance)', tension: 0.1, fill: true, backgroundColor: 'rgba(168, 75, 47, 0.1)' },
-                        { label: 'Principal Paid', data: principalPaidData, borderColor: 'var(--chart-principal)', tension: 0.1, fill: false }
+                        { label: 'Remaining Balance', data: balanceData, borderColor: 'var(--chart-balance)', tension: 0.4, fill: true, backgroundColor: 'rgba(168, 75, 47, 0.1)', pointRadius: 0 },
+                        { label: 'Principal Paid', data: principalPaidData, borderColor: 'var(--chart-principal)', tension: 0.4, fill: false, pointRadius: 0 }
                     ]
                 },
                 options: {
@@ -593,24 +608,27 @@
                         x: { display: false },
                         y: { ticks: { callback: value => Utils.formatCurrency(value) } }
                     },
-                    plugins: { tooltip: { callbacks: { label: context => `${context.dataset.label}: ${Utils.formatCurrency(context.raw)}` } } }
+                    plugins: { tooltip: { mode: 'index', intersect: false, callbacks: { label: context => `${context.dataset.label}: ${Utils.formatCurrency(context.raw)}` } } },
+                    animation: { duration: 500 }
                 }
             });
 
-            this.setupSlider(amortizationData.length / 12, amortizationData, principalPaidData, interestPaidData);
+            this.setupSlider(amortizationData, principalPaidData, interestPaidData);
         }
 
-        setupSlider(maxYears, data, principalPaidData, interestPaidData) {
-            this.yearSlider.max = Math.ceil(maxYears);
+        setupSlider(fullData, principalPaidData, interestPaidData) {
+            if (!this.yearSlider) return;
+            const maxYears = Math.ceil(fullData.length / 12);
+            this.yearSlider.max = maxYears > 0 ? maxYears : 1;
             this.yearSlider.value = 1;
             
             const updateSliderDetails = () => {
                 const year = parseInt(this.yearSlider.value, 10);
-                const monthIndex = Math.min(year * 12 - 1, data.length - 1);
+                const monthIndex = Math.min(year * 12 - 1, fullData.length - 1);
                 if(monthIndex < 0) return;
 
                 this.yearLabel.textContent = `End of Year ${year}`;
-                this.remainingBalanceEl.textContent = Utils.formatCurrency(data[monthIndex].balance);
+                this.remainingBalanceEl.textContent = Utils.formatCurrency(fullData[monthIndex].balance);
                 this.principalPaidEl.textContent = Utils.formatCurrency(principalPaidData[monthIndex]);
                 this.interestPaidEl.textContent = Utils.formatCurrency(interestPaidData[monthIndex]);
             };
@@ -634,7 +652,7 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.toggle('active', content.id === tabId));
             if (tabId === 'chart' && state.chartInstance) {
-                state.chartInstance.resize();
+                setTimeout(() => state.chartInstance.resize(), 50);
             }
             Utils.announceToScreenReader(`Switched to ${tabId} tab`);
         }
@@ -683,50 +701,58 @@
         calculate() {
             document.getElementById('loading-overlay').style.display = 'grid';
             
-            // Use a timeout to allow the loading spinner to render before the calculation blocks the main thread.
             setTimeout(() => {
-                const formData = this.formManager.getFormData();
-                const { homePrice, downPayment, interestRate, loanTerm, propertyTax, homeInsurance, pmi, extraPayment, extraOnetime } = formData;
-                
-                const loanAmount = homePrice - downPayment;
-                if (loanAmount <= 0) {
+                try {
+                    const formData = this.formManager.getFormData();
+                    const { homePrice, downPayment, interestRate, loanTerm, propertyTax, homeInsurance, pmi, extraPayment, extraOnetime } = formData;
+                    
+                    const loanAmount = homePrice - downPayment;
+                    if (loanAmount <= 0 || homePrice <= 0) {
+                        // Handle case with no loan or invalid price
+                        this.resultsManager.updateAll({}, [], formData); // Clear results
+                        return;
+                    }
+                    
+                    const monthlyEquivalentExtra = state.extraPaymentFrequency === 'weekly' ? extraPayment * (52 / 12) : extraPayment;
+                    const amortizationData = MortgageEngine.generateAmortizationSchedule(loanAmount, interestRate, loanTerm, monthlyEquivalentExtra, extraOnetime);
+                    
+                    const monthlyPI = MortgageEngine.calculateMonthlyPayment(loanAmount, interestRate, loanTerm);
+                    const monthlyTax = propertyTax / 12;
+                    const monthlyInsurance = homeInsurance / 12;
+
+                    const totalInterest = amortizationData.reduce((acc, row) => acc + row.interest, 0);
+                    const totalCost = loanAmount + totalInterest + (propertyTax + homeInsurance) * (amortizationData.length / 12);
+                    
+                    const payoffDate = amortizationData.length > 0 ? new Date() : null;
+                    if (payoffDate) payoffDate.setMonth(payoffDate.getMonth() + amortizationData.length);
+
+                    const calculations = {
+                        loanAmount, interestRate, loanTerm,
+                        monthlyPI, monthlyTax, monthlyInsurance, monthlyPMI: pmi,
+                        totalMonthly: monthlyPI + monthlyTax + monthlyInsurance + pmi,
+                        totalInterest, totalCost, payoffDate,
+                        ltvRatio: loanAmount / homePrice
+                    };
+                    
+                    state.updateCalculations(calculations);
+                    
+                    this.resultsManager.updateAll(calculations, amortizationData, formData);
+                    this.formManager.updateExtraPaymentPreview();
+
+                } catch (error) {
+                    console.error("Calculation failed:", error);
+                    Utils.showToast('An error occurred during calculation. Please check your inputs.', 'error');
+                } finally {
                     document.getElementById('loading-overlay').style.display = 'none';
-                    return;
                 }
-                
-                const monthlyEquivalentExtra = state.extraPaymentFrequency === 'weekly' ? extraPayment * (52 / 12) : extraPayment;
-
-                const amortizationData = MortgageEngine.generateAmortizationSchedule(loanAmount, interestRate, loanTerm, monthlyEquivalentExtra, extraOnetime);
-                
-                const monthlyPI = MortgageEngine.calculateMonthlyPayment(loanAmount, interestRate, loanTerm);
-                const monthlyTax = propertyTax / 12;
-                const monthlyInsurance = homeInsurance / 12;
-
-                const totalInterest = amortizationData.reduce((acc, row) => acc + row.interest, 0);
-                const totalCost = loanAmount + totalInterest + (propertyTax + homeInsurance) * (amortizationData.length / 12);
-                
-                const payoffDate = new Date();
-                payoffDate.setMonth(payoffDate.getMonth() + amortizationData.length);
-
-                const calculations = {
-                    loanAmount, interestRate, loanTerm,
-                    monthlyPI, monthlyTax, monthlyInsurance, monthlyPMI: pmi,
-                    totalMonthly: monthlyPI + monthlyTax + monthlyInsurance + pmi,
-                    totalInterest, totalCost, payoffDate,
-                    ltvRatio: loanAmount / homePrice
-                };
-                
-                state.updateCalculations(calculations);
-                
-                this.resultsManager.updateAll(calculations, amortizationData, formData);
-                this.formManager.updateExtraPaymentPreview();
-
-                document.getElementById('loading-overlay').style.display = 'none';
             }, 100);
         }
 
         performInitialCalculation() {
-            document.dispatchEvent(new CustomEvent('calculate'));
+            // A brief delay to ensure all DOM elements are ready.
+            setTimeout(() => {
+                document.dispatchEvent(new CustomEvent('calculate'));
+            }, 100);
         }
     }
 
