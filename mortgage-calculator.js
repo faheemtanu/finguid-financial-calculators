@@ -1,765 +1,375 @@
 /* ============================================================================
-   WORLD'S #1 AI-ENHANCED MORTGAGE CALCULATOR - PRODUCTION JAVASCRIPT
-   Advanced Features: AI Insights, Voice Control, Real-Time Updates
-   Version: 3.2 Production Ready
+   AI-ENHANCED MORTGAGE CALCULATOR - V4 REFINED JAVASCRIPT
+   Modern UX, Robust Logic, and Full Feature Implementation
    ============================================================================ */
 
 (function() {
     'use strict';
 
-    // ========== Global State Management ==========
-    class MortgageCalculatorState {
-        constructor() {
-            this.calculations = {};
-            this.savedCalculations = [];
-            this.comparisonData = [];
-            this.voiceEnabled = false;
-            this.chartInstance = null;
-            this.amortizationData = [];
-            this.currentPage = 1;
-            this.itemsPerPage = 12;
-            this.recognition = null;
-            this.darkMode = this.detectPreferredTheme();
-            this.fontScale = 1.0;
-            this.screenReaderMode = false;
-            this.extraPaymentFrequency = 'monthly';
-
-            // Market data
-            this.marketRates = {
-                '30yr': 6.43,
-                '15yr': 5.73,
-                'arm': 5.90,
-                'fha': 6.44
-            };
-
-            // Location-based data
-            this.stateData = {
-                'Alabama': { tax: 0.0041, insurance: 1200 }, 'Alaska': { tax: 0.0103, insurance: 1100 }, 'Arizona': { tax: 0.0066, insurance: 1300 },
-                'Arkansas': { tax: 0.0062, insurance: 1400 }, 'California': { tax: 0.0075, insurance: 2100 }, 'Colorado': { tax: 0.0051, insurance: 1800 },
-                'Connecticut': { tax: 0.0208, insurance: 1600 }, 'Delaware': { tax: 0.0057, insurance: 1500 }, 'Florida': { tax: 0.0083, insurance: 2400 },
-                'Georgia': { tax: 0.0092, insurance: 1700 }, 'Hawaii': { tax: 0.0028, insurance: 1400 }, 'Idaho': { tax: 0.0069, insurance: 1200 },
-                'Illinois': { tax: 0.0223, insurance: 1500 }, 'Indiana': { tax: 0.0085, insurance: 1300 }, 'Iowa': { tax: 0.0154, insurance: 1400 },
-                'Kansas': { tax: 0.0144, insurance: 1500 }, 'Kentucky': { tax: 0.0086, insurance: 1600 }, 'Louisiana': { tax: 0.0055, insurance: 2200 },
-                'Maine': { tax: 0.0125, insurance: 1300 }, 'Maryland': { tax: 0.0108, insurance: 1600 }, 'Massachusetts': { tax: 0.0116, insurance: 1700 },
-                'Michigan': { tax: 0.0154, insurance: 1400 }, 'Minnesota': { tax: 0.0111, insurance: 1500 }, 'Mississippi': { tax: 0.0061, insurance: 1800 },
-                'Missouri': { tax: 0.0098, insurance: 1500 }, 'Montana': { tax: 0.0084, insurance: 1300 }, 'Nebraska': { tax: 0.0176, insurance: 1600 },
-                'Nevada': { tax: 0.0060, insurance: 1300 }, 'New Hampshire': { tax: 0.0186, insurance: 1200 }, 'New Jersey': { tax: 0.0249, insurance: 1800 },
-                'New Mexico': { tax: 0.0080, insurance: 1400 }, 'New York': { tax: 0.0162, insurance: 1900 }, 'North Carolina': { tax: 0.0084, insurance: 1500 },
-                'North Dakota': { tax: 0.0098, insurance: 1400 }, 'Ohio': { tax: 0.0157, insurance: 1300 }, 'Oklahoma': { tax: 0.0090, insurance: 1700 },
-                'Oregon': { tax: 0.0087, insurance: 1200 }, 'Pennsylvania': { tax: 0.0153, insurance: 1400 }, 'Rhode Island': { tax: 0.0147, insurance: 1600 },
-                'South Carolina': { tax: 0.0057, insurance: 1600 }, 'South Dakota': { tax: 0.0128, insurance: 1500 }, 'Tennessee': { tax: 0.0064, insurance: 1500 },
-                'Texas': { tax: 0.0181, insurance: 2000 }, 'Utah': { tax: 0.0061, insurance: 1300 }, 'Vermont': { tax: 0.0186, insurance: 1200 },
-                'Virginia': { tax: 0.0082, insurance: 1500 }, 'Washington': { tax: 0.0087, insurance: 1400 }, 'West Virginia': { tax: 0.0059, insurance: 1400 },
-                'Wisconsin': { tax: 0.0176, insurance: 1300 }, 'Wyoming': { tax: 0.0062, insurance: 1200 }
-            };
-        }
-
-        detectPreferredTheme() {
-            if (typeof window !== 'undefined') {
-                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            }
-            return false;
-        }
-
-        updateCalculations(data) {
-            this.calculations = { ...this.calculations, ...data };
-        }
-    }
-
-    const state = new MortgageCalculatorState();
-
-    // ========== Utility Functions ==========
-    const Utils = {
-        formatCurrency(amount, includeCents = false) {
-            if (typeof amount !== 'number' || isNaN(amount)) return '$0';
-            const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: includeCents ? 2 : 0, maximumFractionDigits: includeCents ? 2 : 0 });
-            return formatter.format(amount);
-        },
-        formatNumber(num, decimals = 0) {
-            if (typeof num !== 'number' || isNaN(num)) return '0';
-            return new Intl.NumberFormat('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(num);
-        },
-        parseCurrency(value) {
-            if (typeof value === 'number') return value;
-            const cleaned = String(value).replace(/[$,]/g, '');
-            const parsed = parseFloat(cleaned);
-            return isNaN(parsed) ? 0 : parsed;
-        },
-        parsePercentage(value) {
-            const cleaned = String(value).replace(/[%]/g, '');
-            const parsed = parseFloat(cleaned);
-            return isNaN(parsed) ? 0 : parsed;
-        },
-        debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => { clearTimeout(timeout); func(...args); };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        },
-        showToast(message, type = 'info', duration = 4000) {
-            const toastContainer = document.getElementById('toast-container');
-            if(!toastContainer) return;
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
-            toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span>${message}</span>`;
-            toastContainer.appendChild(toast);
-            setTimeout(() => toast.remove(), duration);
-            toast.addEventListener('click', () => toast.remove());
-        },
-        formatDate(date) {
-            return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short' }).format(date);
-        },
-        announceToScreenReader(message) {
-            const announcement = document.getElementById('sr-announcements');
-            if (announcement) announcement.textContent = message;
-        }
+    // ========== Global State & Utilities ==========
+    const state = {
+        extraPaymentFrequency: 'monthly',
+        amortizationData: [],
+        currentPage: 1,
+        itemsPerPage: 12,
+        chartInstance: null,
     };
 
-    // ========== Mortgage Calculator Engine ==========
+    const Utils = {
+        parseCurrency: (val) => parseFloat(String(val).replace(/[$,]/g, '')) || 0,
+        formatCurrency: (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(num),
+        formatNumber: (num) => new Intl.NumberFormat('en-US').format(num),
+        debounce: (func, wait) => {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        },
+    };
+
+    // ========== Mortgage Calculation Engine ==========
     class MortgageEngine {
-        static calculateMonthlyPayment(principal, rate, termYears) {
-            if (principal <= 0 || rate < 0 || termYears <= 0) return 0;
-            if (rate === 0) return principal / (termYears * 12);
-
-            const monthlyRate = rate / 100 / 12;
-            const numPayments = termYears * 12;
-            const monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
-            return isNaN(monthlyPayment) ? 0 : monthlyPayment;
+        static getMonthlyPayment(p, r, n) {
+            if (r === 0) return p / n;
+            return p * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
         }
 
-        static calculatePMI(loanAmount, homePrice) {
-            if (homePrice <= 0) return 0;
-            const ltvRatio = loanAmount / homePrice;
-            if (ltvRatio <= 0.8 || loanAmount <= 0) return 0;
-            let pmiRate = 0.005; // 0.5% annually
-            if (ltvRatio > 0.95) pmiRate = 0.01;
-            else if (ltvRatio > 0.9) pmiRate = 0.008;
-            else if (ltvRatio > 0.85) pmiRate = 0.006;
-            return (loanAmount * pmiRate) / 12;
-        }
-
-        static generateAmortizationSchedule(principal, rate, termYears, extraMonthly = 0, extraOnetime = 0) {
+        static getAmortization(formData) {
+            const principal = formData.homePrice - formData.downPayment;
             if (principal <= 0) return [];
-            const schedule = [];
-            const monthlyRate = rate / 100 / 12;
-            const originalPayment = this.calculateMonthlyPayment(principal, rate, termYears);
+
+            const monthlyRate = formData.interestRate / 100 / 12;
+            const termInMonths = formData.loanTerm * 12;
+            const monthlyPI = this.getMonthlyPayment(principal, monthlyRate, termInMonths);
+            
+            const extraMonthly = state.extraPaymentFrequency === 'weekly' 
+                ? formData.extraMonthly * (52 / 12) 
+                : formData.extraMonthly;
+
             let balance = principal;
-            let month = 1;
-
-            while (balance > 0.01 && month <= termYears * 12 * 2) { // Failsafe for 2x term length
-                const interestPayment = balance * monthlyRate;
-                let principalPayment = originalPayment - interestPayment;
-                
-                if (month === 12 && extraOnetime > 0) {
-                    principalPayment += extraOnetime;
+            const schedule = [];
+            
+            for (let i = 1; i <= termInMonths && balance > 0; i++) {
+                const interest = balance * monthlyRate;
+                let principalPaid = monthlyPI - interest + extraMonthly;
+                if (balance - principalPaid < 0) {
+                    principalPaid = balance;
                 }
-                principalPayment += extraMonthly;
+                balance -= principalPaid;
 
-                if (originalPayment + extraMonthly < interestPayment && month > 1) { 
-                    // Break if payments don't cover interest (prevents infinite loops on weird inputs)
-                    break;
-                }
-                if (principalPayment > balance) principalPayment = balance;
-
-                balance -= principalPayment;
-                if (balance < 0) balance = 0;
-
-                schedule.push({ month, payment: originalPayment + extraMonthly, principal: principalPayment, interest: interestPayment, balance });
-                month++;
+                schedule.push({ month: i, principal: principalPaid, interest, balance });
             }
             return schedule;
         }
     }
 
-    // ========== AI Insights Generator ==========
-    class AIInsights {
-        static generateInsights(calculations, formData) {
-            const insights = [];
-            const icons = { success: 'fa-check-circle', warning: 'fa-exclamation-triangle', info: 'fa-lightbulb' };
-            const { ltvRatio, monthlyPMI, loanAmount, interestRate, loanTerm } = calculations;
-
-            // Down payment insight
-            if (ltvRatio <= 0.8) {
-                insights.push({ type: 'success', title: 'Excellent Down Payment!', message: `Your ${Utils.formatNumber((1 - ltvRatio) * 100, 1)}% down payment eliminates PMI, saving you money each month.`, icon: icons.success });
-            } else {
-                insights.push({ type: 'info', title: 'PMI Required', message: `With a ${Utils.formatNumber((1-ltvRatio) * 100, 1)}% down payment, your estimated monthly PMI is ${Utils.formatCurrency(monthlyPMI)}. Reaching 20% equity will remove this cost.`, icon: icons.info });
-            }
-
-            // Extra payment suggestion
-            const extraPaymentAmount = state.extraPaymentFrequency === 'weekly' ? formData.extraPayment * (52 / 12) : formData.extraPayment;
-            if(extraPaymentAmount > 0) {
-                const savings = this.calculateExtraPaymentSavings(loanAmount, interestRate, loanTerm, extraPaymentAmount);
-                 if (savings.savings > 0) {
-                     insights.push({ type: 'success', title: 'Accelerated Payoff!', message: `By adding ${Utils.formatCurrency(formData.extraPayment)} ${state.extraPaymentFrequency}, you could save over ${Utils.formatCurrency(savings.savings)} in interest and pay off your loan ${savings.timeSaved} years early!`, icon: icons.success });
-                 }
-            } else {
-                 const suggestedExtra = 200;
-                 const savings = this.calculateExtraPaymentSavings(loanAmount, interestRate, loanTerm, suggestedExtra);
-                 if (savings.savings > 10000) {
-                     insights.push({ type: 'info', title: 'Extra Payment Opportunity', message: `Adding just ${Utils.formatCurrency(suggestedExtra)}/month extra could save you over ${Utils.formatCurrency(savings.savings)} in interest and pay off your loan ${savings.timeSaved} years early.`, icon: icons.info });
-                 }
-            }
-            
-            // Interest rate insight
-            if (state.marketRates['30yr']) {
-                const marketAverage = state.marketRates['30yr'];
-                if (interestRate > marketAverage + 0.25) {
-                    insights.push({ type: 'warning', title: 'Rate Shopping Opportunity', message: `Your rate is ${(interestRate - marketAverage).toFixed(2)}% above the market average. Shopping with multiple lenders could save you thousands.`, icon: icons.warning });
-                } else if (interestRate < marketAverage - 0.1) {
-                    insights.push({ type: 'success', title: 'Great Interest Rate!', message: `Your rate is ${(marketAverage - interestRate).toFixed(2)}% below the market average. You've secured an excellent deal!`, icon: icons.success });
-                }
-            }
-
-            return insights;
-        }
-
-        static calculateExtraPaymentSavings(principal, rate, termYears, extraMonthly) {
-            const standardSchedule = MortgageEngine.generateAmortizationSchedule(principal, rate, termYears);
-            const extraSchedule = MortgageEngine.generateAmortizationSchedule(principal, rate, termYears, extraMonthly);
-            if (!standardSchedule.length || !extraSchedule.length) return { savings: 0, timeSaved: 0 };
-
-            const standardTotalInterest = standardSchedule.reduce((sum, row) => sum + row.interest, 0);
-            const extraTotalInterest = extraSchedule.reduce((sum, row) => sum + row.interest, 0);
-
-            const savings = standardTotalInterest - extraTotalInterest;
-            const timeSaved = (standardSchedule.length - extraSchedule.length) / 12;
-
-            return { savings, timeSaved: Utils.formatNumber(timeSaved, 1) };
-        }
-    }
-    
-    // ========== Form Management ==========
-    class FormManager {
+    // ========== UI Component Managers ==========
+    class UIManager {
         constructor() {
-            this.form = document.querySelector('.mortgage-form');
-            this.inputs = {};
-            this.initializeInputs();
+            this.elements = this.getElements();
+            this.chartCtx = this.elements.chartCanvas?.getContext('2d');
+            this.init();
+        }
+
+        getElements() {
+            const ids = ['home-price', 'down-payment', 'down-payment-percent', 'amount-toggle', 'percent-toggle', 'amount-input', 'percent-input', 'pmi-warning', 'interest-rate', 'loan-term', 'property-tax', 'home-insurance', 'pmi', 'extra-monthly', 'monthly-toggle', 'weekly-toggle', 'extra-payment-label', 'savings-preview', 'total-payment', 'display-loan-amount', 'display-total-interest', 'display-payoff-date', 'principal-interest', 'monthly-tax', 'monthly-insurance', 'monthly-pmi', 'mortgage-timeline-chart', 'ai-insights', 'amortization-table-body', 'prev-page', 'next-page', 'current-page', 'total-pages', 'reset-form', 'theme-toggle', 'theme-icon', 'loading-overlay'];
+            const elements = {};
+            ids.forEach(id => elements[id.replace(/-(\w)/g, (m, p1) => p1.toUpperCase())] = document.getElementById(id));
+            elements.termChips = document.querySelectorAll('.term-chip');
+            elements.tabButtons = document.querySelectorAll('.tab-btn');
+            elements.tabContents = document.querySelectorAll('.tab-content');
+            elements.chartCanvas = elements.mortgageTimelineChart;
+            return elements;
+        }
+
+        init() {
             this.setupEventListeners();
-            this.populateStatesDropdown();
+            this.updateTheme(localStorage.getItem('theme') === 'dark');
+            this.performInitialCalculation();
         }
 
-        initializeInputs() {
-            const ids = ['home-price', 'down-payment', 'down-payment-percent', 'interest-rate', 'loan-term', 'custom-term', 'property-state', 'property-tax', 'home-insurance', 'pmi', 'extra-payment-amount', 'extra-onetime'];
-            ids.forEach(id => this.inputs[id] = document.getElementById(id));
-        }
-        
-        populateStatesDropdown() {
-            const stateSelect = this.inputs['property-state'];
-            if (!stateSelect) return;
-            stateSelect.innerHTML = '<option value="">Select your state...</option>';
-            Object.keys(state.stateData).forEach(stateName => {
-                const option = document.createElement('option');
-                option.value = stateName;
-                option.textContent = stateName;
-                stateSelect.appendChild(option);
-            });
-        }
-        
         setupEventListeners() {
-            // Live formatting
-            ['home-price', 'down-payment', 'property-tax', 'home-insurance', 'extra-payment-amount', 'extra-onetime'].forEach(id => {
-                this.inputs[id]?.addEventListener('input', e => this.formatCurrencyInput(e.target));
+            const debouncedCalc = Utils.debounce(() => this.calculate(), 300);
+
+            // Input formatting and live calculation
+            ['homePrice', 'downPayment', 'propertyTax', 'homeInsurance', 'extraMonthly'].forEach(key => {
+                this.elements[key]?.addEventListener('input', (e) => this.formatCurrencyInput(e.target));
+                this.elements[key]?.addEventListener('blur', (e) => this.formatCurrencyInput(e.target, true));
+                this.elements[key]?.addEventListener('input', debouncedCalc);
             });
-            this.inputs['interest-rate']?.addEventListener('input', e => this.formatDecimalInput(e.target));
-            this.inputs['down-payment-percent']?.addEventListener('input', e => this.formatDecimalInput(e.target));
-            
-            // Down payment toggle
-            document.getElementById('amount-toggle').addEventListener('click', () => this.toggleDownPaymentMode('amount'));
-            document.getElementById('percent-toggle').addEventListener('click', () => this.toggleDownPaymentMode('percent'));
 
-            // Loan Term
-            document.querySelectorAll('.term-chip').forEach(chip => chip.addEventListener('click', () => this.selectLoanTerm(chip.dataset.term)));
-            this.inputs['custom-term'].addEventListener('input', e => this.selectLoanTerm(e.target.value));
-
-            // Location-based costs
-            this.inputs['property-state'].addEventListener('change', this.updateLocationBasedData.bind(this));
-            this.inputs['home-price'].addEventListener('input', this.updateLocationBasedData.bind(this));
-            
-            // Auto-calculation triggers
-            const debouncedCalc = Utils.debounce(() => document.dispatchEvent(new CustomEvent('calculate')), 300);
-            Object.values(this.inputs).forEach(input => input?.addEventListener('input', debouncedCalc));
-            document.querySelectorAll('.term-chip, .toggle-btn').forEach(el => el.addEventListener('click', debouncedCalc));
-            
-            // Suggestion chips
-            document.querySelector('.input-suggestions')?.addEventListener('click', e => {
-                if(e.target.classList.contains('suggestion-chip')) {
-                    const input = this.inputs[e.target.dataset.input];
-                    if (input) {
-                        input.value = Utils.formatNumber(parseFloat(e.target.dataset.value));
-                        input.dispatchEvent(new Event('input', { bubbles: true }));
-                    }
-                }
+            ['downPaymentPercent', 'interestRate'].forEach(key => {
+                this.elements[key]?.addEventListener('input', (e) => this.formatDecimalInput(e.target));
+                this.elements[key]?.addEventListener('input', debouncedCalc);
             });
             
-            // Extra payments
-            document.getElementById('monthly-toggle').addEventListener('click', () => this.setExtraPaymentFrequency('monthly'));
-            document.getElementById('weekly-toggle').addEventListener('click', () => this.setExtraPaymentFrequency('weekly'));
-            this.inputs['extra-payment-amount']?.addEventListener('input', this.updateExtraPaymentPreview.bind(this));
+            // Toggles and Chips
+            this.elements.amountToggle?.addEventListener('click', () => this.toggleDownPaymentMode('amount'));
+            this.elements.percentToggle?.addEventListener('click', () => this.toggleDownPaymentMode('percent'));
+            this.elements.monthlyToggle?.addEventListener('click', () => this.setExtraPaymentFrequency('monthly'));
+            this.elements.weeklyToggle?.addEventListener('click', () => this.setExtraPaymentFrequency('weekly'));
+
+            this.elements.termChips.forEach(chip => chip.addEventListener('click', () => {
+                this.selectLoanTerm(chip.dataset.term);
+                debouncedCalc();
+            }));
             
-             // Down payment sync
-            this.inputs['home-price']?.addEventListener('input', this.handleDownPaymentChange.bind(this));
-            this.inputs['down-payment']?.addEventListener('input', this.handleDownPaymentChange.bind(this));
-            this.inputs['down-payment-percent']?.addEventListener('input', this.handleDownPaymentChange.bind(this));
+            this.elements.tabButtons.forEach(btn => btn.addEventListener('click', () => this.switchTab(btn.dataset.tab)));
+            
+            // Buttons
+            this.elements.resetForm?.addEventListener('click', () => this.reset());
+            this.elements.themeToggle?.addEventListener('click', () => this.updateTheme(document.body.dataset.theme !== 'dark'));
+            this.elements.prevPage?.addEventListener('click', () => this.renderAmortizationPage(state.currentPage - 1));
+            this.elements.nextPage?.addEventListener('click', () => this.renderAmortizationPage(state.currentPage + 1));
+
+            // Sync down payment fields
+            this.elements.homePrice?.addEventListener('input', () => this.syncDownPayment());
+            this.elements.downPayment?.addEventListener('input', () => this.syncDownPayment('amount'));
+            this.elements.downPaymentPercent?.addEventListener('input', () => this.syncDownPayment('percent'));
         }
 
-        formatCurrencyInput(input) {
+        formatCurrencyInput(input, onBlur = false) {
             const value = Utils.parseCurrency(input.value);
-            input.value = value > 0 ? new Intl.NumberFormat('en-US').format(value) : '';
+            if (onBlur || value === 0) {
+                input.value = Utils.formatNumber(value);
+            }
         }
         
         formatDecimalInput(input) {
-            let value = input.value;
-            value = value.replace(/[^0-9.]/g, '');
+            let value = input.value.replace(/[^0-9.]/g, '');
             const parts = value.split('.');
-            if (parts.length > 2) {
-                value = parts[0] + '.' + parts.slice(1).join('');
-            }
+            if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('');
             input.value = value;
         }
 
         toggleDownPaymentMode(mode) {
-            document.getElementById('amount-input').style.display = (mode === 'amount') ? 'block' : 'none';
-            document.getElementById('percent-input').style.display = (mode === 'percent') ? 'block' : 'none';
-            document.getElementById('amount-toggle').classList.toggle('active', mode === 'amount');
-            document.getElementById('percent-toggle').classList.toggle('active', mode === 'percent');
-            this.handleDownPaymentChange();
-        }
-
-        handleDownPaymentChange() {
-            const homePrice = Utils.parseCurrency(this.inputs['home-price'].value);
-            const dpAmount = Utils.parseCurrency(this.inputs['down-payment'].value);
-            const dpPercent = Utils.parsePercentage(this.inputs['down-payment-percent'].value);
-            const isPercentMode = document.getElementById('percent-input').style.display === 'block';
-
-            if (homePrice > 0) {
-                if (isPercentMode) {
-                    const newAmount = homePrice * (dpPercent / 100);
-                    this.inputs['down-payment'].value = Utils.formatNumber(newAmount, 0);
-                } else {
-                    const newPercent = (dpAmount / homePrice) * 100;
-                    this.inputs['down-payment-percent'].value = isNaN(newPercent) || !isFinite(newPercent) ? '' : Utils.formatNumber(newPercent, 2);
-                }
-            }
-            this.updatePMI();
+            const isAmount = mode === 'amount';
+            this.elements.amountInput.style.display = isAmount ? 'block' : 'none';
+            this.elements.percentInput.style.display = isAmount ? 'none' : 'block';
+            this.elements.amountToggle.classList.toggle('active', isAmount);
+            this.elements.percentToggle.classList.toggle('active', !isAmount);
         }
         
-        updatePMI() {
-            const homePrice = Utils.parseCurrency(this.inputs['home-price'].value);
-            const downPayment = Utils.parseCurrency(this.inputs['down-payment'].value);
-            const loanAmount = homePrice - downPayment;
-            
-            const pmiWarning = document.getElementById('pmi-warning');
-            const monthlyPMI = MortgageEngine.calculatePMI(loanAmount, homePrice);
+        syncDownPayment(source) {
+            const homePrice = Utils.parseCurrency(this.elements.homePrice.value);
+            if (homePrice === 0) return;
 
-            this.inputs['pmi'].value = Utils.formatCurrency(monthlyPMI).replace('$', '');
-
-            if(pmiWarning) {
-                pmiWarning.style.display = (monthlyPMI > 0) ? 'flex' : 'none';
+            if (source === 'amount') {
+                const amount = Utils.parseCurrency(this.elements.downPayment.value);
+                const percent = (amount / homePrice) * 100;
+                this.elements.downPaymentPercent.value = isFinite(percent) ? percent.toFixed(2) : '0';
+            } else { // Source is percent or home price change
+                const percent = Utils.parseCurrency(this.elements.downPaymentPercent.value);
+                const amount = homePrice * (percent / 100);
+                this.elements.downPayment.value = Utils.formatNumber(amount);
             }
+            this.updatePMIWarning();
+        }
+        
+        updatePMIWarning() {
+            const homePrice = Utils.parseCurrency(this.elements.homePrice.value);
+            const downPayment = Utils.parseCurrency(this.elements.downPayment.value);
+            const isUnder20 = homePrice > 0 && downPayment / homePrice < 0.2;
+            this.elements.pmiWarning.style.display = isUnder20 ? 'flex' : 'none';
         }
 
         selectLoanTerm(term) {
-            const termVal = parseInt(term);
-            this.inputs['loan-term'].value = isNaN(termVal) || termVal <= 0 ? 30 : termVal;
-
-            document.querySelectorAll('.term-chip').forEach(chip => {
-                chip.classList.toggle('active', chip.dataset.term === String(this.inputs['loan-term'].value));
+            this.elements.loanTerm.value = term;
+            this.elements.termChips.forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.term === term);
             });
-
-            if (![15, 20, 30].includes(termVal)) {
-                this.inputs['custom-term'].value = term;
-            } else {
-                this.inputs['custom-term'].value = '';
-            }
         }
         
-        updateLocationBasedData() {
-            const selectedState = this.inputs['property-state'].value;
-            const homePrice = Utils.parseCurrency(this.inputs['home-price'].value);
-
-            if (selectedState && state.stateData[selectedState] && homePrice > 0) {
-                const data = state.stateData[selectedState];
-                this.inputs['property-tax'].value = Utils.formatNumber(homePrice * data.tax, 0);
-                this.inputs['home-insurance'].value = Utils.formatNumber(data.insurance + (homePrice / 1000) * 0.5, 0); // Base + value factor
-            }
-        }
-
-        setExtraPaymentFrequency(frequency) {
-            state.extraPaymentFrequency = frequency;
-            document.getElementById('monthly-toggle').classList.toggle('active', frequency === 'monthly');
-            document.getElementById('weekly-toggle').classList.toggle('active', frequency === 'weekly');
-            const label = document.querySelector('label[for="extra-payment-amount"]');
-            if (label) {
-                label.textContent = `Extra ${frequency.charAt(0).toUpperCase() + frequency.slice(1)} Payment`;
-            }
-            this.updateExtraPaymentPreview();
-        }
-
-        updateExtraPaymentPreview() {
-            const savingsPreview = document.getElementById('savings-preview');
-            const formData = this.getFormData();
-            const { loanAmount, interestRate, loanTerm } = state.calculations;
-            if (!loanAmount || formData.extraPayment <= 0) {
-                savingsPreview.innerHTML = 'Add extra payments to see potential savings';
-                return;
-            }
-            const monthlyEquivalent = state.extraPaymentFrequency === 'weekly' 
-                ? formData.extraPayment * (52 / 12) 
-                : formData.extraPayment;
-            const savings = AIInsights.calculateExtraPaymentSavings(loanAmount, interestRate, loanTerm, monthlyEquivalent);
-            if (savings.savings > 0) {
-                savingsPreview.innerHTML = `You could save <strong>${Utils.formatCurrency(savings.savings)}</strong> in interest and pay off your loan <strong>${savings.timeSaved} years</strong> early!`;
-            } else {
-                savingsPreview.innerHTML = 'Add extra payments to see potential savings';
-            }
+        setExtraPaymentFrequency(freq) {
+            state.extraPaymentFrequency = freq;
+            this.elements.monthlyToggle.classList.toggle('active', freq === 'monthly');
+            this.elements.weeklyToggle.classList.toggle('active', freq === 'weekly');
+            this.elements.extraPaymentLabel.textContent = `Extra ${freq.charAt(0).toUpperCase() + freq.slice(1)} Payment`;
+            this.calculate(); // Recalculate on frequency change
         }
 
         getFormData() {
-            const homePrice = Utils.parseCurrency(this.inputs['home-price'].value);
-            const downPayment = Utils.parseCurrency(this.inputs['down-payment'].value);
+            const homePrice = Utils.parseCurrency(this.elements.homePrice.value);
+            const downPayment = Utils.parseCurrency(this.elements.downPayment.value);
+            const loanAmount = homePrice - downPayment;
+            
+            const pmi = (loanAmount / homePrice) < 0.8 || homePrice === 0 ? 0 : (loanAmount * 0.005) / 12; // Simplified PMI
+            this.elements.pmi.value = Utils.formatNumber(pmi);
+
             return {
                 homePrice,
                 downPayment,
-                interestRate: Utils.parsePercentage(this.inputs['interest-rate'].value),
-                loanTerm: parseInt(this.inputs['loan-term'].value, 10) || 30,
-                propertyTax: Utils.parseCurrency(this.inputs['property-tax'].value),
-                homeInsurance: Utils.parseCurrency(this.inputs['home-insurance'].value),
-                pmi: Utils.parseCurrency(this.inputs['pmi'].value),
-                extraPayment: Utils.parseCurrency(this.inputs['extra-payment-amount'].value),
-                extraOnetime: Utils.parseCurrency(this.inputs['extra-onetime'].value)
+                interestRate: Utils.parseCurrency(this.elements.interestRate.value),
+                loanTerm: parseInt(this.elements.loanTerm.value, 10),
+                propertyTax: Utils.parseCurrency(this.elements.propertyTax.value),
+                homeInsurance: Utils.parseCurrency(this.elements.homeInsurance.value),
+                pmi,
+                extraMonthly: Utils.parseCurrency(this.elements.extraMonthly.value),
             };
         }
-        
-        reset() {
-            this.form.reset();
-            this.inputs['home-price'].value = '400,000';
-            this.inputs['down-payment'].value = '80,000';
-            this.inputs['down-payment-percent'].value = '20';
-            this.inputs['interest-rate'].value = '6.43';
-            this.inputs['property-tax'].value = '';
-            this.inputs['home-insurance'].value = '';
-            this.inputs['extra-payment-amount'].value = '';
-            this.inputs['extra-onetime'].value = '';
 
-            this.selectLoanTerm('30');
-            this.toggleDownPaymentMode('amount');
-            this.setExtraPaymentFrequency('monthly');
-            this.handleDownPaymentChange(); // This will also call updatePMI
-            document.dispatchEvent(new CustomEvent('calculate'));
-            Utils.showToast('Form has been reset', 'info');
-        }
-    }
+        calculate() {
+            this.elements.loadingOverlay.style.display = 'grid';
+            try {
+                const formData = this.getFormData();
+                state.amortizationData = MortgageEngine.getAmortization(formData);
 
-    // ========== Results Display Manager ==========
-    class ResultsManager {
-        constructor() {
-            this.elements = {};
-            const ids = ['total-payment', 'principal-interest', 'monthly-tax', 'monthly-insurance', 'monthly-pmi', 'display-loan-amount', 'display-total-interest', 'display-total-cost', 'display-payoff-date', 'chart-loan-amount', 'ai-insights', 'pi-fill', 'tax-fill', 'insurance-fill', 'pmi-fill', 'amortization-table-body', 'current-page', 'total-pages', 'prev-page', 'next-page'];
-            ids.forEach(id => this.elements[id] = document.getElementById(id));
-            this.chartManager = new ChartManager();
+                const principal = formData.homePrice - formData.downPayment;
+                const monthlyRate = formData.interestRate / 100 / 12;
+                const termInMonths = formData.loanTerm * 12;
+                const monthlyPI = MortgageEngine.getMonthlyPayment(principal, monthlyRate, termInMonths);
+                
+                const totalMonthly = monthlyPI + (formData.propertyTax / 12) + (formData.homeInsurance / 12) + formData.pmi;
 
-            this.elements['prev-page']?.addEventListener('click', () => this.changeAmortizationPage(-1));
-            this.elements['next-page']?.addEventListener('click', () => this.changeAmortizationPage(1));
-        }
+                this.renderResults(formData, totalMonthly);
+                this.renderChart();
+                this.renderAmortizationPage(1);
+                this.renderAIInsights(formData);
+                this.updateSavingsPreview(formData);
 
-        updateAll(calculations, amortizationData, formData) {
-            this.updateSummary(calculations);
-            this.updateBreakdown(calculations);
-            this.chartManager.updateChart(amortizationData, calculations.loanAmount);
-            this.updateAmortizationTable(amortizationData);
-            this.updateAIInsights(calculations, formData);
-            Utils.announceToScreenReader(`Monthly payment calculated: ${Utils.formatCurrency(calculations.totalMonthly)}`);
+            } catch (error) {
+                console.error("Calculation Error:", error);
+            } finally {
+                setTimeout(() => this.elements.loadingOverlay.style.display = 'none', 200);
+            }
         }
         
-        updateSummary(calc) {
-            this.elements['total-payment'].textContent = Utils.formatCurrency(calc.totalMonthly, true);
-            this.elements['display-loan-amount'].textContent = Utils.formatCurrency(calc.loanAmount);
-            this.elements['display-total-interest'].textContent = Utils.formatCurrency(calc.totalInterest);
-            this.elements['display-total-cost'].textContent = Utils.formatCurrency(calc.totalCost);
-            this.elements['display-payoff-date'].textContent = calc.payoffDate ? Utils.formatDate(calc.payoffDate) : 'N/A';
-            this.elements['chart-loan-amount'].textContent = `Based on a ${Utils.formatCurrency(calc.loanAmount)} mortgage`;
+        renderResults(formData, totalMonthly) {
+            const loanAmount = formData.homePrice - formData.downPayment;
+            const totalInterest = state.amortizationData.reduce((acc, row) => acc + row.interest, 0);
+            const payoffDate = new Date();
+            if (state.amortizationData.length > 0) {
+                payoffDate.setMonth(payoffDate.getMonth() + state.amortizationData.length);
+            }
+
+            this.elements.totalPayment.textContent = Utils.formatCurrency(totalMonthly);
+            this.elements.displayLoanAmount.textContent = Utils.formatCurrency(loanAmount).split('.')[0];
+            this.elements.displayTotalInterest.textContent = Utils.formatCurrency(totalInterest).split('.')[0];
+            this.elements.displayPayoffDate.textContent = state.amortizationData.length > 0 ? payoffDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '--';
+
+            const monthlyPI = totalMonthly - (formData.propertyTax / 12) - (formData.homeInsurance / 12) - formData.pmi;
+            this.elements.principalInterest.textContent = Utils.formatCurrency(monthlyPI);
+            this.elements.monthlyTax.textContent = Utils.formatCurrency(formData.propertyTax / 12);
+            this.elements.monthlyInsurance.textContent = Utils.formatCurrency(formData.homeInsurance / 12);
+            this.elements.monthlyPmi.textContent = Utils.formatCurrency(formData.pmi);
+        }
+        
+        renderChart() {
+            if (!this.chartCtx) return;
+            if (state.chartInstance) state.chartInstance.destroy();
+
+            const loanAmount = Utils.parseCurrency(this.elements.homePrice.value) - Utils.parseCurrency(this.elements.downPayment.value);
+            const yearlyData = state.amortizationData.filter((_, i) => (i + 1) % 12 === 0 || i === state.amortizationData.length - 1);
+            
+            state.chartInstance = new Chart(this.chartCtx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => Math.ceil(d.month / 12)),
+                    datasets: [
+                        { label: 'Remaining Balance', data: yearlyData.map(d => d.balance), borderColor: 'var(--c-primary)', tension: 0.2, fill: true },
+                        { label: 'Principal Paid', data: yearlyData.map(d => loanAmount - d.balance), borderColor: 'var(--c-success)', tension: 0.2 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { title: { display: true, text: 'Year' } } } }
+            });
+        }
+        
+        renderAmortizationPage(page) {
+            const totalPages = Math.ceil(state.amortizationData.length / state.itemsPerPage);
+            state.currentPage = Math.max(1, Math.min(page, totalPages));
+            
+            const start = (state.currentPage - 1) * state.itemsPerPage;
+            const end = start + state.itemsPerPage;
+            const pageData = state.amortizationData.slice(start, end);
+
+            this.elements.amortizationTableBody.innerHTML = pageData.map(row => `
+                <tr>
+                    <td>${row.month}</td>
+                    <td>${Utils.formatCurrency(row.principal)}</td>
+                    <td>${Utils.formatCurrency(row.interest)}</td>
+                    <td>${Utils.formatCurrency(row.balance)}</td>
+                </tr>
+            `).join('');
+
+            this.elements.currentPage.textContent = state.currentPage;
+            this.elements.totalPages.textContent = totalPages || 1;
+            this.elements.prevPage.disabled = state.currentPage === 1;
+            this.elements.nextPage.disabled = state.currentPage === totalPages;
         }
 
-        updateBreakdown(calc) {
-            this.elements['principal-interest'].textContent = Utils.formatCurrency(calc.monthlyPI, true);
-            this.elements['monthly-tax'].textContent = Utils.formatCurrency(calc.monthlyTax, true);
-            this.elements['monthly-insurance'].textContent = Utils.formatCurrency(calc.monthlyInsurance, true);
-            this.elements['monthly-pmi'].textContent = Utils.formatCurrency(calc.monthlyPMI, true);
+        renderAIInsights(formData) {
+            const insights = [];
+            const downPaymentPercent = formData.downPayment / formData.homePrice * 100;
 
-            const total = calc.totalMonthly > 0 ? calc.totalMonthly : 1;
-            this.elements['pi-fill'].style.width = `${(calc.monthlyPI / total) * 100}%`;
-            this.elements['tax-fill'].style.width = `${(calc.monthlyTax / total) * 100}%`;
-            this.elements['insurance-fill'].style.width = `${(calc.monthlyInsurance / total) * 100}%`;
-            this.elements['pmi-fill'].style.width = `${(calc.monthlyPMI / total) * 100}%`;
-        }
+            if (downPaymentPercent >= 20) {
+                insights.push({ type: 'success', title: 'Great Down Payment!', message: `Your ${downPaymentPercent.toFixed(1)}% down payment helps you avoid PMI.`, icon: 'fa-check-circle' });
+            } else {
+                insights.push({ type: 'warning', title: 'Consider a Higher Down Payment', message: `Increasing your down payment to 20% would eliminate monthly PMI costs.`, icon: 'fa-exclamation-triangle' });
+            }
+            
+            if (formData.extraMonthly > 0) {
+                 insights.push({ type: 'success', title: 'Accelerated Payments', message: `Making extra payments is a smart way to build equity faster and save on interest.`, icon: 'fa-rocket' });
+            } else {
+                 insights.push({ type: 'info', title: 'Pay Off Your Loan Faster', message: 'Consider adding a small extra amount to your monthly payment to save thousands in interest over the life of the loan.', icon: 'fa-lightbulb' });
+            }
 
-        updateAIInsights(calculations, formData) {
-            if (!this.elements['ai-insights']) return;
-            const insights = AIInsights.generateInsights(calculations, formData);
-            this.elements['ai-insights'].innerHTML = insights.map(insight => `
-                <div class="insight-item ${insight.type}">
-                    <div class="insight-icon"><i class="fas ${insight.icon}"></i></div>
-                    <div class="insight-content">
-                        <h5>${insight.title}</h5>
-                        <p>${insight.message}</p>
-                    </div>
+            this.elements.aiInsights.innerHTML = insights.map(i => `
+                <div class="insight-item ${i.type}">
+                    <i class="fas ${i.icon} insight-icon"></i>
+                    <div><h5>${i.title}</h5><p>${i.message}</p></div>
                 </div>
             `).join('');
         }
 
-        updateAmortizationTable(data) {
-            state.amortizationData = data;
-            state.currentPage = 1;
-            this.renderAmortizationPage();
-        }
-
-        renderAmortizationPage() {
-            const { amortizationData, currentPage, itemsPerPage } = state;
-            if (!this.elements['amortization-table-body']) return;
-            const totalPages = Math.ceil(amortizationData.length / itemsPerPage);
-            
-            const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const pageData = amortizationData.slice(start, end);
-
-            if (pageData.length === 0) {
-                 this.elements['amortization-table-body'].innerHTML = '<tr><td colspan="6" class="empty-state">No payment schedule to display.</td></tr>';
-            } else {
-                this.elements['amortization-table-body'].innerHTML = pageData.map(row => {
-                    const paymentDate = new Date();
-                    paymentDate.setMonth(paymentDate.getMonth() + row.month - 1);
-                    return `
-                        <tr>
-                            <td>${row.month}</td>
-                            <td>${Utils.formatDate(paymentDate)}</td>
-                            <td>${Utils.formatCurrency(row.payment, true)}</td>
-                            <td>${Utils.formatCurrency(row.principal, true)}</td>
-                            <td>${Utils.formatCurrency(row.interest, true)}</td>
-                            <td>${Utils.formatCurrency(row.balance, true)}</td>
-                        </tr>`;
-                }).join('');
+        updateSavingsPreview(formData) {
+             if (formData.extraMonthly <= 0) {
+                this.elements.savingsPreview.textContent = 'Add extra payments to see potential savings.';
+                return;
             }
+            const standardAmortization = MortgageEngine.getAmortization({ ...formData, extraMonthly: 0 });
+            const totalInterestStandard = standardAmortization.reduce((acc, row) => acc + row.interest, 0);
+            const totalInterestExtra = state.amortizationData.reduce((acc, row) => acc + row.interest, 0);
 
-            this.elements['current-page'].textContent = currentPage;
-            this.elements['total-pages'].textContent = totalPages > 0 ? totalPages : 1;
-            this.elements['prev-page'].disabled = currentPage === 1;
-            this.elements['next-page'].disabled = currentPage >= totalPages;
-        }
+            const savings = totalInterestStandard - totalInterestExtra;
+            const timeSaved = (standardAmortization.length - state.amortizationData.length) / 12;
 
-        changeAmortizationPage(direction) {
-            const totalPages = Math.ceil(state.amortizationData.length / state.itemsPerPage);
-            const newPage = state.currentPage + direction;
-            if (newPage >= 1 && newPage <= totalPages) {
-                state.currentPage = newPage;
-                this.renderAmortizationPage();
+            if (savings > 0) {
+                this.elements.savingsPreview.innerHTML = `You could save <strong>${Utils.formatCurrency(savings)}</strong> and pay off your loan <strong>${timeSaved.toFixed(1)} years</strong> early!`;
             }
         }
-    }
 
-    // ========== Chart Management ==========
-    class ChartManager {
-        constructor() {
-            this.canvas = document.getElementById('mortgage-timeline-chart');
-            if (!this.canvas) return;
-            this.ctx = this.canvas.getContext('2d');
-            this.yearSlider = document.getElementById('year-range');
-            this.yearLabel = document.getElementById('year-label');
-            this.remainingBalanceEl = document.getElementById('remaining-balance');
-            this.principalPaidEl = document.getElementById('principal-paid');
-            this.interestPaidEl = document.getElementById('interest-paid');
-        }
-
-        updateChart(amortizationData, loanAmount) {
-            if (!this.ctx || !amortizationData || amortizationData.length === 0) {
-                 if (state.chartInstance) state.chartInstance.destroy();
-                 return;
-            }
-
-            if (state.chartInstance) state.chartInstance.destroy();
-            
-            // For performance, sample the data if the loan is very long
-            const step = Math.ceil(amortizationData.length / 360);
-            const sampledData = amortizationData.filter((_, i) => i % step === 0);
-
-            const labels = sampledData.map(d => d.month);
-            const balanceData = sampledData.map(d => d.balance);
-            const principalPaidData = sampledData.map(d => loanAmount - d.balance);
-            
-            const interestPaidData = amortizationData.reduce((acc, d) => {
-                acc.push((acc.length > 0 ? acc[acc.length - 1] : 0) + d.interest);
-                return acc;
-            }, []);
-
-            state.chartInstance = new Chart(this.ctx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [
-                        { label: 'Remaining Balance', data: balanceData, borderColor: 'var(--chart-balance)', tension: 0.4, fill: true, backgroundColor: 'rgba(168, 75, 47, 0.1)', pointRadius: 0 },
-                        { label: 'Principal Paid', data: principalPaidData, borderColor: 'var(--chart-principal)', tension: 0.4, fill: false, pointRadius: 0 }
-                    ]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: {
-                        x: { display: false },
-                        y: { ticks: { callback: value => Utils.formatCurrency(value) } }
-                    },
-                    plugins: { tooltip: { mode: 'index', intersect: false, callbacks: { label: context => `${context.dataset.label}: ${Utils.formatCurrency(context.raw)}` } } },
-                    animation: { duration: 500 }
-                }
-            });
-
-            this.setupSlider(amortizationData, principalPaidData, interestPaidData);
-        }
-
-        setupSlider(fullData, principalPaidData, interestPaidData) {
-            if (!this.yearSlider) return;
-            const maxYears = Math.ceil(fullData.length / 12);
-            this.yearSlider.max = maxYears > 0 ? maxYears : 1;
-            this.yearSlider.value = 1;
-            
-            const updateSliderDetails = () => {
-                const year = parseInt(this.yearSlider.value, 10);
-                const monthIndex = Math.min(year * 12 - 1, fullData.length - 1);
-                if(monthIndex < 0) return;
-
-                this.yearLabel.textContent = `End of Year ${year}`;
-                this.remainingBalanceEl.textContent = Utils.formatCurrency(fullData[monthIndex].balance);
-                this.principalPaidEl.textContent = Utils.formatCurrency(principalPaidData[monthIndex]);
-                this.interestPaidEl.textContent = Utils.formatCurrency(interestPaidData[monthIndex]);
-            };
-
-            this.yearSlider.oninput = updateSliderDetails;
-            updateSliderDetails();
-        }
-    }
-    
-    // ========== Tab Management ==========
-    class TabManager {
-        constructor() {
-            this.tabContainer = document.querySelector('.tab-controls');
-            if(!this.tabContainer) return;
-            this.tabContainer.addEventListener('click', e => {
-                const button = e.target.closest('button');
-                if (button) this.switchTab(button.dataset.tab);
-            });
-        }
         switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.toggle('active', content.id === tabId));
-            if (tabId === 'chart' && state.chartInstance) {
-                setTimeout(() => state.chartInstance.resize(), 50);
-            }
-            Utils.announceToScreenReader(`Switched to ${tabId} tab`);
-        }
-    }
-    
-    // ========== Theme Manager ==========
-    class ThemeManager {
-        constructor() {
-            this.themeToggle = document.getElementById('theme-toggle');
-            this.themeToggle?.addEventListener('click', this.toggleTheme.bind(this));
-            this.initTheme();
-        }
-        initTheme() {
-            const savedTheme = localStorage.getItem('theme') || (state.darkMode ? 'dark' : 'light');
-            document.body.dataset.theme = savedTheme;
-            document.getElementById('theme-icon')?.classList.toggle('fa-sun', savedTheme === 'dark');
-            document.getElementById('theme-icon')?.classList.toggle('fa-moon', savedTheme === 'light');
-        }
-        toggleTheme() {
-            let currentTheme = document.body.dataset.theme;
-            let newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.body.dataset.theme = newTheme;
-            localStorage.setItem('theme', newTheme);
-            document.getElementById('theme-icon')?.classList.toggle('fa-sun', newTheme === 'dark');
-            document.getElementById('theme-icon')?.classList.toggle('fa-moon', newTheme === 'light');
-        }
-    }
-
-    // ========== Main Calculator Controller ==========
-    class MortgageCalculator {
-        constructor() {
-            this.formManager = new FormManager();
-            this.resultsManager = new ResultsManager();
-            this.tabManager = new TabManager();
-            this.themeManager = new ThemeManager();
-            this.init();
+            this.elements.tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+            this.elements.tabContents.forEach(content => content.classList.toggle('active', content.id === tabId));
+            if (tabId === 'chart') this.renderChart();
         }
 
-        init() {
-            document.addEventListener('calculate', this.calculate.bind(this));
-            document.getElementById('calculate-btn')?.addEventListener('click', this.calculate.bind(this));
-            document.getElementById('reset-form')?.addEventListener('click', () => this.formManager.reset());
-            this.performInitialCalculation();
+        updateTheme(isDark) {
+            document.body.dataset.theme = isDark ? 'dark' : 'light';
+            this.elements.themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            this.renderChart(); // Re-render chart for new theme colors
         }
-
-        calculate() {
-            document.getElementById('loading-overlay').style.display = 'grid';
-            
-            setTimeout(() => {
-                try {
-                    const formData = this.formManager.getFormData();
-                    const { homePrice, downPayment, interestRate, loanTerm, propertyTax, homeInsurance, pmi, extraPayment, extraOnetime } = formData;
-                    
-                    const loanAmount = homePrice - downPayment;
-                    if (loanAmount <= 0 || homePrice <= 0) {
-                        // Handle case with no loan or invalid price
-                        this.resultsManager.updateAll({}, [], formData); // Clear results
-                        return;
-                    }
-                    
-                    const monthlyEquivalentExtra = state.extraPaymentFrequency === 'weekly' ? extraPayment * (52 / 12) : extraPayment;
-                    const amortizationData = MortgageEngine.generateAmortizationSchedule(loanAmount, interestRate, loanTerm, monthlyEquivalentExtra, extraOnetime);
-                    
-                    const monthlyPI = MortgageEngine.calculateMonthlyPayment(loanAmount, interestRate, loanTerm);
-                    const monthlyTax = propertyTax / 12;
-                    const monthlyInsurance = homeInsurance / 12;
-
-                    const totalInterest = amortizationData.reduce((acc, row) => acc + row.interest, 0);
-                    const totalCost = loanAmount + totalInterest + (propertyTax + homeInsurance) * (amortizationData.length / 12);
-                    
-                    const payoffDate = amortizationData.length > 0 ? new Date() : null;
-                    if (payoffDate) payoffDate.setMonth(payoffDate.getMonth() + amortizationData.length);
-
-                    const calculations = {
-                        loanAmount, interestRate, loanTerm,
-                        monthlyPI, monthlyTax, monthlyInsurance, monthlyPMI: pmi,
-                        totalMonthly: monthlyPI + monthlyTax + monthlyInsurance + pmi,
-                        totalInterest, totalCost, payoffDate,
-                        ltvRatio: loanAmount / homePrice
-                    };
-                    
-                    state.updateCalculations(calculations);
-                    
-                    this.resultsManager.updateAll(calculations, amortizationData, formData);
-                    this.formManager.updateExtraPaymentPreview();
-
-                } catch (error) {
-                    console.error("Calculation failed:", error);
-                    Utils.showToast('An error occurred during calculation. Please check your inputs.', 'error');
-                } finally {
-                    document.getElementById('loading-overlay').style.display = 'none';
-                }
-            }, 100);
+        
+        reset() {
+            this.elements.homePrice.value = '400,000';
+            this.elements.downPaymentPercent.value = '20';
+            this.elements.interestRate.value = '6.43';
+            this.elements.propertyTax.value = '';
+            this.elements.homeInsurance.value = '';
+            this.elements.extraMonthly.value = '0';
+            this.selectLoanTerm('30');
+            this.toggleDownPaymentMode('amount');
+            this.syncDownPayment('percent');
+            this.calculate();
         }
 
         performInitialCalculation() {
-            // A brief delay to ensure all DOM elements are ready.
-            setTimeout(() => {
-                document.dispatchEvent(new CustomEvent('calculate'));
-            }, 100);
+             setTimeout(() => this.calculate(), 100);
         }
     }
 
     // ========== Initialize Application ==========
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => window.mortgageCalculator = new MortgageCalculator());
-    } else {
-        window.mortgageCalculator = new MortgageCalculator();
-    }
+    document.addEventListener('DOMContentLoaded', () => new UIManager());
 })();
