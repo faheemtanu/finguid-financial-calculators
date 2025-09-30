@@ -48,9 +48,8 @@
         "featureList": [
             "AI-powered mortgage insights",
             "Voice control interface",
-            "Real-time market rates",
-            "PMI calculation",
-            "Amortization schedules",
+            "Real-time PMI calculation",
+            "Interactive amortization schedules",
             "Extra payment analysis"
         ]
     }
@@ -144,11 +143,10 @@
         </div>
     </header>
 
-    <!-- Hero Section - REDUCED SIZE BY HALF -->
-    <section class="hero-section" role="banner">
+    <!-- Hero Section - REDUCED TO 20% OF ORIGINAL SIZE -->
+    <section class="hero-section hero-compact" role="banner">
         <div class="hero-background" aria-hidden="true">
             <div class="hero-gradient"></div>
-            <div class="hero-pattern"></div>
         </div>
 
         <div class="header-content">
@@ -165,153 +163,14 @@
                     <h1 class="title-main">
                         World's #1 AI Mortgage Calculator
                     </h1>
-                    <span class="title-subtitle">Smart. Accurate. Lightning Fast.</span>
+                    <span class="title-subtitle">Smart • Accurate • Lightning Fast</span>
                 </div>
             </div>
 
             <p class="header-description">
-                Get instant mortgage calculations with AI-powered insights, voice control, and real-time market data. 
-                Calculate your monthly payments, PMI, and discover ways to save thousands on your home loan.
+                Get instant mortgage calculations with AI-powered insights, voice control, and accurate PMI calculations. 
+                Calculate your monthly payments and discover ways to save thousands on your home loan.
             </p>
-
-            <!-- Current Market Rates -->
-            <div class="current-market-rates">
-                <h3>
-                    <i class="fas fa-chart-line"></i>
-                    Current Market Rates
-                </h3>
-
-                <div class="rates-grid">
-                    <div class="rate-item">
-                        <span class="rate-label">30-Year Fixed</span>
-                        <span class="rate-value" id="market-30yr">6.43%</span>
-                    </div>
-                    <div class="rate-item">
-                        <span class="rate-label">15-Year Fixed</span>
-                        <span class="rate-value" id="market-15yr">5.73%</span>
-                    </div>
-                    <div class="rate-item">
-                        <span class="rate-label">5/1 ARM</span>
-                        <span class="rate-value" id="market-arm">5.90%</span>
-                    </div>
-                    <div class="rate-item">
-                        <span class="rate-label">FHA 30-Year</span>
-                        <span class="rate-value" id="market-fha">6.44%</span>
-                    </div>
-                </div>
-
-                <div class="rate-update">
-                    <i class="fas fa-sync-alt"></i>
-                    <span id="rate-update-time">Last updated: Sep 30, 2025, 2:30 PM IST</span>
-                </div>
-            </div>
-
-            <!-- Live Financial Data -->
-            <div class="live-financial-section">
-                <h3>
-                    <i class="fas fa-globe"></i>
-                    Live Financial Markets
-                </h3>
-
-                <div class="financial-grid">
-                    <div class="financial-item">
-                        <i class="fas fa-chart-area" style="color: #2EA043;"></i>
-                        <div class="financial-content">
-                            <span class="financial-label">S&P 500</span>
-                            <span class="financial-value" id="sp500-price">4,443.25</span>
-                            <span class="financial-change positive">+12.25</span>
-                        </div>
-                    </div>
-
-                    <div class="financial-item">
-                        <i class="fas fa-coins" style="color: #FFD700;"></i>
-                        <div class="financial-content">
-                            <span class="financial-label">Gold (Oz)</span>
-                            <span class="financial-value" id="gold-price">$2,640.90</span>
-                            <span class="financial-change positive">+8.10</span>
-                        </div>
-                    </div>
-
-                    <div class="financial-item">
-                        <i class="fas fa-dollar-sign" style="color: #0066CC;"></i>
-                        <div class="financial-content">
-                            <span class="financial-label">USD/INR</span>
-                            <span class="financial-value" id="usd-inr">83.92</span>
-                            <span class="financial-change positive">+0.02</span>
-                        </div>
-                    </div>
-
-                    <div class="financial-item">
-                        <i class="fas fa-oil-can" style="color: #8B4513;"></i>
-                        <div class="financial-content">
-                            <span class="financial-label">Crude Oil</span>
-                            <span class="financial-value" id="crude-price">$68.45</span>
-                            <span class="financial-change negative">-1.23</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Statistics -->
-            <div class="header-stats-section">
-                <div class="stats-container">
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-calculator"></i>
-                        </div>
-                        <div class="stat-content">
-                            <span class="stat-number" id="calc-count">128,847</span>
-                            <span class="stat-label">Calculations<br>This Month</span>
-                            <div class="live-indicator">
-                                <i class="fas fa-circle"></i>
-                                Live
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-piggy-bank"></i>
-                        </div>
-                        <div class="stat-content">
-                            <span class="stat-number" id="avg-savings">$47K</span>
-                            <span class="stat-label">Average Interest<br>Savings</span>
-                            <div class="live-indicator">
-                                <i class="fas fa-circle"></i>
-                                Updated
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="stat-content">
-                            <span class="stat-number">4.9</span>
-                            <span class="stat-label">User Rating<br>(12k+ Reviews)</span>
-                            <div class="live-indicator">
-                                <i class="fas fa-circle"></i>
-                                Verified
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stat-item">
-                        <div class="stat-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-content">
-                            <span class="stat-number">2 Min</span>
-                            <span class="stat-label">Average Calc<br>Time</span>
-                            <div class="live-indicator">
-                                <i class="fas fa-circle"></i>
-                                Real-time
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Hero Actions -->
             <div class="hero-actions">
@@ -324,7 +183,7 @@
                 <button id="voice-demo" class="hero-secondary-btn" aria-label="Try voice control">
                     <span class="btn-shine"></span>
                     <i class="fas fa-microphone"></i>
-                    Try Voice Control
+                    Voice Control
                 </button>
             </div>
         </div>
@@ -433,13 +292,14 @@
                             </small>
                         </div>
 
+                        <!-- PMI Warning and Rate Display -->
                         <div id="pmi-warning" class="pmi-warning" style="display: none;">
                             <i class="fas fa-exclamation-triangle"></i>
                             <div>
-                                <strong>PMI Required:</strong> Your down payment is less than 20%
-                                <div class="pmi-percentage">
-                                    Monthly PMI Rate: <strong id="pmi-percentage-display">0.5%</strong>
-                                    <small>of loan amount annually</small>
+                                <strong>PMI Required:</strong> Down payment less than 20%
+                                <div class="pmi-rate-display">
+                                    <strong>Monthly PMI: $<span id="pmi-amount-display">0</span></strong>
+                                    <small>Annual Rate: <span id="pmi-rate-display">0.5%</span> (Range: 0.3% - 1.5%)</small>
                                 </div>
                             </div>
                         </div>
@@ -469,10 +329,10 @@
                                 <span class="input-suffix">%</span>
                             </div>
                             <small id="interest-rate-help" class="form-help">
-                                Current market average: 6.43% (30-year fixed)
+                                Enter rate with decimals (e.g., 6.43, 5.75, 4.25)
                             </small>
-                            <div id="rate-status" class="rate-status rate-low">
-                                Great rate! Below market average
+                            <div id="rate-status" class="rate-status rate-average">
+                                Market average rate
                             </div>
                         </div>
                     </fieldset>
@@ -572,7 +432,7 @@
 
                         <div class="form-group">
                             <label for="pmi" class="form-label">
-                                Monthly PMI
+                                Monthly PMI (Auto-Calculated)
                             </label>
                             <div class="input-with-prefix">
                                 <span class="input-prefix">$</span>
@@ -584,7 +444,7 @@
                                        readonly>
                             </div>
                             <small id="pmi-help" class="form-help">
-                                Private Mortgage Insurance (auto-calculated)
+                                Auto-calculated based on down payment and loan amount
                             </small>
                         </div>
                     </fieldset>
@@ -614,19 +474,19 @@
 
                             <div class="extra-payments-grid">
                                 <div class="form-group">
-                                    <label for="extra-monthly" class="form-label">
+                                    <label for="extra-payment" class="form-label" id="extra-payment-label">
                                         Extra Monthly Payment
                                     </label>
                                     <div class="input-with-prefix">
                                         <span class="input-prefix">$</span>
                                         <input type="text" 
-                                               id="extra-monthly" 
+                                               id="extra-payment" 
                                                class="form-control" 
                                                value="0" 
-                                               aria-describedby="extra-monthly-help">
+                                               aria-describedby="extra-payment-help">
                                     </div>
-                                    <small id="extra-monthly-help" class="form-help">
-                                        Additional amount to pay each period
+                                    <small id="extra-payment-help" class="form-help">
+                                        Additional amount to pay each month
                                     </small>
                                 </div>
 
@@ -649,7 +509,8 @@
                             </div>
 
                             <div id="savings-preview" class="savings-preview">
-                                Add extra payments to see potential savings
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Add extra payments to see potential savings</span>
                             </div>
                         </div>
                     </details>
@@ -681,116 +542,143 @@
 
                     <div class="payment-change">
                         <i class="fas fa-sync-alt"></i>
-                        Rates updated Sep 30, 2025
+                        Auto-updated on input changes
                     </div>
                 </div>
 
-                <!-- Payment Breakdown -->
-                <div class="payment-breakdown">
-                    <h3 class="breakdown-title">Payment Breakdown</h3>
+                <!-- Universal Share/Export Actions -->
+                <div class="universal-actions">
+                    <button id="share-btn" class="action-btn" aria-label="Share results">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share</span>
+                    </button>
 
-                    <div class="breakdown-list">
-                        <div class="breakdown-item">
-                            <div class="breakdown-label">
-                                <i class="fas fa-home"></i>
-                                Principal & Interest
-                            </div>
-                            <div id="principal-interest" class="breakdown-value">$2,045</div>
-                            <div id="pi-fill" class="breakdown-bar">
-                                <div class="breakdown-fill" style="width: 82%;"></div>
-                            </div>
-                        </div>
+                    <button id="pdf-download-btn" class="action-btn" aria-label="Export to PDF">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>PDF</span>
+                    </button>
 
-                        <div class="breakdown-item">
-                            <div class="breakdown-label">
-                                <i class="fas fa-coins"></i>
-                                Property Tax
-                            </div>
-                            <div id="monthly-tax" class="breakdown-value">$250</div>
-                            <div id="tax-fill" class="breakdown-bar">
-                                <div class="breakdown-fill" style="width: 10%;"></div>
-                            </div>
-                        </div>
+                    <button id="print-btn" class="action-btn" aria-label="Print results">
+                        <i class="fas fa-print"></i>
+                        <span>Print</span>
+                    </button>
 
-                        <div class="breakdown-item">
-                            <div class="breakdown-label">
-                                <i class="fas fa-shield-alt"></i>
-                                Home Insurance
-                            </div>
-                            <div id="monthly-insurance" class="breakdown-value">$133</div>
-                            <div id="insurance-fill" class="breakdown-bar">
-                                <div class="breakdown-fill" style="width: 5%;"></div>
-                            </div>
-                        </div>
-
-                        <div class="breakdown-item">
-                            <div class="breakdown-label">
-                                <i class="fas fa-percentage"></i>
-                                PMI
-                            </div>
-                            <div id="monthly-pmi" class="breakdown-value">$0</div>
-                            <div id="pmi-fill" class="breakdown-bar">
-                                <div class="breakdown-fill" style="width: 0%;"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <button id="save-calculation" class="action-btn" aria-label="Save calculation">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Save</span>
+                    </button>
                 </div>
 
-                <!-- Loan Summary -->
-                <div class="loan-summary-section">
-                    <div class="summary-grid">
-                        <div class="summary-item">
-                            <div class="summary-label">Loan Amount</div>
-                            <div id="display-loan-amount" class="summary-value">$320,000</div>
-                        </div>
-
-                        <div class="summary-item">
-                            <div class="summary-label">Total Interest</div>
-                            <div id="display-total-interest" class="summary-value">$416,200</div>
-                        </div>
-
-                        <div class="summary-item">
-                            <div class="summary-label">Total Cost</div>
-                            <div id="display-total-cost" class="summary-value">$736,200</div>
-                        </div>
-
-                        <div class="summary-item">
-                            <div class="summary-label">Payoff Date</div>
-                            <div id="display-payoff-date" class="summary-value">Sep 2055</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tabbed Content -->
-                <div class="tabbed-section">
+                <!-- Four Tabbed Content -->
+                <div class="results-tabs">
                     <div class="tab-controls" role="tablist">
-                        <button class="tab-btn active" data-tab="chart" role="tab" aria-selected="true" aria-controls="chart">
-                            <i class="fas fa-chart-line"></i>
-                            Chart
+                        <button class="tab-btn active" data-tab="payment-breakup" role="tab" aria-selected="true" aria-controls="payment-breakup">
+                            <i class="fas fa-chart-pie"></i>
+                            Payment Breakup
                         </button>
-                        <button class="tab-btn" data-tab="insights" role="tab" aria-selected="false" aria-controls="insights">
+                        <button class="tab-btn" data-tab="mortgage-overtime" role="tab" aria-selected="false" aria-controls="mortgage-overtime">
+                            <i class="fas fa-chart-line"></i>
+                            Mortgage Over Time
+                        </button>
+                        <button class="tab-btn" data-tab="ai-insights" role="tab" aria-selected="false" aria-controls="ai-insights">
                             <i class="fas fa-lightbulb"></i>
                             AI Insights
                         </button>
                         <button class="tab-btn" data-tab="amortization" role="tab" aria-selected="false" aria-controls="amortization">
                             <i class="fas fa-table"></i>
-                            Schedule
-                        </button>
-                        <button class="tab-btn" data-tab="sharing" role="tab" aria-selected="false" aria-controls="sharing">
-                            <i class="fas fa-share-alt"></i>
-                            Share
+                            Amortization
                         </button>
                     </div>
 
-                    <!-- Chart Tab -->
-                    <div id="chart" class="tab-content active" role="tabpanel" aria-labelledby="chart-tab">
+                    <!-- Tab 1: Payment Breakup (Default) -->
+                    <div id="payment-breakup" class="tab-content active" role="tabpanel">
+                        <!-- Payment Breakdown -->
+                        <div class="payment-breakdown">
+                            <h3 class="breakdown-title">Monthly Payment Breakdown</h3>
+
+                            <div class="breakdown-list">
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label">
+                                        <i class="fas fa-home"></i>
+                                        Principal & Interest
+                                    </div>
+                                    <div id="principal-interest" class="breakdown-value">$2,045</div>
+                                    <div class="breakdown-bar">
+                                        <div id="pi-fill" class="breakdown-fill" style="width: 82%; background: var(--color-primary);"></div>
+                                    </div>
+                                </div>
+
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label">
+                                        <i class="fas fa-coins"></i>
+                                        Property Tax
+                                    </div>
+                                    <div id="monthly-tax" class="breakdown-value">$250</div>
+                                    <div class="breakdown-bar">
+                                        <div id="tax-fill" class="breakdown-fill" style="width: 10%; background: var(--color-warning);"></div>
+                                    </div>
+                                </div>
+
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label">
+                                        <i class="fas fa-shield-alt"></i>
+                                        Home Insurance
+                                    </div>
+                                    <div id="monthly-insurance" class="breakdown-value">$133</div>
+                                    <div class="breakdown-bar">
+                                        <div id="insurance-fill" class="breakdown-fill" style="width: 5%; background: var(--color-info);"></div>
+                                    </div>
+                                </div>
+
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label">
+                                        <i class="fas fa-percentage"></i>
+                                        PMI
+                                    </div>
+                                    <div id="monthly-pmi" class="breakdown-value">$0</div>
+                                    <div class="breakdown-bar">
+                                        <div id="pmi-fill" class="breakdown-fill" style="width: 0%; background: var(--color-error);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loan Summary -->
+                        <div class="loan-summary-section">
+                            <h3 class="summary-title">Loan Summary</h3>
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <div class="summary-label">Loan Amount</div>
+                                    <div id="display-loan-amount" class="summary-value">$320,000</div>
+                                </div>
+
+                                <div class="summary-item">
+                                    <div class="summary-label">Total Interest</div>
+                                    <div id="display-total-interest" class="summary-value">$416,200</div>
+                                </div>
+
+                                <div class="summary-item">
+                                    <div class="summary-label">Total Cost</div>
+                                    <div id="display-total-cost" class="summary-value">$736,200</div>
+                                </div>
+
+                                <div class="summary-item">
+                                    <div class="summary-label">Payoff Date</div>
+                                    <div id="display-payoff-date" class="summary-value">Sep 2055</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Mortgage Over Time -->
+                    <div id="mortgage-overtime" class="tab-content" role="tabpanel">
                         <div class="chart-header">
-                            <h4>Mortgage Balance Over Time</h4>
-                            <p id="chart-loan-amount">Based on a $320,000 mortgage</p>
+                            <h3>Mortgage Balance Over Time</h3>
+                            <p id="chart-loan-amount">Interactive chart based on your loan details</p>
                         </div>
 
                         <div class="chart-container">
-                            <canvas id="mortgage-timeline-chart" width="400" height="200" aria-label="Mortgage balance chart"></canvas>
+                            <canvas id="mortgage-timeline-chart" width="400" height="250" aria-label="Mortgage balance over time chart"></canvas>
                         </div>
 
                         <div class="chart-controls">
@@ -803,7 +691,7 @@
                                    value="1" 
                                    aria-describedby="year-details">
                             <div id="year-details" class="year-details">
-                                Viewing <span class="current-year">Year 1</span> details
+                                <span class="current-year">Drag to explore different years</span>
                             </div>
                         </div>
 
@@ -828,23 +716,23 @@
                         </div>
                     </div>
 
-                    <!-- AI Insights Tab -->
-                    <div id="insights" class="tab-content" role="tabpanel" aria-labelledby="insights-tab">
+                    <!-- Tab 3: AI Insights -->
+                    <div id="ai-insights" class="tab-content" role="tabpanel">
                         <div class="insights-header">
-                            <h4>AI-Powered Insights</h4>
+                            <h3>AI-Powered Insights</h3>
                             <div class="ai-badge">
                                 <i class="fas fa-robot"></i>
                                 AI Powered
                             </div>
                         </div>
 
-                        <div id="ai-insights" class="insights-list">
+                        <div id="ai-insights-list" class="insights-list">
                             <div class="insight-item success">
                                 <div class="insight-icon">
                                     <i class="fas fa-check-circle"></i>
                                 </div>
                                 <div class="insight-content">
-                                    <h5>Great Down Payment!</h5>
+                                    <h4>Great Down Payment!</h4>
                                     <p>Your 20% down payment eliminates PMI, saving you money each month and showing lenders you're a lower-risk borrower.</p>
                                 </div>
                             </div>
@@ -854,8 +742,8 @@
                                     <i class="fas fa-lightbulb"></i>
                                 </div>
                                 <div class="insight-content">
-                                    <h5>Consider Extra Payments</h5>
-                                    <p>Adding just $200/month extra could save you over $89,000 in interest and pay off your loan 8 years early.</p>
+                                    <h4>Consider Extra Payments</h4>
+                                    <p id="extra-payment-insight">Adding just $200/month extra could save you over $89,000 in interest and pay off your loan 8 years early.</p>
                                 </div>
                             </div>
 
@@ -864,15 +752,20 @@
                                     <i class="fas fa-search"></i>
                                 </div>
                                 <div class="insight-content">
-                                    <h5>Rate Shopping Opportunity</h5>
-                                    <p>Your current rate is slightly above market average. Shopping with 3-5 lenders could potentially save you 0.25-0.5%.</p>
+                                    <h4>Rate Shopping Opportunity</h4>
+                                    <p>Compare rates from multiple lenders to ensure you're getting the best deal available in today's market.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Amortization Schedule Tab -->
-                    <div id="amortization" class="tab-content" role="tabpanel" aria-labelledby="amortization-tab">
+                    <!-- Tab 4: Amortization Schedule -->
+                    <div id="amortization" class="tab-content" role="tabpanel">
+                        <div class="amortization-header">
+                            <h3>Payment Schedule</h3>
+                            <p>Detailed monthly payment breakdown over the life of your loan</p>
+                        </div>
+
                         <div class="table-container">
                             <table class="amortization-table" role="table">
                                 <thead>
@@ -887,7 +780,10 @@
                                 </thead>
                                 <tbody id="amortization-table-body">
                                     <tr>
-                                        <td colspan="6" class="empty-state">Calculate to view payment schedule</td>
+                                        <td colspan="6" class="empty-state">
+                                            <i class="fas fa-calculator"></i>
+                                            Click "Calculate Payment" to view detailed payment schedule
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -895,9 +791,10 @@
 
                         <div class="table-pagination">
                             <div class="pagination-info">
-                                Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+                                <span>Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+                                <span id="payment-range-info"></span>
                             </div>
-                            <div>
+                            <div class="pagination-controls">
                                 <button id="prev-page" class="btn btn--ghost btn--sm" disabled>
                                     <i class="fas fa-chevron-left"></i>
                                     Previous
@@ -909,46 +806,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Sharing Tab -->
-                    <div id="sharing" class="tab-content" role="tabpanel" aria-labelledby="sharing-tab">
-                        <div class="sharing-section">
-                            <h4>Share Your Results</h4>
-                            <p>Share your mortgage calculation results with family, friends, or your real estate agent.</p>
-
-                            <div class="share-actions">
-                                <button id="share-btn" class="btn btn--primary">
-                                    <i class="fas fa-share-alt"></i>
-                                    Share Results
-                                </button>
-
-                                <button id="pdf-download-btn" class="btn btn--secondary">
-                                    <i class="fas fa-file-pdf"></i>
-                                    Export PDF
-                                </button>
-
-                                <button id="print-btn" class="btn btn--secondary">
-                                    <i class="fas fa-print"></i>
-                                    Print
-                                </button>
-
-                                <button id="save-calculation" class="btn btn--secondary">
-                                    <i class="fas fa-bookmark"></i>
-                                    Save Calculation
-                                </button>
-
-                                <button id="compare-btn" class="btn btn--secondary">
-                                    <i class="fas fa-balance-scale"></i>
-                                    Compare Scenarios
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
             <!-- Sponsor/Advertising Column -->
-            <aside class="calculator-sponsor-column" role="complementary" aria-label="Partner offers and market information">
+            <aside class="calculator-sponsor-column" role="complementary" aria-label="Partner offers and resources">
                 <!-- Sponsor Card -->
                 <div class="sponsor-card card">
                     <header class="panel-header">
@@ -1012,6 +874,19 @@
                                 Get Quotes
                             </button>
                         </div>
+
+                        <div class="sponsor-item">
+                            <div class="sponsor-logo">
+                                💡
+                            </div>
+                            <h4>Mortgage Tips & Guides</h4>
+                            <p>Expert advice on home buying, refinancing, and maximizing your mortgage savings.</p>
+
+                            <button class="sponsor-btn">
+                                <i class="fas fa-book"></i>
+                                Learn More
+                            </button>
+                        </div>
                     </div>
 
                     <div class="sponsor-disclaimer">
@@ -1021,58 +896,6 @@
                                 This compensation does not influence our recommendations or calculations.
                             </small>
                         </p>
-                    </div>
-                </div>
-
-                <!-- Market Information Card -->
-                <div class="market-card card">
-                    <header class="panel-header">
-                        <h3>
-                            <i class="fas fa-chart-line"></i>
-                            Live Market Data
-                        </h3>
-                    </header>
-
-                    <div class="market-content">
-                        <div class="market-item">
-                            <span class="market-label">30-Year Fixed</span>
-                            <span class="market-rate">6.43%</span>
-                            <span class="market-trend trend-up">
-                                <i class="fas fa-arrow-up"></i>
-                                +0.05%
-                            </span>
-                        </div>
-
-                        <div class="market-item">
-                            <span class="market-label">15-Year Fixed</span>
-                            <span class="market-rate">5.73%</span>
-                            <span class="market-trend trend-down">
-                                <i class="fas fa-arrow-down"></i>
-                                -0.02%
-                            </span>
-                        </div>
-
-                        <div class="market-item">
-                            <span class="market-label">5/1 ARM</span>
-                            <span class="market-rate">5.90%</span>
-                            <span class="market-trend trend-up">
-                                <i class="fas fa-arrow-up"></i>
-                                +0.10%
-                            </span>
-                        </div>
-
-                        <div class="market-item">
-                            <span class="market-label">FHA 30-Year</span>
-                            <span class="market-rate">6.44%</span>
-                            <span class="market-trend trend-up">
-                                <i class="fas fa-arrow-up"></i>
-                                +0.03%
-                            </span>
-                        </div>
-
-                        <div class="market-update">
-                            <small id="current-date-time">Last updated: Sep 30, 2025, 2:47 PM IST</small>
-                        </div>
                     </div>
                 </div>
             </aside>
@@ -1090,7 +913,7 @@
                     </div>
                     <p>
                         The world's most advanced mortgage calculator with AI-powered insights, 
-                        voice control, and real-time market data. Make smarter home financing decisions.
+                        voice control, and real-time calculations. Make smarter home financing decisions.
                     </p>
                     <div class="footer-social">
                         <a href="#" aria-label="Facebook">
