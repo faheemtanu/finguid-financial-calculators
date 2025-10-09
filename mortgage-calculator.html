@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    <!-- Enhanced SEO Meta Tags for American Audiences -->
+    <!-- Enhanced SEO Meta Tags for American Audiences & AI-Friendly -->
     <title>🇺🇸 World's First AI Mortgage Calculator 2025 | Live Federal Reserve Rates | Voice Enabled</title>
-    <meta name="description" content="America's most advanced AI-powered mortgage calculator with live FRED API rates, voice commands, perfect down payment sync, and real-time insights. Built for Americans by Americans.">
-    <meta name="keywords" content="USA mortgage calculator 2025, AI mortgage calculator, FRED API rates, voice calculator, PMI calculator, FHA VA USDA loans, federal reserve data, American home loans">
+    <meta name="description" content="America's most advanced AI-powered mortgage calculator with live FRED API rates, voice commands, perfect down payment sync, payment schedule options, and real-time insights. Built for Americans by Americans.">
+    <meta name="keywords" content="USA mortgage calculator 2025, AI mortgage calculator, FRED API rates, voice calculator, PMI calculator, FHA VA USDA loans, federal reserve data, American home loans, payment schedule">
     <meta name="author" content="World's First AI Calculator Platform - Built for Americans">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="en-US">
@@ -41,8 +41,8 @@
     <link rel="icon" href="/usa-mortgage-icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">
     <link rel="manifest" href="/app.webmanifest">
-    <meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#1e3a8a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#218089" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#32b8c6" media="(prefers-color-scheme: dark)">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="USA Mortgage Calculator">
@@ -55,11 +55,11 @@
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
     
     <!-- Enhanced Fonts for Better Reading -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=FKGroteskNeue:wght@400;500;550;600&family=Geist:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
     
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="mortgage-calculator.css">
+    <link rel="stylesheet" href="mortgage-calculator-final.css">
     
     <!-- Chart.js for Enhanced Colorful Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js" defer></script>
@@ -67,6 +67,7 @@
     
     <!-- jsPDF for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     
     <!-- Enhanced Schema.org Markup for Google AI -->
     <script type="application/ld+json">
@@ -74,7 +75,7 @@
         "@context": "https://schema.org",
         "@type": ["WebApplication", "FinancialService"],
         "name": "World's First AI Mortgage Calculator 2025",
-        "description": "America's most advanced AI-powered mortgage calculator with live Federal Reserve rates, voice commands, and comprehensive loan analysis. Built for Americans by Americans.",
+        "description": "America's most advanced AI-powered mortgage calculator with live Federal Reserve rates, voice commands, payment schedules, and comprehensive loan analysis. Built for Americans by Americans.",
         "url": "https://worldsfirstai-calculator.com/usa-mortgage",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Any",
@@ -97,7 +98,7 @@
         },
         "datePublished": "2025-01-01",
         "dateModified": "2025-10-10",
-        "keywords": ["mortgage calculator", "home loan", "FRED API", "AI calculator", "voice commands", "USA mortgage", "federal reserve data"],
+        "keywords": ["mortgage calculator", "home loan", "FRED API", "AI calculator", "voice commands", "USA mortgage", "federal reserve data", "payment schedule"],
         "inLanguage": "en-US",
         "isAccessibleForFree": true,
         "audience": {
@@ -128,7 +129,7 @@
     </script>
 </head>
 
-<body class="font-adjustable">
+<body class="font-adjustable" data-color-scheme="light">
     <!-- Skip Links for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <a href="#calculator-inputs" class="skip-link">Skip to calculator</a>
@@ -137,29 +138,10 @@
     <div id="sr-announcements" aria-live="polite" aria-atomic="true" class="sr-only"></div>
     <div id="sr-status" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
 
-    <!-- Enhanced Header with Federal Trust Branding -->
-    <header class="site-header" role="banner">
+    <!-- Enhanced Header with Animation -->
+    <header class="site-header animated-header" role="banner">
         <div class="header-container">
-            <!-- Enhanced Federal Trust Bar - No Size Increase -->
-            <div class="federal-trust-bar compact" role="complementary" aria-label="Federal data verification">
-                <div class="trust-indicators">
-                    <div class="trust-badge fed-data" title="Powered by Federal Reserve Economic Data">
-                        <i class="fas fa-university" aria-hidden="true"></i>
-                        <span class="trust-text">FRED API</span>
-                        <span class="live-indicator">LIVE</span>
-                    </div>
-                    <div class="trust-badge secure" title="Bank-Level Security">
-                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
-                        <span class="trust-text">Secure</span>
-                    </div>
-                    <div class="trust-badge ai-powered" title="AI-Powered Analysis">
-                        <i class="fas fa-brain" aria-hidden="true"></i>
-                        <span class="trust-text">AI Powered</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Logo and Brand -->
+            <!-- Enhanced USA Brand -->
             <div class="brand-section">
                 <a href="#" class="logo-link" aria-label="World's First AI Calculator - USA Mortgage Calculator Home">
                     <div class="logo-container">
@@ -172,8 +154,16 @@
                 </a>
             </div>
             
+            <!-- Animated Navigation Links -->
+            <nav class="nav-links animated-nav" role="navigation" aria-label="Main navigation">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+            
             <!-- Enhanced Accessibility Controls with Working Animations -->
-            <div class="accessibility-controls" id="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
+            <div class="accessibility-controls animated-controls" id="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
                 <!-- Working Font Controls -->
                 <div class="font-controls" role="group" aria-label="Font Size Controls">
                     <button type="button" class="control-btn font-btn" id="font-decrease" 
@@ -218,51 +208,30 @@
                 </button>
             </div>
             
-            <!-- Federal Attribution - Compact -->
-            <div class="federal-attribution compact">
-                <small>Data: Federal Reserve Economic Data (FRED)</small>
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                <span class="hamburger"></span>
+                <span class="hamburger"></span>
+                <span class="hamburger"></span>
+            </button>
+        </div>
+        
+        <!-- Animated Middle Section -->
+        <div class="header-middle animated-middle">
+            <div class="header-middle-content">
+                <div class="tagline">Calculate Your Perfect American Home Loan</div>
+                <div class="features-quick">
+                    <span class="feature-quick">Live FRED Data</span>
+                    <span class="feature-quick">Voice Commands</span>
+                    <span class="feature-quick">AI Insights</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section with Federal Trust (No Size Increase) -->
-    <section class="hero-section compact" role="banner">
-        <div class="hero-container">
-            <h1 class="hero-title">
-                <span class="flag-emoji" role="img" aria-label="United States Flag">🇺🇸</span>
-                World's First AI Mortgage Calculator
-                <span class="year-badge">2025</span>
-            </h1>
-            
-            <p class="hero-description">
-                Calculate your perfect American home loan with live Federal Reserve rates, 
-                AI-powered insights, voice commands, and perfect down payment synchronization.
-            </p>
-            
-            <div class="hero-features" role="list" aria-label="Key features">
-                <div class="feature-badge" role="listitem">
-                    <i class="fas fa-microphone-alt feature-icon" aria-hidden="true"></i>
-                    <span class="feature-text">Voice Commands</span>
-                </div>
-                <div class="feature-badge" role="listitem">
-                    <i class="fas fa-chart-line feature-icon" aria-hidden="true"></i>
-                    <span class="feature-text">Live FRED Data</span>
-                </div>
-                <div class="feature-badge" role="listitem">
-                    <i class="fas fa-brain feature-icon" aria-hidden="true"></i>
-                    <span class="feature-text">AI Insights</span>
-                </div>
-                <div class="feature-badge" role="listitem">
-                    <i class="fas fa-mobile-alt feature-icon" aria-hidden="true"></i>
-                    <span class="feature-text">All Devices</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Calculator Container with 30-40-30 Layout -->
+    <!-- Main Calculator Container with Perfect 30-40-30 Layout -->
     <main id="main-content" class="calculator-main" role="main">
-        <div class="calculator-container layout-30-40-30">
+        <div class="calculator-container">
             
             <!-- Left Section: Input Values (30%) -->
             <section class="input-section" role="form" aria-labelledby="input-section-title" id="calculator-inputs">
@@ -296,6 +265,7 @@
                                    aria-describedby="home-price-help" placeholder="450,000"
                                    oninput="updateCalculation()">
                         </div>
+                        <small id="home-price-help" class="help-text">Property tax varies by location and is typically 0.5% to 2.5% of home value</small>
                     </div>
 
                     <!-- Enhanced Down Payment with Perfect Synchronization -->
@@ -450,7 +420,7 @@
                         </div>
                     </div>
 
-                    <!-- Reduced Size Loan Type Cards (Half Size) -->
+                    <!-- Half Size Loan Type Cards -->
                     <div class="loan-type-section">
                         <h3 class="subsection-title">
                             <span class="step-number">🏦</span>
@@ -526,6 +496,7 @@
                             <input type="text" id="property-tax" class="form-control" value="9,000" 
                                    placeholder="9,000" oninput="updateCalculation()">
                         </div>
+                        <small class="help-text">Property tax varies by location and is typically 0.5% to 2.5% of home value</small>
                     </div>
 
                     <div class="form-group">
@@ -541,6 +512,7 @@
                             <input type="text" id="home-insurance" class="form-control" value="1,800" 
                                    placeholder="1,800" oninput="updateCalculation()">
                         </div>
+                        <small class="help-text">Home insurance typically costs 0.3% to 0.8% of home value annually</small>
                     </div>
 
                     <!-- Auto-Calculated PMI -->
@@ -597,6 +569,53 @@
                                    placeholder="0" oninput="updateCalculation()">
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="extra-weekly" class="form-label">
+                            <span class="label-content">
+                                <i class="fas fa-calendar-week label-icon" aria-hidden="true"></i>
+                                Extra Weekly Payment
+                            </span>
+                            <span class="label-help">Bi-weekly strategy for faster payoff</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-prefix" aria-hidden="true">$</span>
+                            <input type="text" id="extra-weekly" class="form-control" value="0" 
+                                   placeholder="0" oninput="updateCalculation()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Closing Costs Estimation -->
+                <div class="form-section">
+                    <h3 class="subsection-title">
+                        <span class="step-number">4</span>
+                        Closing Costs Estimation
+                    </h3>
+
+                    <div class="form-group">
+                        <label for="closing-costs-percentage" class="form-label">
+                            <span class="label-content">
+                                <i class="fas fa-percent label-icon" aria-hidden="true"></i>
+                                Closing Costs Percentage
+                            </span>
+                            <span class="label-help">Typical range 2-5% of home price</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="closing-costs-percentage" class="form-control" 
+                                   min="0" max="10" step="0.1" value="3" 
+                                   placeholder="3" oninput="updateCalculation()">
+                            <span class="input-suffix" aria-hidden="true">%</span>
+                        </div>
+                        <div class="closing-costs-display">
+                            <span class="closing-costs-amount" id="closing-costs-amount">= $13,500</span>
+                            <span class="closing-costs-note">Typical closing costs range from 2-5% of home price</span>
+                        </div>
+                    </div>
+
+                    <div class="auto-update-notice">
+                        All calculations update automatically as you type - no calculate button needed!
+                    </div>
                 </div>
             </section>
 
@@ -619,9 +638,9 @@
                     <div class="payment-amount">
                         <span class="payment-value" id="total-payment" aria-live="polite">$2,768</span>
                         <div class="payment-breakdown">
-                            <span class="breakdown-item" id="pi-breakdown">$2,025 P&I</span>
+                            <span class="breakdown-item" id="pi-summary">$2,025 P&I</span>
                             <span class="breakdown-separator">+</span>
-                            <span class="breakdown-item" id="escrow-breakdown">$743 Escrow</span>
+                            <span class="breakdown-item" id="escrow-summary">$743 Escrow</span>
                         </div>
                     </div>
                 </div>
@@ -680,6 +699,16 @@
                             <div class="summary-details">
                                 <span class="summary-label">Payoff Date</span>
                                 <span class="summary-value" id="payoff-date-summary">Oct 2054</span>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-item closing-costs">
+                            <div class="summary-icon">
+                                <i class="fas fa-file-contract" aria-hidden="true"></i>
+                            </div>
+                            <div class="summary-details">
+                                <span class="summary-label">Closing Costs</span>
+                                <span class="summary-value" id="closing-costs-summary">$13,500</span>
                             </div>
                         </div>
                     </div>
@@ -750,6 +779,80 @@
                     
                     <div class="insights-container" id="insights-container" aria-live="polite">
                         <!-- Real AI insights will be populated here based on user input -->
+                        <div class="insight-item savings">
+                            <h4 class="insight-title">Smart Savings Opportunity</h4>
+                            <p class="insight-text">Adding just $100 extra monthly payment could save you $45,000 in interest and pay off your loan 4.2 years earlier!</p>
+                        </div>
+                        
+                        <div class="insight-item rate">
+                            <h4 class="insight-title">Rate Optimization</h4>
+                            <p class="insight-text">Your current rate is competitive! With excellent credit, you could potentially qualify for 0.25% lower rates with different lenders.</p>
+                        </div>
+                        
+                        <div class="insight-item down-payment">
+                            <h4 class="insight-title">Down Payment Analysis</h4>
+                            <p class="insight-text">Your 20% down payment eliminates PMI, saving $225/month. Great choice for building equity faster!</p>
+                        </div>
+                        
+                        <div class="insight-item market">
+                            <h4 class="insight-title">Market Insights</h4>
+                            <p class="insight-text">Property values in your area have increased 8.2% this year. Your investment timing looks favorable for long-term appreciation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Payment Schedule Section -->
+                <div class="payment-schedule-section">
+                    <h3 class="schedule-title">
+                        <i class="fas fa-calendar-alt schedule-icon" aria-hidden="true"></i>
+                        Payment Schedule
+                        <div class="schedule-options">
+                            <button type="button" class="schedule-btn active" data-schedule="monthly" 
+                                    onclick="toggleScheduleType('monthly')" aria-pressed="true">
+                                Monthly
+                            </button>
+                            <button type="button" class="schedule-btn" data-schedule="yearly" 
+                                    onclick="toggleScheduleType('yearly')" aria-pressed="false">
+                                Yearly
+                            </button>
+                        </div>
+                    </h3>
+
+                    <div class="schedule-container">
+                        <div class="schedule-table-wrapper">
+                            <table class="schedule-table" id="amortization-table" role="table" 
+                                   aria-label="Amortization schedule">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Payment</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Payment</th>
+                                        <th scope="col">Principal</th>
+                                        <th scope="col">Interest</th>
+                                        <th scope="col">Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedule-tbody">
+                                    <tr>
+                                        <td colspan="6" class="schedule-loading">Auto-calculating payment schedule...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="schedule-pagination">
+                            <button type="button" class="pagination-btn" id="prev-page" 
+                                    onclick="changePage(-1)" disabled>
+                                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                Previous
+                            </button>
+                            <span class="pagination-info" id="pagination-info">Payments 1-6 of 360</span>
+                            <button type="button" class="pagination-btn" id="next-page" 
+                                    onclick="changePage(1)">
+                                Next
+                                <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -776,13 +879,18 @@
                             <i class="fas fa-print" aria-hidden="true"></i>
                             <span>Print</span>
                         </button>
+                        <button class="action-btn secondary" onclick="exportSchedule()"
+                                aria-label="Export payment schedule">
+                            <i class="fas fa-download" aria-hidden="true"></i>
+                            <span>Export</span>
+                        </button>
                     </div>
                 </div>
             </section>
 
             <!-- Right Section: Advertising/Sponsor (30%) -->
-            <aside class="sponsor-section" role="complementary" aria-labelledby="sponsor-section-title">
-                <h2 class="section-title" id="sponsor-section-title">
+            <aside class="sidebar-section" role="complementary" aria-labelledby="sidebar-section-title">
+                <h2 class="section-title" id="sidebar-section-title">
                     <i class="fas fa-handshake section-icon" aria-hidden="true"></i>
                     Trusted Partners
                 </h2>
@@ -973,6 +1081,97 @@
         </div>
     </div>
 
+    <!-- Enhanced Footer -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="usa-flag" role="img" aria-label="USA Flag">🇺🇸</span>
+                        <div class="footer-logo-text">
+                            <div class="footer-brand-name">World's First AI Calculator</div>
+                            <div class="footer-brand-tagline">Built for Americans by Americans</div>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        The most advanced AI-powered mortgage calculator with live Federal Reserve rates, 
+                        voice commands, and comprehensive loan analysis. Trusted by millions of Americans.
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Calculators</h4>
+                        <ul>
+                            <li><a href="#">Mortgage Calculator</a></li>
+                            <li><a href="#">Refinance Calculator</a></li>
+                            <li><a href="#">Auto Loan Calculator</a></li>
+                            <li><a href="#">Personal Loan Calculator</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Mortgage Guide</a></li>
+                            <li><a href="#">FRED Data Explained</a></li>
+                            <li><a href="#">Loan Types Guide</a></li>
+                            <li><a href="#">Credit Score Tips</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">Voice Commands Guide</a></li>
+                            <li><a href="#">Accessibility</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Disclaimer</a></li>
+                            <li><a href="#">FRED API Terms</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        <strong>Disclaimer:</strong> This calculator provides estimates for informational purposes only. 
+                        Actual loan terms, rates, and payments may vary. Interest rates are sourced from the Federal Reserve Economic Data (FRED) 
+                        but actual rates offered by lenders may differ. Consult with qualified mortgage professionals for personalized advice.
+                    </p>
+                    <p>
+                        FRED® API is a registered trademark of the Federal Reserve Bank of St. Louis. 
+                        This application uses FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.
+                    </p>
+                </div>
+                
+                <div class="footer-copyright">
+                    <div class="copyright-left">
+                        <p>&copy; 2025 World's First AI Calculator Platform. All rights reserved.</p>
+                        <p>Data provided by Federal Reserve Economic Data (FRED), Federal Reserve Bank of St. Louis</p>
+                    </div>
+                    <div class="footer-badges">
+                        <span class="badge">AI Powered</span>
+                        <span class="badge">FRED API</span>
+                        <span class="badge">Voice Enabled</span>
+                        <span class="badge">Mobile Ready</span>
+                        <span class="badge">WCAG 2.1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <!-- Loading Indicator -->
     <div id="loading-indicator" class="loading-overlay" aria-hidden="true">
         <div class="loading-content">
@@ -997,6 +1196,6 @@
     </div>
 
     <!-- Main JavaScript -->
-    <script src="mortgage-calculator.js" defer></script>
+    <script src="mortgage-calculator-final.js" defer></script>
 </body>
 </html>
