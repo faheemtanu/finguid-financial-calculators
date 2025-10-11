@@ -1,5 +1,5 @@
 /* ========================================================================== */
-/* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v25.0               */
+/* HOME LOAN PRO - AI‑POWERED MORTGAGE CALCULATOR - ENHANCED CSS v25.0     */
 /* Perfect Light/Dark Mode Visibility, Payment Schedules, Working Features  */
 /* Layout: Left 30% | Middle 40% | Right 30% + Header Animation            */
 /* ALL 21 IMPROVEMENTS IMPLEMENTED - PRODUCTION READY                       */
@@ -1032,27 +1032,6 @@ body {
     50% { opacity: 1; }
 }
 
-.refresh-rate-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.refresh-rate-btn:hover {
-    background: var(--color-primary-light);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    transform: rotate(180deg);
-}
-
 .federal-attribution {
     font-size: var(--font-size-calculated-xs);
     color: var(--color-text-muted);
@@ -1123,8 +1102,8 @@ body {
     margin-bottom: var(--space-2);
 }
 
-/* Half Size Loan Type Cards */
-.loan-type-section {
+/* Compact Loan Type Cards */
+.loan-type-section.compact {
     background: linear-gradient(135deg, var(--color-primary-light), rgba(20, 184, 166, 0.03));
     padding: var(--space-6);
     border-radius: var(--radius-2xl);
@@ -1132,7 +1111,7 @@ body {
     margin-bottom: var(--space-6);
 }
 
-.loan-type-grid.half-size {
+.loan-type-grid.compact {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-3);
@@ -2656,50 +2635,46 @@ body {
     border: none;
     color: var(--color-text-muted);
     cursor: pointer;
-    padding: var(--space-1);
-    border-radius: var(--radius-base);
-    transition: all var(--transition-fast);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: var(--font-size-calculated-sm);
+    transition: color var(--transition-fast);
 }
 
 .toast-close:hover {
-    background: var(--color-surface-secondary);
     color: var(--color-text);
 }
 
 /* Voice Status Indicator */
 .voice-status {
     position: fixed;
-    top: var(--space-20);
-    right: var(--space-4);
-    z-index: var(--z-modal);
+    bottom: var(--space-4);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-error-500);
+    color: var(--color-white);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-tooltip);
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition-normal);
 }
 
-.voice-status.show {
+.voice-status.active {
     opacity: 1;
     visibility: visible;
+    animation: voiceStatusPulse var(--duration-1000) ease-in-out infinite;
+}
+
+@keyframes voiceStatusPulse {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
 }
 
 .voice-status-content {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    background: var(--color-error-500);
-    color: var(--color-white);
-    border-radius: var(--radius-full);
-    box-shadow: var(--shadow-lg);
-    animation: voicePulseStatus var(--duration-1000) ease-in-out infinite;
-}
-
-@keyframes voicePulseStatus {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.02); }
+    gap: var(--space-2);
 }
 
 .voice-status-icon {
@@ -2716,96 +2691,82 @@ body {
     border: none;
     color: var(--color-white);
     cursor: pointer;
-    padding: var(--space-1);
-    border-radius: var(--radius-base);
-    transition: all var(--transition-fast);
+    font-size: var(--font-size-calculated-sm);
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
 }
 
 .voice-status-close:hover {
-    background: rgba(255, 255, 255, 0.2);
+    opacity: 1;
 }
 
-/* Screen Reader Mode */
-.screen-reader-mode {
-    font-size: 1.2em !important;
-    line-height: 1.8 !important;
-    letter-spacing: 0.05em !important;
-}
-
-.screen-reader-mode * {
-    animation: none !important;
-    transition: none !important;
-}
-
-/* Responsive Design - Enhanced */
-@media (max-width: 1279px) {
+/* Responsive Design */
+@media (max-width: 1200px) {
     .calculator-container {
-        grid-template-columns: 1fr;
-        gap: var(--space-6);
+        grid-template-columns: 35% 65%;
     }
     
-    .header-middle-content {
-        padding: var(--space-2) var(--space-4);
-    }
-    
-    .tagline {
-        font-size: var(--font-size-calculated-base);
-    }
-    
-    .features-quick {
-        justify-content: center;
-        gap: var(--space-2);
-    }
-}
-
-@media (max-width: 1023px) {
-    .header-container {
-        min-height: 3.5rem;
-        flex-wrap: wrap;
-    }
-    
-    .nav-links {
+    .sidebar-section {
         display: none;
-    }
-    
-    .mobile-menu-toggle {
-        display: flex;
-    }
-    
-    .term-chips.compact-75 {
-        transform: scale(0.85);
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .loan-type-grid.half-size {
-        grid-template-columns: 1fr;
-        transform: scale(1);
-    }
-    
-    .summary-grid,
-    .details-grid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     }
     
     .footer-content {
         grid-template-columns: 1fr;
         gap: var(--space-8);
     }
+}
+
+@media (max-width: 768px) {
+    .calculator-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .header-container {
+        flex-wrap: wrap;
+        gap: var(--space-3);
+    }
+    
+    .nav-links {
+        display: none;
+    }
+    
+    .accessibility-controls {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    .summary-grid,
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
     
     .footer-links {
         grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-6);
+    }
+    
+    .footer-copyright {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-3);
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 480px) {
     .calculator-container {
-        padding: var(--space-6) var(--space-3);
+        padding: var(--space-4);
     }
     
     .input-section,
     .results-section,
     .sidebar-section {
-        padding: var(--space-5);
+        padding: var(--space-4);
     }
     
     .payment-value {
@@ -2817,20 +2778,7 @@ body {
         gap: var(--space-1);
     }
     
-    .summary-grid,
-    .details-grid {
-        grid-template-columns: 1fr;
-    }
-    
     .action-buttons {
-        flex-direction: column;
-    }
-    
-    .voice-modal-content {
-        width: 95%;
-    }
-    
-    .voice-modal-footer {
         flex-direction: column;
     }
     
@@ -2838,111 +2786,71 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .footer-copyright {
-        flex-direction: column;
-        text-align: center;
+    .term-chips.compact-75 {
+        transform: scale(0.65);
     }
     
-    .percentage-chips {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .schedule-title {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .accessibility-controls {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .font-controls {
-        border-right: none;
-        padding-right: var(--space-2);
-        border-bottom: 1px solid var(--color-border);
-        padding-bottom: var(--space-2);
-        margin-bottom: var(--space-2);
-    }
-}
-
-@media (max-width: 479px) {
-    .header-container {
-        padding: 0 var(--space-2);
-    }
-    
-    .calculator-container {
-        padding: var(--space-4) var(--space-2);
-    }
-    
-    .input-section,
-    .results-section,
-    .sidebar-section {
-        padding: var(--space-4);
-    }
-    
-    .voice-modal-content {
-        margin: var(--space-4);
-        width: calc(100% - 2rem);
-    }
-    
-    .toast-container {
-        left: var(--space-2);
-        right: var(--space-2);
-    }
-    
-    .toast {
-        max-width: none;
+    .loan-type-grid.compact {
+        grid-template-columns: 1fr;
+        transform: scale(0.8);
     }
 }
 
 /* Print Styles */
 @media print {
-    * {
-        background: var(--color-white) !important;
-        color: var(--color-black) !important;
-        box-shadow: none !important;
-    }
-    
-    .accessibility-controls,
-    .voice-modal,
-    .sharing-section,
+    .site-header,
     .sidebar-section,
-    .loading-overlay,
-    .toast-container,
-    .voice-status {
+    .sharing-section,
+    .voice-status,
+    .toast-container {
         display: none !important;
     }
     
     .calculator-container {
-        grid-template-columns: 1fr 1fr;
-        gap: var(--space-4);
+        grid-template-columns: 1fr;
+        padding: 0;
+        gap: 0;
     }
     
-    .site-header,
-    .header-middle {
-        position: static;
+    .input-section,
+    .results-section {
+        border: none;
         box-shadow: none;
+        padding: var(--space-4);
+        margin: 0;
+    }
+    
+    .main-payment-card {
+        background: #f8f9fa !important;
+        color: #000 !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .chart-container {
+        page-break-inside: avoid;
     }
 }
 
-/* High Contrast Mode */
+/* High Contrast Mode Support */
 @media (prefers-contrast: high) {
     :root {
         --color-border: var(--color-black);
+        --color-border-light: var(--color-gray-900);
         --color-border-strong: var(--color-black);
     }
     
-    .control-btn {
-        border-width: 3px;
-    }
-    
-    .form-control {
-        border-width: 3px;
+    [data-color-scheme="dark"] {
+        --color-border: var(--color-white);
+        --color-border-light: var(--color-gray-300);
+        --color-border-strong: var(--color-white);
     }
 }
 
-/* Reduced Motion */
+/* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -2953,58 +2861,3 @@ body {
         scroll-behavior: auto !important;
     }
 }
-
-/* Focus Styles for Better Accessibility */
-*:focus {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-.control-btn:focus {
-    outline-color: var(--color-primary);
-    outline-width: 3px;
-}
-
-.form-control:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.3);
-}
-
-/* Utility Classes */
-.highlight-update {
-    animation: highlightFlash var(--duration-700) ease-out;
-}
-
-@keyframes highlightFlash {
-    0% { background-color: rgba(20, 184, 166, 0.3); }
-    100% { background-color: transparent; }
-}
-
-.animate-bounce {
-    animation: bounce var(--duration-500) ease-in-out;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-.animate-fade-in {
-    animation: fadeIn var(--duration-300) ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.focus-within {
-    border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.1) !important;
-}
-
-/* ========================================================================== */
-/* END OF WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v25.0        */
-/* ALL 21 IMPROVEMENTS IMPLEMENTED - PERFECT VISIBILITY & ANIMATIONS        */
-/* Layout: Left 30% | Middle 40% | Right 30% - PRODUCTION READY             */
-/* ========================================================================== */
