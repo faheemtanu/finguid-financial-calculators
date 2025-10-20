@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" data-color-scheme="dark">
+<html lang="en" class="no-js" data-color-scheme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -3358,7 +3358,7 @@
     </style>
 </head>
 
-<body class="font-adjustable" data-color-scheme="dark">
+<body class="font-adjustable" data-color-scheme="light">
     <!-- Skip Links for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <a href="#calculator-inputs" class="skip-link">Skip to calculator</a>
@@ -3395,7 +3395,7 @@
             <div class="accessibility-controls animated-controls" id="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
                 <!-- Working Font Controls -->
                 <div class="font-controls" role="group" aria-label="Font Size Controls">
-                    <button type="button" class="control-btn font-btn" id="font-decrease" 
+                    <button type="button" class="control-btn font-btn active" id="font-decrease" 
                             aria-label="Decrease font size" title="Make text smaller"
                             onclick="adjustFontSize('decrease')">
                         <span class="control-icon" aria-hidden="true">-A-</span>
@@ -3416,8 +3416,8 @@
                 <button type="button" class="control-btn theme-btn" id="theme-toggle" 
                         aria-label="Toggle dark mode" title="Switch between light and dark theme"
                         onclick="toggleTheme()">
-                    <i class="fas fa-sun theme-icon" aria-hidden="true"></i>
-                    <span class="control-label">Light</span>
+                    <i class="fas fa-moon theme-icon" aria-hidden="true"></i>
+                    <span class="control-label">Dark</span>
                 </button>
                 
                 <!-- Working Voice Control -->
@@ -3526,27 +3526,27 @@
 
                         <!-- Working Percentage Chips -->
                         <div class="percentage-chips" role="group" aria-label="Quick down payment percentages">
-                            <button type="button" class="percentage-chip" onclick="setDownPaymentChip(3.5)" 
+                            <button type="button" class="percentage-chip" onclick="setDownPaymentChip(3.5, event)" 
                                     aria-label="3.5 percent down payment">
                                 <span class="chip-value">3.5%</span>
                                 <span class="chip-label">FHA Min</span>
                             </button>
-                            <button type="button" class="percentage-chip" onclick="setDownPaymentChip(5)"
+                            <button type="button" class="percentage-chip" onclick="setDownPaymentChip(5, event)"
                                     aria-label="5 percent down payment">
                                 <span class="chip-value">5%</span>
                                 <span class="chip-label">Conv Min</span>
                             </button>
-                            <button type="button" class="percentage-chip" onclick="setDownPaymentChip(10)"
+                            <button type="button" class="percentage-chip" onclick="setDownPaymentChip(10, event)"
                                     aria-label="10 percent down payment">
                                 <span class="chip-value">10%</span>
                                 <span class="chip-label">Good</span>
                             </button>
-                            <button type="button" class="percentage-chip active" onclick="setDownPaymentChip(20)"
+                            <button type="button" class="percentage-chip active" onclick="setDownPaymentChip(20, event)"
                                     aria-label="20 percent down payment">
                                 <span class="chip-value">20%</span>
                                 <span class="chip-label">No PMI</span>
                             </button>
-                            <button type="button" class="percentage-chip" onclick="setDownPaymentChip(25)"
+                            <button type="button" class="percentage-chip" onclick="setDownPaymentChip(25, event)"
                                     aria-label="25 percent down payment">
                                 <span class="chip-value">25%</span>
                                 <span class="chip-label">Excellent</span>
@@ -3691,19 +3691,19 @@
                         
                         <!-- 75% Size Chips -->
                         <div class="term-chips compact-75" role="group" aria-label="Loan term options">
-                            <button type="button" class="term-chip" data-term="10" onclick="selectTerm(10)">
+                            <button type="button" class="term-chip" data-term="10" onclick="selectTerm(10, event)">
                                 <span class="term-years">10</span>
                                 <span class="term-label">Years</span>
                             </button>
-                            <button type="button" class="term-chip" data-term="15" onclick="selectTerm(15)">
+                            <button type="button" class="term-chip" data-term="15" onclick="selectTerm(15, event)">
                                 <span class="term-years">15</span>
                                 <span class="term-label">Years</span>
                             </button>
-                            <button type="button" class="term-chip" data-term="20" onclick="selectTerm(20)">
+                            <button type="button" class="term-chip" data-term="20" onclick="selectTerm(20, event)">
                                 <span class="term-years">20</span>
                                 <span class="term-label">Years</span>
                             </button>
-                            <button type="button" class="term-chip active" data-term="30" onclick="selectTerm(30)">
+                            <button type="button" class="term-chip active" data-term="30" onclick="selectTerm(30, event)">
                                 <span class="term-years">30</span>
                                 <span class="term-label">Years</span>
                             </button>
@@ -3732,7 +3732,7 @@
                         
                         <div class="loan-type-grid half-size" role="group" aria-label="Loan type options">
                             <button type="button" class="loan-type-btn active" data-loan-type="conventional" 
-                                    onclick="selectLoanType('conventional')" aria-pressed="true">
+                                    onclick="selectLoanType('conventional', event)" aria-pressed="true">
                                 <div class="loan-icon">
                                     <i class="fas fa-university" aria-hidden="true"></i>
                                 </div>
@@ -3743,7 +3743,7 @@
                             </button>
                             
                             <button type="button" class="loan-type-btn" data-loan-type="fha" 
-                                    onclick="selectLoanType('fha')" aria-pressed="false">
+                                    onclick="selectLoanType('fha', event)" aria-pressed="false">
                                 <div class="loan-icon">
                                     <i class="fas fa-home" aria-hidden="true"></i>
                                 </div>
@@ -3754,7 +3754,7 @@
                             </button>
                             
                             <button type="button" class="loan-type-btn" data-loan-type="va" 
-                                    onclick="selectLoanType('va')" aria-pressed="false">
+                                    onclick="selectLoanType('va', event)" aria-pressed="false">
                                 <div class="loan-icon">
                                     <i class="fas fa-medal" aria-hidden="true"></i>
                                 </div>
@@ -3765,7 +3765,7 @@
                             </button>
                             
                             <button type="button" class="loan-type-btn" data-loan-type="usda" 
-                                    onclick="selectLoanType('usda')" aria-pressed="false">
+                                    onclick="selectLoanType('usda', event)" aria-pressed="false">
                                 <div class="loan-icon">
                                     <i class="fas fa-tractor" aria-hidden="true"></i>
                                 </div>
@@ -4617,7 +4617,7 @@
 
         // Global variables
         let currentFontScale = 1;
-        let currentTheme = 'dark';
+        let currentTheme = 'light'; // Changed to light mode by default
         let voiceActive = false;
         let screenReaderActive = false;
         let recognition = null;
@@ -4701,6 +4701,9 @@
             
             // Set initial font scale
             updateFontScale();
+            
+            // Set default -A- mode active
+            document.getElementById('font-decrease').classList.add('active');
             
             // Announce calculator ready for screen readers
             announceToScreenReader('Mortgage calculator ready. Enter your loan details to calculate your monthly payment.');
@@ -4984,7 +4987,7 @@
                     
                     // Update charts
                     updatePaymentChart(monthlyPI, monthlyTax, monthlyInsurance, monthlyPMI, hoaFees);
-                    updateBalanceChart();
+                    updateBalanceChart(loanAmount, interestRate, loanTerm, monthlyPI);
                     updateAmortizationSchedule(loanAmount, interestRate, loanTerm, extraMonthly, extraWeekly);
                     updateAIInsights(homePrice, downPayment, interestRate, loanTerm, totalInterest);
                     updatePaymentSchedule();
@@ -5034,7 +5037,7 @@
             updateCalculation();
         }
 
-        function setDownPaymentChip(percent) {
+        function setDownPaymentChip(percent, event) {
             document.getElementById('down-payment-percent').value = percent;
             syncDownPaymentPercent();
             
@@ -5084,7 +5087,7 @@
             return 30; // Default
         }
 
-        function selectTerm(years) {
+        function selectTerm(years, event) {
             const chips = document.querySelectorAll('.term-chip');
             chips.forEach(chip => chip.classList.remove('active'));
             event.target.classList.add('active');
@@ -5108,7 +5111,7 @@
         }
 
         // Enhanced loan type selection
-        function selectLoanType(type) {
+        function selectLoanType(type, event) {
             const buttons = document.querySelectorAll('.loan-type-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('active');
@@ -5323,11 +5326,53 @@
             }
         }
 
-        function updateBalanceChart() {
-            // This would be populated with real amortization data
-            // For now, we'll use sample data
+        function updateBalanceChart(loanAmount, interestRate, loanTerm, monthlyPI) {
+            // Generate real amortization data for the chart
+            const monthlyRate = interestRate / 100 / 12;
+            const numberOfPayments = loanTerm * 12;
+            let balance = loanAmount;
+            
+            const balanceData = [loanAmount];
+            const principalData = [0];
+            const interestData = [0];
+            
+            for (let year = 1; year <= loanTerm; year++) {
+                let yearPrincipal = 0;
+                let yearInterest = 0;
+                
+                for (let month = 1; month <= 12; month++) {
+                    if (balance <= 0) break;
+                    
+                    const interestPayment = balance * monthlyRate;
+                    const principalPayment = monthlyPI - interestPayment;
+                    
+                    yearPrincipal += principalPayment;
+                    yearInterest += interestPayment;
+                    balance -= principalPayment;
+                }
+                
+                balanceData.push(Math.max(0, balance));
+                principalData.push(yearPrincipal);
+                interestData.push(yearInterest);
+            }
+            
             if (balanceChart) {
+                balanceChart.data.labels = Array.from({length: loanTerm + 1}, (_, i) => `Year ${i}`);
+                balanceChart.data.datasets[0].data = balanceData;
+                balanceChart.data.datasets[1].data = principalData;
                 balanceChart.update();
+            }
+            
+            // Update year details with real data
+            updateYearDetailsWithRealData(principalData, interestData, balanceData);
+        }
+
+        function updateYearDetailsWithRealData(principalData, interestData, balanceData) {
+            const year = parseInt(document.getElementById('year-slider').value);
+            if (principalData[year] && interestData[year] && balanceData[year]) {
+                document.getElementById('principal-paid-year').textContent = formatCurrency(principalData[year]);
+                document.getElementById('interest-paid-year').textContent = formatCurrency(interestData[year]);
+                document.getElementById('remaining-balance-year').textContent = formatCurrency(balanceData[year]);
             }
         }
 
@@ -5641,6 +5686,18 @@
             if (newIndex !== currentIndex) {
                 currentFontScale = scales[newIndex];
                 updateFontScale();
+                
+                // Update active state of font buttons
+                const fontButtons = document.querySelectorAll('.font-btn');
+                fontButtons.forEach(btn => btn.classList.remove('active'));
+                if (direction === 'decrease') {
+                    document.getElementById('font-decrease').classList.add('active');
+                } else if (direction === 'reset') {
+                    document.getElementById('font-reset').classList.add('active');
+                } else if (direction === 'increase') {
+                    document.getElementById('font-increase').classList.add('active');
+                }
+                
                 announceToScreenReader(`Font size ${direction === 'increase' ? 'increased' : direction === 'decrease' ? 'decreased' : 'reset'}.`);
             }
         }
@@ -5654,18 +5711,18 @@
             const themeIcon = themeToggle.querySelector('.theme-icon');
             const themeLabel = themeToggle.querySelector('.control-label');
             
-            if (currentTheme === 'dark') {
-                document.documentElement.setAttribute('data-color-scheme', 'light');
-                currentTheme = 'light';
-                themeIcon.className = 'fas fa-moon theme-icon';
-                themeLabel.textContent = 'Dark';
-                announceToScreenReader('Light theme activated.');
-            } else {
+            if (currentTheme === 'light') {
                 document.documentElement.setAttribute('data-color-scheme', 'dark');
                 currentTheme = 'dark';
                 themeIcon.className = 'fas fa-sun theme-icon';
                 themeLabel.textContent = 'Light';
                 announceToScreenReader('Dark theme activated.');
+            } else {
+                document.documentElement.setAttribute('data-color-scheme', 'light');
+                currentTheme = 'light';
+                themeIcon.className = 'fas fa-moon theme-icon';
+                themeLabel.textContent = 'Dark';
+                announceToScreenReader('Light theme activated.');
             }
         }
 
@@ -5775,7 +5832,11 @@
                 const years = extractNumber(transcript);
                 if (years && years >= 5 && years <= 40) {
                     if ([10, 15, 20, 30].includes(years)) {
-                        selectTerm(years);
+                        // Simulate click on term chip
+                        const termChip = document.querySelector(`.term-chip[data-term="${years}"]`);
+                        if (termChip) {
+                            termChip.click();
+                        }
                     } else {
                         document.getElementById('custom-term').value = years;
                         selectCustomTerm();
