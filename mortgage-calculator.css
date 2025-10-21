@@ -1,6 +1,6 @@
 /* ========================================================================== */
 /* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v26.0               */
-/* DEFAULT DARK MODE | Perfect Light/Dark Visibility, Payment Schedules, Tabs */
+/* DEFAULT DARK MODE | Includes One-time Extra Payment Styles               */
 /* Layout: Left 30% | Middle 40% | Right 30% + Header Animation            */
 /* ALL REQUIRED IMPROVEMENTS IMPLEMENTED - PRODUCTION READY                 */
 /* ========================================================================== */
@@ -249,6 +249,20 @@ label {
     margin-right: 5px;
 }
 
+/* NEW: Extra Payment Impact Styling */
+#extra-payment-impact {
+    font-weight: 600;
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 6px;
+    background-color: var(--highlight-bg); /* Use existing highlight background */
+    color: var(--text-color-primary); /* Ensure text is readable */
+    display: block;
+}
+#extra-payment-impact i {
+    margin-right: 5px;
+}
+
 
 /* -------------------------------------------------------------------------- */
 /* MIDDLE PANEL: RESULT STYLES (Colorful & Attractive)                        */
@@ -481,6 +495,17 @@ label {
     font-weight: bold;
 }
 
+#schedule-table .pmi-tip {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-primary-dark);
+    display: block;
+    margin-top: 2px;
+}
+.light-mode #schedule-table .pmi-tip {
+    color: var(--color-secondary);
+}
+
 /* -------------------------------------------------------------------------- */
 /* RIGHT PANEL: AD STYLES                                                     */
 /* -------------------------------------------------------------------------- */
@@ -561,14 +586,13 @@ label {
 
 /* Loading & Toast */
 .loading-overlay {
-    /* ... (Existing styles preserved/adapted for dark mode) ... */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
