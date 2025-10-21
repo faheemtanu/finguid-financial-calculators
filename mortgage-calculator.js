@@ -1,6 +1,6 @@
 /* ========================================================================== */
 /* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED JS v26.0 (Production Ready) */
-/* FIX: One-time Extra Payment fully functional and integrated with Amortization */
+/* IMPLEMENTED: 50-State Tax, 4 Tabs, Live Charts, Schedule/PDF Export, AI Insights, Dark Mode */
 /* FRED API KEY IS HIDDEN FROM UI/PRINT (9c6c421f077f2091e8bae4f143ada59a)     */
 /* ========================================================================== */
 
@@ -11,7 +11,7 @@
 const MORTGAGE_CALCULATOR = {
     // Version & Configuration
     VERSION: '26.0',
-    DEBUG: false,
+    DEBUG: true,
     
     // FRED API Configuration (Key is hidden from print/display - Feature 6)
     FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a', 
@@ -33,10 +33,7 @@ const MORTGAGE_CALCULATOR = {
         propertyTaxRate: 1.1, // Annual %
         homeInsurance: 1200, // Annual $
         pmi: 0.5,
-        state: 'TX',
-        // NEW Extra Payment fields
-        extraPaymentAmount: 0,
-        extraPaymentMonth: 1 
+        state: 'TX'
     },
 
     // 50-State Data (Average Annual Property Tax Rate (%) and Annual Home Insurance ($) - Feature 1)
@@ -88,12 +85,15 @@ function calculateMortgage() {
     const taxRate = (parseFloat(document.getElementById('property-tax-rate').value) / 100) || 0.01;
     let annualInsurance = parseFloat(document.getElementById('home-insurance').value) || 0;
 
+    // Update global state
+    MORTGAGE_CALCULATOR.currentCalculation = { homePrice, downPayment, loanTerm, interestRate: annualRate * 100, pmi: pmiRate * 100, propertyTaxRate: taxRate * 100, homeInsurance: annualInsurance };
+
     const loanAmount = homePrice - downPayment;
     const months = loanTerm * 12;
     const monthlyRate = annualRate / 12;
 
     if (loanAmount <= 0 || months <= 0 || monthlyRate === 0) {
-        return { monthlyPayment: 0, totalInterest: 0, totalPayoff: homePrice, principalInterest: 0, monthlyTax: 0, monthlyInsurance: 0, monthlyPMI: 0, loanAmount: 0, months: 0, monthlyRate: 0, annualRate: 0 };
+        return { monthlyPayment: 0, totalInterest: 0, totalPayoff: homePrice, principalInterest: 0, monthlyTax: 0, monthlyInsurance: 0, monthlyPMI: 0 };
     }
 
     // 2. Principal & Interest (P&I) Calculation
@@ -108,9 +108,11 @@ function calculateMortgage() {
     const downPaymentPercent = downPayment / homePrice;
     let monthlyPMI = 0;
     if (downPaymentPercent < 0.20) {
+        // PMI is calculated on the Loan Amount (LTV > 80%)
         monthlyPMI = (loanAmount * pmiRate) / 12;
-        document.getElementById('pmi-tip').textContent = `PMI: ${pmiRate * 100}% on $${loanAmount.toLocaleString()} (LTV > 80%)`;
+        document.getElementById('pmi-tip').textContent = `PMI: ${MORTGAGE_CALCULATOR.currentCalculation.pmi.toFixed(2)}% on $${loanAmount.toLocaleString()} (LTV > 80%)`;
     } else {
+        // Hide PMI if LTV <= 80%
         monthlyPMI = 0;
         document.getElementById('pmi').value = 0.0;
         document.getElementById('pmi-tip').textContent = `PMI: Waived (Down Payment is >= 20%)`;
@@ -118,19 +120,9 @@ function calculateMortgage() {
 
     const monthlyPayment = principalInterest + monthlyTax + monthlyInsurance + monthlyPMI;
 
-    // 5. Totals Calculation (Pre-Extra Payment)
+    // 5. Totals Calculation
     const totalPayoff = (monthlyPayment * months) + downPayment;
     const totalInterest = (principalInterest * months) - loanAmount;
-
-    // Update global state
-    MORTGAGE_CALCULATOR.currentCalculation = { 
-        ...MORTGAGE_CALCULATOR.currentCalculation, 
-        homePrice, downPayment, loanTerm, 
-        interestRate: annualRate * 100, 
-        pmi: pmiRate * 100, 
-        propertyTaxRate: taxRate * 100, 
-        homeInsurance: annualInsurance 
-    };
 
     return {
         monthlyPayment: monthlyPayment,
@@ -148,67 +140,29 @@ function calculateMortgage() {
 }
 
 /**
- * Amortization data for charts and schedules, handles early payoff logic (Feature Fix).
+ * Amortization data for charts and schedules (Feature 3 & 4).
  * @param {object} calcs - The output of calculateMortgage().
- * @param {object|null} extraPaymentConfig - {amount: number, month: number}
  * @returns {Array<object>} Monthly/Yearly amortization data.
  */
-function getAmortizationData(calcs, extraPaymentConfig = null) {
-    let { loanAmount, monthlyRate, months, principalInterest, monthlyTax, monthlyInsurance, monthlyPMI } = calcs;
+function getAmortizationData(calcs) {
+    let { loanAmount, monthlyRate, months } = calcs;
     let balance = loanAmount;
     const data = [];
 
     for (let i = 1; i <= months; i++) {
-        if (balance <= 0) {
-            break; // Loan is paid off early
-        }
-
         let interestPayment = balance * monthlyRate;
-        let regularPrincipal = principalInterest - interestPayment;
-        
-        let extraPrincipal = 0;
-        let totalPrincipalPayment = regularPrincipal;
-        let totalMonthlyPayment = calcs.monthlyPayment;
-        
-        // 1. Apply One-time Extra Principal Payment
-        if (extraPaymentConfig && extraPaymentConfig.amount > 0 && i === extraPaymentConfig.month) {
-            extraPrincipal = extraPaymentConfig.amount;
-            totalPrincipalPayment += extraPrincipal; 
-            totalMonthlyPayment += extraPrincipal; // Increase total payment for this month
-        }
-        
-        // 2. Final Payment Adjustment (if this payment pays off the loan)
-        if (balance - totalPrincipalPayment < 0) {
-            // The actual principal needed to zero the balance
-            const principalNeeded = balance; 
-            
-            // The portion of the total payment that was extra principal
-            extraPrincipal = Math.max(0, principalNeeded - regularPrincipal);
-            
-            // The total interest for this final month
-            interestPayment = balance * monthlyRate; 
-            
-            // The total payment for this final month (P+I+T+I+PMI)
-            totalMonthlyPayment = principalNeeded + interestPayment + monthlyTax + monthlyInsurance + monthlyPMI;
-
-            totalPrincipalPayment = principalNeeded;
-            balance = 0;
-        } else {
-            balance -= totalPrincipalPayment;
-        }
-        
-        // Ensure interest is non-negative, especially in the final month edge case
-        interestPayment = Math.max(0, interestPayment); 
+        let principalPayment = calcs.principalInterest - interestPayment;
+        balance -= principalPayment;
+        balance = Math.max(0, balance); // Ensure balance does not go negative
 
         data.push({
             month: i,
             year: Math.ceil(i / 12),
-            startingBalance: balance + totalPrincipalPayment,
-            monthlyPayment: totalMonthlyPayment,
-            principal: totalPrincipalPayment, // Total Principal paid (Regular + Extra)
+            startingBalance: balance + principalPayment,
+            monthlyPayment: calcs.monthlyPayment,
+            principal: principalPayment,
             interest: interestPayment,
-            extraPayment: extraPrincipal, 
-            taxInsurancePITI: monthlyTax + monthlyInsurance + monthlyPMI,
+            taxInsurancePITI: calcs.monthlyTax + calcs.monthlyInsurance + calcs.monthlyPMI,
             endingBalance: balance
         });
     }
@@ -217,16 +171,21 @@ function getAmortizationData(calcs, extraPaymentConfig = null) {
 }
 
 // ========================================================================== //
-// DATA FETCHING (FRED API Fix)                                               //
+// DATA FETCHING (FRED API Fix - Feature 9)                                   //
 // ========================================================================== //
 
 /**
  * Fetches the latest 30-year fixed rate from FRED API.
  */
 async function fetchLiveRate() {
-    // ... (Function body is the same as previous version) ...
+    if (MORTGAGE_CALCULATOR.DEBUG) {
+        console.log(`🏦 Attempting to fetch live FRED rate...`);
+    }
+
     const seriesId = 'MORTGAGE30US';
     const apiKey = MORTGAGE_CALCULATOR.FRED_API_KEY;
+    
+    // Construct the robust API URL (Fixes fetching issues)
     const url = `${MORTGAGE_CALCULATOR.FRED_BASE_URL}?series_id=${seriesId}&api_key=${apiKey}&file_type=json&sort_order=desc&limit=1`;
     
     showLoading(true, 'Fetching live Federal Reserve rates...');
@@ -278,36 +237,27 @@ function updateCalculatorResults() {
     const calcs = calculateMortgage();
     const { homePrice, downPayment } = MORTGAGE_CALCULATOR.currentCalculation;
 
-    // 1. Get Extra Payment details
-    const extraPaymentAmount = parseFloat(document.getElementById('extra-payment-amount').value) || 0;
-    const extraPaymentMonth = parseInt(document.getElementById('extra-payment-month').value) || 1;
-    MORTGAGE_CALCULATOR.currentCalculation.extraPaymentAmount = extraPaymentAmount;
-    MORTGAGE_CALCULATOR.currentCalculation.extraPaymentMonth = extraPaymentMonth;
-    const extraPaymentConfig = { amount: extraPaymentAmount, month: extraPaymentMonth };
-
-    // 2. Generate Amortization Data WITH extra payment
-    const amortizationData = getAmortizationData(calcs, extraPaymentConfig);
-
     // Update Down Payment Percentage
     const dpPercent = (downPayment / homePrice) * 100;
     document.getElementById('down-payment-percent').value = isNaN(dpPercent) ? '0.00%' : `${dpPercent.toFixed(2)}%`;
 
-    // 3. Update Overall Summary (Based on the new, shortened amortization)
-    const paidMonths = amortizationData.length;
-    const newTotalInterest = amortizationData.reduce((sum, d) => sum + d.interest, 0);
-    const newTotalPayoff = newTotalInterest + calcs.loanAmount + downPayment;
-    
-    // The monthly payment PITI is the same, but the total interest/payoff is new
+    // Update Overall Summary
     document.getElementById('monthly-payment-result').textContent = formatCurrency(calcs.monthlyPayment);
-    document.getElementById('total-interest-result').textContent = formatCurrency(newTotalInterest);
-    document.getElementById('total-payoff-result').textContent = formatCurrency(newTotalPayoff);
+    document.getElementById('total-interest-result').textContent = formatCurrency(calcs.totalInterest);
+    document.getElementById('total-payoff-result').textContent = formatCurrency(calcs.totalPayoff);
 
-    // 4. Update Features using Amortization Data
+    // Update Loan Summary Breakdown (Tab 1)
     renderLoanSummaryBreakdown(calcs);
+
+    // Update Mortgage Balance Over Time Chart (Tab 2 - Feature 3)
+    const amortizationData = getAmortizationData(calcs);
     renderMortgageTimelineChart(amortizationData);
+
+    // Update Payment Schedule (Tab 4 - Feature 4)
     generatePaymentScheduleTable(amortizationData);
-    updateExtraPaymentImpact(calcs, amortizationData); // Calculate and display extra payment impact
-    generateAIInsights(calcs, amortizationData); 
+    
+    // Update AI Insights (Tab 3)
+    generateAIInsights(calcs);
 }
 
 
@@ -315,7 +265,6 @@ function updateCalculatorResults() {
  * Renders the Payment Components Pie Chart and breakdown list (Tab 1).
  */
 function renderLoanSummaryBreakdown(calcs) {
-    // ... (Function body is the same as previous version) ...
     const ctx = document.getElementById('paymentComponentsChart').getContext('2d');
 
     const data = [
@@ -341,8 +290,8 @@ function renderLoanSummaryBreakdown(calcs) {
         data: {
             labels: labels,
             datasets: [{
-                data: data.map(d => Math.max(0, d)),
-                backgroundColor: ['#14b8a6', '#3b82f6', '#f59e0b', '#8b5cf6'], 
+                data: data.map(d => Math.max(0, d)), // Ensure no negative data points
+                backgroundColor: ['#14b8a6', '#3b82f6', '#f59e0b', '#8b5cf6'], // Teal, Blue, Amber, Purple
                 hoverOffset: 10
             }]
         },
@@ -360,6 +309,7 @@ function renderLoanSummaryBreakdown(calcs) {
         }
     });
 
+    // Render Breakdown Grid
     const breakdownEl = document.getElementById('breakdown-summary');
     breakdownEl.innerHTML = `
         <div class="breakdown-item principal">
@@ -389,26 +339,21 @@ function renderLoanSummaryBreakdown(calcs) {
  * Renders the Mortgage Balance Over Time line chart (Tab 2 - Feature 3).
  */
 function renderMortgageTimelineChart(amortizationData) {
-    // ... (Function body is the same as previous version) ...
     const ctx = document.getElementById('mortgageTimelineChart').getContext('2d');
     const loanTerm = MORTGAGE_CALCULATOR.currentCalculation.loanTerm;
     
+    // Aggregate by year for a cleaner chart (only need end-of-year data)
     const yearlyData = [];
-    let currentYear = 1;
-    let yearEndBalance = amortizationData[0]?.endingBalance || 0;
-
-    for(let i = 1; i <= amortizationData.length; i++) {
-        const d = amortizationData[i - 1];
-        if (d.month % 12 === 0 || i === amortizationData.length) {
-            yearEndBalance = d.endingBalance;
+    for (let i = 1; i <= loanTerm; i++) {
+        const yearEndData = amortizationData.find(d => d.month === i * 12) || amortizationData[amortizationData.length - 1];
+        if (yearEndData) {
             yearlyData.push({
-                year: currentYear,
-                balance: yearEndBalance
+                year: i,
+                balance: yearEndData.endingBalance
             });
-            currentYear++;
         }
     }
-    
+
     if (MORTGAGE_CALCULATOR.charts.mortgageTimeline) {
         MORTGAGE_CALCULATOR.charts.mortgageTimeline.destroy();
     }
@@ -421,7 +366,7 @@ function renderMortgageTimelineChart(amortizationData) {
                 {
                     label: 'Remaining Mortgage Balance',
                     data: yearlyData.map(d => d.balance),
-                    borderColor: '#3b82f6',
+                    borderColor: '#3b82f6', // Blue
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                     fill: true,
                     tension: 0.3
@@ -472,43 +417,29 @@ function generatePaymentScheduleTable(amortizationData) {
     let yearlyInterest = 0;
     let yearlyPayment = 0;
     let currentYear = 1;
-    let lastYear = amortizationData[amortizationData.length - 1].year;
 
     amortizationData.forEach((d, index) => {
         // Monthly Row
         const monthlyRow = tableBody.insertRow();
-        
-        // Highlight month with extra payment
-        if (d.extraPayment > 0) {
-            monthlyRow.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'; // Light blue highlight
-        }
-        
-        const extraPaymentText = d.extraPayment > 0 ? `<span class="pmi-tip">(+${formatCurrency(d.extraPayment)})</span>` : '';
-        
         monthlyRow.innerHTML = `
             <td>${d.year}-${(d.month % 12 === 0 ? 12 : d.month % 12)}</td>
             <td>${formatCurrency(d.monthlyPayment)}</td>
-            <td>${formatCurrency(d.principal)}${extraPaymentText}</td>
+            <td>${formatCurrency(d.principal)}</td>
             <td>${formatCurrency(d.interest)}</td>
             <td>${formatCurrency(d.taxInsurancePITI)}</td>
             <td>${formatCurrency(d.endingBalance)}</td>
         `;
         
-        // Accumulate totals
         yearlyPrincipal += d.principal;
         yearlyInterest += d.interest;
         yearlyPayment += d.monthlyPayment;
 
         // Yearly Summary Row (Feature 4: Monthly AND Yearly Schedule)
-        if (d.year > currentYear || index === amortizationData.length - 1) {
+        if (d.month % 12 === 0 || index === amortizationData.length - 1) {
             const summaryRow = tableBody.insertRow();
             summaryRow.className = 'yearly-summary';
-            
-            // Adjust currentYear for the last row if it's an early payoff year
-            const displayYear = index === amortizationData.length - 1 ? lastYear : currentYear;
-
             summaryRow.innerHTML = `
-                <td><strong>Year ${displayYear} Summary</strong></td>
+                <td><strong>Year ${currentYear} Summary</strong></td>
                 <td><strong>${formatCurrency(yearlyPayment)}</strong></td>
                 <td><strong>${formatCurrency(yearlyPrincipal)}</strong></td>
                 <td><strong>${formatCurrency(yearlyInterest)}</strong></td>
@@ -528,7 +459,7 @@ function generatePaymentScheduleTable(amortizationData) {
 /**
  * Generates dynamic AI-Powered Insights (Tab 3 - New AI Feature).
  */
-function generateAIInsights(calcs, amortizationData) {
+function generateAIInsights(calcs) {
     const insightBox = document.getElementById('ai-insights-text');
     const { totalInterest, monthlyPayment, totalPayoff, loanTerm, interestRate, downPayment, homePrice } = calcs;
     const loanToValue = 1 - (downPayment / homePrice);
@@ -540,102 +471,36 @@ function generateAIInsights(calcs, amortizationData) {
 
     let insights = '';
 
-    // 1. Total Cost Insight (Updated with actual calculated interest)
-    const newTotalInterest = amortizationData.reduce((sum, d) => sum + d.interest, 0);
-    const newTotalPayoff = newTotalInterest + calcs.loanAmount + calcs.downPayment;
-    insights += `<p><i class="fas fa-chart-line" style="color:#f59e0b;"></i> **Financial Snapshot:** Your total estimated cost for this loan is **${formatCurrency(newTotalPayoff)}**. Of that, ${formatCurrency(newTotalInterest)} (${(newTotalInterest / newTotalPayoff * 100).toFixed(1)}%) is interest. Your **PITI is ${formatCurrency(calcs.monthlyPayment)}**.</p>`;
+    // 1. Total Cost Insight
+    insights += `<p><i class="fas fa-chart-line" style="color:#f59e0b;"></i> **Financial Snapshot:** Your total estimated cost for this ${loanTerm}-year loan is **${formatCurrency(totalPayoff)}**. Of that, ${formatCurrency(totalInterest)} (${(totalInterest / totalPayoff * 100).toFixed(1)}%) is interest. Paying just one extra principal-only payment per year could reduce your term by up to 4 years.</p>`;
 
     // 2. LTV/PMI Insight
     if (loanToValue > 0.8) {
-        insights += `<p><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> **PMI Alert:** Your Loan-to-Value (LTV) ratio is **${(loanToValue * 100).toFixed(1)}%**, requiring Private Mortgage Insurance (PMI). Increase your down payment to 20% to eliminate this cost.</p>`;
+        insights += `<p><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> **PMI Alert:** Your Loan-to-Value (LTV) ratio is **${(loanToValue * 100).toFixed(1)}%**, which requires Private Mortgage Insurance (PMI). Your monthly payment includes **${formatCurrency(calcs.monthlyPMI)}** in PMI. Increase your down payment to 20% to eliminate this cost and save significant money.</p>`;
     } else {
-        insights += `<p><i class="fas fa-shield-alt" style="color:#14b8a6;"></i> **LTV Advantage:** With a **${(downPayment / homePrice * 100).toFixed(1)}%** down payment, your LTV is low and you have successfully **waived PMI**.</p>`;
+        insights += `<p><i class="fas fa-shield-alt" style="color:#14b8a6;"></i> **LTV Advantage:** With a **${(downPayment / homePrice * 100).toFixed(1)}%** down payment, your LTV is low and you have successfully **waived PMI**, saving you **${formatCurrency(homePrice * (MORTGAGE_CALCULATOR.currentCalculation.pmi / 100) / 12)}** per month!</p>`;
     }
     
-    // 3. Rate Environment Insight (Same as previous version)
+    // 3. Rate Environment Insight
     if (interestRate > 7.0) {
         insights += `<p><i class="fas fa-hand-holding-usd" style="color:#3b82f6;"></i> **Rate Strategy:** The current interest rate of **${interestRate.toFixed(2)}%** is relatively high. The AI recommends actively monitoring the FRED rate and considering a **refinance option** if the rate drops by 1.0% or more within the next 3 years.</p>`;
     } else if (interestRate < 5.0) {
-         insights += `<p><i class="fas fa-thumbs-up" style="color:#14b8a6;"></i> **Rate Strategy:** The interest rate of **${interestRate.toFixed(2)}%** is excellent. Lock in this rate now! Our AI suggests **prioritizing principal payments** over other investments.</p>`;
+         insights += `<p><i class="fas fa-thumbs-up" style="color:#14b8a6;"></i> **Rate Strategy:** The interest rate of **${interestRate.toFixed(2)}%** is excellent. Lock in this rate now! Our AI suggests **prioritizing principal payments** over other investments, as the guaranteed loan return beats inflation.</p>`;
     } else {
-        insights += `<p><i class="fas fa-search" style="color:#8b5cf6;"></i> **Rate Strategy:** Your rate of **${interestRate.toFixed(2)}%** is moderate. The AI suggests comparing a 15-year term option (via the Loan Compare tool) to significantly reduce interest.</p>`;
-    }
-    
-    // 4. Extra Payment Insight (NEW)
-    if (MORTGAGE_CALCULATOR.currentCalculation.extraPaymentAmount > 0) {
-        const impactText = document.getElementById('extra-payment-impact').textContent;
-        insights += `<p><i class="fas fa-bullseye" style="color:#f59e0b;"></i> **Accelerated Payoff:** ${impactText}. This strategy is highly effective because you cut interest accrual immediately, maximizing long-term savings.</p>`;
+        insights += `<p><i class="fas fa-search" style="color:#8b5cf6;"></i> **Rate Strategy:** Your rate of **${interestRate.toFixed(2)}%** is moderate. The AI suggests comparing a 15-year term option (via the Loan Compare tool) to significantly reduce interest, as your current payment is manageable at **${formatCurrency(monthlyPayment)}**.</p>`;
     }
 
     insightBox.innerHTML = insights;
 }
 
-/**
- * Calculates the impact of the extra payment on the loan term and total interest. (Feature Fix)
- */
-function updateExtraPaymentImpact(calcs, currentAmortizationData) {
-    const originalMonths = calcs.months;
-    const paidMonths = currentAmortizationData.length;
-    const extraAmount = MORTGAGE_CALCULATOR.currentCalculation.extraPaymentAmount;
-
-    const impactEl = document.getElementById('extra-payment-impact');
-    
-    // 1. Get amortization data WITHOUT extra payment for comparison
-    const originalAmortizationData = getAmortizationData(calcs, null);
-    const originalTotalInterest = originalAmortizationData.reduce((sum, d) => sum + d.interest, 0);
-    
-    const newTotalInterest = currentAmortizationData.reduce((sum, d) => sum + d.interest, 0);
-    const interestSaved = originalTotalInterest - newTotalInterest;
-
-    if (extraAmount > 0) {
-        const monthsSaved = originalMonths - paidMonths;
-        const yearsSaved = Math.floor(monthsSaved / 12);
-        const remainingMonths = monthsSaved % 12;
-
-        if (monthsSaved > 0) {
-            impactEl.innerHTML = `
-                <i class="fas fa-check-circle" style="color: var(--color-primary);"></i> 
-                **Impact:** Loan paid off **${yearsSaved}y ${remainingMonths}m** early. 
-                Total interest saved: **${formatCurrency(interestSaved)}**.
-            `;
-        } else {
-             impactEl.innerHTML = `
-                <i class="fas fa-info-circle" style="color: var(--color-accent);"></i> 
-                **Impact:** Extra payment applied. Total interest saved: **${formatCurrency(interestSaved)}**.
-            `;
-        }
-    } else {
-        impactEl.innerHTML = `
-            <i class="fas fa-info-circle" style="color: var(--color-gray-400);"></i> 
-            **Impact:** No extra payment applied. Use this to see how much you save!
-        `;
-    }
-}
-
-
-/**
- * Populates the extra payment month dropdown based on the selected loan term. (Feature Fix)
- */
-function populateExtraPaymentMonths(loanTerm) {
-    const selectEl = document.getElementById('extra-payment-month');
-    const months = loanTerm * 12;
-    selectEl.innerHTML = '<option value="1" selected>Month 1 (Closing)</option>';
-
-    for (let i = 12; i <= months; i += 12) {
-        const year = i / 12;
-        selectEl.innerHTML += `<option value="${i}">Year ${year} Start (Month ${i})</option>`;
-    }
-}
-
 // ========================================================================== //
-// FEATURE IMPLEMENTATION (Existing Features)                                 //
+// FEATURE IMPLEMENTATION (1, 2, 4, 5, 7, 8, 10)                              //
 // ========================================================================== //
 
 /**
- * Populates the State Dropdown and handles state-based tax/insurance updates.
+ * Populates the State Dropdown and handles state-based tax/insurance updates (Feature 1).
  */
 function setupStateDropdown() {
-    // ... (Function body is the same as previous version) ...
     const stateSelect = document.getElementById('state-select');
     let options = '<option value="">Select State</option>';
 
@@ -649,6 +514,7 @@ function setupStateDropdown() {
         const selectedCode = e.target.value;
         const stateData = MORTGAGE_CALCULATOR.STATE_DATA[selectedCode];
         if (stateData) {
+            // Auto-update Tax Rate and Insurance $
             document.getElementById('property-tax-rate').value = stateData.taxRate.toFixed(2);
             document.getElementById('home-insurance').value = stateData.insurance.toFixed(0);
             MORTGAGE_CALCULATOR.currentCalculation.state = selectedCode;
@@ -657,6 +523,7 @@ function setupStateDropdown() {
         }
     });
 
+    // Initialize with default TX rates
     stateSelect.dispatchEvent(new Event('change'));
 }
 
@@ -664,12 +531,13 @@ function setupStateDropdown() {
  * Handles tab switching (Feature 2).
  */
 function setupTabs() {
-    // ... (Function body is the same as previous version) ...
     document.querySelectorAll('.tab-link').forEach(button => {
         button.addEventListener('click', () => {
+            // Deactivate all
             document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
+            // Activate clicked tab
             const targetId = button.getAttribute('data-tab');
             button.classList.add('active');
             document.getElementById(targetId).classList.add('active');
@@ -681,15 +549,16 @@ function setupTabs() {
  * Toggles Dark/Light Mode (Feature 10).
  */
 function toggleDarkMode() {
-    // ... (Function body is the same as previous version) ...
     document.body.classList.toggle('light-mode');
     const isLight = document.body.classList.contains('light-mode');
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
     
+    // Update button icon
     const toggleBtn = document.getElementById('dark-mode-toggle');
     toggleBtn.innerHTML = isLight ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
     toggleBtn.setAttribute('aria-label', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
 
+    // Re-render charts to pick up new theme colors
     updateCalculatorResults();
 }
 
@@ -697,10 +566,10 @@ function toggleDarkMode() {
  * Initializes the Screen Reader/Text-to-Speech (Feature 7).
  */
 function toggleScreenReader() {
-    // ... (Function body is the same as previous version) ...
     if ('speechSynthesis' in window) {
         const synth = window.speechSynthesis;
         
+        // Stop current speech if speaking
         if (synth.speaking) {
             synth.cancel();
             document.getElementById('voice-status').style.display = 'none';
@@ -709,6 +578,7 @@ function toggleScreenReader() {
 
         document.getElementById('voice-status').style.display = 'flex';
         
+        // Concatenate all key elements to read
         const results = document.getElementById('monthly-payment-result').textContent;
         const totalInterest = document.getElementById('total-interest-result').textContent;
         const totalPayoff = document.getElementById('total-payoff-result').textContent;
@@ -728,9 +598,9 @@ function toggleScreenReader() {
  * Opens a new window for Loan Comparison (Feature 8).
  */
 function openLoanCompareWindow() {
-    // ... (Function body is the same as previous version) ...
     const { homePrice, downPayment, loanTerm, interestRate, propertyTaxRate, homeInsurance, pmi } = MORTGAGE_CALCULATOR.currentCalculation;
     
+    // Simple, production-ready implementation: pass current state as URL params
     const params = new URLSearchParams({
         hp: homePrice,
         dp: downPayment,
@@ -741,10 +611,13 @@ function openLoanCompareWindow() {
         pmi: pmi
     });
     
-    const compareURL = `loan-compare-tool.html?${params.toString()}`;
+    const compareURL = `loan-compare-tool.html?${params.toString()}`; // Assume a separate HTML for the tool
     
+    // Open in a new window with a specific size
     window.open(compareURL, 'LoanCompareWindow', 'width=800,height=600,scrollbars=yes,resizable=yes');
     showToast('🚀 Loan Compare Tool launched in a new window!', 'success');
+    
+    /* NOTE: In a full production environment, 'loan-compare-tool.html' would be a separate, fully functional calculator page designed to compare 3-5 different scenarios (e.g., 30-yr vs 15-yr, High vs Low PMI, etc.) based on the passed parameters. */
 }
 
 
@@ -752,12 +625,13 @@ function openLoanCompareWindow() {
  * Shares results as a printable PDF (Feature 5 & 4 Export).
  */
 function shareAsPDF() {
-    // ... (Function body is the same as previous version) ...
+    // Combine the Loan Summary Card, Amortization Chart, and Payment Schedule table for the PDF
     const resultsContainer = document.querySelector('.middle-panel');
     const pdfFileName = 'AI_Mortgage_Calculator_Results.pdf';
 
     showLoading(true, 'Generating PDF... Please wait.');
     
+    // Ensure all necessary tabs are rendered (if they are not active) before capturing
     const loanSummaryContent = document.getElementById('loan-summary').innerHTML;
     const amortizationChartContent = document.getElementById('mortgage-balance').innerHTML;
     const scheduleContent = document.getElementById('payment-schedule').innerHTML;
@@ -786,6 +660,7 @@ function shareAsPDF() {
         </div>
     `;
 
+    // Use a temporary element to render the combined content for html2canvas
     const tempElement = document.createElement('div');
     tempElement.innerHTML = printContent;
     document.body.appendChild(tempElement);
@@ -801,6 +676,7 @@ function shareAsPDF() {
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save(pdfFileName);
         
+        // Cleanup
         document.body.removeChild(tempElement);
         showLoading(false);
         showToast('🎉 PDF Report generated successfully!', 'success');
@@ -817,7 +693,6 @@ function shareAsPDF() {
 // ========================================================================== //
 
 function showLoading(show, text = 'Processing...') {
-    // ... (Function body is the same as previous version) ...
     const indicator = document.getElementById('loading-indicator');
     const textEl = indicator.querySelector('.loading-text');
     if (show) {
@@ -831,7 +706,6 @@ function showLoading(show, text = 'Processing...') {
 }
 
 function showToast(message, type = 'info', duration = 4000) {
-    // ... (Function body is the same as previous version) ...
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
@@ -855,56 +729,51 @@ function showToast(message, type = 'info', duration = 4000) {
 // ========================================================================== //
 
 function initializeCalculator() {
-    // 1. Setup Theme 
+    // 1. Setup Theme (Feature 10)
     const savedTheme = localStorage.getItem('theme') || 'dark';
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
     } else {
+        // Default is dark mode, which is set in HTML/CSS, but explicitly ensure
         document.body.classList.remove('light-mode');
     }
     document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
     document.getElementById('dark-mode-toggle').innerHTML = (savedTheme === 'light') ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
 
 
-    // 2. Setup State Dropdown 
+    // 2. Setup State Dropdown (Feature 1)
     setupStateDropdown(); 
 
-    // 3. Setup Extra Payment Month Dropdown (Dynamic based on term)
-    const initialTerm = parseInt(document.getElementById('loan-term').value) || 30;
-    populateExtraPaymentMonths(initialTerm);
-
-    // 4. Setup Tabs
+    // 3. Setup Tabs (Feature 2)
     setupTabs();
     
-    // 5. Setup Event Listeners for Live Update
+    // 4. Setup Event Listeners for Live Update
     const form = document.getElementById('calculator-form');
     form.querySelectorAll('input, select').forEach(element => {
         element.addEventListener('input', updateCalculatorResults);
     });
 
-    // Special listener for Loan Term change (needs to update extra payment months)
-    document.getElementById('loan-term').addEventListener('change', (e) => {
-        const newTerm = parseInt(e.target.value);
-        populateExtraPaymentMonths(newTerm);
-        updateCalculatorResults();
-    });
-
-    // 6. Setup Action Buttons
+    // 5. Setup Action Buttons (Features 5, 7, 8)
     document.getElementById('screen-reader-toggle').addEventListener('click', toggleScreenReader);
     document.getElementById('loan-compare-btn').addEventListener('click', openLoanCompareWindow);
     document.getElementById('share-pdf-btn').addEventListener('click', shareAsPDF);
-    document.getElementById('export-schedule-btn').addEventListener('click', shareAsPDF);
+    document.getElementById('export-schedule-btn').addEventListener('click', shareAsPDF); // Same PDF function for simplicity
 
-    // 7. Initial Calculation and FRED Rate Fetch
+    // 6. Initial Calculation and FRED Rate Fetch
     updateCalculatorResults();
     fetchLiveRate();
+
+    // 7. Periodic Rate Monitoring (Background process, disabled for production example but logic is here)
+    // setInterval(fetchLiveRate, MORTGAGE_CALCULATOR.RATE_UPDATE_INTERVAL);
 
     showToast('🚀 AI Calculator Loaded. Live rates are being fetched.', 'success');
 }
 
-// Initialization
+// Quick initialization
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeCalculator);
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeCalculator();
+    });
 } else {
     initializeCalculator();
 }
