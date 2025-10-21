@@ -1,6 +1,7 @@
 /* ========================================================================== */
-/* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v26.0               */
-/* ALL IMPROVEMENTS IMPLEMENTED - PRODUCTION READY                          */
+/* FINGUID AI MORTGAGE CALCULATOR - ENHANCED CSS v26.0                      */
+/* DEFAULT DARK MODE IMPLEMENTED                                            */
+/* Includes Header, Footer, Hero, and all requested feature styles          */
 /* ========================================================================== */
 
 /* ========================================================================== */
@@ -19,6 +20,8 @@
     --color-gray-600: rgba(75, 85, 99, 1);   /* Secondary Text */
     --color-gray-500: rgba(156, 163, 175, 1); /* Muted Text/Placeholder */
     --color-gray-200: rgba(229, 231, 235, 1); /* Lightest Gray */
+    --color-gray-100: rgba(243, 244, 246, 1);
+    --color-gray-50: rgba(249, 250, 251, 1);
 
     /* Primary/Accent Color (Teal/Cyan for AI & Trust) */
     --color-teal-500: rgba(20, 184, 166, 1); /* Primary */
@@ -41,33 +44,34 @@
     --color-shadow: rgba(0, 0, 0, 0.4);
     
     /* Chart Colors (Vibrant & Accessible) */
-    --color-chart-primary: var(--color-teal-500);
-    --color-chart-secondary: rgba(59, 130, 246, 1); /* Blue for Interest */
-    --color-chart-tertiary: rgba(239, 68, 68, 1); /* Red for Tax */
-    --color-chart-quaternary: rgba(245, 158, 11, 1); /* Yellow for Insurance/Fees */
-    --color-chart-quinary: rgba(139, 69, 19, 1); /* Brown for Principal Paid */
+    --color-chart-pi: var(--color-teal-500);
+    --color-chart-tax: rgba(59, 130, 246, 1); /* Blue */
+    --color-chart-ins: rgba(239, 68, 68, 1); /* Red */
+    --color-chart-other: rgba(245, 158, 11, 1); /* Yellow */
+    
+    /* Timeline Chart Colors (From User Image) */
+    --color-chart-balance: rgba(20, 184, 166, 0.6); /* Teal */
+    --color-chart-principal: rgba(245, 158, 11, 0.6); /* Orange */
+    --color-chart-interest: rgba(239, 68, 68, 0.6); /* Red */
 
     /* Typography & Spacing */
     --font-family-primary: 'Inter', sans-serif;
     --font-size-base: 1rem;
     --font-scale: 1;
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
     --space-4: 1rem;
     --space-6: 1.5rem;
+    --space-8: 2rem;
+    --radius-md: 0.375rem;
     --radius-lg: 0.5rem;
+    --radius-full: 9999px;
     --shadow-xl: 0 20px 25px -5px var(--color-shadow), 0 8px 10px -6px var(--color-shadow);
 }
 
 /* Light Mode Overrides */
 [data-color-scheme="light"] {
-    /* Light Mode Palette */
-    --color-gray-900: rgba(17, 24, 39, 1);
-    --color-gray-800: rgba(31, 41, 55, 1);
-    --color-gray-700: rgba(55, 65, 81, 1);
-    --color-gray-600: rgba(75, 85, 99, 1);
-    --color-gray-500: rgba(107, 114, 128, 1);
-    --color-gray-100: rgba(243, 244, 246, 1);
-    --color-gray-50: rgba(249, 250, 251, 1);
-
     /* Semantic Colors (Light Mode) */
     --color-background: var(--color-gray-50);
     --color-surface: var(--color-white);
@@ -82,11 +86,14 @@
     --color-shadow: rgba(0, 0, 0, 0.1);
 
     /* Chart Colors (Slightly less saturated for light mode) */
-    --color-chart-primary: var(--color-teal-600);
-    --color-chart-secondary: rgba(37, 99, 235, 1);
-    --color-chart-tertiary: rgba(220, 38, 38, 1);
-    --color-chart-quaternary: rgba(217, 119, 6, 1);
-    --color-chart-quinary: rgba(160, 82, 45, 1);
+    --color-chart-pi: var(--color-teal-600);
+    --color-chart-tax: rgba(37, 99, 235, 1);
+    --color-chart-ins: rgba(220, 38, 38, 1);
+    --color-chart-other: rgba(217, 119, 6, 1);
+    
+    --color-chart-balance: rgba(13, 148, 136, 0.6);
+    --color-chart-principal: rgba(217, 119, 6, 0.6);
+    --color-chart-interest: rgba(220, 38, 38, 0.6);
 }
 
 /* Utility Classes for Dynamic Font Scaling */
@@ -99,6 +106,7 @@
 .text-3xl { font-size: calc(1.875rem * var(--font-scale)); }
 .text-4xl { font-size: calc(2.25rem * var(--font-scale)); }
 .text-5xl { font-size: calc(3rem * var(--font-scale)); }
+.mt-4 { margin-top: var(--space-4); }
 
 /* ========================================================================== */
 /* 2. BASE & LAYOUT STYLES                                                    */
@@ -122,102 +130,38 @@ body {
 }
 
 .app-container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: var(--space-4);
 }
 
 .flow-content > * + * {
     margin-top: var(--space-6);
 }
 
-/* Main Grid Layout (Preserved Left 30% | Middle 40% | Right 30%) */
+/* Main Grid Layout */
 .main-content-grid {
     display: grid;
     grid-template-columns: 1fr; /* Default mobile layout */
     gap: var(--space-6);
-    padding: var(--space-6) 0;
+    padding: var(--space-6) var(--space-4);
 }
 
 @media (min-width: 1024px) {
     .main-content-grid {
-        grid-template-columns: 30% 40% 30%;
+        /* 30% | 40% | 30% layout */
+        grid-template-columns: 3fr 4fr 3fr;
+        gap: var(--space-6);
+        padding: var(--space-8) var(--space-6);
+    }
+}
+
+@media (min-width: 1400px) {
+    .main-content-grid {
         gap: var(--space-8);
+        padding: var(--space-8);
     }
 }
 
-/* Hero Section */
-.hero-section {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-teal-700) 100%);
-    color: white;
-    padding: 3rem 1rem;
-    border-radius: var(--radius-lg);
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow-xl);
-}
-
-.hero-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 2rem;
-}
-
-@media (min-width: 768px) {
-    .hero-content {
-        flex-direction: row;
-        justify-content: space-between;
-        text-align: left;
-    }
-}
-
-.hero-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.hero-subtitle {
-    font-size: 1.25rem;
-    opacity: 0.9;
-    margin-bottom: 1.5rem;
-}
-
-.hero-features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    font-weight: 500;
-}
-
-.hero-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.fed-badge {
-    background: white;
-    padding: 1.5rem;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.fed-logo {
-    width: 200px;
-    height: auto;
-}
 
 /* Sections Styling */
 .input-section, .results-section, .sponsor-section {
@@ -230,32 +174,70 @@ body {
 }
 
 /* ========================================================================== */
-/* 3. HEADER & CONTROLS                                                       */
+/* 3. NEW HEADER, HERO, & FOOTER                                            */
 /* ========================================================================== */
 
-.header {
+/* Header */
+.site-header {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-3) var(--space-4);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid var(--color-border);
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-.logo-container {
+.logo-link {
     display: flex;
     align-items: center;
+    text-decoration: none;
+    color: var(--color-text);
 }
 
 .logo-icon {
-    font-size: var(--font-size-2xl);
+    font-size: 1.5rem;
     color: var(--color-primary);
-    margin-right: var(--space-3);
+    margin-right: 0.5rem;
 }
 
 .logo-text {
-    font-size: var(--font-size-xl);
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-text);
+}
+
+.logo-subtext {
+    font-weight: 500;
+    color: var(--color-primary);
+}
+
+.site-nav {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .site-nav {
+        display: flex;
+        gap: var(--space-6);
+    }
+    .nav-link {
+        text-decoration: none;
+        color: var(--color-text-secondary);
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+    .nav-link:hover {
+        color: var(--color-primary);
+    }
 }
 
 .header-controls {
@@ -291,6 +273,125 @@ body {
 [data-color-scheme="dark"] .theme-toggle .light-icon { display: block; }
 [data-color-scheme="dark"] .theme-toggle .dark-icon { display: none; }
 
+
+/* Hero Section */
+.hero-section {
+    padding: var(--space-4) var(--space-4);
+    background-color: var(--color-surface-secondary);
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+}
+.hero-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+}
+.hero-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .hero-section {
+        padding: var(--space-6) var(--space-4);
+    }
+    .hero-title {
+        font-size: 2rem;
+    }
+    .hero-subtitle {
+        font-size: 1.125rem;
+    }
+}
+
+
+/* Footer */
+.site-footer {
+    padding: var(--space-8) var(--space-4);
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-8);
+}
+
+.footer-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-6);
+    margin-bottom: var(--space-6);
+}
+
+@media (min-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+}
+
+.footer-brand .logo-link {
+    margin-bottom: var(--space-3);
+}
+.footer-mission {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-bottom: var(--space-4);
+}
+.footer-fed-branding {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+.fed-logo {
+    width: 150px;
+    opacity: 0.7;
+    margin-top: var(--space-2);
+}
+
+.footer-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+}
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+.footer-link {
+    text-decoration: none;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    transition: color 0.2s;
+}
+.footer-link:hover {
+    color: var(--color-primary);
+}
+
+.footer-bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+}
+.footer-badges {
+    display: flex;
+    gap: var(--space-2);
+}
+.footer-disclaimer-text {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-align: center;
+}
 
 /* ========================================================================== */
 /* 4. INPUTS & FORMS                                                          */
@@ -382,12 +483,20 @@ body {
 }
 
 .select-control {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="%23a0aec0"><path d="M256 352a96 96 0 1 0 0-192 96 96 0 1 0 0 192zM512 256a256 256 0 1 1-512 0 256 256 0 1 1 512 0z"/></svg>');
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
-    background-size: 0.75em auto;
+    background-size: 1.25em 1.25em;
     padding-right: 2.5rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
+
+[data-color-scheme="dark"] .select-control {
+     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23D1D5DB' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+}
+
 
 .input-hint {
     display: block;
@@ -395,14 +504,6 @@ body {
     color: var(--color-text-muted);
     margin-top: var(--space-1);
     padding-left: var(--space-1);
-}
-
-/* Rate Update Time */
-.rate-update-time {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    margin-left: auto;
-    padding-left: var(--space-3);
 }
 
 /* Chips/Loan Type/Term Selectors */
@@ -482,6 +583,7 @@ body {
 }
 
 .tab-btn {
+    flex-grow: 1;
     flex-shrink: 0;
     padding: var(--space-2) var(--space-3);
     font-size: var(--font-size-sm);
@@ -492,6 +594,7 @@ body {
     color: var(--color-text-muted);
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
+    text-align: center;
 }
 
 .tab-btn:hover {
@@ -528,76 +631,6 @@ body {
 .chart-container-large {
     height: 400px;
     margin-bottom: var(--space-4);
-}
-
-/* Treasury Yield Indicator */
-.treasury-yield-indicator {
-    margin-top: var(--space-6);
-    padding: var(--space-4);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-}
-
-.treasury-yield-indicator h4 {
-    margin-bottom: var(--space-3);
-    color: var(--color-text);
-    font-size: var(--font-size-lg);
-}
-
-#treasury-yield-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-}
-
-.yield-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-}
-
-.yield-label {
-    font-weight: 500;
-    color: var(--color-text-secondary);
-}
-
-.yield-value {
-    font-weight: 600;
-    color: var(--color-text);
-}
-
-.yield-trend {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-}
-
-.trend-indicator {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-2);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-}
-
-.trend-indicator.positive {
-    background-color: rgba(34, 197, 94, 0.2);
-    color: rgba(34, 197, 94, 1);
-}
-
-.trend-indicator.negative {
-    background-color: rgba(239, 68, 68, 0.2);
-    color: rgba(239, 68, 68, 1);
-}
-
-.trend-indicator.neutral {
-    background-color: rgba(156, 163, 175, 0.2);
-    color: rgba(156, 163, 175, 1);
 }
 
 /* Summary Details */
@@ -763,9 +796,9 @@ body {
 }
 
 .schedule-table .month-col { text-align: left; }
-.schedule-table .principal-col { color: var(--color-chart-primary); }
-.schedule-table .interest-col { color: var(--color-chart-secondary); }
-.schedule-table .balance-col { font-weight: 600; }
+.schedule-table .principal-col { color: var(--color-chart-principal); }
+.schedule-table .interest-col { color: var(--color-chart-interest); }
+.schedule-table .balance-col { font-weight: 600; color: var(--color-chart-balance); }
 
 .pagination-controls {
     display: flex;
@@ -828,6 +861,7 @@ body {
     transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
     text-decoration: none;
     line-height: 1.2;
+    border: none;
 }
 
 .btn-full {
@@ -886,22 +920,23 @@ body {
     padding: var(--space-2) var(--space-4);
     font-size: var(--font-size-sm);
     border: none;
+    flex-grow: 1;
 }
 
-.btn-facebook { background-color: #3b5998; }
-.btn-facebook:hover { background-color: #2d4373; }
-.btn-twitter { background-color: #1da1f2; }
-.btn-twitter:hover { background-color: #0c85d0; }
-.btn-whatsapp { background-color: #25D366; }
-.btn-whatsapp:hover { background-color: #128C7E; }
-.btn-linkedin { background-color: #0077B5; }
-.btn-linkedin:hover { background-color: #005885; }
+.btn-native-share {
+    background-color: #3b5998;
+}
+.btn-native-share:hover {
+    background-color: #2d4373;
+}
+
 .btn-pdf { 
     background-color: rgba(239, 68, 68, 1); 
     color: var(--color-white);
     padding: var(--space-2) var(--space-4);
     font-size: var(--font-size-sm);
     border: none;
+    flex-grow: 1;
 }
 .btn-pdf:hover { background-color: rgba(220, 38, 38, 1); }
 
@@ -919,7 +954,7 @@ body {
     margin-top: var(--space-4);
 }
 
-/* Rate Status */
+/* Rate Status & Market Trend */
 .rate-status {
     padding: var(--space-3);
     border-radius: var(--radius-md);
@@ -929,12 +964,46 @@ body {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-2);
 }
 
 .rate-status i {
     color: var(--color-primary);
 }
+#rate-last-update {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-left: auto;
+}
+
+.market-trend {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-secondary);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+}
+#dgs10-trend-icon {
+    font-size: 0.75rem;
+}
+#dgs10-trend-icon.positive {
+    color: var(--color-chart-pi);
+}
+#dgs10-trend-icon.negative {
+    color: var(--color-chart-ins);
+}
+.fed-branding {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-left: auto;
+    font-style: italic;
+}
+
 
 /* ========================================================================== */
 /* 7. ASIDE/SPONSOR SECTION                                                   */
@@ -952,7 +1021,6 @@ body {
 .ad-card-lender { border-left: 5px solid var(--color-primary); }
 .ad-card-insurance { border-left: 5px solid rgba(59, 130, 246, 1); }
 .ad-card-feature { border-left: 5px solid rgba(245, 158, 11, 1); }
-.ad-card-refinance { border-left: 5px solid rgba(168, 85, 247, 1); }
 
 .ad-title {
     font-size: var(--font-size-lg);
@@ -987,95 +1055,8 @@ body {
 }
 
 /* ========================================================================== */
-/* 8. FOOTER & ACCESSIBILITY                                                  */
+/* 8. FOOTER & ACCESSIBILITY (Overlays)                                       */
 /* ========================================================================== */
-
-.footer {
-    padding: var(--space-8) 0 var(--space-6);
-    border-top: 1px solid var(--color-border);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin-top: var(--space-8);
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-    margin-bottom: var(--space-6);
-}
-
-@media (min-width: 768px) {
-    .footer-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1024px) {
-    .footer-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-.footer-column h4 {
-    color: var(--color-text);
-    margin-bottom: var(--space-3);
-    font-size: var(--font-size-lg);
-}
-
-.footer-column ul {
-    list-style: none;
-}
-
-.footer-column ul li {
-    margin-bottom: var(--space-2);
-}
-
-.footer-column ul li a {
-    color: var(--color-text-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.footer-column ul li a:hover {
-    color: var(--color-primary);
-}
-
-.social-links {
-    display: flex;
-    gap: var(--space-3);
-    margin-top: var(--space-3);
-}
-
-.social-links a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    background-color: var(--color-surface-secondary);
-    color: var(--color-text-secondary);
-    border-radius: 50%;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.social-links a:hover {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-}
-
-.footer-bottom {
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--space-4);
-    text-align: center;
-}
-
-.footer-badges {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-2);
-    margin-bottom: var(--space-4);
-}
 
 /* Voice Status Indicator */
 .voice-status {
@@ -1179,16 +1160,16 @@ body {
 .toast-info { background-color: rgba(59, 130, 246, 1); }
 
 
-/* Print Styles (Hide API Key & Sponsors on print) */
+/* Print Styles */
 @media print {
     body {
         background: white !important;
         color: black !important;
         font-size: 10pt !important;
     }
-    .header, .footer, .sponsor-section, .share-results-section, 
+    .site-header, .hero-section, .footer, .sponsor-section, .share-results-section, 
     .header-controls, #voice-status, #loading-indicator, .toast-container,
-    .btn-compare, .tabs-header, .schedule-controls, .hero-section {
+    .btn-compare, .tabs-header, .schedule-controls {
         display: none !important;
     }
     .main-content-grid {
@@ -1208,7 +1189,6 @@ body {
         color: white !important;
     }
     
-    /* Ensure only the active tab prints */
     .tab-content {
         display: none !important;
         visibility: hidden !important;
@@ -1217,26 +1197,16 @@ body {
         display: block !important;
         visibility: visible !important;
     }
-    
-    /* Hide the specific string containing the API Key */
-    .fred-api-status-footer {
-        display: none !important;
-    }
 }
 
 
 /* Mobile Responsiveness */
 @media (max-width: 1023px) {
     .app-container {
-        padding: var(--space-3);
+        padding: 0;
     }
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .header-controls {
-        margin-top: var(--space-3);
-        align-self: flex-end;
+    .header-content {
+        padding: var(--space-3) var(--space-4);
     }
     .input-section, .results-section, .sponsor-section {
         padding: var(--space-4);
@@ -1247,16 +1217,22 @@ body {
     .logo-text {
         font-size: var(--font-size-xl);
     }
+}
+@media (max-width: 767px) {
+    .site-nav {
+        display: none;
+    }
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.25rem;
     }
     .hero-subtitle {
-        font-size: 1.125rem;
+        font-size: 0.875rem;
     }
-    .feature-item {
-        font-size: var(--font-size-sm);
+    .tab-btn {
+        flex-basis: 45%;
+        font-size: 0.8rem;
     }
-    .share-buttons {
-        justify-content: center;
+    .total-value {
+        font-size: 1.25rem;
     }
 }
