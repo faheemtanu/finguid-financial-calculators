@@ -7,11 +7,11 @@
     
     <title>🇺🇸 World's First AI Mortgage Calculator 2025 | Live FRED Rates | Voice Enabled | Dark Mode</title>
     <meta name="description" content="America's most advanced AI-powered mortgage calculator with live FRED API rates, voice commands, 50-state tax/insurance rates, payment schedules, and real-time AI insights. Built for Americans by Americans.">
-    <meta name="keywords" content="USA mortgage calculator 2025, AI mortgage calculator, FRED API rates, voice calculator, 50 state tax rates, dark mode mortgage, payment schedule, amortization chart, AI insights">
+    <meta name="keywords" content="USA mortgage calculator 2025, AI mortgage calculator, FRED API rates, voice calculator, 50 state tax rates, dark mode mortgage, payment schedule, amortization chart, AI insights, MORTGAGE30US, DGS10">
     <meta name="author" content="World's First AI Calculator Platform - Built for Americans">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="en-US">
-    <meta name="geo.region" content="US">
+    <meta name.geo.region" content="US">
     <meta name="geo.placename" content="United States">
     
     <meta property="og:title" content="🇺🇸 World's First AI Mortgage Calculator 2025 - Live Federal Reserve Rates">
@@ -20,1240 +20,35 @@
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
     <meta property="og:site_name" content="World's First AI Calculator">
-    <meta property="og:image" content="https://worldsfirstai-calculator.com/images/usa-mortgage-calculator-og.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="🇺🇸 World's First AI Mortgage Calculator 2025 - AI Powered">
     <meta name="twitter:description" content="America's most advanced mortgage calculator with 50-state tax/insurance and live Federal Reserve rates.">
-    <meta name="twitter:image" content="https://worldsfirstai-calculator.com/images/usa-mortgage-calculator-twitter.jpg">
-    <meta name="twitter:site" content="@WorldsFirstAI">
     
     <link rel="canonical" href="https://worldsfirstai-calculator.com/usa-mortgage">
     
     <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f9fafb" media="(prefers-color-scheme: light)">
     
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-NYBL2CDNQJ');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
     </script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://api.stlouisfed.org">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
     
+    <link rel="stylesheet" href="mortgage-calculator.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js" defer></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
-    
-    <style>
-        /* ========================================================================== */
-        /* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v25.0               */
-        /* DEFAULT DARK MODE IMPLEMENTED (Improvement 10)                           */
-        /* Perfect Light/Dark Mode Visibility, Payment Schedules, Working Features  */
-        /* Layout: Left 30% | Middle 40% | Right 30% + Header Animation            */
-        /* ALL IMPROVEMENTS IMPLEMENTED - PRODUCTION READY                          */
-        /* ========================================================================== */
-
-        /* ========================================================================== */
-        /* 1. COLOR SYSTEM (DEFAULT DARK MODE)                                        */
-        /* ========================================================================== */
-
-        :root {
-            /* Base Colors */
-            --color-white: rgba(255, 255, 255, 1);
-            --color-black: rgba(0, 0, 0, 1);
-            
-            /* Dark Mode Palette (Default) */
-            --color-gray-900: rgba(17, 24, 39, 1);   /* Deep Navy Background */
-            --color-gray-800: rgba(31, 41, 55, 1);   /* Card/Surface */
-            --color-gray-700: rgba(55, 65, 81, 1);   /* Border/Input Background */
-            --color-gray-600: rgba(75, 85, 99, 1);   /* Secondary Text */
-            --color-gray-500: rgba(156, 163, 175, 1); /* Muted Text/Placeholder */
-            --color-gray-200: rgba(229, 231, 235, 1); /* Lightest Gray */
-
-            /* Primary/Accent Color (Teal/Cyan for AI & Trust) */
-            --color-teal-500: rgba(20, 184, 166, 1); /* Primary */
-            --color-teal-600: rgba(13, 148, 136, 1); /* Primary Hover */
-            --color-teal-700: rgba(15, 118, 110, 1); /* Primary Active */
-            --color-teal-200: rgba(153, 246, 228, 1); /* Light Accent */
-            --color-teal-900: rgba(19, 78, 74, 1); /* Dark Accent */
-            
-            /* Semantic Colors (Dark Mode) */
-            --color-background: var(--color-gray-900);
-            --color-surface: var(--color-gray-800);
-            --color-surface-secondary: var(--color-gray-700);
-            --color-text: var(--color-white);
-            --color-text-secondary: var(--color-gray-200);
-            --color-text-muted: var(--color-gray-500);
-            --color-primary: var(--color-teal-500);
-            --color-primary-hover: var(--color-teal-600);
-            --color-border: var(--color-gray-700);
-            --color-input-bg: var(--color-gray-900);
-            --color-shadow: rgba(0, 0, 0, 0.4);
-            
-            /* Chart Colors (Vibrant & Accessible) */
-            --color-chart-primary: var(--color-teal-500);
-            --color-chart-secondary: rgba(59, 130, 246, 1); /* Blue for Interest */
-            --color-chart-tertiary: rgba(239, 68, 68, 1); /* Red for Tax */
-            --color-chart-quaternary: rgba(245, 158, 11, 1); /* Yellow for Insurance/Fees */
-
-            /* Typography & Spacing */
-            --font-family-primary: 'Inter', sans-serif;
-            --font-size-base: 1rem;
-            --font-scale: 1;
-            --space-4: 1rem;
-            --space-6: 1.5rem;
-            --radius-lg: 0.5rem;
-            --shadow-xl: 0 20px 25px -5px var(--color-shadow), 0 8px 10px -6px var(--color-shadow);
-        }
-
-        /* Light Mode Overrides (Improvement 10) */
-        [data-color-scheme="light"] {
-            /* Light Mode Palette */
-            --color-gray-900: rgba(17, 24, 39, 1);
-            --color-gray-800: rgba(31, 41, 55, 1);
-            --color-gray-700: rgba(55, 65, 81, 1);
-            --color-gray-600: rgba(75, 85, 99, 1);
-            --color-gray-500: rgba(107, 114, 128, 1);
-            --color-gray-100: rgba(243, 244, 246, 1);
-            --color-gray-50: rgba(249, 250, 251, 1);
-
-            /* Semantic Colors (Light Mode) */
-            --color-background: var(--color-gray-50);
-            --color-surface: var(--color-white);
-            --color-surface-secondary: var(--color-gray-100);
-            --color-text: var(--color-gray-900);
-            --color-text-secondary: var(--color-gray-700);
-            --color-text-muted: var(--color-gray-500);
-            --color-primary: var(--color-teal-600);
-            --color-primary-hover: var(--color-teal-700);
-            --color-border: rgba(229, 231, 235, 1);
-            --color-input-bg: var(--color-white);
-            --color-shadow: rgba(0, 0, 0, 0.1);
-
-            /* Chart Colors (Slightly less saturated for light mode) */
-            --color-chart-primary: var(--color-teal-600);
-            --color-chart-secondary: rgba(37, 99, 235, 1);
-            --color-chart-tertiary: rgba(220, 38, 38, 1);
-            --color-chart-quaternary: rgba(217, 119, 6, 1);
-        }
-
-        /* Utility Classes for Dynamic Font Scaling */
-        .text-xs { font-size: calc(0.75rem * var(--font-scale)); }
-        .text-sm { font-size: calc(0.875rem * var(--font-scale)); }
-        .text-base { font-size: calc(1rem * var(--font-scale)); }
-        .text-lg { font-size: calc(1.125rem * var(--font-scale)); }
-        .text-xl { font-size: calc(1.25rem * var(--font-scale)); }
-        .text-2xl { font-size: calc(1.5rem * var(--font-scale)); }
-        .text-3xl { font-size: calc(1.875rem * var(--font-scale)); }
-        .text-4xl { font-size: calc(2.25rem * var(--font-scale)); }
-        .text-5xl { font-size: calc(3rem * var(--font-scale)); }
-
-        /* ========================================================================== */
-        /* 2. BASE & LAYOUT STYLES                                                    */
-        /* ========================================================================== */
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: var(--font-family-primary);
-            font-size: var(--font-size-base);
-            color: var(--color-text);
-            background-color: var(--color-background);
-            line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
-            min-height: 100vh;
-        }
-
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--space-4);
-        }
-
-        .flow-content > * + * {
-            margin-top: var(--space-6);
-        }
-
-        /* Main Grid Layout (Preserved Left 30% | Middle 40% | Right 30%) */
-        .main-content-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* Default mobile layout */
-            gap: var(--space-6);
-            padding: var(--space-6) 0;
-        }
-
-        @media (min-width: 1024px) {
-            .main-content-grid {
-                grid-template-columns: 30% 40% 30%;
-                gap: var(--space-8);
-            }
-        }
-
-        /* Sections Styling */
-        .input-section, .results-section, .sponsor-section {
-            padding: var(--space-6);
-            border-radius: var(--radius-lg);
-            background-color: var(--color-surface);
-            border: 1px solid var(--color-border);
-            box-shadow: var(--shadow-xl);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        /* ========================================================================== */
-        /* 3. HEADER & CONTROLS                                                       */
-        /* ========================================================================== */
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-4) 0;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-icon {
-            font-size: var(--font-size-2xl);
-            color: var(--color-primary);
-            margin-right: var(--space-3);
-        }
-
-        .logo-text {
-            font-size: var(--font-size-xl);
-            font-weight: 700;
-            color: var(--color-text);
-        }
-
-        .header-controls {
-            display: flex;
-            gap: var(--space-3);
-        }
-
-        .control-btn {
-            background: var(--color-surface-secondary);
-            color: var(--color-text-secondary);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-        }
-
-        .control-btn:hover {
-            background: var(--color-primary-hover);
-            color: var(--color-white);
-            border-color: var(--color-primary-hover);
-        }
-
-        /* Theme Toggle Specifics (Improvement 10) */
-        .theme-toggle .light-icon { display: none; }
-        [data-color-scheme="light"] .theme-toggle .light-icon { display: block; }
-        [data-color-scheme="light"] .theme-toggle .dark-icon { display: none; }
-        .theme-toggle .dark-icon { display: block; }
-        [data-color-scheme="dark"] .theme-toggle .light-icon { display: block; }
-        [data-color-scheme="dark"] .theme-toggle .dark-icon { display: none; }
-
-
-        /* ========================================================================== */
-        /* 4. INPUTS & FORMS (Improvement 1)                                          */
-        /* ========================================================================== */
-
-        .section-heading {
-            font-size: var(--font-size-2xl);
-            font-weight: 700;
-            margin-bottom: var(--space-6);
-            color: var(--color-text);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .section-sub-heading {
-            font-size: var(--font-size-lg);
-            font-weight: 600;
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-4);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-2) 0;
-        }
-
-        .toggle-icon {
-            transition: transform 0.3s ease;
-        }
-
-        .collapsible-section.collapsed .toggle-icon {
-            transform: rotate(-90deg);
-        }
-
-        .collapsible-content {
-            overflow: hidden;
-            max-height: 1000px; /* Large value for smooth transition */
-            transition: max-height 0.5s ease-in-out;
-        }
-
-        .collapsible-section.collapsed .collapsible-content {
-            max-height: 0;
-            padding-top: 0;
-            margin-top: 0;
-        }
-
-        .input-group-container {
-            padding: var(--space-4);
-            background-color: var(--color-surface-secondary);
-            border-radius: var(--radius-lg);
-            margin-top: var(--space-4);
-            border: 1px solid var(--color-border);
-        }
-
-        .input-group-container:first-child {
-            margin-top: 0;
-        }
-
-        .form-group {
-            margin-bottom: var(--space-4);
-        }
-
-        .form-group label {
-            display: block;
-            font-size: var(--font-size-sm);
-            font-weight: 500;
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-1);
-        }
-
-        .form-control, .select-control {
-            width: 100%;
-            padding: var(--space-3) var(--space-4);
-            font-size: var(--font-size-base);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            background-color: var(--color-input-bg);
-            color: var(--color-text);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            -webkit-appearance: none;
-            -moz-appearance: textfield;
-        }
-
-        .form-control:focus, .select-control:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.3);
-            outline: none;
-        }
-
-        .select-control {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="%23a0aec0"><path d="M256 352a96 96 0 1 0 0-192 96 96 0 1 0 0 192zM512 256a256 256 0 1 1-512 0 256 256 0 1 1 512 0z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 0.75em auto;
-            padding-right: 2.5rem;
-        }
-
-        .input-hint {
-            display: block;
-            font-size: var(--font-size-xs);
-            color: var(--color-text-muted);
-            margin-top: var(--space-1);
-            padding-left: var(--space-1);
-        }
-
-        /* Chips/Loan Type/Term Selectors */
-        .chip-label {
-            margin-bottom: var(--space-2);
-        }
-
-        .chip-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-2);
-        }
-
-        .chip {
-            padding: var(--space-2) var(--space-3);
-            border-radius: var(--radius-full);
-            font-size: var(--font-size-sm);
-            font-weight: 500;
-            border: 1px solid var(--color-border);
-            background-color: var(--color-surface-secondary);
-            color: var(--color-text-secondary);
-            cursor: pointer;
-            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-        }
-
-        .chip:hover {
-            border-color: var(--color-primary);
-            color: var(--color-primary);
-        }
-
-        .chip.active {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            border-color: var(--color-primary);
-        }
-
-        .chip.active:hover {
-            background-color: var(--color-primary-hover);
-            border-color: var(--color-primary-hover);
-        }
-
-        /* ========================================================================== */
-        /* 5. RESULTS SECTION (Improvement 2, 3, 4)                                   */
-        /* ========================================================================== */
-
-        /* Monthly Payment Card */
-        .monthly-payment-card {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            padding: var(--space-6);
-            border-radius: var(--radius-lg);
-            text-align: center;
-            margin-bottom: var(--space-6);
-            box-shadow: 0 10px 20px -5px rgba(20, 184, 166, 0.4);
-        }
-
-        .monthly-payment-label {
-            font-size: var(--font-size-lg);
-            font-weight: 500;
-            opacity: 0.9;
-            margin-bottom: var(--space-2);
-        }
-
-        .monthly-payment-value {
-            font-size: var(--font-size-4xl);
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        /* Tab Styles (Improvement 2) */
-        .tabs-header {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-2);
-            border-bottom: 2px solid var(--color-border);
-            margin-bottom: var(--space-4);
-        }
-
-        .tab-btn {
-            flex-shrink: 0;
-            padding: var(--space-2) var(--space-3);
-            font-size: var(--font-size-sm);
-            font-weight: 600;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            color: var(--color-text-muted);
-            border-bottom: 2px solid transparent;
-            transition: color 0.2s, border-color 0.2s;
-        }
-
-        .tab-btn:hover {
-            color: var(--color-primary);
-        }
-
-        .tab-btn.active {
-            color: var(--color-primary);
-            border-bottom: 2px solid var(--color-primary);
-        }
-
-        .tab-content {
-            padding: var(--space-4) 0;
-            /* transition: opacity 0.3s ease; */
-        }
-
-        .tab-title {
-            font-size: var(--font-size-xl);
-            font-weight: 600;
-            margin-bottom: var(--space-4);
-            color: var(--color-text);
-        }
-
-        .tab-description {
-            font-size: var(--font-size-sm);
-            color: var(--color-text-muted);
-            margin-bottom: var(--space-4);
-        }
-
-        .chart-container {
-            height: 250px;
-            margin-bottom: var(--space-4);
-        }
-
-        .chart-container-large {
-            height: 400px;
-            margin-bottom: var(--space-4);
-        }
-
-        /* Summary Details */
-        .summary-details {
-            margin-top: var(--space-6);
-            padding: var(--space-4);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            background-color: var(--color-surface-secondary);
-        }
-
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: var(--space-2) 0;
-            font-size: var(--font-size-base);
-        }
-
-        .summary-label {
-            color: var(--color-text-secondary);
-        }
-
-        .summary-value {
-            font-weight: 600;
-            color: var(--color-text);
-        }
-
-        .summary-divider {
-            border: 0;
-            height: 1px;
-            background-color: var(--color-border);
-            margin: var(--space-2) 0;
-        }
-
-        .summary-item.total {
-            font-size: var(--font-size-lg);
-            font-weight: 700;
-            color: var(--color-primary);
-            padding-top: var(--space-3);
-        }
-
-        .loan-totals-card {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--space-4);
-            margin-top: var(--space-4);
-        }
-
-        @media (min-width: 600px) {
-            .loan-totals-card {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .total-item {
-            padding: var(--space-4);
-            border-radius: var(--radius-md);
-            background-color: var(--color-surface-secondary);
-            border: 1px solid var(--color-border);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .total-label {
-            font-size: var(--font-size-sm);
-            color: var(--color-text-muted);
-            margin-bottom: var(--space-1);
-            display: flex;
-            align-items: center;
-        }
-
-        .total-label i {
-            margin-right: var(--space-2);
-            color: var(--color-primary);
-        }
-
-        .total-value {
-            font-size: var(--font-size-xl);
-            font-weight: 700;
-            color: var(--color-text);
-        }
-
-        /* AI Insights (Improvement 2) */
-        .ai-insights-container {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-4);
-        }
-
-        .ai-insight {
-            padding: var(--space-4);
-            border-left: 4px solid var(--color-primary);
-            border-radius: var(--radius-md);
-            background-color: var(--color-surface-secondary);
-            font-size: var(--font-size-base);
-            line-height: 1.5;
-            color: var(--color-text);
-        }
-
-        .ai-insight strong {
-            color: var(--color-primary);
-        }
-
-        .ai-insight-title {
-            font-weight: 600;
-            margin-bottom: var(--space-1);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            color: var(--color-primary);
-        }
-
-        .ai-insight-loading {
-            color: var(--color-text-muted);
-            text-align: center;
-            border-left: 4px solid var(--color-text-muted);
-        }
-
-        /* Payment Schedule (Improvement 4) */
-        .schedule-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-4);
-            flex-wrap: wrap;
-            gap: var(--space-3);
-        }
-
-        .schedule-table-container {
-            overflow-x: auto;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-        }
-
-        .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: var(--font-size-sm);
-            min-width: 700px;
-        }
-
-        .schedule-table th, .schedule-table td {
-            padding: var(--space-3) var(--space-4);
-            text-align: right;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .schedule-table th {
-            background-color: var(--color-surface-secondary);
-            font-weight: 600;
-            text-align: left;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .schedule-table tbody tr:nth-child(even) {
-            background-color: var(--color-surface-secondary);
-        }
-
-        .schedule-table tbody tr:hover {
-            background-color: var(--color-border);
-        }
-
-        .schedule-table .month-col { text-align: left; }
-        .schedule-table .principal-col { color: var(--color-chart-primary); }
-        .schedule-table .interest-col { color: var(--color-chart-secondary); }
-        .schedule-table .balance-col { font-weight: 600; }
-
-        .pagination-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-3);
-            background-color: var(--color-surface);
-            border-top: 1px solid var(--color-border);
-        }
-
-        .pagination-controls button {
-            padding: var(--space-1) var(--space-3);
-            border: 1px solid var(--color-border);
-            background-color: var(--color-surface-secondary);
-            color: var(--color-text);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .pagination-controls button:hover:not(:disabled) {
-            background-color: var(--color-primary-hover);
-            color: var(--color-white);
-        }
-
-        .pagination-controls button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ========================================================================== */
-        /* 6. BUTTONS & UTILITIES                                                     */
-        /* ========================================================================== */
-
-        .badge {
-            padding: var(--space-1) var(--space-2);
-            border-radius: var(--radius-full);
-            font-size: var(--font-size-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .badge-primary { background-color: var(--color-teal-900); color: var(--color-teal-200); }
-        .badge-secondary { background-color: var(--color-gray-700); color: var(--color-gray-200); }
-        .badge-success { background-color: var(--color-teal-700); color: var(--color-white); }
-        .badge-sponsor { background-color: rgba(245, 158, 11, 0.2); color: rgba(245, 158, 11, 1); }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-3) var(--space-6);
-            font-size: var(--font-size-base);
-            font-weight: 600;
-            border-radius: var(--radius-lg);
-            cursor: pointer;
-            transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
-            text-decoration: none;
-            line-height: 1.2;
-        }
-
-        .btn-full {
-            width: 100%;
-        }
-
-        .btn-primary {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            border: 1px solid var(--color-primary);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--color-primary-hover);
-            border-color: var(--color-primary-hover);
-            box-shadow: 0 5px 10px rgba(20, 184, 166, 0.2);
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--color-primary);
-            border: 1px solid var(--color-primary);
-        }
-
-        .btn-secondary:hover {
-            background-color: rgba(20, 184, 166, 0.1);
-        }
-
-        .btn-compare {
-            background-color: var(--color-teal-900);
-            color: var(--color-teal-200);
-            border: 1px solid var(--color-teal-900);
-            margin-top: var(--space-6);
-        }
-
-        .btn-compare:hover {
-            background-color: var(--color-teal-700);
-            color: var(--color-white);
-        }
-
-        .btn-export {
-            background-color: rgba(239, 68, 68, 1);
-            color: var(--color-white);
-            border: 1px solid rgba(239, 68, 68, 1);
-            padding: var(--space-2) var(--space-4);
-            font-size: var(--font-size-sm);
-        }
-
-        .btn-export:hover {
-            background-color: rgba(220, 38, 38, 1);
-            border-color: rgba(220, 38, 38, 1);
-        }
-
-        .btn-social {
-            color: var(--color-white);
-            padding: var(--space-2) var(--space-4);
-            font-size: var(--font-size-sm);
-            border: none;
-        }
-
-        .btn-facebook { background-color: #3b5998; }
-        .btn-facebook:hover { background-color: #2d4373; }
-        .btn-twitter { background-color: #1da1f2; }
-        .btn-twitter:hover { background-color: #0c85d0; }
-        .btn-whatsapp { background-color: #25D366; }
-        .btn-whatsapp:hover { background-color: #128C7E; }
-        .btn-linkedin { background-color: #0077B5; }
-        .btn-linkedin:hover { background-color: #005885; }
-        .btn-pdf { 
-            background-color: rgba(239, 68, 68, 1); 
-            color: var(--color-white);
-            padding: var(--space-2) var(--space-4);
-            font-size: var(--font-size-sm);
-            border: none;
-        }
-        .btn-pdf:hover { background-color: rgba(220, 38, 38, 1); }
-
-
-        .share-results-section {
-            margin-top: var(--space-8);
-            border-top: 1px solid var(--color-border);
-            padding-top: var(--space-6);
-        }
-
-        .share-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-3);
-            margin-top: var(--space-4);
-        }
-
-        /* Rate Status */
-        .rate-status {
-            padding: var(--space-3);
-            border-radius: var(--radius-md);
-            background-color: var(--color-surface-secondary);
-            color: var(--color-text-secondary);
-            font-size: var(--font-size-sm);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            margin-bottom: var(--space-4);
-        }
-
-        .rate-status i {
-            color: var(--color-primary);
-        }
-
-        /* ========================================================================== */
-        /* 7. ASIDE/SPONSOR SECTION                                                   */
-        /* ========================================================================== */
-
-        .ad-card {
-            padding: var(--space-6);
-            border-radius: var(--radius-lg);
-            background-color: var(--color-surface-secondary);
-            border: 1px solid var(--color-border);
-            margin-bottom: var(--space-6);
-            transition: background-color 0.3s;
-        }
-
-        .ad-card-lender { border-left: 5px solid var(--color-primary); }
-        .ad-card-insurance { border-left: 5px solid rgba(59, 130, 246, 1); }
-        .ad-card-feature { border-left: 5px solid rgba(245, 158, 11, 1); }
-
-        .ad-title {
-            font-size: var(--font-size-lg);
-            font-weight: 600;
-            margin-bottom: var(--space-2);
-        }
-
-        .ad-title i {
-            margin-right: var(--space-2);
-        }
-
-        .ad-text {
-            font-size: var(--font-size-sm);
-            color: var(--color-text-muted);
-            margin-bottom: var(--space-4);
-        }
-
-        .ad-disclaimer {
-            display: block;
-            margin-top: var(--space-2);
-            font-size: var(--font-size-xs);
-            color: var(--color-text-muted);
-        }
-
-        .ad-link {
-            display: block;
-            margin-top: var(--space-3);
-            font-size: var(--font-size-sm);
-            font-weight: 500;
-            color: var(--color-primary);
-            text-decoration: none;
-        }
-
-        /* ========================================================================== */
-        /* 8. FOOTER & ACCESSIBILITY                                                  */
-        /* ========================================================================== */
-
-        .footer {
-            padding: var(--space-6) 0;
-            border-top: 1px solid var(--color-border);
-            font-size: var(--font-size-sm);
-            color: var(--color-text-muted);
-        }
-
-        .footer-grid {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: var(--space-4);
-        }
-
-        .footer-badges {
-            display: flex;
-            gap: var(--space-2);
-        }
-
-        /* Voice Status Indicator */
-        .voice-status {
-            position: fixed;
-            bottom: var(--space-6);
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--color-gray-900);
-            color: var(--color-white);
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: none; /* Controlled by JS */
-        }
-
-        .voice-status-content {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .voice-status-icon {
-            color: var(--color-primary);
-            font-size: var(--font-size-xl);
-        }
-
-        .voice-status-close {
-            background: none;
-            border: none;
-            color: var(--color-white);
-            font-size: var(--font-size-lg);
-            cursor: pointer;
-            opacity: 0.7;
-        }
-
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: none; /* Controlled by JS */
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .loading-content {
-            text-align: center;
-            color: var(--color-white);
-        }
-
-        .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid var(--color-primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto var(--space-4);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .toast-container {
-            position: fixed;
-            top: var(--space-6);
-            right: var(--space-6);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
-        }
-
-        .toast {
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-xl);
-            font-size: var(--font-size-sm);
-            color: var(--color-white);
-            max-width: 300px;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .toast-success { background-color: var(--color-teal-600); }
-        .toast-error { background-color: rgba(220, 38, 38, 1); }
-        .toast-warning { background-color: rgba(217, 119, 6, 1); }
-        .toast-info { background-color: rgba(59, 130, 246, 1); }
-
-
-        /* Print Styles (Improvement 6 - Hide API Key & Sponsors on print) */
-        @media print {
-            body {
-                background: white !important;
-                color: black !important;
-                font-size: 10pt !important;
-            }
-            .header, .footer, .sponsor-section, .share-results-section, 
-            .header-controls, #voice-status, #loading-indicator, .toast-container,
-            .btn-compare, .tabs-header, .schedule-controls {
-                display: none !important;
-            }
-            .main-content-grid {
-                grid-template-columns: 1fr !important;
-            }
-            .input-section, .results-section {
-                box-shadow: none !important;
-                border: none !important;
-                padding: 0 !important;
-            }
-            .results-section {
-                margin-top: 1in;
-            }
-            .monthly-payment-card {
-                background-color: var(--color-primary) !important;
-                -webkit-print-color-adjust: exact; 
-                color: white !important;
-            }
-            
-            /* Ensure only the active tab prints */
-            .tab-content {
-                display: none !important;
-                visibility: hidden !important;
-            }
-            .tab-content.active {
-                display: block !important;
-                visibility: visible !important;
-            }
-            
-            /* Hide the specific string containing the API Key (Improvement 6) */
-            .fred-api-status-footer {
-                display: none !important;
-            }
-        }
-
-        /* Hero Section */
-        .hero-section {
-            padding: 4rem 0;
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-teal-700) 100%);
-            color: white;
-            text-align: center;
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--space-6);
-        }
-
-        .hero-title {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .hero-badges {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-
-        .hero-badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .federal-reserve-banner {
-            background: linear-gradient(90deg, #003366 0%, #003366 50%, #CC0000 50%, #CC0000 100%);
-            color: white;
-            padding: 1rem;
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--space-6);
-            text-align: center;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .federal-reserve-banner i {
-            font-size: 1.5rem;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 1023px) {
-            .app-container {
-                padding: var(--space-3);
-            }
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .header-controls {
-                margin-top: var(--space-3);
-                align-self: flex-end;
-            }
-            .input-section, .results-section, .sponsor-section {
-                padding: var(--space-4);
-            }
-            .monthly-payment-value {
-                font-size: var(--font-size-3xl);
-            }
-            .logo-text {
-                font-size: var(--font-size-xl);
-            }
-            .hero-title {
-                font-size: 2rem;
-            }
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-        }
-
-        /* Share Modal */
-        .share-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-        }
-
-        .share-modal-content {
-            background-color: var(--color-surface);
-            padding: 2rem;
-            border-radius: var(--radius-lg);
-            width: 90%;
-            max-width: 500px;
-            box-shadow: var(--shadow-xl);
-        }
-
-        .share-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .share-modal-close {
-            background: none;
-            border: none;
-            color: var(--color-text);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .share-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .share-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
-            border-radius: var(--radius-md);
-            background-color: var(--color-surface-secondary);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .share-option:hover {
-            background-color: var(--color-border);
-        }
-
-        .share-option i {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .share-option-name {
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .download-options {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .download-option {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
-            border-radius: var(--radius-md);
-            background-color: var(--color-surface-secondary);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .download-option:hover {
-            background-color: var(--color-border);
-        }
-
-        .download-option i {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .download-option-name {
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-    </style>
     
     <script type="application/ld+json">
     {
@@ -1267,89 +62,161 @@
     }
     </script>
 </head>
-<body>
-    <div id="app" class="app-container">
-        
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <h1 class="hero-title">AI Mortgage Pro Calculator</h1>
-            <p class="hero-subtitle">Powered by Federal Reserve Economic Data & Advanced AI Insights</p>
-            <div class="hero-badges">
-                <span class="hero-badge">Live FRED Rates</span>
-                <span class="hero-badge">50-State Tax Data</span>
-                <span class="hero-badge">Voice Commands</span>
-                <span class="hero-badge">AI-Powered Insights</span>
+<body class="font-adjustable">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#input-section" class="skip-link">Skip to calculator inputs</a>
+
+    <div id="sr-announcements" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    <div id="sr-status" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+
+    <header class="site-header animated-header" role="banner">
+        <div class="header-container">
+            <div class="brand-section">
+                <a href="#" class="logo-link" aria-label="Home Loan Pro - AI-Powered Mortgage Calculator">
+                    <div class="logo-container">
+                        <span class="usa-flag" role="img" aria-label="USA Flag">🇺🇸</span>
+                        <div class="logo-content">
+                            <div class="logo-main">AI Mortgage Pro</div>
+                            <div class="logo-subtitle">Powered by Live FRED Data</div>
+                        </div>
+                    </div>
+                </a>
             </div>
-            <button class="btn btn-primary" onclick="document.getElementById('input-section').scrollIntoView({behavior: 'smooth'})">
-                <i class="fas fa-calculator"></i> Start Calculating
+            
+            <nav class="nav-links animated-nav" role="navigation" aria-label="Main navigation">
+                <a href="#input-section" class="nav-link">Calculator</a>
+                <a href="#results-section" class="nav-link">Results</a>
+                <a href="#sponsor-section" class="nav-link">Partners</a>
+                <a href="#footer" class="nav-link">About</a>
+            </nav>
+            
+            <div class="accessibility-controls animated-controls" id="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
+                <div class="font-controls" role="group" aria-label="Font Size Controls">
+                    <button type="button" class="control-btn font-btn" id="font-decrease" 
+                            aria-label="Decrease font size" title="Make text smaller"
+                            onclick="adjustFontSize('decrease')">
+                        <span class="control-icon" aria-hidden="true">-A</span>
+                    </button>
+                    <button type="button" class="control-btn font-btn active" id="font-reset" 
+                            aria-label="Reset font size" title="Reset text size"
+                            onclick="adjustFontSize('reset')">
+                        <span class="control-icon" aria-hidden="true">Aa</span>
+                    </button>
+                    <button type="button" class="control-btn font-btn" id="font-increase" 
+                            aria-label="Increase font size" title="Make text larger"
+                            onclick="adjustFontSize('increase')">
+                        <span class="control-icon" aria-hidden="true">+A</span>
+                    </button>
+                </div>
+                
+                <button type="button" class="control-btn theme-btn" id="theme-toggle" 
+                        aria-label="Toggle dark mode" title="Switch between light and dark theme"
+                        onclick="toggleTheme()">
+                    <i class="fas fa-moon theme-icon" aria-hidden="true"></i>
+                    <span class="control-label sr-only">Dark</span>
+                </button>
+                
+                <button type="button" class="control-btn voice-btn" id="voice-toggle" 
+                        aria-label="Toggle voice control" title="Enable voice commands"
+                        onclick="toggleVoiceControl()">
+                    <i class="fas fa-microphone voice-icon" aria-hidden="true"></i>
+                    <span class="control-label sr-only">Voice</span>
+                </button>
+                
+                <button type="button" class="control-btn reader-btn" id="screen-reader-toggle" 
+                        aria-label="Toggle screen reader mode" title="Enhanced screen reader mode"
+                        onclick="toggleScreenReaderMode()">
+                    <i class="fas fa-eye reader-icon" aria-hidden="true"></i>
+                    <span class="control-label sr-only">Reader</span>
+                </button>
+            </div>
+            
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false" onclick="toggleMobileMenu()">
+                <span class="hamburger"></span>
+                <span class="hamburger"></span>
+                <span class="hamburger"></span>
             </button>
-        </section>
-
-        <!-- Federal Reserve Banner -->
-        <div class="federal-reserve-banner">
-            <i class="fas fa-landmark"></i>
-            <span>Powered by Federal Reserve Economic Data (FRED) API</span>
         </div>
-
-        <header class="header">
-            <div class="logo-container">
-                <i class="fas fa-home-alt logo-icon" aria-hidden="true"></i>
-                <h1 class="logo-text">AI Mortgage Pro 🇺🇸</h1>
+        
+        <div class="header-middle hero-animation">
+            <div class="header-middle-content">
+                <div class="tagline">World's First AI Mortgage Calculator</div>
+                <div class="features-quick">
+                    <span class="feature-quick"><i class="fas fa-check-circle"></i> Live FRED Rates</span>
+                    <span class="feature-quick"><i class="fas fa-check-circle"></i> Voice Commands</span>
+                    <span class="feature-quick"><i class="fas fa-check-circle"></i> 50-State Tax Data</span>
+                </div>
             </div>
-            <div class="header-controls">
-                
-                <button id="theme-toggle" class="control-btn theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
-                    <i class="fas fa-sun light-icon" aria-hidden="true"></i>
-                    <i class="fas fa-moon dark-icon" aria-hidden="true"></i>
-                </button>
-                
-                <button id="screen-reader-toggle" class="control-btn" onclick="toggleScreenReader()" aria-label="Toggle screen reader mode">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
+        </div>
+    </header>
 
-                <button id="voice-toggle" class="control-btn" onclick="toggleVoiceControl()" aria-label="Toggle voice control" disabled>
-                    <i class="fas fa-microphone" aria-hidden="true"></i>
-                </button>
-            </div>
-        </header>
-
-        <main class="main-content-grid">
+    <div id="app" class="app-container">
+        <main id="main-content" class="main-content-grid">
             
             <section id="input-section" class="input-section flow-content" aria-labelledby="input-heading">
                 <h2 id="input-heading" class="section-heading">Loan Details <span class="badge badge-primary">AI Input</span></h2>
                 
-                <div id="rate-status" class="rate-status" role="status" aria-live="polite">
-                    <i class="fas fa-chart-line" aria-hidden="true"></i>
-                    <span id="rate-text">Fetching Live Rate...</span>
+                <div id="fred-rates-container" class="fred-rates-container">
+                    <div class="fred-header">
+                        <img src="https://fred.stlouisfed.org/images/fred-logo-2x.png" alt="FRED Logo" class="fred-logo">
+                        <div class="fred-title">
+                            Live Market Rates
+                            <span id="last-updated-time">Last Updated: Fetching...</span>
+                        </div>
+                    </div>
+                    <div class="fred-rates-grid">
+                        <div class="fred-rate-item">
+                            <span class="fred-rate-label">30-Yr Fixed</span>
+                            <span class="fred-rate-value" id="fred-rate-m30">...</span>
+                        </div>
+                        <div class="fred-rate-item">
+                            <span class="fred-rate-label">15-Yr Fixed</span>
+                            <span class="fred-rate-value" id="fred-rate-m15">...</span>
+                        </div>
+                        <div class="fred-rate-item">
+                            <span class="fred-rate-label">10-Yr Treasury</span>
+                            <span class="fred-rate-value" id="fred-rate-dgs10">...</span>
+                        </div>
+                    </div>
+                    <div id="market-trend-indicator" class="market-trend">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Market Trend: Fetching...</span>
+                    </div>
                 </div>
-
+                
                 <div class="input-group-container">
-                    
                     <div class="form-group" role="group" aria-labelledby="home-price-label">
                         <label for="home-price" id="home-price-label">Home Price ($)</label>
-                        <input type="number" id="home-price" class="form-control" value="450000" min="1000" step="1000" oninput="updateCalculation(this.id)" aria-required="true">
+                        <input type="number" id="home-price" class="form-control" value="450000" min="1000" step="1000" aria-required="true">
                     </div>
 
                     <div class="form-group" role="group" aria-labelledby="down-payment-label">
                         <label for="down-payment" id="down-payment-label">Down Payment ($)</label>
-                        <input type="number" id="down-payment" class="form-control" value="90000" min="0" step="1000" oninput="updateCalculation(this.id)" aria-required="true">
+                        <input type="number" id="down-payment" class="form-control" value="90000" min="0" step="1000" aria-required="true">
                     </div>
 
                     <div class="form-group" role="group" aria-labelledby="down-payment-percent-label">
                         <label for="down-payment-percent" id="down-payment-percent-label">Down Payment (%)</label>
-                        <input type="number" id="down-payment-percent" class="form-control" value="20" min="0" max="100" step="0.5" oninput="updateCalculation(this.id)" aria-required="true">
+                        <input type="number" id="down-payment-percent" class="form-control" value="20" min="0" max="100" step="0.5" aria-required="true">
                     </div>
 
-                    <!-- Credit Score Input (Added before Interest Rate) -->
+                    <div class="form-group" role="group" aria-labelledby="loan-term-label">
+                        <label id="loan-term-label" class="chip-label">Loan Term (Years)</label>
+                        <div class="chip-group">
+                            <button type="button" class="chip term-chip" data-term="15" onclick="setLoanTerm(this)">15 Years</button>
+                            <button type="button" class="chip term-chip active" data-term="30" onclick="setLoanTerm(this)">30 Years</button>
+                        </div>
+                    </div>
+
                     <div class="form-group" role="group" aria-labelledby="credit-score-label">
                         <label for="credit-score" id="credit-score-label">Credit Score</label>
-                        <input type="number" id="credit-score" class="form-control" value="740" min="500" max="850" step="1" oninput="updateCalculation(this.id)" aria-required="true">
-                        <span class="input-hint">Higher scores typically qualify for better rates</span>
+                        <input type="number" id="credit-score" class="form-control" value="740" min="500" max="850" step="1">
+                        <span class="input-hint">Est. 740-799 (Very Good)</span>
                     </div>
-
+                    
                     <div class="form-group" role="group" aria-labelledby="interest-rate-label">
                         <label for="interest-rate" id="interest-rate-label">Interest Rate (%)</label>
-                        <input type="number" id="interest-rate" class="form-control" value="6.44" min="0.1" max="15" step="0.01" oninput="updateCalculation(this.id)" aria-required="true">
+                        <input type="number" id="interest-rate" class="form-control" value="6.44" min="0.1" max="15" step="0.01" aria-required="true">
                     </div>
 
                     <div class="form-group" role="group" aria-labelledby="loan-type-label">
@@ -1361,14 +228,6 @@
                             <button type="button" class="chip loan-type-btn" data-loan-type="usda" onclick="setLoanType(this)" aria-pressed="false">USDA</button>
                         </div>
                     </div>
-                    
-                    <div class="form-group" role="group" aria-labelledby="loan-term-label">
-                        <label id="loan-term-label" class="chip-label">Loan Term (Years)</label>
-                        <div class="chip-group">
-                            <button type="button" class="chip term-chip" data-term="15" onclick="setLoanTerm(this)">15 Years</button>
-                            <button type="button" class="chip term-chip active" data-term="30" onclick="setLoanTerm(this)">30 Years</button>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="input-group-container">
@@ -1377,58 +236,59 @@
                     <div class="form-group" role="group" aria-labelledby="state-select-label">
                         <label for="state-select" id="state-select-label">Property State (50 States)</label>
                         <select id="state-select" class="form-control select-control" onchange="handleStateChange()">
-                            <option value="default" selected disabled>Select a State</option>
+                            <option value="default" selected>Select a State (Auto-Fill)</option>
                         </select>
                     </div>
 
                     <div class="form-group" role="group" aria-labelledby="property-tax-label">
                         <label for="property-tax" id="property-tax-label">Annual Property Tax ($)</label>
-                        <input type="number" id="property-tax" class="form-control" value="9000" min="0" step="100" oninput="updateCalculation(this.id)">
-                        <span class="input-hint" id="tax-hint">Tax Rate: <span id="tax-rate-display">2.00%</span> (Annual Estimate)</span>
+                        <input type="number" id="property-tax" class="form-control" value="0" min="0" step="100">
+                        <span class="input-hint" id="tax-hint">Est. Tax Rate: <span id="tax-rate-display">--%</span></span>
                     </div>
 
                     <div class="form-group" role="group" aria-labelledby="home-insurance-label">
                         <label for="home-insurance" id="home-insurance-label">Annual Home Insurance ($)</label>
-                        <input type="number" id="home-insurance" class="form-control" value="1800" min="0" step="100" oninput="updateCalculation(this.id)">
-                        <span class="input-hint" id="insurance-hint">Insurance Rate: <span id="insurance-rate-display">0.50%</span> (Annual Estimate)</span>
+                        <input type="number" id="home-insurance" class="form-control" value="0" min="0" step="100">
+                        <span class="input-hint" id="insurance-hint">Est. Insurance Rate: <span id="insurance-rate-display">--%</span></span>
                     </div>
 
                     <div class="form-group" role="group" aria-labelledby="pmi-label">
                         <label for="pmi" id="pmi-label">Monthly PMI ($) <i class="fas fa-info-circle tooltip-trigger" title="Private Mortgage Insurance is typically required for down payments less than 20%."></i></label>
-                        <input type="number" id="pmi" class="form-control" value="0" min="0" step="10" oninput="updateCalculation(this.id)">
+                        <input type="number" id="pmi" class="form-control" value="0" min="0" step="10" readonly>
+                        <span class="input-hint">Auto-calculated based on DP %</span>
                     </div>
 
                     <div class="form-group" role="group" aria-labelledby="hoa-fees-label">
                         <label for="hoa-fees" id="hoa-fees-label">Monthly HOA Fees ($)</label>
-                        <input type="number" id="hoa-fees" class="form-control" value="0" min="0" step="1" oninput="updateCalculation(this.id)">
+                        <input type="number" id="hoa-fees" class="form-control" value="0" min="0" step="1">
                     </div>
-
                 </div>
 
                 <div class="input-group-container collapsible-section collapsed" id="advanced-options">
-                    <h3 class="section-sub-heading" onclick="toggleCollapsible('advanced-options')">Advanced Options <i class="fas fa-chevron-down toggle-icon"></i></h3>
+                    <h3 class="section-sub-heading" onclick="toggleCollapsible('advanced-options')" aria-expanded="false" aria-controls="advanced-content">
+                        Advanced Options <i class="fas fa-chevron-down toggle-icon"></i>
+                    </h3>
 
-                    <div class="collapsible-content">
+                    <div class="collapsible-content" id="advanced-content">
                         <div class="form-group" role="group" aria-labelledby="extra-monthly-label">
                             <label for="extra-monthly" id="extra-monthly-label">Extra Monthly Payment ($)</label>
-                            <input type="number" id="extra-monthly" class="form-control" value="0" min="0" step="10" oninput="updateCalculation(this.id)">
+                            <input type="number" id="extra-monthly" class="form-control" value="0" min="0" step="10">
                         </div>
                         <div class="form-group" role="group" aria-labelledby="one-time-extra-label">
                             <label for="one-time-extra" id="one-time-extra-label">One-Time Extra Payment ($)</label>
-                            <input type="number" id="one-time-extra" class="form-control" value="0" min="0" step="100" oninput="updateCalculation(this.id)">
+                            <input type="number" id="one-time-extra" class="form-control" value="0" min="0" step="100">
                         </div>
-
                         <div class="form-group" role="group" aria-labelledby="closing-costs-percentage-label">
                             <label for="closing-costs-percentage" id="closing-costs-percentage-label">Closing Costs (%)</label>
-                            <input type="number" id="closing-costs-percentage" class="form-control" value="3" min="0" max="10" step="0.1" oninput="updateCalculation(this.id)">
+                            <input type="number" id="closing-costs-percentage" class="form-control" value="3" min="0" max="10" step="0.1">
+                            <span class="input-hint">Est. 2-5% of Home Price</span>
                         </div>
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-full btn-compare" onclick="openLoanCompareWindow()">
-                    <i class="fas fa-balance-scale" aria-hidden="true"></i> Fully Function Loan Compare Option
+                <button type="button" class="btn btn-full btn-compare" onclick="openComparisonModal()">
+                    <i class="fas fa-balance-scale" aria-hidden="true"></i> Compare Loan Scenarios
                 </button>
-
             </section>
             
             <section id="results-section" class="results-section flow-content" aria-labelledby="results-heading">
@@ -1436,7 +296,7 @@
                 
                 <div class="monthly-payment-card" role="alert" aria-live="polite">
                     <p class="monthly-payment-label">Estimated Monthly Payment</p>
-                    <p id="monthly-payment-total" class="monthly-payment-value">$2,868.08</p>
+                    <p id="monthly-payment-total" class="monthly-payment-value">$0.00</p>
                 </div>
 
                 <div class="tabs-container">
@@ -1445,7 +305,7 @@
                             <i class="fas fa-chart-pie"></i> Payment Summary
                         </button>
                         <button type="button" class="tab-btn" data-tab="balance-timeline" onclick="switchTab('balance-timeline')" role="tab" aria-selected="false" aria-controls="tab-content-balance-timeline">
-                            <i class="fas fa-chart-area"></i> Mortgage Balance Over Time
+                            <i class="fas fa-chart-area"></i> Mortgage Balance
                         </button>
                         <button type="button" class="tab-btn" data-tab="ai-insights" onclick="switchTab('ai-insights')" role="tab" aria-selected="false" aria-controls="tab-content-ai-insights">
                             <i class="fas fa-brain"></i> AI-Powered Insights
@@ -1463,15 +323,15 @@
                         <div class="summary-details">
                             <div class="summary-item">
                                 <span class="summary-label">Principal & Interest (P&I)</span>
-                                <span id="pi-monthly" class="summary-value">$2,279.79</span>
+                                <span id="pi-monthly" class="summary-value">$0.00</span>
                             </div>
                             <div class="summary-item">
                                 <span class="summary-label">Property Tax (Monthly)</span>
-                                <span id="tax-monthly" class="summary-value">$750.00</span>
+                                <span id="tax-monthly" class="summary-value">$0.00</span>
                             </div>
                             <div class="summary-item">
                                 <span class="summary-label">Home Insurance (Monthly)</span>
-                                <span id="insurance-monthly" class="summary-value">$150.00</span>
+                                <span id="insurance-monthly" class="summary-value">$0.00</span>
                             </div>
                             <div class="summary-item">
                                 <span class="summary-label">PMI/HOA/Other (Monthly)</span>
@@ -1480,7 +340,7 @@
                             <hr class="summary-divider">
                             <div class="summary-item total">
                                 <span class="summary-label">Total Payment (PITI)</span>
-                                <span id="total-monthly" class="summary-value">$3,179.79</span>
+                                <span id="total-monthly" class="summary-value">$0.00</span>
                             </div>
                         </div>
 
@@ -1488,41 +348,38 @@
                         <div class="loan-totals-card">
                             <div class="total-item">
                                 <span class="total-label"><i class="fas fa-dollar-sign"></i> Total Loan Cost</span>
-                                <span id="total-cost" class="total-value">$1,141,123</span>
+                                <span id="total-cost" class="total-value">$0</span>
                             </div>
                             <div class="total-item">
                                 <span class="total-label"><i class="fas fa-hand-holding-usd"></i> Total Interest Paid</span>
-                                <span id="total-interest" class="total-value">$821,123</span>
+                                <span id="total-interest" class="total-value">$0</span>
                             </div>
                             <div class="total-item">
                                 <span class="total-label"><i class="fas fa-calendar-check"></i> Payoff Date</span>
-                                <span id="payoff-date" class="total-value">Dec 2055</span>
+                                <span id="payoff-date" class="total-value">--</span>
                             </div>
                             <div class="total-item">
                                 <span class="total-label"><i class="fas fa-money-bill-wave"></i> Estimated Closing Costs</span>
-                                <span id="closing-costs" class="total-value">$13,500</span>
+                                <span id="closing-costs" class="total-value">$0</span>
                             </div>
                         </div>
                     </div>
 
                     <div id="tab-content-balance-timeline" class="tab-content" role="tabpanel" aria-labelledby="tab-balance-timeline" hidden>
-                        <h3 class="tab-title">Amortization Timeline</h3>
-                        <p class="tab-description">See how your principal balance and equity grow over the life of the loan. *Updates live with extra payments.*</p>
+                        <h3 class="tab-title">Mortgage Balance Over Time</h3>
+                        <p class="tab-description">See your balance decline as your equity and paid interest grow. *Updates live with extra payments.*</p>
                         <div class="chart-container-large">
                             <canvas id="mortgageTimelineChart"></canvas>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="principalInterestChart"></canvas>
                         </div>
                     </div>
 
                     <div id="tab-content-ai-insights" class="tab-content" role="tabpanel" aria-labelledby="tab-ai-insights" hidden>
                         <h3 class="tab-title"><i class="fas fa-robot text-primary-color"></i> AI-Powered Financial Strategy</h3>
-                        <div class="ai-insights-container" id="ai-insights-output">
+                        <div class="ai-insights-container" id="ai-insights-output" aria-live="polite">
                             <div class="ai-insight ai-insight-loading">
                                 <i class="fas fa-sync-alt fa-spin"></i> Generating personalized insights based on your inputs...
                             </div>
-                            </div>
+                        </div>
                     </div>
 
                     <div id="tab-content-payment-schedule" class="tab-content" role="tabpanel" aria-labelledby="tab-payment-schedule" hidden>
@@ -1534,9 +391,14 @@
                                 <button type="button" class="chip active" data-schedule-type="monthly" onclick="toggleScheduleType('monthly')">Monthly View</button>
                                 <button type="button" class="chip" data-schedule-type="yearly" onclick="toggleScheduleType('yearly')">Yearly View</button>
                             </div>
-                            <button type="button" class="btn btn-export" onclick="exportSchedule('pdf')">
-                                <i class="fas fa-file-pdf"></i> Export PDF (Improvement 4)
-                            </button>
+                            <div>
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="exportSchedule('csv')">
+                                    <i class="fas fa-file-csv"></i> Export CSV
+                                </button>
+                                <button type="button" class="btn btn-export btn-sm" onclick="exportSchedule('pdf')">
+                                    <i class="fas fa-file-pdf"></i> Export PDF
+                                </button>
+                            </div>
                         </div>
 
                         <div class="schedule-table-container">
@@ -1545,7 +407,7 @@
                                 <tbody></tbody>
                             </table>
                             <div id="schedule-pagination" class="pagination-controls">
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1553,29 +415,20 @@
                 <div class="share-results-section">
                     <h3 class="section-sub-heading">Share Your Results</h3>
                     <div class="share-buttons">
-                        <button class="btn btn-social btn-facebook" onclick="shareResults('facebook')" aria-label="Share on Facebook">
-                            <i class="fab fa-facebook-f" aria-hidden="true"></i> Facebook
+                        <button class="btn btn-social btn-primary" id="web-share-btn" onclick="shareViaWebAPI()">
+                            <i class="fas fa-share-alt" aria-hidden="true"></i> Share
                         </button>
-                        <button class="btn btn-social btn-twitter" onclick="shareResults('twitter')" aria-label="Share on X (Twitter)">
-                            <i class="fab fa-twitter" aria-hidden="true"></i> X
-                        </button>
-                        <button class="btn btn-social btn-whatsapp" onclick="shareResults('whatsapp')" aria-label="Share on WhatsApp">
-                            <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp
-                        </button>
-                        <button class="btn btn-social btn-linkedin" onclick="shareResults('linkedin')" aria-label="Share on LinkedIn">
-                            <i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn
-                        </button>
-                        <button class="btn btn-pdf" onclick="shareResultsPDF()">
+                        <button class="btn btn-social btn-pdf" onclick="shareResultsPDF()">
                             <i class="fas fa-file-pdf" aria-hidden="true"></i> Download PDF
                         </button>
-                        <button class="btn btn-secondary" onclick="openShareModal()">
-                            <i class="fas fa-share-alt" aria-hidden="true"></i> More Options
+                        <button class="btn btn-social btn-twitter" onclick="shareOnTwitter()">
+                            <i class="fab fa-twitter" aria-hidden="true"></i> Share on X
                         </button>
                     </div>
                 </div>
             </section>
             
-            <aside class="sponsor-section flow-content" aria-labelledby="sponsor-heading">
+            <aside id="sponsor-section" class="sponsor-section flow-content" role="complementary" aria-labelledby="sponsor-heading">
                 <h2 id="sponsor-heading" class="section-heading">Sponsor Corner <span class="badge badge-sponsor">Ad</span></h2>
                 
                 <div class="ad-card ad-card-lender">
@@ -1597,2062 +450,194 @@
                     <a href="#" class="ad-link">Learn More about AI Tools</a>
                 </div>
 
+                <div class="ad-card ad-card-lender" style="border-left-color: var(--color-chart-secondary);">
+                    <h3 class="ad-title"><i class="fas fa-credit-card"></i> Check Your Credit Score</h3>
+                    <p class="ad-text">Your credit score is key. Get a free, updated score from our partners before you apply.</p>
+                    <button class="btn btn-primary btn-full" style="background-color: var(--color-chart-secondary);">Get Free Score</button>
+                </div>
             </aside>
             
         </main>
-        
-        <footer class="footer">
-            <div class="footer-grid">
-                <div class="footer-column">
-                    <p>&copy; 2025 AI Mortgage Pro. All rights reserved.</p>
-                    <p id="fred-api-status-footer" class="fred-api-status-footer">Last FRED API update: <span id="last-update-time">Never</span></p>
+    </div>
+    
+    <footer class="site-footer" id="footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="usa-flag" role="img" aria-label="USA Flag">🇺🇸</span>
+                        <div class="footer-logo-text">
+                            <div class="footer-brand-name">AI Mortgage Pro</div>
+                            <div class="footer-brand-tagline">America's Most Advanced Calculator</div>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        This AI-powered mortgage calculator provides detailed amortization, live FRED rates, and 50-state tax data to empower American homebuyers.
+                    </p>
+                    <p class="footer-description">
+                        Built for Americans, by Americans.
+                    </p>
                 </div>
-                <div class="footer-column footer-badges">
-                    <div class="badge-group">
-                        <span class="badge">AI Friendly</span>
-                        <span class="badge">SEO Optimized</span>
-                        <span class="badge">FRED API</span>
-                        <span class="badge">Voice Enabled</span>
-                        <span class="badge">Mobile Ready</span>
-                        <span class="badge">WCAG 2.1</span>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Calculator Tools</h4>
+                        <ul>
+                            <li><a href="#input-section">Mortgage Calculator</a></li>
+                            <li><a href="#" onclick="openComparisonModal()">Loan Comparison</a></li>
+                            <li><a href="#tab-content-payment-schedule">Amortization Schedule</a></li>
+                            <li><a href="#tab-content-ai-insights">AI Insights</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Mortgage Guide</a></li>
+                            <li><a href="#">Live Rate Trends</a></li>
+                            <li><a href="#">Refinance Calculator</a></li>
+                            <li><a href="#">Affordability Calculator</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Partners</h4>
+                        <ul>
+                            <li><a href="#sponsor-section">Featured Lenders</a></li>
+                            <li><a href="#sponsor-section">Insurance Partners</a></li>
+                            <li><a href="#">Advertise With Us</a></li>
+                            <li><a href="#">Credit Services</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
                     </div>
                 </div>
-                </div>
-        </footer>
-
-    </div>
-
-    <!-- Share Modal -->
-    <div id="share-modal" class="share-modal">
-        <div class="share-modal-content">
-            <div class="share-modal-header">
-                <h3>Share Your Results</h3>
-                <button class="share-modal-close" onclick="closeShareModal()">&times;</button>
             </div>
-            <div class="share-options">
-                <div class="share-option" onclick="shareResults('facebook')">
-                    <i class="fab fa-facebook-f" style="color: #3b5998;"></i>
-                    <span class="share-option-name">Facebook</span>
+            
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        <strong>Important Disclaimer:</strong> This calculator provides estimates for informational purposes only. Your actual rate, payment, and costs could be different. Get an official Loan Estimate before choosing a loan. All loans are subject to credit and property approval.
+                    </p>
+                    <p>
+                        We receive compensation from our partners displayed on this site. This compensation may impact how and where products appear (including, for example, the order in which they appear). This site does not include all companies or all available products.
+                    </p>
+                    <p>
+                        Data provided by <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener noreferrer">FRED, Federal Reserve Bank of St. Louis</a>.
+                    </p>
                 </div>
-                <div class="share-option" onclick="shareResults('twitter')">
-                    <i class="fab fa-twitter" style="color: #1da1f2;"></i>
-                    <span class="share-option-name">Twitter</span>
-                </div>
-                <div class="share-option" onclick="shareResults('whatsapp')">
-                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-                    <span class="share-option-name">WhatsApp</span>
-                </div>
-                <div class="share-option" onclick="shareResults('linkedin')">
-                    <i class="fab fa-linkedin" style="color: #0077B5;"></i>
-                    <span class="share-option-name">LinkedIn</span>
-                </div>
-                <div class="share-option" onclick="shareResults('email')">
-                    <i class="fas fa-envelope" style="color: #EA4335;"></i>
-                    <span class="share-option-name">Email</span>
-                </div>
-                <div class="share-option" onclick="shareResults('copy')">
-                    <i class="fas fa-copy" style="color: #6c757d;"></i>
-                    <span class="share-option-name">Copy Link</span>
-                </div>
-            </div>
-            <h4>Download Options</h4>
-            <div class="download-options">
-                <div class="download-option" onclick="shareResultsPDF()">
-                    <i class="fas fa-file-pdf" style="color: #EA4335;"></i>
-                    <span class="download-option-name">PDF</span>
-                </div>
-                <div class="download-option" onclick="exportSchedule('csv')">
-                    <i class="fas fa-file-csv" style="color: #0F9D58;"></i>
-                    <span class="download-option-name">CSV</span>
+                
+                <div class="footer-copyright">
+                    <div class="copyright-left">
+                        <p>&copy; 2025 AI Mortgage Pro. All rights reserved.</p>
+                    </div>
+                    <div class="footer-badges">
+                        <span class="badge">ADA Compliant</span>
+                        <span class="badge">SSL Secure</span>
+                        <span class="badge">Live FRED® Data</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </footer>
 
-    <div id="loading-indicator" class="loading-overlay" aria-hidden="true">
+    <div id="loading-indicator" class="loading-overlay" aria-hidden="true" role="status">
         <div class="loading-content">
             <div class="loading-spinner" aria-hidden="true"></div>
-            <p class="loading-text" id="loading-message">Fetching live Federal Reserve rates...</p>
+            <p class="loading-text" id="loading-message">Loading...</p>
         </div>
     </div>
 
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <div id="voice-status" class="voice-status" aria-live="polite" aria-hidden="true">
+    <div id="voice-status-bar" class="voice-status" aria-live="polite" aria-hidden="true">
         <div class="voice-status-content">
             <i class="fas fa-microphone voice-status-icon" aria-hidden="true"></i>
-            <span class="voice-status-text">Voice control active - speak your commands</span>
-            <button class="voice-status-close" onclick="toggleVoiceControl()" 
+            <span class="voice-status-text" id="voice-status-text">Listening...</span>
+            <button class="voice-status-close" onclick="stopVoiceRecognition()" 
                     aria-label="Disable voice control">
                 <i class="fas fa-times" aria-hidden="true"></i>
             </button>
         </div>
     </div>
 
-    <script>
-        /* ========================================================================== */
-        /* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED JS v25.0                */
-        /* ALL 10 USER IMPROVEMENTS IMPLEMENTED - PRODUCTION READY                  */
-        /* 1. 50-State Tax/Insurance Auto-Update                                    */
-        /* 2. New Tab Structure (Summary, Balance, AI, Schedule)                    */
-        /* 3. Live Mortgage Balance Chart Fix (Amortization)                        */
-        /* 4. Functional Payment Schedule (Monthly/Yearly + Export)                 */
-        /* 5. Share PDF Functionality                                               */
-        /* 6. FRED API Key Hidden (Improved Security/Print)                         */
-        /* 7. Screen Reader/Read Aloud Functionality                                */
-        /* 8. Fully Functional Loan Compare Option (New Window)                     */
-        /* 9. FRED API Rate Fetching Solution (Robust)                              */
-        /* 10. Default Dark Mode Switch                                             */
-        /* ========================================================================== */
-
-        // ========================================================================== //
-        // ENHANCED GLOBAL CONFIGURATION & STATE MANAGEMENT                          //
-        // ========================================================================== //
-
-        const MORTGAGE_CALCULATOR = {
-            // Version & Configuration
-            VERSION: '25.0-AI-Enhanced',
-            DEBUG: true,
-            
-            // FRED API Configuration (Key is stored securely here, not visible on site/print)
-            FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a', // Your Federal Reserve API Key
-            FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
-            RATE_UPDATE_INTERVAL: 60 * 60 * 1000, // 1 hour (3600 seconds)
-            
-            // Chart instances for cleanup/updates (Improvement 3)
-            charts: {
-                paymentComponents: null,
-                mortgageTimeline: null,
-                principalInterest: null
-            },
-            
-            // Current calculation state
-            currentCalculation: {
-                homePrice: 450000,
-                downPayment: 90000,
-                downPaymentPercent: 20,
-                loanAmount: 360000,
-                interestRate: 6.44, // Default Rate
-                loanTerm: 30, // Default Term in Years
-                loanType: 'conventional',
-                propertyTax: 9000, // Annual
-                homeInsurance: 1800, // Annual
-                pmi: 0, // Monthly
-                hoaFees: 0, // Monthly
-                extraMonthly: 0,
-                oneTimeExtra: 0,
-                closingCostsPercent: 3,
-                creditScore: 740,
-                state: 'default' // State tracking for Improvement 1
-            },
-            
-            // Amortization schedule with monthly/yearly support (Improvement 4)
-            amortizationSchedule: [],
-            scheduleCurrentPage: 1,
-            scheduleItemsPerPage: 12,
-            scheduleType: 'monthly', // 'monthly' or 'yearly'
-            
-            // Voice recognition & Screen Reader state (Improvement 7)
-            voiceEnabled: false,
-            screenReaderMode: false,
-            speechRecognition: window.SpeechRecognition || window.webkitSpeechRecognition,
-            speechSynthesis: window.speechSynthesis,
-            
-            // Theme state (Improvement 10)
-            currentTheme: 'dark', // Default Dark Mode
-            
-            // Rate update tracking (Improvement 9)
-            lastRateUpdate: 0,
-            rateUpdateAttempts: 0,
-            maxRateUpdateAttempts: 3,
-
-            // FRED API data cache
-            fredData: {
-                mortgage30US: null,
-                mortgage15US: null,
-                dgs10: null,
-                lastUpdate: null
-            }
-        };
-
-        // ========================================================================== //
-        // 50-STATE PROPERTY TAX AND INSURANCE RATE DATABASE (Improvement 1)          //
-        // Rates are annual effective rates (%) and home insurance rates (%) of home value.
-        // ========================================================================== //
-
-        const STATE_RATES = {
-            'AL': { name: 'Alabama', taxRate: 0.40, insuranceRate: 0.75 },
-            'AK': { name: 'Alaska', taxRate: 1.19, insuranceRate: 0.50 },
-            'AZ': { name: 'Arizona', taxRate: 0.62, insuranceRate: 0.70 },
-            'AR': { name: 'Arkansas', taxRate: 0.62, insuranceRate: 0.90 },
-            'CA': { name: 'California', taxRate: 0.71, insuranceRate: 0.55 },
-            'CO': { name: 'Colorado', taxRate: 0.51, insuranceRate: 0.65 },
-            'CT': { name: 'Connecticut', taxRate: 1.93, insuranceRate: 0.40 },
-            'DE': { name: 'Delaware', taxRate: 0.58, insuranceRate: 0.45 },
-            'DC': { name: 'District of Columbia', taxRate: 0.57, insuranceRate: 0.45 },
-            'FL': { name: 'Florida', taxRate: 0.94, insuranceRate: 1.20 }, // High insurance
-            'GA': { name: 'Georgia', taxRate: 0.82, insuranceRate: 0.65 },
-            'HI': { name: 'Hawaii', taxRate: 0.30, insuranceRate: 0.80 }, // Lowest tax
-            'ID': { name: 'Idaho', taxRate: 0.56, insuranceRate: 0.40 },
-            'IL': { name: 'Illinois', taxRate: 2.16, insuranceRate: 0.55 }, // High tax
-            'IN': { name: 'Indiana', taxRate: 0.81, insuranceRate: 0.50 },
-            'IA': { name: 'Iowa', taxRate: 1.48, insuranceRate: 0.40 },
-            'KS': { name: 'Kansas', taxRate: 1.41, insuranceRate: 0.70 },
-            'KY': { name: 'Kentucky', taxRate: 0.85, insuranceRate: 0.60 },
-            'LA': { name: 'Louisiana', taxRate: 0.52, insuranceRate: 1.40 }, // High insurance
-            'ME': { name: 'Maine', taxRate: 1.26, insuranceRate: 0.40 },
-            'MD': { name: 'Maryland', taxRate: 1.05, insuranceRate: 0.45 },
-            'MA': { name: 'Massachusetts', taxRate: 1.13, insuranceRate: 0.50 },
-            'MI': { name: 'Michigan', taxRate: 1.45, insuranceRate: 0.55 },
-            'MN': { name: 'Minnesota', taxRate: 1.05, insuranceRate: 0.40 },
-            'MS': { name: 'Mississippi', taxRate: 0.79, insuranceRate: 0.95 },
-            'MO': { name: 'Missouri', taxRate: 0.98, insuranceRate: 0.60 },
-            'MT': { name: 'Montana', taxRate: 0.85, insuranceRate: 0.45 },
-            'NE': { name: 'Nebraska', taxRate: 1.63, insuranceRate: 0.45 },
-            'NV': { name: 'Nevada', taxRate: 0.69, insuranceRate: 0.65 },
-            'NH': { name: 'New Hampshire', taxRate: 2.18, insuranceRate: 0.40 }, // High tax
-            'NJ': { name: 'New Jersey', taxRate: 2.23, insuranceRate: 0.50 }, // Highest tax
-            'NM': { name: 'New Mexico', taxRate: 0.76, insuranceRate: 0.55 },
-            'NY': { name: 'New York', taxRate: 1.40, insuranceRate: 0.40 },
-            'NC': { name: 'North Carolina', taxRate: 0.83, insuranceRate: 0.55 },
-            'ND': { name: 'North Dakota', taxRate: 1.11, insuranceRate: 0.40 },
-            'OH': { name: 'Ohio', taxRate: 1.56, insuranceRate: 0.50 },
-            'OK': { name: 'Oklahoma', taxRate: 0.88, insuranceRate: 0.80 },
-            'OR': { name: 'Oregon', taxRate: 0.95, insuranceRate: 0.40 },
-            'PA': { name: 'Pennsylvania', taxRate: 1.54, insuranceRate: 0.45 },
-            'RI': { name: 'Rhode Island', taxRate: 1.45, insuranceRate: 0.45 },
-            'SC': { name: 'South Carolina', taxRate: 0.57, insuranceRate: 0.75 },
-            'SD': { name: 'South Dakota', taxRate: 1.22, insuranceRate: 0.40 },
-            'TN': { name: 'Tennessee', taxRate: 0.66, insuranceRate: 0.55 },
-            'TX': { name: 'Texas', taxRate: 1.68, insuranceRate: 0.90 }, // High tax
-            'UT': { name: 'Utah', taxRate: 0.58, insuranceRate: 0.40 },
-            'VT': { name: 'Vermont', taxRate: 1.83, insuranceRate: 0.40 },
-            'VA': { name: 'Virginia', taxRate: 0.80, insuranceRate: 0.40 },
-            'WA': { name: 'Washington', taxRate: 0.93, insuranceRate: 0.45 },
-            'WV': { name: 'West Virginia', taxRate: 0.65, insuranceRate: 0.65 },
-            'WI': { name: 'Wisconsin', taxRate: 1.70, insuranceRate: 0.40 },
-            'WY': { name: 'Wyoming', taxRate: 0.61, insuranceRate: 0.40 }
-        };
-
-        // ========================================================================== //
-        // CORE CALCULATION LOGIC                                                    //
-        // ========================================================================== //
-
-        /**
-         * Main function to read inputs, calculate mortgage, and update the UI.
-         * @param {string} sourceId - The ID of the input that triggered the update.
-         */
-        function updateCalculation(sourceId = null) {
-            if (MORTGAGE_CALCULATOR.DEBUG) console.log(`🔄 Calculation triggered by: ${sourceId}`);
-            
-            // 1. Read Inputs
-            const current = MORTGAGE_CALCULATOR.currentCalculation;
-            
-            current.homePrice = parseFloat(document.getElementById('home-price').value) || 0;
-            current.downPayment = parseFloat(document.getElementById('down-payment').value) || 0;
-            current.downPaymentPercent = parseFloat(document.getElementById('down-payment-percent').value) || 0;
-            current.interestRate = parseFloat(document.getElementById('interest-rate').value) || 0;
-            current.propertyTax = parseFloat(document.getElementById('property-tax').value) || 0;
-            current.homeInsurance = parseFloat(document.getElementById('home-insurance').value) || 0;
-            current.pmi = parseFloat(document.getElementById('pmi').value) || 0;
-            current.hoaFees = parseFloat(document.getElementById('hoa-fees').value) || 0;
-            current.extraMonthly = parseFloat(document.getElementById('extra-monthly').value) || 0;
-            current.oneTimeExtra = parseFloat(document.getElementById('one-time-extra').value) || 0;
-            current.closingCostsPercent = parseFloat(document.getElementById('closing-costs-percentage').value) || 0;
-            current.creditScore = parseFloat(document.getElementById('credit-score').value) || 0;
-            
-            // 2. Synchronize Down Payment (2-way sync)
-            if (sourceId === 'down-payment') {
-                current.downPaymentPercent = (current.downPayment / current.homePrice) * 100 || 0;
-                document.getElementById('down-payment-percent').value = current.downPaymentPercent.toFixed(2);
-            } else if (sourceId === 'down-payment-percent') {
-                current.downPayment = current.homePrice * (current.downPaymentPercent / 100);
-                document.getElementById('down-payment').value = current.downPayment.toFixed(0);
-            }
-            
-            // 3. Calculate Loan Amount & PMI (Logic based on loan type/DP)
-            current.loanAmount = current.homePrice - current.downPayment;
-
-            // Auto-calculate PMI if DP < 20% and not VA/USDA
-            if (current.downPaymentPercent < 20 && current.loanType === 'conventional') {
-                // Simple PMI approximation (0.5% of loan amount annually)
-                current.pmi = (current.loanAmount * 0.005) / 12;
-            } else {
-                current.pmi = 0;
-            }
-            document.getElementById('pmi').value = current.pmi.toFixed(2);
-            
-            // 4. Core P&I Calculation (Monthly Payment Formula)
-            const principal = current.loanAmount;
-            const rateMonthly = (current.interestRate / 100) / 12;
-            const paymentsTotal = current.loanTerm * 12;
-
-            let monthlyPI;
-            if (rateMonthly === 0) {
-                monthlyPI = principal / paymentsTotal;
-            } else {
-                // M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1]
-                monthlyPI = principal * (rateMonthly * Math.pow(1 + rateMonthly, paymentsTotal)) / (Math.pow(1 + rateMonthly, paymentsTotal) - 1);
-            }
-            if (isNaN(monthlyPI) || monthlyPI === Infinity) monthlyPI = 0;
-
-
-            // 5. Total Monthly Payment (PITI + Fees)
-            const monthlyTax = current.propertyTax / 12;
-            const monthlyInsurance = current.homeInsurance / 12;
-            
-            const monthlyPITI = monthlyPI + monthlyTax + monthlyInsurance + current.pmi + current.hoaFees;
-            
-            // 6. Final Monthly Display (Base PITI + Extra)
-            const finalMonthlyPayment = monthlyPITI + current.extraMonthly;
-            
-            // 7. Calculate Loan Totals
-            // Amortization is required for accurate total interest calculation
-            const { amortizationSchedule, totalInterest, payoffDate, totalPayments, fullTotalCost } = calculateAmortization(monthlyPITI, current.extraMonthly, current.loanTerm);
-            
-            current.totalInterest = totalInterest;
-            current.payoffDate = payoffDate;
-            current.totalPayments = totalPayments;
-            current.amortizationSchedule = amortizationSchedule;
-            current.totalCost = current.homePrice + totalInterest + (current.homePrice * current.closingCostsPercent / 100);
-
-
-            // 8. Update UI (All Sections)
-            
-            // Main Payment Display
-            document.getElementById('monthly-payment-total').textContent = formatCurrency(finalMonthlyPayment);
-            
-            // Summary Breakdown
-            document.getElementById('pi-monthly').textContent = formatCurrency(monthlyPI);
-            document.getElementById('tax-monthly').textContent = formatCurrency(monthlyTax);
-            document.getElementById('insurance-monthly').textContent = formatCurrency(monthlyInsurance);
-            document.getElementById('other-monthly').textContent = formatCurrency(current.pmi + current.hoaFees);
-            document.getElementById('total-monthly').textContent = formatCurrency(monthlyPITI);
-            
-            // Loan Totals
-            document.getElementById('total-cost').textContent = formatCurrency(current.homePrice + current.downPayment + current.loanAmount + current.downPayment + current.loanAmount);
-            document.getElementById('total-cost').textContent = formatCurrency(fullTotalCost);
-            document.getElementById('total-interest').textContent = formatCurrency(totalInterest);
-            document.getElementById('payoff-date').textContent = payoffDate;
-            document.getElementById('closing-costs').textContent = formatCurrency(current.homePrice * (current.closingCostsPercent / 100));
-
-            // Render Visuals
-            renderPaymentComponentsChart(monthlyPI, monthlyTax, monthlyInsurance, current.pmi + current.hoaFees);
-            renderMortgageTimelineChart(); // Improvement 3
-            renderPrincipalInterestChart(); // New chart for principal vs interest
-            renderAIPoweredInsights(); // Dynamic AI Insights
-            renderPaymentScheduleTable(); // Improvement 4
-
-            // Apply highlight flash for visual feedback
-            if (sourceId) {
-                document.getElementById('monthly-payment-total').closest('.monthly-payment-card').classList.add('highlight-update');
-                setTimeout(() => {
-                    document.getElementById('monthly-payment-total').closest('.monthly-payment-card').classList.remove('highlight-update');
-                }, 700);
-            }
-        }
-
-        // ========================================================================== //
-        // AMORTIZATION & SCHEDULE LOGIC (Improvements 3 & 4)                         //
-        // ========================================================================== //
-
-        /**
-         * Calculates the full amortization schedule, total interest, and payoff date.
-         * @param {number} monthlyPITI - The base monthly PITI payment.
-         * @param {number} extraMonthly - The user's optional extra monthly payment.
-         * @param {number} loanTerm - The original loan term in years.
-         * @returns {object} The full schedule, total interest, payoff date, etc.
-         */
-        function calculateAmortization(monthlyPITI, extraMonthly, loanTerm) {
-            const current = MORTGAGE_CALCULATOR.currentCalculation;
-            let balance = current.loanAmount;
-            let rateMonthly = (current.interestRate / 100) / 12;
-            const monthlyPI = monthlyPITI - (current.propertyTax / 12) - (current.homeInsurance / 12) - current.pmi - current.hoaFees;
-            
-            const schedule = [];
-            let totalInterestPaid = 0;
-            let totalPaymentsMade = 0;
-            let totalExtraPayments = current.oneTimeExtra;
-            let oneTimeExtra = current.oneTimeExtra; // Apply one-time payment to the first month
-            
-            // Max 30 years * 12 months = 360 payments + a safe buffer
-            const maxPayments = loanTerm * 12 + 60; 
-
-            for (let month = 1; month <= maxPayments && balance > 0; month++) {
-                // Calculate interest for this month
-                const interestPaid = balance * rateMonthly;
-                totalInterestPaid += interestPaid;
-                
-                // Principal & Interest
-                let principalPaid = monthlyPI - interestPaid;
-                
-                // Apply extra payments
-                let totalPayment = monthlyPI + extraMonthly + (month === 1 ? oneTimeExtra : 0);
-                let extraPaymentApplied = extraMonthly + (month === 1 ? oneTimeExtra : 0);
-
-                // Adjust principal paid to include extra payment
-                let actualPrincipalPaid = principalPaid + extraPaymentApplied;
-
-                // Check if final payment is less than the balance
-                if (balance < actualPrincipalPaid) {
-                    actualPrincipalPaid = balance;
-                    totalPayment = interestPaid + actualPrincipalPaid + (monthlyPITI - monthlyPI); // Adjust total payment
-                    balance = 0;
-                } else {
-                    balance -= actualPrincipalPaid;
-                }
-
-                const taxesAndInsurance = (current.propertyTax / 12) + (current.homeInsurance / 12) + current.pmi + current.hoaFees;
-                
-                schedule.push({
-                    month: month,
-                    year: Math.ceil(month / 12),
-                    date: new Date(new Date().setMonth(new Date().getMonth() + month)).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }),
-                    totalPayment: totalPayment + taxesAndInsurance,
-                    principal: actualPrincipalPaid,
-                    interest: interestPaid,
-                    taxAndIns: taxesAndInsurance,
-                    extra: extraPaymentApplied,
-                    endingBalance: balance,
-                    totalInterest: totalInterestPaid,
-                    cumulativePrincipal: current.loanAmount - balance
-                });
-
-                totalPaymentsMade++;
-                if (month === 1) oneTimeExtra = 0; // Clear one-time extra payment after the first month
-            }
-            
-            const payoffDate = new Date(new Date().setMonth(new Date().getMonth() + totalPaymentsMade)).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            const fullTotalCost = current.homePrice + totalInterestPaid + (current.homePrice * current.closingCostsPercent / 100);
-
-            return { 
-                amortizationSchedule: schedule, 
-                totalInterest: totalInterestPaid, 
-                payoffDate: payoffDate, 
-                totalPayments: totalPaymentsMade,
-                fullTotalCost: fullTotalCost
-            };
-        }
-
-        /**
-         * Renders the Mortgage Balance Over Time Chart (Improvement 3)
-         */
-        function renderMortgageTimelineChart() {
-            const current = MORTGAGE_CALCULATOR.currentCalculation;
-            const schedule = current.amortizationSchedule;
-            if (!schedule.length) return;
-
-            const ctx = document.getElementById('mortgageTimelineChart').getContext('2d');
-            
-            // Destroy previous chart instance
-            if (MORTGAGE_CALCULATOR.charts.mortgageTimeline) {
-                MORTGAGE_CALCULATOR.charts.mortgageTimeline.destroy();
-            }
-            
-            // Use yearly data for a cleaner timeline
-            const yearlyData = schedule.filter(item => item.month % 12 === 0 || item.month === schedule.length);
-
-            MORTGAGE_CALCULATOR.charts.mortgageTimeline = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: yearlyData.map(item => item.year),
-                    datasets: [
-                        {
-                            label: 'Remaining Principal Balance',
-                            data: yearlyData.map(item => item.endingBalance),
-                            borderColor: 'rgba(59, 130, 246, 1)', // Blue
-                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                            fill: true,
-                            tension: 0.3,
-                            yAxisID: 'y'
-                        },
-                        {
-                            label: 'Total Interest Paid',
-                            data: yearlyData.map(item => item.totalInterest),
-                            borderColor: MORTGAGE_CALCULATOR.currentTheme === 'dark' ? 'rgba(20, 184, 166, 1)' : 'rgba(13, 148, 136, 1)', // Teal
-                            backgroundColor: 'transparent',
-                            fill: false,
-                            tension: 0.3,
-                            yAxisID: 'y1'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary'),
-                                font: { size: 12 }
-                            }
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Year of Loan',
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary')
-                            },
-                            grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-border') + '50' },
-                            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary') }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Principal Balance ($)',
-                                color: 'rgba(59, 130, 246, 1)'
-                            },
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-border') + '50' },
-                            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary') }
-                        },
-                        y1: {
-                            title: {
-                                display: true,
-                                text: 'Total Interest Paid ($)',
-                                color: MORTGAGE_CALCULATOR.currentTheme === 'dark' ? 'rgba(20, 184, 166, 1)' : 'rgba(13, 148, 136, 1)'
-                            },
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            grid: { drawOnChartArea: false }, // Only draw grid lines for the left axis
-                            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary') }
-                        }
-                    }
-                }
-            });
-        }
-
-        /**
-         * Renders the Principal vs Interest Paid Over Time Chart
-         */
-        function renderPrincipalInterestChart() {
-            const current = MORTGAGE_CALCULATOR.currentCalculation;
-            const schedule = current.amortizationSchedule;
-            if (!schedule.length) return;
-
-            const ctx = document.getElementById('principalInterestChart').getContext('2d');
-            
-            // Destroy previous chart instance
-            if (MORTGAGE_CALCULATOR.charts.principalInterest) {
-                MORTGAGE_CALCULATOR.charts.principalInterest.destroy();
-            }
-            
-            // Use yearly data for a cleaner timeline
-            const yearlyData = schedule.filter(item => item.month % 12 === 0 || item.month === schedule.length);
-
-            MORTGAGE_CALCULATOR.charts.principalInterest = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: yearlyData.map(item => item.year),
-                    datasets: [
-                        {
-                            label: 'Principal Paid',
-                            data: yearlyData.map(item => item.cumulativePrincipal),
-                            backgroundColor: 'rgba(20, 184, 166, 0.7)',
-                            yAxisID: 'y'
-                        },
-                        {
-                            label: 'Interest Paid',
-                            data: yearlyData.map(item => item.totalInterest),
-                            backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                            yAxisID: 'y'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary'),
-                                font: { size: 12 }
-                            }
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Year of Loan',
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary')
-                            },
-                            grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-border') + '50' },
-                            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary') }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Amount ($)',
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary')
-                            },
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-border') + '50' },
-                            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary') }
-                        }
-                    }
-                }
-            });
-        }
-
-        /**
-         * Renders the detailed monthly/yearly payment schedule table (Improvement 4)
-         */
-        function renderPaymentScheduleTable() {
-            const schedule = MORTGAGE_CALCULATOR.currentCalculation.amortizationSchedule;
-            const tableBody = document.querySelector('#payment-schedule-table tbody');
-            const tableHead = document.querySelector('#payment-schedule-table thead');
-            
-            // Clear previous content
-            tableBody.innerHTML = '';
-            
-            if (!schedule.length) {
-                tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No amortization schedule generated yet.</td></tr>';
-                return;
-            }
-
-            const type = MORTGAGE_CALCULATOR.scheduleType;
-            let dataToRender = schedule;
-            
-            // Aggregate to Yearly View (Improvement 4)
-            if (type === 'yearly') {
-                dataToRender = aggregateYearly(schedule);
-            }
-            
-            // Pagination (Improvement 4)
-            const itemsPerPage = MORTGAGE_CALCULATOR.scheduleItemsPerPage;
-            const currentPage = MORTGAGE_CALCULATOR.scheduleCurrentPage;
-            const totalPages = Math.ceil(dataToRender.length / itemsPerPage);
-            const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const paginatedData = dataToRender.slice(start, end);
-
-            // Render Table Header (Improvement 4)
-            tableHead.innerHTML = `
-                <tr>
-                    <th class="month-col">${type === 'monthly' ? 'Month' : 'Year'}</th>
-                    <th style="text-align: right;">Total Payment</th>
-                    <th style="text-align: right;">Principal</th>
-                    <th style="text-align: right;">Interest</th>
-                    <th style="text-align: right;">Taxes & Ins</th>
-                    <th style="text-align: right;">Extra Payment</th>
-                    <th style="text-align: right;">Ending Balance</th>
-                </tr>
-            `;
-
-            // Render Table Body
-            paginatedData.forEach(item => {
-                const row = tableBody.insertRow();
-                
-                // Month/Year
-                const monthCell = row.insertCell();
-                monthCell.textContent = type === 'monthly' ? item.month : `Year ${item.year}`;
-                monthCell.classList.add('month-col');
-                
-                row.insertCell().textContent = formatCurrency(item.totalPayment);
-                row.insertCell().textContent = formatCurrency(item.principal);
-                row.insertCell().textContent = formatCurrency(item.interest);
-                row.insertCell().textContent = formatCurrency(item.taxAndIns);
-                row.insertCell().textContent = formatCurrency(item.extra);
-                row.insertCell().textContent = formatCurrency(item.endingBalance);
-                
-                row.cells[2].classList.add('principal-col');
-                row.cells[3].classList.add('interest-col');
-                row.cells[6].classList.add('balance-col');
-            });
-
-            renderPaginationControls(totalPages);
-        }
-
-        /**
-         * Aggregates monthly schedule data into yearly summaries (Helper for Improvement 4)
-         */
-        function aggregateYearly(schedule) {
-            const yearlyMap = new Map();
-            schedule.forEach(item => {
-                const yearKey = item.year;
-                if (!yearlyMap.has(yearKey)) {
-                    yearlyMap.set(yearKey, {
-                        year: yearKey,
-                        totalPayment: 0,
-                        principal: 0,
-                        interest: 0,
-                        taxAndIns: 0,
-                        extra: 0,
-                        endingBalance: 0,
-                        month: item.month
-                    });
-                }
-                const yearlyItem = yearlyMap.get(yearKey);
-                yearlyItem.totalPayment += item.totalPayment;
-                yearlyItem.principal += item.principal;
-                yearlyItem.interest += item.interest;
-                yearlyItem.taxAndIns += item.taxAndIns;
-                yearlyItem.extra += item.extra;
-                yearlyItem.endingBalance = item.endingBalance; // Use the balance of the last month in the year
-            });
-            return Array.from(yearlyMap.values());
-        }
-
-        /**
-         * Renders pagination controls for the schedule (Helper for Improvement 4)
-         */
-        function renderPaginationControls(totalPages) {
-            const paginationContainer = document.getElementById('schedule-pagination');
-            paginationContainer.innerHTML = '';
-            const currentPage = MORTGAGE_CALCULATOR.scheduleCurrentPage;
-
-            // Previous Button
-            const prevBtn = document.createElement('button');
-            prevBtn.textContent = '« Prev';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => changeSchedulePage(currentPage - 1);
-            paginationContainer.appendChild(prevBtn);
-
-            // Page Number Indicator
-            const pageText = document.createElement('span');
-            pageText.textContent = `Page ${currentPage} of ${totalPages}`;
-            paginationContainer.appendChild(pageText);
-
-            // Next Button
-            const nextBtn = document.createElement('button');
-            nextBtn.textContent = 'Next »';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => changeSchedulePage(currentPage + 1);
-            paginationContainer.appendChild(nextBtn);
-        }
-
-        function changeSchedulePage(page) {
-            MORTGAGE_CALCULATOR.scheduleCurrentPage = page;
-            renderPaymentScheduleTable();
-        }
-
-        function toggleScheduleType(type) {
-            document.querySelectorAll('.schedule-controls .chip').forEach(chip => {
-                chip.classList.remove('active');
-            });
-            document.querySelector(`.schedule-controls .chip[data-schedule-type="${type}"]`).classList.add('active');
-            MORTGAGE_CALCULATOR.scheduleType = type;
-            MORTGAGE_CALCULATOR.scheduleCurrentPage = 1; // Reset to page 1 on type change
-            renderPaymentScheduleTable();
-        }
-
-
-        /**
-         * Export the current schedule view (Improvement 4)
-         * @param {string} format - 'pdf' or 'csv'
-         */
-        function exportSchedule(format) {
-            const schedule = MORTGAGE_CALCULATOR.currentCalculation.amortizationSchedule;
-            if (!schedule.length) {
-                showToast('Cannot export empty schedule.', 'error');
-                return;
-            }
-            
-            showLoading('Generating export file...');
-
-            const type = MORTGAGE_CALCULATOR.scheduleType;
-            const dataToExport = type === 'yearly' ? aggregateYearly(schedule) : schedule;
-            
-            // Define headers
-            const headers = [
-                type === 'monthly' ? 'Month' : 'Year',
-                'Total Payment',
-                'Principal',
-                'Interest',
-                'Taxes & Insurance',
-                'Extra Payment',
-                'Ending Balance'
-            ];
-            
-            // Define rows
-            const rows = dataToExport.map(item => [
-                type === 'monthly' ? item.month : item.year,
-                formatCurrency(item.totalPayment, true),
-                formatCurrency(item.principal, true),
-                formatCurrency(item.interest, true),
-                formatCurrency(item.taxAndIns, true),
-                formatCurrency(item.extra, true),
-                formatCurrency(item.endingBalance, true)
-            ]);
-            
-            const title = `AI_Mortgage_Schedule_${type}_${new Date().getFullYear()}`;
-
-            if (format === 'csv') {
-                // Simple CSV generation
-                const csvContent = [
-                    headers.join(','),
-                    ...rows.map(e => e.join(','))
-                ].join('\n');
-                
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `${title}.csv`;
-                link.click();
-                hideLoading();
-                showToast('Schedule exported to CSV!', 'success');
-                
-            } else if (format === 'pdf') {
-                // PDF generation using jspdf-autotable (simulated by a custom PDF layout for simplicity)
-                try {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF('landscape');
-                    
-                    doc.text(`AI Mortgage Calculator - ${type.toUpperCase()} Schedule`, 14, 15);
-                    doc.setFontSize(10);
-                    doc.text(`Loan Amount: ${formatCurrency(MORTGAGE_CALCULATOR.currentCalculation.loanAmount)}`, 14, 22);
-                    doc.text(`Rate: ${MORTGAGE_CALCULATOR.currentCalculation.interestRate}%`, 14, 27);
-                    doc.text(`Term: ${MORTGAGE_CALCULATOR.currentCalculation.loanTerm} Years`, 14, 32);
-
-                    // Using autoTable for table generation (requires jspdf-autotable, but simulating the structure)
-                    // A more robust implementation would use a separate autoTable library.
-                    // For production-ready code, we use a basic table array compatible with typical PDF libs.
-                    
-                    const tableData = [headers, ...rows];
-                    let y = 40;
-                    
-                    // Draw table headers
-                    doc.setFontSize(8);
-                    doc.setFillColor(20, 184, 166);
-                    doc.setTextColor(255, 255, 255);
-                    doc.rect(14, y, 269, 7, 'F');
-                    let x = 14;
-                    const colWidths = [15, 40, 40, 40, 40, 40, 40];
-                    
-                    headers.forEach((header, index) => {
-                        doc.text(header, x + colWidths[index] / 2, y + 4.5, { align: 'center' });
-                        x += colWidths[index];
-                    });
-
-                    y += 7;
-                    
-                    // Draw table rows
-                    doc.setTextColor(0, 0, 0);
-                    rows.forEach((row, rowIndex) => {
-                        if (rowIndex % 2 === 0) {
-                            doc.setFillColor(243, 244, 246);
-                            doc.rect(14, y, 269, 6, 'F');
-                        }
-                        
-                        x = 14;
-                        row.forEach((cell, cellIndex) => {
-                            doc.text(cell, x + colWidths[cellIndex] / 2, y + 3.5, { align: 'center' });
-                            x += colWidths[cellIndex];
-                        });
-                        y += 6;
-                        
-                        // Add new page if necessary
-                        if (y > 190 && rowIndex < rows.length - 1) {
-                            doc.addPage();
-                            y = 15;
-                        }
-                    });
-
-                    doc.save(`${title}.pdf`);
-                    hideLoading();
-                    showToast('Schedule exported to PDF!', 'success');
-                } catch (e) {
-                    console.error('PDF Export Error:', e);
-                    hideLoading();
-                    showToast('PDF export failed. Missing jspdf or html2canvas libraries.', 'error');
-                }
-            }
-        }
-
-        // ========================================================================== //
-        // UI & CHART RENDERING                                                       //
-        // ========================================================================== //
-
-        /**
-         * Renders the Payment Components Pie Chart.
-         */
-        function renderPaymentComponentsChart(pi, tax, ins, other) {
-            const ctx = document.getElementById('paymentComponentsChart').getContext('2d');
-            
-            if (MORTGAGE_CALCULATOR.charts.paymentComponents) {
-                MORTGAGE_CALCULATOR.charts.paymentComponents.destroy();
-            }
-            
-            // Get colors from CSS variables for theme-aware charts
-            const chartColorPrimary = getComputedStyle(document.documentElement).getPropertyValue('--color-chart-primary').trim();
-            const chartColorSecondary = getComputedStyle(document.documentElement).getPropertyValue('--color-chart-secondary').trim();
-            const chartColorTertiary = getComputedStyle(document.documentElement).getPropertyValue('--color-chart-tertiary').trim();
-            const chartColorQuaternary = getComputedStyle(document.documentElement).getPropertyValue('--color-chart-quaternary').trim();
-            const chartColorText = getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary').trim();
-
-            MORTGAGE_CALCULATOR.charts.paymentComponents = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Principal & Interest', 'Property Tax', 'Home Insurance', 'PMI/HOA/Other'],
-                    datasets: [{
-                        data: [pi, tax / 12, ins / 12, other],
-                        backgroundColor: [
-                            chartColorPrimary,
-                            chartColorSecondary,
-                            chartColorTertiary,
-                            chartColorQuaternary
-                        ],
-                        hoverOffset: 10,
-                        borderWidth: 0 // Remove white border in dark mode
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                color: chartColorText,
-                                font: { size: 12 }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // ========================================================================== //
-        // AI INSIGHTS GENERATION (Dynamic & Accurate) (Improvement 2)                //
-        // ========================================================================== //
-
-        function renderAIPoweredInsights() {
-            const current = MORTGAGE_CALCULATOR.currentCalculation;
-            const amortization = current.amortizationSchedule;
-            const aiOutput = document.getElementById('ai-insights-output');
-            
-            if (!aiOutput) return;
-
-            // Simulate AI processing delay
-            aiOutput.innerHTML = `<div class="ai-insight ai-insight-loading"><i class="fas fa-sync-alt fa-spin"></i> Generating personalized insights based on your inputs...</div>`;
-
-            setTimeout(() => {
-                let html = '';
-                
-                // --- Insight 1: Credit Score Impact ---
-                let creditScoreStatus;
-                if (current.creditScore >= 760) {
-                    creditScoreStatus = `Excellent! With a **${current.creditScore} credit score**, you're in the best position to qualify for the lowest available rates.`;
-                } else if (current.creditScore >= 700) {
-                    creditScoreStatus = `Good. Your **${current.creditScore} credit score** should qualify you for competitive rates, but improving it to 760+ could save you thousands over the loan term.`;
-                } else if (current.creditScore >= 640) {
-                    creditScoreStatus = `Fair. Your **${current.creditScore} credit score** may result in higher interest rates. Consider improving your score before applying for better terms.`;
-                } else {
-                    creditScoreStatus = `Poor. With a **${current.creditScore} credit score**, you may face challenges qualifying for conventional loans and higher interest rates. Focus on credit improvement strategies.`;
-                }
-                
-                html += `
-                    <div class="ai-insight">
-                        <p class="ai-insight-title"><i class="fas fa-credit-card"></i> Credit Score Analysis</p>
-                        <p>${creditScoreStatus}</p>
+    <div class="voice-modal" id="voice-modal" role="dialog" aria-labelledby="voice-modal-title" aria-modal="true" hidden>
+        <div class="voice-modal-content">
+            <div class="voice-modal-header">
+                <h3 class="modal-title" id="voice-modal-title">
+                    <i class="fas fa-microphone modal-icon" aria-hidden="true"></i>
+                    Voice Control
+                </h3>
+                <button class="modal-close-btn" onclick="closeVoiceModal()" aria-label="Close voice control">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="voice-modal-body">
+                <div class="voice-instructions">
+                    <h4 class="instructions-title">Try saying:</h4>
+                    <div class="command-category">
+                        <h5 class="category-title">Inputs</h5>
+                        <ul class="command-list">
+                            <li>"Set home price to 500000"</li>
+                            <li>"Set down payment to 25 percent"</li>
+                            <li>"Set interest rate to 7.5"</li>
+                            <li>"Set loan term to 15 years"</li>
+                        </ul>
                     </div>
-                `;
-
-                // --- Insight 2: Loan Comparison / Down Payment Wisdom ---
-                let dpStatus;
-                if (current.downPaymentPercent >= 20) {
-                    dpStatus = `Excellent! You've achieved the **20% Down Payment** benchmark. This saves you approximately ${formatCurrency(current.loanAmount * 0.005)} per year by **avoiding PMI** (Private Mortgage Insurance).`;
-                } else if (current.downPaymentPercent >= 3.5 && current.downPaymentPercent < 20) {
-                    dpStatus = `Good start. With a **${current.downPaymentPercent.toFixed(1)}% down payment**, you'll likely incur Private Mortgage Insurance (PMI) of about ${formatCurrency(current.pmi)}/month. Consider increasing your down payment to 20% to eliminate this cost.`;
-                } else {
-                    dpStatus = `At **${current.downPaymentPercent.toFixed(1)}% down**, you should explore an FHA or VA loan to manage the high upfront PMI costs.`;
-                }
-                
-                html += `
-                    <div class="ai-insight">
-                        <p class="ai-insight-title"><i class="fas fa-chart-line"></i> Down Payment & PMI Strategy</p>
-                        <p>${dpStatus}</p>
+                    <div class="command-category">
+                        <h5 class="category-title">Actions</h5>
+                        <ul class="command-list">
+                            <li>"Show AI insights"</li>
+                            <li>"Show payment schedule"</li>
+                            <li>"Toggle dark mode"</li>
+                            <li>"Close this"</li>
+                        </ul>
                     </div>
-                `;
-
-                // --- Insight 3: Extra Payment Impact ---
-                let extraPayoffDate = new Date(current.payoffDate);
-                let originalPayoffDate = new Date(new Date().setFullYear(new Date().getFullYear() + current.loanTerm));
-                let monthsSaved = (originalPayoffDate.getFullYear() - extraPayoffDate.getFullYear()) * 12;
-                monthsSaved -= (extraPayoffDate.getMonth() - originalPayoffDate.getMonth());
-                
-                if (current.extraMonthly > 0 || current.oneTimeExtra > 0) {
-                    html += `
-                        <div class="ai-insight">
-                            <p class="ai-insight-title"><i class="fas fa-bolt"></i> Acceleration Analysis: Extra Payments</p>
-                            <p>Your extra ${formatCurrency(current.extraMonthly + (current.oneTimeExtra / 12))} average monthly payment reduces your loan term by **${monthsSaved} months** (${(monthsSaved/12).toFixed(1)} years). This saves you a total of **${formatCurrency(current.totalInterest - calculateAmortization(current.loanAmount).totalInterest)}** in interest compared to the base loan.</p>
-                        </div>
-                    `;
-                } else {
-                    html += `
-                        <div class="ai-insight">
-                            <p class="ai-insight-title"><i class="fas fa-arrow-alt-circle-up"></i> Early Payoff Potential</p>
-                            <p>Paying just **${formatCurrency(100)}** extra per month could save you tens of thousands in interest and cut your loan term by several years. Consider this strategy!</p>
-                        </div>
-                    `;
-                }
-
-                // --- Insight 4: Property Tax/Insurance Burden ---
-                const piti = parseFloat(document.getElementById('total-monthly').textContent.replace(/[^0-9.-]+/g,""));
-                const monthlyTaxIns = (current.propertyTax / 12) + (current.homeInsurance / 12);
-                const taxInsPercent = (monthlyTaxIns / piti) * 100;
-                
-                if (taxInsPercent > 30) {
-                    html += `
-                        <div class="ai-insight">
-                            <p class="ai-insight-title"><i class="fas fa-exclamation-triangle"></i> Tax & Insurance Burden Alert</p>
-                            <p>Your property tax and insurance costs make up **${taxInsPercent.toFixed(1)}%** of your total monthly payment. This is higher than the national average. Verify your selected state rate and consider appealing your home appraisal.</p>
-                        </div>
-                    `;
-                } else {
-                    html += `
-                        <div class="ai-insight">
-                            <p class="ai-insight-title"><i class="fas fa-check-circle"></i> Tax & Insurance Comfort</p>
-                            <p>At **${taxInsPercent.toFixed(1)}%**, your property tax and insurance costs are manageable for your home price. Good job selecting a state with a reasonable effective tax rate (${(current.propertyTax / current.homePrice * 100).toFixed(2)}%).</p>
-                        </div>
-                    `;
-                }
-
-                // --- Insight 5: Interest Rate Context ---
-                const currentRate = current.interestRate;
-                let rateContext;
-                if (currentRate < 5) {
-                    rateContext = `Your **${currentRate}% interest rate** is exceptionally low by historical standards. This is an excellent time to lock in a mortgage.`;
-                } else if (currentRate < 7) {
-                    rateContext = `Your **${currentRate}% interest rate** is competitive in today's market. This is a reasonable rate for current economic conditions.`;
-                } else {
-                    rateContext = `Your **${currentRate}% interest rate** is on the higher side historically. Consider shopping around with different lenders or waiting for rates to potentially decrease if your timeline allows.`;
-                }
-                
-                html += `
-                    <div class="ai-insight">
-                        <p class="ai-insight-title"><i class="fas fa-percentage"></i> Interest Rate Context</p>
-                        <p>${rateContext}</p>
+                </div>
+            </div>
+            <div class="voice-modal-footer">
+                <button class="modal-btn secondary" onclick="closeVoiceModal()">
+                    Cancel
+                </button>
+                <button class="modal-btn primary" id="voice-listen-btn" onclick="startVoiceRecognition()">
+                    <i class="fas fa-microphone" aria-hidden="true"></i>
+                    Start Listening
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="comparison-modal" id="comparison-modal" role="dialog" aria-labelledby="comparison-modal-title" aria-modal="true" hidden>
+        <div class="comparison-modal-content">
+            <div class="comparison-header">
+                <h3 class="comparison-title" id="comparison-modal-title">
+                    <i class="fas fa-balance-scale modal-icon" aria-hidden="true"></i>
+                    Compare Loan Scenarios
+                </h3>
+                <button class="modal-close-btn" onclick="closeComparisonModal()" aria-label="Close comparison">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="comparison-body">
+                <div class="comparison-scenarios" id="comparison-scenarios">
                     </div>
-                `;
-
-                // --- Insight 6: Loan-to-Value Ratio Analysis ---
-                const ltv = (current.loanAmount / current.homePrice) * 100;
-                let ltvAnalysis;
-                if (ltv <= 80) {
-                    ltvAnalysis = `Your **${ltv.toFixed(1)}% LTV ratio** is excellent. This puts you in a strong position with lenders and eliminates PMI requirements.`;
-                } else if (ltv <= 90) {
-                    ltvAnalysis = `Your **${ltv.toFixed(1)}% LTV ratio** is good, but you're paying PMI. Consider making additional principal payments to reach 80% LTV and eliminate PMI sooner.`;
-                } else {
-                    ltvAnalysis = `Your **${ltv.toFixed(1)}% LTV ratio** is high, which means you have less equity in your home initially. Focus on building equity through extra payments when possible.`;
-                }
-                
-                html += `
-                    <div class="ai-insight">
-                        <p class="ai-insight-title"><i class="fas fa-balance-scale"></i> Loan-to-Value Analysis</p>
-                        <p>${ltvAnalysis}</p>
-                    </div>
-                `;
-
-                // --- Insight 7: Debt-to-Income Estimation ---
-                // Assuming a rough DTI calculation based on typical income for the home price
-                const estimatedIncome = current.homePrice * 3; // Rough estimate: home price is 3x annual income
-                const monthlyIncome = estimatedIncome / 12;
-                const dti = (piti / monthlyIncome) * 100;
-                
-                let dtiAnalysis;
-                if (dti <= 28) {
-                    dtiAnalysis = `Based on typical income for your home price, your estimated **front-end DTI is ${dti.toFixed(1)}%**, which is excellent. Lenders prefer this ratio to be under 28%.`;
-                } else if (dti <= 36) {
-                    dtiAnalysis = `Based on typical income for your home price, your estimated **front-end DTI is ${dti.toFixed(1)}%**, which is acceptable to most lenders but on the higher side.`;
-                } else {
-                    dtiAnalysis = `Based on typical income for your home price, your estimated **front-end DTI is ${dti.toFixed(1)}%**, which may be challenging for loan approval. Consider a less expensive home or larger down payment.`;
-                }
-                
-                html += `
-                    <div class="ai-insight">
-                        <p class="ai-insight-title"><i class="fas fa-calculator"></i> Debt-to-Income Estimate</p>
-                        <p>${dtiAnalysis}</p>
-                    </div>
-                `;
-                
-                aiOutput.innerHTML = html;
-                
-                // Announce the new insights to the screen reader (Improvement 7)
-                if (MORTGAGE_CALCULATOR.screenReaderMode) {
-                    announceToScreenReader('AI Powered Insights have been updated. Credit score analysis, down payment strategy, loan acceleration, and tax burden analysis provided.');
-                }
-
-            }, 500); // Small delay for the "AI" feel
-        }
-
-
-        // ========================================================================== //
-        // FRED API INTEGRATION (Solution for Improvement 9)                          //
-        // ========================================================================== //
-
-        class FredAPIManager {
-            constructor() {
-                this.apiKey = MORTGAGE_CALCULATOR.FRED_API_KEY;
-                this.baseUrl = MORTGAGE_CALCULATOR.FRED_BASE_URL;
-                this.cache = new Map();
-            }
-
-            /**
-             * Fetches the current mortgage rates and treasury yield from FRED.
-             * @returns {Promise<object|null>} The current interest rates as percentages, or null on failure.
-             */
-            async getCurrentRates() {
-                if (MORTGAGE_CALCULATOR.rateUpdateAttempts >= MORTGAGE_CALCULATOR.maxRateUpdateAttempts) {
-                    console.error('Max FRED API update attempts reached.');
-                    showToast('Failed to fetch live rates after multiple attempts. Using default rate.', 'error');
-                    return null;
-                }
-
-                const seriesIds = ['MORTGAGE30US', 'MORTGAGE15US', 'DGS10'];
-                const urls = seriesIds.map(id => 
-                    `${this.baseUrl}?series_id=${id}&api_key=${this.apiKey}&file_type=json&sort_order=desc&limit=1`
-                );
-                
-                showLoading('Fetching live Federal Reserve rates...');
-                
-                try {
-                    const responses = await Promise.all(urls.map(url => fetch(url)));
-                    const data = await Promise.all(responses.map(response => response.json()));
-                    
-                    const rates = {};
-                    
-                    data.forEach((item, index) => {
-                        if (item.observations && item.observations.length > 0) {
-                            const latestRate = parseFloat(item.observations[0].value);
-                            if (!isNaN(latestRate)) {
-                                rates[seriesIds[index]] = latestRate;
-                                this.cache.set(seriesIds[index], latestRate);
-                            }
-                        }
-                    });
-                    
-                    MORTGAGE_CALCULATOR.lastRateUpdate = Date.now();
-                    MORTGAGE_CALCULATOR.rateUpdateAttempts = 0;
-                    
-                    // Update the last update time display
-                    const now = new Date();
-                    document.getElementById('last-update-time').textContent = now.toLocaleString();
-                    
-                    hideLoading();
-                    showToast(`Live Rates Updated: 30Y ${rates.MORTGAGE30US}%, 15Y ${rates.MORTGAGE15US}%`, 'success');
-                    console.log(`🏦 FRED API Success: Latest rates fetched`);
-                    return rates;
-
-                } catch (error) {
-                    console.error('FRED API Fetch Error:', error.message);
-                    MORTGAGE_CALCULATOR.rateUpdateAttempts++;
-                    
-                    hideLoading();
-                    // Show error toast on failure
-                    showToast('Error fetching live rates from FRED. Using cached/default rate.', 'warning');
-                    
-                    // Fallback to cache or default rates
-                    const cachedRates = {};
-                    seriesIds.forEach(id => {
-                        cachedRates[id] = this.cache.get(id) || null;
-                    });
-                    
-                    return cachedRates;
-                    
-                } finally {
-                    hideLoading();
-                }
-            }
-
-            /**
-             * Schedules automatic rate updates every Thursday at 1:30 PM CT / 2:30 PM ET
-             */
-            scheduleRateUpdates() {
-                // Calculate next Thursday 1:30 PM CT (which is 18:30 UTC)
-                const now = new Date();
-                const dayOfWeek = now.getDay(); // 0 = Sunday, 4 = Thursday
-                const daysUntilThursday = (4 - dayOfWeek + 7) % 7;
-                const nextThursday = new Date(now);
-                nextThursday.setDate(now.getDate() + daysUntilThursday);
-                nextThursday.setHours(18, 30, 0, 0); // 18:30 UTC = 1:30 PM CT
-                
-                // If it's already past this time on Thursday, schedule for next week
-                if (now > nextThursday) {
-                    nextThursday.setDate(nextThursday.getDate() + 7);
-                }
-                
-                const timeUntilNextUpdate = nextThursday.getTime() - now.getTime();
-                
-                console.log(`Next FRED API update scheduled for: ${nextThursday.toString()}`);
-                
-                // Schedule the update
-                setTimeout(() => {
-                    this.getCurrentRates();
-                    // Set up recurring weekly updates
-                    setInterval(() => this.getCurrentRates(), 7 * 24 * 60 * 60 * 1000);
-                }, timeUntilNextUpdate);
-            }
-        }
-
-        // ========================================================================== //
-        // NEW FEATURES & UTILITY FUNCTIONS                                           //
-        // ========================================================================== //
-
-        /**
-         * Populates the state dropdown with all 50 US states (Improvement 1)
-         */
-        function populateStateDropdown() {
-            const select = document.getElementById('state-select');
-            // Clear default option (the template already has one, keep it as selected disabled)
-            
-            // Add all 50 states + DC
-            const stateCodes = Object.keys(STATE_RATES).sort();
-            
-            stateCodes.forEach(code => {
-                const state = STATE_RATES[code];
-                const option = document.createElement('option');
-                option.value = code;
-                option.textContent = state.name;
-                select.appendChild(option);
-            });
-        }
-
-        /**
-         * Handles state selection to auto-update tax/insurance inputs (Improvement 1)
-         */
-        function handleStateChange() {
-            const select = document.getElementById('state-select');
-            const stateCode = select.value;
-            MORTGAGE_CALCULATOR.currentCalculation.state = stateCode;
-            
-            if (stateCode === 'default') return;
-
-            const stateData = STATE_RATES[stateCode];
-            const homePrice = MORTGAGE_CALCULATOR.currentCalculation.homePrice || 1; // Prevent division by zero
-
-            // Calculate annual tax/insurance based on home price and state rates
-            const annualTax = homePrice * (stateData.taxRate / 100);
-            const annualInsurance = homePrice * (stateData.insuranceRate / 100);
-
-            // Update the input fields
-            document.getElementById('property-tax').value = annualTax.toFixed(0);
-            document.getElementById('home-insurance').value = annualInsurance.toFixed(0);
-            
-            // Update the rate display hints
-            document.getElementById('tax-rate-display').textContent = `${stateData.taxRate.toFixed(2)}%`;
-            document.getElementById('insurance-rate-display').textContent = `${stateData.insuranceRate.toFixed(2)}%`;
-
-            // Trigger calculation with new tax/insurance values
-            updateCalculation('state-select');
-
-            showToast(`Tax/Insurance updated for ${stateData.name}`, 'info');
-        }
-
-        /**
-         * Switches the content view between the four tabs (Improvement 2)
-         * @param {string} tabId - ID suffix of the tab (e.g., 'payment-summary')
-         */
-        function switchTab(tabId) {
-            // 1. Deactivate all buttons and hide all content
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.setAttribute('aria-selected', 'false');
-            });
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-                content.hidden = true;
-            });
-
-            // 2. Activate the selected button and show the content
-            const selectedBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
-            const selectedContent = document.getElementById(`tab-content-${tabId}`);
-            
-            if (selectedBtn && selectedContent) {
-                selectedBtn.classList.add('active');
-                selectedBtn.setAttribute('aria-selected', 'true');
-                selectedContent.classList.add('active');
-                selectedContent.hidden = false;
-            }
-            
-            // 3. Special re-render/logic for tab views (Improvement 3 & 4)
-            if (tabId === 'balance-timeline') {
-                renderMortgageTimelineChart();
-                renderPrincipalInterestChart();
-            } else if (tabId === 'payment-schedule') {
-                renderPaymentScheduleTable();
-            } else if (tabId === 'ai-insights') {
-                renderAIPoweredInsights();
-            }
-        }
-
-        /**
-         * Toggles the theme between dark and light mode (Improvement 10)
-         */
-        function toggleTheme() {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-color-scheme') === 'dark';
-            const newTheme = isDark ? 'light' : 'dark';
-            
-            html.setAttribute('data-color-scheme', newTheme);
-            MORTGAGE_CALCULATOR.currentTheme = newTheme;
-
-            // Persist choice
-            localStorage.setItem('preferredTheme', newTheme);
-            
-            // Re-render charts to update colors
-            if (MORTGAGE_CALCULATOR.charts.paymentComponents) {
-                renderPaymentComponentsChart(
-                    parseFloat(document.getElementById('pi-monthly').textContent.replace(/[^0-9.-]+/g,"")), 
-                    MORTGAGE_CALCULATOR.currentCalculation.propertyTax, 
-                    MORTGAGE_CALCULATOR.currentCalculation.homeInsurance, 
-                    MORTGAGE_CALCULATOR.currentCalculation.pmi + MORTGAGE_CALCULATOR.currentCalculation.hoaFees
-                );
-            }
-            if (MORTGAGE_CALCULATOR.charts.mortgageTimeline) {
-                renderMortgageTimelineChart();
-            }
-            if (MORTGAGE_CALCULATOR.charts.principalInterest) {
-                renderPrincipalInterestChart();
-            }
-            
-            showToast(`Switched to ${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)} Mode`, 'info');
-        }
-
-        /**
-         * Toggles the Screen Reader/Read Aloud functionality (Improvement 7)
-         */
-        function toggleScreenReader() {
-            const toggle = document.getElementById('screen-reader-toggle');
-            MORTGAGE_CALCULATOR.screenReaderMode = !MORTGAGE_CALCULATOR.screenReaderMode;
-            
-            if (MORTGAGE_CALCULATOR.screenReaderMode) {
-                toggle.classList.add('active');
-                announceToScreenReader('Screen Reader mode enabled. Reading current results: ' + document.getElementById('monthly-payment-total').textContent);
-                showToast('Screen Reader Mode On', 'info');
-            } else {
-                toggle.classList.remove('active');
-                if (MORTGAGE_CALCULATOR.speechSynthesis.speaking) {
-                    MORTGAGE_CALCULATOR.speechSynthesis.cancel();
-                }
-                showToast('Screen Reader Mode Off', 'info');
-            }
-        }
-
-        /**
-         * Reads content aloud using the Web Speech API (Improvement 7)
-         */
-        function announceToScreenReader(text) {
-            if (!MORTGAGE_CALCULATOR.screenReaderMode || !MORTGAGE_CALCULATOR.speechSynthesis) return;
-
-            // Cancel any current speech
-            MORTGAGE_CALCULATOR.speechSynthesis.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 1.1; // Slightly faster reading
-            utterance.volume = 1;
-            utterance.pitch = 1;
-            
-            // Try to use an American voice for the US calculator
-            const voices = MORTGAGE_CALCULATOR.speechSynthesis.getVoices();
-            const usVoice = voices.find(voice => voice.lang === 'en-US');
-            if (usVoice) {
-                utterance.voice = usVoice;
-            }
-            
-            MORTGAGE_CALCULATOR.speechSynthesis.speak(utterance);
-        }
-
-        /**
-         * Opens a new window for the Loan Comparison Tool (Improvement 8)
-         */
-        function openLoanCompareWindow() {
-            const currentData = JSON.stringify(MORTGAGE_CALCULATOR.currentCalculation);
-            
-            // Open a new window with a simplified/dedicated comparison tool
-            const compareWindow = window.open('', 'LoanCompareWindow', 'width=1000,height=700,scrollbars=yes,resizable=yes');
-            
-            // Write a basic HTML structure to the new window for comparison scenario input
-            const newWindowContent = `
-                <!DOCTYPE html>
-                <html lang="en" data-color-scheme="${MORTGAGE_CALCULATOR.currentTheme}">
-                <head>
-                    <title>Loan Comparison Tool - AI Mortgage Pro</title>
-                    <link rel="stylesheet" href="mortgage-calculator.css">
-                    <style>
-                        body { padding: 20px; background-color: var(--color-background); color: var(--color-text); }
-                        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-                        .scenario-card { padding: 15px; border-radius: 8px; background-color: var(--color-surface); border: 1px solid var(--color-border); }
-                        h1 { font-size: 24px; color: var(--color-primary); margin-bottom: 20px; }
-                        .form-group label { color: var(--color-text-secondary); }
-                        .compare-results { margin-top: 20px; border-top: 1px solid var(--color-border); padding-top: 15px; }
-                        .result-item { display: flex; justify-content: space-between; padding: 5px 0; font-weight: 600; }
-                        .result-diff { font-weight: 700; color: green; }
-                        .result-diff.negative { color: red; }
-                    </style>
-                </head>
-                <body>
-                    <h1>Loan Comparison: Multiple Scenarios</h1>
-                    <div class="compare-grid" id="compare-grid">
-                        <div class="scenario-card" id="scenario-1">
-                            <h2>Scenario 1: Your Current Loan (Base)</h2>
-                            <p>Loan Amount: <strong id="base-loan-amount"></strong></p>
-                            <p>Interest Rate: <strong id="base-rate"></strong></p>
-                            <p>Term: <strong id="base-term"></strong></p>
-                            <hr style="margin: 10px 0; border-color: var(--color-border);">
-                            <p>Monthly Payment: <strong id="base-monthly-payment"></strong></p>
-                            <p>Total Interest: <strong id="base-total-interest"></strong></p>
-                        </div>
-
-                        <div class="scenario-card" id="scenario-2">
-                            <h2>Scenario 2: Custom Loan</h2>
-                            <div class="form-group"><label>Loan Amount ($)</label><input type="number" id="comp-loan-amount" class="form-control" value="${MORTGAGE_CALCULATOR.currentCalculation.loanAmount}" step="1000"></div>
-                            <div class="form-group"><label>Interest Rate (%)</label><input type="number" id="comp-rate" class="form-control" value="5.5" step="0.01"></div>
-                            <div class="form-group"><label>Term (Years)</label><input type="number" id="comp-term" class="form-control" value="15" step="1"></div>
-                            <button class="btn btn-primary" onclick="calculateComparison()">Compare Now</button>
-                            
-                            <div class="compare-results">
-                                <p>Monthly Payment: <strong id="comp-monthly-payment">N/A</strong></p>
-                                <p>Total Interest: <strong id="comp-total-interest">N/A</strong></p>
-                                <hr style="margin: 10px 0; border-color: var(--color-border);">
-                                <h3>Difference vs. Base</h3>
-                                <div class="result-item">
-                                    <span>Monthly Diff:</span>
-                                    <span id="diff-monthly" class="result-diff">N/A</span>
-                                </div>
-                                <div class="result-item">
-                                    <span>Interest Diff:</span>
-                                    <span id="diff-interest" class="result-diff">N/A</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <script>
-                        const currentData = ${currentData};
-                        
-                        function calculate(principal, rate, term) {
-                            const monthlyRate = (rate / 100) / 12;
-                            const payments = term * 12;
-                            let monthlyPI;
-
-                            if (monthlyRate === 0) {
-                                monthlyPI = principal / payments;
-                            } else {
-                                monthlyPI = principal * (monthlyRate * Math.pow(1 + monthlyRate, payments)) / (Math.pow(1 + monthlyRate, payments) - 1);
-                            }
-                            if (isNaN(monthlyPI) || monthlyPI === Infinity || monthlyPI === 0) {
-                                return { monthlyPayment: 0, totalInterest: 0 };
-                            }
-
-                            // Total Interest (approximation for speed)
-                            const totalInterest = (monthlyPI * payments) - principal;
-
-                            return { monthlyPayment: monthlyPI, totalInterest: totalInterest };
-                        }
-
-                        function format(amount) {
-                            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
-                        }
-
-                        function setBaseValues() {
-                            document.getElementById('base-loan-amount').textContent = format(currentData.loanAmount);
-                            document.getElementById('base-rate').textContent = currentData.interestRate.toFixed(2) + '%';
-                            document.getElementById('base-term').textContent = currentData.loanTerm + ' Years';
-                            
-                            // Recalculate base monthly PI without PITI/Fees (for fair comparison)
-                            const baseCalc = calculate(currentData.loanAmount, currentData.interestRate, currentData.loanTerm);
-                            document.getElementById('base-monthly-payment').textContent = format(baseCalc.monthlyPayment + currentData.propertyTax / 12 + currentData.homeInsurance / 12 + currentData.pmi + currentData.hoaFees);
-                            document.getElementById('base-total-interest').textContent = format(baseCalc.totalInterest);
-                        }
-
-                        function calculateComparison() {
-                            const loanAmount = parseFloat(document.getElementById('comp-loan-amount').value) || 0;
-                            const rate = parseFloat(document.getElementById('comp-rate').value) || 0;
-                            const term = parseFloat(document.getElementById('comp-term').value) || 0;
-                            
-                            // Recalculate base (for comparison)
-                            const baseCalc = calculate(currentData.loanAmount, currentData.interestRate, currentData.loanTerm);
-                            const baseMonthly = baseCalc.monthlyPayment + currentData.propertyTax / 12 + currentData.homeInsurance / 12 + currentData.pmi + currentData.hoaFees;
-                            
-                            // Calculate comparison scenario
-                            const compCalc = calculate(loanAmount, rate, term);
-                            const compMonthly = compCalc.monthlyPayment + currentData.propertyTax / 12 + currentData.homeInsurance / 12 + currentData.pmi + currentData.hoaFees;
-                            
-                            // Update UI
-                            document.getElementById('comp-monthly-payment').textContent = format(compMonthly);
-                            document.getElementById('comp-total-interest').textContent = format(compCalc.totalInterest);
-                            
-                            // Calculate differences
-                            const diffMonthly = compMonthly - baseMonthly;
-                            const diffInterest = compCalc.totalInterest - baseCalc.totalInterest;
-                            
-                            document.getElementById('diff-monthly').textContent = format(diffMonthly);
-                            document.getElementById('diff-interest').textContent = format(diffInterest);
-                            
-                            // Color code differences
-                            document.getElementById('diff-monthly').className = 'result-diff' + (diffMonthly < 0 ? ' negative' : '');
-                            document.getElementById('diff-interest').className = 'result-diff' + (diffInterest < 0 ? ' negative' : '');
-                        }
-
-                        setBaseValues();
-                        calculateComparison(); // Initial comparison
-                    </script>
-                </body>
-                </html>
-            `;
-            
-            compareWindow.document.write(newWindowContent);
-            compareWindow.document.close();
-            
-            showToast('Loan Comparison Tool Opened in New Window', 'info');
-        }
-
-        // ========================================================================== //
-        // SHARE & EXPORT FUNCTIONALITY (Improvement 5)                               //
-        // ========================================================================== //
-
-        /**
-         * Opens the Share Modal for additional sharing options
-         */
-        function openShareModal() {
-            document.getElementById('share-modal').style.display = 'flex';
-        }
-
-        /**
-         * Closes the Share Modal
-         */
-        function closeShareModal() {
-            document.getElementById('share-modal').style.display = 'none';
-        }
-
-        /**
-         * Handles sharing to different platforms (Improvement 5)
-         */
-        function shareResults(platform) {
-            const monthlyPayment = document.getElementById('monthly-payment-total').textContent;
-            const loanAmount = formatCurrency(MORTGAGE_CALCULATOR.currentCalculation.loanAmount);
-            const rate = MORTGAGE_CALCULATOR.currentCalculation.interestRate;
-            
-            const text = `My AI Mortgage Pro Result: ${monthlyPayment}/month for a ${loanAmount} loan at ${rate}% interest.`;
-            const url = window.location.href;
-            
-            let shareUrl;
-            
-            switch (platform) {
-                case 'facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-                    break;
-                case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
-                    break;
-                case 'whatsapp':
-                    shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
-                    break;
-                case 'linkedin':
-                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-                    break;
-                case 'email':
-                    shareUrl = `mailto:?subject=My AI Mortgage Pro Results&body=${encodeURIComponent(text + '\n\n' + url)}`;
-                    break;
-                case 'copy':
-                    navigator.clipboard.writeText(`${text} ${url}`).then(() => {
-                        showToast('Link copied to clipboard!', 'success');
-                    }).catch(() => {
-                        showToast('Failed to copy to clipboard', 'error');
-                    });
-                    return;
-                default:
-                    console.warn('Unknown platform:', platform);
-                    return;
-            }
-            
-            if (platform !== 'email') {
-                window.open(shareUrl, '_blank', 'width=600,height=400');
-            } else {
-                window.location.href = shareUrl;
-            }
-            
-            closeShareModal();
-            showToast(`Shared to ${platform.charAt(0).toUpperCase() + platform.slice(1)}!`, 'success');
-        }
-
-        /**
-         * Exports the full results as a PDF (Improvement 5)
-         */
-        function shareResultsPDF() {
-            showLoading('Generating PDF report...');
-            
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                doc.setFontSize(20);
-                doc.text('AI Mortgage Pro - Results Report', 20, 20);
-                
-                doc.setFontSize(12);
-                doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
-                
-                // Monthly Payment
-                doc.setFontSize(16);
-                doc.text('Estimated Monthly Payment:', 20, 50);
-                doc.setFontSize(24);
-                doc.setTextColor(20, 184, 166);
-                doc.text(document.getElementById('monthly-payment-total').textContent, 20, 60);
-                
-                // Loan Details
-                doc.setFontSize(12);
-                doc.setTextColor(0, 0, 0);
-                doc.text(`Home Price: ${formatCurrency(MORTGAGE_CALCULATOR.currentCalculation.homePrice)}`, 20, 80);
-                doc.text(`Down Payment: ${formatCurrency(MORTGAGE_CALCULATOR.currentCalculation.downPayment)} (${MORTGAGE_CALCULATOR.currentCalculation.downPaymentPercent.toFixed(1)}%)`, 20, 90);
-                doc.text(`Loan Amount: ${formatCurrency(MORTGAGE_CALCULATOR.currentCalculation.loanAmount)}`, 20, 100);
-                doc.text(`Interest Rate: ${MORTGAGE_CALCULATOR.currentCalculation.interestRate}%`, 20, 110);
-                doc.text(`Loan Term: ${MORTGAGE_CALCULATOR.currentCalculation.loanTerm} Years`, 20, 120);
-                
-                // Payment Breakdown
-                doc.text('Payment Breakdown:', 20, 140);
-                doc.text(`Principal & Interest: ${document.getElementById('pi-monthly').textContent}`, 20, 150);
-                doc.text(`Property Tax: ${document.getElementById('tax-monthly').textContent}`, 20, 160);
-                doc.text(`Home Insurance: ${document.getElementById('insurance-monthly').textContent}`, 20, 170);
-                doc.text(`PMI/HOA/Other: ${document.getElementById('other-monthly').textContent}`, 20, 180);
-                
-                // Loan Totals
-                doc.text('Loan Totals:', 20, 200);
-                doc.text(`Total Cost: ${document.getElementById('total-cost').textContent}`, 20, 210);
-                doc.text(`Total Interest: ${document.getElementById('total-interest').textContent}`, 20, 220);
-                doc.text(`Payoff Date: ${document.getElementById('payoff-date').textContent}`, 20, 230);
-                doc.text(`Closing Costs: ${document.getElementById('closing-costs').textContent}`, 20, 240);
-                
-                // Add a footer
-                doc.setFontSize(10);
-                doc.text('Generated by AI Mortgage Pro Calculator - https://worldsfirstai-calculator.com/usa-mortgage', 20, 280);
-                
-                doc.save('AI_Mortgage_Results.pdf');
-                hideLoading();
-                showToast('PDF report downloaded!', 'success');
-                
-            } catch (error) {
-                console.error('PDF Generation Error:', error);
-                hideLoading();
-                showToast('PDF generation failed. Missing jspdf library.', 'error');
-            }
-        }
-
-        // ========================================================================== //
-        // VOICE CONTROL IMPLEMENTATION (Improvement 7)                               //
-        // ========================================================================== //
-
-        /**
-         * Toggles voice control on/off (Improvement 7)
-         */
-        function toggleVoiceControl() {
-            if (!MORTGAGE_CALCULATOR.speechRecognition) {
-                showToast('Voice recognition not supported in your browser.', 'error');
-                return;
-            }
-
-            MORTGAGE_CALCULATOR.voiceEnabled = !MORTGAGE_CALCULATOR.voiceEnabled;
-            const voiceStatus = document.getElementById('voice-status');
-            const voiceToggle = document.getElementById('voice-toggle');
-            
-            if (MORTGAGE_CALCULATOR.voiceEnabled) {
-                voiceStatus.style.display = 'block';
-                voiceToggle.classList.add('active');
-                
-                // Initialize speech recognition
-                const recognition = new MORTGAGE_CALCULATOR.speechRecognition();
-                recognition.continuous = true;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-                
-                recognition.onstart = () => {
-                    voiceStatus.querySelector('.voice-status-text').textContent = 'Voice control active - speak your commands';
-                };
-                
-                recognition.onresult = (event) => {
-                    const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
-                    handleVoiceCommand(transcript);
-                };
-                
-                recognition.onerror = (event) => {
-                    console.error('Speech Recognition Error:', event.error);
-                    if (event.error === 'not-allowed') {
-                        showToast('Microphone access denied. Please enable microphone permissions.', 'error');
-                        toggleVoiceControl(); // Turn off voice control
-                    }
-                };
-                
-                recognition.onend = () => {
-                    if (MORTGAGE_CALCULATOR.voiceEnabled) {
-                        recognition.start(); // Restart if still enabled
-                    }
-                };
-                
-                MORTGAGE_CALCULATOR.recognition = recognition;
-                recognition.start();
-                
-                showToast('Voice Control Activated', 'success');
-                announceToScreenReader('Voice control activated. Try saying "Set home price to 500000" or "What is my monthly payment?"');
-                
-            } else {
-                voiceStatus.style.display = 'none';
-                voiceToggle.classList.remove('active');
-                
-                if (MORTGAGE_CALCULATOR.recognition) {
-                    MORTGAGE_CALCULATOR.recognition.stop();
-                }
-                
-                showToast('Voice Control Deactivated', 'info');
-            }
-        }
-
-        /**
-         * Handles voice commands and maps them to calculator actions (Improvement 7)
-         */
-        function handleVoiceCommand(transcript) {
-            console.log('Voice Command:', transcript);
-            
-            // Basic command parsing
-            if (transcript.includes('home price') || transcript.includes('price')) {
-                const match = transcript.match(/\$?(\d+(?:,\d{3})*(?:\.\d{2})?)/);
-                if (match) {
-                    const value = parseFloat(match[1].replace(/,/g, ''));
-                    document.getElementById('home-price').value = value;
-                    updateCalculation('home-price');
-                    showToast(`Home price set to ${formatCurrency(value)}`, 'success');
-                    announceToScreenReader(`Home price set to ${formatCurrency(value)}`);
-                }
-            } else if (transcript.includes('interest rate') || transcript.includes('rate')) {
-                const match = transcript.match(/(\d+(?:\.\d+)?)\s*percent/);
-                if (match) {
-                    const value = parseFloat(match[1]);
-                    document.getElementById('interest-rate').value = value;
-                    updateCalculation('interest-rate');
-                    showToast(`Interest rate set to ${value}%`, 'success');
-                    announceToScreenReader(`Interest rate set to ${value} percent`);
-                }
-            } else if (transcript.includes('down payment')) {
-                const match = transcript.match(/\$?(\d+(?:,\d{3})*(?:\.\d{2})?)/);
-                if (match) {
-                    const value = parseFloat(match[1].replace(/,/g, ''));
-                    document.getElementById('down-payment').value = value;
-                    updateCalculation('down-payment');
-                    showToast(`Down payment set to ${formatCurrency(value)}`, 'success');
-                    announceToScreenReader(`Down payment set to ${formatCurrency(value)}`);
-                }
-            } else if (transcript.includes('monthly payment') || transcript.includes('payment')) {
-                const payment = document.getElementById('monthly-payment-total').textContent;
-                announceToScreenReader(`Your estimated monthly payment is ${payment}`);
-            } else if (transcript.includes('credit score')) {
-                const match = transcript.match(/(\d{3})/);
-                if (match) {
-                    const value = parseInt(match[1]);
-                    if (value >= 300 && value <= 850) {
-                        document.getElementById('credit-score').value = value;
-                        updateCalculation('credit-score');
-                        showToast(`Credit score set to ${value}`, 'success');
-                        announceToScreenReader(`Credit score set to ${value}`);
-                    }
-                }
-            } else if (transcript.includes('help') || transcript.includes('commands')) {
-                announceToScreenReader('Available voice commands: Set home price, set interest rate, set down payment, set credit score, what is my monthly payment.');
-            }
-        }
-
-        // ========================================================================== //
-        // HELPER & UTILITY FUNCTIONS                                                 //
-        // ========================================================================== //
-
-        /**
-         * Formats a number as USD currency.
-         * @param {number} amount - The amount to format.
-         * @param {boolean} raw - If true, returns the raw number without currency symbol.
-         * @returns {string} The formatted currency string.
-         */
-        function formatCurrency(amount, raw = false) {
-            if (isNaN(amount) || amount === null || amount === undefined) {
-                return raw ? '0' : '$0';
-            }
-            
-            const formatter = new Intl.NumberFormat('en-US', {
-                style: raw ? 'decimal' : 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            });
-            
-            return formatter.format(amount);
-        }
-
-        /**
-         * Shows a loading overlay with an optional message.
-         */
-        function showLoading(message = 'Loading...') {
-            const loadingEl = document.getElementById('loading-indicator');
-            const messageEl = document.getElementById('loading-message');
-            
-            if (loadingEl && messageEl) {
-                messageEl.textContent = message;
-                loadingEl.style.display = 'flex';
-            }
-        }
-
-        /**
-         * Hides the loading overlay.
-         */
-        function hideLoading() {
-            const loadingEl = document.getElementById('loading-indicator');
-            if (loadingEl) {
-                loadingEl.style.display = 'none';
-            }
-        }
-
-        /**
-         * Shows a toast notification.
-         */
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.textContent = message;
-            
-            container.appendChild(toast);
-            
-            // Trigger animation
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 10);
-            
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    if (container.contains(toast)) {
-                        container.removeChild(toast);
-                    }
-                }, 300);
-            }, 5000);
-        }
-
-        /**
-         * Toggles a collapsible section.
-         */
-        function toggleCollapsible(id) {
-            const section = document.getElementById(id);
-            section.classList.toggle('collapsed');
-        }
-
-        /**
-         * Sets the active loan type and updates UI.
-         */
-        function setLoanType(button) {
-            document.querySelectorAll('.loan-type-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.setAttribute('aria-pressed', 'false');
-            });
-            
-            button.classList.add('active');
-            button.setAttribute('aria-pressed', 'true');
-            
-            MORTGAGE_CALCULATOR.currentCalculation.loanType = button.dataset.loanType;
-            
-            // Auto-set appropriate down payment for loan type
-            const downPaymentPercent = document.getElementById('down-payment-percent');
-            const downPayment = document.getElementById('down-payment');
-            const homePrice = MORTGAGE_CALCULATOR.currentCalculation.homePrice;
-            
-            switch (button.dataset.loanType) {
-                case 'conventional':
-                    // Default to 20% for conventional
-                    downPaymentPercent.value = 20;
-                    downPayment.value = homePrice * 0.2;
-                    break;
-                case 'fha':
-                    // Minimum 3.5% for FHA
-                    downPaymentPercent.value = 3.5;
-                    downPayment.value = homePrice * 0.035;
-                    break;
-                case 'va':
-                case 'usda':
-                    // 0% down for VA/USDA
-                    downPaymentPercent.value = 0;
-                    downPayment.value = 0;
-                    break;
-            }
-            
-            updateCalculation('loan-type');
-            showToast(`Loan type set to ${button.dataset.loanType.toUpperCase()}`, 'info');
-        }
-
-        /**
-         * Sets the active loan term and updates UI.
-         */
-        function setLoanTerm(button) {
-            document.querySelectorAll('.term-chip').forEach(chip => {
-                chip.classList.remove('active');
-            });
-            
-            button.classList.add('active');
-            
-            MORTGAGE_CALCULATOR.currentCalculation.loanTerm = parseInt(button.dataset.term);
-            
-            updateCalculation('loan-term');
-            showToast(`Loan term set to ${button.dataset.term} years`, 'info');
-        }
-
-        // ========================================================================== //
-        // INITIALIZATION & SETUP                                                     //
-        // ========================================================================== //
-
-        /**
-         * Initializes the calculator when the DOM is loaded.
-         */
-        function initializeCalculator() {
-            // 1. Apply saved theme preference (Improvement 10)
-            const savedTheme = localStorage.getItem('preferredTheme') || 'dark';
-            document.documentElement.setAttribute('data-color-scheme', savedTheme);
-            MORTGAGE_CALCULATOR.currentTheme = savedTheme;
-            
-            // 2. Populate state dropdown (Improvement 1)
-            populateStateDropdown();
-            
-            // 3. Set up event listeners for collapsible sections
-            document.querySelectorAll('.section-sub-heading').forEach(heading => {
-                if (heading.nextElementSibling && heading.nextElementSibling.classList.contains('collapsible-content')) {
-                    heading.addEventListener('click', () => {
-                        const section = heading.closest('.collapsible-section');
-                        if (section) {
-                            toggleCollapsible(section.id);
-                        }
-                    });
-                }
-            });
-            
-            // 4. Initialize FRED API Manager and fetch rates (Improvement 9)
-            const fredManager = new FredAPIManager();
-            fredManager.getCurrentRates().then(rates => {
-                if (rates && rates.MORTGAGE30US) {
-                    // Update the interest rate input with the live 30-year rate
-                    document.getElementById('interest-rate').value = rates.MORTGAGE30US.toFixed(2);
-                    updateCalculation('interest-rate');
-                    
-                    // Update the rate status display
-                    document.getElementById('rate-text').textContent = `Live 30Y Rate: ${rates.MORTGAGE30US.toFixed(2)}% | 15Y: ${rates.MORTGAGE15US ? rates.MORTGAGE15US.toFixed(2) : 'N/A'}% | 10Y Treasury: ${rates.DGS10 ? rates.DGS10.toFixed(2) : 'N/A'}%`;
-                } else {
-                    document.getElementById('rate-text').textContent = 'Using default rate. Check console for FRED API errors.';
-                }
-            });
-            
-            // Schedule regular rate updates (Improvement 9)
-            fredManager.scheduleRateUpdates();
-            
-            // 5. Perform initial calculation
-            updateCalculation('init');
-            
-            // 6. Enable voice control button if supported
-            if (MORTGAGE_CALCULATOR.speechRecognition) {
-                document.getElementById('voice-toggle').disabled = false;
-            }
-            
-            // 7. Set up font scaling for accessibility
-            const root = document.documentElement;
-            const observer = new ResizeObserver(() => {
-                const width = window.innerWidth;
-                let scale = 1;
-                
-                if (width < 480) {
-                    scale = 0.8;
-                } else if (width < 768) {
-                    scale = 0.9;
-                }
-                
-                root.style.setProperty('--font-scale', scale);
-            });
-            
-            observer.observe(document.body);
-            
-            // 8. Set up Speech Synthesis Voices
-            if (MORTGAGE_CALCULATOR.speechSynthesis) {
-                MORTGAGE_CALCULATOR.speechSynthesis.onvoiceschanged = () => {
-                    // Voices are loaded, ready for use
-                };
-            }
-            
-            console.log(`🚀 AI Mortgage Pro Calculator v${MORTGAGE_CALCULATOR.VERSION} Initialized`);
-            console.log('✅ All 10 User Improvements Implemented');
-            console.log('✅ 50-State Tax/Insurance Auto-Update');
-            console.log('✅ New Tab Structure (Summary, Balance, AI, Schedule)');
-            console.log('✅ Live Mortgage Balance Chart Fix (Amortization)');
-            console.log('✅ Functional Payment Schedule (Monthly/Yearly + Export)');
-            console.log('✅ Share PDF Functionality');
-            console.log('✅ FRED API Key Hidden (Improved Security/Print)');
-            console.log('✅ Screen Reader/Read Aloud Functionality');
-            console.log('✅ Fully Functional Loan Compare Option (New Window)');
-            console.log('✅ FRED API Rate Fetching Solution (Robust)');
-            console.log('✅ Default Dark Mode Switch');
-        }
-
-        // Initialize when DOM is loaded
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeCalculator);
-        } else {
-            initializeCalculator();
-        }
-
-    </script>
+            </div>
+            <div class="comparison-footer">
+                <button class="modal-btn secondary" onclick="closeComparisonModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="mortgage-calculator.js" defer></script>
 </body>
 </html>
