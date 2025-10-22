@@ -1,6 +1,6 @@
 /* ========================================================================== */
-/* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v26.0 */
-/* PRODUCTION READY - ALL 11 IMPROVEMENTS IMPLEMENTED */
+/* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v27.0 */
+/* PRODUCTION READY - ALL IMPROVEMENTS IMPLEMENTED */
 /* Mobile-First, SEO-Optimized, Partner-Friendly, Device-Responsive */
 /* ========================================================================== */
 
@@ -276,58 +276,98 @@ body {
     font-weight: 600;
 }
 
-/* IMPROVEMENT 7: Live Market Insights (Horizontal Layout) */
-.market-insights-section {
-    background: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--space-4) 0;
+/* Compact Live Rates Section */
+.compact-rates-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    background: var(--color-surface-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+    margin-bottom: var(--space-4);
+    justify-content: space-between;
+    align-items: center;
 }
 
-.market-insights-container {
+.compact-rate-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 80px;
+}
+
+.compact-rate-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+    white-space: nowrap;
+}
+
+.compact-rate-value {
+    font-size: var(--font-size-base);
+    color: var(--color-primary);
+    font-weight: 800;
+    line-height: 1;
+}
+
+.rate-update-time {
+    flex-basis: 100%;
+    text-align: center;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-2);
+}
+
+@media (min-width: 768px) {
+    .compact-rates-section {
+        flex-wrap: nowrap;
+    }
+    .rate-update-time {
+        flex-basis: auto;
+        border-top: none;
+        border-left: 1px solid var(--color-border);
+        padding-left: var(--space-4);
+        margin-top: 0;
+        margin-left: var(--space-4);
+        text-align: left;
+        min-width: 120px;
+    }
+}
+
+/* Live Numbers Container for Timeline Tab */
+.live-numbers-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-4);
-}
-
-.market-insight-card {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-3);
     background: var(--color-surface-secondary);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     padding: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.live-number-item {
     text-align: center;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.market-insight-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-.insight-label {
+.live-number-label {
+    display: block;
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
-    font-weight: 500;
-    margin-bottom: var(--space-2);
-}
-
-.insight-value {
-    font-size: var(--font-size-2xl);
-    font-weight: 700;
-    color: var(--color-primary);
+    font-weight: 600;
     margin-bottom: var(--space-1);
 }
 
-.insight-change {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-}
-
-.insight-change.positive {
-    color: var(--color-success);
-}
-
-.insight-change.negative {
-    color: var(--color-error);
+.live-number-value {
+    display: block;
+    font-size: var(--font-size-lg);
+    color: var(--color-primary);
+    font-weight: 800;
 }
 
 /* Main Grid (30% | 40% | 30%) */
@@ -725,7 +765,7 @@ input[type="number"]::-webkit-outer-spin-button {
     color: var(--color-text);
 }
 
-/* IMPROVEMENT 8: AI Insights */
+/* AI Insights */
 .ai-insights-container {
     display: flex;
     flex-direction: column;
@@ -773,7 +813,7 @@ input[type="number"]::-webkit-outer-spin-button {
     color: var(--color-text-muted);
 }
 
-/* IMPROVEMENT 5: Payment Schedule */
+/* Payment Schedule */
 .schedule-controls {
     display: flex;
     justify-content: space-between;
@@ -1042,7 +1082,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* ========================================================================== */
-/* 8. FOOTER (IMPROVEMENT 10) */
+/* 8. FOOTER */
 /* ========================================================================== */
 
 .footer {
@@ -1270,10 +1310,6 @@ input[type="number"]::-webkit-outer-spin-button {
         font-size: var(--font-size-2xl);
     }
 
-    .market-insights-container {
-        grid-template-columns: 1fr;
-    }
-
     .calculator-grid {
         grid-template-columns: 1fr;
     }
@@ -1318,6 +1354,31 @@ input[type="number"]::-webkit-outer-spin-button {
 
     .btn {
         width: 100%;
+    }
+
+    .compact-rates-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .compact-rate-item {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: var(--space-2) 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .compact-rate-item:last-of-type {
+        border-bottom: none;
+    }
+
+    .rate-update-time {
+        border-left: none;
+        border-top: 1px solid var(--color-border);
+        padding-left: 0;
+        padding-top: var(--space-2);
+        margin-left: 0;
+        margin-top: var(--space-2);
     }
 }
 
@@ -1387,7 +1448,7 @@ input[type="number"]::-webkit-outer-spin-button {
 /* ADDITIONAL IMPROVEMENTS CSS */
 /* ========================================================================== */
 
-/* IMPROVEMENT 1: Animated USA Flag */
+/* Animated USA Flag */
 .usa-flag-animated {
     width: 48px;
     height: 32px;
@@ -1409,14 +1470,14 @@ input[type="number"]::-webkit-outer-spin-button {
     50% { transform: perspective(400px) rotateY(5deg); }
 }
 
-/* IMPROVEMENT 2: Navigation visibility on desktop */
+/* Navigation visibility on desktop */
 @media (min-width: 1024px) {
     .header-nav {
         display: flex;
     }
 }
 
-/* IMPROVEMENT 3: AI-Powered Animation */
+/* AI-Powered Animation */
 .ai-powered-animated {
     display: inline-block;
     font-weight: 800;
@@ -1436,7 +1497,7 @@ input[type="number"]::-webkit-outer-spin-button {
     100% { background-position: 200% center; }
 }
 
-/* IMPROVEMENT 4: Hero Compact (50% size) */
+/* Hero Compact (50% size) */
 .hero-compact {
     padding: var(--space-6) 0 !important;
     min-height: auto !important;
@@ -1462,68 +1523,7 @@ input[type="number"]::-webkit-outer-spin-button {
     }
 }
 
-/* IMPROVEMENT 5: Compact Market Rates Horizontal */
-.market-rates-compact {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    margin: var(--space-4) 0;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--shadow);
-}
-
-.market-rate-item {
-    flex: 1;
-    min-width: 120px;
-    text-align: center;
-    padding: var(--space-2);
-}
-
-.rate-label {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    font-weight: 600;
-    margin-bottom: var(--space-1);
-    white-space: nowrap;
-}
-
-.rate-value {
-    font-size: var(--font-size-xl);
-    color: var(--color-primary);
-    font-weight: 800;
-    line-height: 1;
-}
-
-.rate-update-info {
-    flex-basis: 100%;
-    text-align: center;
-    font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
-    padding-top: var(--space-2);
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--space-2);
-}
-
-@media (min-width: 768px) {
-    .market-rates-compact {
-        flex-wrap: nowrap;
-    }
-    .rate-update-info {
-        flex-basis: auto;
-        border-top: none;
-        border-left: 1px solid var(--color-border);
-        padding-left: var(--space-4);
-        margin-top: 0;
-        margin-left: var(--space-4);
-    }
-}
-
-/* IMPROVEMENT 6: Content Toggle */
+/* Content Toggle */
 .content-toggle-container {
     display: flex;
     gap: var(--space-2);
@@ -1577,7 +1577,7 @@ input[type="number"]::-webkit-outer-spin-button {
     }
 }
 
-/* IMPROVEMENT 16: Loan Type Display */
+/* Loan Type Display */
 .loan-type-display {
     font-size: var(--font-size-sm);
     color: rgba(255, 255, 255, 0.9);
@@ -1586,7 +1586,7 @@ input[type="number"]::-webkit-outer-spin-button {
     letter-spacing: 0.5px;
 }
 
-/* IMPROVEMENT 9: Social Share Options */
+/* Social Share Options */
 .social-share-options {
     display: flex;
     flex-wrap: wrap;
@@ -1616,7 +1616,7 @@ input[type="number"]::-webkit-outer-spin-button {
     transform: translateY(-2px);
 }
 
-/* IMPROVEMENT 18: Social Links in Footer */
+/* Social Links in Footer */
 .social-links-footer {
     display: flex;
     justify-content: center;
@@ -1646,7 +1646,7 @@ input[type="number"]::-webkit-outer-spin-button {
     box-shadow: var(--shadow-lg);
 }
 
-/* IMPROVEMENT 15: Compare Modal */
+/* Compare Modal */
 .compare-modal {
     position: fixed;
     inset: 0;
@@ -1779,20 +1779,6 @@ input[type="number"]::-webkit-outer-spin-button {
         height: 24px;
     }
 
-    .market-rates-compact {
-        flex-direction: column;
-    }
-
-    .market-rate-item {
-        width: 100%;
-        border-bottom: 1px solid var(--color-border);
-        padding-bottom: var(--space-2);
-    }
-
-    .market-rate-item:last-of-type {
-        border-bottom: none;
-    }
-
     .social-share-options {
         flex-direction: column;
     }
@@ -1821,7 +1807,7 @@ input[type="number"]::-webkit-outer-spin-button {
         padding: var(--space-4) 0 !important;
     }
 
-    .market-rates-compact {
+    .compact-rates-section {
         page-break-inside: avoid;
     }
 
