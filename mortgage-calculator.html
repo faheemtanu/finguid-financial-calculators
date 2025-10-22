@@ -1,660 +1,405 @@
-/**
- * FINGUID AI MORTGAGE CALCULATOR - PRODUCTION CSS
- * ------------------------------------------------
- * ARCHITECTURE: Custom Utility-First, Mobile-First, SCALABLE.
- * Goal: Maximize performance (Core Web Vitals), optimize for all devices,
- * and create an attractive, trustworthy financial interface.
- *
- * COLOR PALETTE (CSS Variables for AI/Partner Customization)
- * --primary: Brand Blue (Trust, Finance)
- * --secondary: Action Green (Conversion, CTAs)
- * --accent: Warm Yellow (Highlights, Warnings)
- * --text: Dark Gray (Readability)
- * --background: Off-White (Cleanliness)
- */
-
-:root {
-    /* Brand Colors (Primary/Secondary) */
-    --color-primary: #1D3A5D; /* Finguid Deep Blue */
-    --color-secondary: #00A693; /* Trust Green */
-    --color-accent: #FFC300; /* Highlight Yellow */
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-color-scheme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    /* Text/Background Colors (Readability) */
-    --color-text-dark: #333333;
-    --color-text-light: #f4f4f4;
-    --color-background-main: #FFFFFF;
-    --color-background-light: #f9f9f9;
-    --color-border: #dddddd;
-    --color-error: #D9534F;
-    --color-success: #5CB85C;
-
-    /* Typography */
-    --font-family-primary: 'Roboto', sans-serif;
-    --font-size-base: 16px;
-    --line-height-base: 1.6;
+    <title>🇺🇸 World's First AI Mortgage Calculator 2025 | Live FRED Rates | Voice Enabled | Dark Mode</title>
+    <meta name="description" content="America's most advanced AI-powered mortgage calculator with live FRED API rates, voice commands, 50-state tax/insurance rates, payment schedules, and real-time AI insights. Built for Americans by Americans.">
+    <meta name="keywords" content="USA mortgage calculator 2025, AI mortgage calculator, FRED API rates, voice calculator, 50 state tax rates, dark mode mortgage, payment schedule, amortization chart, AI insights">
+    <meta name="author" content="World's First AI Calculator Platform - Built for Americans">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="en-US">
+    <meta name="geo.region" content="US">
+    <meta name="geo.placename" content="United States">
     
-    /* Spacing / Layout (Mobile-First) */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 32px;
-    --spacing-xl: 64px;
-
-    /* Borders / Shadows */
-    --border-radius: 8px;
-    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.05);
-    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-    /* Grid/Container (Desktop Override) */
-    --max-content-width: 1200px;
-}
-
-/* -------------------------------------------------
- * 1. BASE / RESET STYLES (Core Web Vitals - Minimalist Reset)
- * ------------------------------------------------- */
-
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-}
-
-body {
-    font-family: var(--font-family-primary);
-    color: var(--color-text-dark);
-    background-color: var(--color-background-light);
-    min-height: 100vh; /* PWA requirement */
-    -webkit-font-smoothing: antialiased;
-}
-
-/* Typography Base */
-h1, h2, h3, h4 {
-    line-height: 1.2;
-    margin-bottom: var(--spacing-md);
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-h1 { font-size: 2.2rem; }
-h2 { font-size: 1.8rem; }
-h3 { font-size: 1.4rem; }
-
-p {
-    margin-bottom: var(--spacing-sm);
-}
-
-a {
-    color: var(--color-secondary);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-a:hover {
-    color: var(--color-primary);
-    text-decoration: underline;
-}
-
-/* -------------------------------------------------
- * 2. LAYOUT & GRID SYSTEM (Responsive / All Device Friendly)
- * ------------------------------------------------- */
-
-.container {
-    width: 100%;
-    max-width: var(--max-content-width);
-    margin: 0 auto;
-    padding: 0 var(--spacing-md);
-}
-
-/* Mobile-First Layout: Single Column */
-.main-content-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-lg) var(--spacing-md);
-}
-
-/* Tablet/Desktop Layout: Two Columns for Calculator/Results */
-@media (min-width: 768px) {
-    .main-content-grid {
-        grid-template-columns: 2fr 1.5fr; /* Calculator wider than Results */
-        grid-template-areas: 
-            "calc results"
-            "amortization amortization";
-        padding: var(--spacing-xl) var(--spacing-lg);
-    }
+    <meta property="og:title" content="🇺🇸 World's First AI Mortgage Calculator 2025 - Live Federal Reserve Rates">
+    <meta property="og:description" content="Calculate your perfect American home loan with live FRED rates, AI insights, voice commands, and 50-state rate synchronization. Trusted by millions.">
+    <meta property="og:url" content="https://worldsfirstai-calculator.com/usa-mortgage">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="World's First AI Calculator">
+    <meta property="og:image" content="https://worldsfirstai-calculator.com/images/usa-mortgage-calculator-og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     
-    #calculator-panel { grid-area: calc; }
-    #results-panel { grid-area: results; }
-    #amortization-details { grid-area: amortization; }
-
-    .header-grid {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="🇺🇸 World's First AI Mortgage Calculator 2025 - AI Powered">
+    <meta name="twitter:description" content="America's most advanced mortgage calculator with 50-state tax/insurance and live Federal Reserve rates.">
+    <meta name="twitter:image" content="https://worldsfirstai-calculator.com/images/usa-mortgage-calculator-twitter.jpg">
+    <meta name="twitter:site" content="@WorldsFirstAI">
+    
+    <link rel="canonical" href="https://worldsfirstai-calculator.com/usa-mortgage">
+    
+    <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f9fafb" media="(prefers-color-scheme: light)">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.stlouisfed.org">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <link rel="stylesheet" href="mortgage-calculator.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js" defer></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": ["WebApplication", "FinancialService"],
+        "name": "World's First AI Mortgage Calculator 2025",
+        "description": "America's most advanced AI-powered mortgage calculator with live Federal Reserve rates, voice commands, and comprehensive loan analysis.",
+        "url": "https://worldsfirstai-calculator.com/usa-mortgage",
+        "operatingSystem": "All",
+        "applicationCategory": "FinanceApplication"
     }
-}
-
-/* Full Width Panel for Amortization Table */
-.full-width-panel {
-    grid-column: 1 / -1;
-}
-
-.panel {
-    background-color: var(--color-background-main);
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-medium);
-}
-
-/* -------------------------------------------------
- * 3. HEADER & FOOTER (SEO/Branding)
- * ------------------------------------------------- */
-
-#main-header {
-    background-color: var(--color-primary);
-    color: var(--color-text-light);
-    padding: var(--spacing-md) 0;
-    border-bottom: 5px solid var(--color-secondary);
-}
-
-.logo a {
-    color: var(--color-text-light);
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-nav a {
-    color: var(--color-text-light);
-    margin-left: var(--spacing-md);
-    padding: var(--spacing-sm) 0;
-    font-weight: 400;
-    transition: background-color 0.2s;
-    border-bottom: 2px solid transparent;
-}
-
-nav a:hover {
-    color: var(--color-accent);
-    text-decoration: none;
-    border-bottom-color: var(--color-accent);
-}
-
-.partner-link {
-    color: var(--color-accent);
-    font-weight: 700;
-}
-
-#main-footer {
-    background-color: var(--color-text-dark);
-    color: var(--color-text-light);
-    padding: var(--spacing-md) 0;
-    margin-top: var(--spacing-lg);
-    font-size: 0.85rem;
-}
-
-.footer-content {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-}
-
-.footer-links {
-    margin-top: var(--spacing-sm);
-}
-
-.footer-link {
-    color: var(--color-text-light);
-    margin: 0 var(--spacing-sm);
-}
-
-/* -------------------------------------------------
- * 4. FORM STYLING (User Friendly / Accessibility)
- * ------------------------------------------------- */
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-md);
-}
-
-@media (min-width: 600px) {
-    .form-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    .calculate-btn {
-        grid-column: 1 / -1; /* Full width button */
-    }
-    .input-section-header {
-        grid-column: 1 / -1;
-        margin-top: var(--spacing-md);
-    }
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    padding: var(--spacing-sm);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    background-color: var(--color-background-light);
-}
-
-label {
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-xs);
-    font-size: 0.9rem;
-}
-
-input[type="number"],
-select {
-    padding: var(--spacing-sm);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    width: 100%;
-    transition: border-color 0.3s;
-}
-
-input:focus, select:focus {
-    outline: none;
-    border-color: var(--color-secondary);
-    box-shadow: 0 0 0 2px rgba(0, 166, 147, 0.2);
-}
-
-.input-help {
-    font-size: 0.75rem;
-    color: #666;
-    margin-top: var(--spacing-xs);
-}
-
-.ai-rate-hint {
-    color: var(--color-primary);
-    font-weight: 700;
-}
-
-/* Range Slider Styling */
-.range-slider-group {
-    display: flex;
-    align-items: center;
-    margin-top: var(--spacing-sm);
-}
-
-#down-payment-range {
-    flex-grow: 1;
-    margin-right: var(--spacing-sm);
-    -webkit-appearance: none;
-    appearance: none;
-    height: 6px;
-    background: #dddddd;
-    border-radius: 3px;
-}
-
-#down-payment-range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    cursor: grab;
-    border: 3px solid var(--color-background-main);
-}
-
-#down-payment-percent {
-    font-weight: 700;
-    color: var(--color-primary);
-    min-width: 45px;
-    text-align: right;
-}
-
-/* -------------------------------------------------
- * 5. BUTTONS (Conversion Optimized)
- * ------------------------------------------------- */
-
-.btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-weight: 700;
-    text-align: center;
-    transition: transform 0.2s, background-color 0.2s;
-    font-size: 1rem;
-    display: inline-block;
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-}
-
-.btn-primary {
-    background-color: var(--color-primary);
-    color: var(--color-text-light);
-    border-bottom: 4px solid #10263f; /* Darker shade for depth */
-}
-
-.btn-primary:hover {
-    background-color: #27476e;
-    border-bottom-color: #10263f;
-}
-
-.btn-secondary {
-    background-color: var(--color-secondary);
-    color: var(--color-text-light);
-}
-
-.btn-secondary:hover {
-    background-color: #008779;
-}
-
-.btn-tertiary {
-    background-color: transparent;
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-    margin-top: var(--spacing-md);
-}
-
-.btn-tertiary:hover {
-    background-color: var(--color-primary);
-    color: var(--color-text-light);
-}
-
-.btn-cta {
-    background-color: var(--color-accent);
-    color: var(--color-primary);
-    font-size: 1.1rem;
-    padding: var(--spacing-md);
-}
-
-.btn-cta:hover {
-    background-color: #e6b200;
-}
-
-.toggle-btn {
-    width: 100%;
-}
-
-/* -------------------------------------------------
- * 6. RESULTS & AI INSIGHTS (Smart & Attractive)
- * ------------------------------------------------- */
-
-.ai-tag {
-    background-color: var(--color-accent);
-    color: var(--color-primary);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    vertical-align: middle;
-}
-
-/* Core Payment Summary Card */
-.summary-card {
-    background-color: var(--color-primary);
-    color: var(--color-text-light);
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius);
-    text-align: center;
-    margin-bottom: var(--spacing-md);
-}
-
-.summary-label {
-    font-size: 1rem;
-    opacity: 0.8;
-    margin-bottom: var(--spacing-sm);
-}
-
-.summary-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-sm);
-    color: var(--color-accent);
-}
-
-.breakdown-piti {
-    font-size: 0.9rem;
-    opacity: 0.9;
-}
-
-/* AI Affordability Gauge */
-.ai-gauge {
-    padding: var(--spacing-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    margin-bottom: var(--spacing-md);
-    background-color: var(--color-background-light);
-}
-
-.gauge-title {
-    color: var(--color-secondary);
-    font-size: 1.2rem;
-    margin-bottom: var(--spacing-md);
-}
-
-.gauge-bar-container {
-    height: 15px;
-    background: var(--color-error); /* Default to risky for visual effect */
-    border-radius: 8px;
-    position: relative;
-    margin-bottom: var(--spacing-sm);
-    overflow: hidden;
-}
-
-.gauge-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(to right, var(--color-success), var(--color-accent), var(--color-error));
-    transition: width 1s ease-out;
-}
-
-.gauge-label {
-    position: absolute;
-    top: -20px;
-    font-size: 0.75rem;
-    color: var(--color-text-dark);
-}
-.safe-zone { left: 0%; color: var(--color-success); }
-.borderline-zone { left: 36%; transform: translateX(-50%); }
-.risky-zone { right: 0%; color: var(--color-error); }
-
-.dti-text {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-sm);
-}
-
-.ai-insight-text {
-    border-left: 4px solid var(--color-secondary);
-    padding-left: var(--spacing-sm);
-    font-style: italic;
-    font-size: 0.9rem;
-}
-
-/* Predictive Payoff Scenario Card */
-.scenario-card {
-    background-color: #e6f7ff; /* Light, inviting blue */
-    padding: var(--spacing-md);
-    border-radius: var(--border-radius);
-    border: 1px solid #b3e0ff;
-    margin-top: var(--spacing-md);
-}
-
-.scenario-title {
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-sm);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.new-tag {
-    background-color: var(--color-error);
-    color: var(--color-text-light);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.7rem;
-    font-weight: 700;
-}
-
-.input-group-inline {
-    display: flex;
-    align-items: center;
-    margin-bottom: var(--spacing-md);
-}
-
-.input-group-inline label {
-    flex-shrink: 0;
-    margin-right: var(--spacing-sm);
-    font-weight: 400;
-}
-
-.scenario-results {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-}
-
-.metric-label {
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.metric-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--color-secondary);
-}
-
-/* -------------------------------------------------
- * 7. MONETIZATION / AD SLOTS (Monetization/Partner Friendly)
- * ------------------------------------------------- */
-
-.ad-slot {
-    background-color: #fffae6; /* Light yellow background */
-    border: 1px dashed var(--color-accent);
-    padding: var(--spacing-sm);
-    text-align: center;
-    font-size: 0.9rem;
-    color: #666;
-    margin: var(--spacing-md) 0;
-}
-
-#ad-slot-header {
-    background-color: #ffd666;
-    padding: 10px 0;
-    text-align: center;
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-.partner-callout {
-    background-color: #e6f9f7; /* Light cyan */
-    border: 2px solid var(--color-secondary);
-    padding: var(--spacing-md);
-    margin-top: var(--spacing-lg);
-}
-
-.ad-title, .partner-form-title {
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-sm);
-}
-
-.partner-form {
-    margin-top: var(--spacing-lg);
-    background-color: var(--color-primary);
-    color: var(--color-text-light);
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius);
-    text-align: center;
-}
-
-.partner-form p {
-    margin-bottom: var(--spacing-md);
-}
-
-/* -------------------------------------------------
- * 8. DATA TABLE (Amortization)
- * ------------------------------------------------- */
-
-.table-container {
-    overflow-x: auto; /* Scrollable on small screens */
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: var(--spacing-md);
-    font-size: 0.9rem;
-}
-
-.data-table th, .data-table td {
-    padding: var(--spacing-sm);
-    border: 1px solid var(--color-border);
-    text-align: right;
-}
-
-.data-table th {
-    background-color: var(--color-primary);
-    color: var(--color-text-light);
-    position: sticky; /* Sticky header for long tables */
-    top: 0;
-    z-index: 10;
-    text-align: center;
-}
-
-.data-table tbody tr:nth-child(even) {
-    background-color: var(--color-background-light);
-}
-
-.data-table tbody tr:hover {
-    background-color: #e0f7fa; /* Highlight on hover for better UX */
-}
-
-/* Last Column (Remaining Balance) is key */
-.data-table td:last-child {
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-/* -------------------------------------------------
- * 9. UTILITY CLASSES (Performance / Customization)
- * ------------------------------------------------- */
-
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
-.mt-lg { margin-top: var(--spacing-lg); }
-.mb-lg { margin-bottom: var(--spacing-lg); }
-.p-sm { padding: var(--spacing-sm); }
-.hidden { display: none !important; }
-
-/* Status Colors */
-.status-safe { color: var(--color-success); font-weight: 700; }
-.status-borderline { color: var(--color-accent); font-weight: 700; }
-.status-risky { color: var(--color-error); font-weight: 700; }
-
-/* Animation Utility (AI / Loading Effect) */
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(0, 166, 147, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(0, 166, 147, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(0, 166, 147, 0); }
-}
-
-.pulse-primary {
-    animation: pulse 2s infinite;
-}
-
-/* Utility to ensure maximum line count by including detailed, component-specific styles
-   and extensive, descriptive comments for every section. This structure is highly
-   scalable, maintainable, and Core Web Vitals optimized. */
-
-/* END OF style.css */
+    </script>
+</head>
+<body>
+    <div id="app" class="app-container">
+        
+        <header class="header">
+            <div class="logo-container">
+                <i class="fas fa-home-alt logo-icon" aria-hidden="true"></i>
+                <h1 class="logo-text">AI Mortgage Pro 🇺🇸</h1>
+            </div>
+            <div class="header-controls">
+                
+                <button id="theme-toggle" class="control-btn theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
+                    <i class="fas fa-sun light-icon" aria-hidden="true"></i>
+                    <i class="fas fa-moon dark-icon" aria-hidden="true"></i>
+                </button>
+                
+                <button id="screen-reader-toggle" class="control-btn" onclick="toggleScreenReader()" aria-label="Toggle screen reader mode">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+
+                <button id="voice-toggle" class="control-btn" onclick="toggleVoiceControl()" aria-label="Toggle voice control" disabled>
+                    <i class="fas fa-microphone" aria-hidden="true"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content-grid">
+            
+            <section id="input-section" class="input-section flow-content" aria-labelledby="input-heading">
+                <h2 id="input-heading" class="section-heading">Loan Details <span class="badge badge-primary">AI Input</span></h2>
+                
+                <div id="rate-status" class="rate-status" role="status" aria-live="polite">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i>
+                    <span id="rate-text">Fetching Live Rate...</span>
+                </div>
+
+                <div class="input-group-container">
+                    
+                    <div class="form-group" role="group" aria-labelledby="home-price-label">
+                        <label for="home-price" id="home-price-label">Home Price ($)</label>
+                        <input type="number" id="home-price" class="form-control" value="450000" min="1000" step="1000" oninput="updateCalculation(this.id)" aria-required="true">
+                    </div>
+
+                    <div class="form-group" role="group" aria-labelledby="down-payment-label">
+                        <label for="down-payment" id="down-payment-label">Down Payment ($)</label>
+                        <input type="number" id="down-payment" class="form-control" value="90000" min="0" step="1000" oninput="updateCalculation(this.id)" aria-required="true">
+                    </div>
+
+                    <div class="form-group" role="group" aria-labelledby="down-payment-percent-label">
+                        <label for="down-payment-percent" id="down-payment-percent-label">Down Payment (%)</label>
+                        <input type="number" id="down-payment-percent" class="form-control" value="20" min="0" max="100" step="0.5" oninput="updateCalculation(this.id)" aria-required="true">
+                    </div>
+
+                    <div class="form-group" role="group" aria-labelledby="interest-rate-label">
+                        <label for="interest-rate" id="interest-rate-label">Interest Rate (%)</label>
+                        <input type="number" id="interest-rate" class="form-control" value="6.44" min="0.1" max="15" step="0.01" oninput="updateCalculation(this.id)" aria-required="true">
+                    </div>
+
+                    <div class="form-group" role="group" aria-labelledby="loan-type-label">
+                        <label id="loan-type-label" class="chip-label">Loan Type</label>
+                        <div class="chip-group">
+                            <button type="button" class="chip loan-type-btn active" data-loan-type="conventional" onclick="setLoanType(this)" aria-pressed="true">Conventional</button>
+                            <button type="button" class="chip loan-type-btn" data-loan-type="fha" onclick="setLoanType(this)" aria-pressed="false">FHA</button>
+                            <button type="button" class="chip loan-type-btn" data-loan-type="va" onclick="setLoanType(this)" aria-pressed="false">VA</button>
+                            <button type="button" class="chip loan-type-btn" data-loan-type="usda" onclick="setLoanType(this)" aria-pressed="false">USDA</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" role="group" aria-labelledby="loan-term-label">
+                        <label id="loan-term-label" class="chip-label">Loan Term (Years)</label>
+                        <div class="chip-group">
+                            <button type="button" class="chip term-chip" data-term="15" onclick="setLoanTerm(this)">15 Years</button>
+                            <button type="button" class="chip term-chip active" data-term="30" onclick="setLoanTerm(this)">30 Years</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group-container">
+                    <h3 class="section-sub-heading">Property Information <span class="badge badge-secondary">Auto-Fill</span></h3>
+
+                    <div class="form-group" role="group" aria-labelledby="state-select-label">
+                        <label for="state-select" id="state-select-label">Property State (50 States)</label>
+                        <select id="state-select" class="form-control select-control" onchange="handleStateChange()">
+                            <option value="default" selected disabled>Select a State</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" role="group" aria-labelledby="property-tax-label">
+                        <label for="property-tax" id="property-tax-label">Annual Property Tax ($)</label>
+                        <input type="number" id="property-tax" class="form-control" value="9000" min="0" step="100" oninput="updateCalculation(this.id)">
+                        <span class="input-hint" id="tax-hint">Tax Rate: <span id="tax-rate-display">2.00%</span> (Annual Estimate)</span>
+                    </div>
+
+                    <div class="form-group" role="group" aria-labelledby="home-insurance-label">
+                        <label for="home-insurance" id="home-insurance-label">Annual Home Insurance ($)</label>
+                        <input type="number" id="home-insurance" class="form-control" value="1800" min="0" step="100" oninput="updateCalculation(this.id)">
+                        <span class="input-hint" id="insurance-hint">Insurance Rate: <span id="insurance-rate-display">0.50%</span> (Annual Estimate)</span>
+                    </div>
+
+                    <div class="form-group" role="group" aria-labelledby="pmi-label">
+                        <label for="pmi" id="pmi-label">Monthly PMI ($) <i class="fas fa-info-circle tooltip-trigger" title="Private Mortgage Insurance is typically required for down payments less than 20%."></i></label>
+                        <input type="number" id="pmi" class="form-control" value="0" min="0" step="10" oninput="updateCalculation(this.id)">
+                    </div>
+
+                    <div class="form-group" role="group" aria-labelledby="hoa-fees-label">
+                        <label for="hoa-fees" id="hoa-fees-label">Monthly HOA Fees ($)</label>
+                        <input type="number" id="hoa-fees" class="form-control" value="0" min="0" step="1" oninput="updateCalculation(this.id)">
+                    </div>
+
+                </div>
+
+                <div class="input-group-container collapsible-section collapsed" id="advanced-options">
+                    <h3 class="section-sub-heading" onclick="toggleCollapsible('advanced-options')">Advanced Options <i class="fas fa-chevron-down toggle-icon"></i></h3>
+
+                    <div class="collapsible-content">
+                        <div class="form-group" role="group" aria-labelledby="extra-monthly-label">
+                            <label for="extra-monthly" id="extra-monthly-label">Extra Monthly Payment ($)</label>
+                            <input type="number" id="extra-monthly" class="form-control" value="0" min="0" step="10" oninput="updateCalculation(this.id)">
+                        </div>
+                        <div class="form-group" role="group" aria-labelledby="one-time-extra-label">
+                            <label for="one-time-extra" id="one-time-extra-label">One-Time Extra Payment ($)</label>
+                            <input type="number" id="one-time-extra" class="form-control" value="0" min="0" step="100" oninput="updateCalculation(this.id)">
+                        </div>
+
+                        <div class="form-group" role="group" aria-labelledby="closing-costs-percentage-label">
+                            <label for="closing-costs-percentage" id="closing-costs-percentage-label">Closing Costs (%)</label>
+                            <input type="number" id="closing-costs-percentage" class="form-control" value="3" min="0" max="10" step="0.1" oninput="updateCalculation(this.id)">
+                        </div>
+
+                        <div class="form-group" role="group" aria-labelledby="credit-score-label">
+                            <label for="credit-score" id="credit-score-label">Credit Score</label>
+                            <input type="number" id="credit-score" class="form-control" value="740" min="500" max="850" step="1" oninput="updateCalculation(this.id)">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-full btn-compare" onclick="openLoanCompareWindow()">
+                    <i class="fas fa-balance-scale" aria-hidden="true"></i> Fully Function Loan Compare Option
+                </button>
+
+            </section>
+            
+            <section id="results-section" class="results-section flow-content" aria-labelledby="results-heading">
+                <h2 id="results-heading" class="section-heading">Your Payment Summary <span class="badge badge-success">Live Result</span></h2>
+                
+                <div class="monthly-payment-card" role="alert" aria-live="polite">
+                    <p class="monthly-payment-label">Estimated Monthly Payment</p>
+                    <p id="monthly-payment-total" class="monthly-payment-value">$2,868.08</p>
+                </div>
+
+                <div class="tabs-container">
+                    <div class="tabs-header" role="tablist">
+                        <button type="button" class="tab-btn active" data-tab="payment-summary" onclick="switchTab('payment-summary')" role="tab" aria-selected="true" aria-controls="tab-content-payment-summary">
+                            <i class="fas fa-chart-pie"></i> Payment Summary
+                        </button>
+                        <button type="button" class="tab-btn" data-tab="balance-timeline" onclick="switchTab('balance-timeline')" role="tab" aria-selected="false" aria-controls="tab-content-balance-timeline">
+                            <i class="fas fa-chart-area"></i> Mortgage Balance Over Time
+                        </button>
+                        <button type="button" class="tab-btn" data-tab="ai-insights" onclick="switchTab('ai-insights')" role="tab" aria-selected="false" aria-controls="tab-content-ai-insights">
+                            <i class="fas fa-brain"></i> AI-Powered Insights
+                        </button>
+                        <button type="button" class="tab-btn" data-tab="payment-schedule" onclick="switchTab('payment-schedule')" role="tab" aria-selected="false" aria-controls="tab-content-payment-schedule">
+                            <i class="fas fa-calendar-alt"></i> Payment Schedule
+                        </button>
+                    </div>
+
+                    <div id="tab-content-payment-summary" class="tab-content active" role="tabpanel" aria-labelledby="tab-payment-summary">
+                        <h3 class="tab-title">Monthly Payment Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="paymentComponentsChart"></canvas>
+                        </div>
+                        <div class="summary-details">
+                            <div class="summary-item">
+                                <span class="summary-label">Principal & Interest (P&I)</span>
+                                <span id="pi-monthly" class="summary-value">$2,279.79</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Property Tax (Monthly)</span>
+                                <span id="tax-monthly" class="summary-value">$750.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Home Insurance (Monthly)</span>
+                                <span id="insurance-monthly" class="summary-value">$150.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">PMI/HOA/Other (Monthly)</span>
+                                <span id="other-monthly" class="summary-value">$0.00</span>
+                            </div>
+                            <hr class="summary-divider">
+                            <div class="summary-item total">
+                                <span class="summary-label">Total Payment (PITI)</span>
+                                <span id="total-monthly" class="summary-value">$3,179.79</span>
+                            </div>
+                        </div>
+
+                        <h3 class="tab-title mt-4">Loan Totals</h3>
+                        <div class="loan-totals-card">
+                            <div class="total-item">
+                                <span class="total-label"><i class="fas fa-dollar-sign"></i> Total Loan Cost</span>
+                                <span id="total-cost" class="total-value">$1,141,123</span>
+                            </div>
+                            <div class="total-item">
+                                <span class="total-label"><i class="fas fa-hand-holding-usd"></i> Total Interest Paid</span>
+                                <span id="total-interest" class="total-value">$821,123</span>
+                            </div>
+                            <div class="total-item">
+                                <span class="total-label"><i class="fas fa-calendar-check"></i> Payoff Date</span>
+                                <span id="payoff-date" class="total-value">Dec 2055</span>
+                            </div>
+                            <div class="total-item">
+                                <span class="total-label"><i class="fas fa-money-bill-wave"></i> Estimated Closing Costs</span>
+                                <span id="closing-costs" class="total-value">$13,500</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-balance-timeline" class="tab-content" role="tabpanel" aria-labelledby="tab-balance-timeline" hidden>
+                        <h3 class="tab-title">Amortization Timeline</h3>
+                        <p class="tab-description">See how your principal balance and equity grow over the life of the loan. *Updates live with extra payments.*</p>
+                        <div class="chart-container-large">
+                            <canvas id="mortgageTimelineChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-ai-insights" class="tab-content" role="tabpanel" aria-labelledby="tab-ai-insights" hidden>
+                        <h3 class="tab-title"><i class="fas fa-robot text-primary-color"></i> AI-Powered Financial Strategy</h3>
+                        <div class="ai-insights-container" id="ai-insights-output">
+                            <div class="ai-insight ai-insight-loading">
+                                <i class="fas fa-sync-alt fa-spin"></i> Generating personalized insights based on your inputs...
+                            </div>
+                            </div>
+                    </div>
+
+                    <div id="tab-content-payment-schedule" class="tab-content" role="tabpanel" aria-labelledby="tab-payment-schedule" hidden>
+                        <h3 class="tab-title">Full Payment Schedule</h3>
+                        <p class="tab-description">Accurate monthly and yearly amortization details.</p>
+                        
+                        <div class="schedule-controls">
+                            <div class="chip-group">
+                                <button type="button" class="chip active" data-schedule-type="monthly" onclick="toggleScheduleType('monthly')">Monthly View</button>
+                                <button type="button" class="chip" data-schedule-type="yearly" onclick="toggleScheduleType('yearly')">Yearly View</button>
+                            </div>
+                            <button type="button" class="btn btn-export" onclick="exportSchedule('pdf')">
+                                <i class="fas fa-file-pdf"></i> Export PDF (Improvement 4)
+                            </button>
+                        </div>
+
+                        <div class="schedule-table-container">
+                            <table id="payment-schedule-table" class="schedule-table">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                            <div id="schedule-pagination" class="pagination-controls">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="share-results-section">
+                    <h3 class="section-sub-heading">Share Your Results</h3>
+                    <div class="share-buttons">
+                        <button class="btn btn-social btn-facebook" aria-label="Share on Facebook">
+                            <i class="fab fa-facebook-f" aria-hidden="true"></i> Facebook
+                        </button>
+                        <button class="btn btn-social btn-twitter" aria-label="Share on X (Twitter)">
+                            <i class="fab fa-twitter" aria-hidden="true"></i> X
+                        </button>
+                        <button class="btn btn-pdf" onclick="shareResultsPDF()">
+                            <i class="fas fa-file-pdf" aria-hidden="true"></i> Share PDF (Improvement 5)
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <aside class="sponsor-section flow-content" aria-labelledby="sponsor-heading">
+                <h2 id="sponsor-heading" class="section-heading">Sponsor Corner <span class="badge badge-sponsor">Ad</span></h2>
+                
+                <div class="ad-card ad-card-lender">
+                    <h3 class="ad-title"><i class="fas fa-piggy-bank"></i> Compare Local Lenders</h3>
+                    <p class="ad-text">Get pre-approved in minutes. Our AI compares rates from thousands of trusted local and national partners.</p>
+                    <button class="btn btn-primary btn-full">Find Your Best Rate</button>
+                    <small class="ad-disclaimer">NMLS #12345. Equal Housing Lender.</small>
+                </div>
+
+                <div class="ad-card ad-card-insurance">
+                    <h3 class="ad-title"><i class="fas fa-shield-alt"></i> Save on Home Insurance</h3>
+                    <p class="ad-text">Florida, Texas, or California? Our system finds the lowest premium with the best coverage for your state.</p>
+                    <button class="btn btn-secondary btn-full">Get a Free Quote</button>
+                </div>
+
+                <div class="ad-card ad-card-feature">
+                    <h3 class="ad-title"><i class="fas fa-robot"></i> AI Down Payment Sync</h3>
+                    <p class="ad-text">Our tool auto-suggests perfect down payments (20%, 3.5%, 0%) to optimize your monthly payment and loan type.</p>
+                    <a href="#" class="ad-link">Learn More about AI Tools</a>
+                </div>
+
+            </aside>
+            
+        </main>
+        
+        <footer class="footer">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <p>&copy; 2025 AI Mortgage Pro. All rights reserved.</p>
+                </div>
+                <div class="footer-column footer-badges">
+                    <div class="badge-group">
+                        <span class="badge">AI Friendly</span>
+                        <span class="badge">SEO Optimized</span>
+                        <span class="badge">FRED API</span>
+                        <span class="badge">Voice Enabled</span>
+                        <span class="badge">Mobile Ready</span>
+                        <span class="badge">WCAG 2.1</span>
+                    </div>
+                </div>
+                </div>
+        </footer>
+
+    </div>
+
+    <div id="loading-indicator" class="loading-overlay" aria-hidden="true">
+        <div class="loading-content">
+            <div class="loading-spinner" aria-hidden="true"></div>
+            <p class="loading-text" id="loading-message">Fetching live Federal Reserve rates...</p>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <div id="voice-status" class="voice-status" aria-live="polite" aria-hidden="true">
+        <div class="voice-status-content">
+            <i class="fas fa-microphone voice-status-icon" aria-hidden="true"></i>
+            <span class="voice-status-text">Voice control active - speak your commands</span>
+            <button class="voice-status-close" onclick="toggleVoiceControl()" 
+                    aria-label="Disable voice control">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="mortgage-calculator.js" defer></script>
+</body>
+</html>
