@@ -5,87 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    <!-- Primary Meta Tags -->
-    <title>AI Mortgage Calculator 2024 | Live FRED Rates & 50-State Taxes | Finguid.com</title>
-    <meta name="description" content="Free AI-powered mortgage calculator with live Federal Reserve rates, voice commands, 50-state tax data, amortization schedules, and personalized insights. Calculate your exact monthly payment.">
-    <meta name="keywords" content="mortgage calculator, mortgage payment, home loan calculator, FRED rates, AI mortgage, refinance calculator, amortization schedule, 50 state taxes, finguid">
-    <meta name="author" content="Finguid Financial Calculators">
+    <title>🇺🇸 World's Best AI Mortgage Calculator | Live FRED Rates | finguid.com</title>
+    <meta name="description" content="finguid.com's most advanced AI-powered mortgage calculator with live FRED API rates, voice commands, 50-state tax/insurance rates, payment schedules, and real-time AI insights. Built to be user-friendly, SEO-optimized, and fully mobile-responsive.">
+    <meta name="keywords" content="mortgage calculator, AI calculator, FRED API rates, voice calculator, finguid, dark mode mortgage, amortization chart, partner friendly">
+    <meta name="author" content="Finguid Calculator Platform">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="en-US">
     <link rel="canonical" href="https://finguid.com/mortgage-calculator">
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://finguid.com/mortgage-calculator">
-    <meta property="og:title" content="AI Mortgage Calculator | Live Rates & 50-State Taxes | Finguid.com">
-    <meta property="og:description" content="Calculate your mortgage with AI insights, live FRED rates, and accurate 50-state tax data. Voice commands & mobile friendly.">
-    <meta property="og:image" content="https://finguid.com/images/mortgage-calculator-og.jpg">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1f2937"> <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
     
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://finguid.com/mortgage-calculator">
-    <meta property="twitter:title" content="AI Mortgage Calculator | Live Rates & 50-State Taxes">
-    <meta property="twitter:description" content="Calculate your mortgage with AI insights, live FRED rates, and accurate 50-state tax data.">
-    <meta property="twitter:image" content="https://finguid.com/images/mortgage-calculator-twitter.jpg">
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "AI Mortgage Calculator",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Web Browser",
-        "description": "Advanced mortgage calculator with AI insights, live FRED rates, and 50-state tax data",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "author": {
-            "@type": "Organization",
-            "name": "Finguid.com",
-            "url": "https://finguid.com"
-        },
-        "featureList": [
-            "Live FRED mortgage rates",
-            "50-state tax calculations",
-            "AI-powered insights",
-            "Voice command support",
-            "Amortization schedules",
-            "Mobile-optimized design"
-        ]
-    }
-    </script>
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1f2937">
-    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
-    
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-NYBL2CDNQJ', {
-        page_title: 'Mortgage Calculator',
-        page_location: window.location.href
-      });
+      gtag('config', 'G-NYBL2CDNQJ');
     </script>
 
-    <!-- External Dependencies -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.js"></script>
     
-    <!-- Our Styles -->
     <link rel="stylesheet" href="mortgage-calculator.css">
+    
 </head>
 <body>
     <div class="app-container">
@@ -101,11 +43,8 @@
                 <button id="theme-toggle" class="btn-icon" aria-label="Toggle Light/Dark Mode" title="Toggle Light/Dark Mode">
                     <i class="fas fa-sun" aria-hidden="true"></i>
                 </button>
-                <button id="voice-toggle" class="btn-icon" aria-label="Toggle Voice Input" title="Toggle Voice Input">
+                <button id="voice-toggle" class="btn-icon" onclick="toggleVoiceControl()" aria-label="Toggle Voice Input" title="Toggle Voice Input">
                     <i class="fas fa-microphone" aria-hidden="true"></i>
-                </button>
-                <button id="install-btn" class="btn-icon" aria-label="Install App" title="Install App" style="display: none;">
-                    <i class="fas fa-download" aria-hidden="true"></i>
                 </button>
             </div>
         </header>
@@ -117,9 +56,9 @@
                 <form id="mortgage-form" class="form-grid">
                     
                     <div class="form-group">
-                        <label for="homePrice">Home Price ($)</label>
-                        <input type="range" id="homePrice" class="form-control range-slider" min="50000" max="2000000" step="1000" value="450000">
-                        <output for="homePrice" id="homePrice-output" class="range-output">$450,000</output>
+                        <label for="loanAmount">Home Price ($)</label>
+                        <input type="range" id="loanAmount" class="form-control range-slider" min="50000" max="2000000" step="1000" value="450000">
+                        <output for="loanAmount" id="loanAmount-output" class="range-output">$450,000</output>
                     </div>
 
                     <div class="form-group">
@@ -129,75 +68,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="loanTerm">Loan Term (Years)</label>
-                        <select id="loanTerm" class="form-control">
-                            <option value="30">30 Year Fixed</option>
-                            <option value="20">20 Year Fixed</option>
-                            <option value="15">15 Year Fixed</option>
-                            <option value="10">10 Year Fixed</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
                         <label for="interestRate">Interest Rate (%) <span class="fred-rate-status" id="fred-rate-status"></span></label>
                         <input type="range" id="interestRate" class="form-control range-slider" min="1.0" max="10.0" step="0.01" value="6.5">
                         <output for="interestRate" id="interestRate-output" class="range-output">6.50%</output>
                     </div>
 
                     <div class="form-group">
-                        <label for="stateSelect">Select Your State</label>
-                        <select id="stateSelect" class="form-control">
-                            <option value="AL">Alabama</option>
-                            <option value="AK">Alaska</option>
-                            <option value="AZ">Arizona</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="CA" selected>California</option>
-                            <option value="CO">Colorado</option>
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="FL">Florida</option>
-                            <option value="GA">Georgia</option>
-                            <option value="HI">Hawaii</option>
-                            <option value="ID">Idaho</option>
-                            <option value="IL">Illinois</option>
-                            <option value="IN">Indiana</option>
-                            <option value="IA">Iowa</option>
-                            <option value="KS">Kansas</option>
-                            <option value="KY">Kentucky</option>
-                            <option value="LA">Louisiana</option>
-                            <option value="ME">Maine</option>
-                            <option value="MD">Maryland</option>
-                            <option value="MA">Massachusetts</option>
-                            <option value="MI">Michigan</option>
-                            <option value="MN">Minnesota</option>
-                            <option value="MS">Mississippi</option>
-                            <option value="MO">Missouri</option>
-                            <option value="MT">Montana</option>
-                            <option value="NE">Nebraska</option>
-                            <option value="NV">Nevada</option>
-                            <option value="NH">New Hampshire</option>
-                            <option value="NJ">New Jersey</option>
-                            <option value="NM">New Mexico</option>
-                            <option value="NY">New York</option>
-                            <option value="NC">North Carolina</option>
-                            <option value="ND">North Dakota</option>
-                            <option value="OH">Ohio</option>
-                            <option value="OK">Oklahoma</option>
-                            <option value="OR">Oregon</option>
-                            <option value="PA">Pennsylvania</option>
-                            <option value="RI">Rhode Island</option>
-                            <option value="SC">South Carolina</option>
-                            <option value="SD">South Dakota</option>
-                            <option value="TN">Tennessee</option>
-                            <option value="TX">Texas</option>
-                            <option value="UT">Utah</option>
-                            <option value="VT">Vermont</option>
-                            <option value="VA">Virginia</option>
-                            <option value="WA">Washington</option>
-                            <option value="WV">West Virginia</option>
-                            <option value="WI">Wisconsin</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="DC">District of Columbia</option>
+                        <label for="loanTerm">Loan Term (Years)</label>
+                        <select id="loanTerm" class="form-control">
+                            <option value="30">30 Year Fixed</option>
+                            <option value="20">20 Year Fixed</option>
+                            <option value="15">15 Year Fixed</option>
+                            <option value="10">10 Year Fixed</option>
                         </select>
                     </div>
 
@@ -216,14 +98,13 @@
                     <div class="form-group full-width voice-input-display">
                         <label for="voice-command-text">Voice Input History</label>
                         <textarea id="voice-command-text" class="form-control" placeholder="Speak a command, e.g., 'What is my payment for a 500,000 home at 7 percent?'" readonly></textarea>
-                        <p class="text-sm text-info">💡 <strong>Try Voice Command:</strong> "Calculate a 30-year loan of $450,000 at 6.27 percent."</p>
+                        <p class="text-sm text-info">💡 **Try Voice Command:** "Calculate a 30-year loan of $450,000 at 6.27 percent."</p>
                     </div>
                 </form>
 
                 <div class="action-buttons-group">
-                    <button id="calculate-btn" class="btn btn-primary full-width">Calculate Mortgage</button>
-                    <button id="share-pdf-btn" class="btn btn-secondary full-width" disabled>Share/Export PDF</button>
-                    <button id="save-calculation" class="btn btn-secondary full-width">Save Calculation</button>
+                    <button id="calculate-btn" class="btn btn-primary full-width" onclick="updateCalculation()">Calculate Mortgage</button>
+                    <button id="share-pdf-btn" class="btn btn-secondary full-width" onclick="exportToPDF()" disabled>Share/Export PDF</button>
                 </div>
 
             </section>
@@ -248,8 +129,8 @@
                         <span class="value total" id="total-monthly-payment">$2,471.24</span>
                     </div>
                     <div class="disclaimer-text">
-                        <p id="total-interest-paid" class="text-sm">Total Interest Paid over 30 years: <strong>$338,396</strong></p>
-                        <p class="text-xs text-muted">*Payment is an estimate and does not include PMI if applicable.</p>
+                        <p id="total-interest-paid" class="text-sm">Total Interest Paid over 30 years: **$588,397**</p>
+                        <p class="text-xs text-muted">*Payment is an estimate and does not include PMI.</p>
                     </div>
                 </div>
 
@@ -264,35 +145,27 @@
                     <div id="tab-summary" class="tab-content active" role="tabpanel" aria-labelledby="summary">
                         <h3 class="tab-content-title">Loan Summary</h3>
                         <div class="data-grid">
-                            <div><span class="label">Home Price</span><span class="value" id="summary-home-price">$450,000</span></div>
-                            <div><span class="label">Down Payment</span><span class="value" id="summary-down-payment">$90,000 (20%)</span></div>
                             <div><span class="label">Loan Amount</span><span class="value" id="summary-loan-amount">$360,000</span></div>
                             <div><span class="label">Loan Term</span><span class="value" id="summary-loan-term">30 Years</span></div>
                             <div><span class="label">Interest Rate</span><span class="value" id="summary-interest-rate">6.50%</span></div>
-                            <div><span class="label">State</span><span class="value" id="summary-state">California</span></div>
-                            <div><span class="label">Annual Property Tax</span><span class="value" id="summary-annual-tax">$4,950</span></div>
-                            <div><span class="label">Annual Insurance</span><span class="value" id="summary-annual-insurance">$1,500</span></div>
+                            <div><span class="label">Annual Tax ($)</span><span class="value" id="summary-annual-tax">$4,950</span></div>
+                            <div><span class="label">Annual Insurance ($)</span><span class="value" id="summary-annual-insurance">$1,500</span></div>
                             <div><span class="label">Total Principal Repaid</span><span class="value" id="summary-total-principal">$360,000</span></div>
-                            <div><span class="label">Total Interest Paid</span><span class="value" id="summary-total-interest">$338,396</span></div>
-                            <div><span class="label">Total Loan Cost</span><span class="value" id="summary-total-cost">$698,396</span></div>
-                            <div><span class="label">Loan-to-Value Ratio</span><span class="value" id="summary-ltv">80%</span></div>
                         </div>
                     </div>
 
                     <div id="tab-balance-chart" class="tab-content" role="tabpanel" aria-labelledby="balance-chart">
                         <h3 class="tab-content-title">Amortization Schedule Chart</h3>
-                        <div class="chart-container">
-                            <canvas id="amortization-chart"></canvas>
-                        </div>
+                        <canvas id="amortization-chart"></canvas>
                     </div>
 
                     <div id="tab-ai-insights" class="tab-content" role="tabpanel" aria-labelledby="ai-insights">
                         <h3 class="tab-content-title">AI Financial Insights</h3>
                         <div id="ai-insights-content" class="ai-content">
                             <p>Loading AI-powered insights...</p>
-                        </div>
-                        <button class="btn btn-tertiary full-width" id="read-aloud-btn">
-                            <i class="fas fa-volume-up" aria-hidden="true"></i> Read Insights Aloud
+                            </div>
+                        <button class="btn btn-tertiary full-width" id="read-aloud-btn" onclick="textToSpeech('ai-insights-content')">
+                            <i class="fas fa-volume-up" aria-hidden="true"></i> Read Aloud
                         </button>
                     </div>
 
@@ -304,19 +177,7 @@
                         </div>
                         <div class="schedule-table-container">
                             <table id="payment-schedule-table" class="schedule-table">
-                                <thead>
-                                    <tr>
-                                        <th>Year</th>
-                                        <th>Yearly P&I</th>
-                                        <th>Total Principal</th>
-                                        <th>Total Interest</th>
-                                        <th>Remaining Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Will be populated by JavaScript -->
-                                </tbody>
-                            </table>
+                                </table>
                         </div>
                     </div>
                     
@@ -324,80 +185,25 @@
             </section>
 
             <aside class="sponsor-section card" aria-labelledby="sponsor-heading">
-                <h2 id="sponsor-heading" class="card-title">💰 Partner Offers & Rate Comparisons</h2>
-                <p class="text-sm text-center text-muted">Compare rates from our trusted partners to ensure you're getting the best deal.</p>
+                <h2 id="sponsor-heading" class="card-title">Sponsor & Partner Opportunities</h2>
+                <p class="text-sm text-center text-muted">A dedicated, high-value space for partner integrations (e.g., mortgage lenders, real estate agents) to drive high-intent leads.</p>
                 
-                <!-- LendingTree Comparison -->
-                <div class="ad-block partner-block" style="border-left: 4px solid #10b981;">
-                    <div class="partner-badge">🔥 Most Popular</div>
-                    <h4><i class="fas fa-chart-line"></i> Compare Rates from 5+ Lenders</h4>
-                    <p>Get pre-approved in minutes and compare offers from multiple lenders side-by-side.</p>
-                    <div class="partner-features">
-                        <span class="feature-tag">No Credit Impact</span>
-                        <span class="feature-tag">Real Rates</span>
-                        <span class="feature-tag">Free Comparison</span>
-                    </div>
-                    <a href="https://www.lendingtree.com/mortgage/?utm_source=finguid&utm_medium=calculator&utm_campaign=mortgage" 
-                       class="btn btn-success full-width partner-link" 
-                       data-partner="LendingTree"
-                       target="_blank" rel="noopener sponsored">
-                        Compare Rates Now - Save $5,000+
-                    </a>
+                <div class="ad-block partner-block">
+                    <h4>Compare Live Lender Rates!</h4>
+                    <p>Get pre-approved in minutes by comparing rates from over 10 top national lenders.</p>
+                    <a href="#" class="btn btn-success full-width" onclick="openComparisonTool()">Compare Rates Now</a>
                 </div>
 
-                <!-- Rocket Mortgage -->
-                <div class="ad-block partner-block" style="border-left: 4px solid #3b82f6;">
-                    <h4><i class="fas fa-bolt"></i> Rocket Mortgage® - #1 Online Lender</h4>
-                    <p>America's largest mortgage lender with fully online application and quick approval.</p>
-                    <div class="partner-rating">
-                        <span class="stars">★★★★★</span>
-                        <span class="rating-text">4.8/5 (12,000+ reviews)</span>
-                    </div>
-                    <a href="https://www.rocketmortgage.com/?utm_source=finguid&utm_medium=calculator" 
-                       class="btn btn-primary full-width partner-link"
-                       data-partner="RocketMortgage"
-                       target="_blank" rel="noopener sponsored">
-                        Get Pre-Approved in 10 Min
-                    </a>
+                <div class="ad-block partner-block">
+                    <h4>Need a Local Agent?</h4>
+                    <p>Connect with a top-rated real estate agent specializing in your area.</p>
+                    <a href="#" class="btn btn-info full-width">Find Your Agent</a>
                 </div>
 
-                <!-- Better.com -->
-                <div class="ad-block partner-block" style="border-left: 4px solid #8b5cf6;">
-                    <h4><i class="fas fa-rocket"></i> Better.com - Digital Mortgage</h4>
-                    <p>Fully digital mortgage experience with competitive rates and no lender fees.</p>
-                    <div class="partner-rating">
-                        <span class="stars">★★★★☆</span>
-                        <span class="rating-text">4.6/5 (8,500+ reviews)</span>
-                    </div>
-                    <a href="https://better.com/?utm_source=finguid&utm_medium=calculator" 
-                       class="btn btn-secondary full-width partner-link"
-                       data-partner="BetterCom"
-                       target="_blank" rel="noopener sponsored">
-                        Check Your Rate
-                    </a>
-                </div>
-
-                <!-- Local Agent Connection -->
-                <div class="ad-block partner-block" style="border-left: 4px solid #f59e0b;">
-                    <h4><i class="fas fa-user-tie"></i> Connect with Local Experts</h4>
-                    <p>Get matched with top-rated real estate agents who know your local market.</p>
-                    <form class="agent-lead-form" id="agentLeadForm">
-                        <input type="email" placeholder="Your Email" required class="form-control mb-2">
-                        <input type="tel" placeholder="ZIP Code" required class="form-control mb-2">
-                        <button type="submit" class="btn btn-warning full-width">Find My Agent</button>
-                    </form>
-                </div>
-
-                <!-- Google Ad Slot with Fallback -->
                 <div class="ad-block google-ad-slot">
                     <p class="ad-label">Advertisement</p>
-                    <div id="ad-container-300x250" class="ad-unit">
-                        <!-- Google Ad will load here -->
-                        <div class="ad-fallback">
-                            <h5>Mortgage Rates at 6.27%</h5>
-                            <p>Compare today's best rates from top national lenders</p>
-                            <a href="#" class="btn btn-secondary full-width">View Current Rates</a>
-                        </div>
+                    <div style="background: var(--color-gray-700); height: 250px; display: flex; align-items: center; justify-content: center; color: var(--color-white); font-weight: 600;">
+                        Finguid Banner Ad Slot (300x250)
                     </div>
                 </div>
             </aside>
@@ -414,43 +220,41 @@
                     <a href="/privacy-policy">Privacy Policy</a>
                     <a href="/terms">Terms of Use</a>
                     <a href="/disclaimer">Disclaimer</a>
-                    <a href="/affiliate-disclosure">Affiliate Disclosure</a>
                 </div>
                 <div class="footer-badges">
+                    <span class="badge">World-Class</span>
                     <span class="badge">PWA Ready</span>
-                    <span class="badge">50 States</span>
+                    <span class="badge">SEO Optimized</span>
                     <span class="badge">FRED API</span>
                     <span class="badge">Voice Enabled</span>
-                    <span class="badge">AI Powered</span>
+                    <span class="badge">Mobile Ready</span>
                 </div>
             </div>
         </footer>
 
     </div>
 
-    <!-- Loading Overlay -->
     <div id="loading-indicator" class="loading-overlay" aria-hidden="true">
         <div class="loading-content">
             <div class="loading-spinner" aria-hidden="true"></div>
             <p class="loading-text" id="loading-message">Fetching live Federal Reserve rates...</p>
         </div>
     </div>
-
-    <!-- Toast Container -->
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
-
-    <!-- Voice Status -->
     <div id="voice-status" class="voice-status" aria-live="polite" aria-hidden="true">
         <div class="voice-status-content">
             <i class="fas fa-microphone voice-status-icon" aria-hidden="true"></i>
             <span class="voice-status-text">Voice control active - speak your commands</span>
-            <button class="voice-status-close" aria-label="Disable voice control">
+            <button class="voice-status-close" onclick="toggleVoiceControl()" aria-label="Disable voice control">
                 <i class="fas fa-times" aria-hidden="true"></i>
             </button>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="mortgage-calculator.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.js"></script>
+
+    <script src="mortgage-calculator.js" defer></script>
 </body>
 </html>
