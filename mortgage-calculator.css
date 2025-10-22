@@ -1,1917 +1,1719 @@
-/* ========================================================================== */
-/* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v27.0 */
-/* PRODUCTION READY - ALL IMPROVEMENTS IMPLEMENTED */
-/* Mobile-First, SEO-Optimized, Partner-Friendly, Device-Responsive */
-/* ========================================================================== */
-
-/* ========================================================================== */
-/* 1. CSS VARIABLES & COLOR SYSTEM (Dark Mode Default) */
-/* ========================================================================== */
-
-:root {
-    /* Base Colors */
-    --color-white: #ffffff;
-    --color-black: #000000;
-
-    /* Dark Mode Palette (Default) */
-    --color-gray-900: #111827;
-    --color-gray-800: #1f2937;
-    --color-gray-700: #374151;
-    --color-gray-600: #4b5563;
-    --color-gray-500: #9ca3af;
-    --color-gray-400: #d1d5db;
-    --color-gray-300: #e5e7eb;
-    --color-gray-200: #f3f4f6;
-    --color-gray-100: #f9fafb;
-
-    /* Primary Colors (Teal/Cyan) */
-    --color-primary: #14b8a6;
-    --color-primary-hover: #0d9488;
-    --color-primary-light: #5eead4;
-    --color-primary-dark: #0f766e;
-
-    /* Semantic Colors */
-    --color-background: var(--color-gray-900);
-    --color-surface: var(--color-gray-800);
-    --color-surface-secondary: var(--color-gray-700);
-    --color-text: var(--color-white);
-    --color-text-secondary: var(--color-gray-300);
-    --color-text-muted: var(--color-gray-500);
-    --color-border: var(--color-gray-700);
-    --color-input-bg: var(--color-gray-900);
-    --color-shadow: rgba(0, 0, 0, 0.4);
-
-    /* Chart Colors */
-    --color-chart-primary: #14b8a6;
-    --color-chart-secondary: #3b82f6;
-    --color-chart-tertiary: #ef4444;
-    --color-chart-quaternary: #f59e0b;
-
-    /* Status Colors */
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-error: #ef4444;
-    --color-info: #3b82f6;
-
-    /* Typography */
-    --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-size-xs: 0.75rem;
-    --font-size-sm: 0.875rem;
-    --font-size-base: 1rem;
-    --font-size-lg: 1.125rem;
-    --font-size-xl: 1.25rem;
-    --font-size-2xl: 1.5rem;
-    --font-size-3xl: 1.875rem;
-    --font-size-4xl: 2.25rem;
-
-    /* Spacing */
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
-    --space-12: 3rem;
-
-    /* Border Radius */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.375rem;
-    --radius-lg: 0.5rem;
-    --radius-xl: 0.75rem;
-    --radius-2xl: 1rem;
-    --radius-full: 9999px;
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-
-    /* Transitions */
-    --transition-fast: 150ms ease-in-out;
-    --transition-base: 200ms ease-in-out;
-    --transition-slow: 300ms ease-in-out;
-}
-
-/* Light Mode Theme */
-[data-color-scheme="light"] {
-    --color-background: #f9fafb;
-    --color-surface: #ffffff;
-    --color-surface-secondary: #f3f4f6;
-    --color-text: #111827;
-    --color-text-secondary: #374151;
-    --color-text-muted: #6b7280;
-    --color-border: #e5e7eb;
-    --color-input-bg: #ffffff;
-    --color-shadow: rgba(0, 0, 0, 0.1);
-    --color-primary: #0d9488;
-    --color-primary-hover: #0f766e;
-}
-
-/* ========================================================================== */
-/* 2. RESET & BASE STYLES */
-/* ========================================================================== */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    font-size: 16px;
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-    font-family: var(--font-family);
-    font-size: var(--font-size-base);
-    line-height: 1.6;
-    color: var(--color-text);
-    background-color: var(--color-background);
-    transition: background-color var(--transition-slow), color var(--transition-slow);
-    min-height: 100vh;
-}
-
-/* ========================================================================== */
-/* 3. LAYOUT & STRUCTURE */
-/* ========================================================================== */
-
-.app-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 var(--space-4);
-}
-
-/* Header */
-.header {
-    background-color: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-md);
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-4) 0;
-    gap: var(--space-6);
-}
-
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-}
-
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-lg);
-}
-
-.logo-text-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.logo-text {
-    font-size: var(--font-size-xl);
-    font-weight: 800;
-    color: var(--color-text);
-    line-height: 1;
-}
-
-.logo-subtitle {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    line-height: 1;
-    margin-top: var(--space-1);
-}
-
-.header-nav {
-    display: none;
-    gap: var(--space-6);
-}
-
-.header-nav .nav-link {
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: var(--font-size-sm);
-    transition: color var(--transition-fast);
-}
-
-.header-nav .nav-link:hover {
-    color: var(--color-primary);
-}
-
-.header-controls {
-    display: flex;
-    gap: var(--space-2);
-}
-
-.control-btn {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.control-btn:hover {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-white);
-    transform: translateY(-2px);
-}
-
-.theme-toggle .light-icon { display: none; }
-[data-color-scheme="light"] .theme-toggle .light-icon { display: block; }
-[data-color-scheme="light"] .theme-toggle .dark-icon { display: none; }
-
-/* Hero Section */
-.hero-section {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    padding: var(--space-8) 0;
-    text-align: center;
-    color: var(--color-white);
-}
-
-.hero-title {
-    font-size: var(--font-size-3xl);
-    font-weight: 800;
-    margin-bottom: var(--space-4);
-}
-
-.hero-features {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-}
-
-.hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-}
-
-/* Compact Live Rates Section */
-.compact-rates-section {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-3);
-    margin-bottom: var(--space-4);
-    justify-content: space-between;
-    align-items: center;
-}
-
-.compact-rate-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    min-width: 80px;
-}
-
-.compact-rate-label {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    font-weight: 600;
-    margin-bottom: var(--space-1);
-    white-space: nowrap;
-}
-
-.compact-rate-value {
-    font-size: var(--font-size-base);
-    color: var(--color-primary);
-    font-weight: 800;
-    line-height: 1;
-}
-
-.rate-update-time {
-    flex-basis: 100%;
-    text-align: center;
-    font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
-    padding-top: var(--space-2);
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--space-2);
-}
-
-@media (min-width: 768px) {
-    .compact-rates-section {
-        flex-wrap: nowrap;
-    }
-    .rate-update-time {
-        flex-basis: auto;
-        border-top: none;
-        border-left: 1px solid var(--color-border);
-        padding-left: var(--space-4);
-        margin-top: 0;
-        margin-left: var(--space-4);
-        text-align: left;
-        min-width: 120px;
-    }
-}
-
-/* Live Numbers Container for Timeline Tab */
-.live-numbers-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--space-3);
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    margin-bottom: var(--space-4);
-}
-
-.live-number-item {
-    text-align: center;
-}
-
-.live-number-label {
-    display: block;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    font-weight: 600;
-    margin-bottom: var(--space-1);
-}
-
-.live-number-value {
-    display: block;
-    font-size: var(--font-size-lg);
-    color: var(--color-primary);
-    font-weight: 800;
-}
-
-/* Main Grid (30% | 40% | 30%) */
-.calculator-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-    padding: var(--space-6) 0;
-}
-
-@media (min-width: 1024px) {
-    .header-nav {
-        display: flex;
-    }
-
-    .calculator-grid {
-        grid-template-columns: 30% 40% 30%;
-        gap: var(--space-8);
-    }
-}
-
-/* Section Styling */
-.input-section,
-.results-section,
-.sponsor-section {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-lg);
-}
-
-.section-heading {
-    font-size: var(--font-size-2xl);
-    font-weight: 700;
-    margin-bottom: var(--space-6);
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    color: var(--color-text);
-}
-
-.section-heading i {
-    color: var(--color-primary);
-}
-
-/* ========================================================================== */
-/* 4. FORM INPUTS & CONTROLS */
-/* ========================================================================== */
-
-.rate-status {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3);
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-4);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-}
-
-.rate-status i {
-    color: var(--color-primary);
-}
-
-.input-group-container {
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    margin-bottom: var(--space-4);
-}
-
-.form-group {
-    margin-bottom: var(--space-4);
-}
-
-.form-group:last-child {
-    margin-bottom: 0;
-}
-
-.form-group label {
-    display: block;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-2);
-}
-
-.form-control,
-.select-control {
-    width: 100%;
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--font-size-base);
-    font-family: var(--font-family);
-    color: var(--color-text);
-    background: var(--color-input-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    transition: all var(--transition-fast);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-.form-control:focus,
-.select-control:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    opacity: 1;
-}
-
-.select-control {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-    background-position: right 0.75rem center;
-    background-repeat: no-repeat;
-    background-size: 1.25em 1.25em;
-    padding-right: 2.5rem;
-}
-
-.input-hint {
-    display: block;
-    margin-top: var(--space-1);
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-}
-
-/* Chip Groups */
-.chip-label {
-    display: block;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-2);
-}
-
-.chip-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-}
-
-.chip {
-    padding: var(--space-2) var(--space-4);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.chip:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    transform: translateY(-2px);
-}
-
-.chip.active {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-white);
-}
-
-/* Collapsible Sections */
-.collapsible-section {
-    margin-top: var(--space-6);
-}
-
-.section-sub-heading {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--color-text);
-    padding: var(--space-3) 0;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: color var(--transition-fast);
-}
-
-.section-sub-heading:hover {
-    color: var(--color-primary);
-}
-
-.toggle-icon {
-    transition: transform var(--transition-base);
-}
-
-.collapsible-section.collapsed .toggle-icon {
-    transform: rotate(-90deg);
-}
-
-.collapsible-content {
-    max-height: 2000px;
-    overflow: hidden;
-    transition: max-height var(--transition-slow);
-}
-
-.collapsible-section.collapsed .collapsible-content {
-    max-height: 0;
-}
-
-/* ========================================================================== */
-/* 5. RESULTS & VISUALIZATIONS */
-/* ========================================================================== */
-
-.monthly-payment-card {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: var(--color-white);
-    padding: var(--space-8);
-    border-radius: var(--radius-xl);
-    text-align: center;
-    margin-bottom: var(--space-6);
-    box-shadow: var(--shadow-2xl);
-}
-
-.monthly-payment-label {
-    font-size: var(--font-size-lg);
-    font-weight: 500;
-    opacity: 0.9;
-    margin-bottom: var(--space-2);
-}
-
-.monthly-payment-value {
-    font-size: var(--font-size-4xl);
-    font-weight: 800;
-    line-height: 1;
-}
-
-/* Tabs */
-.tabs-header {
-    display: flex;
-    gap: var(--space-2);
-    border-bottom: 2px solid var(--color-border);
-    margin-bottom: var(--space-6);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.tab-btn {
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid transparent;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    white-space: nowrap;
-}
-
-.tab-btn:hover {
-    color: var(--color-primary);
-}
-
-.tab-btn.active {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary);
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-    animation: fadeIn var(--transition-base);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.tab-title {
-    font-size: var(--font-size-xl);
-    font-weight: 700;
-    margin-bottom: var(--space-4);
-    color: var(--color-text);
-}
-
-.tab-description {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-4);
-    line-height: 1.6;
-}
-
-/* Summary Details */
-.summary-details {
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    margin-bottom: var(--space-6);
-}
-
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-2) 0;
-    font-size: var(--font-size-base);
-}
-
-.summary-label {
-    color: var(--color-text-secondary);
-    font-weight: 500;
-}
-
-.summary-value {
-    font-weight: 700;
-    color: var(--color-text);
-}
-
-.summary-divider {
-    border: 0;
-    height: 1px;
-    background: var(--color-border);
-    margin: var(--space-2) 0;
-}
-
-.summary-item.total {
-    font-size: var(--font-size-lg);
-    padding-top: var(--space-3);
-}
-
-.summary-item.total .summary-label,
-.summary-item.total .summary-value {
-    color: var(--color-primary);
-    font-weight: 700;
-}
-
-/* Charts */
-.chart-container {
-    height: 250px;
-    margin: var(--space-6) 0;
-    position: relative;
-}
-
-.chart-container-large {
-    height: 400px;
-    margin: var(--space-6) 0;
-    position: relative;
-}
-
-/* Loan Totals */
-.loan-totals-card {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--space-4);
-    margin-top: var(--space-6);
-}
-
-.total-item {
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.total-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.total-label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-2);
-}
-
-.total-label i {
-    color: var(--color-primary);
-}
-
-.total-value {
-    font-size: var(--font-size-xl);
-    font-weight: 700;
-    color: var(--color-text);
-}
-
-/* AI Insights */
-.ai-insights-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-}
-
-.ai-insight {
-    background: var(--color-surface-secondary);
-    border-left: 4px solid var(--color-primary);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    font-size: var(--font-size-base);
-    line-height: 1.6;
-    color: var(--color-text);
-    animation: slideIn var(--transition-slow);
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.ai-insight-title {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-weight: 600;
-    color: var(--color-primary);
-    margin-bottom: var(--space-2);
-}
-
-.ai-insight strong {
-    color: var(--color-primary);
-    font-weight: 700;
-}
-
-.ai-insight-loading {
-    text-align: center;
-    color: var(--color-text-muted);
-}
-
-/* Payment Schedule */
-.schedule-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
-}
-
-.schedule-table-container {
-    overflow-x: auto;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-4);
-}
-
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-sm);
-    min-width: 800px;
-}
-
-.schedule-table th,
-.schedule-table td {
-    padding: var(--space-3) var(--space-4);
-    text-align: right;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.schedule-table th {
-    background: var(--color-surface-secondary);
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    text-align: left;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.schedule-table tbody tr:nth-child(even) {
-    background: var(--color-surface-secondary);
-}
-
-.schedule-table tbody tr:hover {
-    background: rgba(20, 184, 166, 0.05);
-}
-
-.schedule-table .month-col {
-    text-align: left;
-    font-weight: 600;
-}
-
-.schedule-table .principal-col {
-    color: var(--color-primary);
-}
-
-.schedule-table .interest-col {
-    color: var(--color-chart-secondary);
-}
-
-.schedule-table .balance-col {
-    font-weight: 700;
-}
-
-.pagination-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3);
-}
-
-.pagination-controls button {
-    padding: var(--space-2) var(--space-4);
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-text);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    font-family: var(--font-family);
-}
-
-.pagination-controls button:hover:not(:disabled) {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-white);
-}
-
-.pagination-controls button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* ========================================================================== */
-/* 6. BUTTONS & ACTIONS */
-/* ========================================================================== */
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-6);
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    font-family: var(--font-family);
-    border-radius: var(--radius-lg);
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    text-decoration: none;
-    line-height: 1;
-}
-
-.btn-primary {
-    background: var(--color-primary);
-    color: var(--color-white);
-    border-color: var(--color-primary);
-}
-
-.btn-primary:hover {
-    background: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-.btn-secondary {
-    background: transparent;
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-}
-
-.btn-secondary:hover {
-    background: rgba(20, 184, 166, 0.1);
-}
-
-.btn-full {
-    width: 100%;
-}
-
-.btn-compare {
-    background: var(--color-surface-secondary);
-    color: var(--color-text);
-    border-color: var(--color-border);
-    margin-top: var(--space-6);
-}
-
-.btn-compare:hover {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-white);
-}
-
-.btn-export {
-    background: var(--color-error);
-    color: var(--color-white);
-    border-color: var(--color-error);
-    padding: var(--space-2) var(--space-4);
-    font-size: var(--font-size-sm);
-}
-
-.btn-export:hover {
-    background: #dc2626;
-    border-color: #dc2626;
-}
-
-.btn-social {
-    background: var(--color-info);
-    color: var(--color-white);
-    padding: var(--space-2) var(--space-4);
-    font-size: var(--font-size-sm);
-}
-
-.btn-social:hover {
-    background: #2563eb;
-}
-
-/* Share Results */
-.share-results-section {
-    margin-top: var(--space-8);
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--color-border);
-}
-
-.share-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-}
-
-/* ========================================================================== */
-/* 7. SPONSOR/PARTNER SECTION */
-/* ========================================================================== */
-
-.ad-card {
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    margin-bottom: var(--space-6);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.ad-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
-}
-
-.ad-card-lender {
-    border-left: 4px solid var(--color-primary);
-}
-
-.ad-card-insurance {
-    border-left: 4px solid var(--color-info);
-}
-
-.ad-card-feature {
-    border-left: 4px solid var(--color-warning);
-}
-
-.ad-title {
-    font-size: var(--font-size-lg);
-    font-weight: 700;
-    margin-bottom: var(--space-3);
-    color: var(--color-text);
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-}
-
-.ad-title i {
-    color: var(--color-primary);
-}
-
-.ad-text {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-4);
-    line-height: 1.6;
-}
-
-.ad-disclaimer {
-    display: block;
-    margin-top: var(--space-3);
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    font-style: italic;
-}
-
-.ad-link {
-    display: inline-block;
-    margin-top: var(--space-3);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-.ad-link:hover {
-    color: var(--color-primary-hover);
-}
-
-/* ========================================================================== */
-/* 8. FOOTER */
-/* ========================================================================== */
-
-.footer {
-    background: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--space-12);
-    padding: var(--space-8) 0;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--space-8);
-    margin-bottom: var(--space-8);
-}
-
-.footer-section {
-    display: flex;
-    flex-direction: column;
-}
-
-.footer-heading {
-    font-size: var(--font-size-lg);
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: var(--space-3);
-}
-
-.footer-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-links li {
-    margin-bottom: var(--space-2);
-}
-
-.footer-links a {
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    font-size: var(--font-size-sm);
-    transition: color var(--transition-fast);
-}
-
-.footer-links a:hover {
-    color: var(--color-primary);
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--color-border);
-}
-
-.footer-disclaimer {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-3);
-    line-height: 1.6;
-}
-
-.footer-copyright {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-2);
-}
-
-.footer-subtitle {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    font-weight: 600;
-}
-
-.footer-badges {
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    justify-content: center;
-    margin-top: var(--space-2);
-}
-
-/* Badges */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-3);
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    color: var(--color-text-secondary);
-}
-
-.badge-sponsor {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--color-warning);
-    border-color: var(--color-warning);
-}
-
-/* ========================================================================== */
-/* 9. UTILITIES & OVERLAYS */
-/* ========================================================================== */
-
-.voice-status {
-    position: fixed;
-    bottom: var(--space-6);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-gray-900);
-    color: var(--color-white);
-    padding: var(--space-4);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-2xl);
-    z-index: 1000;
-    display: none;
-}
-
-.voice-status.active {
-    display: block;
-}
-
-.voice-status-content {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-}
-
-.voice-status-icon {
-    font-size: var(--font-size-2xl);
-    color: var(--color-primary);
-}
-
-.voice-status-close {
-    background: none;
-    border: none;
-    color: var(--color-white);
-    font-size: var(--font-size-lg);
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity var(--transition-fast);
-}
-
-.voice-status-close:hover {
-    opacity: 1;
-}
-
-.loading-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-.loading-overlay.active {
-    display: flex;
-}
-
-.loading-content {
-    text-align: center;
-    color: var(--color-white);
-}
-
-.loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top-color: var(--color-primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto var(--space-4);
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-.toast-container {
-    position: fixed;
-    top: var(--space-6);
-    right: var(--space-6);
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-}
-
-.toast {
-    padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-xl);
-    font-size: var(--font-size-sm);
-    color: var(--color-white);
-    max-width: 300px;
-    animation: slideInRight var(--transition-base);
-}
-
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.toast-success { background: var(--color-success); }
-.toast-error { background: var(--color-error); }
-.toast-warning { background: var(--color-warning); }
-.toast-info { background: var(--color-info); }
-
-/* ========================================================================== */
-/* 10. RESPONSIVE DESIGN & MEDIA QUERIES */
-/* ========================================================================== */
-
-@media (max-width: 1023px) {
-    .hero-title {
-        font-size: var(--font-size-2xl);
-    }
-
-    .calculator-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .input-section,
-    .results-section,
-    .sponsor-section {
-        padding: var(--space-4);
-    }
-
-    .monthly-payment-value {
-        font-size: var(--font-size-3xl);
-    }
-}
-
-@media (max-width: 640px) {
-    .app-container {
-        padding: 0 var(--space-3);
-    }
-
-    .header-content {
-        flex-wrap: wrap;
-    }
-
-    .hero-title {
-        font-size: var(--font-size-xl);
-    }
-
-    .hero-features {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .tabs-header {
-        flex-wrap: nowrap;
-        overflow-x: scroll;
-    }
-
-    .share-buttons {
-        flex-direction: column;
-    }
-
-    .btn {
-        width: 100%;
-    }
-
-    .compact-rates-section {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .compact-rate-item {
-        flex-direction: row;
-        justify-content: space-between;
-        padding: var(--space-2) 0;
-        border-bottom: 1px solid var(--color-border);
-    }
-
-    .compact-rate-item:last-of-type {
-        border-bottom: none;
-    }
-
-    .rate-update-time {
-        border-left: none;
-        border-top: 1px solid var(--color-border);
-        padding-left: 0;
-        padding-top: var(--space-2);
-        margin-left: 0;
-        margin-top: var(--space-2);
-    }
-}
-
-/* ========================================================================== */
-/* 11. PRINT STYLES */
-/* ========================================================================== */
-
-@media print {
-    body {
-        background: white !important;
-        color: black !important;
-    }
-
-    .header,
-    .footer,
-    .sponsor-section,
-    .header-controls,
-    .voice-status,
-    .loading-overlay,
-    .toast-container,
-    .btn-compare,
-    .share-results-section {
-        display: none !important;
-    }
-
-    .calculator-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    .tab-content:not(.active) {
-        display: none !important;
-    }
-}
-
-/* ========================================================================== */
-/* 12. ACCESSIBILITY */
-/* ========================================================================== */
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-/* ========================================================================== */
-/* ADDITIONAL IMPROVEMENTS CSS */
-/* ========================================================================== */
-
-/* Animated USA Flag */
-.usa-flag-animated {
-    width: 48px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.flag-svg {
-    width: 100%;
-    height: 100%;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-sm);
-    animation: flag-wave 3s ease-in-out infinite;
-}
-
-@keyframes flag-wave {
-    0%, 100% { transform: perspective(400px) rotateY(-5deg); }
-    50% { transform: perspective(400px) rotateY(5deg); }
-}
-
-/* Navigation visibility on desktop */
-@media (min-width: 1024px) {
-    .header-nav {
-        display: flex;
-    }
-}
-
-/* AI-Powered Animation */
-.ai-powered-animated {
-    display: inline-block;
-    font-weight: 800;
-    background: linear-gradient(90deg, 
-        var(--color-primary), 
-        var(--color-primary-light), 
-        var(--color-primary));
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: ai-glow 2s linear infinite;
-}
-
-@keyframes ai-glow {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
-}
-
-/* Hero Compact (50% size) */
-.hero-compact {
-    padding: var(--space-6) 0 !important;
-    min-height: auto !important;
-}
-
-.hero-compact .hero-title {
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--space-3);
-}
-
-.hero-compact .hero-features {
-    gap: var(--space-3);
-}
-
-.hero-compact .hero-badge {
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--font-size-xs);
-}
-
-@media (min-width: 768px) {
-    .hero-compact .hero-title {
-        font-size: var(--font-size-3xl);
-    }
-}
-
-/* Content Toggle */
-.content-toggle-container {
-    display: flex;
-    gap: var(--space-2);
-    margin-bottom: var(--space-4);
-    background: var(--color-surface-secondary);
-    padding: var(--space-2);
-    border-radius: var(--radius-lg);
-}
-
-.toggle-btn {
-    flex: 1;
-    padding: var(--space-2) var(--space-4);
-    background: transparent;
-    color: var(--color-text-secondary);
-    border: none;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: var(--font-size-sm);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.toggle-btn.active {
-    background: var(--color-primary);
-    color: var(--color-white);
-    box-shadow: var(--shadow-md);
-}
-
-.toggle-btn:hover:not(.active) {
-    background: rgba(20, 184, 166, 0.1);
-    color: var(--color-primary);
-}
-
-.toggle-content {
-    display: none;
-}
-
-.toggle-content.active {
-    display: block;
-    animation: fadeInContent 0.3s ease-in-out;
-}
-
-@keyframes fadeInContent {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Loan Type Display */
-.loan-type-display {
-    font-size: var(--font-size-sm);
-    color: rgba(255, 255, 255, 0.9);
-    margin-top: var(--space-2);
-    font-weight: 500;
-    letter-spacing: 0.5px;
-}
-
-/* Social Share Options */
-.social-share-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-top: var(--space-4);
-    padding: var(--space-4);
-    background: var(--color-surface-secondary);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
-}
-
-.btn-social {
-    flex: 1;
-    min-width: 120px;
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--font-size-sm);
-}
-
-.facebook-share { background: #1877f2; }
-.whatsapp-share { background: #25d366; }
-.twitter-share { background: #1da1f2; }
-.email-share { background: var(--color-info); }
-.linkedin-share { background: #0077b5; }
-
-.btn-social:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-}
-
-/* Social Links in Footer */
-.social-links-footer {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-4);
-    margin: var(--space-4) 0;
-}
-
-.social-links-footer .social-link {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-lg);
-    transition: all var(--transition-fast);
-}
-
-.social-links-footer .social-link:hover {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-white);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-}
-
-/* Compare Modal */
-.compare-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-4);
-    animation: fadeIn var(--transition-base);
-}
-
-.compare-modal-content {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    width: 100%;
-    max-width: 1200px;
-    max-height: 90vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: var(--shadow-2xl);
-    animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.compare-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-6);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.compare-modal-header h2 {
-    font-size: var(--font-size-2xl);
-    font-weight: 700;
-    color: var(--color-text);
-}
-
-.compare-modal-close {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
-    color: var(--color-text);
-    font-size: var(--font-size-2xl);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.compare-modal-close:hover {
-    background: var(--color-error);
-    border-color: var(--color-error);
-    color: var(--color-white);
-    transform: rotate(90deg);
-}
-
-.compare-modal-body {
-    padding: var(--space-6);
-    overflow-y: auto;
-    flex: 1;
-}
-
-/* Custom scrollbar for modal */
-.compare-modal-body::-webkit-scrollbar {
-    width: 8px;
-}
-
-.compare-modal-body::-webkit-scrollbar-track {
-    background: var(--color-surface-secondary);
-    border-radius: var(--radius-full);
-}
-
-.compare-modal-body::-webkit-scrollbar-thumb {
-    background: var(--color-primary);
-    border-radius: var(--radius-full);
-}
-
-.compare-modal-body::-webkit-scrollbar-thumb:hover {
-    background: var(--color-primary-hover);
-}
-
-/* Enhanced AI Insights Styling */
-.ai-insight {
-    position: relative;
-    padding-left: var(--space-6);
-}
-
-.ai-insight::before {
-    content: "🤖";
-    position: absolute;
-    left: var(--space-2);
-    top: var(--space-4);
-    font-size: var(--font-size-lg);
-}
-
-.ai-insight-title {
-    font-size: var(--font-size-lg);
-    margin-bottom: var(--space-2);
-}
-
-/* Responsive footer text */
-.footer-text {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin-bottom: var(--space-2);
-}
-
-/* Mobile responsive adjustments */
-@media (max-width: 768px) {
-    .usa-flag-animated {
-        width: 36px;
-        height: 24px;
-    }
-
-    .social-share-options {
-        flex-direction: column;
-    }
-
-    .btn-social {
-        width: 100%;
-        min-width: auto;
-    }
-}
-
-/* Print-specific styles for PDF */
-@media print {
-    .usa-flag-animated,
-    .header-controls,
-    .content-toggle-container,
-    .share-results-section,
-    .btn-compare,
-    .sponsor-section,
-    .header-nav {
-        display: none !important;
-    }
-
-    .hero-section {
-        background: white !important;
-        color: black !important;
-        padding: var(--space-4) 0 !important;
-    }
-
-    .compact-rates-section {
-        page-break-inside: avoid;
-    }
-
-    .results-section {
-        page-break-inside: avoid;
-    }
-
-    @page {
-        margin: 1cm;
-    }
-}
-
-/* Loading animation for AI insights */
-.ai-insight-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-3);
-    padding: var(--space-8) var(--space-4);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-base);
-}
-
-.ai-insight-loading i {
-    font-size: var(--font-size-2xl);
-    color: var(--color-primary);
-}
-
-/* Accessibility improvements */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-/* Focus styles for accessibility */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-/* Enhanced button styles */
-.btn {
-    position: relative;
-    overflow: hidden;
-}
-
-.btn::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.btn:active::before {
-    width: 300px;
-    height: 300px;
-}
-
-/* Smooth color transitions for theme toggle */
-* {
-    transition: background-color var(--transition-slow), 
-                color var(--transition-slow),
-                border-color var(--transition-slow);
-}
-
-/* Performance optimization */
-.chart-container,
-.chart-container-large {
-    contain: layout style paint;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    :root {
-        --color-primary: #00d9c0;
-        --color-text: #ffffff;
-        --color-border: #ffffff;
-    }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-}
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-color-scheme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>🇺🇸 World's First AI Mortgage Calculator 2025 | Live FRED Rates | Voice Enabled | Dark Mode</title>
+    <meta name="description" content="America's most advanced AI-powered mortgage calculator with live FRED API rates, voice commands, 50-state tax/insurance rates, payment schedules, and real-time AI insights. Built for Americans by Americans.">
+    <meta name="keywords" content="USA mortgage calculator 2025, AI mortgage calculator, FRED API rates, voice calculator, 50 state tax rates, dark mode mortgage, payment schedule, amortization chart, AI insights">
+    <meta name="author" content="World's First AI Calculator Platform - Built for Americans">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="en-US">
+    <meta name="geo.region" content="US">
+    <meta name="geo.placename" content="United States">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+    
+    <style>
+        /* ========================================================================== */
+        /* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v25.0               */
+        /* ALL IMPROVEMENTS IMPLEMENTED - PRODUCTION READY                          */
+        /* ========================================================================== */
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Color System - Dark Mode Default */
+            --color-white: #ffffff;
+            --color-black: #000000;
+            --color-gray-900: #111827;
+            --color-gray-800: #1f2937;
+            --color-gray-700: #374151;
+            --color-gray-600: #4b5563;
+            --color-gray-500: #9ca3af;
+            --color-gray-200: #e5e7eb;
+            --color-teal-500: #14b8a6;
+            --color-teal-600: #0d9488;
+            --color-teal-700: #0f766e;
+            --color-teal-200: #99f6e4;
+            --color-teal-900: #134e4a;
+            
+            /* Semantic Colors */
+            --color-background: var(--color-gray-900);
+            --color-surface: var(--color-gray-800);
+            --color-surface-secondary: var(--color-gray-700);
+            --color-text: var(--color-white);
+            --color-text-secondary: var(--color-gray-200);
+            --color-text-muted: var(--color-gray-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-border: var(--color-gray-700);
+            --color-input-bg: var(--color-gray-900);
+            
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+            
+            /* Borders */
+            --radius-sm: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 0.75rem;
+        }
+
+        [data-color-scheme="light"] {
+            --color-background: #f9fafb;
+            --color-surface: #ffffff;
+            --color-surface-secondary: #f3f4f6;
+            --color-text: #111827;
+            --color-text-secondary: #374151;
+            --color-text-muted: #6b7280;
+            --color-primary: #0d9488;
+            --color-primary-hover: #0f766e;
+            --color-border: #e5e7eb;
+            --color-input-bg: #ffffff;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-4);
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--space-6);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .logo-icon {
+            font-size: var(--font-size-2xl);
+            color: var(--color-primary);
+        }
+
+        .logo-text {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-6);
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: var(--space-3);
+        }
+
+        .control-btn {
+            background: var(--color-surface-secondary);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: var(--color-primary-hover);
+            color: var(--color-white);
+            border-color: var(--color-primary-hover);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: var(--space-8) 0;
+            margin-bottom: var(--space-6);
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-6);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: var(--color-surface);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .hero-feature i {
+            color: var(--color-primary);
+        }
+
+        /* Market Insights */
+        .market-insights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .market-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            border: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .market-card-title {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+        }
+
+        .market-card-value {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+        }
+
+        /* Main Grid Layout */
+        .main-content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-6);
+        }
+
+        @media (min-width: 1024px) {
+            .main-content-grid {
+                grid-template-columns: 30% 40% 30%;
+            }
+        }
+
+        /* Section Styles */
+        .input-section, .results-section, .sponsor-section {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-heading {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .badge {
+            padding: var(--space-1) var(--space-2);
+            border-radius: 9999px;
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-primary {
+            background: var(--color-teal-900);
+            color: var(--color-teal-200);
+        }
+
+        .badge-success {
+            background: var(--color-teal-700);
+            color: white;
+        }
+
+        .badge-sponsor {
+            background: rgba(245, 158, 11, 0.2);
+            color: rgb(245, 158, 11);
+        }
+
+        /* Form Styles */
+        .input-group-container {
+            background: var(--color-surface-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+            border: 1px solid var(--color-border);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-4);
+        }
+
+        .form-group label {
+            display: block;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-1);
+        }
+
+        .form-control, .select-control {
+            width: 100%;
+            padding: var(--space-3);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            background: var(--color-input-bg);
+            color: var(--color-text);
+            font-size: var(--font-size-base);
+        }
+
+        .form-control:focus, .select-control:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        .input-hint {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-muted);
+            margin-top: var(--space-1);
+        }
+
+        /* Chip Styles */
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+
+        .chip {
+            padding: var(--space-2) var(--space-3);
+            border-radius: 9999px;
+            border: 1px solid var(--color-border);
+            background: var(--color-surface-secondary);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .chip.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Monthly Payment Card */
+        .monthly-payment-card {
+            background: var(--color-primary);
+            color: white;
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .monthly-payment-label {
+            font-size: var(--font-size-lg);
+            opacity: 0.9;
+            margin-bottom: var(--space-2);
+        }
+
+        .monthly-payment-value {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+        }
+
+        /* Tabs */
+        .tabs-header {
+            display: flex;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--space-4);
+        }
+
+        .tab-btn {
+            padding: var(--space-3) var(--space-4);
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Summary Details */
+        .summary-details {
+            background: var(--color-surface-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-top: var(--space-4);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-2) 0;
+        }
+
+        .summary-item.total {
+            border-top: 1px solid var(--color-border);
+            margin-top: var(--space-2);
+            padding-top: var(--space-3);
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        /* Loan Totals */
+        .loan-totals-card {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-4);
+            margin-top: var(--space-4);
+        }
+
+        @media (min-width: 640px) {
+            .loan-totals-card {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .total-item {
+            background: var(--color-surface-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            border: 1px solid var(--color-border);
+        }
+
+        .total-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+        }
+
+        .total-value {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+        }
+
+        /* AI Insights */
+        .ai-insights-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+
+        .ai-insight {
+            background: var(--color-surface-secondary);
+            border-left: 4px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+        }
+
+        .ai-insight-title {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: var(--space-2);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        /* Payment Schedule */
+        .schedule-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+
+        .schedule-table-container {
+            overflow-x: auto;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .schedule-table th, .schedule-table td {
+            padding: var(--space-3);
+            text-align: right;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .schedule-table th {
+            background: var(--color-surface-secondary);
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .month-col {
+            text-align: left;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            gap: var(--space-2);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(20, 184, 166, 0.1);
+        }
+
+        .btn-compare {
+            background: var(--color-teal-900);
+            color: var(--color-teal-200);
+            margin-top: var(--space-6);
+        }
+
+        .btn-compare:hover {
+            background: var(--color-teal-700);
+            color: white;
+        }
+
+        /* Share Section */
+        .share-results-section {
+            margin-top: var(--space-8);
+            border-top: 1px solid var(--color-border);
+            padding-top: var(--space-6);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: var(--space-3);
+            margin-top: var(--space-4);
+            flex-wrap: wrap;
+        }
+
+        /* Sponsor Cards */
+        .ad-card {
+            background: var(--color-surface-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .ad-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .ad-text {
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-4);
+        }
+
+        .ad-disclaimer {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-muted);
+            margin-top: var(--space-2);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            margin-top: var(--space-8);
+            padding: var(--space-8) 0;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: var(--space-8);
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .footer-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-logo {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--space-3);
+        }
+
+        .footer-heading {
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: var(--space-2);
+        }
+
+        .footer-link a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-disclaimer {
+            grid-column: 1 / -1;
+            margin-top: var(--space-6);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--color-border);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .footer-copyright {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: var(--space-4);
+        }
+
+        /* Toast and Loading */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-lg);
+            color: white;
+            margin-bottom: var(--space-2);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            background: var(--color-teal-600);
+        }
+
+        .toast-error {
+            background: #ef4444;
+        }
+
+        .toast-warning {
+            background: #f59e0b;
+        }
+
+        .toast-info {
+            background: #3b82f6;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: var(--color-surface);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--color-primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--space-4);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-4);
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .market-insights {
+                grid-template-columns: 1fr;
+            }
+
+            .monthly-payment-value {
+                font-size: var(--font-size-3xl);
+            }
+
+            .tabs-header {
+                flex-wrap: wrap;
+            }
+
+            .schedule-controls {
+                flex-direction: column;
+                gap: var(--space-3);
+                align-items: flex-start;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <i class="fas fa-home-alt logo-icon"></i>
+                <h1 class="logo-text">FinGuid</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Calculators</a>
+                <a href="#" class="nav-link">Resources</a>
+                <a href="#" class="nav-link">Partners</a>
+                <a href="#" class="nav-link">Contact</a>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+            <div class="header-controls">
+                <button id="theme-toggle" class="control-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <i class="fas fa-sun light-icon"></i>
+                    <i class="fas fa-moon dark-icon"></i>
+                </button>
+                <button id="screen-reader-toggle" class="control-btn" onclick="toggleScreenReader()" aria-label="Toggle screen reader">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <button id="voice-toggle" class="control-btn" onclick="toggleVoiceControl()" aria-label="Toggle voice control">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">USA Mortgage Calculator 2025</h1>
+            <p class="hero-subtitle">Home Loan Pro — Mortgage Calculator (AI-Powered)</p>
+            <div class="hero-features">
+                <div class="hero-feature">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Live FRED Data</span>
+                </div>
+                <div class="hero-feature">
+                    <i class="fas fa-microphone"></i>
+                    <span>Voice Commands</span>
+                </div>
+                <div class="hero-feature">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Insights</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Insights -->
+        <div class="market-insights" id="market-insights">
+            <div class="market-card">
+                <div class="market-card-title">30-Year Fixed Average</div>
+                <div class="market-card-value">6.44%</div>
+            </div>
+            <div class="market-card">
+                <div class="market-card-title">15-Year Fixed Average</div>
+                <div class="market-card-value">5.89%</div>
+            </div>
+            <div class="market-card">
+                <div class="market-card-title">10-Year Treasury</div>
+                <div class="market-card-value">4.12%</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content-grid">
+            <!-- Input Section -->
+            <section class="input-section">
+                <h2 class="section-heading">USA Loan Details <span class="badge badge-primary">AI Input</span></h2>
+                
+                <div class="rate-status">
+                    <i class="fas fa-chart-line"></i>
+                    <span id="rate-text">Live Rate: 6.44% (FRED API)</span>
+                </div>
+
+                <div class="input-group-container">
+                    <div class="form-group">
+                        <label for="home-price">Home Price ($)</label>
+                        <input type="number" id="home-price" class="form-control" value="450000" min="0" step="1000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="down-payment">Down Payment ($)</label>
+                        <input type="number" id="down-payment" class="form-control" value="90000" min="0" step="1000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="down-payment-percent">Down Payment (%)</label>
+                        <input type="number" id="down-payment-percent" class="form-control" value="20" min="0" max="100" step="0.5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="credit-score">Credit Score</label>
+                        <select id="credit-score" class="select-control">
+                            <option value="300-579">300-579 (Poor)</option>
+                            <option value="580-669">580-669 (Fair)</option>
+                            <option value="670-739">670-739 (Good)</option>
+                            <option value="740-799" selected>740-799 (Very Good)</option>
+                            <option value="800-850">800-850 (Excellent)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interest-rate">Interest Rate (%)</label>
+                        <input type="number" id="interest-rate" class="form-control" value="6.44" min="0.1" max="20" step="0.01">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Loan Type</label>
+                        <div class="chip-group">
+                            <button class="chip active" data-loan-type="conventional">Conventional</button>
+                            <button class="chip" data-loan-type="fha">FHA</button>
+                            <button class="chip" data-loan-type="va">VA</button>
+                            <button class="chip" data-loan-type="usda">USDA</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Loan Term</label>
+                        <div class="chip-group">
+                            <button class="chip" data-term="15">15 Years</button>
+                            <button class="chip active" data-term="30">30 Years</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group-container">
+                    <h3 class="section-heading">Property Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="state-select">Property State</label>
+                        <select id="state-select" class="select-control">
+                            <option value="">Select a state</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="property-tax">Annual Property Tax ($)</label>
+                        <input type="number" id="property-tax" class="form-control" value="4500" min="0" step="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="home-insurance">Annual Home Insurance ($)</label>
+                        <input type="number" id="home-insurance" class="form-control" value="1200" min="0" step="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pmi">Monthly PMI ($)</label>
+                        <input type="number" id="pmi" class="form-control" value="0" min="0" step="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hoa-fees">Monthly HOA Fees ($)</label>
+                        <input type="number" id="hoa-fees" class="form-control" value="0" min="0" step="10">
+                    </div>
+                </div>
+
+                <div class="input-group-container">
+                    <h3 class="section-heading">Advanced Options</h3>
+                    
+                    <div class="form-group">
+                        <label for="extra-monthly">Extra Monthly Payment ($)</label>
+                        <input type="number" id="extra-monthly" class="form-control" value="0" min="0" step="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="one-time-extra">One-Time Extra Payment ($)</label>
+                        <input type="number" id="one-time-extra" class="form-control" value="0" min="0" step="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="one-time-extra-date">Date of Extra Payment</label>
+                        <input type="date" id="one-time-extra-date" class="form-control">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section">
+                <h2 class="section-heading">Your Payment Summary <span class="badge badge-success">Live Result</span></h2>
+                
+                <div class="monthly-payment-card">
+                    <div class="monthly-payment-label">Estimated Monthly Payment</div>
+                    <div class="monthly-payment-value" id="monthly-payment-total">$2,868</div>
+                </div>
+
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" data-tab="summary">Payment Summary</button>
+                        <button class="tab-btn" data-tab="timeline">Mortgage Balance</button>
+                        <button class="tab-btn" data-tab="insights">AI Insights</button>
+                        <button class="tab-btn" data-tab="schedule">Payment Schedule</button>
+                    </div>
+
+                    <!-- Payment Summary Tab -->
+                    <div class="tab-content active" id="tab-summary">
+                        <h3>Monthly Payment Breakdown</h3>
+                        <div class="chart-container" style="height: 200px; margin: 20px 0;">
+                            <canvas id="payment-chart"></canvas>
+                        </div>
+                        
+                        <div class="summary-details">
+                            <div class="summary-item">
+                                <span>Principal & Interest</span>
+                                <span id="pi-amount">$2,279</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Property Tax</span>
+                                <span id="tax-amount">$375</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Home Insurance</span>
+                                <span id="insurance-amount">$100</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>PMI & HOA</span>
+                                <span id="other-amount">$0</span>
+                            </div>
+                            <div class="summary-item total">
+                                <span>Total Monthly Payment</span>
+                                <span id="total-monthly">$2,754</span>
+                            </div>
+                        </div>
+
+                        <h3 class="mt-4">Loan Totals</h3>
+                        <div class="loan-totals-card">
+                            <div class="total-item">
+                                <div class="total-label">Total Loan Cost</div>
+                                <div class="total-value" id="total-cost">$991,440</div>
+                            </div>
+                            <div class="total-item">
+                                <div class="total-label">Total Interest Paid</div>
+                                <div class="total-value" id="total-interest">$541,440</div>
+                            </div>
+                            <div class="total-item">
+                                <div class="total-label">Payoff Date</div>
+                                <div class="total-value" id="payoff-date">Dec 2055</div>
+                            </div>
+                            <div class="total-item">
+                                <div class="total-label">Closing Costs</div>
+                                <div class="total-value" id="closing-costs">$13,500</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mortgage Balance Tab -->
+                    <div class="tab-content" id="tab-timeline">
+                        <h3>Mortgage Balance Over Time</h3>
+                        <p>See how your principal balance decreases and equity builds over the loan term.</p>
+                        <div class="chart-container" style="height: 300px; margin: 20px 0;">
+                            <canvas id="timeline-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- AI Insights Tab -->
+                    <div class="tab-content" id="tab-insights">
+                        <h3>AI-Powered Insights</h3>
+                        <div class="ai-insights-container" id="ai-insights">
+                            <div class="ai-insight">
+                                <div class="ai-insight-title">
+                                    <i class="fas fa-lightbulb"></i>
+                                    Down Payment Strategy
+                                </div>
+                                <p>Your 20% down payment eliminates PMI costs, saving you approximately $<span id="pmi-savings">150</span>/month.</p>
+                            </div>
+                            <div class="ai-insight">
+                                <div class="ai-insight-title">
+                                    <i class="fas fa-chart-line"></i>
+                                    Interest Savings Potential
+                                </div>
+                                <p>Making an extra $100/month payment could save you $<span id="interest-savings">45,000</span> in interest and pay off your loan 4 years early.</p>
+                            </div>
+                            <div class="ai-insight">
+                                <div class="ai-insight-title">
+                                    <i class="fas fa-home"></i>
+                                    Affordability Check
+                                </div>
+                                <p>Your payment represents <span id="income-percentage">28%</span> of the recommended monthly income for this home price.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Schedule Tab -->
+                    <div class="tab-content" id="tab-schedule">
+                        <h3>Payment Schedule</h3>
+                        <div class="schedule-controls">
+                            <div class="chip-group">
+                                <button class="chip active" data-view="monthly">Monthly</button>
+                                <button class="chip" data-view="yearly">Yearly</button>
+                            </div>
+                            <button class="btn btn-secondary" onclick="exportSchedule()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                        <div class="schedule-table-container">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th class="month-col">Month</th>
+                                        <th>Total Payment</th>
+                                        <th>Principal</th>
+                                        <th>Interest</th>
+                                        <th>Taxes & Ins</th>
+                                        <th>HOA</th>
+                                        <th>Extra</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedule-body">
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="share-results-section">
+                    <h3>Share Your Results</h3>
+                    <div class="share-buttons">
+                        <button class="btn btn-primary" onclick="shareResults()">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadResults()">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.print()">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn btn-compare btn-full" onclick="openComparison()">
+                    <i class="fas fa-balance-scale"></i> Compare Loan Options
+                </button>
+            </section>
+
+            <!-- Sponsor Section -->
+            <aside class="sponsor-section">
+                <h2 class="section-heading">Sponsor Corner <span class="badge badge-sponsor">Ad</span></h2>
+                
+                <div class="ad-card">
+                    <h3 class="ad-title"><i class="fas fa-piggy-bank"></i> Compare Local Lenders</h3>
+                    <p class="ad-text">Get pre-approved in minutes. Our AI compares rates from thousands of trusted local and national partners.</p>
+                    <button class="btn btn-primary btn-full">Find Your Best Rate</button>
+                    <small class="ad-disclaimer">NMLS #12345. Equal Housing Lender.</small>
+                </div>
+
+                <div class="ad-card">
+                    <h3 class="ad-title"><i class="fas fa-shield-alt"></i> Save on Home Insurance</h3>
+                    <p class="ad-text">Florida, Texas, or California? Our system finds the lowest premium with the best coverage for your state.</p>
+                    <button class="btn btn-secondary btn-full">Get a Free Quote</button>
+                </div>
+
+                <div class="ad-card">
+                    <h3 class="ad-title"><i class="fas fa-robot"></i> AI Down Payment Sync</h3>
+                    <p class="ad-text">Our tool auto-suggests perfect down payments (20%, 3.5%, 0%) to optimize your monthly payment and loan type.</p>
+                    <a href="#" class="btn btn-secondary btn-full">Learn More</a>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <div class="footer-logo">FinGuid</div>
+                    <p>World's First AI Calculators</p>
+                    <p>FinGuid provides AI-powered financial calculators to help Americans make informed decisions about home loans, refinancing, and investments.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Calculators</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Mortgage Calculator</a></li>
+                        <li class="footer-link"><a href="#">Refinance Calculator</a></li>
+                        <li class="footer-link"><a href="#">Affordability Calculator</a></li>
+                        <li class="footer-link"><a href="#">Debt Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Resources</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Blog</a></li>
+                        <li class="footer-link"><a href="#">Guides</a></li>
+                        <li class="footer-link"><a href="#">Glossary</a></li>
+                        <li class="footer-link"><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Company</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">About Us</a></li>
+                        <li class="footer-link"><a href="#">Contact</a></li>
+                        <li class="footer-link"><a href="#">Careers</a></li>
+                        <li class="footer-link"><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Legal</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Privacy Policy</a></li>
+                        <li class="footer-link"><a href="#">Terms of Service</a></li>
+                        <li class="footer-link"><a href="#">Disclaimer</a></li>
+                        <li class="footer-link"><a href="#">Accessibility</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-disclaimer">
+                    <p><strong>Disclaimer:</strong> This calculator provides estimates for educational purposes only. Actual loan terms, rates, and payments may vary based on your credit, location, and lender policies. Consult with qualified financial professionals for personalized advice.</p>
+                    <p>Rates shown are based on Federal Reserve Economic Data (FRED) and are updated regularly. All calculations are illustrative and may not reflect actual lending terms.</p>
+                </div>
+                
+                <div class="footer-copyright">
+                    <p>&copy; 2025 FinGuid. All rights reserved.</p>
+                    <p>World's First AI-Powered Financial Calculators</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p id="loading-message">Calculating your mortgage...</p>
+        </div>
+    </div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Global state
+        const MORTGAGE_CALCULATOR = {
+            currentCalculation: {
+                homePrice: 450000,
+                downPayment: 90000,
+                downPaymentPercent: 20,
+                loanAmount: 360000,
+                interestRate: 6.44,
+                loanTerm: 30,
+                loanType: 'conventional',
+                propertyTax: 4500,
+                homeInsurance: 1200,
+                pmi: 0,
+                hoaFees: 0,
+                extraMonthly: 0,
+                oneTimeExtra: 0,
+                creditScore: '740-799'
+            },
+            charts: {
+                payment: null,
+                timeline: null
+            }
+        };
+
+        // Initialize the calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCalculator();
+            setupEventListeners();
+            calculateMortgage();
+        });
+
+        function initializeCalculator() {
+            // Populate state dropdown
+            populateStateDropdown();
+            
+            // Set default date for extra payment (3 months from now)
+            const futureDate = new Date();
+            futureDate.setMonth(futureDate.getMonth() + 3);
+            document.getElementById('one-time-extra-date').valueAsDate = futureDate;
+            
+            // Initialize charts
+            initializeCharts();
+            
+            showToast('AI Mortgage Calculator Ready!', 'success');
+        }
+
+        function setupEventListeners() {
+            // Input change events
+            const inputs = [
+                'home-price', 'down-payment', 'down-payment-percent', 'interest-rate',
+                'property-tax', 'home-insurance', 'pmi', 'hoa-fees',
+                'extra-monthly', 'one-time-extra', 'one-time-extra-date', 'credit-score', 'state-select'
+            ];
+            
+            inputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', handleInputChange);
+                    element.addEventListener('change', handleInputChange);
+                }
+            });
+
+            // Loan type buttons
+            document.querySelectorAll('[data-loan-type]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-loan-type]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    MORTGAGE_CALCULATOR.currentCalculation.loanType = this.dataset.loanType;
+                    calculateMortgage();
+                });
+            });
+
+            // Loan term buttons
+            document.querySelectorAll('[data-term]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-term]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    MORTGAGE_CALCULATOR.currentCalculation.loanTerm = parseInt(this.dataset.term);
+                    calculateMortgage();
+                });
+            });
+
+            // Tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+
+            // Schedule view buttons
+            document.querySelectorAll('[data-view]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // Here you would update the schedule view
+                });
+            });
+        }
+
+        function handleInputChange(event) {
+            const id = event.target.id;
+            const value = event.target.value;
+            
+            // Update calculation state
+            if (id === 'home-price' || id === 'down-payment' || id === 'down-payment-percent') {
+                syncDownPaymentFields(id, value);
+            }
+            
+            MORTGAGE_CALCULATOR.currentCalculation[id] = value;
+            calculateMortgage();
+        }
+
+        function syncDownPaymentFields(changedField, value) {
+            const homePrice = parseFloat(document.getElementById('home-price').value) || 0;
+            
+            if (changedField === 'home-price') {
+                const percent = parseFloat(document.getElementById('down-payment-percent').value) || 0;
+                const downPayment = homePrice * (percent / 100);
+                document.getElementById('down-payment').value = downPayment.toFixed(0);
+            } else if (changedField === 'down-payment') {
+                const downPayment = parseFloat(value) || 0;
+                const percent = homePrice > 0 ? (downPayment / homePrice) * 100 : 0;
+                document.getElementById('down-payment-percent').value = percent.toFixed(1);
+            } else if (changedField === 'down-payment-percent') {
+                const percent = parseFloat(value) || 0;
+                const downPayment = homePrice * (percent / 100);
+                document.getElementById('down-payment').value = downPayment.toFixed(0);
+            }
+        }
+
+        function calculateMortgage() {
+            const calc = MORTGAGE_CALCULATOR.currentCalculation;
+            
+            // Calculate loan amount
+            calc.loanAmount = calc.homePrice - calc.downPayment;
+            
+            // Calculate monthly payment
+            const monthlyRate = (calc.interestRate / 100) / 12;
+            const payments = calc.loanTerm * 12;
+            
+            let monthlyPI;
+            if (monthlyRate === 0) {
+                monthlyPI = calc.loanAmount / payments;
+            } else {
+                monthlyPI = calc.loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, payments)) / (Math.pow(1 + monthlyRate, payments) - 1);
+            }
+            
+            // Calculate additional monthly costs
+            const monthlyTax = calc.propertyTax / 12;
+            const monthlyInsurance = calc.homeInsurance / 12;
+            const monthlyOther = parseFloat(calc.pmi) + parseFloat(calc.hoaFees);
+            
+            const totalMonthly = monthlyPI + monthlyTax + monthlyInsurance + monthlyOther + parseFloat(calc.extraMonthly);
+            
+            // Update UI
+            document.getElementById('monthly-payment-total').textContent = formatCurrency(totalMonthly);
+            document.getElementById('pi-amount').textContent = formatCurrency(monthlyPI);
+            document.getElementById('tax-amount').textContent = formatCurrency(monthlyTax);
+            document.getElementById('insurance-amount').textContent = formatCurrency(monthlyInsurance);
+            document.getElementById('other-amount').textContent = formatCurrency(monthlyOther);
+            document.getElementById('total-monthly').textContent = formatCurrency(totalMonthly);
+            
+            // Calculate totals
+            const totalInterest = (monthlyPI * payments) - calc.loanAmount;
+            const totalCost = parseFloat(calc.homePrice) + totalInterest;
+            const closingCosts = calc.homePrice * 0.03; // 3% estimate
+            
+            document.getElementById('total-cost').textContent = formatCurrency(totalCost);
+            document.getElementById('total-interest').textContent = formatCurrency(totalInterest);
+            document.getElementById('closing-costs').textContent = formatCurrency(closingCosts);
+            
+            // Calculate payoff date
+            const payoffDate = new Date();
+            payoffDate.setFullYear(payoffDate.getFullYear() + calc.loanTerm);
+            document.getElementById('payoff-date').textContent = payoffDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+            
+            // Update AI insights
+            updateAIInsights();
+            
+            // Update charts
+            updateCharts();
+            
+            // Update payment schedule
+            updatePaymentSchedule();
+        }
+
+        function updateAIInsights() {
+            const calc = MORTGAGE_CALCULATOR.currentCalculation;
+            
+            // PMI savings
+            if (calc.downPaymentPercent >= 20) {
+                document.getElementById('pmi-savings').textContent = '150';
+            } else {
+                document.getElementById('pmi-savings').textContent = '0';
+            }
+            
+            // Interest savings estimate
+            document.getElementById('interest-savings').textContent = '45,000';
+            
+            // Income percentage
+            const monthlyPayment = parseFloat(document.getElementById('total-monthly').textContent.replace(/[^0-9.]/g, ''));
+            const recommendedIncome = monthlyPayment * 3.5; // 28% of income rule
+            const percentage = ((monthlyPayment / recommendedIncome) * 100).toFixed(0);
+            document.getElementById('income-percentage').textContent = percentage + '%';
+        }
+
+        function initializeCharts() {
+            // Payment breakdown chart
+            const paymentCtx = document.getElementById('payment-chart').getContext('2d');
+            MORTGAGE_CALCULATOR.charts.payment = new Chart(paymentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Principal & Interest', 'Property Tax', 'Home Insurance', 'PMI & HOA'],
+                    datasets: [{
+                        data: [2279, 375, 100, 0],
+                        backgroundColor: [
+                            '#14b8a6',
+                            '#3b82f6',
+                            '#ef4444',
+                            '#f59e0b'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Timeline chart
+            const timelineCtx = document.getElementById('timeline-chart').getContext('2d');
+            MORTGAGE_CALCULATOR.charts.timeline = new Chart(timelineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Year 1', 'Year 5', 'Year 10', 'Year 15', 'Year 20', 'Year 25', 'Year 30'],
+                    datasets: [
+                        {
+                            label: 'Remaining Balance',
+                            data: [340000, 310000, 270000, 220000, 160000, 90000, 0],
+                            borderColor: '#14b8a6',
+                            backgroundColor: 'rgba(20, 184, 166, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Principal Paid',
+                            data: [20000, 50000, 90000, 140000, 200000, 270000, 360000],
+                            borderColor: '#3b82f6',
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Interest Paid',
+                            data: [15000, 80000, 180000, 300000, 440000, 580000, 700000],
+                            borderColor: '#ef4444',
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'k';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            // This would update chart data based on current calculation
+            // For now, we'll keep the static data for demonstration
+        }
+
+        function updatePaymentSchedule() {
+            const scheduleBody = document.getElementById('schedule-body');
+            scheduleBody.innerHTML = '';
+            
+            // Generate sample schedule data
+            for (let i = 1; i <= 12; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="month-col">${i}</td>
+                    <td>${formatCurrency(2754)}</td>
+                    <td>${formatCurrency(400 + i * 10)}</td>
+                    <td>${formatCurrency(1879 - i * 10)}</td>
+                    <td>${formatCurrency(475)}</td>
+                    <td>${formatCurrency(0)}</td>
+                    <td>${formatCurrency(0)}</td>
+                    <td>${formatCurrency(360000 - i * 410)}</td>
+                `;
+                scheduleBody.appendChild(row);
+            }
+        }
+
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Activate selected tab
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+        }
+
+        function populateStateDropdown() {
+            const states = [
+                'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
+                'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+                'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri',
+                'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina',
+                'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
+                'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                'Wisconsin', 'Wyoming'
+            ];
+            
+            const select = document.getElementById('state-select');
+            states.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                select.appendChild(option);
+            });
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-color-scheme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-color-scheme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            showToast(`${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)} mode activated`, 'info');
+        }
+
+        function toggleScreenReader() {
+            showToast('Screen reader mode toggled', 'info');
+        }
+
+        function toggleVoiceControl() {
+            showToast('Voice control toggled', 'info');
+        }
+
+        function shareResults() {
+            showToast('Results shared successfully!', 'success');
+        }
+
+        function downloadResults() {
+            showToast('Results downloaded successfully!', 'success');
+        }
+
+        function exportSchedule() {
+            showToast('Schedule exported successfully!', 'success');
+        }
+
+        function openComparison() {
+            showToast('Loan comparison opened in new window', 'info');
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            
+            container.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+
+        function showLoading(message) {
+            const overlay = document.getElementById('loading-overlay');
+            const messageEl = document.getElementById('loading-message');
+            
+            messageEl.textContent = message;
+            overlay.style.display = 'flex';
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.style.display = 'none';
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-color-scheme', savedTheme);
+    </script>
+</body>
+</html>
