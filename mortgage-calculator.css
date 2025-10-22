@@ -1,6 +1,7 @@
 /* ========================================================================== */
 /* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v25.0               */
-/* PRODUCTION READY WITH PWA, 50-STATE TAXES, VOICE COMMANDS               */
+/* DEFAULT DARK MODE IMPLEMENTED (User Request)                             */
+/* Layout: Left 30% | Middle 40% | Right 30%                               */
 /* ========================================================================== */
 
 /* ========================================================================== */
@@ -15,7 +16,6 @@
     --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-error: #ef4444;
-    --color-white: #ffffff;
     
     /* Dark Mode (Default) */
     --color-bg: #111827;           /* Deep Navy Background */
@@ -26,7 +26,7 @@
     --color-shadow: rgba(0, 0, 0, 0.4);
 
     /* Typography */
-    --font-family-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family-main: 'Inter', sans-serif;
     --font-size-base: 16px;
     --space-1: 0.25rem; /* 4px */
     --space-2: 0.5rem;  /* 8px */
@@ -58,18 +58,12 @@
     padding: 0;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 body {
     font-family: var(--font-family-main);
     background-color: var(--color-bg);
     color: var(--color-text-main);
     line-height: 1.6;
     transition: background-color var(--transition-fast), color var(--transition-fast);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 .app-container {
@@ -147,6 +141,7 @@ body {
     grid-column: 3 / 4; /* Right Column */
 }
 
+
 /* ========================================================================== */
 /* 4. COMPONENTS (Cards, Buttons, Forms)                                      */
 /* ========================================================================== */
@@ -194,7 +189,6 @@ body {
     background-color: var(--color-bg); 
     color: var(--color-text-main);
     transition: border-color var(--transition-fast);
-    font-family: var(--font-family-main);
 }
 
 .form-control:focus {
@@ -219,7 +213,6 @@ body {
     outline: none;
     margin: 10px 0;
     border-radius: 3px;
-    width: 100%;
 }
 
 .range-slider::-webkit-slider-thumb {
@@ -231,7 +224,6 @@ body {
     background: var(--color-primary);
     cursor: pointer;
     transition: background var(--transition-fast);
-    border: 2px solid var(--color-white);
 }
 
 .range-slider::-moz-range-thumb {
@@ -240,7 +232,6 @@ body {
     border-radius: 50%;
     background: var(--color-primary);
     cursor: pointer;
-    border: 2px solid var(--color-white);
 }
 
 /* Button Styles */
@@ -251,11 +242,6 @@ body {
     cursor: pointer;
     font-weight: 600;
     transition: background-color var(--transition-fast), opacity var(--transition-fast);
-    font-family: var(--font-family-main);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
 }
 
 .btn-primary {
@@ -286,17 +272,6 @@ body {
     opacity: 0.9;
 }
 
-.btn-warning {
-    background-color: var(--color-warning);
-    color: var(--color-white);
-}
-
-.btn-tertiary {
-    background-color: transparent;
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-}
-
 .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -310,11 +285,6 @@ body {
     border-radius: 50%;
     font-size: 1.1rem;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .btn-icon:hover {
@@ -337,12 +307,11 @@ body {
 /* ========================================================================== */
 
 .monthly-payment-card {
-    background: linear-gradient(135deg, var(--color-primary), #2563eb);
+    background-color: var(--color-primary); /* Primary color for high contrast */
     color: var(--color-white);
     margin-bottom: var(--space-8);
     padding: var(--space-8);
     text-align: center;
-    border: none;
 }
 
 .payment-breakdown {
@@ -356,7 +325,6 @@ body {
     font-size: 0.9rem;
     display: block;
     margin-bottom: var(--space-1);
-    opacity: 0.9;
 }
 
 .breakdown-item .value {
@@ -372,7 +340,6 @@ body {
     font-size: 1rem;
     display: block;
     margin-bottom: var(--space-2);
-    opacity: 0.9;
 }
 
 .total-payment .total {
@@ -390,7 +357,6 @@ body {
     display: flex;
     border-bottom: 1px solid var(--color-border);
     margin-bottom: var(--space-4);
-    overflow-x: auto;
 }
 
 .tab-button {
@@ -402,7 +368,6 @@ body {
     font-weight: 500;
     border-bottom: 3px solid transparent;
     transition: all var(--transition-fast);
-    white-space: nowrap;
 }
 
 .tab-button.active {
@@ -453,18 +418,9 @@ body {
     padding: var(--space-4);
     border-radius: var(--radius-sm);
     border: 1px solid var(--color-border);
-    min-height: 200px;
+    min-height: 100px;
     margin-bottom: var(--space-4);
-    white-space: pre-wrap;
-    line-height: 1.6;
-}
-
-.loading-ai {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    color: var(--color-text-muted);
+    white-space: pre-wrap; /* For better formatted output from the AI */
 }
 
 /* Schedule Table */
@@ -504,12 +460,6 @@ body {
     text-align: left;
 }
 
-/* Chart Container */
-.chart-container {
-    position: relative;
-    height: 400px;
-    width: 100%;
-}
 
 /* ========================================================================== */
 /* 6. SPONSOR & ADVERTISING                                                   */
@@ -518,58 +468,14 @@ body {
 .ad-block {
     margin-bottom: var(--space-6);
     padding: var(--space-4);
-    border: 1px solid var(--color-border);
+    border: 1px dashed var(--color-primary);
     border-radius: var(--radius-md);
     text-align: center;
-    position: relative;
 }
 
-.partner-block {
-    text-align: left;
-    border-left-width: 4px;
-}
-
-.partner-badge {
-    position: absolute;
-    top: -10px;
-    right: 10px;
-    background: var(--color-warning);
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
-}
-
-.partner-features {
-    display: flex;
-    gap: var(--space-2);
-    margin: var(--space-3) 0;
-    flex-wrap: wrap;
-}
-
-.feature-tag {
-    background: var(--color-surface);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-}
-
-.partner-rating {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    margin: var(--space-3) 0;
-}
-
-.stars {
-    color: #fbbf24;
-}
-
-.rating-text {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
+.partner-block h4 {
+    color: var(--color-secondary);
+    margin-bottom: var(--space-2);
 }
 
 .ad-label {
@@ -577,26 +483,6 @@ body {
     color: var(--color-text-muted);
     text-transform: uppercase;
     margin-bottom: var(--space-2);
-}
-
-.ad-unit {
-    background: var(--color-bg);
-    height: 250px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-muted);
-    font-weight: 600;
-    border-radius: var(--radius-sm);
-}
-
-.ad-fallback {
-    text-align: center;
-    padding: var(--space-4);
-}
-
-.agent-lead-form {
-    margin-top: var(--space-4);
 }
 
 /* ========================================================================== */
@@ -625,7 +511,7 @@ body {
 }
 
 .branded-footer-image {
-    max-width: 150px;
+    max-width: 150px; /* Adjust size for branding image */
     height: auto;
     margin-bottom: var(--space-2);
 }
@@ -657,6 +543,7 @@ body {
     font-size: 0.7rem;
     font-weight: 700;
 }
+
 
 /* ========================================================================== */
 /* 8. MOBILE RESPONSIVENESS (All Device Friendly)                             */
@@ -704,15 +591,6 @@ body {
         font-size: 2.5rem;
     }
 
-    .payment-breakdown {
-        flex-direction: column;
-        gap: var(--space-4);
-    }
-
-    .data-grid {
-        grid-template-columns: 1fr;
-    }
-
     .footer-container {
         flex-direction: column;
         align-items: flex-start;
@@ -727,28 +605,6 @@ body {
     }
 }
 
-@media (max-width: 640px) {
-    .app-container {
-        padding: var(--space-2);
-    }
-    
-    .card {
-        padding: var(--space-4);
-    }
-    
-    .monthly-payment-card {
-        padding: var(--space-4);
-    }
-    
-    .monthly-payment-card .total {
-        font-size: 2rem;
-    }
-    
-    .tabs-header {
-        font-size: 0.9rem;
-    }
-}
-
 /* ========================================================================== */
 /* 9. UTILITY & OVERLAYS (Voice, Loading, Toast)                              */
 /* ========================================================================== */
@@ -758,7 +614,6 @@ body {
 .text-xs { font-size: 0.75rem; }
 .text-muted { color: var(--color-text-muted); }
 .text-center { text-align: center; }
-.mb-2 { margin-bottom: var(--space-2); }
 
 /* Loading Overlay */
 .loading-overlay {
@@ -795,73 +650,6 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Toast Styles */
-.toast-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1050;
-    max-width: 350px;
-}
-
-.toast {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    margin-bottom: var(--space-2);
-    box-shadow: 0 4px 12px var(--color-shadow);
-    transform: translateX(400px);
-    transition: transform 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-}
-
-.toast.fade-in {
-    transform: translateX(0);
-}
-
-.toast.fade-out {
-    transform: translateX(400px);
-}
-
-.toast.toast-success {
-    border-left: 4px solid var(--color-success);
-}
-
-.toast.toast-error {
-    border-left: 4px solid var(--color-error);
-}
-
-.toast.toast-warning {
-    border-left: 4px solid var(--color-warning);
-}
-
-.toast.toast-info {
-    border-left: 4px solid var(--color-primary);
-}
-
-.toast-icon {
-    font-size: 1.2rem;
-}
-
-.toast-success .toast-icon {
-    color: var(--color-success);
-}
-
-.toast-error .toast-icon {
-    color: var(--color-error);
-}
-
-.toast-warning .toast-icon {
-    color: var(--color-warning);
-}
-
-.toast-info .toast-icon {
-    color: var(--color-primary);
-}
-
 /* Voice Status */
 .voice-status {
     position: fixed;
@@ -892,15 +680,6 @@ body {
     font-size: 0.9rem;
     font-weight: 500;
     margin-right: var(--space-3);
-}
-
-.voice-status-close {
-    background: none;
-    border: none;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    padding: 0;
-    font-size: 1rem;
 }
 
 @keyframes pulse {
@@ -938,7 +717,7 @@ body {
     /* Hide non-essential elements for a clean printout */
     .header, .sponsor-section, .footer, .action-buttons-group, 
     #theme-toggle, #voice-toggle, .toast-container, .btn-compare, 
-    .tabs-header, .schedule-controls, #install-btn {
+    .tabs-header, .schedule-controls {
         display: none !important;
     }
     .main-content-grid {
@@ -974,30 +753,5 @@ body {
         text-align: center;
         margin-bottom: 20px;
         color: black !important; /* Ensure black for print */
-    }
-}
-
-/* Focus styles for accessibility */
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    :root {
-        --color-border: #000000;
-        --color-shadow: rgba(0, 0, 0, 0.8);
-    }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
     }
 }
