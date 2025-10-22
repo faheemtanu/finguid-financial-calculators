@@ -1057,3 +1057,110 @@ document.getElementById('voice-status-close')?.addEventListener('click', () => {
 });
 
 console.log('✅ All features initialized successfully!');
+
+// Toggle Main Content (Basic/Advanced)
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.toggle-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(this.dataset.content+'-content').classList.add('active');
+    });
+});
+
+// Animate 'AI-Powered' text
+const aiTextEl = document.querySelector('.ai-powered-animated');
+if(aiTextEl){
+    let chars = aiTextEl.textContent.split('');
+    aiTextEl.innerHTML = chars.map((c, i) => `<span style='animation-delay:${0.06*i}s;'>${c}</span>`).join('');
+}
+
+// Hero Section Resize (handled via .hero-compact CSS)
+
+// Market Rates Compact display updated via render/live fetch (see fetchLiveRates)
+
+// Loan Term Custom Entry
+const customTermChip = document.getElementById('custom-term-chip');
+const customTermInput = document.getElementById('custom-term-input');
+if(customTermChip && customTermInput){
+    customTermChip.addEventListener('click', function(){
+        customTermInput.style.display = 'block';
+        customTermInput.focus();
+    });
+    customTermInput.addEventListener('input', function(){
+        let val = parseInt(this.value);
+        if(!isNaN(val) && val > 0 && val <= 50){
+            MORTGAGE_CALCULATOR.currentCalculation.loanTerm = val;
+            updateCalculation('custom-term');
+        }
+    });
+}
+
+// Show selected loan type in estimate
+const loanTypes = document.querySelectorAll('.chip[data-type]');
+const loanTypeDisplay = document.getElementById('loan-type-display');
+loanTypes.forEach(type => {
+    type.addEventListener('click', function(){
+        loanTypes.forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        MORTGAGE_CALCULATOR.currentCalculation.loanType = this.dataset.type;
+        loanTypeDisplay.textContent = this.textContent + ' Loan';
+        updateCalculation('loan-type');
+    });
+});
+
+// Credit Score affects Interest Rate
+document.getElementById('credit-score').addEventListener('change', function(){
+    const map = { '800': 6.1, '740': 6.44, '670': 6.95, '620': 7.55, '580': 8.40, '550': 9.90 };
+    const val = this.value;
+    document.getElementById('interest-rate').value = map[val];
+    updateCalculation('credit-score');
+});
+
+// Market Rates Section update
+document.addEventListener('updateRates', function(e){
+    document.getElementById('rate-30-year').textContent = e.detail["30yr"]+"%";
+    document.getElementById('rate-15-year').textContent = e.detail["15yr"]+"%";
+    document.getElementById('rate-10-treasury').textContent = e.detail["10yr"]+"%";
+    document.getElementById('rate-update-time').textContent = 'Last updated: '+e.detail.time;
+});
+
+// Market Rates fetch (simulate FRED twice daily)
+function fetchLiveRates() {
+    // Simulate fetching
+    let now = new Date();
+    let hours = now.getHours();
+    let mins = now.getMinutes();
+    // For demo, just pick possible hours
+    let detail = { "30yr":6.44, "15yr":5.89, "10yr":4.25, "time":now.toLocaleString() };
+    document.dispatchEvent(new CustomEvent("updateRates",{detail}));
+}
+fetchLiveRates();
+// setInterval(fetchLiveRates, 12*60*60*1000); // 2x a day
+
+// Share Results - Display Social Share Options
+document.getElementById('share-btn').addEventListener('click', function(){
+    document.getElementById('social-share-options').style.display='flex';
+});
+
+// Social Share Buttons
+['facebook','whatsapp','twitter','email'].forEach(key => {
+    document.querySelector('.'+key+'-share').addEventListener('click', function(){
+        let url = window.location.href;
+        let txt = encodeURIComponent('See my mortgage calculation results: '+url);
+        let share;
+        if(key==='facebook') share = 'https://facebook.com/sharer/sharer.php?u='+url;
+        if(key==='twitter') share = 'https://twitter.com/share?text='+txt+'&url='+url;
+        if(key==='whatsapp') share = 'https://wa.me/?text='+txt;
+        if(key==='email') share = 'mailto:?subject=Check Out This Mortgage Result&body='+txt;
+        window.open(share,'_blank');
+    });
+});
+
+// Download PDF (using print for now)
+document.getElementById('download-pdf-btn').addEventListener('click', function(){
+    window.print();
+});
+
+// Footer: Remove 'Made in USA' (should not exist in v2 footer)
+// Footer: Social Links exists in template
