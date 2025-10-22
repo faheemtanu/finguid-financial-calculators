@@ -5,32 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    <title>🇺🇸 World's First AI Mortgage Calculator 2025 | Live FRED Rates | Voice Enabled | Dark Mode</title>
+    <title>🇺🇸 FinGuid - World's First AI Mortgage Calculator 2025 | Live FRED Rates | Voice Enabled</title>
     <meta name="description" content="America's most advanced AI-powered mortgage calculator with live FRED API rates, voice commands, 50-state tax/insurance rates, payment schedules, and real-time AI insights. Built for Americans by Americans.">
     <meta name="keywords" content="USA mortgage calculator 2025, AI mortgage calculator, FRED API rates, voice calculator, 50 state tax rates, dark mode mortgage, payment schedule, amortization chart, AI insights">
-    <meta name="author" content="World's First AI Calculator Platform - Built for Americans">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="en-US">
     <meta name="geo.region" content="US">
     <meta name="geo.placename" content="United States">
     
-    <meta property="og:title" content="🇺🇸 World's First AI Mortgage Calculator 2025 - Live Federal Reserve Rates">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+    
+    <meta property="og:title" content="🇺🇸 FinGuid - World's First AI Mortgage Calculator 2025 - Live Federal Reserve Rates">
     <meta property="og:description" content="Calculate your perfect American home loan with live FRED rates, AI insights, voice commands, and 50-state rate synchronization. Trusted by millions.">
-    <meta property="og:url" content="https://worldsfirstai-calculator.com/usa-mortgage">
+    <meta property="og:url" content="https://finguid.com/usa-mortgage">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
-    <meta property="og:site_name" content="World's First AI Calculator">
-    <meta property="og:image" content="https://worldsfirstai-calculator.com/images/usa-mortgage-calculator-og.jpg">
+    <meta property="og:site_name" content="FinGuid">
+    <meta property="og:image" content="https://finguid.com/images/usa-mortgage-calculator-og.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="🇺🇸 World's First AI Mortgage Calculator 2025 - AI Powered">
+    <meta name="twitter:title" content="🇺🇸 FinGuid - World's First AI Mortgage Calculator 2025">
     <meta name="twitter:description" content="America's most advanced mortgage calculator with 50-state tax/insurance and live Federal Reserve rates.">
-    <meta name="twitter:image" content="https://worldsfirstai-calculator.com/images/usa-mortgage-calculator-twitter.jpg">
-    <meta name="twitter:site" content="@WorldsFirstAI">
+    <meta name="twitter:image" content="https://finguid.com/images/usa-mortgage-calculator-twitter.jpg">
+    <meta name="twitter:site" content="@FinGuid">
     
-    <link rel="canonical" href="https://worldsfirstai-calculator.com/usa-mortgage">
+    <link rel="canonical" href="https://finguid.com/usa-mortgage">
     
     <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f9fafb" media="(prefers-color-scheme: light)">
@@ -53,9 +62,9 @@
     {
         "@context": "https://schema.org",
         "@type": ["WebApplication", "FinancialService"],
-        "name": "World's First AI Mortgage Calculator 2025",
+        "name": "FinGuid - World's First AI Mortgage Calculator 2025",
         "description": "America's most advanced AI-powered mortgage calculator with live Federal Reserve rates, voice commands, and comprehensive loan analysis.",
-        "url": "https://worldsfirstai-calculator.com/usa-mortgage",
+        "url": "https://finguid.com/usa-mortgage",
         "operatingSystem": "All",
         "applicationCategory": "FinanceApplication"
     }
@@ -64,13 +73,20 @@
 <body>
     <div id="app" class="app-container">
         
+        <!-- Compact Header -->
         <header class="header">
             <div class="logo-container">
                 <i class="fas fa-home-alt logo-icon" aria-hidden="true"></i>
-                <h1 class="logo-text">AI Mortgage Pro 🇺🇸</h1>
+                <h1 class="logo-text">FinGuid</h1>
             </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Calculators</a>
+                <a href="#" class="nav-link">Resources</a>
+                <a href="#" class="nav-link">Partners</a>
+                <a href="#" class="nav-link">Contact</a>
+            </nav>
             <div class="header-controls">
-                
                 <button id="theme-toggle" class="control-btn theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
                     <i class="fas fa-sun light-icon" aria-hidden="true"></i>
                     <i class="fas fa-moon dark-icon" aria-hidden="true"></i>
@@ -80,11 +96,37 @@
                     <i class="fas fa-volume-up" aria-hidden="true"></i>
                 </button>
 
-                <button id="voice-toggle" class="control-btn" onclick="toggleVoiceControl()" aria-label="Toggle voice control" disabled>
+                <button id="voice-toggle" class="control-btn" onclick="toggleVoiceControl()" aria-label="Toggle voice control">
                     <i class="fas fa-microphone" aria-hidden="true"></i>
                 </button>
             </div>
         </header>
+
+        <!-- Compact Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">USA Mortgage Calculator 2025</h1>
+            <p class="hero-subtitle">Home Loan Pro — Mortgage Calculator <span class="ai-powered-text">AI Powered</span></p>
+        </section>
+
+        <!-- Live Market Rates -->
+        <div class="market-rates-bar">
+            <div class="rate-item">
+                <span class="rate-label">30-Year Fixed</span>
+                <span class="rate-value" id="rate-30yr">6.44%</span>
+            </div>
+            <div class="rate-item">
+                <span class="rate-label">15-Year Fixed</span>
+                <span class="rate-value" id="rate-15yr">5.89%</span>
+            </div>
+            <div class="rate-item">
+                <span class="rate-label">10-Year Treasury</span>
+                <span class="rate-value" id="rate-10yr">4.12%</span>
+            </div>
+            <div class="rate-update">
+                <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                <span id="last-update-text">Updated: Loading...</span>
+            </div>
+        </div>
 
         <main class="main-content-grid">
             
@@ -111,6 +153,18 @@
                     <div class="form-group" role="group" aria-labelledby="down-payment-percent-label">
                         <label for="down-payment-percent" id="down-payment-percent-label">Down Payment (%)</label>
                         <input type="number" id="down-payment-percent" class="form-control" value="20" min="0" max="100" step="0.5" oninput="updateCalculation(this.id)" aria-required="true">
+                    </div>
+
+                    <!-- Credit Score Section -->
+                    <div class="form-group" role="group" aria-labelledby="credit-score-label">
+                        <label for="credit-score" id="credit-score-label">Credit Score</label>
+                        <select id="credit-score" class="form-control select-control" onchange="updateInterestRateByCreditScore()">
+                            <option value="300-579">300-579 (Poor) +2.0%</option>
+                            <option value="580-669">580-669 (Fair) +1.5%</option>
+                            <option value="670-739">670-739 (Good) +1.0%</option>
+                            <option value="740-799" selected>740-799 (Very Good) +0.5%</option>
+                            <option value="800-850">800-850 (Excellent) +0.0%</option>
+                        </select>
                     </div>
 
                     <div class="form-group" role="group" aria-labelledby="interest-rate-label">
@@ -188,17 +242,8 @@
                             <label for="closing-costs-percentage" id="closing-costs-percentage-label">Closing Costs (%)</label>
                             <input type="number" id="closing-costs-percentage" class="form-control" value="3" min="0" max="10" step="0.1" oninput="updateCalculation(this.id)">
                         </div>
-
-                        <div class="form-group" role="group" aria-labelledby="credit-score-label">
-                            <label for="credit-score" id="credit-score-label">Credit Score</label>
-                            <input type="number" id="credit-score" class="form-control" value="740" min="500" max="850" step="1" oninput="updateCalculation(this.id)">
-                        </div>
                     </div>
                 </div>
-
-                <button type="button" class="btn btn-full btn-compare" onclick="openLoanCompareWindow()">
-                    <i class="fas fa-balance-scale" aria-hidden="true"></i> Fully Function Loan Compare Option
-                </button>
 
             </section>
             
@@ -216,10 +261,10 @@
                             <i class="fas fa-chart-pie"></i> Payment Summary
                         </button>
                         <button type="button" class="tab-btn" data-tab="balance-timeline" onclick="switchTab('balance-timeline')" role="tab" aria-selected="false" aria-controls="tab-content-balance-timeline">
-                            <i class="fas fa-chart-area"></i> Mortgage Balance Over Time
+                            <i class="fas fa-chart-area"></i> Mortgage Balance
                         </button>
                         <button type="button" class="tab-btn" data-tab="ai-insights" onclick="switchTab('ai-insights')" role="tab" aria-selected="false" aria-controls="tab-content-ai-insights">
-                            <i class="fas fa-brain"></i> AI-Powered Insights
+                            <i class="fas fa-brain"></i> AI Insights
                         </button>
                         <button type="button" class="tab-btn" data-tab="payment-schedule" onclick="switchTab('payment-schedule')" role="tab" aria-selected="false" aria-controls="tab-content-payment-schedule">
                             <i class="fas fa-calendar-alt"></i> Payment Schedule
@@ -290,7 +335,7 @@
                             <div class="ai-insight ai-insight-loading">
                                 <i class="fas fa-sync-alt fa-spin"></i> Generating personalized insights based on your inputs...
                             </div>
-                            </div>
+                        </div>
                     </div>
 
                     <div id="tab-content-payment-schedule" class="tab-content" role="tabpanel" aria-labelledby="tab-payment-schedule" hidden>
@@ -303,7 +348,7 @@
                                 <button type="button" class="chip" data-schedule-type="yearly" onclick="toggleScheduleType('yearly')">Yearly View</button>
                             </div>
                             <button type="button" class="btn btn-export" onclick="exportSchedule('pdf')">
-                                <i class="fas fa-file-pdf"></i> Export PDF (Improvement 4)
+                                <i class="fas fa-file-pdf"></i> Export PDF
                             </button>
                         </div>
 
@@ -313,7 +358,7 @@
                                 <tbody></tbody>
                             </table>
                             <div id="schedule-pagination" class="pagination-controls">
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -328,10 +373,16 @@
                             <i class="fab fa-twitter" aria-hidden="true"></i> X
                         </button>
                         <button class="btn btn-pdf" onclick="shareResultsPDF()">
-                            <i class="fas fa-file-pdf" aria-hidden="true"></i> Share PDF (Improvement 5)
+                            <i class="fas fa-file-pdf" aria-hidden="true"></i> Share PDF
                         </button>
                     </div>
                 </div>
+
+                <!-- Moved Loan Compare Button Here -->
+                <button type="button" class="btn btn-full btn-compare" onclick="openLoanCompareWindow()">
+                    <i class="fas fa-balance-scale" aria-hidden="true"></i> Compare Loan Options
+                </button>
+
             </section>
             
             <aside class="sponsor-section flow-content" aria-labelledby="sponsor-heading">
@@ -359,23 +410,66 @@
             </aside>
             
         </main>
-        
+
+        <!-- New Footer Section -->
         <footer class="footer">
             <div class="footer-grid">
                 <div class="footer-column">
-                    <p>&copy; 2025 AI Mortgage Pro. All rights reserved.</p>
+                    <div class="footer-logo">FinGuid</div>
+                    <p class="footer-tagline">World's First AI Calculators</p>
+                    <p class="footer-description">FinGuid provides AI-powered financial calculators to help Americans make informed decisions about home loans, refinancing, and investments.</p>
                 </div>
-                <div class="footer-column footer-badges">
-                    <div class="badge-group">
-                        <span class="badge">AI Friendly</span>
-                        <span class="badge">SEO Optimized</span>
-                        <span class="badge">FRED API</span>
-                        <span class="badge">Voice Enabled</span>
-                        <span class="badge">Mobile Ready</span>
-                        <span class="badge">WCAG 2.1</span>
-                    </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Calculators</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Mortgage Calculator</a></li>
+                        <li class="footer-link"><a href="#">Refinance Calculator</a></li>
+                        <li class="footer-link"><a href="#">Affordability Calculator</a></li>
+                        <li class="footer-link"><a href="#">Debt Calculator</a></li>
+                    </ul>
                 </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Resources</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Blog</a></li>
+                        <li class="footer-link"><a href="#">Guides</a></li>
+                        <li class="footer-link"><a href="#">Glossary</a></li>
+                        <li class="footer-link"><a href="#">FAQ</a></li>
+                    </ul>
                 </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Company</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">About Us</a></li>
+                        <li class="footer-link"><a href="#">Contact</a></li>
+                        <li class="footer-link"><a href="#">Careers</a></li>
+                        <li class="footer-link"><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Legal</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Privacy Policy</a></li>
+                        <li class="footer-link"><a href="#">Terms of Service</a></li>
+                        <li class="footer-link"><a href="#">Disclaimer</a></li>
+                        <li class="footer-link"><a href="#">Accessibility</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-disclaimer">
+                    <p><strong>Disclaimer:</strong> This calculator provides estimates for educational purposes only. Actual loan terms, rates, and payments may vary based on your credit, location, and lender policies. Consult with qualified financial professionals for personalized advice.</p>
+                    <p>Rates shown are based on Federal Reserve Economic Data (FRED) and are updated regularly. All calculations are illustrative and may not reflect actual lending terms.</p>
+                </div>
+                
+                <div class="footer-copyright">
+                    <p>&copy; 2025 FinGuid. All rights reserved.</p>
+                    <p>World's First AI-Powered Financial Calculators</p>
+                </div>
+            </div>
         </footer>
 
     </div>
