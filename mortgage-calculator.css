@@ -1383,66 +1383,549 @@ input[type="number"]::-webkit-outer-spin-button {
     outline-offset: 2px;
 }
 
-.hero-compact {
-    padding: var(--space-4) 0 !important;
-    min-height: 220px !important;
-}
+/* ========================================================================== */
+/* ADDITIONAL IMPROVEMENTS CSS */
+/* ========================================================================== */
 
-.market-rates-compact {
+/* IMPROVEMENT 1: Animated USA Flag */
+.usa-flag-animated {
+    width: 48px;
+    height: 32px;
     display: flex;
-    gap: var(--space-4);
-    background: var(--color-surface-secondary);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    padding: var(--space-4);
-    margin-bottom: var(--space-6);
+    align-items: center;
     justify-content: center;
-    align-items: center;
 }
-.market-rate-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 110px;
-    padding: var(--space-2) var(--space-4);
-    background: var(--color-surface);
-    border-radius: var(--radius-md);
+
+.flag-svg {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-sm);
     box-shadow: var(--shadow-sm);
+    animation: flag-wave 3s ease-in-out infinite;
 }
-.rate-label { font-size: var(--font-size-xs); color: var(--color-text-muted); font-weight: 600; }
-.rate-value { font-size: var(--font-size-xl); color: var(--color-primary); font-weight: 800; }
-.rate-update { font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-top: 3px; }
 
-.toggle-btn {
-    background: var(--color-primary);
-    color: var(--color-white);
-    border-radius: var(--radius-full);
-    border: none;
-    padding: var(--space-2) var(--space-4);
-    font-weight: 600;
-    margin-right: var(--space-2);
-    font-size: var(--font-size-sm);
-    cursor: pointer;
-    transition: background var(--transition-fast);
+@keyframes flag-wave {
+    0%, 100% { transform: perspective(400px) rotateY(-5deg); }
+    50% { transform: perspective(400px) rotateY(5deg); }
 }
-.toggle-btn.active {
-    background: var(--color-primary-hover);
+
+/* IMPROVEMENT 2: Navigation visibility on desktop */
+@media (min-width: 1024px) {
+    .header-nav {
+        display: flex;
+    }
 }
-.toggle-content { display: none; }
-.toggle-content.active { display: block; }
 
-.social-links .social-link { font-size: 1.7em; margin-right: .75em; color: var(--color-primary); }
-.social-links .social-link:hover { color: var(--color-primary-hover); }
-
+/* IMPROVEMENT 3: AI-Powered Animation */
 .ai-powered-animated {
     display: inline-block;
-    font-size: inherit;
-    font-weight: bold;
-    color: var(--color-primary);
-    animation: pulseAI 1.2s infinite linear alternate;
+    font-weight: 800;
+    background: linear-gradient(90deg, 
+        var(--color-primary), 
+        var(--color-primary-light), 
+        var(--color-primary));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: ai-glow 2s linear infinite;
 }
-@keyframes pulseAI {
-    0% { color: var(--color-primary); }
-    50% { color: var(--color-primary-light); transform: scale(1.07); }
-    100% { color: var(--color-primary-hover); }
+
+@keyframes ai-glow {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* IMPROVEMENT 4: Hero Compact (50% size) */
+.hero-compact {
+    padding: var(--space-6) 0 !important;
+    min-height: auto !important;
+}
+
+.hero-compact .hero-title {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-3);
+}
+
+.hero-compact .hero-features {
+    gap: var(--space-3);
+}
+
+.hero-compact .hero-badge {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-xs);
+}
+
+@media (min-width: 768px) {
+    .hero-compact .hero-title {
+        font-size: var(--font-size-3xl);
+    }
+}
+
+/* IMPROVEMENT 5: Compact Market Rates Horizontal */
+.market-rates-compact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    margin: var(--space-4) 0;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+}
+
+.market-rate-item {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: var(--space-2);
+}
+
+.rate-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+    white-space: nowrap;
+}
+
+.rate-value {
+    font-size: var(--font-size-xl);
+    color: var(--color-primary);
+    font-weight: 800;
+    line-height: 1;
+}
+
+.rate-update-info {
+    flex-basis: 100%;
+    text-align: center;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-2);
+}
+
+@media (min-width: 768px) {
+    .market-rates-compact {
+        flex-wrap: nowrap;
+    }
+    .rate-update-info {
+        flex-basis: auto;
+        border-top: none;
+        border-left: 1px solid var(--color-border);
+        padding-left: var(--space-4);
+        margin-top: 0;
+        margin-left: var(--space-4);
+    }
+}
+
+/* IMPROVEMENT 6: Content Toggle */
+.content-toggle-container {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    background: var(--color-surface-secondary);
+    padding: var(--space-2);
+    border-radius: var(--radius-lg);
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.toggle-btn.active {
+    background: var(--color-primary);
+    color: var(--color-white);
+    box-shadow: var(--shadow-md);
+}
+
+.toggle-btn:hover:not(.active) {
+    background: rgba(20, 184, 166, 0.1);
+    color: var(--color-primary);
+}
+
+.toggle-content {
+    display: none;
+}
+
+.toggle-content.active {
+    display: block;
+    animation: fadeInContent 0.3s ease-in-out;
+}
+
+@keyframes fadeInContent {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* IMPROVEMENT 16: Loan Type Display */
+.loan-type-display {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: var(--space-2);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* IMPROVEMENT 9: Social Share Options */
+.social-share-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+}
+
+.btn-social {
+    flex: 1;
+    min-width: 120px;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-sm);
+}
+
+.facebook-share { background: #1877f2; }
+.whatsapp-share { background: #25d366; }
+.twitter-share { background: #1da1f2; }
+.email-share { background: var(--color-info); }
+.linkedin-share { background: #0077b5; }
+
+.btn-social:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* IMPROVEMENT 18: Social Links in Footer */
+.social-links-footer {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    margin: var(--space-4) 0;
+}
+
+.social-links-footer .social-link {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-lg);
+    transition: all var(--transition-fast);
+}
+
+.social-links-footer .social-link:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* IMPROVEMENT 15: Compare Modal */
+.compare-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    animation: fadeIn var(--transition-base);
+}
+
+.compare-modal-content {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-2xl);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.compare-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.compare-modal-header h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.compare-modal-close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-text);
+    font-size: var(--font-size-2xl);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.compare-modal-close:hover {
+    background: var(--color-error);
+    border-color: var(--color-error);
+    color: var(--color-white);
+    transform: rotate(90deg);
+}
+
+.compare-modal-body {
+    padding: var(--space-6);
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Custom scrollbar for modal */
+.compare-modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.compare-modal-body::-webkit-scrollbar-track {
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-full);
+}
+
+.compare-modal-body::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+}
+
+.compare-modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-hover);
+}
+
+/* Enhanced AI Insights Styling */
+.ai-insight {
+    position: relative;
+    padding-left: var(--space-6);
+}
+
+.ai-insight::before {
+    content: "🤖";
+    position: absolute;
+    left: var(--space-2);
+    top: var(--space-4);
+    font-size: var(--font-size-lg);
+}
+
+.ai-insight-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-2);
+}
+
+/* Responsive footer text */
+.footer-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-2);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .usa-flag-animated {
+        width: 36px;
+        height: 24px;
+    }
+
+    .market-rates-compact {
+        flex-direction: column;
+    }
+
+    .market-rate-item {
+        width: 100%;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: var(--space-2);
+    }
+
+    .market-rate-item:last-of-type {
+        border-bottom: none;
+    }
+
+    .social-share-options {
+        flex-direction: column;
+    }
+
+    .btn-social {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+/* Print-specific styles for PDF */
+@media print {
+    .usa-flag-animated,
+    .header-controls,
+    .content-toggle-container,
+    .share-results-section,
+    .btn-compare,
+    .sponsor-section,
+    .header-nav {
+        display: none !important;
+    }
+
+    .hero-section {
+        background: white !important;
+        color: black !important;
+        padding: var(--space-4) 0 !important;
+    }
+
+    .market-rates-compact {
+        page-break-inside: avoid;
+    }
+
+    .results-section {
+        page-break-inside: avoid;
+    }
+
+    @page {
+        margin: 1cm;
+    }
+}
+
+/* Loading animation for AI insights */
+.ai-insight-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    padding: var(--space-8) var(--space-4);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+}
+
+.ai-insight-loading i {
+    font-size: var(--font-size-2xl);
+    color: var(--color-primary);
+}
+
+/* Accessibility improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Focus styles for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Enhanced button styles */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Smooth color transitions for theme toggle */
+* {
+    transition: background-color var(--transition-slow), 
+                color var(--transition-slow),
+                border-color var(--transition-slow);
+}
+
+/* Performance optimization */
+.chart-container,
+.chart-container-large {
+    contain: layout style paint;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --color-primary: #00d9c0;
+        --color-text: #ffffff;
+        --color-border: #ffffff;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
