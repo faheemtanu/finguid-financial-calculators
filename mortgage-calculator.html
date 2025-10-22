@@ -1,1003 +1,456 @@
-/* ========================================================================== */
-/* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v25.0               */
-/* PRODUCTION READY WITH PWA, 50-STATE TAXES, VOICE COMMANDS               */
-/* ========================================================================== */
-
-/* ========================================================================== */
-/* 1. COLOR SYSTEM & TYPOGRAPHY                                               */
-/* ========================================================================== */
-
-:root {
-    /* Color Palette (Default Dark Mode) */
-    --color-primary: #3b82f6;      /* Blue */
-    --color-primary-light: #60a5fa;
-    --color-secondary: #10b981;    /* Emerald */
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-error: #ef4444;
-    --color-white: #ffffff;
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-color-scheme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    /* Dark Mode (Default) */
-    --color-bg: #111827;           /* Deep Navy Background */
-    --color-surface: #1f2937;      /* Card/Input Background */
-    --color-border: #374151;       /* Subtle Border */
-    --color-text-main: #f9fafb;    /* Primary Text (White) */
-    --color-text-muted: #9ca3af;   /* Secondary/Muted Text */
-    --color-shadow: rgba(0, 0, 0, 0.4);
-
-    /* Typography */
-    --font-family-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-size-base: 16px;
-    --space-1: 0.25rem; /* 4px */
-    --space-2: 0.5rem;  /* 8px */
-    --space-3: 0.75rem; /* 12px */
-    --space-4: 1rem;    /* 16px */
-    --space-6: 1.5rem;  /* 24px */
-    --space-8: 2rem;    /* 32px */
+    <!-- Primary Meta Tags -->
+    <title>AI Mortgage Calculator 2024 | Live FRED Rates & 50-State Taxes | Finguid.com</title>
+    <meta name="description" content="Free AI-powered mortgage calculator with live Federal Reserve rates, voice commands, 50-state tax data, amortization schedules, and personalized insights. Calculate your exact monthly payment.">
+    <meta name="keywords" content="mortgage calculator, mortgage payment, home loan calculator, FRED rates, AI mortgage, refinance calculator, amortization schedule, 50 state taxes, finguid">
+    <meta name="author" content="Finguid Financial Calculators">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="en-US">
+    <link rel="canonical" href="https://finguid.com/mortgage-calculator">
     
-    /* Other */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
-    --transition-fast: 0.2s ease-out;
-}
-
-/* Light Mode Override (for theme-toggle) */
-[data-color-scheme="light"] {
-    --color-bg: #f9fafb;           /* Light Background */
-    --color-surface: #ffffff;      /* White Card/Input Background */
-    --color-border: #e5e7eb;       /* Light Border */
-    --color-text-main: #111827;    /* Primary Text (Black) */
-    --color-text-muted: #6b7280;   /* Secondary/Muted Text */
-    --color-shadow: rgba(0, 0, 0, 0.1);
-}
-
-/* Base Styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: var(--font-family-main);
-    background-color: var(--color-bg);
-    color: var(--color-text-main);
-    line-height: 1.6;
-    transition: background-color var(--transition-fast), color var(--transition-fast);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.app-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: var(--space-8);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* ========================================================================== */
-/* 2. HEADER & LOGO                                                           */
-/* ========================================================================== */
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: var(--space-6);
-    margin-bottom: var(--space-6);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.logo-area {
-    display: flex;
-    flex-direction: column;
-}
-
-.logo-text {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--color-text-main);
-}
-
-.logo-suffix {
-    font-size: 1.5rem;
-    font-weight: 300;
-    color: var(--color-primary);
-}
-
-.main-title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: var(--color-text-muted);
-    margin-top: var(--space-1);
-}
-
-.header-controls {
-    display: flex;
-    gap: var(--space-4);
-}
-
-/* ========================================================================== */
-/* 3. LAYOUT GRID (LEFT | MIDDLE | RIGHT)                                     */
-/* ========================================================================== */
-
-.main-content-grid {
-    display: grid;
-    /* Desktop 3-column layout: Input(30%) | Results(40%) | Sponsor(30%) */
-    grid-template-columns: 3fr 4fr 3fr; 
-    gap: var(--space-8);
-    flex-grow: 1;
-}
-
-.input-section {
-    grid-column: 1 / 2; /* Left Column */
-}
-
-.results-section {
-    grid-column: 2 / 3; /* Middle Column */
-}
-
-.sponsor-section {
-    grid-column: 3 / 4; /* Right Column */
-}
-
-/* ========================================================================== */
-/* 4. COMPONENTS (Cards, Buttons, Forms)                                      */
-/* ========================================================================== */
-
-.card {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: var(--space-6);
-    box-shadow: 0 4px 6px -1px var(--color-shadow);
-    transition: all var(--transition-fast);
-}
-
-.card-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: var(--space-6);
-    color: var(--color-primary);
-}
-
-/* Form Styles */
-.form-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: var(--space-2);
-    color: var(--color-text-muted);
-}
-
-.form-control {
-    width: 100%;
-    padding: var(--space-3);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    background-color: var(--color-bg); 
-    color: var(--color-text-main);
-    transition: border-color var(--transition-fast);
-    font-family: var(--font-family-main);
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Primary-based focus ring */
-}
-
-.range-output {
-    margin-top: var(--space-2);
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-text-main);
-}
-
-/* Range Slider Styling (Modern Look) */
-.range-slider {
-    -webkit-appearance: none;
-    appearance: none;
-    height: 6px;
-    background: var(--color-border);
-    outline: none;
-    margin: 10px 0;
-    border-radius: 3px;
-    width: 100%;
-}
-
-.range-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    cursor: pointer;
-    transition: background var(--transition-fast);
-    border: 2px solid var(--color-white);
-}
-
-.range-slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    cursor: pointer;
-    border: 2px solid var(--color-white);
-}
-
-/* Button Styles */
-.btn {
-    padding: var(--space-3) var(--space-6);
-    border: none;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color var(--transition-fast), opacity var(--transition-fast);
-    font-family: var(--font-family-main);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-}
-
-.btn-primary {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-}
-
-.btn-primary:hover:not(:disabled) {
-    background-color: var(--color-primary-light);
-}
-
-.btn-secondary {
-    background-color: var(--color-surface);
-    color: var(--color-text-main);
-    border: 1px solid var(--color-border);
-}
-
-.btn-secondary:hover:not(:disabled) {
-    background-color: var(--color-border);
-}
-
-.btn-success {
-    background-color: var(--color-success);
-    color: var(--color-white);
-}
-
-.btn-success:hover:not(:disabled) {
-    opacity: 0.9;
-}
-
-.btn-warning {
-    background-color: var(--color-warning);
-    color: var(--color-white);
-}
-
-.btn-tertiary {
-    background-color: transparent;
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.btn-icon {
-    background: none;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-main);
-    padding: var(--space-2);
-    border-radius: 50%;
-    font-size: 1.1rem;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-icon:hover {
-    background-color: var(--color-surface);
-}
-
-.action-buttons-group {
-    margin-top: var(--space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-}
-
-.full-width {
-    width: 100%;
-}
-
-/* ========================================================================== */
-/* 5. RESULT SECTION STYLING                                                  */
-/* ========================================================================== */
-
-.monthly-payment-card {
-    background: linear-gradient(135deg, var(--color-primary), #2563eb);
-    color: var(--color-white);
-    margin-bottom: var(--space-8);
-    padding: var(--space-8);
-    text-align: center;
-    border: none;
-}
-
-.payment-breakdown {
-    display: flex;
-    justify-content: space-around;
-    padding-bottom: var(--space-4);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.breakdown-item .label {
-    font-size: 0.9rem;
-    display: block;
-    margin-bottom: var(--space-1);
-    opacity: 0.9;
-}
-
-.breakdown-item .value {
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.total-payment {
-    padding-top: var(--space-4);
-}
-
-.total-payment .label {
-    font-size: 1rem;
-    display: block;
-    margin-bottom: var(--space-2);
-    opacity: 0.9;
-}
-
-.total-payment .total {
-    font-size: 3rem;
-    font-weight: 800;
-}
-
-.disclaimer-text {
-    margin-top: var(--space-3);
-    color: rgba(255, 255, 255, 0.7);
-}
-
-/* Tabs */
-.tabs-header {
-    display: flex;
-    border-bottom: 1px solid var(--color-border);
-    margin-bottom: var(--space-4);
-    overflow-x: auto;
-}
-
-.tab-button {
-    background: none;
-    border: none;
-    color: var(--color-text-muted);
-    padding: var(--space-3) var(--space-4);
-    cursor: pointer;
-    font-weight: 500;
-    border-bottom: 3px solid transparent;
-    transition: all var(--transition-fast);
-    white-space: nowrap;
-}
-
-.tab-button.active {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary);
-    font-weight: 600;
-}
-
-.tab-content {
-    padding: var(--space-4) 0;
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.tab-content-title {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-4);
-    color: var(--color-text-main);
-}
-
-.data-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-}
-
-.data-grid div {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--space-2);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.data-grid .label {
-    color: var(--color-text-muted);
-}
-
-.data-grid .value {
-    font-weight: 600;
-}
-
-/* AI Insights */
-.ai-content {
-    background-color: var(--color-bg);
-    padding: var(--space-4);
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border);
-    min-height: 200px;
-    margin-bottom: var(--space-4);
-    white-space: pre-wrap;
-    line-height: 1.6;
-}
-
-.loading-ai {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    color: var(--color-text-muted);
-}
-
-/* Schedule Table */
-.schedule-table-container {
-    max-height: 400px;
-    overflow-y: auto;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-}
-
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-}
-
-.schedule-table th, .schedule-table td {
-    padding: var(--space-2) var(--space-4);
-    text-align: right;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.schedule-table th {
-    background-color: var(--color-surface);
-    color: var(--color-text-muted);
-    position: sticky;
-    top: 0;
-    font-weight: 600;
-    text-align: left;
-}
-
-.schedule-table tr:hover {
-    background-color: var(--color-border);
-}
-
-.schedule-table td:first-child, .schedule-table th:first-child {
-    text-align: left;
-}
-
-/* Chart Container */
-.chart-container {
-    position: relative;
-    height: 400px;
-    width: 100%;
-}
-
-/* ========================================================================== */
-/* 6. SPONSOR & ADVERTISING                                                   */
-/* ========================================================================== */
-
-.ad-block {
-    margin-bottom: var(--space-6);
-    padding: var(--space-4);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    text-align: center;
-    position: relative;
-}
-
-.partner-block {
-    text-align: left;
-    border-left-width: 4px;
-}
-
-.partner-badge {
-    position: absolute;
-    top: -10px;
-    right: 10px;
-    background: var(--color-warning);
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
-}
-
-.partner-features {
-    display: flex;
-    gap: var(--space-2);
-    margin: var(--space-3) 0;
-    flex-wrap: wrap;
-}
-
-.feature-tag {
-    background: var(--color-surface);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-}
-
-.partner-rating {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    margin: var(--space-3) 0;
-}
-
-.stars {
-    color: #fbbf24;
-}
-
-.rating-text {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-}
-
-.ad-label {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    text-transform: uppercase;
-    margin-bottom: var(--space-2);
-}
-
-.ad-unit {
-    background: var(--color-bg);
-    height: 250px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-muted);
-    font-weight: 600;
-    border-radius: var(--radius-sm);
-}
-
-.ad-fallback {
-    text-align: center;
-    padding: var(--space-4);
-}
-
-.agent-lead-form {
-    margin-top: var(--space-4);
-}
-
-/* ========================================================================== */
-/* 7. FOOTER (BRANDING)                                                       */
-/* ========================================================================== */
-
-.footer {
-    margin-top: var(--space-8);
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--color-border);
-    text-align: center;
-}
-
-.footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-}
-
-.footer-branding {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.branded-footer-image {
-    max-width: 150px;
-    height: auto;
-    margin-bottom: var(--space-2);
-}
-
-.footer-branding p {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-}
-
-.footer-links a {
-    color: var(--color-primary-light);
-    text-decoration: none;
-    margin-right: var(--space-4);
-    font-size: 0.9rem;
-}
-
-.footer-links a:hover {
-    color: var(--color-primary);
-    text-decoration: underline;
-}
-
-.footer-badges .badge {
-    margin-left: var(--space-2);
-    display: inline-block;
-    padding: 3px 6px;
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    border-radius: var(--radius-sm);
-    font-size: 0.7rem;
-    font-weight: 700;
-}
-
-/* ========================================================================== */
-/* 8. MOBILE RESPONSIVENESS (All Device Friendly)                             */
-/* ========================================================================== */
-
-@media (max-width: 1023px) {
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://finguid.com/mortgage-calculator">
+    <meta property="og:title" content="AI Mortgage Calculator | Live Rates & 50-State Taxes | Finguid.com">
+    <meta property="og:description" content="Calculate your mortgage with AI insights, live FRED rates, and accurate 50-state tax data. Voice commands & mobile friendly.">
+    <meta property="og:image" content="https://finguid.com/images/mortgage-calculator-og.jpg">
     
-    .app-container {
-        padding: var(--space-4);
-    }
-
-    /* Stack Columns on Mobile/Tablet */
-    .main-content-grid {
-        grid-template-columns: 1fr; /* Single column layout */
-        gap: var(--space-6);
-    }
-
-    .input-section {
-        order: 1; /* Input first */
-    }
-
-    .results-section {
-        order: 2; /* Results second */
-    }
-
-    .sponsor-section {
-        order: 3; /* Sponsor/Ads last */
-    }
-
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .header-controls {
-        align-self: flex-end;
-        margin-top: -30px; /* Pull controls up next to title */
-    }
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://finguid.com/mortgage-calculator">
+    <meta property="twitter:title" content="AI Mortgage Calculator | Live Rates & 50-State Taxes">
+    <meta property="twitter:description" content="Calculate your mortgage with AI insights, live FRED rates, and accurate 50-state tax data.">
+    <meta property="twitter:image" content="https://finguid.com/images/mortgage-calculator-twitter.jpg">
     
-    .main-title {
-        font-size: 1rem;
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "AI Mortgage Calculator",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "description": "Advanced mortgage calculator with AI insights, live FRED rates, and 50-state tax data",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Finguid.com",
+            "url": "https://finguid.com"
+        },
+        "featureList": [
+            "Live FRED mortgage rates",
+            "50-state tax calculations",
+            "AI-powered insights",
+            "Voice command support",
+            "Amortization schedules",
+            "Mobile-optimized design"
+        ]
     }
-
-    .monthly-payment-card .total {
-        font-size: 2.5rem;
-    }
-
-    .payment-breakdown {
-        flex-direction: column;
-        gap: var(--space-4);
-    }
-
-    .data-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .footer-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .footer-links, .footer-badges {
-        margin-top: var(--space-3);
-    }
-    .footer-links a {
-        display: block;
-        margin-bottom: var(--space-2);
-        margin-right: 0;
-    }
-}
-
-@media (max-width: 640px) {
-    .app-container {
-        padding: var(--space-2);
-    }
+    </script>
     
-    .card {
-        padding: var(--space-4);
-    }
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1f2937">
+    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
     
-    .monthly-payment-card {
-        padding: var(--space-4);
-    }
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
     
-    .monthly-payment-card .total {
-        font-size: 2rem;
-    }
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ', {
+        page_title: 'Mortgage Calculator',
+        page_location: window.location.href
+      });
+    </script>
+
+    <!-- External Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.js"></script>
     
-    .tabs-header {
-        font-size: 0.9rem;
-    }
-}
+    <!-- Our Styles -->
+    <link rel="stylesheet" href="mortgage-calculator.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <header class="header">
+            <div class="logo-area">
+                <a href="https://finguid.com" aria-label="Finguid Home">
+                    <span class="logo-text">finguid</span><span class="logo-suffix">.com</span>
+                </a>
+                <h1 class="main-title">AI Mortgage Calculator <span class="badge">Live FRED Rates</span></h1>
+            </div>
+            <div class="header-controls">
+                <button id="theme-toggle" class="btn-icon" aria-label="Toggle Light/Dark Mode" title="Toggle Light/Dark Mode">
+                    <i class="fas fa-sun" aria-hidden="true"></i>
+                </button>
+                <button id="voice-toggle" class="btn-icon" aria-label="Toggle Voice Input" title="Toggle Voice Input">
+                    <i class="fas fa-microphone" aria-hidden="true"></i>
+                </button>
+                <button id="install-btn" class="btn-icon" aria-label="Install App" title="Install App" style="display: none;">
+                    <i class="fas fa-download" aria-hidden="true"></i>
+                </button>
+            </div>
+        </header>
 
-/* ========================================================================== */
-/* 9. UTILITY & OVERLAYS (Voice, Loading, Toast)                              */
-/* ========================================================================== */
+        <main class="main-content-grid">
+            
+            <section class="input-section card" aria-labelledby="input-heading">
+                <h2 id="input-heading" class="card-title">Loan Parameters</h2>
+                <form id="mortgage-form" class="form-grid">
+                    
+                    <div class="form-group">
+                        <label for="homePrice">Home Price ($)</label>
+                        <input type="range" id="homePrice" class="form-control range-slider" min="50000" max="2000000" step="1000" value="450000">
+                        <output for="homePrice" id="homePrice-output" class="range-output">$450,000</output>
+                    </div>
 
-.text-info { color: var(--color-primary-light); }
-.text-sm { font-size: 0.875rem; }
-.text-xs { font-size: 0.75rem; }
-.text-muted { color: var(--color-text-muted); }
-.text-center { text-align: center; }
-.mb-2 { margin-bottom: var(--space-2); }
+                    <div class="form-group">
+                        <label for="downPayment">Down Payment ($)</label>
+                        <input type="range" id="downPayment" class="form-control range-slider" min="0" max="400000" step="500" value="90000">
+                        <output for="downPayment" id="downPayment-output" class="range-output">$90,000 (20%)</output>
+                    </div>
 
-/* Loading Overlay */
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    color: var(--color-white);
-}
+                    <div class="form-group">
+                        <label for="loanTerm">Loan Term (Years)</label>
+                        <select id="loanTerm" class="form-control">
+                            <option value="30">30 Year Fixed</option>
+                            <option value="20">20 Year Fixed</option>
+                            <option value="15">15 Year Fixed</option>
+                            <option value="10">10 Year Fixed</option>
+                        </select>
+                    </div>
 
-.loading-overlay.active {
-    display: flex;
-}
+                    <div class="form-group">
+                        <label for="interestRate">Interest Rate (%) <span class="fred-rate-status" id="fred-rate-status"></span></label>
+                        <input type="range" id="interestRate" class="form-control range-slider" min="1.0" max="10.0" step="0.01" value="6.5">
+                        <output for="interestRate" id="interestRate-output" class="range-output">6.50%</output>
+                    </div>
 
-.loading-spinner {
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid var(--color-primary);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: var(--space-4);
-}
+                    <div class="form-group">
+                        <label for="stateSelect">Select Your State</label>
+                        <select id="stateSelect" class="form-control">
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA" selected>California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="DC">District of Columbia</option>
+                        </select>
+                    </div>
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+                    <div class="form-group">
+                        <label for="propertyTaxRate">Annual Property Tax Rate (%)</label>
+                        <input type="range" id="propertyTaxRate" class="form-control range-slider" min="0.1" max="5.0" step="0.01" value="1.10">
+                        <output for="propertyTaxRate" id="propertyTaxRate-output" class="range-output">1.10%</output>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="insuranceRate">Annual Home Insurance ($)</label>
+                        <input type="range" id="insuranceRate" class="form-control range-slider" min="500" max="5000" step="100" value="1500">
+                        <output for="insuranceRate" id="insuranceRate-output" class="range-output">$1,500</output>
+                    </div>
 
-/* Toast Styles */
-.toast-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1050;
-    max-width: 350px;
-}
+                    <div class="form-group full-width voice-input-display">
+                        <label for="voice-command-text">Voice Input History</label>
+                        <textarea id="voice-command-text" class="form-control" placeholder="Speak a command, e.g., 'What is my payment for a 500,000 home at 7 percent?'" readonly></textarea>
+                        <p class="text-sm text-info">💡 <strong>Try Voice Command:</strong> "Calculate a 30-year loan of $450,000 at 6.27 percent."</p>
+                    </div>
+                </form>
 
-.toast {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    margin-bottom: var(--space-2);
-    box-shadow: 0 4px 12px var(--color-shadow);
-    transform: translateX(400px);
-    transition: transform 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-}
+                <div class="action-buttons-group">
+                    <button id="calculate-btn" class="btn btn-primary full-width">Calculate Mortgage</button>
+                    <button id="share-pdf-btn" class="btn btn-secondary full-width" disabled>Share/Export PDF</button>
+                    <button id="save-calculation" class="btn btn-secondary full-width">Save Calculation</button>
+                </div>
 
-.toast.fade-in {
-    transform: translateX(0);
-}
+            </section>
+            
+            <section class="results-section" aria-live="polite" aria-atomic="true">
+                
+                <h2 class="card-title">Your Monthly Payment</h2>
+                
+                <div class="monthly-payment-card card">
+                    <div class="payment-breakdown">
+                        <div class="breakdown-item">
+                            <span class="label">Principal & Interest (P&I)</span>
+                            <span class="value" id="pi-payment">$1,939.99</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Taxes & Insurance (T&I)</span>
+                            <span class="value" id="ti-payment">$531.25</span>
+                        </div>
+                    </div>
+                    <div class="total-payment">
+                        <span class="label">Estimated Total Monthly Payment</span>
+                        <span class="value total" id="total-monthly-payment">$2,471.24</span>
+                    </div>
+                    <div class="disclaimer-text">
+                        <p id="total-interest-paid" class="text-sm">Total Interest Paid over 30 years: <strong>$338,396</strong></p>
+                        <p class="text-xs text-muted">*Payment is an estimate and does not include PMI if applicable.</p>
+                    </div>
+                </div>
 
-.toast.fade-out {
-    transform: translateX(400px);
-}
+                <div class="tabs-container card">
+                    <div class="tabs-header" role="tablist">
+                        <button class="tab-button active" data-tab="summary" role="tab" aria-selected="true" aria-controls="tab-summary">Summary</button>
+                        <button class="tab-button" data-tab="balance-chart" role="tab" aria-selected="false" aria-controls="tab-balance-chart">Balance Chart</button>
+                        <button class="tab-button" data-tab="ai-insights" role="tab" aria-selected="false" aria-controls="tab-ai-insights">AI Insights</button>
+                        <button class="tab-button" data-tab="schedule" role="tab" aria-selected="false" aria-controls="tab-schedule">Schedule</button>
+                    </div>
 
-.toast.toast-success {
-    border-left: 4px solid var(--color-success);
-}
+                    <div id="tab-summary" class="tab-content active" role="tabpanel" aria-labelledby="summary">
+                        <h3 class="tab-content-title">Loan Summary</h3>
+                        <div class="data-grid">
+                            <div><span class="label">Home Price</span><span class="value" id="summary-home-price">$450,000</span></div>
+                            <div><span class="label">Down Payment</span><span class="value" id="summary-down-payment">$90,000 (20%)</span></div>
+                            <div><span class="label">Loan Amount</span><span class="value" id="summary-loan-amount">$360,000</span></div>
+                            <div><span class="label">Loan Term</span><span class="value" id="summary-loan-term">30 Years</span></div>
+                            <div><span class="label">Interest Rate</span><span class="value" id="summary-interest-rate">6.50%</span></div>
+                            <div><span class="label">State</span><span class="value" id="summary-state">California</span></div>
+                            <div><span class="label">Annual Property Tax</span><span class="value" id="summary-annual-tax">$4,950</span></div>
+                            <div><span class="label">Annual Insurance</span><span class="value" id="summary-annual-insurance">$1,500</span></div>
+                            <div><span class="label">Total Principal Repaid</span><span class="value" id="summary-total-principal">$360,000</span></div>
+                            <div><span class="label">Total Interest Paid</span><span class="value" id="summary-total-interest">$338,396</span></div>
+                            <div><span class="label">Total Loan Cost</span><span class="value" id="summary-total-cost">$698,396</span></div>
+                            <div><span class="label">Loan-to-Value Ratio</span><span class="value" id="summary-ltv">80%</span></div>
+                        </div>
+                    </div>
 
-.toast.toast-error {
-    border-left: 4px solid var(--color-error);
-}
+                    <div id="tab-balance-chart" class="tab-content" role="tabpanel" aria-labelledby="balance-chart">
+                        <h3 class="tab-content-title">Amortization Schedule Chart</h3>
+                        <div class="chart-container">
+                            <canvas id="amortization-chart"></canvas>
+                        </div>
+                    </div>
 
-.toast.toast-warning {
-    border-left: 4px solid var(--color-warning);
-}
+                    <div id="tab-ai-insights" class="tab-content" role="tabpanel" aria-labelledby="ai-insights">
+                        <h3 class="tab-content-title">AI Financial Insights</h3>
+                        <div id="ai-insights-content" class="ai-content">
+                            <p>Loading AI-powered insights...</p>
+                        </div>
+                        <button class="btn btn-tertiary full-width" id="read-aloud-btn">
+                            <i class="fas fa-volume-up" aria-hidden="true"></i> Read Insights Aloud
+                        </button>
+                    </div>
 
-.toast.toast-info {
-    border-left: 4px solid var(--color-primary);
-}
+                    <div id="tab-schedule" class="tab-content" role="tabpanel" aria-labelledby="schedule">
+                        <h3 class="tab-content-title">Full Payment Schedule</h3>
+                        <div class="schedule-controls">
+                            <button id="toggle-schedule" class="btn btn-secondary">Show Monthly Schedule</button>
+                            <button id="export-schedule-csv" class="btn btn-secondary">Export to CSV</button>
+                        </div>
+                        <div class="schedule-table-container">
+                            <table id="payment-schedule-table" class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Yearly P&I</th>
+                                        <th>Total Principal</th>
+                                        <th>Total Interest</th>
+                                        <th>Remaining Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
 
-.toast-icon {
-    font-size: 1.2rem;
-}
+            <aside class="sponsor-section card" aria-labelledby="sponsor-heading">
+                <h2 id="sponsor-heading" class="card-title">💰 Partner Offers & Rate Comparisons</h2>
+                <p class="text-sm text-center text-muted">Compare rates from our trusted partners to ensure you're getting the best deal.</p>
+                
+                <!-- LendingTree Comparison -->
+                <div class="ad-block partner-block" style="border-left: 4px solid #10b981;">
+                    <div class="partner-badge">🔥 Most Popular</div>
+                    <h4><i class="fas fa-chart-line"></i> Compare Rates from 5+ Lenders</h4>
+                    <p>Get pre-approved in minutes and compare offers from multiple lenders side-by-side.</p>
+                    <div class="partner-features">
+                        <span class="feature-tag">No Credit Impact</span>
+                        <span class="feature-tag">Real Rates</span>
+                        <span class="feature-tag">Free Comparison</span>
+                    </div>
+                    <a href="https://www.lendingtree.com/mortgage/?utm_source=finguid&utm_medium=calculator&utm_campaign=mortgage" 
+                       class="btn btn-success full-width partner-link" 
+                       data-partner="LendingTree"
+                       target="_blank" rel="noopener sponsored">
+                        Compare Rates Now - Save $5,000+
+                    </a>
+                </div>
 
-.toast-success .toast-icon {
-    color: var(--color-success);
-}
+                <!-- Rocket Mortgage -->
+                <div class="ad-block partner-block" style="border-left: 4px solid #3b82f6;">
+                    <h4><i class="fas fa-bolt"></i> Rocket Mortgage® - #1 Online Lender</h4>
+                    <p>America's largest mortgage lender with fully online application and quick approval.</p>
+                    <div class="partner-rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">4.8/5 (12,000+ reviews)</span>
+                    </div>
+                    <a href="https://www.rocketmortgage.com/?utm_source=finguid&utm_medium=calculator" 
+                       class="btn btn-primary full-width partner-link"
+                       data-partner="RocketMortgage"
+                       target="_blank" rel="noopener sponsored">
+                        Get Pre-Approved in 10 Min
+                    </a>
+                </div>
 
-.toast-error .toast-icon {
-    color: var(--color-error);
-}
+                <!-- Better.com -->
+                <div class="ad-block partner-block" style="border-left: 4px solid #8b5cf6;">
+                    <h4><i class="fas fa-rocket"></i> Better.com - Digital Mortgage</h4>
+                    <p>Fully digital mortgage experience with competitive rates and no lender fees.</p>
+                    <div class="partner-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-text">4.6/5 (8,500+ reviews)</span>
+                    </div>
+                    <a href="https://better.com/?utm_source=finguid&utm_medium=calculator" 
+                       class="btn btn-secondary full-width partner-link"
+                       data-partner="BetterCom"
+                       target="_blank" rel="noopener sponsored">
+                        Check Your Rate
+                    </a>
+                </div>
 
-.toast-warning .toast-icon {
-    color: var(--color-warning);
-}
+                <!-- Local Agent Connection -->
+                <div class="ad-block partner-block" style="border-left: 4px solid #f59e0b;">
+                    <h4><i class="fas fa-user-tie"></i> Connect with Local Experts</h4>
+                    <p>Get matched with top-rated real estate agents who know your local market.</p>
+                    <form class="agent-lead-form" id="agentLeadForm">
+                        <input type="email" placeholder="Your Email" required class="form-control mb-2">
+                        <input type="tel" placeholder="ZIP Code" required class="form-control mb-2">
+                        <button type="submit" class="btn btn-warning full-width">Find My Agent</button>
+                    </form>
+                </div>
 
-.toast-info .toast-icon {
-    color: var(--color-primary);
-}
+                <!-- Google Ad Slot with Fallback -->
+                <div class="ad-block google-ad-slot">
+                    <p class="ad-label">Advertisement</p>
+                    <div id="ad-container-300x250" class="ad-unit">
+                        <!-- Google Ad will load here -->
+                        <div class="ad-fallback">
+                            <h5>Mortgage Rates at 6.27%</h5>
+                            <p>Compare today's best rates from top national lenders</p>
+                            <a href="#" class="btn btn-secondary full-width">View Current Rates</a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+        </main>
 
-/* Voice Status */
-.voice-status {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-primary);
-    border-radius: var(--radius-md);
-    padding: var(--space-3) var(--space-4);
-    z-index: 1010;
-    box-shadow: 0 4px 12px var(--color-shadow);
-    display: none;
-    align-items: center;
-}
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-branding">
+                    <img src="Footer.jpg" alt="Finguid.com Branding" class="branded-footer-image">
+                    <p>&copy; 2025 finguid.com. All Rights Reserved.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy-policy">Privacy Policy</a>
+                    <a href="/terms">Terms of Use</a>
+                    <a href="/disclaimer">Disclaimer</a>
+                    <a href="/affiliate-disclosure">Affiliate Disclosure</a>
+                </div>
+                <div class="footer-badges">
+                    <span class="badge">PWA Ready</span>
+                    <span class="badge">50 States</span>
+                    <span class="badge">FRED API</span>
+                    <span class="badge">Voice Enabled</span>
+                    <span class="badge">AI Powered</span>
+                </div>
+            </div>
+        </footer>
 
-.voice-status.active {
-    display: flex;
-}
+    </div>
 
-.voice-status-icon {
-    color: var(--color-primary);
-    margin-right: var(--space-3);
-    animation: pulse 1.5s infinite;
-}
+    <!-- Loading Overlay -->
+    <div id="loading-indicator" class="loading-overlay" aria-hidden="true">
+        <div class="loading-content">
+            <div class="loading-spinner" aria-hidden="true"></div>
+            <p class="loading-text" id="loading-message">Fetching live Federal Reserve rates...</p>
+        </div>
+    </div>
 
-.voice-status-text {
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-right: var(--space-3);
-}
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-.voice-status-close {
-    background: none;
-    border: none;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    padding: 0;
-    font-size: 1rem;
-}
+    <!-- Voice Status -->
+    <div id="voice-status" class="voice-status" aria-live="polite" aria-hidden="true">
+        <div class="voice-status-content">
+            <i class="fas fa-microphone voice-status-icon" aria-hidden="true"></i>
+            <span class="voice-status-text">Voice control active - speak your commands</span>
+            <button class="voice-status-close" aria-label="Disable voice control">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
 
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* FRED API Status */
-.fred-rate-status {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 2px 4px;
-    border-radius: 4px;
-    color: var(--color-success);
-    margin-left: var(--space-2);
-}
-
-.fred-rate-status.default {
-    color: var(--color-warning);
-}
-
-.badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--color-white);
-    background-color: var(--color-secondary);
-    padding: 2px 5px;
-    border-radius: 4px;
-    margin-left: var(--space-2);
-}
-
-/* Print Styles */
-@media print {
-    /* Hide non-essential elements for a clean printout */
-    .header, .sponsor-section, .footer, .action-buttons-group, 
-    #theme-toggle, #voice-toggle, .toast-container, .btn-compare, 
-    .tabs-header, .schedule-controls, #install-btn {
-        display: none !important;
-    }
-    .main-content-grid {
-        grid-template-columns: 1fr !important;
-    }
-    .input-section, .results-section {
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0 !important;
-    }
-    
-    /* Ensure only the summary and AI/Chart (if active) prints cleanly */
-    .tab-content {
-        display: none !important;
-        visibility: hidden !important;
-    }
-    #tab-summary, #tab-balance-chart.active, #tab-ai-insights.active, #tab-schedule.active {
-        display: block !important;
-        visibility: visible !important;
-    }
-    
-    /* Ensure payment card prints with color (important for branding) */
-    .monthly-payment-card {
-        background-color: var(--color-primary) !important;
-        -webkit-print-color-adjust: exact; 
-        color: white !important;
-    }
-    
-    /* Print header for context */
-    .results-section h2 {
-        display: block !important;
-        font-size: 1.5rem;
-        text-align: center;
-        margin-bottom: 20px;
-        color: black !important; /* Ensure black for print */
-    }
-}
-
-/* Focus styles for accessibility */
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    :root {
-        --color-border: #000000;
-        --color-shadow: rgba(0, 0, 0, 0.8);
-    }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
+    <!-- JavaScript -->
+    <script src="mortgage-calculator.js"></script>
+</body>
+</html>
