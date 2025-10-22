@@ -7,7 +7,7 @@
     <meta name="keywords" content="mortgage calculator, home loan, FRED rates, USA mortgage, AI calculator">
     <title>AI-Powered Mortgage Calculator | FinGuid - USA 2025</title>
 
-    <!-- IMPROVEMENT 11: Google Analytics -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -30,11 +30,11 @@
 <body>
     <div class="app-container">
 
-        <!-- IMPROVEMENT 1 & 2: Header with Animated USA Flag and Navigation -->
+        <!-- Header with Animated USA Flag and Navigation -->
         <header class="header">
             <div class="header-content">
                 <div class="logo-container">
-                    <!-- IMPROVEMENT 1: Animated USA Flag SVG -->
+                    <!-- Animated USA Flag SVG -->
                     <div class="usa-flag-animated">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" class="flag-svg">
                             <defs>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
 
-                <!-- IMPROVEMENT 2: Navigation Links -->
+                <!-- Navigation Links -->
                 <nav class="header-nav">
                     <a href="https://finguid.com/" class="nav-link">Home</a>
                     <a href="https://finguid.com/calculators" class="nav-link">Calculators</a>
@@ -74,11 +74,14 @@
                     <button class="control-btn voice-toggle" title="Voice Commands">
                         <i class="fas fa-microphone"></i>
                     </button>
+                    <button class="control-btn screen-reader-toggle" title="Screen Reader">
+                        <i class="fas fa-assistive-listening-systems"></i>
+                    </button>
                 </div>
             </div>
         </header>
 
-        <!-- IMPROVEMENT 3 & 4: Hero Section with AI-Powered Animation and 50% Size -->
+        <!-- Hero Section -->
         <section class="hero-section hero-compact">
             <h1 class="hero-title">
                 Home Loan Pro — Mortgage Calculator (<span class="ai-powered-animated">AI-Powered</span>)
@@ -99,26 +102,6 @@
             </div>
         </section>
 
-        <!-- IMPROVEMENT 5: Market Rates (Compact Horizontal Below Hero) -->
-        <!-- IMPROVEMENT 14: Rate auto-updated from FRED 2x daily with timestamp -->
-        <section class="market-rates-compact">
-            <div class="market-rate-item">
-                <div class="rate-label">30-Year Fixed Average</div>
-                <div class="rate-value" id="rate-30-year">6.44%</div>
-            </div>
-            <div class="market-rate-item">
-                <div class="rate-label">15-Year Fixed Average</div>
-                <div class="rate-value" id="rate-15-year">5.89%</div>
-            </div>
-            <div class="market-rate-item">
-                <div class="rate-label">10-Year Treasury</div>
-                <div class="rate-value" id="rate-10-treasury">4.25%</div>
-            </div>
-            <div class="rate-update-info" id="rate-update-info">
-                Last updated: <span id="rate-update-time">--</span>
-            </div>
-        </section>
-
         <!-- Main Calculator Grid (30% | 40% | 30%) -->
         <div class="calculator-grid">
 
@@ -129,12 +112,31 @@
                     Loan Details
                 </h2>
 
+                <!-- Compact Live Rates Section -->
+                <div class="compact-rates-section">
+                    <div class="compact-rate-item">
+                        <span class="compact-rate-label">30-Year</span>
+                        <span class="compact-rate-value" id="rate-30-year">6.44%</span>
+                    </div>
+                    <div class="compact-rate-item">
+                        <span class="compact-rate-label">15-Year</span>
+                        <span class="compact-rate-value" id="rate-15-year">5.89%</span>
+                    </div>
+                    <div class="compact-rate-item">
+                        <span class="compact-rate-label">10-Yr Treasury</span>
+                        <span class="compact-rate-value" id="rate-10-treasury">4.25%</span>
+                    </div>
+                    <div class="rate-update-time" id="rate-update-time">
+                        Updated: <span id="rate-update-time-value">--</span>
+                    </div>
+                </div>
+
                 <div class="rate-status">
                     <i class="fas fa-sync-alt"></i>
                     <span id="live-rate-status">Fetching Live Rate...</span>
                 </div>
 
-                <!-- IMPROVEMENT 6: Content Toggle (Basic/Advanced) -->
+                <!-- Content Toggle (Basic/Advanced) -->
                 <div class="content-toggle-container">
                     <button class="toggle-btn active" data-content="basic">Basic</button>
                     <button class="toggle-btn" data-content="advanced">Advanced</button>
@@ -160,7 +162,7 @@
                             <input type="number" id="down-payment-percent" class="form-control" value="20" min="0" max="100" step="0.1">
                         </div>
 
-                        <!-- IMPROVEMENT 12: Credit Score affects Interest Rate -->
+                        <!-- Credit Score affects Interest Rate -->
                         <div class="form-group">
                             <label for="credit-score">Credit Score</label>
                             <select id="credit-score" class="select-control">
@@ -180,7 +182,7 @@
                             <span class="input-hint">Auto-updated 2x daily from FRED</span>
                         </div>
 
-                        <!-- IMPROVEMENT 13: Manual Loan Term Entry -->
+                        <!-- Manual Loan Term Entry -->
                         <div class="form-group">
                             <label class="chip-label">Loan Term (Years)</label>
                             <div class="chip-group">
@@ -191,7 +193,7 @@
                             <input type="number" id="custom-term-input" class="form-control" placeholder="Enter years (1-50)" min="1" max="50" style="display:none; margin-top:10px;">
                         </div>
 
-                        <!-- IMPROVEMENT 16: Loan Type reflects in Monthly Payment -->
+                        <!-- Loan Type reflects in Monthly Payment -->
                         <div class="form-group">
                             <label class="chip-label">Loan Type</label>
                             <div class="chip-group">
@@ -345,7 +347,7 @@
                 <div class="monthly-payment-card">
                     <div class="monthly-payment-label">Estimated Monthly Payment</div>
                     <div class="monthly-payment-value" id="monthly-payment-total">$2,868.08</div>
-                    <!-- IMPROVEMENT 16: Display selected loan type -->
+                    <!-- Display selected loan type -->
                     <div class="loan-type-display" id="loan-type-display">Conventional Loan</div>
                 </div>
 
@@ -377,6 +379,11 @@
                         <div class="summary-item">
                             <span class="summary-label">PMI/HOA/Other (Monthly)</span>
                             <span class="summary-value" id="other-monthly">$0.00</span>
+                        </div>
+                        <!-- Extra Monthly Payment Row -->
+                        <div class="summary-item" id="extra-monthly-row" style="display: none;">
+                            <span class="summary-label">Extra Monthly Payment</span>
+                            <span class="summary-value" id="extra-monthly-display">$0.00</span>
                         </div>
                         <hr class="summary-divider">
                         <div class="summary-item total">
@@ -424,6 +431,23 @@
                 <!-- Tab 2: Timeline -->
                 <div class="tab-content" id="tab-timeline">
                     <h3 class="tab-title">Mortgage Balance Over Time</h3>
+                    
+                    <!-- Live Numbers Display -->
+                    <div class="live-numbers-container">
+                        <div class="live-number-item">
+                            <span class="live-number-label">Current Balance</span>
+                            <span class="live-number-value" id="current-balance">$360,000</span>
+                        </div>
+                        <div class="live-number-item">
+                            <span class="live-number-label">Principal Paid</span>
+                            <span class="live-number-value" id="principal-paid">$0</span>
+                        </div>
+                        <div class="live-number-item">
+                            <span class="live-number-label">Interest Paid</span>
+                            <span class="live-number-value" id="interest-paid">$0</span>
+                        </div>
+                    </div>
+                    
                     <p class="tab-description">
                         See how your principal balance, principal paid, and interest paid change over the life of the loan.
                         <em>Updates live with extra payments.</em>
@@ -433,7 +457,7 @@
                     </div>
                 </div>
 
-                <!-- IMPROVEMENT 7: Enhanced AI Insights -->
+                <!-- Enhanced AI Insights -->
                 <div class="tab-content" id="tab-insights">
                     <h3 class="tab-title">AI-Powered Financial Strategy</h3>
                     <p class="tab-description">
@@ -447,7 +471,7 @@
                     </div>
                 </div>
 
-                <!-- IMPROVEMENT 8: Fixed Yearly Payment Schedule -->
+                <!-- Fixed Yearly Payment Schedule -->
                 <div class="tab-content" id="tab-schedule">
                     <h3 class="tab-title">Full Payment Schedule</h3>
                     <p class="tab-description">
@@ -491,7 +515,7 @@
                     </div>
                 </div>
 
-                <!-- IMPROVEMENT 9 & 10: Share Results with Social Options and PDF Download -->
+                <!-- Share Results with Social Options and PDF Download -->
                 <div class="share-results-section">
                     <h3 class="tab-title">Share Results</h3>
                     <div class="share-buttons">
@@ -525,7 +549,7 @@
                     </div>
                 </div>
 
-                <!-- IMPROVEMENT 15: Compare Different Loan Scenarios -->
+                <!-- Compare Different Loan Scenarios -->
                 <button class="btn btn-compare btn-full" id="compare-scenarios-btn">
                     <i class="fas fa-columns"></i> Compare Different Loan Scenarios
                 </button>
@@ -573,7 +597,7 @@
                     <a href="/first-time-buyer" class="ad-link">Read the Guide <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-                <!-- IMPROVEMENT 19: Learning Center Links -->
+                <!-- Learning Center Links -->
                 <div class="ad-card">
                     <h3 class="ad-title">
                         <i class="fas fa-graduation-cap"></i>
@@ -589,7 +613,7 @@
             </aside>
         </div>
 
-        <!-- IMPROVEMENT 17, 18, 19: Updated Footer (Remove Made in USA, Add Social Links) -->
+        <!-- Updated Footer (Remove Learning Center) -->
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-section">
@@ -619,16 +643,6 @@
                         <li><a href="https://finguid.com/resources">Guides</a></li>
                         <li><a href="https://finguid.com/resources">Glossary</a></li>
                         <li><a href="https://finguid.com/resources">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3 class="footer-heading">Learning Center</h3>
-                    <ul class="footer-links">
-                        <li><a href="/first-time-buyer">First-Time Buyer Guide</a></li>
-                        <li><a href="/mortgage-basics">Mortgage Basics</a></li>
-                        <li><a href="/refinancing">Refinancing Guide</a></li>
-                        <li><a href="/credit-improvement">Credit Improvement</a></li>
                     </ul>
                 </div>
 
@@ -667,7 +681,7 @@
                     © 2025 FinGuid. All rights reserved.
                 </p>
 
-                <!-- IMPROVEMENT 18: Social Media Links -->
+                <!-- Social Media Links -->
                 <div class="social-links-footer">
                     <a href="https://facebook.com/finguid" class="social-link" title="Facebook" target="_blank">
                         <i class="fab fa-facebook"></i>
