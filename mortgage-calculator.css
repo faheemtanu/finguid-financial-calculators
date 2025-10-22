@@ -1,348 +1,169 @@
 /* ========================================================================== */
-/* FIN-GUID MORTGAGE CALCULATOR - PRODUCTION READY CSS v2025.04.18          */
-/* Total Lines: ~2000+ (Including detailed comments, media queries, and utility classes) */
-/* Implementation Details:                                                    */
-/* - Full Dark/Light Mode support (Preserved)                                 */
-/* - Layout: Left 30% | Middle 40% | Right 30% (Preserved)                    */
-/* - New styles for Header Navigation and minimized header height.            */
-/* - AI Powered animation added.                                              */
-/* - Custom styles for Credit Score range slider.                             */
-/* - Styles for Live Treasury Rates block.                                    */
-/* - Custom styles for Loan Compare block.                                    */
-/* - Detailed Footer styles to match the mockup image.                        */
-/* - Specific Chart styling for the stacked amortization chart.               */
+/* WORLD'S FIRST AI MORTGAGE CALCULATOR - ENHANCED CSS v25.0               */
+/* DEFAULT DARK MODE IMPLEMENTED (User Request)                             */
+/* Layout: Left 30% | Middle 40% | Right 30%                               */
 /* ========================================================================== */
 
 /* ========================================================================== */
-/* 1. COLOR SYSTEM (DEFAULT DARK MODE) - PRESERVED & ENHANCED                 */
+/* 1. COLOR SYSTEM & TYPOGRAPHY                                               */
 /* ========================================================================== */
 
 :root {
-    /* Base Colors */
-    --color-white: rgba(255, 255, 255, 1);
-    --color-black: rgba(0, 0, 0, 1);
+    /* Color Palette (Default Dark Mode) */
+    --color-primary: #3b82f6;      /* Blue */
+    --color-primary-light: #60a5fa;
+    --color-secondary: #10b981;    /* Emerald */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
     
-    /* Dark Mode Palette (Default) */
-    --color-gray-900: rgba(17, 24, 39, 1);     /* Deep Navy Background */
-    --color-gray-800: rgba(31, 41, 55, 1);     /* Card/Surface */
-    --color-gray-700: rgba(55, 65, 81, 1);     /* Border/Input Background */
-    --color-gray-600: rgba(75, 85, 99, 1);     /* Secondary Text */
-    --color-gray-500: rgba(156, 163, 175, 1);   /* Muted Text/Placeholder */
-    --color-gray-200: rgba(229, 231, 235, 1);   /* Lightest Gray */
-
-    /* Primary/Accent Color (FinTech Teal/Cyan) */
-    --color-teal-500: rgba(20, 184, 166, 1);   /* Primary */
-    --color-teal-600: rgba(13, 148, 136, 1);   /* Primary Hover */
-    --color-teal-700: rgba(15, 118, 110, 1);   /* Primary Active */
-    
-    /* Semantic Colors (Dark Mode) */
-    --color-background: var(--color-gray-900);
-    --color-surface: var(--color-gray-800);
-    --color-surface-secondary: var(--color-gray-700);
-    --color-text: var(--color-white);
-    --color-text-secondary: var(--color-gray-200);
-    --color-text-muted: var(--color-gray-500);
-    --color-primary: var(--color-teal-500);
-    --color-primary-hover: var(--color-teal-600);
-    --color-border: var(--color-gray-700);
-    --color-input-bg: var(--color-gray-900);
+    /* Dark Mode (Default) */
+    --color-bg: #111827;           /* Deep Navy Background */
+    --color-surface: #1f2937;      /* Card/Input Background */
+    --color-border: #374151;       /* Subtle Border */
+    --color-text-main: #f9fafb;    /* Primary Text (White) */
+    --color-text-muted: #9ca3af;   /* Secondary/Muted Text */
     --color-shadow: rgba(0, 0, 0, 0.4);
+
+    /* Typography */
+    --font-family-main: 'Inter', sans-serif;
+    --font-size-base: 16px;
+    --space-1: 0.25rem; /* 4px */
+    --space-2: 0.5rem;  /* 8px */
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem;    /* 16px */
+    --space-6: 1.5rem;  /* 24px */
+    --space-8: 2rem;    /* 32px */
     
-    /* Chart Colors (Vibrant & Accessible) */
-    /* Updated chart colors for the new stacked area chart look */
-    --color-chart-principal: var(--color-teal-500);         /* Principal (Teal) */
-    --color-chart-remaining: rgba(59, 130, 246, 1);         /* Remaining Balance (Blue) */
-    --color-chart-interest: rgba(239, 68, 68, 1);           /* Interest (Red) */
-
-    /* Typography & Spacing */
-    --font-family-primary: 'Inter', sans-serif;
-    --font-size-base: 1rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
+    /* Other */
     --radius-sm: 0.25rem;
-    --radius-lg: 0.5rem;
-    --shadow-xl: 0 10px 15px -3px var(--color-shadow), 0 4px 6px -2px var(--color-shadow);
+    --radius-md: 0.5rem;
+    --transition-fast: 0.2s ease-out;
 }
 
-/* Light Mode Overrides */
+/* Light Mode Override (for theme-toggle) */
 [data-color-scheme="light"] {
-    /* Light Mode Palette */
-    --color-gray-900: rgba(17, 24, 39, 1);
-    --color-gray-50: rgba(249, 250, 251, 1);
-
-    /* Semantic Colors (Light Mode) */
-    --color-background: var(--color-gray-50);
-    --color-surface: var(--color-white);
-    --color-surface-secondary: rgba(243, 244, 246, 1);
-    --color-text: var(--color-gray-900);
-    --color-text-secondary: rgba(55, 65, 81, 1);
-    --color-text-muted: rgba(107, 114, 128, 1);
-    --color-primary: var(--color-teal-600);
-    --color-primary-hover: var(--color-teal-700);
-    --color-border: rgba(229, 231, 235, 1);
-    --color-input-bg: var(--color-white);
+    --color-bg: #f9fafb;           /* Light Background */
+    --color-surface: #ffffff;      /* White Card/Input Background */
+    --color-border: #e5e7eb;       /* Light Border */
+    --color-text-main: #111827;    /* Primary Text (Black) */
+    --color-text-muted: #6b7280;   /* Secondary/Muted Text */
     --color-shadow: rgba(0, 0, 0, 0.1);
-
-    /* Chart Colors (Lighter variants for light mode) */
-    --color-chart-principal: var(--color-teal-600);
-    --color-chart-remaining: rgba(37, 99, 235, 1);
-    --color-chart-interest: rgba(220, 38, 38, 1);
 }
 
-/* ========================================================================== */
-/* 2. BASE & LAYOUT STYLES                                                    */
-/* ========================================================================== */
-
+/* Base Styles */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    font-family: var(--font-family-primary);
-    font-size: var(--font-size-base);
-    color: var(--color-text);
-    background-color: var(--color-background);
+    font-family: var(--font-family-main);
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
     line-height: 1.6;
-    transition: background-color 0.3s, color 0.3s;
-    min-height: 100vh;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .app-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: var(--space-4);
-}
-
-.flow-content > * + * {
-    margin-top: var(--space-6);
-}
-
-/* Visually Hidden for Accessibility */
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-/* Accessibility: Skip Link (Escape to main content) */
-.skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    padding: var(--space-3) var(--space-4);
-    z-index: 1000;
-    text-decoration: none;
-    transition: top 0.3s;
-    border-radius: 0 0 var(--radius-lg) 0;
-}
-
-.skip-link:focus {
-    top: 0;
-}
-
-/* Main Grid Layout (Preserved Left 30% | Middle 40% | Right 30%) */
-.main-content-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Default mobile layout */
-    gap: var(--space-6);
-    padding: var(--space-6) 0;
-}
-
-@media (min-width: 1024px) {
-    .main-content-grid {
-        grid-template-columns: 30% 40% 30%;
-        gap: var(--space-8);
-    }
-}
-
-/* Sections Styling */
-.input-section, .results-section, .sponsor-section {
-    padding: var(--space-6);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-xl);
-    transition: background-color 0.3s, border-color 0.3s;
+    padding: var(--space-8);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ========================================================================== */
-/* 3. HEADER, NAVIGATION & AI ANIMATION (Minimized Space)                     */
+/* 2. HEADER & LOGO                                                           */
 /* ========================================================================== */
 
 .header {
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--space-3) 0; /* Minimized vertical space */
-}
-
-.header-top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    padding-bottom: var(--space-6);
+    margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
 }
 
-.logo-container {
+.logo-area {
     display: flex;
-    align-items: center;
-    gap: var(--space-2);
-}
-
-.logo-icon {
-    font-size: 1.5rem;
-    color: var(--color-primary);
+    flex-direction: column;
 }
 
 .logo-text {
-    font-size: 1.25rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    color: var(--color-text);
+    color: var(--color-text-main);
 }
 
-/* AI Powered Animation Badge */
-@keyframes pulse-teal {
-    0% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(20, 184, 166, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
-}
-
-.logo-badge {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    padding: 0.2rem 0.6rem;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-left: var(--space-3);
-    border: 1px solid var(--color-primary);
-}
-
-.ai-powered-animated {
-    animation: pulse-teal 2s infinite;
-}
-
-/* Main Navigation Styles */
-.main-nav {
-    flex-grow: 1;
-    margin: 0 var(--space-8);
-}
-
-.main-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: var(--space-6);
-    padding: 0;
-}
-
-.main-nav a {
-    text-decoration: none;
-    color: var(--color-text-secondary);
-    font-weight: 500;
-    padding: var(--space-2) 0;
-    position: relative;
-    transition: color 0.2s;
-}
-
-.main-nav a:hover, .main-nav a.active {
+.logo-suffix {
+    font-size: 1.5rem;
+    font-weight: 300;
     color: var(--color-primary);
 }
 
-.main-nav a.active::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--color-primary);
+.main-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
 }
 
-/* Header Controls (Voice, Theme, Screen Reader) */
 .header-controls {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--space-4);
 }
 
-.control-btn {
-    background: var(--color-surface-secondary);
-    color: var(--color-text-secondary);
+/* ========================================================================== */
+/* 3. LAYOUT GRID (LEFT | MIDDLE | RIGHT)                                     */
+/* ========================================================================== */
+
+.main-content-grid {
+    display: grid;
+    /* Desktop 3-column layout: Input(30%) | Results(40%) | Sponsor(30%) */
+    grid-template-columns: 3fr 4fr 3fr; 
+    gap: var(--space-8);
+    flex-grow: 1;
+}
+
+.input-section {
+    grid-column: 1 / 2; /* Left Column */
+}
+
+.results-section {
+    grid-column: 2 / 3; /* Middle Column */
+}
+
+.sponsor-section {
+    grid-column: 3 / 4; /* Right Column */
+}
+
+
+/* ========================================================================== */
+/* 4. COMPONENTS (Cards, Buttons, Forms)                                      */
+/* ========================================================================== */
+
+.card {
+    background-color: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    box-shadow: 0 4px 6px -1px var(--color-shadow);
+    transition: all var(--transition-fast);
 }
 
-.control-btn:hover {
-    background: var(--color-primary-hover);
-    color: var(--color-white);
-    border-color: var(--color-primary-hover);
-}
-
-/* Theme Toggle Specifics */
-.theme-toggle .light-icon { display: none; }
-[data-color-scheme="light"] .theme-toggle .light-icon { display: block; }
-[data-color-scheme="light"] .theme-toggle .dark-icon { display: none; }
-
-/* Voice & Screen Reader Active State */
-.control-btn.active {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    border-color: var(--color-primary);
-}
-
-/* Hero Section Styling (Minimal Space) */
-.hero-section {
-    padding: var(--space-4) 0 var(--space-6); /* Reduced padding */
-    text-align: center;
-}
-
-.hero-heading {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: var(--space-2);
-}
-
-.hero-subtext {
-    font-size: var(--font-size-base);
-    color: var(--color-text-muted);
-}
-
-/* ... (rest of the CSS for Inputs, Results, Tables, Charts, etc.) ... */
-
-/* ========================================================================== */
-/* 4. INPUT SECTION STYLES (Credit Score & Live Rates)                        */
-/* ========================================================================== */
-
-.section-heading {
+.card-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--color-text);
     margin-bottom: var(--space-6);
-    border-bottom: 2px solid var(--color-border);
-    padding-bottom: var(--space-3);
+    color: var(--color-primary);
 }
 
-.input-group-container {
+/* Form Styles */
+.form-grid {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -351,58 +172,47 @@ body {
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
 }
 
 .form-group label {
-    font-size: var(--font-size-sm);
+    font-size: 0.9rem;
     font-weight: 500;
-    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2);
+    color: var(--color-text-muted);
 }
 
-.form-control, .form-group select {
-    padding: var(--space-3) var(--space-4);
-    background-color: var(--color-input-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    color: var(--color-text);
-    font-size: var(--font-size-base);
-    transition: border-color 0.2s, box-shadow 0.2s;
+.form-control {
     width: 100%;
-}
-
-.form-control:focus, .form-group select:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.3);
-    outline: none;
-}
-
-/* Credit Score Range Slider */
-.credit-score-group .flex-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.credit-score-group .badge {
-    background-color: var(--color-teal-700);
-    color: var(--color-white);
-    padding: 0.2rem 0.5rem;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    font-size: 0.8rem;
+    background-color: var(--color-bg); 
+    color: var(--color-text-main);
+    transition: border-color var(--transition-fast);
 }
 
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Primary-based focus ring */
+}
+
+.range-output {
+    margin-top: var(--space-2);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+}
+
+/* Range Slider Styling (Modern Look) */
 .range-slider {
     -webkit-appearance: none;
-    width: 100%;
-    height: 8px;
-    background: var(--color-gray-700);
+    appearance: none;
+    height: 6px;
+    background: var(--color-border);
     outline: none;
-    opacity: 0.9;
-    transition: opacity 0.2s;
-    border: none;
-    margin: 0;
-    padding: 0;
+    margin: 10px 0;
+    border-radius: 3px;
 }
 
 .range-slider::-webkit-slider-thumb {
@@ -413,7 +223,7 @@ body {
     border-radius: 50%;
     background: var(--color-primary);
     cursor: pointer;
-    border: 3px solid var(--color-surface);
+    transition: background var(--transition-fast);
 }
 
 .range-slider::-moz-range-thumb {
@@ -422,66 +232,16 @@ body {
     border-radius: 50%;
     background: var(--color-primary);
     cursor: pointer;
-    border: 3px solid var(--color-surface);
-}
-
-.range-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    margin-top: var(--space-2);
-}
-
-/* Live Rates Display */
-.live-rates-status {
-    padding: var(--space-4);
-    border: 1px dashed var(--color-primary);
-    background-color: var(--color-teal-900);
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-}
-
-.live-rates-title {
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    color: var(--color-primary);
-    margin-bottom: var(--space-3);
-}
-
-.rate-line {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.1rem 0;
-}
-
-.rate-icon {
-    color: var(--color-teal-500);
-    margin-right: var(--space-2);
-}
-
-.rate-value {
-    font-weight: 700;
-    color: var(--color-white);
-}
-
-.update-info {
-    text-align: right;
-    margin-top: var(--space-2);
-    font-style: italic;
-    color: var(--color-text-muted);
 }
 
 /* Button Styles */
 .btn {
     padding: var(--space-3) var(--space-6);
     border: none;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     cursor: pointer;
-    font-size: var(--font-size-base);
     font-weight: 600;
-    transition: background-color 0.2s, box-shadow 0.2s;
+    transition: background-color var(--transition-fast), opacity var(--transition-fast);
 }
 
 .btn-primary {
@@ -489,174 +249,509 @@ body {
     color: var(--color-white);
 }
 
-.btn-primary:hover {
-    background-color: var(--color-primary-hover);
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-light);
 }
 
 .btn-secondary {
-    background-color: var(--color-surface-secondary);
-    color: var(--color-text);
+    background-color: var(--color-surface);
+    color: var(--color-text-main);
     border: 1px solid var(--color-border);
 }
 
-.btn-secondary:hover {
-    background-color: var(--color-gray-700);
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-border);
 }
 
-.btn-full {
-    width: 100%;
-}
-
-/* ... (rest of the CSS for Results, Tabs, Tables, etc.) ... */
-
-/* ========================================================================== */
-/* 5. RESULTS & CHART STYLES (Amortization Stacked Area Chart)                */
-/* ========================================================================== */
-
-/* ... (Existing styles for monthly-payment-card, tabs-container, etc.) ... */
-
-/* Amortization Chart Container */
-.chart-container-lg {
-    position: relative;
-    height: 400px; /* Specific height for clarity */
-    width: 100%;
-    margin-top: var(--space-4);
-}
-
-/* Loan Compare Card */
-.loan-compare-card {
-    padding: var(--space-6);
-    margin-top: var(--space-6);
-    border: 2px solid var(--color-teal-700);
-    background-color: var(--color-teal-900);
-    border-radius: var(--radius-lg);
-    transition: all 0.3s;
-}
-
-.loan-compare-card p {
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-4);
-    font-size: var(--font-size-sm);
-}
-
-.btn-compare {
-    background-color: var(--color-teal-500);
+.btn-success {
+    background-color: var(--color-success);
     color: var(--color-white);
 }
 
-.btn-compare:hover {
-    background-color: var(--color-teal-600);
+.btn-success:hover:not(:disabled) {
+    opacity: 0.9;
 }
 
-/* ... (rest of the CSS for Sponsor section, Loading, Voice status) ... */
-
-/* ========================================================================== */
-/* 6. FOOTER STYLES (Matching Footer.jpg Mockup)                              */
-/* ========================================================================== */
-
-.main-footer {
-    background-color: var(--color-gray-800);
-    border-top: 1px solid var(--color-border);
-    padding: var(--space-8) var(--space-4);
-    color: var(--color-text-secondary);
-    margin-top: var(--space-8);
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Mobile: 2 columns */
-    gap: var(--space-8);
-    max-width: 1200px;
-    margin: 0 auto;
+.btn-icon {
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-main);
+    padding: var(--space-2);
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
 }
 
-@media (min-width: 768px) {
-    .footer-grid {
-        grid-template-columns: 2fr repeat(4, 1fr); /* Desktop: 5 columns */
-    }
+.btn-icon:hover {
+    background-color: var(--color-surface);
 }
 
-.footer-col {
-    /* Flex alignment for column content */
+.action-buttons-group {
+    margin-top: var(--space-6);
     display: flex;
     flex-direction: column;
+    gap: var(--space-3);
 }
 
-.footer-col-brand .logo-text {
-    font-size: 1.5rem;
+.full-width {
+    width: 100%;
 }
 
-.brand-mission {
-    font-size: var(--font-size-sm);
-    margin: var(--space-4) 0;
-    line-height: 1.4;
-}
+/* ========================================================================== */
+/* 5. RESULT SECTION STYLING                                                  */
+/* ========================================================================== */
 
-.copyright-text {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-4);
-}
-
-.footer-heading {
-    font-size: var(--font-size-base);
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: var(--space-4);
-}
-
-.footer-col ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-}
-
-.footer-col a {
-    text-decoration: none;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    transition: color 0.2s;
-}
-
-.footer-col a:hover {
-    color: var(--color-primary);
-}
-
-/* Social Icons */
-.social-links {
-    display: flex;
-    gap: var(--space-4);
-}
-
-.social-links a {
-    color: var(--color-text-secondary);
-    font-size: 1.2rem;
-}
-
-.social-links a:hover {
-    color: var(--color-primary);
-}
-
-/* Disclaimer Section */
-.footer-disclaimer {
-    max-width: 1200px;
-    margin: var(--space-6) auto 0;
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--color-gray-700);
+.monthly-payment-card {
+    background-color: var(--color-primary); /* Primary color for high contrast */
+    color: var(--color-white);
+    margin-bottom: var(--space-8);
+    padding: var(--space-8);
     text-align: center;
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
 }
 
-.footer-disclaimer p {
+.payment-breakdown {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.breakdown-item .label {
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: var(--space-1);
+}
+
+.breakdown-item .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.total-payment {
+    padding-top: var(--space-4);
+}
+
+.total-payment .label {
+    font-size: 1rem;
+    display: block;
     margin-bottom: var(--space-2);
 }
 
-/* ... (Rest of the comprehensive CSS to reach line count, including print and mobile styles) ... */
+.total-payment .total {
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+.disclaimer-text {
+    margin-top: var(--space-3);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Tabs */
+.tabs-header {
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-4);
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    padding: var(--space-3) var(--space-4);
+    cursor: pointer;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.tab-button.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    font-weight: 600;
+}
+
+.tab-content {
+    padding: var(--space-4) 0;
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-4);
+    color: var(--color-text-main);
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.data-grid div {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.data-grid .label {
+    color: var(--color-text-muted);
+}
+
+.data-grid .value {
+    font-weight: 600;
+}
+
+/* AI Insights */
+.ai-content {
+    background-color: var(--color-bg);
+    padding: var(--space-4);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    min-height: 100px;
+    margin-bottom: var(--space-4);
+    white-space: pre-wrap; /* For better formatted output from the AI */
+}
+
+/* Schedule Table */
+.schedule-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.schedule-table th, .schedule-table td {
+    padding: var(--space-2) var(--space-4);
+    text-align: right;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.schedule-table th {
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+    position: sticky;
+    top: 0;
+    font-weight: 600;
+    text-align: left;
+}
+
+.schedule-table tr:hover {
+    background-color: var(--color-border);
+}
+
+.schedule-table td:first-child, .schedule-table th:first-child {
+    text-align: left;
+}
+
 
 /* ========================================================================== */
-/* 7. MEDIA QUERIES & PRINT STYLES                                            */
+/* 6. SPONSOR & ADVERTISING                                                   */
 /* ========================================================================== */
-/* ... (Additional mobile/tablet and print styles to pad to ~2000 lines) ... */
+
+.ad-block {
+    margin-bottom: var(--space-6);
+    padding: var(--space-4);
+    border: 1px dashed var(--color-primary);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.partner-block h4 {
+    color: var(--color-secondary);
+    margin-bottom: var(--space-2);
+}
+
+.ad-label {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+}
+
+/* ========================================================================== */
+/* 7. FOOTER (BRANDING)                                                       */
+/* ========================================================================== */
+
+.footer {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+.footer-branding {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.branded-footer-image {
+    max-width: 150px; /* Adjust size for branding image */
+    height: auto;
+    margin-bottom: var(--space-2);
+}
+
+.footer-branding p {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.footer-links a {
+    color: var(--color-primary-light);
+    text-decoration: none;
+    margin-right: var(--space-4);
+    font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.footer-badges .badge {
+    margin-left: var(--space-2);
+    display: inline-block;
+    padding: 3px 6px;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+
+/* ========================================================================== */
+/* 8. MOBILE RESPONSIVENESS (All Device Friendly)                             */
+/* ========================================================================== */
+
+@media (max-width: 1023px) {
+    
+    .app-container {
+        padding: var(--space-4);
+    }
+
+    /* Stack Columns on Mobile/Tablet */
+    .main-content-grid {
+        grid-template-columns: 1fr; /* Single column layout */
+        gap: var(--space-6);
+    }
+
+    .input-section {
+        order: 1; /* Input first */
+    }
+
+    .results-section {
+        order: 2; /* Results second */
+    }
+
+    .sponsor-section {
+        order: 3; /* Sponsor/Ads last */
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-controls {
+        align-self: flex-end;
+        margin-top: -30px; /* Pull controls up next to title */
+    }
+    
+    .main-title {
+        font-size: 1rem;
+    }
+
+    .monthly-payment-card .total {
+        font-size: 2.5rem;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .footer-links, .footer-badges {
+        margin-top: var(--space-3);
+    }
+    .footer-links a {
+        display: block;
+        margin-bottom: var(--space-2);
+        margin-right: 0;
+    }
+}
+
+/* ========================================================================== */
+/* 9. UTILITY & OVERLAYS (Voice, Loading, Toast)                              */
+/* ========================================================================== */
+
+.text-info { color: var(--color-primary-light); }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.text-muted { color: var(--color-text-muted); }
+.text-center { text-align: center; }
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--color-white);
+}
+
+.loading-overlay.active {
+    display: flex;
+}
+
+.loading-spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid var(--color-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--space-4);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Voice Status */
+.voice-status {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    z-index: 1010;
+    box-shadow: 0 4px 12px var(--color-shadow);
+    display: none;
+    align-items: center;
+}
+
+.voice-status.active {
+    display: flex;
+}
+
+.voice-status-icon {
+    color: var(--color-primary);
+    margin-right: var(--space-3);
+    animation: pulse 1.5s infinite;
+}
+
+.voice-status-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-right: var(--space-3);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* FRED API Status */
+.fred-rate-status {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 4px;
+    border-radius: 4px;
+    color: var(--color-success);
+    margin-left: var(--space-2);
+}
+
+.fred-rate-status.default {
+    color: var(--color-warning);
+}
+
+.badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-white);
+    background-color: var(--color-secondary);
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: var(--space-2);
+}
+
+/* Print Styles */
+@media print {
+    /* Hide non-essential elements for a clean printout */
+    .header, .sponsor-section, .footer, .action-buttons-group, 
+    #theme-toggle, #voice-toggle, .toast-container, .btn-compare, 
+    .tabs-header, .schedule-controls {
+        display: none !important;
+    }
+    .main-content-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .input-section, .results-section {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    
+    /* Ensure only the summary and AI/Chart (if active) prints cleanly */
+    .tab-content {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    #tab-summary, #tab-balance-chart.active, #tab-ai-insights.active, #tab-schedule.active {
+        display: block !important;
+        visibility: visible !important;
+    }
+    
+    /* Ensure payment card prints with color (important for branding) */
+    .monthly-payment-card {
+        background-color: var(--color-primary) !important;
+        -webkit-print-color-adjust: exact; 
+        color: white !important;
+    }
+    
+    /* Print header for context */
+    .results-section h2 {
+        display: block !important;
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 20px;
+        color: black !important; /* Ensure black for print */
+    }
+}
