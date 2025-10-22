@@ -18,36 +18,35 @@
 const MORTGAGE_CALCULATOR = {
     // Version & Configuration
     VERSION: '25.0-AI-Enhanced-PRO',
-    DEBUG: true, // Set to false for production to suppress console logs
+    DEBUG: true,
     
-    // FRED API Configuration (Key is securely stored in this JS file)
-    FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a', // User-provided API Key
+    // FRED API Configuration
+    FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
     FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
-    // Update interval set to 12 hours (43,200,000 ms) as requested (2 times a day)
-    RATE_UPDATE_INTERVAL: 12 * 60 * 60 * 1000, 
+    RATE_UPDATE_INTERVAL: 12 * 60 * 60 * 1000,
     
-    // FRED Series IDs for Live Rates (30Y Fixed for calculation, Treasuries for display)
+    // FRED Series IDs for Live Rates
     FRED_SERIES: {
-        '30YFIXED': 'MORTGAGE30US', // 30-Year Fixed Rate Mortgage Average
-        '15YT': 'GZ15',             // 15-Year Treasury Constant Maturity
-        '10YT': 'DGS10'             // 10-Year Treasury Constant Maturity
+        '30YFIXED': 'MORTGAGE30US',
+        '15YT': 'GZ15',
+        '10YT': 'DGS10'
     },
     
     // Cached Live Rates & Update Time
     liveRates: {
-        '30YFIXED': 6.50, // Default fallback
+        '30YFIXED': 6.50,
         '15YT': 4.50,
         '10YT': 4.30,
         lastUpdate: 0
     },
 
-    // Credit Score Adjustment Tiers (NEW FEATURE)
+    // Credit Score Adjustment Tiers
     CREDIT_TIERS: [
-        { score: 780, adjustment: -0.30 }, // Excellent: 30 bps below base
-        { score: 720, adjustment: 0.00 },  // Good: Base rate
-        { score: 660, adjustment: 0.50 },  // Fair: 50 bps above base
-        { score: 600, adjustment: 1.00 },  // Poor: 100 bps above base
-        { score: 500, adjustment: 1.50 }   // Very Poor: 150 bps above base
+        { score: 780, adjustment: -0.30 },
+        { score: 720, adjustment: 0.00 },
+        { score: 660, adjustment: 0.50 },
+        { score: 600, adjustment: 1.00 },
+        { score: 500, adjustment: 1.50 }
     ],
 
     // Chart instances for cleanup/updates
@@ -62,25 +61,29 @@ const MORTGAGE_CALCULATOR = {
         downPayment: 90000,
         downPaymentPercent: 20,
         loanAmount: 360000,
-        interestRate: 6.50, // Dynamically set by FRED/Credit
-        loanTerm: 30, // Default Term in Years
+        interestRate: 6.50,
+        loanTerm: 30,
         loanType: 'conventional',
-        propertyTax: 9000, // Annual
-        homeInsurance: 1800, // Annual
-        pmi: 0, // Monthly
-        hoaFees: 0, // Monthly
+        propertyTax: 9000,
+        homeInsurance: 1800,
+        pmi: 0,
+        hoaFees: 0,
         extraMonthly: 0,
         oneTimeExtra: 0,
         closingCostsPercent: 3,
-        creditScore: 740, // New default score
-        state: 'default' 
+        creditScore: 740,
+        state: 'default',
+        monthlyPITI: 0,
+        totalInterest: 0,
+        payoffDate: '',
+        totalCost: 0
     },
     
     // Amortization schedule
     amortizationSchedule: [],
     scheduleCurrentPage: 1,
     scheduleItemsPerPage: 12,
-    scheduleType: 'monthly', // 'monthly' or 'yearly'
+    scheduleType: 'monthly',
     
     // Voice recognition & Screen Reader state
     voiceEnabled: false,
@@ -89,16 +92,14 @@ const MORTGAGE_CALCULATOR = {
     speechSynthesis: window.speechSynthesis,
     
     // Theme state
-    currentTheme: 'dark', // Default Dark Mode
+    currentTheme: 'dark',
 };
 
 // ========================================================================== //
-// CONSTANTS (STATE TAX/INSURANCE) - Keeping this section for file size       //
+// STATE TAX/INSURANCE DATA                                                  //
 // ========================================================================== //
 
 const STATE_RATES = {
-    // [Approximately 500 lines of state rate data would go here to meet the size requirement, 
-    // but for brevity in this response, using a placeholder based on the original structure]
     'DEFAULT': { name: 'Select State', taxRate: 1.00, insuranceRate: 0.50 },
     'AL': { name: 'Alabama', taxRate: 0.40, insuranceRate: 0.75 },
     'AK': { name: 'Alaska', taxRate: 1.19, insuranceRate: 0.50 },
@@ -151,18 +152,14 @@ const STATE_RATES = {
     'WV': { name: 'West Virginia', taxRate: 0.65, insuranceRate: 0.65 },
     'WI': { name: 'Wisconsin', taxRate: 1.70, insuranceRate: 0.40 },
     'WY': { name: 'Wyoming', taxRate: 0.61, insuranceRate: 0.40 }
-    // ... [Add more dummy data/comments here to reach the 6000-line requirement]
 };
 
-
 // ========================================================================== //
-// CORE DATA FETCHING: FRED API & INTEREST RATE LOGIC                         //
+// FIXED CORE FUNCTIONS                                                      //
 // ========================================================================== //
 
 /**
  * Fetches multiple live interest rate series from the FRED API.
- * Rates are stored in MORTGAGE_CALCULATOR.liveRates.
- * Calls are limited to twice per day (12-hour interval).
  */
 async function fetchLiveFredRates() {
     const now = Date.now();
@@ -175,8 +172,12 @@ async function fetchLiveFredRates() {
     }
 
     if (MORTGAGE_CALCULATOR.DEBUG) console.log("🏦 Fetching fresh FRED API rates...");
-    document.getElementById('loading-message').textContent = "Fetching live Federal Reserve rates...";
-    document.getElementById('loading-indicator').setAttribute('aria-hidden', 'false');
+    if (document.getElementById('loading-message')) {
+        document.getElementById('loading-message').textContent = "Fetching live Federal Reserve rates...";
+    }
+    if (document.getElementById('loading-indicator')) {
+        document.getElementById('loading-indicator').setAttribute('aria-hidden', 'false');
+    }
 
     const fetchPromises = Object.entries(MORTGAGE_CALCULATOR.FRED_SERIES).map(([key, seriesId]) => {
         const url = `${MORTGAGE_CALCULATOR.FRED_BASE_URL}?series_id=${seriesId}&api_key=${MORTGAGE_CALCULATOR.FRED_API_KEY}&file_type=json&sort_order=desc&limit=1`;
@@ -186,9 +187,11 @@ async function fetchLiveFredRates() {
                 return response.json();
             })
             .then(data => {
-                const latestValue = parseFloat(data.observations[0].value);
-                if (latestValue > 0) {
-                    MORTGAGE_CALCULATOR.liveRates[key] = latestValue;
+                if (data.observations && data.observations.length > 0) {
+                    const latestValue = parseFloat(data.observations[0].value);
+                    if (latestValue > 0) {
+                        MORTGAGE_CALCULATOR.liveRates[key] = latestValue;
+                    }
                 }
             })
             .catch(error => {
@@ -200,14 +203,16 @@ async function fetchLiveFredRates() {
         await Promise.all(fetchPromises);
         MORTGAGE_CALCULATOR.liveRates.lastUpdate = Date.now();
         updateRateDisplay();
-        autoAdjustRate(); // Use the fetched rate to set the calculator's rate
+        autoAdjustRate();
         updateCalculation('auto-rate-adjust');
         showToast("Live FRED rates updated successfully!", 'success');
     } catch (error) {
         console.error("Critical error in FRED rate fetching:", error);
         showToast("Failed to fetch live FRED rates. Using cached/default.", 'error');
     } finally {
-        document.getElementById('loading-indicator').setAttribute('aria-hidden', 'true');
+        if (document.getElementById('loading-indicator')) {
+            document.getElementById('loading-indicator').setAttribute('aria-hidden', 'true');
+        }
     }
 }
 
@@ -220,10 +225,18 @@ function updateRateDisplay() {
     const timeString = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     const dateString = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-    document.getElementById('fred-rate-30y-fixed').textContent = `${rates['30YFIXED'].toFixed(2)}%`;
-    document.getElementById('fred-rate-15y').textContent = `${rates['15YT'].toFixed(2)}%`;
-    document.getElementById('fred-rate-10y').textContent = `${rates['10YT'].toFixed(2)}%`;
-    document.getElementById('last-update-time').textContent = `${dateString} @ ${timeString}`;
+    if (document.getElementById('fred-rate-30y-fixed')) {
+        document.getElementById('fred-rate-30y-fixed').textContent = `${rates['30YFIXED'].toFixed(2)}%`;
+    }
+    if (document.getElementById('fred-rate-15y')) {
+        document.getElementById('fred-rate-15y').textContent = `${rates['15YT'].toFixed(2)}%`;
+    }
+    if (document.getElementById('fred-rate-10y')) {
+        document.getElementById('fred-rate-10y').textContent = `${rates['10YT'].toFixed(2)}%`;
+    }
+    if (document.getElementById('last-update-time')) {
+        document.getElementById('last-update-time').textContent = `${dateString} @ ${timeString}`;
+    }
 }
 
 /**
@@ -249,12 +262,16 @@ function autoAdjustRate() {
     
     // Update the state and the input field
     current.interestRate = newRate;
-    document.getElementById('interest-rate').value = newRate.toFixed(2);
+    if (document.getElementById('interest-rate')) {
+        document.getElementById('interest-rate').value = newRate.toFixed(2);
+    }
     
     if (MORTGAGE_CALCULATOR.DEBUG) console.log(`Rate adjusted: Base(${baseRate.toFixed(2)}%) + Adj(${adjustment.toFixed(2)}%) = ${newRate.toFixed(2)}%`);
 
     // Only set the auto-rate indicator if the user didn't manually override the rate
-    document.getElementById('auto-rate-indicator').style.display = 'inline-block';
+    if (document.getElementById('auto-rate-indicator')) {
+        document.getElementById('auto-rate-indicator').style.display = 'inline-block';
+    }
 }
 
 /**
@@ -264,7 +281,9 @@ function autoAdjustRate() {
 function updateCreditScore(sourceId) {
     const scoreValue = document.getElementById('credit-score').value;
     MORTGAGE_CALCULATOR.currentCalculation.creditScore = parseInt(scoreValue);
-    document.getElementById('current-score-value').textContent = scoreValue;
+    if (document.getElementById('current-score-value')) {
+        document.getElementById('current-score-value').textContent = scoreValue;
+    }
     
     // Recalculate and update the interest rate immediately
     autoAdjustRate(); 
@@ -272,7 +291,7 @@ function updateCreditScore(sourceId) {
 }
 
 // ========================================================================== //
-// CORE CALCULATION LOGIC (ADAPTED)                                           //
+// FIXED CORE CALCULATION LOGIC                                              //
 // ========================================================================== //
 
 /**
@@ -290,28 +309,22 @@ function updateCalculation(sourceId = null) {
     const downPaymentPercent = parseFloat(document.getElementById('down-payment-percent').value) || 0;
     const interestRateInput = parseFloat(document.getElementById('interest-rate').value) || 0;
     
-    // Special handling for Credit Score and State selection
-    if (sourceId === 'credit-score') {
-        updateCreditScore(sourceId);
-        // Note: updateCreditScore calls updateCalculation again, so we can exit here
-        return; 
-    }
+    // Handle state selection
     if (sourceId === 'state-select') {
         autoUpdateTaxAndInsurance();
     }
     
     // If the user manually changed the interest rate, turn off auto-adjust indicator
     if (sourceId === 'interest-rate') {
-        document.getElementById('auto-rate-indicator').style.display = 'none';
-        current.interestRate = interestRateInput; // Use the manual input
+        if (document.getElementById('auto-rate-indicator')) {
+            document.getElementById('auto-rate-indicator').style.display = 'none';
+        }
+        current.interestRate = interestRateInput;
     } else if (sourceId === 'auto-rate-adjust') {
-        // If triggered by the auto-adjust function, use the already set auto-adjusted rate
-        current.interestRate = interestRateInput; 
+        current.interestRate = interestRateInput;
     } else {
-        // For any other input, ensure the rate field reflects the current state rate
         current.interestRate = parseFloat(document.getElementById('interest-rate').value) || 0;
     }
-
 
     // 2. Synchronize Down Payment (2-way sync)
     if (sourceId === 'down-payment') {
@@ -330,7 +343,7 @@ function updateCalculation(sourceId = null) {
     current.loanTerm = parseInt(document.getElementById('loan-term').value) || 30;
     current.loanType = document.getElementById('loan-type').value;
 
-    // Remaining input reads (same as original logic)
+    // Remaining input reads
     current.propertyTax = parseFloat(document.getElementById('property-tax').value) || 0;
     current.homeInsurance = parseFloat(document.getElementById('home-insurance').value) || 0;
     current.pmi = parseFloat(document.getElementById('pmi').value) || 0;
@@ -339,10 +352,9 @@ function updateCalculation(sourceId = null) {
     current.oneTimeExtra = parseFloat(document.getElementById('one-time-extra').value) || 0;
     current.closingCostsPercent = parseFloat(document.getElementById('closing-costs-percentage').value) || 0;
 
-
     // 3. Auto-calculate PMI (Logic based on loan type/DP)
     if (current.downPaymentPercent < 20 && current.loanType === 'conventional') {
-        current.pmi = (current.loanAmount * 0.005) / 12; // Simple PMI approximation
+        current.pmi = (current.loanAmount * 0.005) / 12;
     } else {
         current.pmi = 0;
     }
@@ -357,7 +369,6 @@ function updateCalculation(sourceId = null) {
     if (rateMonthly === 0) {
         monthlyPI = principal / paymentsTotal;
     } else {
-        // M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1]
         monthlyPI = principal * (rateMonthly * Math.pow(1 + rateMonthly, paymentsTotal)) / (Math.pow(1 + rateMonthly, paymentsTotal) - 1);
     }
     if (isNaN(monthlyPI) || monthlyPI === Infinity) monthlyPI = 0;
@@ -377,50 +388,69 @@ function updateCalculation(sourceId = null) {
     current.payoffDate = payoffDate;
     current.amortizationSchedule = amortizationSchedule;
     current.totalCost = fullTotalCost;
-
+    current.monthlyPITI = monthlyPITI;
 
     // 8. Update UI (All Sections)
     
-    document.getElementById('monthly-payment-total').textContent = formatCurrency(finalMonthlyPayment);
-    document.getElementById('extra-badge').style.display = current.extraMonthly > 0 || current.oneTimeExtra > 0 ? 'inline-block' : 'none';
+    if (document.getElementById('monthly-payment-total')) {
+        document.getElementById('monthly-payment-total').textContent = formatCurrency(finalMonthlyPayment);
+    }
+    if (document.getElementById('extra-badge')) {
+        document.getElementById('extra-badge').style.display = current.extraMonthly > 0 || current.oneTimeExtra > 0 ? 'inline-block' : 'none';
+    }
     
     // Summary Breakdown
-    document.getElementById('pi-monthly').textContent = formatCurrency(monthlyPI);
-    document.getElementById('tax-monthly').textContent = formatCurrency(monthlyTax);
-    document.getElementById('insurance-monthly').textContent = formatCurrency(monthlyInsurance);
-    document.getElementById('other-monthly').textContent = formatCurrency(current.pmi + current.hoaFees);
+    if (document.getElementById('pi-monthly')) {
+        document.getElementById('pi-monthly').textContent = formatCurrency(monthlyPI);
+    }
+    if (document.getElementById('tax-monthly')) {
+        document.getElementById('tax-monthly').textContent = formatCurrency(monthlyTax);
+    }
+    if (document.getElementById('insurance-monthly')) {
+        document.getElementById('insurance-monthly').textContent = formatCurrency(monthlyInsurance);
+    }
+    if (document.getElementById('other-monthly')) {
+        document.getElementById('other-monthly').textContent = formatCurrency(current.pmi + current.hoaFees);
+    }
     
     // Loan Totals
-    document.getElementById('total-cost').textContent = formatCurrency(fullTotalCost);
-    document.getElementById('total-interest').textContent = formatCurrency(totalInterest);
-    document.getElementById('payoff-date').textContent = payoffDate;
-    document.getElementById('closing-costs').textContent = formatCurrency(current.homePrice * (current.closingCostsPercent / 100));
+    if (document.getElementById('total-cost')) {
+        document.getElementById('total-cost').textContent = formatCurrency(fullTotalCost);
+    }
+    if (document.getElementById('total-interest')) {
+        document.getElementById('total-interest').textContent = formatCurrency(totalInterest);
+    }
+    if (document.getElementById('payoff-date')) {
+        document.getElementById('payoff-date').textContent = payoffDate;
+    }
+    if (document.getElementById('closing-costs')) {
+        document.getElementById('closing-costs').textContent = formatCurrency(current.homePrice * (current.closingCostsPercent / 100));
+    }
 
     // Render Visuals
     renderPaymentComponentsChart(monthlyPI, monthlyTax, monthlyInsurance, current.pmi + current.hoaFees);
-    renderMortgageTimelineChart(); // Updated to match mock
-    renderAIPoweredInsights(); // Dynamic AI Insights
+    renderMortgageTimelineChart();
+    renderAIPoweredInsights();
     renderPaymentScheduleTable();
 
     // Apply highlight flash for visual feedback
-    if (sourceId) {
-        document.getElementById('monthly-payment-total').closest('.monthly-payment-card').classList.add('highlight-update');
-        setTimeout(() => {
-            document.getElementById('monthly-payment-total').closest('.monthly-payment-card').classList.remove('highlight-update');
-        }, 700);
+    if (sourceId && document.getElementById('monthly-payment-total')) {
+        const paymentCard = document.getElementById('monthly-payment-total').closest('.monthly-payment-card');
+        if (paymentCard) {
+            paymentCard.classList.add('highlight-update');
+            setTimeout(() => {
+                paymentCard.classList.remove('highlight-update');
+            }, 700);
+        }
     }
 }
 
 // ========================================================================== //
-// AMORTIZATION & CHART LOGIC (MOCK IMAGE REPLICATION)                        //
+// FIXED AMORTIZATION & CHART LOGIC                                          //
 // ========================================================================== //
 
 /**
- * Calculates the full amortization schedule. (Preserved function, adjusted for clarity)
- * @param {number} monthlyPITI - The base monthly PITI payment.
- * @param {number} extraMonthly - The user's optional extra monthly payment.
- * @param {number} loanTerm - The original loan term in years.
- * @returns {object} The full schedule, total interest, payoff date, etc.
+ * Calculates the full amortization schedule.
  */
 function calculateAmortization(monthlyPITI, extraMonthly, loanTerm) {
     const current = MORTGAGE_CALCULATOR.currentCalculation;
@@ -431,11 +461,11 @@ function calculateAmortization(monthlyPITI, extraMonthly, loanTerm) {
     const schedule = [];
     let totalInterestPaid = 0;
     let totalPaymentsMade = 0;
-    let oneTimeExtra = current.oneTimeExtra; 
+    let oneTimeExtra = current.oneTimeExtra;
     let cumulativePrincipal = 0;
     let cumulativeInterest = 0;
     
-    const maxPayments = loanTerm * 12 + 60; // Safety buffer
+    const maxPayments = loanTerm * 12 + 60;
 
     for (let month = 1; month <= maxPayments && balance > 0; month++) {
         const interestPaid = balance * rateMonthly;
@@ -472,7 +502,7 @@ function calculateAmortization(monthlyPITI, extraMonthly, loanTerm) {
             totalPrincipal: cumulativePrincipal
         });
 
-        if (month === 1) oneTimeExtra = 0; 
+        if (month === 1) oneTimeExtra = 0;
     }
 
     const payoffDate = new Date(new Date().setMonth(new Date().getMonth() + totalPaymentsMade)).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -481,86 +511,76 @@ function calculateAmortization(monthlyPITI, extraMonthly, loanTerm) {
     return { amortizationSchedule: schedule, totalInterest: totalInterestPaid, payoffDate: payoffDate, totalPayments: totalPaymentsMade, fullTotalCost: fullTotalCost };
 }
 
-
 /**
- * Renders the Mortgage Balance Over Time Chart (Stacked Area/Line - MATCHING MOCK)
+ * Renders the Mortgage Balance Over Time Chart
  */
 function renderMortgageTimelineChart() {
     const current = MORTGAGE_CALCULATOR.currentCalculation;
     const schedule = current.amortizationSchedule;
     if (!schedule.length) return;
 
-    const ctx = document.getElementById('mortgageTimelineChart').getContext('2d');
+    const ctx = document.getElementById('mortgageTimelineChart');
+    if (!ctx) return;
 
     // Destroy previous chart instance
     if (MORTGAGE_CALCULATOR.charts.mortgageTimeline) {
         MORTGAGE_CALCULATOR.charts.mortgageTimeline.destroy();
     }
 
-    // Use yearly data (or every 12th payment) for a cleaner timeline
+    // Use yearly data for a cleaner timeline
     const yearlyData = schedule.filter(item => item.month % 12 === 0 || item.month === schedule.length);
     const maxCumulativeCost = current.homePrice + current.totalInterest;
 
-    MORTGAGE_CALCULATOR.charts.mortgageTimeline = new Chart(ctx, {
-        type: 'line', // Use line type for flexibility
+    MORTGAGE_CALCULATOR.charts.mortgageTimeline = new Chart(ctx.getContext('2d'), {
+        type: 'line',
         data: {
             labels: yearlyData.map(item => `Year ${item.year}`),
             datasets: [
-                // 1. Interest Paid (Stacked Area from bottom)
                 {
                     label: 'Total Interest Paid',
                     data: yearlyData.map(item => item.totalInterest),
-                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--color-chart-interest'),
-                    borderColor: getComputedStyle(document.documentElement).getPropertyValue('--color-chart-interest'),
+                    backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
                     fill: true,
                     stack: 'payments',
                     tension: 0.4,
                     pointRadius: 0
                 },
-                // 2. Principal Paid (Stacked Area on top of Interest)
                 {
                     label: 'Total Principal Paid',
                     data: yearlyData.map(item => item.totalPrincipal),
-                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--color-chart-principal'),
-                    borderColor: getComputedStyle(document.documentElement).getPropertyValue('--color-chart-principal'),
+                    backgroundColor: 'rgba(20, 184, 166, 0.6)',
+                    borderColor: 'rgba(20, 184, 166, 1)',
                     fill: true,
                     stack: 'payments',
                     tension: 0.4,
                     pointRadius: 0
                 },
-                // 3. Remaining Balance (Line on the opposite axis)
                 {
                     label: 'Remaining Balance',
                     data: yearlyData.map(item => item.endingBalance),
                     backgroundColor: 'transparent',
-                    borderColor: getComputedStyle(document.documentElement).getPropertyValue('--color-chart-balance'),
+                    borderColor: 'rgba(59, 130, 246, 1)',
                     borderWidth: 3,
                     yAxisID: 'y1',
                     pointRadius: 3,
-                    pointBackgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--color-chart-balance')
+                    pointBackgroundColor: 'rgba(59, 130, 246, 1)'
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false,
-            },
+            interaction: { mode: 'index', intersect: false },
             plugins: {
-                legend: {
-                    display: false // Use custom HTML legend
-                },
+                legend: { display: false },
                 tooltip: {
                     mode: 'index',
                     intersect: false,
                     callbacks: {
                         label: function(context) {
                             let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
+                            if (label) label += ': ';
                             if (context.parsed.y !== null) {
                                 label += formatCurrency(context.parsed.y);
                             }
@@ -571,13 +591,11 @@ function renderMortgageTimelineChart() {
             },
             scales: {
                 x: {
-                    grid: {
-                        color: 'rgba(156, 163, 175, 0.1)',
-                    },
+                    grid: { color: 'rgba(156, 163, 175, 0.1)' },
                     title: {
                         display: true,
                         text: 'Year of Loan',
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary')
+                        color: 'rgba(156, 163, 175, 1)'
                     }
                 },
                 y: {
@@ -587,37 +605,33 @@ function renderMortgageTimelineChart() {
                     title: {
                         display: true,
                         text: 'Cumulative Paid ($)',
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary')
+                        color: 'rgba(156, 163, 175, 1)'
                     },
-                    grid: {
-                        color: 'rgba(156, 163, 175, 0.1)',
-                    },
+                    grid: { color: 'rgba(156, 163, 175, 0.1)' },
                     ticks: {
                         callback: function(value) {
                             return '$' + (value / 1000) + 'K';
                         },
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary')
+                        color: 'rgba(156, 163, 175, 1)'
                     },
-                    max: maxCumulativeCost * 1.05 // Cap the cumulative axis
+                    max: maxCumulativeCost * 1.05
                 },
                 y1: {
                     beginAtZero: true,
-                    position: 'right', // Remaining balance on the right axis
+                    position: 'right',
                     title: {
                         display: true,
                         text: 'Remaining Balance ($)',
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-chart-balance')
+                        color: 'rgba(59, 130, 246, 1)'
                     },
-                    grid: {
-                        drawOnChartArea: false, // Only draw y-axis grid lines
-                    },
+                    grid: { drawOnChartArea: false },
                     ticks: {
                         callback: function(value) {
                             return '$' + (value / 1000) + 'K';
                         },
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-chart-balance')
+                        color: 'rgba(59, 130, 246, 1)'
                     },
-                    max: current.loanAmount * 1.05 // Cap the balance axis
+                    max: current.loanAmount * 1.05
                 }
             }
         }
@@ -625,185 +639,248 @@ function renderMortgageTimelineChart() {
 }
 
 /**
- * Renders the Payment Components Pie/Doughnut Chart (Preserved)
+ * Renders the Payment Components Pie/Doughnut Chart
  */
 function renderPaymentComponentsChart(pi, tax, insurance, other) {
-    // ... [Original implementation for Pie/Doughnut Chart (Preserved)]
-    // ... (This function remains largely the same as the original, using existing chart libraries)
-}
+    const ctx = document.getElementById('paymentComponentsChart');
+    if (!ctx) return;
 
-// ========================================================================== //
-// ACTION HANDLERS & NEW FEATURES                                             //
-// ========================================================================== //
-
-/**
- * Handles the "Loan Compare" feature (NEW FEATURE).
- * Opens a new window for a side-by-side comparison of loan options.
- */
-function compareLoan() {
-    const current = MORTGAGE_CALCULATOR.currentCalculation;
-    const loanString = `LoanAmount=${current.loanAmount}&Rate=${current.interestRate}&Term=${current.loanTerm}&Payment=${formatCurrency(current.monthlyPITI)}`;
-    
-    // In a production environment, this would link to a dedicated comparison page
-    const comparisonURL = `/loan-comparison-tool?mainLoan=${loanString}`; 
-    window.open(comparisonURL, '_blank', 'width=1000,height=800,scrollbars=yes,resizable=yes');
-    
-    showToast("Opening Loan Comparison Tool...", 'info');
-}
-
-
-// ========================================================================== //
-// VOICE CONTROL FIX & SCREEN READER MODE (Accessibility)                     //
-// ========================================================================== //
-
-// Voice Recognition Instance
-let recognition = null;
-if (MORTGAGE_CALCULATOR.speechRecognition) {
-    recognition = new MORTGAGE_CALCULATOR.speechRecognition();
-    recognition.continuous = false;
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    
-    recognition.onresult = (event) => {
-        const command = event.results[0][0].transcript.toLowerCase();
-        handleVoiceCommand(command);
-    };
-
-    recognition.onerror = (event) => {
-        console.error('Voice recognition error:', event.error);
-        if (event.error !== 'no-speech') {
-            showToast(`Voice Error: ${event.error}. Try again.`, 'error');
-            toggleVoiceControl(false); // Disable on critical error
-        }
-    };
-
-    recognition.onend = () => {
-        if (MORTGAGE_CALCULATOR.voiceEnabled) {
-             // Relaunch recognition if still enabled (for continuous mode simulation)
-            setTimeout(() => {
-                if (MORTGAGE_CALCULATOR.voiceEnabled) startVoiceRecognition();
-            }, 500);
-        }
-    };
-} else {
-    // Disable voice controls if API is not supported
-    document.getElementById('voice-toggle').disabled = true;
-    showToast("Voice command not supported by your browser.", 'error');
-}
-
-
-/**
- * Toggles the state of the voice control feature (FIXED).
- * @param {boolean} forceState - Optional: force the voice state to true/false.
- */
-function toggleVoiceControl(forceState = null) {
-    const voiceToggleBtn = document.getElementById('voice-toggle');
-    
-    if (forceState !== null) {
-        MORTGAGE_CALCULATOR.voiceEnabled = forceState;
-    } else {
-        MORTGAGE_CALCULATOR.voiceEnabled = !MORTGAGE_CALCULATOR.voiceEnabled;
+    // Destroy previous chart instance
+    if (MORTGAGE_CALCULATOR.charts.paymentComponents) {
+        MORTGAGE_CALCULATOR.charts.paymentComponents.destroy();
     }
 
-    if (MORTGAGE_CALCULATOR.voiceEnabled) {
-        voiceToggleBtn.classList.add('active-voice');
-        document.getElementById('voice-status').setAttribute('aria-hidden', 'false');
-        startVoiceRecognition();
-    } else {
-        voiceToggleBtn.classList.remove('active-voice');
-        document.getElementById('voice-status').setAttribute('aria-hidden', 'true');
-        if (recognition) recognition.stop();
-    }
-}
-
-/**
- * Starts the voice recognition service.
- */
-function startVoiceRecognition() {
-    if (MORTGAGE_CALCULATOR.voiceEnabled && recognition) {
-        try {
-            recognition.start();
-            if (MORTGAGE_CALCULATOR.DEBUG) console.log('Voice recognition started.');
-        } catch (e) {
-            // Error handling for when recognition is already running
-            if (e.name !== 'InvalidStateError') {
-                console.error("Failed to start voice recognition:", e);
+    MORTGAGE_CALCULATOR.charts.paymentComponents = new Chart(ctx.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Principal & Interest', 'Property Tax', 'Home Insurance', 'PMI & HOA'],
+            datasets: [{
+                data: [pi, tax, insurance, other],
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(107, 114, 128, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(59, 130, 246, 1)',
+                    'rgba(245, 158, 11, 1)',
+                    'rgba(139, 92, 246, 1)',
+                    'rgba(107, 114, 128, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: 'rgba(156, 163, 175, 1)',
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = Math.round((value / total) * 100);
+                            return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                        }
+                    }
+                }
             }
         }
-    }
+    });
 }
-
-/**
- * Processes the voice command and modifies the calculator inputs.
- * @param {string} command - The transcribed voice command.
- */
-function handleVoiceCommand(command) {
-    const parts = command.split(' ');
-    const number = parseFloat(parts.find(p => !isNaN(parseFloat(p)))) || 0;
-
-    if (command.includes('home price') && number > 0) {
-        document.getElementById('home-price').value = number;
-        showToast(`Set Home Price to ${formatCurrency(number)}`, 'info');
-    } else if (command.includes('interest rate') && number > 0) {
-        document.getElementById('interest-rate').value = number.toFixed(2);
-        document.getElementById('auto-rate-indicator').style.display = 'none'; // Manual override
-        showToast(`Set Interest Rate to ${number.toFixed(2)}%`, 'info');
-    } else if (command.includes('down payment') && number > 0) {
-        document.getElementById('down-payment').value = number;
-        showToast(`Set Down Payment to ${formatCurrency(number)}`, 'info');
-    } else if (command.includes('loan term') && (number === 30 || number === 15 || number === 10)) {
-        document.getElementById('loan-term').value = number;
-        showToast(`Set Loan Term to ${number} years`, 'info');
-    } else if (command.includes('calculate') || command.includes('show payment')) {
-        // No change needed, simply re-run calculation
-        showToast("Recalculating mortgage...", 'info');
-    } else {
-        showToast(`Command not recognized: "${command}"`, 'warning');
-        return;
-    }
-
-    updateCalculation('voice-command');
-}
-
-/**
- * Toggles the screen reader mode (Text to Speech).
- */
-function toggleScreenReader() {
-    MORTGAGE_CALCULATOR.screenReaderMode = !MORTGAGE_CALCULATOR.screenReaderMode;
-    const srToggleBtn = document.getElementById('screen-reader-toggle');
-    srToggleBtn.classList.toggle('active', MORTGAGE_CALCULATOR.screenReaderMode);
-    
-    if (MORTGAGE_CALCULATOR.screenReaderMode) {
-        speakText("Screen Reader mode activated. All major updates will now be read aloud.");
-    } else {
-        if (MORTGAGE_CALCULATOR.speechSynthesis.speaking) MORTGAGE_CALCULATOR.speechSynthesis.cancel();
-        showToast("Screen Reader mode deactivated.", 'info');
-    }
-}
-
-/**
- * Reads the given text aloud using the browser's Speech Synthesis API.
- * @param {string} text - The text to speak.
- */
-function speakText(text) {
-    if (!MORTGAGE_CALCULATOR.speechReaderMode || !MORTGAGE_CALCULATOR.speechSynthesis) return;
-
-    if (MORTGAGE_CALCULATOR.speechSynthesis.speaking) {
-        MORTGAGE_CALCULATOR.speechSynthesis.cancel();
-    }
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    // Use a standard voice for consistency
-    utterance.voice = MORTGAGE_CALCULATOR.speechSynthesis.getVoices().find(v => v.lang === 'en-US') || null; 
-    utterance.rate = 1.0; 
-    utterance.pitch = 1.0; 
-    
-    MORTGAGE_CALCULATOR.speechSynthesis.speak(utterance);
-}
-
 
 // ========================================================================== //
-// UTILITY FUNCTIONS (FORMATTING & TOASTS)                                    //
+// NEW MISSING FUNCTION IMPLEMENTATIONS                                      //
+// ========================================================================== //
+
+/**
+ * Renders AI Powered Insights
+ */
+function renderAIPoweredInsights() {
+    const insightsContent = document.getElementById('ai-insights-content');
+    if (!insightsContent) return;
+
+    const current = MORTGAGE_CALCULATOR.currentCalculation;
+    
+    const insights = [];
+    
+    // Credit Score Insight
+    if (current.creditScore >= 780) {
+        insights.push({
+            title: "Excellent Credit Score",
+            message: "Your credit score qualifies you for the best available rates. Consider shopping around for even better terms.",
+            type: "success",
+            icon: "fa-star"
+        });
+    } else if (current.creditScore >= 720) {
+        insights.push({
+            title: "Good Credit Score", 
+            message: "You're getting competitive rates. Paying down other debts could help improve your score further.",
+            type: "info",
+            icon: "fa-thumbs-up"
+        });
+    }
+    
+    // Down Payment Insight
+    if (current.downPaymentPercent < 20) {
+        insights.push({
+            title: "Consider Larger Down Payment",
+            message: "A 20% down payment would eliminate PMI costs and save you money long-term.",
+            type: "warning",
+            icon: "fa-piggy-bank"
+        });
+    }
+    
+    // Extra Payments Insight
+    if (current.extraMonthly > 0 || current.oneTimeExtra > 0) {
+        const totalSavings = current.totalInterest - calculateAmortization(current.monthlyPITI, 0, current.loanTerm).totalInterest;
+        insights.push({
+            title: "Smart Extra Payments",
+            message: `Your extra payments could save approximately ${formatCurrency(totalSavings)} in interest.`,
+            type: "success",
+            icon: "fa-rocket"
+        });
+    }
+    
+    // Default insight if none apply
+    if (insights.length === 0) {
+        insights.push({
+            title: "Solid Financial Plan",
+            message: "Your current mortgage plan is well-structured. Consider consulting with a financial advisor for personalized advice.",
+            type: "info",
+            icon: "fa-chart-line"
+        });
+    }
+    
+    // Render insights
+    insightsContent.innerHTML = insights.map(insight => `
+        <div class="ai-insight ai-insight-${insight.type}">
+            <div class="ai-insight-icon">
+                <i class="fas ${insight.icon}"></i>
+            </div>
+            <div class="ai-insight-content">
+                <h5>${insight.title}</h5>
+                <p>${insight.message}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+/**
+ * Renders Payment Schedule Table
+ */
+function renderPaymentScheduleTable() {
+    const table = document.getElementById('payment-schedule-table');
+    if (!table) return;
+
+    const schedule = MORTGAGE_CALCULATOR.currentCalculation.amortizationSchedule;
+    const currentPage = MORTGAGE_CALCULATOR.scheduleCurrentPage;
+    const itemsPerPage = MORTGAGE_CALCULATOR.scheduleItemsPerPage;
+    
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, schedule.length);
+    const pageData = schedule.slice(startIndex, endIndex);
+
+    // Build table headers
+    let html = `
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Date</th>
+                <th>Principal</th>
+                <th>Interest</th>
+                <th>Tax & Insurance</th>
+                <th>Extra</th>
+                <th>Total Payment</th>
+                <th>Remaining Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+
+    // Build table rows
+    pageData.forEach(payment => {
+        html += `
+            <tr>
+                <td>${payment.month}</td>
+                <td>${payment.date}</td>
+                <td>${formatCurrency(payment.principal)}</td>
+                <td>${formatCurrency(payment.interest)}</td>
+                <td>${formatCurrency(payment.taxAndIns)}</td>
+                <td>${formatCurrency(payment.extra)}</td>
+                <td>${formatCurrency(payment.totalPayment)}</td>
+                <td>${formatCurrency(payment.endingBalance)}</td>
+            </tr>
+        `;
+    });
+
+    html += '</tbody>';
+    table.innerHTML = html;
+
+    // Update pagination controls
+    updatePaginationControls();
+}
+
+/**
+ * Updates pagination controls for schedule table
+ */
+function updatePaginationControls() {
+    const totalPages = Math.ceil(MORTGAGE_CALCULATOR.currentCalculation.amortizationSchedule.length / MORTGAGE_CALCULATOR.scheduleItemsPerPage);
+    const currentPage = MORTGAGE_CALCULATOR.scheduleCurrentPage;
+
+    if (document.getElementById('prev-page-btn')) {
+        document.getElementById('prev-page-btn').disabled = currentPage <= 1;
+    }
+    if (document.getElementById('next-page-btn')) {
+        document.getElementById('next-page-btn').disabled = currentPage >= totalPages;
+    }
+    if (document.getElementById('page-status')) {
+        document.getElementById('page-status').textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+}
+
+/**
+ * Changes schedule page
+ */
+function changeSchedulePage(direction) {
+    const totalPages = Math.ceil(MORTGAGE_CALCULATOR.currentCalculation.amortizationSchedule.length / MORTGAGE_CALCULATOR.scheduleItemsPerPage);
+    const newPage = MORTGAGE_CALCULATOR.scheduleCurrentPage + direction;
+    
+    if (newPage >= 1 && newPage <= totalPages) {
+        MORTGAGE_CALCULATOR.scheduleCurrentPage = newPage;
+        renderPaymentScheduleTable();
+    }
+}
+
+/**
+ * Toggles schedule type between monthly and yearly
+ */
+function toggleScheduleType() {
+    const toggleBtn = document.getElementById('schedule-toggle-btn');
+    if (MORTGAGE_CALCULATOR.scheduleType === 'monthly') {
+        MORTGAGE_CALCULATOR.scheduleType = 'yearly';
+        MORTGAGE_CALCULATOR.scheduleItemsPerPage = 5;
+        toggleBtn.textContent = 'View Monthly';
+    } else {
+        MORTGAGE_CALCULATOR.scheduleType = 'monthly';
+        MORTGAGE_CALCULATOR.scheduleItemsPerPage = 12;
+        toggleBtn.textContent = 'View Yearly';
+    }
+    MORTGAGE_CALCULATOR.scheduleCurrentPage = 1;
+    renderPaymentScheduleTable();
+}
+
+// ========================================================================== //
+// FIXED UTILITY FUNCTIONS                                                   //
 // ========================================================================== //
 
 /**
@@ -824,6 +901,8 @@ function formatCurrency(number) {
  */
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
+    if (!container) return;
+
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     toast.textContent = message;
@@ -835,7 +914,9 @@ function showToast(message, type = 'info') {
     }, 5000);
     
     // Read the toast message aloud if screen reader mode is active
-    speakText(message);
+    if (MORTGAGE_CALCULATOR.screenReaderMode) {
+        speakText(message);
+    }
 }
 
 /**
@@ -863,6 +944,8 @@ function autoUpdateTaxAndInsurance() {
  */
 function populateStateSelect() {
     const select = document.getElementById('state-select');
+    if (!select) return;
+    
     // Clear existing options
     select.innerHTML = '';
     
@@ -876,10 +959,201 @@ function populateStateSelect() {
         if (code === 'DEFAULT') {
              option.textContent = 'Select State (Manual Input)';
         } else if (code === 'TX') {
-            option.selected = true; // Set a default example state
+            option.selected = true;
         }
         select.appendChild(option);
     });
+}
+
+/**
+ * Toggles between light and dark themes
+ */
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-color-scheme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-color-scheme', newTheme);
+    MORTGAGE_CALCULATOR.currentTheme = newTheme;
+    
+    // Update theme toggle button icon
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        const sunIcon = themeToggle.querySelector('.fa-sun');
+        const moonIcon = themeToggle.querySelector('.fa-moon');
+        
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = newTheme === 'dark' ? 'none' : 'block';
+            moonIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+        }
+    }
+    
+    showToast(`${newTheme === 'dark' ? 'Dark' : 'Light'} mode activated`, 'info');
+}
+
+/**
+ * Shares results as PDF (placeholder implementation)
+ */
+function shareResultsPDF() {
+    showToast("PDF export feature would be implemented here", 'info');
+}
+
+// ========================================================================== //
+// FIXED VOICE CONTROL FUNCTIONS                                             //
+// ========================================================================== //
+
+// Voice Recognition Instance
+let recognition = null;
+if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    
+    recognition.onresult = (event) => {
+        const command = event.results[0][0].transcript.toLowerCase();
+        handleVoiceCommand(command);
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Voice recognition error:', event.error);
+        if (event.error !== 'no-speech') {
+            showToast(`Voice Error: ${event.error}. Try again.`, 'error');
+            toggleVoiceControl(false);
+        }
+    };
+
+    recognition.onend = () => {
+        if (MORTGAGE_CALCULATOR.voiceEnabled) {
+            setTimeout(() => {
+                if (MORTGAGE_CALCULATOR.voiceEnabled) startVoiceRecognition();
+            }, 500);
+        }
+    };
+} else {
+    // Disable voice controls if API is not supported
+    const voiceToggle = document.getElementById('voice-toggle');
+    if (voiceToggle) {
+        voiceToggle.disabled = true;
+    }
+    showToast("Voice command not supported by your browser.", 'error');
+}
+
+/**
+ * Toggles the state of the voice control feature.
+ */
+function toggleVoiceControl(forceState = null) {
+    const voiceToggleBtn = document.getElementById('voice-toggle');
+    if (!voiceToggleBtn) return;
+    
+    if (forceState !== null) {
+        MORTGAGE_CALCULATOR.voiceEnabled = forceState;
+    } else {
+        MORTGAGE_CALCULATOR.voiceEnabled = !MORTGAGE_CALCULATOR.voiceEnabled;
+    }
+
+    if (MORTGAGE_CALCULATOR.voiceEnabled) {
+        voiceToggleBtn.classList.add('active-voice');
+        const voiceStatus = document.getElementById('voice-status');
+        if (voiceStatus) {
+            voiceStatus.setAttribute('aria-hidden', 'false');
+        }
+        startVoiceRecognition();
+    } else {
+        voiceToggleBtn.classList.remove('active-voice');
+        const voiceStatus = document.getElementById('voice-status');
+        if (voiceStatus) {
+            voiceStatus.setAttribute('aria-hidden', 'true');
+        }
+        if (recognition) recognition.stop();
+    }
+}
+
+/**
+ * Starts the voice recognition service.
+ */
+function startVoiceRecognition() {
+    if (MORTGAGE_CALCULATOR.voiceEnabled && recognition) {
+        try {
+            recognition.start();
+            if (MORTGAGE_CALCULATOR.DEBUG) console.log('Voice recognition started.');
+        } catch (e) {
+            if (e.name !== 'InvalidStateError') {
+                console.error("Failed to start voice recognition:", e);
+            }
+        }
+    }
+}
+
+/**
+ * Processes the voice command and modifies the calculator inputs.
+ */
+function handleVoiceCommand(command) {
+    const parts = command.split(' ');
+    const number = parseFloat(parts.find(p => !isNaN(parseFloat(p)))) || 0;
+
+    if (command.includes('home price') && number > 0) {
+        document.getElementById('home-price').value = number;
+        showToast(`Set Home Price to ${formatCurrency(number)}`, 'info');
+    } else if (command.includes('interest rate') && number > 0) {
+        document.getElementById('interest-rate').value = number.toFixed(2);
+        const autoIndicator = document.getElementById('auto-rate-indicator');
+        if (autoIndicator) {
+            autoIndicator.style.display = 'none';
+        }
+        showToast(`Set Interest Rate to ${number.toFixed(2)}%`, 'info');
+    } else if (command.includes('down payment') && number > 0) {
+        document.getElementById('down-payment').value = number;
+        showToast(`Set Down Payment to ${formatCurrency(number)}`, 'info');
+    } else if (command.includes('loan term') && (number === 30 || number === 15 || number === 10)) {
+        document.getElementById('loan-term').value = number;
+        showToast(`Set Loan Term to ${number} years`, 'info');
+    } else if (command.includes('calculate') || command.includes('show payment')) {
+        showToast("Recalculating mortgage...", 'info');
+    } else {
+        showToast(`Command not recognized: "${command}"`, 'warning');
+        return;
+    }
+
+    updateCalculation('voice-command');
+}
+
+/**
+ * Toggles the screen reader mode (Text to Speech).
+ */
+function toggleScreenReader() {
+    MORTGAGE_CALCULATOR.screenReaderMode = !MORTGAGE_CALCULATOR.screenReaderMode;
+    const srToggleBtn = document.getElementById('screen-reader-toggle');
+    if (srToggleBtn) {
+        srToggleBtn.classList.toggle('active', MORTGAGE_CALCULATOR.screenReaderMode);
+    }
+    
+    if (MORTGAGE_CALCULATOR.screenReaderMode) {
+        speakText("Screen Reader mode activated. All major updates will now be read aloud.");
+    } else {
+        if (MORTGAGE_CALCULATOR.speechSynthesis.speaking) {
+            MORTGAGE_CALCULATOR.speechSynthesis.cancel();
+        }
+        showToast("Screen Reader mode deactivated.", 'info');
+    }
+}
+
+/**
+ * Reads the given text aloud using the browser's Speech Synthesis API.
+ */
+function speakText(text) {
+    if (!MORTGAGE_CALCULATOR.screenReaderMode || !MORTGAGE_CALCULATOR.speechSynthesis) return;
+
+    if (MORTGAGE_CALCULATOR.speechSynthesis.speaking) {
+        MORTGAGE_CALCULATOR.speechSynthesis.cancel();
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = MORTGAGE_CALCULATOR.speechSynthesis.getVoices();
+    utterance.voice = voices.find(v => v.lang === 'en-US') || null;
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    
+    MORTGAGE_CALCULATOR.speechSynthesis.speak(utterance);
 }
 
 // ========================================================================== //
@@ -900,18 +1174,20 @@ function initializeCalculator() {
     
     // 3. Kick off FRED rate fetching and scheduling
     fetchLiveFredRates();
-    // Set a recurring interval for updates (12 hours)
     setInterval(fetchLiveFredRates, MORTGAGE_CALCULATOR.RATE_UPDATE_INTERVAL);
 
-    // 4. Set Event Listeners for new inputs/features
+    // 4. Set Event Listeners
     document.querySelectorAll('.form-control').forEach(input => {
         input.addEventListener('input', () => updateCalculation(input.id));
         input.addEventListener('change', () => updateCalculation(input.id));
     });
     
     // Event listener for credit score slider
-    document.getElementById('credit-score').addEventListener('input', () => updateCreditScore('credit-score'));
-    document.getElementById('credit-score').addEventListener('change', () => updateCreditScore('credit-score'));
+    const creditScoreInput = document.getElementById('credit-score');
+    if (creditScoreInput) {
+        creditScoreInput.addEventListener('input', () => updateCreditScore('credit-score'));
+        creditScoreInput.addEventListener('change', () => updateCreditScore('credit-score'));
+    }
     
     // Event listeners for tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -933,21 +1209,11 @@ function initializeCalculator() {
     updateCalculation();
 }
 
-
 // Fast initialization on DOMContentLoaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        // Use a slight delay to ensure all deferred scripts (Chart.js, jsPDF) are loaded
-        setTimeout(initializeCalculator, 500); 
+        setTimeout(initializeCalculator, 500);
     });
 } else {
     setTimeout(initializeCalculator, 500);
 }
-
-
-/* NOTE: This JS file contains extensive comments, repeated utility logic, 
-   and placeholder functions (e.g., renderPaymentComponentsChart, renderAIPoweredInsights, 
-   renderPaymentScheduleTable - assumed to be complex and multi-line) 
-   to ensure the final code volume meets the minimum line requirement while 
-   fully implementing all requested features.
-*/
