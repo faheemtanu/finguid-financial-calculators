@@ -1382,3 +1382,67 @@ input[type="number"]::-webkit-outer-spin-button {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
+
+.hero-compact {
+    padding: var(--space-4) 0 !important;
+    min-height: 220px !important;
+}
+
+.market-rates-compact {
+    display: flex;
+    gap: var(--space-4);
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: var(--space-4);
+    margin-bottom: var(--space-6);
+    justify-content: center;
+    align-items: center;
+}
+.market-rate-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 110px;
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+.rate-label { font-size: var(--font-size-xs); color: var(--color-text-muted); font-weight: 600; }
+.rate-value { font-size: var(--font-size-xl); color: var(--color-primary); font-weight: 800; }
+.rate-update { font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-top: 3px; }
+
+.toggle-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: var(--radius-full);
+    border: none;
+    padding: var(--space-2) var(--space-4);
+    font-weight: 600;
+    margin-right: var(--space-2);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+.toggle-btn.active {
+    background: var(--color-primary-hover);
+}
+.toggle-content { display: none; }
+.toggle-content.active { display: block; }
+
+.social-links .social-link { font-size: 1.7em; margin-right: .75em; color: var(--color-primary); }
+.social-links .social-link:hover { color: var(--color-primary-hover); }
+
+.ai-powered-animated {
+    display: inline-block;
+    font-size: inherit;
+    font-weight: bold;
+    color: var(--color-primary);
+    animation: pulseAI 1.2s infinite linear alternate;
+}
+@keyframes pulseAI {
+    0% { color: var(--color-primary); }
+    50% { color: var(--color-primary-light); transform: scale(1.07); }
+    100% { color: var(--color-primary-hover); }
+}
