@@ -1,7 +1,7 @@
 :root {
   /* Primitive Color Tokens */
   --color-white: rgba(255, 255, 255, 1);
-  --color-white-rgb: 255, 255, 255; /* NEW: For opacity */
+  --color-white-rgb: 255, 255, 255;
   --color-black: rgba(0, 0, 0, 1);
   --color-cream-50: rgba(252, 252, 249, 1);
   --color-cream-100: rgba(255, 255, 253, 1);
@@ -35,14 +35,14 @@
   --color-orange-400-rgb: 230, 129, 97;
 
   /* Background color tokens (Light Mode) */
-  --color-bg-1: rgba(59, 130, 246, 0.08); /* Light blue */
-  --color-bg-2: rgba(245, 158, 11, 0.08); /* Light yellow */
-  --color-bg-3: rgba(34, 197, 94, 0.08); /* Light green */
-  --color-bg-4: rgba(239, 68, 68, 0.08); /* Light red */
-  --color-bg-5: rgba(147, 51, 234, 0.08); /* Light purple */
-  --color-bg-6: rgba(249, 115, 22, 0.08); /* Light orange */
-  --color-bg-7: rgba(236, 72, 153, 0.08); /* Light pink */
-  --color-bg-8: rgba(6, 182, 212, 0.08); /* Light cyan */
+  --color-bg-1: rgba(59, 130, 246, 0.08);
+  --color-bg-2: rgba(245, 158, 11, 0.08);
+  --color-bg-3: rgba(34, 197, 94, 0.08);
+  --color-bg-4: rgba(239, 68, 68, 0.08);
+  --color-bg-5: rgba(147, 51, 234, 0.08);
+  --color-bg-6: rgba(249, 115, 22, 0.08);
+  --color-bg-7: rgba(236, 72, 153, 0.08);
+  --color-bg-8: rgba(6, 182, 212, 0.08);
 
   /* Semantic Color Tokens (Light Mode) */
   --color-background: var(--color-cream-50);
@@ -81,10 +81,8 @@
   --color-info-rgb: 98, 108, 113;
 
   /* Typography */
-  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
-    Monaco, Consolas, monospace;
+  --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-size-xs: 11px;
   --font-size-sm: 12px;
   --font-size-base: 14px;
@@ -126,12 +124,9 @@
   /* Shadows */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
-    0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
-    0 4px 6px -2px rgba(0, 0, 0, 0.02);
-  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 
   /* Animation */
   --duration-fast: 150ms;
@@ -155,14 +150,14 @@
     --color-gray-200-rgb: 245, 245, 245;
 
     /* Background color tokens (Dark Mode) */
-    --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
-    --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
-    --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
-    --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
-    --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
-    --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
-    --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
-    --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+    --color-bg-1: rgba(29, 78, 216, 0.15);
+    --color-bg-2: rgba(180, 83, 9, 0.15);
+    --color-bg-3: rgba(21, 128, 61, 0.15);
+    --color-bg-4: rgba(185, 28, 28, 0.15);
+    --color-bg-5: rgba(107, 33, 168, 0.15);
+    --color-bg-6: rgba(194, 65, 12, 0.15);
+    --color-bg-7: rgba(190, 24, 93, 0.15);
+    --color-bg-8: rgba(8, 145, 178, 0.15);
 
     /* Semantic Color Tokens (Dark Mode) */
     --color-background: var(--color-charcoal-700);
@@ -186,7 +181,7 @@
     --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.6);
     --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
     
-    --select-caret-light: var(--select-caret-dark); /* Use dark caret for light text */
+    --select-caret-light: var(--select-caret-dark);
   }
 }
 
@@ -319,6 +314,10 @@ h6 {
     border-width: 0;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* ========================================================================== */
 /* BUTTONS & CONTROLS */
 /* ========================================================================== */
@@ -416,7 +415,7 @@ h6 {
   margin-left: auto;
   margin-right: auto;
   padding: var(--space-10) var(--space-16);
-  min-height: 70px; /* Ensures consistent height */
+  min-height: 70px;
 }
 
 /* Brand Section */
@@ -464,7 +463,7 @@ h6 {
     flex-grow: 1;
     text-align: center;
     padding: 0 var(--space-20);
-    min-width: 0; /* allows shrinking */
+    min-width: 0;
 }
 
 .tagline {
@@ -598,7 +597,7 @@ h6 {
 
 .calculator-container {
     display: grid;
-    grid-template-columns: 1fr 2fr; /* 1/3 for input, 2/3 for results on desktop */
+    grid-template-columns: 1fr 2fr;
     gap: var(--space-32);
     padding-top: var(--space-24);
     padding-bottom: var(--space-32);
@@ -606,19 +605,19 @@ h6 {
 
 .input-section {
     position: sticky;
-    top: 85px; /* Stick below the header */
+    top: 85px;
     align-self: start;
     min-width: 320px;
-    display: flex; /* NEW: Flex column for card and ad */
-    flex-direction: column; /* NEW */
-    gap: var(--space-24); /* NEW */
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
 }
 
 .results-section {
     min-width: 0;
-    display: flex; /* NEW */
-    flex-direction: column; /* NEW */
-    gap: var(--space-24); /* NEW */
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
 }
 
 /* Card Styling */
@@ -627,7 +626,6 @@ h6 {
     border: 1px solid var(--color-card-border);
     border-radius: var(--radius-lg);
     padding: var(--space-20);
-    /* margin-bottom: var(--space-24); REMOVED for flex gap */
     box-shadow: var(--shadow-md);
     transition: all var(--duration-fast) var(--ease-standard);
 }
@@ -678,9 +676,9 @@ h6 {
 
 input[type="text"],
 input[type="number"],
-input[type="email"], /* NEW */
-input[type="tel"], /* NEW */
-textarea, /* NEW */
+input[type="email"],
+input[type="tel"],
+textarea,
 select {
     width: 100%;
     padding: var(--space-10) var(--space-12);
@@ -694,22 +692,22 @@ select {
 
 body[data-color-scheme="dark"] input[type="text"],
 body[data-color-scheme="dark"] input[type="number"],
-body[data-color-scheme="dark"] input[type="email"], /* NEW */
-body[data-color-scheme="dark"] input[type="tel"], /* NEW */
-body[data-color-scheme="dark"] textarea, /* NEW */
+body[data-color-scheme="dark"] input[type="email"],
+body[data-color-scheme="dark"] input[type="tel"],
+body[data-color-scheme="dark"] textarea,
 body[data-color-scheme="dark"] select {
     background-color: var(--color-charcoal-700);
 }
 
 input:focus,
-textarea:focus, /* NEW */
+textarea:focus,
 select:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: var(--focus-ring);
 }
 
-/* NEW: Textarea */
+/* Textarea */
 textarea {
     font-family: var(--font-family-base);
     line-height: var(--line-height-normal);
@@ -840,18 +838,22 @@ body[data-color-scheme="dark"] select {
 
 /* Loan Comparison Tool */
 .loan-comparison-tool {
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-16) var(--space-12);
     margin-top: var(--space-20);
     padding-top: var(--space-16);
     border-top: 1px solid var(--color-card-border-inner);
-    display: none; /* Controlled by JS */
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-16) var(--space-12);
+}
+
+.loan-comparison-tool.active {
+    display: grid;
 }
 
 .comparison-heading {
     grid-column: 1 / span 2;
     font-size: var(--font-size-lg);
-    color: var(--color-error);
+    color: var(--color-primary);
     margin-bottom: var(--space-8);
 }
 
@@ -869,7 +871,6 @@ body[data-color-scheme="dark"] select {
     color: var(--color-white);
     border: none;
     box-shadow: 0 10px 20px rgba(var(--color-teal-500-rgb), 0.2);
-    /* margin-bottom: var(--space-24); REMOVED for flex gap */
 }
 
 .summary-card .card-heading {
@@ -911,11 +912,6 @@ body[data-color-scheme="dark"] select {
     padding-bottom: var(--space-16);
     border-bottom: 1px solid rgba(var(--color-white-rgb), 0.2);
     margin-bottom: var(--space-16);
-}
-
-.summary-details-grid.summary-item .item-label,
-.summary-details-grid.summary-item .item-value {
-    color: var(--color-text); /* Override for regular tab content */
 }
 
 .summary-item {
@@ -972,7 +968,7 @@ body[data-color-scheme="dark"] select {
     padding: var(--space-12);
     margin-top: var(--space-16);
     border-left: 4px solid var(--color-red-400);
-    display: none; /* Controlled by JS */
+    display: none;
 }
 
 .comparison-heading-mini {
@@ -988,12 +984,10 @@ body[data-color-scheme="dark"] select {
     color: var(--color-cream-100);
 }
 
-
 /* ========================================================================== */
 /* TABBED CONTENT */
 /* ========================================================================== */
 
-/* NEW: Added .card styles to .tab-container in HTML */
 .tab-container {
     padding: var(--space-20);
 }
@@ -1016,7 +1010,7 @@ body[data-color-scheme="dark"] select {
     border-bottom: 3px solid transparent;
     cursor: pointer;
     transition: all var(--duration-fast) ease;
-    white-space: nowrap; /* NEW: Prevent wrapping on small screens */
+    white-space: nowrap;
 }
 
 .tab-btn i {
@@ -1034,7 +1028,7 @@ body[data-color-scheme="dark"] select {
 }
 
 .tab-content {
-    display: none; /* Hidden by default, shown by JS */
+    display: none;
 }
 
 .tab-content.active {
@@ -1091,7 +1085,6 @@ body[data-color-scheme="dark"] select {
     padding: var(--space-8);
     background-color: var(--color-surface);
 }
-
 
 /* ========================================================================== */
 /* TIMELINE SLIDER */
@@ -1172,14 +1165,13 @@ input[type=range]:active::-moz-range-thumb {
     color: var(--color-text);
 }
 
-
 /* ========================================================================== */
 /* AMORTIZATION TABLE */
 /* ========================================================================== */
 
 .schedule-controls {
     display: flex;
-    flex-wrap: wrap; /* NEW */
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: var(--space-12);
@@ -1249,7 +1241,7 @@ input[type=range]:active::-moz-range-thumb {
 
 /* Mobile: Hide labels and use data-label attribute for accessibility */
 .amortization-table td[data-label] {
-    text-align: right; /* Default back to right for values */
+    text-align: right;
 }
 .amortization-table td[data-label]:first-child {
     text-align: left;
@@ -1271,7 +1263,7 @@ input[type=range]:active::-moz-range-thumb {
 }
 
 /* ========================================================================== */
-/* NEW: MONETIZATION STYLES */
+/* MONETIZATION STYLES */
 /* ========================================================================== */
 
 .ad-label {
@@ -1285,8 +1277,8 @@ input[type=range]:active::-moz-range-thumb {
     align-items: center;
     justify-content: center;
     min-height: 600px;
-    width: 100%; /* Will be constrained by grid column */
-    max-width: 300px; /* Max width for this type of ad */
+    width: 100%;
+    max-width: 300px;
     margin: 0 auto;
     background-color: var(--color-secondary);
     border: 1px dashed var(--color-border);
@@ -1363,7 +1355,7 @@ input[type=range]:active::-moz-range-thumb {
 }
 
 .affiliate-card .affiliate-image {
-    height: 120px; /* NEW */
+    height: 120px;
     width: auto;
     margin-bottom: var(--space-12);
     border-radius: var(--radius-sm);
@@ -1387,7 +1379,7 @@ input[type=range]:active::-moz-range-thumb {
 }
 
 /* ========================================================================== */
-/* NEW: SEO & PARTNER-FRIENDLY CONTENT STYLES */
+/* SEO & PARTNER-FRIENDLY CONTENT STYLES */
 /* ========================================================================== */
 
 .content-section {
@@ -1448,7 +1440,6 @@ input[type=range]:active::-moz-range-thumb {
 .embed-tool .btn {
     margin-top: var(--space-12);
 }
-
 
 /* ========================================================================== */
 /* TOAST NOTIFICATIONS */
@@ -1518,7 +1509,7 @@ input[type=range]:active::-moz-range-thumb {
     gap: var(--space-16);
     box-shadow: var(--shadow-lg);
     z-index: 90;
-    transform: translateY(100%); /* Start off-screen */
+    transform: translateY(100%);
     transition: transform var(--duration-normal) var(--ease-standard);
 }
 
@@ -1551,7 +1542,7 @@ input[type=range]:active::-moz-range-thumb {
     height: 100%;
     background-color: rgba(var(--color-slate-900-rgb), 0.8);
     z-index: 1000;
-    display: none; /* Controlled by JS */
+    display: none;
     justify-content: center;
     align-items: center;
     transition: opacity var(--duration-fast);
@@ -1666,7 +1657,6 @@ input[type=range]:active::-moz-range-thumb {
     margin-right: var(--space-4);
 }
 
-
 /* ========================================================================== */
 /* MEDIA QUERIES (RESPONSIVENESS) */
 /* ========================================================================== */
@@ -1684,7 +1674,7 @@ input[type=range]:active::-moz-range-thumb {
     }
 
     .ad-placeholder-skyscraper {
-        display: none; /* Hide skyscraper ad on smaller screens */
+        display: none;
     }
 
     .header-container {
@@ -1737,7 +1727,7 @@ input[type=range]:active::-moz-range-thumb {
     }
     
     .features-quick {
-        flex-wrap: wrap; /* NEW */
+        flex-wrap: wrap;
         gap: var(--space-8);
     }
 
@@ -1750,13 +1740,12 @@ input[type=range]:active::-moz-range-thumb {
         gap: var(--space-16);
     }
     
-    /* NEW: Stack rate input and select on mobile */
     .input-group.group-inline {
         grid-template-columns: 1fr;
         gap: var(--space-8);
     }
     .input-group.group-inline label {
-        grid-column: 1; /* Ensure label is full width */
+        grid-column: 1;
     }
     .input-group.group-inline .input-addon {
         grid-column: 1;
@@ -1764,7 +1753,6 @@ input[type=range]:active::-moz-range-thumb {
     .input-group.group-inline .input-group {
         grid-column: 1;
     }
-
 
     .group-inline .input-addon {
         grid-row: auto;
@@ -1793,7 +1781,7 @@ input[type=range]:active::-moz-range-thumb {
     .tab-btn {
         flex-basis: 50%;
         border-bottom: 1px solid var(--color-border);
-        font-size: var(--font-size-sm); /* NEW: Smaller for mobile */
+        font-size: var(--font-size-sm);
     }
     
     .footer-grid {
@@ -1807,7 +1795,7 @@ input[type=range]:active::-moz-range-thumb {
     }
 
     .schedule-controls {
-        flex-direction: column; /* Stack controls on mobile */
+        flex-direction: column;
     }
     .schedule-controls select {
         width: 100%;
@@ -1816,26 +1804,24 @@ input[type=range]:active::-moz-range-thumb {
 
 /* Print Styles (for exporting PDF/Amortization Schedule) */
 @media print {
-    /* Hide non-essential UI elements */
     .site-header,
     .footer-section,
     .accessibility-controls,
     .pwa-banner,
     .voice-status,
     .toast-container,
-    .input-section, /* Hide input form */
-    .ad-placeholder-leaderboard, /* Hide ads */
-    .lead-gen-form, /* Hide lead form */
-    .affiliate-section, /* Hide affiliate */
-    .embed-tool, /* Hide embed */
-    .content-section, /* Hide content */
-    .tab-header /* Hide tabs */
-    {
+    .input-section,
+    .ad-placeholder-leaderboard,
+    .lead-gen-form,
+    .affiliate-section,
+    .embed-tool,
+    .content-section,
+    .tab-header {
         display: none !important;
     }
     
     .calculator-container {
-        grid-template-columns: 1fr; /* Single column for print */
+        grid-template-columns: 1fr;
         max-width: none;
         padding: 0;
     }
@@ -1864,7 +1850,7 @@ input[type=range]:active::-moz-range-thumb {
     }
 
     .tab-content {
-        display: block !important; /* Show all tab content */
+        display: block !important;
         break-inside: avoid;
         margin-bottom: var(--space-24);
     }
@@ -1895,7 +1881,7 @@ input[type=range]:active::-moz-range-thumb {
         --color-text: var(--color-black);
         --color-background: var(--color-white);
         --color-surface: var(--color-white);
-        --color-primary: #0000FF; /* High Contrast Blue */
+        --color-primary: #0000FF;
         --color-primary-hover: #0000FF;
         --color-primary-active: #0000FF;
     }
@@ -1905,7 +1891,7 @@ input[type=range]:active::-moz-range-thumb {
         --color-text: var(--color-white);
         --color-background: var(--color-black);
         --color-surface: var(--color-black);
-        --color-primary: #FFFF00; /* High Contrast Yellow */
+        --color-primary: #FFFF00;
         --color-primary-hover: #FFFF00;
         --color-primary-active: #FFFF00;
     }
