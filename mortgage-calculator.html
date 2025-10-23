@@ -163,10 +163,10 @@
     
     <div id="sr-announcements" class="sr-only" aria-live="polite" aria-atomic="true"></div>
     
-    <div id="loading-indicator" class="loading-overlay" aria-hidden="true">
+    <div id="loading-overlay" class="loading-overlay" aria-hidden="true">
         <div class="loading-content">
             <div class="loading-spinner"></div>
-            <div class="loading-text">Loading...</div>
+            <div id="loading-message" class="loading-text">Loading...</div>
         </div>
     </div>
 
@@ -184,7 +184,7 @@
                 </a>
             </div>
 
-            <div class="header-middle animated-middle">
+            <div class="header-middle">
                 <div class="header-middle-content">
                     <h1 class="tagline">Home Loan Pro — AI‑Powered Mortgage Calculator</h1>
                     <div class="features-quick">
@@ -196,7 +196,7 @@
                 </div>
             </div>
 
-            <div class="accessibility-controls animated-controls">
+            <div class="accessibility-controls">
                 <div class="font-controls">
                     <button class="control-btn font-btn" onclick="adjustFontSize('decrease')" aria-label="Decrease font size" title="Decrease font size">
                         <i class="fas fa-minus control-icon" aria-hidden="true"></i>
@@ -232,7 +232,7 @@
             <section class="input-section" aria-labelledby="input-heading">
                 <div class="card">
                     <h2 id="input-heading" class="card-heading">1. Loan Parameters</h2>
-                    <form id="mortgage-form" class="input-grid">
+                    <form id="calculator-form" class="input-grid">
                         
                         <div class="input-group">
                             <label for="home-price">Home Price ($)</label>
@@ -273,7 +273,7 @@
                             <div class="input-group">
                                 <select id="live-rate-select" aria-label="Apply a live average rate">
                                     <option value="">Apply Live Rate</option>
-                                    </select>
+                                </select>
                             </div>
                         </div>
                         <div id="fred-rate-status" class="rate-status" aria-live="polite">
@@ -376,30 +376,30 @@
                     <div id="loan-comparison-tool" class="loan-comparison-tool" aria-hidden="true">
                         <h3 class="comparison-heading">Loan B Parameters</h3>
                         <div class="input-group">
-                            <label for="b-home-price">Home Price ($)</label>
+                            <label for="comp-home-price">Home Price ($)</label>
                             <div class="input-addon">
                                 <span class="addon-text">$</span>
-                                <input type="text" id="b-home-price" name="b-home-price" value="400,000" inputmode="numeric" data-initial-value="400000" aria-label="Loan B Home Price in dollars">
+                                <input type="text" id="comp-home-price" name="comp-home-price" value="400,000" inputmode="numeric" data-initial-value="400000" aria-label="Loan B Home Price in dollars">
                             </div>
                         </div>
                         <div class="input-group">
-                            <label for="b-down-payment-percent">Down Payment (%)</label>
+                            <label for="comp-down-payment-percent">Down Payment (%)</label>
                             <div class="input-addon addon-right">
-                                <input type="text" id="b-down-payment-percent" name="b-down-payment-percent" value="25" inputmode="numeric" aria-label="Loan B Down Payment percentage">
+                                <input type="text" id="comp-down-payment-percent" name="comp-down-payment-percent" value="25" inputmode="numeric" aria-label="Loan B Down Payment percentage">
                                 <span class="addon-text">%</span>
                             </div>
                         </div>
                         <div class="input-group">
-                            <label for="b-interest-rate">Interest Rate (%)</label>
+                            <label for="comp-interest-rate">Interest Rate (%)</label>
                             <div class="input-addon addon-right">
-                                <input type="text" id="b-interest-rate" name="b-interest-rate" value="5.99" inputmode="decimal" aria-label="Loan B Interest Rate percentage">
+                                <input type="text" id="comp-interest-rate" name="comp-interest-rate" value="5.99" inputmode="decimal" aria-label="Loan B Interest Rate percentage">
                                 <span class="addon-text">%</span>
                             </div>
                         </div>
                         <div class="input-group">
-                            <label for="b-loan-term">Loan Term (Years)</label>
+                            <label for="comp-loan-term">Loan Term (Years)</label>
                             <div class="input-addon addon-right">
-                                <input type="number" id="b-loan-term" name="b-loan-term" value="15" min="5" max="40" step="1" aria-label="Loan B Loan Term in years">
+                                <input type="number" id="comp-loan-term" name="comp-loan-term" value="15" min="5" max="40" step="1" aria-label="Loan B Loan Term in years">
                                 <span class="addon-text">Yrs</span>
                             </div>
                         </div>
@@ -414,10 +414,10 @@
 
                 <div class="ad-placeholder-skyscraper card" aria-hidden="true">
                     <span class="ad-label">Advertisement</span>
-                    </div>
+                </div>
             </section>
             
-            <section class="results-section">
+            <section class="results-section" id="results-section">
                 
                 <div class="card summary-card" aria-labelledby="summary-heading">
                     <h2 id="summary-heading" class="card-heading">4. Results Overview</h2>
@@ -455,22 +455,22 @@
 
                     <div id="comparison-results-box" class="comparison-results-box" aria-live="polite" aria-hidden="true">
                         <h3 class="comparison-heading-mini">Loan B Comparison</h3>
-                        <div id="comparison-results-text" class="comparison-text"></div>
+                        <div id="comparison-insight-text" class="comparison-text"></div>
                     </div>
                 </div>
                 
                 <div class="tab-container card">
                     <div class="tab-header" role="tablist" aria-label="Mortgage Calculation Details">
-                        <button class="tab-btn active" data-tab="payment-components" role="tab" aria-selected="true" aria-controls="payment-components-tab">
+                        <button class="tab-btn active" data-target="payment-components-tab" role="tab" aria-selected="true" aria-controls="payment-components-tab">
                             <i class="fas fa-chart-pie"></i> Breakdown
                         </button>
-                        <button class="tab-btn" data-tab="loan-summary" role="tab" aria-selected="false" aria-controls="loan-summary-tab">
+                        <button class="tab-btn" data-target="loan-summary-tab" role="tab" aria-selected="false" aria-controls="loan-summary-tab">
                             <i class="fas fa-list-alt"></i> Summary
                         </button>
-                        <button class="tab-btn" data-tab="schedule" role="tab" aria-selected="false" aria-controls="schedule-tab">
+                        <button class="tab-btn" data-target="schedule-tab" role="tab" aria-selected="false" aria-controls="schedule-tab">
                             <i class="fas fa-table"></i> Schedule
                         </button>
-                        <button class="tab-btn" data-tab="timeline" role="tab" aria-selected="false" aria-controls="timeline-tab">
+                        <button class="tab-btn" data-target="timeline-tab" role="tab" aria-selected="false" aria-controls="timeline-tab">
                             <i class="fas fa-chart-line"></i> Timeline
                         </button>
                     </div>
@@ -543,7 +543,7 @@
                             </div>
                             <div class="summary-item">
                                 <div class="item-label">Interest Saved by Extra Payments</div>
-                                <div id="summary-interest-saved" class="item-value">$0.00</div>
+                                <div id="extra-payment-savings" class="item-value">$0.00</div>
                             </div>
                             <div class="summary-item">
                                 <div class="item-label">Loan Paid Off</div>
@@ -554,16 +554,16 @@
 
                     <div id="schedule-tab" class="tab-content" role="tabpanel" aria-labelledby="schedule">
                         <div class="schedule-controls">
-                            <button id="schedule-export-csv" class="btn btn-secondary btn-icon-left">
+                            <button id="export-csv" class="btn btn-secondary btn-icon-left">
                                 <i class="fas fa-file-csv"></i> Export CSV
                             </button>
-                            <button id="schedule-export-pdf" class="btn btn-secondary btn-icon-left">
+                            <button id="export-pdf" class="btn btn-secondary btn-icon-left">
                                 <i class="fas fa-file-pdf"></i> Export PDF
                             </button>
-                            <select id="schedule-view-toggle" aria-label="Toggle Monthly or Yearly Schedule View">
-                                <option value="monthly">Monthly View</option>
-                                <option value="yearly">Yearly View</option>
-                            </select>
+                            <div>
+                                <button id="amortization-monthly-btn" class="btn btn-secondary active">Monthly</button>
+                                <button id="amortization-yearly-btn" class="btn btn-secondary">Yearly</button>
+                            </div>
                         </div>
                         <div class="table-container">
                             <table id="amortization-table" class="amortization-table">
@@ -571,23 +571,22 @@
                                     <tr>
                                         <th scope="col" id="col-period">Period</th>
                                         <th scope="col">Payment</th>
-                                        <th scope="col">P&I</th>
                                         <th scope="col">Interest</th>
                                         <th scope="col">Principal</th>
-                                        <th scope="col">Extra Principal</th>
                                         <th scope="col">Balance</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    </tbody>
+                                <tbody id="amortization-table-body">
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
                             </table>
                         </div>
                         <div class="schedule-pagination">
-                            <button id="prev-page-btn" class="btn btn-secondary" aria-label="Previous page" disabled>
+                            <button id="amortization-prev" class="btn btn-secondary" aria-label="Previous page" disabled>
                                 <i class="fas fa-arrow-left"></i> Prev
                             </button>
-                            <span id="page-info" aria-live="polite">Page 1 of 30</span>
-                            <button id="next-page-btn" class="btn btn-secondary" aria-label="Next page">
+                            <span id="amortization-pagination-info" aria-live="polite">Page 1 of 30</span>
+                            <button id="amortization-next" class="btn btn-secondary" aria-label="Next page">
                                 Next <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -631,7 +630,7 @@
                             <select id="lead-service" required>
                                 <option value="">Select Service...</option>
                                 <option value="mortgage">Mortgage Rate Quote</option>
-                                <option value_refinance="refinance">Refinance Consultation</option>
+                                <option value="refinance">Refinance Consultation</option>
                                 <option value="insurance">Home Insurance Quote</option>
                                 <option value="investment">Investment Advice</option>
                             </select>
@@ -643,7 +642,7 @@
 
                 <div class="ad-placeholder-leaderboard card" aria-hidden="true">
                     <span class="ad-label">Advertisement</span>
-                    </div>
+                </div>
 
                 <div class="card content-section" id="how-to-guide">
                     <h2 class="card-heading">How to Use This Calculator</h2>
@@ -728,7 +727,7 @@
         <div id="pwa-banner" class="pwa-banner" role="alert" aria-live="polite" aria-hidden="true">
             <i class="fas fa-mobile-alt"></i>
             <span class="pwa-text">Install Home Loan Pro for offline use and faster access!</span>
-            <button id="pwa-install-btn" class="btn btn-primary btn-sm">Install App</button>
+            <button id="pwa-install-button" class="btn btn-primary btn-sm">Install App</button>
             <button id="pwa-close-btn" class="btn btn-secondary btn-sm" aria-label="Close installation prompt">
                 <i class="fas fa-times"></i>
             </button>
