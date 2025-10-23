@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-color-scheme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Home Loan Pro — AI‑Powered Mortgage Calculator | FinGuid USA</title>
     <meta name="description" content="World's First AI-Powered Mortgage Calculator with real-time Federal Reserve rates, ZIP code lookup, and smart insights. Calculate your perfect home loan in seconds.">
-    <meta name="keywords" content="mortgage calculator, home loan calculator, mortgage rates, FRED API, AI mortgage, USA mortgage, property tax calculator">
+    <meta name="keywords" content="mortgage calculator, home loan calculator, mortgage rates, FRED API, AI mortgage, USA mortgage, property tax calculator, how to calculate mortgage">
     <meta name="robots" content="index, follow">
     <meta name="author" content="FinGuid - World's First AI Calculator">
     
@@ -16,7 +16,6 @@
     <meta property="og:url" content="https://finguid.com/mortgage-calculator">
     <meta property="og:site_name" content="FinGuid">
     <meta property="og:locale" content="en_US">
-    
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Home Loan Pro — AI‑Powered Mortgage Calculator">
     <meta name="twitter:description" content="World's most advanced mortgage calculator with AI insights and live rates.">
@@ -25,7 +24,6 @@
     
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0D9488">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,14 +33,19 @@
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async defer></script>
     
     <link rel="stylesheet" href="mortgage-calculator.css">
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
     
     <script type="application/ld+json">
     {
@@ -65,492 +68,459 @@
         },
         "featureList": [
             "AI-Powered Mortgage Insights",
-            "Real-time Federal Reserve Rates",
-            "41,552+ ZIP Code Database",
-            "Interactive Payment Charts",
+            "Real-time Federal Reserve Rates (30-yr, 15-yr, 5/1 ARM)",
+            "41,552+ ZIP Code Database for Tax/Insurance",
+            "Interactive Payment Charts & Amortization Schedule",
             "Voice Control Features",
             "Export to PDF/CSV",
-            "Mobile-Optimized Interface"
+            "PITI & PMI Calculations"
+        ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Use the AI-Powered Mortgage Calculator",
+        "description": "Calculate your estimated monthly mortgage payment (PITI) with live interest rates and location-specific data.",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": "Enter Loan Parameters",
+                "text": "Input your Home Price and Down Payment. The calculator will auto-fill the percentage. Select your desired Loan Type (e.g., Conventional) and Loan Term (e.g., 30 Years)."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Select Interest Rate",
+                "text": "Manually enter an Interest Rate, or use the 'Apply Live Rate' dropdown to select a real-time average rate from the Federal Reserve for a 30-Year Fixed, 15-Year Fixed, or 5/1 ARM loan."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Enter Property Details",
+                "text": "Enter your 5-digit property ZIP Code. The calculator will auto-populate estimated annual Property Tax and Home Insurance rates for that area. You can override these values manually."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Add Extra Payments (Optional)",
+                "text": "If you plan to pay more, add an Extra Monthly or Weekly amount. This will update your payoff date and show you total interest saved."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Calculate and Review",
+                "text": "Click 'Calculate Mortgage' to see your complete results. Review the 'Results Overview' for your total monthly payment (PITI) and AI-powered insights. Explore the tabs for a detailed Payment Breakdown, Loan Summary, Payment Schedule, and an interactive Timeline Chart."
+            }
+        ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is PITI in a mortgage payment?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "PITI stands for Principal, Interest, Taxes, and Insurance. These are the four main components of your total monthly mortgage payment. Principal is the amount that goes toward paying down your loan balance. Interest is the fee you pay to the lender for borrowing the money. Taxes refer to the property taxes assessed by your local government. Insurance is the homeowner's insurance (and often Private Mortgage Insurance or PMI) required by the lender."
+                }
+            }
+            // ... more FAQs for SEO
         ]
     }
     </script>
 </head>
-
-<body data-color-scheme="light">
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <div id="sr-announcements" class="sr-only" aria-live="polite" aria-atomic="true"></div>
-    
-    <div id="loading-indicator" class="loading-overlay" aria-hidden="true">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Loading...</div>
-        </div>
-    </div>
-
-    <header class="site-header" role="banner">
-        <div class="header-container">
-            <div class="brand-section">
-                <a href="/" class="logo-link" aria-label="FinGuid Home">
-                    <div class="logo-container">
-                        <div class="usa-flag" role="img" aria-label="USA Flag">🇺🇸</div>
-                        <div class="logo-content">
-                            <div class="logo-main">FinGuid</div>
-                            <div class="logo-subtitle">World's First AI Calculator</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="header-middle animated-middle">
-                <div class="header-middle-content">
-                    <h1 class="tagline">Home Loan Pro — AI‑Powered Mortgage Calculator</h1>
-                    <div class="features-quick">
-                        <span class="feature-quick">🏦 Live FRED Rates</span>
-                        <span class="feature-quick">🗺️ 41,552+ ZIP Codes</span>
-                        <span class="feature-quick">🤖 AI Insights</span>
-                        <span class="feature-quick">📊 Interactive Charts</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="accessibility-controls animated-controls">
-                <div class="font-controls">
-                    <button class="control-btn font-btn" onclick="adjustFontSize('decrease')" aria-label="Decrease font size" title="Decrease font size">
-                        <i class="fas fa-minus control-icon" aria-hidden="true"></i>
-                        <span class="control-label">A-</span>
-                    </button>
-                    <button class="control-btn font-btn" onclick="adjustFontSize('increase')" aria-label="Increase font size" title="Increase font size">
-                        <i class="fas fa-plus control-icon" aria-hidden="true"></i>
-                        <span class="control-label">A+</span>
-                    </button>
-                </div>
-                <button id="theme-toggle" class="control-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Dark/Light Mode">
+<body class="theme-light">
+    <header>
+        <div class="container">
+            <div class="logo">Home Loan Pro ⚡️ AI</div>
+            <div class="actions">
+                <button id="theme-toggle" class="btn btn-icon" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
                     <i class="fas fa-moon theme-icon" aria-hidden="true"></i>
-                    <span class="control-label">Theme</span>
                 </button>
-                <button id="screen-reader-toggle" class="control-btn" aria-label="Toggle Screen Reader Mode" title="Toggle Screen Reader Mode">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    <span class="control-label">Reader</span>
-                </button>
-                <button id="voice-toggle" class="control-btn" aria-label="Toggle Voice Control" title="Toggle Voice Control">
-                    <i class="fas fa-microphone" aria-hidden="true"></i>
-                    <span class="control-label">Voice</span>
+                <div class="font-controls">
+                    <button class="font-btn" title="Decrease Font Size" onclick="adjustFontSize('decrease')" aria-label="Decrease Font Size">A-</button>
+                    <button class="font-btn" title="Increase Font Size" onclick="adjustFontSize('increase')" aria-label="Increase Font Size">A+</button>
+                </div>
+                <button id="install-pwa-btn" class="btn btn-secondary hide-on-desktop" style="display: none;" title="Install App">
+                    <i class="fas fa-download"></i> Install
                 </button>
             </div>
-        </div>
-        <div id="voice-status" class="voice-status" aria-live="polite" aria-hidden="true">
-            <span class="voice-status-text">Voice Control: Disabled</span>
         </div>
     </header>
 
-    <main id="main-content" role="main">
-        <div class="container calculator-container">
+    <main class="calculator-page">
+        <div class="container main-grid">
             
-            <section class="input-section card" aria-labelledby="input-heading">
-                <h2 id="input-heading" class="card-heading">1. Loan Parameters</h2>
-                <form id="mortgage-form" class="input-grid">
-                    
-                    <div class="input-group">
-                        <label for="home-price">Home Price ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="home-price" name="home-price" value="450,000" inputmode="numeric" data-initial-value="450000" aria-label="Home Price in dollars">
-                        </div>
-                    </div>
+            <div class="input-panel">
+                <section class="card calculation-card">
+                    <h1 class="card-heading">AI Home Loan Calculator</h1>
+                    <p class="heading-subtext">For American Homebuying Decisions. All inputs are PITI-compliant.</p>
 
-                    <div class="input-group group-inline">
-                        <label for="down-payment">Down Payment ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="down-payment" name="down-payment" value="90,000" inputmode="numeric" data-initial-value="90000" aria-label="Down Payment in dollars">
-                        </div>
-                        <div class="input-addon addon-right">
-                            <input type="text" id="down-payment-percent" name="down-payment-percent" value="20" inputmode="numeric" aria-label="Down Payment percentage">
-                            <span class="addon-text">%</span>
-                        </div>
-                    </div>
+                    <form id="mortgage-form">
+                        <div class="input-group-grid">
+                            <div class="input-field">
+                                <label for="home-price">Home Price ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">$</span>
+                                    <input type="text" id="home-price" value="450,000" inputmode="numeric" data-type="currency" required aria-required="true">
+                                </div>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label for="down-payment">Down Payment ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">$</span>
+                                    <input type="text" id="down-payment" value="90,000" inputmode="numeric" data-type="currency" required aria-required="true">
+                                </div>
+                            </div>
 
-                    <div class="input-group">
-                        <label for="loan-type">Loan Type</label>
-                        <select id="loan-type" name="loan-type" aria-label="Loan Type">
-                            <option value="conventional" selected>Conventional</option>
-                            <option value="fha">FHA</option>
-                            <option value="va">VA</option>
-                            <option value="usda">USDA</option>
-                        </select>
-                    </div>
+                            <div class="input-field">
+                                <label for="down-payment-percent">Down Payment (%)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">%</span>
+                                    <input type="text" id="down-payment-percent" value="20.00" inputmode="decimal" data-type="percent" required aria-required="true">
+                                </div>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label for="loan-type">Loan Type</label>
+                                <select id="loan-type">
+                                    <option value="conventional">Conventional</option>
+                                    <option value="fha">FHA</option>
+                                    <option value="va">VA</option>
+                                    <option value="usdaloan">USDA Loan</option>
+                                </select>
+                            </div>
 
-                    <div class="input-group">
-                        <label for="interest-rate">Interest Rate (%)</label>
-                        <div class="input-addon addon-right">
-                            <input type="text" id="interest-rate" name="interest-rate" value="6.44" inputmode="decimal" aria-label="Interest Rate percentage">
-                            <span class="addon-text">%</span>
+                            <div class="input-field">
+                                <label for="loan-term">Loan Term (Years)</label>
+                                <select id="loan-term">
+                                    <option value="30">30 Years Fixed</option>
+                                    <option value="15">15 Years Fixed</option>
+                                    <option value="10">10 Years Fixed</option>
+                                    <option value="5">5 Years (5/1 ARM)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label for="interest-rate">Interest Rate (%)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">%</span>
+                                    <input type="text" id="interest-rate" value="6.44" inputmode="decimal" data-type="percent" required aria-required="true">
+                                </div>
+                            </div>
+                            
+                            <div class="input-field full-width fred-rate-field">
+                                <div class="live-rate-controls">
+                                    <label for="live-rate-select">Apply Live Rate (FRED®)</label>
+                                    <select id="live-rate-select" aria-label="Select live interest rate from FRED">
+                                        <option value="">-- Fetching Live Rates --</option>
+                                    </select>
+                                </div>
+                                <div id="fred-rate-status" class="status-badge status-info">
+                                    <i class="fas fa-sync-alt fa-spin"></i> <span class="status-text">Connecting to FRED API...</span>
+                                </div>
+                            </div>
                         </div>
-                        <div id="fred-rate-status" class="rate-status" aria-live="polite">
-                            <i class="fas fa-sync-alt status-icon"></i>
-                            <span class="status-text">FRED Rate: 6.44% (Live)</span>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="loan-term">Loan Term (Years)</label>
-                        <div class="input-addon addon-right">
-                            <input type="number" id="loan-term" name="loan-term" value="30" min="5" max="40" step="1" aria-label="Loan Term in years">
-                            <span class="addon-text">Yrs</span>
-                        </div>
-                    </div>
 
-                    <div class="input-group">
-                        <label for="zip-code">Property ZIP Code</label>
-                        <input type="text" id="zip-code" name="zip-code" value="77001" inputmode="numeric" placeholder="e.g., 77001" maxlength="5" aria-label="Property ZIP Code">
-                        <div id="zip-info" class="rate-status zip-info" aria-live="polite">
-                            <i class="fas fa-map-marker-alt status-icon"></i>
-                            <span class="status-text">Houston, TX (Default)</span>
+                        <div class="monetization-cta card-affiliate affiliate-link" data-affiliate-partner="rate_compare">
+                            <p class="cta-text">Compare personalized live rates from multiple lenders now:</p>
+                            <button type="button" class="btn btn-primary btn-cta">
+                                <i class="fas fa-hand-holding-usd"></i> Get Pre-Approved Rates
+                            </button>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </section>
 
-                <h2 class="card-heading-mini">2. Property Expenses (Annual)</h2>
-                <form id="expenses-form" class="input-grid">
-                    
-                    <div class="input-group">
-                        <label for="property-tax">Property Tax ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="property-tax" name="property-tax" value="9,000" inputmode="numeric" data-initial-value="9000" aria-label="Annual Property Tax in dollars">
-                        </div>
-                        <div id="tax-rate-info" class="rate-status" aria-live="polite">
-                            <i class="fas fa-percentage status-icon"></i>
-                            <span class="status-text">~1.81% (Est.)</span>
-                        </div>
-                    </div>
+                <section class="card calculation-card">
+                    <h2 class="card-heading">Property Details (Taxes & Insurance)</h2>
+                    <form id="expenses-form">
+                        <div class="input-group-grid">
+                            <div class="input-field full-width zip-field">
+                                <label for="zip-code">Property ZIP Code (5-Digit)</label>
+                                <input type="text" id="zip-code" value="77001" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required aria-required="true">
+                                <div id="zip-info" class="status-badge status-secondary">
+                                    <i class="fas fa-map-marker-alt"></i> <span class="status-text">Houston, TX (Defaults Loaded)</span>
+                                </div>
+                            </div>
 
-                    <div class="input-group">
-                        <label for="home-insurance">Home Insurance ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="home-insurance" name="home-insurance" value="1,800" inputmode="numeric" data-initial-value="1800" aria-label="Annual Home Insurance in dollars">
-                        </div>
-                        <div id="insurance-rate-info" class="rate-status" aria-live="polite">
-                            <i class="fas fa-house-damage status-icon"></i>
-                            <span class="status-text">~0.4% (Est.)</span>
-                        </div>
-                    </div>
+                            <div class="input-field">
+                                <label for="property-tax">Annual Property Tax ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">$</span>
+                                    <input type="text" id="property-tax" value="9,000" inputmode="numeric" data-type="currency" required aria-required="true">
+                                </div>
+                                <div id="tax-rate-info" class="status-badge status-info small">
+                                    <span class="status-text">~1.81% (Est.)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label for="home-insurance">Annual Home Insurance ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">$</span>
+                                    <input type="text" id="home-insurance" value="1,800" inputmode="numeric" data-type="currency" required aria-required="true">
+                                </div>
+                                <div id="insurance-rate-info" class="status-badge status-info small">
+                                    <span class="status-text">~0.40% (Est.)</span>
+                                </div>
+                            </div>
 
-                    <div class="input-group">
-                        <label for="pmi">Annual PMI ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="pmi" name="pmi" value="0" inputmode="numeric" data-initial-value="0" aria-label="Annual Private Mortgage Insurance in dollars">
+                            <div class="input-field">
+                                <label for="pmi">Annual PMI ($) <i class="fas fa-info-circle tooltip" title="Private Mortgage Insurance (PMI) is usually required for Conventional loans with less than 20% down."></i></label>
+                                <div class="input-with-icon">
+                                    <span class="icon">$</span>
+                                    <input type="text" id="pmi" value="0" inputmode="numeric" data-type="currency" required aria-required="true">
+                                </div>
+                            </div>
+                            
+                            <div class="input-field">
+                                <label for="hoa-fees">Monthly HOA / Other Fees ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">$</span>
+                                    <input type="text" id="hoa-fees" value="0" inputmode="numeric" data-type="currency" required aria-required="true">
+                                </div>
+                            </div>
                         </div>
-                        <div class="pmi-info">
-                            <i class="fas fa-info-circle"></i>
-                            <span>PMI is required if Down Payment is < 20%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="hoa-fees">Monthly HOA/Dues ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="hoa-fees" name="hoa-fees" value="0" inputmode="numeric" data-initial-value="0" aria-label="Monthly HOA or Dues in dollars">
-                        </div>
-                    </div>
-                </form>
-
-                <h2 class="card-heading-mini">3. Extra Payments</h2>
-                <form id="extra-payments-form" class="input-grid extra-payments-grid">
-                    
-                    <div class="input-group">
-                        <label for="extra-monthly">Extra Monthly ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="extra-monthly" name="extra-monthly" value="0" inputmode="numeric" data-initial-value="0" aria-label="Extra Monthly Payment in dollars">
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="extra-weekly">Extra Weekly ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="extra-weekly" name="extra-weekly" value="0" inputmode="numeric" data-initial-value="0" aria-label="Extra Weekly Payment in dollars">
-                        </div>
-                    </div>
-                </form>
-
-                <div id="comparison-toggle-container">
-                    <button id="compare-loan-toggle" class="btn btn-secondary btn-full" aria-expanded="false" aria-controls="loan-comparison-tool" title="Add a second loan to compare scenarios">
-                        <i class="fas fa-balance-scale-left"></i> Compare a Second Loan
-                    </button>
-                </div>
-
-                <div id="loan-comparison-tool" class="loan-comparison-tool" aria-hidden="true">
-                    <h3 class="comparison-heading">Loan B Parameters</h3>
-                    <div class="input-group">
-                        <label for="b-home-price">Home Price ($)</label>
-                        <div class="input-addon">
-                            <span class="addon-text">$</span>
-                            <input type="text" id="b-home-price" name="b-home-price" value="400,000" inputmode="numeric" data-initial-value="400000" aria-label="Loan B Home Price in dollars">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="b-down-payment-percent">Down Payment (%)</label>
-                        <div class="input-addon addon-right">
-                            <input type="text" id="b-down-payment-percent" name="b-down-payment-percent" value="25" inputmode="numeric" aria-label="Loan B Down Payment percentage">
-                            <span class="addon-text">%</span>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="b-interest-rate">Interest Rate (%)</label>
-                        <div class="input-addon addon-right">
-                            <input type="text" id="b-interest-rate" name="b-interest-rate" value="5.99" inputmode="decimal" aria-label="Loan B Interest Rate percentage">
-                            <span class="addon-text">%</span>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="b-loan-term">Loan Term (Years)</label>
-                        <div class="input-addon addon-right">
-                            <input type="number" id="b-loan-term" name="b-loan-term" value="15" min="5" max="40" step="1" aria-label="Loan B Loan Term in years">
-                            <span class="addon-text">Yrs</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="action-bar">
-                    <button id="calculate-btn" type="button" class="btn btn-primary btn-full">
-                        <i class="fas fa-calculator" aria-hidden="true"></i> Calculate Mortgage
-                    </button>
-                </div>
-            </section>
-            
-            <section class="results-section">
+                    </form>
+                </section>
                 
-                <div class="card summary-card" aria-labelledby="summary-heading">
-                    <h2 id="summary-heading" class="card-heading">4. Results Overview</h2>
+                <section class="card calculation-card">
+                    <h2 class="card-heading">Accelerate Payoff (Optional)</h2>
+                    <form id="extra-payments-form">
+                        <div class="input-group-grid">
+                            <div class="input-field">
+                                <label for="extra-monthly">Extra Monthly Payment ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">$</span>
+                                    <input type="text" id="extra-monthly" value="0" inputmode="numeric" data-type="currency">
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <label for="extra-weekly">Extra Weekly Payment ($)</label>
+                                <div class="input-with-icon">
+                                    <span class="icon">$</span>
+                                    <input type="text" id="extra-weekly" value="0" inputmode="numeric" data-type="currency">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     
-                    <div class="summary-key-figure">
-                        <div class="key-figure-label">Estimated Monthly Payment (PITI)</div>
-                        <div id="monthly-payment-total" class="key-figure-value">$2,654.55</div>
-                        <div id="monthly-payment-comparison" class="key-figure-comparison" aria-live="polite"></div>
-                    </div>
-                    
-                    <div class="summary-details-grid">
-                        <div class="summary-item">
-                            <div class="item-label">Loan Amount</div>
-                            <div id="loan-amount-display" class="item-value">$360,000</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="item-label">Total Cost</div>
-                            <div id="total-cost-display" class="item-value">$955,639</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="item-label">Total Interest Paid</div>
-                            <div id="total-interest-display" class="item-value">$595,639</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="item-label">Payoff Date</div>
-                            <div id="payoff-date-display" class="item-value">Jul 2055</div>
-                        </div>
-                    </div>
-
-                    <div id="ai-insights-box" class="ai-insights-box" aria-live="polite">
-                        <i class="fas fa-robot"></i>
-                        <h3 class="insights-heading">AI Mortgage Insights</h3>
-                        <p id="ai-insights-text" class="insights-text">Based on current inputs, your **Monthly Housing Expense (PITI) is $2,654.55**. This is a **high interest burden**, with **$595,639** in interest over 30 years. Consider increasing your down payment or exploring a 15-year term to save an estimated $200k+ in interest.</p>
-                    </div>
-
-                    <div id="comparison-results-box" class="comparison-results-box" aria-live="polite" aria-hidden="true">
-                        <h3 class="comparison-heading-mini">Loan B Comparison</h3>
-                        <div id="comparison-results-text" class="comparison-text"></div>
-                    </div>
-                </div>
-                
-                <div class="tab-container">
-                    <div class="tab-header" role="tablist" aria-label="Mortgage Calculation Details">
-                        <button class="tab-btn active" data-tab="payment-components" role="tab" aria-selected="true" aria-controls="payment-components-tab">
-                            <i class="fas fa-chart-pie"></i> Payment Breakdown
+                    <div class="loan-comparison-container">
+                        <button id="compare-loan-toggle" class="btn btn-secondary-outline full-width" aria-expanded="false" aria-controls="loan-comparison-tool">
+                            <i class="fas fa-balance-scale-left"></i> Compare a Second Loan
                         </button>
-                        <button class="tab-btn" data-tab="loan-summary" role="tab" aria-selected="false" aria-controls="loan-summary-tab">
-                            <i class="fas fa-list-alt"></i> Loan Summary
+                        <div id="loan-comparison-tool" class="comparison-input-section" aria-hidden="true" style="max-height: 0;">
+                            <h3 class="input-heading">Loan B (For Comparison)</h3>
+                            <div class="input-group-grid">
+                                <div class="input-field">
+                                    <label for="b-home-price">Loan B Price ($)</label>
+                                    <input type="text" id="b-home-price" value="400,000" inputmode="numeric" data-type="currency">
+                                </div>
+                                <div class="input-field">
+                                    <label for="b-down-payment-percent">Loan B DP (%)</label>
+                                    <input type="text" id="b-down-payment-percent" value="25" inputmode="decimal" data-type="percent">
+                                </div>
+                                <div class="input-field">
+                                    <label for="b-loan-term">Loan B Term (Years)</label>
+                                    <select id="b-loan-term">
+                                        <option value="15">15 Years Fixed</option>
+                                        <option value="30">30 Years Fixed</option>
+                                    </select>
+                                </div>
+                                <div class="input-field">
+                                    <label for="b-interest-rate">Loan B Rate (%)</label>
+                                    <input type="text" id="b-interest-rate" value="5.99" inputmode="decimal" data-type="percent">
+                                </div>
+                            </div>
+                            <div id="comparison-results-box" class="comparison-results-box" aria-hidden="true" style="display: none;">
+                                <p id="comparison-results-text">Comparison results will appear here after calculation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <button id="calculate-btn" class="btn btn-primary btn-large full-width" type="button" aria-controls="results-section">
+                    <i class="fas fa-calculator"></i> Calculate Mortgage
+                </button>
+                
+                <section class="card card-affiliate affiliate-link" data-affiliate-partner="lender_lead_form" tabindex="0">
+                    <h3 class="card-heading-affiliate">Sponsor Product: Get a Free Mortgage Check-up</h3>
+                    <p>Connect with a local, licensed advisor who can confirm your PITI, pre-approval status, and lock in your rate. (Affiliate Link)</p>
+                    <button type="button" class="btn btn-warning full-width btn-cta">
+                        <i class="fas fa-address-card"></i> Check Eligibility Now
+                    </button>
+                </section>
+                
+            </div>
+            
+            <div class="results-panel">
+                <section id="results-section" class="card results-section" style="opacity: 0.5; pointer-events: none;">
+                    
+                    <div class="tabs-navigation" role="tablist">
+                        <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true" aria-controls="overview-tab">
+                            <i class="fas fa-chart-line"></i> Results Overview
+                        </button>
+                        <button class="tab-btn" data-tab="breakdown" role="tab" aria-selected="false" aria-controls="breakdown-tab">
+                            <i class="fas fa-chart-pie"></i> PITI Breakdown
                         </button>
                         <button class="tab-btn" data-tab="schedule" role="tab" aria-selected="false" aria-controls="schedule-tab">
-                            <i class="fas fa-table"></i> Payment Schedule
-                        </button>
-                        <button class="tab-btn" data-tab="timeline" role="tab" aria-selected="false" aria-controls="timeline-tab">
-                            <i class="fas fa-chart-line"></i> Timeline Chart
+                            <i class="fas fa-table"></i> Amortization Schedule
                         </button>
                     </div>
 
-                    <div id="payment-components-tab" class="tab-content active" role="tabpanel" aria-labelledby="payment-components">
-                        <div class="results-grid">
-                            <div class="result-item">
-                                <div class="item-label">Principal & Interest (P&I)</div>
-                                <div id="pi-payment-display" class="item-value">$2,274.55</div>
+                    <div id="overview-tab" class="tab-content active" role="tabpanel" tabindex="0">
+                        <div class="summary-grid">
+                            <div class="summary-card">
+                                <p class="item-label">Monthly PITI Payment</p>
+                                <p class="item-value primary-value" id="monthly-payment-total">$0.00</p>
+                                <p class="item-sub-label">(Principal, Interest, Taxes, Insurance)</p>
+                                <p id="monthly-payment-comparison" class="item-comparison"></p>
                             </div>
-                            <div class="result-item">
-                                <div class="item-label">Property Tax (Monthly)</div>
-                                <div id="tax-monthly-display" class="item-value">$750.00</div>
-                            </div>
-                            <div class="result-item">
-                                <div class="item-label">Home Insurance (Monthly)</div>
-                                <div id="insurance-monthly-display" class="item-value">$150.00</div>
-                            </div>
-                            <div class="result-item">
-                                <div class="item-label">PMI (Monthly)</div>
-                                <div id="pmi-monthly-display" class="item-value">$0.00</div>
-                            </div>
-                            <div class="result-item">
-                                <div class="item-label">HOA Fees (Monthly)</div>
-                                <div id="hoa-fees-display" class="item-value">$0.00</div>
-                            </div>
-                            <div class="result-item item-highlight">
-                                <div class="item-label">Total Payment (PITI + HOA)</div>
-                                <div id="total-monthly-display" class="item-value">$3,174.55</div>
+                            <div class="summary-card">
+                                <p class="item-label">Estimated Payoff Date</p>
+                                <p class="item-value" id="payoff-date-display">TBD</p>
+                                <p class="item-sub-label">Total Loan Cost: <strong id="total-cost-display">$0.00</strong></p>
                             </div>
                         </div>
+                        
+                        <div class="ai-insights-box">
+                            <h3 class="insights-heading"><i class="fas fa-robot"></i> AI-Powered Mortgage Insights</h3>
+                            <p class="insights-text" id="ai-insights-text">
+                                Please click 'Calculate Mortgage' to receive personalized insights based on current US rates, your location, and loan parameters.
+                            </p>
+                        </div>
+
+                        <div class="chart-container-large">
+                            <h4 class="chart-title">Principal & Interest Timeline</h4>
+                            <canvas id="mortgage-timeline-chart"></canvas>
+                        </div>
+
+                        <div class="summary-grid">
+                            <div class="summary-card">
+                                <p class="item-label">Loan Principal</p>
+                                <p class="item-value small-value" id="loan-amount-display">$0.00</p>
+                            </div>
+                            <div class="summary-card">
+                                <p class="item-label">Total Interest Paid</p>
+                                <p class="item-value small-value" id="total-interest-display">$0.00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-affiliate affiliate-link cta-in-results" data-affiliate-partner="refinance_offer">
+                            <p>Interest too high? See if you qualify for a lower rate or a cash-out refinance.</p>
+                            <a href="#" class="btn btn-primary-outline btn-cta"><i class="fas fa-percentage"></i> View Refinance Offers</a>
+                        </div>
+                    </div>
+
+                    <div id="breakdown-tab" class="tab-content" role="tabpanel" tabindex="0">
                         <div class="chart-container">
+                            <h4 class="chart-title">Payment Components Distribution</h4>
                             <canvas id="payment-components-chart"></canvas>
                         </div>
-                    </div>
-
-                    <div id="loan-summary-tab" class="tab-content" role="tabpanel" aria-labelledby="loan-summary">
-                        <div class="results-grid summary-details-grid">
-                            <div class="summary-item">
-                                <div class="item-label">Home Price</div>
-                                <div id="summary-home-price" class="item-value">$450,000</div>
+                        <div class="breakdown-list-container">
+                            <div class="breakdown-item primary">
+                                <span class="item-name">Total Monthly Payment</span>
+                                <span class="item-value" id="total-monthly-display">$0.00</span>
                             </div>
-                            <div class="summary-item">
-                                <div class="item-label">Down Payment</div>
-                                <div id="summary-down-payment" class="item-value">$90,000 (20%)</div>
+                            <div class="breakdown-item">
+                                <span class="item-name">Principal & Interest (P&I)</span>
+                                <span class="item-value" id="pi-payment-display">$0.00</span>
                             </div>
-                            <div class="summary-item">
-                                <div class="item-label">Loan Amount</div>
-                                <div id="summary-loan-amount" class="item-value">$360,000</div>
+                            <div class="breakdown-item">
+                                <span class="item-name">Property Taxes (T)</span>
+                                <span class="item-value" id="tax-monthly-display">$0.00</span>
                             </div>
-                            <div class="summary-item">
-                                <div class="item-label">Estimated Closing Costs (~3%)</div>
-                                <div id="summary-closing-costs" class="item-value">$13,500</div>
+                            <div class="breakdown-item">
+                                <span class="item-name">Home Insurance (I)</span>
+                                <span class="item-value" id="insurance-monthly-display">$0.00</span>
                             </div>
-                            <div class="summary-item">
-                                <div class="item-label">Total Cash Needed at Closing</div>
-                                <div id="summary-cash-needed" class="item-value">$103,500</div>
+                            <div class="breakdown-item">
+                                <span class="item-name">PMI (Private Mortgage Insurance)</span>
+                                <span class="item-value" id="pmi-monthly-display">$0.00</span>
                             </div>
-                            <div class="summary-item">
-                                <div class="item-label">Total Cost of Home (Interest + Principal)</div>
-                                <div id="summary-total-cost" class="item-value">$955,639</div>
-                            </div>
-                            <div class="summary-item">
-                                <div class="item-label">Effective APR (Estimated)</div>
-                                <div id="summary-effective-apr" class="item-value">6.65%</div>
-                            </div>
-                            <div class="summary-item">
-                                <div class="item-label">Total Extra Principal Paid</div>
-                                <div id="summary-extra-paid" class="item-value">$0.00</div>
-                            </div>
-                            <div class="summary-item">
-                                <div class="item-label">Interest Saved by Extra Payments</div>
-                                <div id="summary-interest-saved" class="item-value">$0.00</div>
-                            </div>
-                            <div class="summary-item">
-                                <div class="item-label">Loan Paid Off</div>
-                                <div id="summary-loan-paid-off" class="item-value">Jul 2055 (30 Years)</div>
+                            <div class="breakdown-item">
+                                <span class="item-name">HOA / Other Fees</span>
+                                <span class="item-value" id="hoa-fees-display">$0.00</span>
                             </div>
                         </div>
                     </div>
 
-                    <div id="schedule-tab" class="tab-content" role="tabpanel" aria-labelledby="schedule">
+                    <div id="schedule-tab" class="tab-content" role="tabpanel" tabindex="0">
+                        <h3 class="tab-heading">Amortization Schedule</h3>
                         <div class="schedule-controls">
-                            <button id="schedule-export-csv" class="btn btn-secondary btn-icon-left">
-                                <i class="fas fa-file-csv"></i> Export CSV
-                            </button>
-                            <button id="schedule-export-pdf" class="btn btn-secondary btn-icon-left">
-                                <i class="fas fa-file-pdf"></i> Export PDF
-                            </button>
-                            <select id="schedule-view-toggle" aria-label="Toggle Monthly or Yearly Schedule View">
+                            <select id="schedule-view-type" aria-label="Amortization Schedule View Type">
                                 <option value="monthly">Monthly View</option>
-                                <option value="yearly">Yearly View</option>
+                                <option value="yearly">Yearly Summary</option>
                             </select>
+                            <div class="export-buttons">
+                                <button id="export-pdf" class="btn btn-secondary-outline" aria-label="Export schedule as PDF">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </button>
+                                <button id="export-csv" class="btn btn-secondary-outline" aria-label="Export schedule as CSV">
+                                    <i class="fas fa-file-csv"></i> CSV
+                                </button>
+                            </div>
                         </div>
-                        <div class="table-container">
-                            <table id="amortization-table" class="amortization-table">
+                        
+                        <div class="schedule-table-container">
+                            <table id="amortization-table">
                                 <thead>
                                     <tr>
-                                        <th scope="col" id="col-period">Period</th>
-                                        <th scope="col">Payment</th>
-                                        <th scope="col">P&I</th>
-                                        <th scope="col">Interest</th>
-                                        <th scope="col">Principal</th>
-                                        <th scope="col">Extra Principal</th>
-                                        <th scope="col">Balance</th>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>P&I</th>
+                                        <th>Principal</th>
+                                        <th>Interest</th>
+                                        <th>Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    </tbody>
+                                    <tr><td colspan="6" class="table-placeholder">Schedule loads here after calculation.</td></tr>
+                                </tbody>
                             </table>
                         </div>
                         <div class="schedule-pagination">
-                            <button id="prev-page-btn" class="btn btn-secondary" aria-label="Previous page" disabled>
-                                <i class="fas fa-arrow-left"></i> Prev
-                            </button>
-                            <span id="page-info" aria-live="polite">Page 1 of 30</span>
-                            <button id="next-page-btn" class="btn btn-secondary" aria-label="Next page">
-                                Next <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="timeline-tab" class="tab-content" role="tabpanel" aria-labelledby="timeline">
-                        <div class="timeline-slider-container">
-                            <input type="range" id="year-range" min="1" max="30" value="15" step="1" aria-label="Mortgage timeline year slider">
-                            <div id="year-details" class="year-details" aria-live="polite">
-                                <h3>Year <span id="current-year-display">15</span> Summary</h3>
-                                <p>Balance Remaining: <span id="balance-remaining-display">$198,000</span></p>
-                                <p>Total Principal Paid: <span id="total-principal-paid-display">$162,000</span></p>
-                                <p>Total Interest Paid: <span id="total-interest-paid-display">$295,000</span></p>
                             </div>
-                        </div>
-                        <div class="chart-container-large">
-                            <canvas id="mortgage-timeline-chart"></canvas>
-                        </div>
                     </div>
-
-                </div>
-            </section>
+                </section>
+            </div>
         </div>
-
-        <div id="pwa-banner" class="pwa-banner" role="alert" aria-live="polite" aria-hidden="true">
-            <i class="fas fa-mobile-alt"></i>
-            <span class="pwa-text">Install Home Loan Pro for offline use and faster access!</span>
-            <button id="pwa-install-btn" class="btn btn-primary btn-sm">Install App</button>
-            <button id="pwa-close-btn" class="btn btn-secondary btn-sm" aria-label="Close installation prompt">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
     </main>
-    
-    <footer class="site-footer" role="contentinfo">
-        <div class="footer-container">
+
+    <footer class="main-footer">
+        <div class="container">
             <div class="footer-grid">
-                <div class="footer-section">
-                    <h4>FinGuid USA</h4>
-                    <p>World's First AI Calculator Platform for Americans. Building transparent, free, and advanced financial tools.</p>
+                <div class="footer-section footer-branding">
+                    <h3>Home Loan Pro AI</h3>
+                    <p>The World's First AI-Powered Financial Calculator Platform for Americans.</p>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Legal & Compliance</h4>
+                    <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">About FinGuid</a></li>
+                        <li><a href="#">Partner with Us</a></li>
+                        <li><a href="#">Media Kit</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal & Disclosure</h4>
+                    <ul>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Disclaimer</a></li>
-                        <li><a href="#">Source Code (MIT)</a></li>
+                        <li><a href="#">Affiliate Disclosure</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
                     <h4>Disclaimer</h4>
-                    <p class="disclaimer-text">This calculator provides estimates for illustrative purposes only and is not financial advice. Consult a professional lender for official quotes and actual property laws.</p>
+                    <p class="disclaimer-text">This calculator provides estimates for illustrative purposes only and is not financial advice. Consult a professional lender for official quotes. We may receive compensation from our partners, which does not affect our calculators or insights.</p>
                 </div>
                 
                 <div class="footer-badges">
@@ -573,7 +543,7 @@
 
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-    <script src="mortgage-calculator.js"></script>
+    <script src="mortgage-calculator.js" defer></script>
     
 </body>
 </html>
