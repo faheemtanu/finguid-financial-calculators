@@ -6,14 +6,14 @@
     
     <title>Refinance Pro — World's First AI‑Powered Mortgage Refinance Calculator | FinGuid USA</title>
     <meta name="description" content="Calculate your mortgage refinance savings, break-even point, and total interest using the World's First AI-Powered Refinance Calculator. Real-time FRED rates and smart financial insights for American home buyers.">
-    <meta name="keywords" content="mortgage refinance calculator, refinance savings, refi calculator, break-even point, current mortgage rate, FRED API, AI refinance, USA home refinance, FinGuid, Americans, financial calculator, world class calculator">
+    <meta name="keywords" content="mortgage refinance calculator, refinance savings, refi calculator, break-even point, current mortgage rate, FRED API, AI refinance, USA home refinance, FinGuid, Americans, financial calculator, world class calculator, AI friendly, SEO friendly">
     <meta name="robots" content="index, follow">
     <meta name="author" content="FinGuid - World's First AI Calculator Platform">
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#19343B"> 
 
-    <script async src="https://www.googletletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -21,190 +21,241 @@
       gtag('config', 'G-NYBL2CDNQJ');
     </script>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujv+Q9pE3k3Wd83w1sA7/63c501fC/y423qJ+5j5t4t1b3hA43j1/w8zF6B9t00pG8zF5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="refinance-calculator.css">
 </head>
 <body>
+
     <header class="main-header">
         <div class="header-content container">
-            <div class="logo">
-                <i class="fas fa-home" aria-hidden="true"></i> FinGuid
-            </div>
-            <div class="tagline">
-                Refinance Pro: World's First AI‑Powered Mortgage Refinance Calculator
+            <div class="logo-area">
+                <a href="https://www.finguid.com/" class="logo">FinGuid</a>
+                <span class="tagline">World's First AI Refinance Calculator</span>
             </div>
             
             <div class="accessibility-controls">
-                <button id="voice-command-button" class="control-button" title="Voice Command">
-                    <i class="fas fa-microphone" aria-hidden="true"></i>
-                    <span class="sr-only">Voice Command</span>
-                </button>
-                <button id="text-to-speech-button" class="control-button" title="Read Results">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                    <span class="sr-only">Text to Speech</span>
-                </button>
-                <button id="theme-toggle-button" class="control-button" title="Toggle Light/Dark Mode">
+                <button id="theme-toggle-button" class="control-button" title="Toggle Light/Dark Mode" aria-label="Toggle Light/Dark Mode">
                     <i class="fas fa-moon" aria-hidden="true"></i>
-                    <span class="sr-only">Toggle Theme</span>
                 </button>
+                <button id="text-to-speech-button" class="control-button" title="Text-to-Speech Mode" aria-label="Text-to-Speech Mode">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+                <button id="voice-command-button" class="control-button" title="Voice Command (Alpha)" aria-label="Voice Command (Alpha)">
+                    <i class="fas fa-microphone" aria-hidden="true"></i>
+                </button>
+                <div class="features-quick">
+                    AI-Powered | FRED Live Rate | PWA
+                </div>
             </div>
-            
-            <div class="features-quick">
-                <span><i class="fas fa-bolt"></i> Live Rates</span>
-                <span><i class="fas fa-robot"></i> AI Insight</span>
-                <span><i class="fas fa-mobile-alt"></i> PWA Ready</span>
+        </div>
+        <div class="live-rate-bar">
+            <div class="container">
+                <i class="fas fa-university" aria-hidden="true"></i> Live FRED 30yr Mortgage Rate: <strong id="live-rate-display">Fetching...</strong>
             </div>
         </div>
     </header>
 
-    <main class="calculator-page container">
-        <div class="calculator-container">
-            <section class="input-section card">
-                <h2>Your Refinance Scenario</h2>
-                <div class="input-group">
-                    <div class="input-split">
-                        <div class="input-block">
-                            <h3>Current Mortgage Details</h3>
-                            
-                            <label for="currentLoanBalance">Current Loan Balance ($)</label>
-                            <input type="number" id="currentLoanBalance" value="300000" min="0" step="1000">
-                            
-                            <label for="currentInterestRate">Current Interest Rate (%)</label>
-                            <input type="number" id="currentInterestRate" value="6.5" min="0" max="100" step="0.01">
-                            
-                            <label for="remainingTerm">Remaining Term (Years)</label>
-                            <select id="remainingTerm">
-                                <option value="300">25</option>
-                                <option value="240">20</option>
-                                <option value="180" selected>15</option>
-                                <option value="120">10</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input-block">
-                            <h3>New Mortgage Details</h3>
-                            
-                            <label for="newLoanAmount">New Loan Amount ($)</label>
-                            <input type="number" id="newLoanAmount" value="300000" min="0" step="1000" aria-describedby="new-loan-help">
-                            <p class="help-text" id="new-loan-help">Typically your current balance, or more for a Cash-Out Refi.</p>
-
-                            <label for="newInterestRate">New Interest Rate (%)</label>
-                            <input type="number" id="newInterestRate" value="7.0" min="0" max="100" step="0.01">
-                            
-                            <label for="newLoanTerm">New Loan Term (Years)</label>
-                            <select id="newLoanTerm">
-                                <option value="360" selected>30</option>
-                                <option value="240">20</option>
-                                <option value="180">15</option>
-                                <option value="120">10</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <h3>Refinance Costs</h3>
-                    <label for="closingCosts">Refinance Closing Costs ($)</label>
-                    <input type="number" id="closingCosts" value="5000" min="0" step="100">
-                </div>
-
-                <div class="ad-slot primary-ad">
-                    <p><i class="fas fa-handshake"></i> **Sponsored Product:** Compare the lowest refinance rates in your state!</p>
-                    <a href="#affiliate-link-1" class="button primary-button-link" target="_blank">View Live Refinance Offers</a>
-                </div>
-                
-            </section>
-
-            <section class="results-section">
-                <div class="summary-card card">
-                    <h2>Refinance Calculation Summary</h2>
-                    <div class="summary-details">
-                        <div>
-                            <p class="label">Current Monthly P&I</p>
-                            <p class="value" id="current-payment">$0.00</p>
-                        </div>
-                        <div>
-                            <p class="label">New Monthly P&I</p>
-                            <p class="value" id="new-payment">$0.00</p>
-                        </div>
-                        <div class="highlight-box">
-                            <p class="label">Monthly Savings</p>
-                            <p class="value savings" id="monthly-savings">$0.00</p>
-                        </div>
-                        <div class="highlight-box">
-                            <p class="label">Total Interest Saved</p>
-                            <p class="value total-savings" id="total-interest-savings">$0.00</p>
-                        </div>
-                    </div>
-
-                    <div class="break-even-point">
-                        <p class="label">Break-Even Point</p>
-                        <p class="value" id="break-even-months">0 months</p>
-                        <p class="help-text"><i class="fas fa-info-circle"></i> This is when your monthly savings cover your closing costs.</p>
-                    </div>
-                </div>
-
-                <div class="ai-insight-card card secondary-card">
-                    <h2><i class="fas fa-robot"></i> AI-Powered Refinance Insights</h2>
-                    <p id="ai-insight-text">Input your data to receive personalized, actionable advice on whether refinancing is right for you, based on current market trends and your financial goals.</p>
-                    <div class="ad-slot secondary-ad">
-                        <p><strong>Affiliate Recommendation:</strong> High Credit Score? Check out this preferred partner for low-fee options.</p>
-                        <a href="#affiliate-link-2" class="button secondary-button-link" target="_blank">Get Pre-Approved</a>
-                    </div>
-                </div>
-            </section>
-        </div>
+    <main class="calculator-container container">
         
-        <section class="detailed-results card full-width">
-            <div class="tab-controls">
-                <button class="tab-button active" onclick="showRefiTab('payment-comparison')">Payment & Savings Comparison</button>
-                <button class="tab-button" onclick="showRefiTab('amortization')">Amortization Schedules</button>
-            </div>
+        <section class="input-section card">
+            <h2>Your Current & New Loan Details</h2>
+            <form id="refinance-form" oninput="calculateRefinance()">
+                
+                <fieldset class="input-group">
+                    <legend>Current Mortgage</legend>
+                    <div class="input-split">
+                        <div class="input-field">
+                            <label for="currentLoanBalance">Remaining Balance</label>
+                            <input type="number" id="currentLoanBalance" value="300000" min="1000" step="1000" required>
+                            <span class="currency-symbol">$</span>
+                        </div>
+                        <div class="input-field">
+                            <label for="currentInterestRate">Current Rate (%)</label>
+                            <input type="number" id="currentInterestRate" value="6.5" min="0.1" step="0.01" required>
+                            <span class="currency-symbol">%</span>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <label for="remainingTermMonths">Remaining Term (Months)</label>
+                        <input type="number" id="remainingTermMonths" value="180" min="12" max="360" step="12" required>
+                    </div>
+                    <div class="input-field">
+                        <label for="currentMonthlyPayment">Current P&I Payment (Est.)</label>
+                        <input type="text" id="currentMonthlyPayment" value="$2,642.52" readonly class="readonly-value">
+                    </div>
+                </fieldset>
 
-            <div id="payment-comparison" class="tab-content active">
-                <div class="chart-container">
-                    <canvas id="refi-comparison-chart"></canvas>
+                <fieldset class="input-group">
+                    <legend>New Refinance Mortgage</legend>
+                    <div class="input-field">
+                        <label for="refiClosingCosts">Closing Costs ($)</label>
+                        <input type="number" id="refiClosingCosts" value="5000" min="0" step="100" required>
+                        <span class="currency-symbol">$</span>
+                    </div>
+                    <div class="input-split">
+                        <div class="input-field">
+                            <label for="newLoanAmount">New Loan Amount</label>
+                            <input type="number" id="newLoanAmount" value="305000" min="1000" step="1000" required>
+                            <span class="currency-symbol">$</span>
+                        </div>
+                        <div class="input-field">
+                            <label for="newInterestRate">New Rate (%)</label>
+                            <input type="number" id="newInterestRate" value="6.75" min="0.1" step="0.01" required>
+                            <span class="currency-symbol">%</span>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <label for="newLoanTermMonths">New Term (Years)</label>
+                        <select id="newLoanTermMonths" onchange="calculateRefinance()">
+                            <option value="360">30 Years</option>
+                            <option value="240">20 Years</option>
+                            <option value="180" selected>15 Years</option>
+                            <option value="120">10 Years</option>
+                        </select>
+                    </div>
+                </fieldset>
+            </form>
+            
+            <div class="ad-slot">
+                <p>Compare Refinance Offers & Save Now!</p>
+                <a href="#sponsor-link" class="cta-button">Get Personalized Quotes</a>
+            </div>
+        </section>
+
+        <section class="results-section">
+            
+            <div class="summary-card card">
+                <h3>Refinance Savings Summary</h3>
+                <div class="summary-details">
+                    <div class="summary-item">
+                        <span class="label">Monthly Payment Change</span>
+                        <p class="value" id="monthly-payment-change">$0.00</p>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Total Interest Saved / Spent</span>
+                        <p class="value" id="total-interest-change">$0.00</p>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Break-Even Point</span>
+                        <p class="value" id="break-even-point">N/A</p>
+                    </div>
                 </div>
             </div>
 
-            <div id="amortization" class="tab-content">
-                <h3>Detailed Amortization Schedules</h3>
-                
-                <div class="amortization-table-container" id="amortization-table-container"> 
-                    <table id="amortization-table" class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th>Old Payment</th>
-                                <th>New Payment</th>
-                                <th>Savings</th>
-                                <th>Old Balance</th>
-                                <th>New Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td colspan="6" class="placeholder-text">Please input your loan details to generate the schedule.</td></tr>
-                        </tbody>
-                    </table>
+            <div class="ai-insights card">
+                <h3><i class="fas fa-brain"></i> FinGuid AI Insight</h3>
+                <p id="ai-insight-text">... Enter your details above to receive personalized, AI-driven recommendations on whether refinancing makes financial sense for your specific situation. ...</p>
+                <a href="#affiliate-product" class="insight-cta">Explore AI-Recommended Mortgage Lenders</a>
+            </div>
+
+            <div class="tabs-container card">
+                <div class="tabs-nav">
+                    <button class="tab-button active" onclick="showRefiTab('payment-comparison')">Payment & Savings Comparison</button>
+                    <button class="tab-button" onclick="showRefiTab('amortization')">Amortization Schedule</button>
+                </div>
+
+                <div id="payment-comparison" class="tab-content active">
+                    <h4>Current vs. New Loan</h4>
+                    <div class="chart-container-responsive">
+                         <canvas id="comparisonChart"></canvas>
+                    </div>
+                    
+                    <div class="table-container-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Current Loan (Remaining)</th>
+                                    <th>New Refinanced Loan</th>
+                                    <th>Difference</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>P&I Payment</td>
+                                    <td id="comp-current-pandi"></td>
+                                    <td id="comp-new-pandi"></td>
+                                    <td id="comp-pandi-diff"></td>
+                                </tr>
+                                <tr>
+                                    <td>Loan Term (Months)</td>
+                                    <td id="comp-current-term"></td>
+                                    <td id="comp-new-term"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Interest Paid (Over Term)</td>
+                                    <td id="comp-current-interest"></td>
+                                    <td id="comp-new-interest"></td>
+                                    <td id="comp-interest-diff"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="disclaimer-text">**Note:** Total Interest calculation includes interest for the remaining term of the current loan only for comparison purposes, plus closing costs for the New Loan.</p>
+                </div>
+
+                <div id="amortization" class="tab-content">
+                    <h4>New Loan Amortization (First 12 Months)</h4>
+                    
+                    <div class="amortization-controls">
+                        <label for="amortization-year-select">View Year:</label>
+                        <select id="amortization-year-select"></select>
+                        <button id="prev-year-button" class="control-button" title="Previous Year" disabled>
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <button id="next-year-button" class="control-button" title="Next Year">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button id="export-csv-button" class="control-button cta-button" title="Export to CSV">
+                            <i class="fas fa-file-csv"></i> Export
+                        </button>
+                    </div>
+
+                    <div class="table-container-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="data-table amortization-table">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Payment</th>
+                                    <th>Interest</th>
+                                    <th>Principal</th>
+                                    <th>Remaining Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="amortization-table-body">
+                                <tr><td colspan="5" class="placeholder">Calculate to see the schedule.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
-    
+
     <footer class="main-footer">
         <div class="container">
             <nav class="footer-nav">
-                <div class="nav-column">
-                    <h4>FinGuid Platform</h4>
+                <div class="footer-col">
+                    <h4>Calculators</h4>
                     <ul>
-                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                        <li><a href="/affordability-calculator.html">Affordability Calculator</a></li>
-                        <li><a href="/refinance-calculator.html">Refinance Calculator</a></li>
+                        <li><a href="https://finguid.com/calculators">Mortgage Calculator</a></li>
+                        <li><a href="https://finguid.com/calculators">Affordability Calculator</a></li>
+                        <li><a href="https://finguid.com/calculators">Refinance Calculator</a></li>
+                        <li><a href="https://finguid.com/calculators">All Calculators</a></li>
                     </ul>
                 </div>
-                <div class="nav-column">
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="https://www.finguid.com/about.html">About Us</a></li>
+                        <li><a href="https://www.finguid.com/contact.html">Contact</a></li>
+                        <li><a href="https://www.finguid.com/privacy.html">Privacy Policy</a></li>
+                        <li><a href="https://www.finguid.com/terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
                     <h4>Partnership & Ads (Monetization)</h4>
                     <ul>
                         <li><a href="#advertising">Advertising (Ad Slot)</a></li>
@@ -232,7 +283,6 @@
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="/register-sw.js"></script> 
     <script src="refinance-calculator.js"></script>
     
 </body>
