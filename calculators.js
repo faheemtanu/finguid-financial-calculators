@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -15,17 +16,21 @@
     <meta name="description" content="Access all our free financial calculators in one place. Mortgage, auto loan, investment, and retirement planning calculators designed for Americans.">
     <meta name="keywords" content="financial calculators, mortgage calculator, auto loan calculator, investment calculator, retirement planning, USA financial tools">
     
+    <!-- Open Graph Tags -->
     <meta property="og:title" content="Financial Calculators - USA Financial Planning Tools">
     <meta property="og:description" content="Comprehensive suite of free financial calculators designed specifically for Americans. Calculate mortgages, loans, investments, and more.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.finguid.com/calculators.html">
     
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Schema.org Markup -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -47,6 +52,7 @@
     }
     </script>
     
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -56,6 +62,7 @@
     </script>
 </head>
 <body>
+    <!-- Navigation -->
     <header class="header">
         <nav class="navbar">
             <div class="container">
@@ -81,7 +88,9 @@
         </nav>
     </header>
 
+    <!-- Main Content -->
     <main class="calculators-page">
+        <!-- Hero Section -->
         <section class="calculators-hero">
             <div class="container">
                 <div class="hero-content">
@@ -106,6 +115,7 @@
             </div>
         </section>
 
+        <!-- Filter Section -->
         <section class="calculator-filters">
             <div class="container">
                 <div class="filter-header">
@@ -149,10 +159,12 @@
             </div>
         </section>
 
+        <!-- Calculators Grid -->
         <section class="calculators-grid-section">
             <div class="container">
                 <div class="calculators-grid" id="calculators-grid">
                     
+                    <!-- Home & Mortgage Calculators -->
                     <div class="calculator-card" data-category="home" data-keywords="mortgage home loan payment pmi tax insurance">
                         <div class="card-status">
                             <span class="status-badge available">Available</span>
@@ -171,28 +183,6 @@
                         </div>
                         <div class="card-actions">
                             <a href="/mortgage-calculator.html" class="btn btn-primary">
-                                <i class="fas fa-calculator"></i>
-                                Calculate Now
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="calculator-card" data-category="home" data-keywords="affordability home loan house budget maximum">
-                        <div class="card-status">
-                            <span class="status-badge available">New!</span>
-                        </div>
-                        <div class="card-icon" style="background: var(--color-bg-9);"> <i class="fas fa-sack-dollar"></i> </div>
-                        <div class="card-content">
-                            <h3>Affordability Calculator</h3>
-                            <p>Determine the maximum loan amount and home price you can afford based on your income, debts, and down payment.</p>
-                            <div class="card-features">
-                                <span class="feature-tag">Max Price</span>
-                                <span class="feature-tag">Debt-to-Income</span>
-                                <span class="feature-tag">DTI Ratio</span>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="/affordability-calculator.html" class="btn btn-primary">
                                 <i class="fas fa-calculator"></i>
                                 Calculate Now
                             </a>
@@ -247,6 +237,7 @@
                         </div>
                     </div>
 
+                    <!-- Auto & Transportation Calculators -->
                     <div class="calculator-card" data-category="auto" data-keywords="auto loan car payment vehicle financing trade">
                         <div class="card-status">
                             <span class="status-badge coming-soon">Week 3</span>
@@ -295,6 +286,7 @@
                         </div>
                     </div>
 
+                    <!-- Investment & Retirement Calculators -->
                     <div class="calculator-card" data-category="investment" data-keywords="investment compound interest retirement savings growth">
                         <div class="card-status">
                             <span class="status-badge coming-soon">Week 4</span>
@@ -367,6 +359,7 @@
                         </div>
                     </div>
 
+                    <!-- Debt & Credit Calculators -->
                     <div class="calculator-card" data-category="debt" data-keywords="credit card debt payoff interest payment strategy">
                         <div class="card-status">
                             <span class="status-badge coming-soon">Week 5</span>
@@ -415,6 +408,7 @@
                         </div>
                     </div>
 
+                    <!-- Business & Tax Calculators -->
                     <div class="calculator-card" data-category="business" data-keywords="business loan sba funding startup">
                         <div class="card-status">
                             <span class="status-badge coming-soon">Coming Soon</span>
@@ -465,6 +459,7 @@
 
                 </div>
 
+                <!-- No Results Message -->
                 <div id="no-results" class="no-results" style="display: none;">
                     <div class="no-results-content">
                         <i class="fas fa-search"></i>
@@ -479,6 +474,7 @@
             </div>
         </section>
 
+        <!-- Features Section -->
         <section class="calculator-features">
             <div class="container">
                 <div class="section-header">
@@ -538,6 +534,7 @@
             </div>
         </section>
 
+        <!-- Newsletter CTA -->
         <section class="newsletter-cta">
             <div class="container">
                 <div class="cta-content">
@@ -559,6 +556,7 @@
         </section>
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -612,6 +610,7 @@
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="script.js"></script>
     <script src="calculators.js"></script>
 </body>
