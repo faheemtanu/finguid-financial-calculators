@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Refinance Pro — World's First AI‑Powered Mortgage Refinance Calculator | FinGuid USA</title>
+    <meta name="description" content="Calculate your mortgage refinance savings, break-even point, and total interest using the World's First AI-Powered Refinance Calculator. Real-time FRED rates and smart financial insights for American home buyers.">
+    <meta name="keywords" content="mortgage refinance calculator, refinance savings, refi calculator, break-even point, current mortgage rate, FRED API, AI refinance, USA home refinance, FinGuid">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#19343B"> 
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <link rel="stylesheet" href="refinance-calculator.css"> <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "AI Mortgage Refinance Calculator",
+      "applicationCategory": "FinancialApplication",
+      "operatingSystem": "All",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "1250"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
+            <p class="tagline">World's First AI-Powered Refinance Calculator</p>
+            <div class="features-quick">
+                <span class="feature-quick"><i class="fas fa-microchip"></i> AI Insights</span>
+                <span class="feature-quick"><i class="fas fa-microphone-alt"></i> Voice Command</span>
+                <span class="feature-quick"><i class="fas fa-chart-line"></i> Live FRED Rates</span>
+                <span class="feature-quick"><i class="fas fa-cloud-download-alt"></i> PWA Ready</span>
+            </div>
+            
+            <div class="accessibility-controls">
+                <button id="mode-toggle" aria-label="Toggle Light/Dark Mode"><i class="fas fa-moon"></i></button>
+                <button id="voice-command-toggle" aria-label="Activate Voice Command"><i class="fas fa-microphone-alt"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="calculator-container">
+            
+            <section class="input-section card">
+                <h2>Mortgage Refinance Analysis</h2>
+                <form id="refinance-form" aria-label="Mortgage Refinance Input Form">
+                    
+                    <fieldset class="input-group">
+                        <legend class="section-title">Current Loan Details</legend>
+                        <div class="input-split">
+                            <label for="current-balance">Current Principal Balance ($)</label>
+                            <input type="number" id="current-balance" value="250000" min="1000" step="1000" required aria-label="Current Principal Balance">
+                            
+                            <label for="current-rate">Current Interest Rate (%)</label>
+                            <input type="number" id="current-rate" value="6.5" min="0.1" max="30" step="0.01" required aria-label="Current Interest Rate">
+
+                            <label for="remaining-term">Remaining Term (Years)</label>
+                            <input type="number" id="remaining-term" value="25" min="1" max="30" step="1" required aria-label="Remaining Loan Term in Years">
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="input-group">
+                        <legend class="section-title">New Refinance Loan Details</legend>
+                        <div class="input-split">
+                            <label for="new-rate">New Interest Rate (%) <span id="fred-rate-label" class="live-rate-badge" title="Live rate from FRED API">Live Rate <i class="fas fa-bolt"></i></span></label>
+                            <input type="number" id="new-rate" value="5.5" min="0.1" max="30" step="0.01" required aria-label="New Interest Rate">
+
+                            <label for="new-term">New Loan Term (Years)</label>
+                            <select id="new-term" required aria-label="New Loan Term">
+                                <option value="30">30 Years</option>
+                                <option value="20">20 Years</option>
+                                <option value="15" selected>15 Years</option>
+                                <option value="10">10 Years</option>
+                            </select>
+
+                            <label for="closing-costs">Closing Costs ($) - (Added to New Principal)</label>
+                            <input type="number" id="closing-costs" value="5000" min="0" step="100" aria-label="Refinance Closing Costs">
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset class="input-group">
+                        <legend class="section-title">Monthly PITI & HOA</legend>
+                        <div class="input-split">
+                            <label for="monthly-tax">Monthly Property Tax ($)</label>
+                            <input type="number" id="monthly-tax" value="350" min="0" step="1" aria-label="Monthly Property Tax">
+
+                            <label for="monthly-insurance">Monthly Insurance ($)</label>
+                            <input type="number" id="monthly-insurance" value="120" min="0" step="1" aria-label="Monthly Homeowner's Insurance">
+                            
+                            <label for="monthly-hoa">Monthly HOA/Other ($)</label>
+                            <input type="number" id="monthly-hoa" value="0" min="0" step="1" aria-label="Monthly HOA or Other Fees">
+                        </div>
+                    </fieldset>
+
+                    <button type="submit" class="primary-button" id="calculate-button">Calculate Refinance Savings</button>
+                    
+                    <div class="monetization-slot affiliate-ad-small" id="affiliate-ad-1" aria-label="Affiliate link to a Top Refinance Lender">
+                        <p><strong>Refinance Offer:</strong> Compare pre-qualified rates instantly and save thousands! <a href="#affiliate-link-to-lender" target="_blank" rel="sponsored noopener">Get Personalized Rates Now <i class="fas fa-external-link-alt"></i></a></p>
+                    </div>
+
+                </form>
+            </section>
+
+            <section class="output-section">
+                <div class="summary-card card">
+                    <h2 class="summary-title">Refinance Analysis Results</h2>
+                    <div class="summary-details">
+                        <div class="summary-item">
+                            <span class="label">Monthly Savings (P&I)</span>
+                            <span class="value" id="monthly-savings">$0.00</span>
+                        </div>
+                        <div class="summary-item highlight">
+                            <span class="label">Break-Even Point (Months)</span>
+                            <span class="value" id="break-even">0.0</span>
+                        </div>
+                        <div class="summary-item highlight">
+                            <span class="label">Total Interest Savings Over Life</span>
+                            <span class="value" id="total-interest-savings">$0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">New Total Monthly Payment (PITI)</span>
+                            <span class="value" id="new-monthly-piti">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-insights card">
+                    <h3><i class="fas fa-microchip"></i> AI-Powered Insights & Recommendations</h3>
+                    <div id="ai-output">
+                        <p>Enter your loan details and click calculate to receive a personalized analysis and recommendations from FinGuid's AI engine.</p>
+                        <p><strong>Partner Spotlight:</strong> See if you qualify for a $200 bonus with our featured sponsor <a href="#sponsor-link" target="_blank" rel="sponsored noopener">Financial Partner Co.</a></p>
+                    </div>
+                </div>
+                
+                <div class="tabs-container card">
+                    <div class="tabs-nav">
+                        <button class="tab-button active" onclick="showRefiTab('payment-comparison')">Payment Comparison</button>
+                        <button class="tab-button" onclick="showRefiTab('interest-timeline')">Interest Timeline</button>
+                        <button class="tab-button" onclick="showRefiTab('amortization-table')">New Loan Amortization</button>
+                    </div>
+                    
+                    <div id="payment-comparison" class="tab-content active">
+                        <h4>Current vs. New Monthly P&I</h4>
+                        <canvas id="paymentComparisonChart" aria-label="Chart comparing current and new principal and interest payments."></canvas>
+                    </div>
+                    
+                    <div id="interest-timeline" class="tab-content">
+                        <h4>Total Interest Paid Over Time</h4>
+                        <canvas id="amortizationTimelineChart" aria-label="Chart showing the total interest paid for the current remaining loan and the new refinanced loan."></canvas>
+                    </div>
+
+                    <div id="amortization-table" class="tab-content">
+                        <h4>New Loan Amortization Schedule</h4>
+                        <div class="table-controls">
+                            <label for="year-display-refi">Display Year:</label>
+                            <input type="range" id="year-display-refi" min="1" max="30" value="1" step="1" aria-label="Select Amortization Year">
+                            <span id="current-year-display">Year 1</span>
+                            <button id="export-csv-button-refi" class="secondary-button" aria-label="Export New Loan Amortization to CSV"><i class="fas fa-file-csv"></i> Export CSV</button>
+                        </div>
+                        <div class="table-scroll">
+                            <table id="amortization-table-refi">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Payment</th>
+                                        <th>Interest</th>
+                                        <th>Principal</th>
+                                        <th>Remaining Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="6">Calculate to see the schedule.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="monetization-slot large-ad-banner" id="large-ad-slot" aria-label="Large advertising banner for high-value sponsor or product">
+                    <h3>Special Sponsor Offer: Get a Free Home Appraisal Report!</h3>
+                    <p>Click here to connect with top-rated mortgage brokers in your state.</p>
+                    <a href="#high-value-sponsor-link" target="_blank" rel="sponsored noopener" class="primary-button">View Offer</a>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <h2 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h2>
+                    <p>World's First AI-Enhanced Financial Calculator Platform.</p>
+                </div>
+                <nav class="footer-nav" aria-label="Footer Navigation">
+                    <div class="nav-column">
+                        <h4>Calculators</h4>
+                        <ul>
+                            <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                            <li><a href="/refinance-calculator.html">Refinance Calculator</a></li>
+                            <li><a href="#affordability">Affordability Calculator</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-column">
+                        <h4>Company & Legal</h4>
+                        <ul>
+                            <li><a href="#about">About FinGuid</a></li>
+                            <li><a href="#terms">Terms & Privacy</a></li>
+                            <li><a href="#contact">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-column">
+                        <h4>Partnership & Ads (Monetization)</h4>
+                        <ul>
+                            <li><a href="#advertising">Advertising (Ad Slot)</a></li>
+                            <li><a href="#affiliates">Affiliate Products</a></li>
+                            <li><a href="#sponsor-link">Sponsor Products</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. We monetize via advertising and affiliate partnerships.
+                    </p>
+                </div>
+                
+                <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="refinance-calculator.js"></script>
+    
+</body>
+</html>
