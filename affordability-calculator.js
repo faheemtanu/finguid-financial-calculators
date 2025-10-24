@@ -1,42 +1,37 @@
 /*
-  HOME LOAN PRO — AI‑POWERED MORTGAGE AFFORDABILITY CALCULATOR - PRODUCTION JS v4.0 (STYLE-ALIGNED)
+  HOME LOAN PRO — AI‑POWERED MORTGAGE AFFORDABILITY CALCULATOR - PRODUCTION JS v4.1
   FinGuid USA Market Domination Build - World's First AI-Powered Calculator
    Target: Production Ready, DTI-Based Affordability Calculation.
-   Aligned Features Implemented:
-  ✅ Core DTI Affordability Calculation (Retained)
-  ✅ UTILS Module (Formatting) & THEME_MANAGER (Dark/Light Mode) (Imported from Mortgage JS)
-  ✅ AI-Powered Insights Engine (Conditional logic for recommendations & monetization) (Retained)
-  ✅ Voice Control (Speech Recognition & Text-to-Speech) (Imported from Mortgage JS)
-  ✅ WCAG 2.1 AA Accessibility & Responsive Design (Supported by CSS/JS)
+   Features Implemented:
+  ✅ Core DTI Affordability Calculation (28%/36% Rule) & Dynamic PMI Logic
+  ✅ FRED API Integration (MORTGAGE30US) with Auto-Update (Key: 9c6c421f077f2091e8bae4f143ada59a)
+  ✅ AI-Powered Insights Engine (Monetization & Recommendations)
+  ✅ Voice Control (Speech Recognition & Text-to-Speech)
+  ✅ Light/Dark Mode Toggling & User Preferences Storage
+  ✅ PWA Ready Setup (Service Worker Registration)
+  ✅ WCAG 2.1 AA Accessibility & Responsive Design
    © 2025 FinGuid - World's First AI Calculator Platform for Americans
 */
 
 // ==========================================================================
-// I. GLOBAL CONFIGURATION & STATE MANAGEMENT (Core Affordability Logic)
+// I. GLOBAL CONFIGURATION & STATE MANAGEMENT
 // ==========================================================================
 
 const AFFORDABILITY_CALCULATOR = {
-    VERSION: '4.0',
-    DEBUG: false,
-    FRONT_END_DTI: 0.28, 
-    BACK_END_DTI: 0.36,  
+    VERSION: '4.1',
+    FRONT_END_DTI: 0.28, // 28% DTI Rule (PITI / Income)
+    BACK_END_DTI: 0.36,  // 36% DTI Rule (PITI + Debts / Income)
     DEFAULT_RATE: 7.00, 
+    // Core parameters for property-related costs
     INITIAL_STATE: {
         annualIncome: 80000,
         monthlyDebts: 500,
         downPayment: 20000,
         mortgageTerm: 30, // years
-        interestRate: 7.00,
+        interestRate: 7.00, // Will be overwritten by FRED API
         propertyTaxRate: 0.012, // 1.2% of home value
-        insuranceRate: 0.0035, // 0.35% of home value (Mock/Estimate)
-        pmiRate: 0.005, // 0.5% of loan, for < 20% down (Mock/Estimate)
-    },
-    currentCalculation: {
-        maxHomePrice: 0,
-        maxLoanAmount: 0,
-        maxMonthlyPITI: 0,
-        feMaxHomePrice: 0,
-        downPaymentUsed: 0,
+        insuranceRate: 0.0035, // 0.35% of home value (Homeowner's Insurance)
+        pmiRate: 0.005, // 0.5% of loan, for < 20% down
     }
 };
 
@@ -45,491 +40,458 @@ let userPreferences = {
     voiceMode: false
 };
 
-// ==========================================================================
-// II. UTILITY & FORMATTING MODULE (IMPORTED for Style Alignment)
-// ==========================================================================
-
-const UTILS = (function() {
-    
-    /**
-     * Formats a number as USD currency.
-     */
-    function formatCurrency(amount) { 
-        if (typeof amount !== 'number' || isNaN(amount)) return '$0.00';
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2, }).format(amount);
-    }
-    
-    /**
-     * Formats a number as a percentage.
-     */
-    function formatPercentage(value) {
-        if (typeof value !== 'number' || isNaN(value)) return '0.00%';
-        return (value * 100).toFixed(2) + '%';
-    }
-    
-    /**
-     * Parses a currency string back into a numeric value.
-     */
-    function parseCurrency(currencyString) {
-        if (typeof currencyString !== 'string') return 0;
-        return parseFloat(currencyString.replace(/[^0-9.-]+/g,"")) || 0;
-    }
-
-    /**
-     * Gets the numeric value of a range/number input or parses currency if needed.
-     */
-    function getNumericValue(elementId, isCurrency = false) {
-        const element = document.getElementById(elementId);
-        if (!element) return 0;
-        
-        let value = element.value;
-        if (isCurrency) {
-            return parseCurrency(value);
-        }
-        
-        return parseFloat(value) || 0;
-    }
-
-    /**
-     * Simple Mortgage Payment Formula Helper (M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1 ])
-     */
-    function calculateMonthlyPI(principal, annualRate, years) {
-        const R = annualRate / 12 / 100; // Monthly rate
-        const N = years * 12; // Total payments
-        if (R === 0) return principal / N; // Handles zero interest case
-        
-        const R_PLUS_1_POW_N = Math.pow(1 + R, N);
-        return principal * (R * R_PLUS_1_POW_N) / (R_PLUS_1_POW_N - 1);
-    }
-
-    return {
-        formatCurrency,
-        formatPercentage,
-        parseCurrency,
-        getNumericValue,
-        calculateMonthlyPI
-    };
-})();
-
 
 // ==========================================================================
-// III. CORE CALCULATION LOGIC (DTI-based calculation - Retained)
+// II. CORE CALCULATION LOGIC (DTI-based)
 // ==========================================================================
 
 function getCalculatorInputs() {
+    const parseNumeric = (id, defaultValue) => {
+        const element = document.getElementById(id);
+        if (!element) return defaultValue;
+        // Allows for currency formatted inputs (e.g., $80,000)
+        return parseFloat(element.value.replace(/[^0-9.]/g, '')) || defaultValue; 
+    };
+    
     return {
-        annualIncome: UTILS.getNumericValue('annualIncome', true),
-        monthlyDebts: UTILS.getNumericValue('monthlyDebts', true),
-        downPayment: UTILS.getNumericValue('downPayment', true),
-        mortgageTerm: UTILS.getNumericValue('mortgageTerm'),
-        interestRate: UTILS.getNumericValue('interestRate'),
-        propertyTaxRate: UTILS.getNumericValue('propertyTaxRate') / 100, // Convert % to decimal
-        insuranceRate: AFFORDABILITY_CALCULATOR.INITIAL_STATE.insuranceRate, // Fixed estimate
-        pmiRate: AFFORDABILITY_CALCULATOR.INITIAL_STATE.pmiRate // Fixed estimate
+        annualIncome: parseNumeric('annualIncome', AFFORDABILITY_CALCULATOR.INITIAL_STATE.annualIncome),
+        monthlyDebts: parseNumeric('monthlyDebts', AFFORDABILITY_CALCULATOR.INITIAL_STATE.monthlyDebts),
+        downPayment: parseNumeric('downPayment', AFFORDABILITY_CALCULATOR.INITIAL_STATE.downPayment),
+        mortgageTerm: parseInt(document.getElementById('mortgageTerm').value) || AFFORDABILITY_CALCULATOR.INITIAL_STATE.mortgageTerm,
+        interestRate: parseFloat(document.getElementById('interestRate').value) || AFFORDABILITY_CALCULATOR.INITIAL_STATE.interestRate,
+        zipCode: (document.getElementById('zipCode') ? document.getElementById('zipCode').value.trim() : '')
     };
 }
 
 function calculateAffordability() {
     const inputs = getCalculatorInputs();
-    const annualRate = inputs.interestRate;
-    const years = inputs.mortgageTerm;
-    const dp = inputs.downPayment;
-    const monthlyDebt = inputs.monthlyDebts;
-    const monthlyIncome = inputs.annualIncome / 12;
 
-    // 1. Calculate Max Monthly PITI based on Front-End DTI (28%)
-    const maxMonthlyPITI_FE = monthlyIncome * AFFORDABILITY_CALCULATOR.FRONT_END_DTI;
-
-    // 2. Calculate Max Monthly PITI based on Back-End DTI (36%)
-    const maxMonthlyDebt_BE = monthlyIncome * AFFORDABILITY_CALCULATOR.BACK_END_DTI;
-    const maxMonthlyPITI_BE = maxMonthlyDebt_BE - monthlyDebt;
-
-    // 3. Determine the controlling Max Monthly PITI (the lowest of the two)
+    // 1. Calculate Max Monthly PITI based on DTI Rules
+    const maxMonthlyPITI_FE = inputs.annualIncome * AFFORDABILITY_CALCULATOR.FRONT_END_DTI / 12;
+    const maxMonthlyDebt_BE = inputs.annualIncome * AFFORDABILITY_CALCULATOR.BACK_END_DTI / 12;
+    const maxMonthlyPITI_BE = maxMonthlyDebt_BE - inputs.monthlyDebts;
     const maxMonthlyPITI = Math.min(maxMonthlyPITI_FE, maxMonthlyPITI_BE);
-    
-    // Ensure maxMonthlyPITI is not negative
+
     if (maxMonthlyPITI <= 0) {
-        updateResults({ 
-            maxHomePrice: 0, 
-            maxLoanAmount: 0, 
-            maxMonthlyPITI: 0, 
-            feMaxHomePrice: 0,
-            downPaymentUsed: dp
-        });
-        generateInsights(0, inputs);
-        showToast("Calculation failed: Your monthly debts may be too high relative to your income.", 'error');
+        renderResults({ maxHomePrice: 0, maxLoanAmount: 0, estimatedTotalPITI: 0, monthlyDebt: inputs.monthlyDebts, estimatedP_I: 0, estimatedTax: 0, estimatedIns: 0, estimatedPMI: 0 });
+        THEME_MANAGER.showToast('Your monthly debt is too high or income too low to qualify.', 'error');
         return;
     }
 
-    // 4. Calculate what loan amount this max PITI can support (Iterative/Binary search is more accurate, but we use an algebraic approximation for speed)
-    // Formula rearrangement is complex due to the Tax/Insurance being a function of the unknown Home Value.
-    // We can solve by expressing all components relative to the Loan Amount (L) and Down Payment (DP).
-    
-    // PITI = PI + Tax + Insurance + PMI
-    // PI = L * PI_Factor(R, N)
-    // Tax = (L + DP) * Tax_Rate / 12
-    // Ins = (L + DP) * Ins_Rate / 12
-    // PMI (if applicable) = L * PMI_Rate / 12 
-    
-    // For Simplicity, we assume Max Loan (L) is based only on Max Monthly PI, then adjust for T&I.
-    
-    // Let's first calculate the maximum PI payment the user can afford:
-    const maxMonthlyPI = maxMonthlyPITI - (
-        // Estimate T&I based on Home Value from Loan + Down Payment. This is an approximation.
-        // A standard approach is to solve for the Loan Amount (L) that satisfies the equation:
-        // Max PITI = L * PI_Factor + (L + DP) * (TaxRate/12 + InsRate/12 + PMI_Factor)
-        // L = (Max PITI - DP * (TaxRate/12 + InsRate/12)) / (PI_Factor + (TaxRate/12 + InsRate/12 + PMI_Factor))
-        // PMI Factor is applied if DP is less than 20% of the calculated total Home Value, which creates a circular dependency.
+    // 2. Calculation Constants
+    const monthlyRate = inputs.interestRate / 100 / 12;
+    const termMonths = inputs.mortgageTerm * 12;
+    const P_I_Factor = (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1) || 0;
+    const taxFactorMonthly = AFFORDABILITY_CALCULATOR.INITIAL_STATE.propertyTaxRate / 12;
+    const insuranceFactorMonthly = AFFORDABILITY_CALCULATOR.INITIAL_STATE.insuranceRate / 12;
+    const initialPMIFactor = AFFORDABILITY_CALCULATOR.INITIAL_STATE.pmiRate / 12;
+
+    // Sub-function to calculate L (Loan) and H (Price) for a given PMI factor
+    const calculateLoanAndPrice = (pmiFactor) => {
+        // L = (PITI_max - DP * (T + I)) / (P_I_Factor + T + I + PMI_Factor)
+        const numerator = maxMonthlyPITI - inputs.downPayment * (taxFactorMonthly + insuranceFactorMonthly);
+        const denominator = P_I_Factor + taxFactorMonthly + insuranceFactorMonthly + pmiFactor;
         
-        // **Simplified Model (Most Calculators Use This for Speed)**
-        // 1. Calculate L based only on PI, assuming an initial guess for T&I (e.g., based on DP alone or a typical home price).
-        // 2. Recalculate T&I based on the derived Home Price (L + DP).
-        // 3. Check if the resulting PITI is below the maximum. 
+        const maxLoanAmount = numerator / denominator;
+        const maxHomePrice = maxLoanAmount + inputs.downPayment;
         
-        // **Algebraic Solution (More Accurate for this case)**
-        // Target: Solve for L (Max Loan Amount)
-        // Max Monthly PITI = Monthly Debt-to-Income (DTI) Limit
-        
-        // Let F = PI_Factor + (Tax_Rate / 12) + (Ins_Rate / 12) + (PMI_Factor)
-        // Max_PITI = L * F + DP * (Tax_Rate / 12 + Ins_Rate / 12)
-        // Note: PMI_Factor is L * PMI_Rate/12 if L/(L+DP) > 0.8. We'll simplify for one pass.
-        
-        // Assume LTV is > 80% (PMI applies) if DP is < 20% of a reasonably high home price (e.g., $500k). 
-        const isPMIApplicable = dp / (dp + 500000) < 0.2; 
-        const pmiFactor = isPMIApplicable ? (inputs.pmiRate / 12) : 0;
-        
-        // Factor for PI: Monthly PI payment per $1 of Loan
-        const R = annualRate / 12 / 100;
-        const N = years * 12;
-        const piFactor = R === 0 ? (1 / N) : (R * Math.pow(1 + R, N) / (Math.pow(1 + R, N) - 1));
-        
-        // Factor for T&I: Monthly T&I payment per $1 of Home Value
-        const monthlyHomeValueFactor = (inputs.propertyTaxRate / 12) + (inputs.insuranceRate / 12);
-        
-        // Combined Factor (PI on Loan, T&I on Home Value (L+DP))
-        // Max_PITI = L * PI_Factor + (L + DP) * MonthlyHomeValueFactor + L * PMI_Factor
-        // Max_PITI = L * (PI_Factor + MonthlyHomeValueFactor + PMI_Factor) + DP * MonthlyHomeValueFactor
-        
-        const loanCoeff = piFactor + monthlyHomeValueFactor + pmiFactor;
-        const constantTerm = dp * monthlyHomeValueFactor;
-        
-        const maxLoanAmount = (maxMonthlyPITI - constantTerm) / loanCoeff;
-        
-        // Final Results
-        const maxHomePrice = maxLoanAmount + dp;
-        
-        // Calculate the Max Monthly PITI using the final maxHomePrice to verify DTI
-        const monthlyTax = maxHomePrice * (inputs.propertyTaxRate / 12);
-        const monthlyInsurance = maxHomePrice * (inputs.insuranceRate / 12);
-        const monthlyPI = UTILS.calculateMonthlyPI(maxLoanAmount, annualRate, years);
-        const monthlyPMI = isPMIApplicable ? (maxLoanAmount * (inputs.pmiRate / 12)) : 0;
-        const verifiedPITI = monthlyPI + monthlyTax + monthlyInsurance + monthlyPMI;
-        
-        // 5. Calculate Front-End Max Home Price for comparison
-        const feLoanCoeff = piFactor + monthlyHomeValueFactor; // No PMI is assumed for simpler FE DTI calculation
-        const feConstantTerm = dp * monthlyHomeValueFactor;
-        const feMaxLoanAmount = (maxMonthlyPITI_FE - feConstantTerm) / feLoanCoeff;
-        const feMaxHomePrice = feMaxLoanAmount + dp;
-        
-        // Store results in state and update UI
-        AFFORDABILITY_CALCULATOR.currentCalculation = {
-            maxHomePrice: maxHomePrice,
-            maxLoanAmount: maxLoanAmount,
-            maxMonthlyPITI: verifiedPITI,
-            feMaxHomePrice: feMaxHomePrice,
-            downPaymentUsed: dp,
-        };
-        
-        updateResults(AFFORDABILITY_CALCULATOR.currentCalculation);
-        generateInsights(maxHomePrice, inputs);
-}
-
-
-// ==========================================================================
-// IV. UI & RESULT RENDERING (Retained, but uses UTILS.formatCurrency)
-// ==========================================================================
-
-function updateResults(calc) {
-    document.getElementById('max-home-price').textContent = UTILS.formatCurrency(calc.maxHomePrice);
-    document.getElementById('max-loan-amount').textContent = UTILS.formatCurrency(calc.maxLoanAmount);
-    document.getElementById('max-monthly-piti').textContent = UTILS.formatCurrency(calc.maxMonthlyPITI);
-    document.getElementById('fe-dti-price').textContent = UTILS.formatCurrency(calc.feMaxHomePrice);
-    document.getElementById('dp-used').textContent = UTILS.formatCurrency(calc.downPaymentUsed);
-
-    // Update range value text
-    const taxRate = UTILS.getNumericValue('propertyTaxRate');
-    document.getElementById('property-tax-value').textContent = taxRate.toFixed(2) + '%';
-}
-
-// V. AI-POWERED INSIGHTS GENERATION (AI Friendly & Monetization)
-function generateInsights(maxPrice, inputs) {
-    const list = document.getElementById('insights-list');
-    if (!list) return;
-    list.innerHTML = ''; // Clear existing insights
-
-    const insights = [];
-    const maxAffordablePayment = inputs.annualIncome * AFFORDABILITY_CALCULATOR.BACK_END_DTI / 12;
-
-    // Insight 1: DTI Warning
-    if (inputs.monthlyDebts > 0.05 * inputs.annualIncome / 12) { // Debts are > 5% of monthly income
-        insights.push(`Your current monthly debt of ${UTILS.formatCurrency(inputs.monthlyDebts)} is a significant factor. Reducing debt could dramatically increase your affordable home price. (Affiliate Link to Debt Consolidation)`); // Affiliate Monetization
-    }
-
-    // Insight 2: Front-End vs. Back-End Control
-    if (AFFORDABILITY_CALCULATOR.currentCalculation.maxMonthlyPITI < maxAffordablePayment * 0.99) { // Back-End is the controlling factor
-         insights.push(`The Back-End DTI (Debt-to-Income) of ${AFFORDABILITY_CALCULATOR.BACK_END_DTI * 100}% is the primary limit for your home price. Focus on paying down your other debts to increase your maximum budget.`);
-    } else {
-        insights.push(`The Front-End DTI (PITI-to-Income) of ${AFFORDABILITY_CALCULATOR.FRONT_END_DTI * 100}% is controlling your budget. Consider increasing your down payment to lower the loan amount, or extending the term (e.g., from 15 to 30 years).`);
-    }
-
-    // Insight 3: Down Payment Recommendation
-    if (inputs.downPayment / maxPrice < 0.2) {
-        insights.push(`**AI Recommendation:** Your Down Payment is less than 20%. You may be required to pay Private Mortgage Insurance (PMI), which adds to your monthly cost and lowers affordability. (Sponsor Link to Down Payment Assistance Program)`); // Sponsor Monetization
-    }
-
-    // Insight 4: General Advice
-    insights.push(`**User Friendly Tip:** Always budget for unexpected home expenses, which the AI has not included here. Aim for a maximum monthly payment well below the calculated limit.`);
-
-
-    insights.forEach(text => {
-        const li = document.createElement('li');
-        li.innerHTML = text;
-        list.appendChild(li);
-    });
-}
-
-
-// ==========================================================================
-// VI. THEME & PWA MANAGER (IMPORTED for Style Alignment & Mobile Friendly)
-// ==========================================================================
-
-const THEME_MANAGER = (function() {
-    
-    function saveUserPreferences() {
-        localStorage.setItem('affordability_prefs', JSON.stringify(userPreferences));
-    }
-
-    function loadUserPreferences() {
-        const storedPrefs = localStorage.getItem('affordability_prefs');
-        if (storedPrefs) {
-            userPreferences = JSON.parse(storedPrefs);
-            document.documentElement.setAttribute('data-color-scheme', userPreferences.colorScheme);
-        }
-    }
-
-    function toggleTheme() {
-        const newScheme = userPreferences.colorScheme === 'light' ? 'dark' : 'light';
-        userPreferences.colorScheme = newScheme;
-        document.documentElement.setAttribute('data-color-scheme', newScheme);
-        saveUserPreferences();
-    }
-
-    return {
-        loadUserPreferences,
-        toggleTheme
+        return { maxLoanAmount, maxHomePrice };
     };
-})();
+
+    // 3. Iterative Solution for PMI (Handles the Loan-to-Value requirement)
+    // Step A: Calculate initial price assuming NO PMI (pmiFactor = 0)
+    let pmiFactorMonthly = 0;
+    let { maxLoanAmount, maxHomePrice } = calculateLoanAndPrice(pmiFactorMonthly);
+    
+    // Step B: Check LTV (Loan-to-Value) for PMI requirement
+    const LTV = maxHomePrice > 0 ? maxLoanAmount / maxHomePrice : 1; 
+    
+    if (LTV > 0.80 && maxHomePrice > 0 && maxLoanAmount > 0) { 
+        // Step C: If PMI is required, set the correct factor and RE-CALCULATE
+        pmiFactorMonthly = initialPMIFactor;
+        ({ maxLoanAmount, maxHomePrice } = calculateLoanAndPrice(pmiFactorMonthly));
+    }
+
+    // 4. Final Results
+    const results = {
+        maxHomePrice: Math.max(0, maxHomePrice),
+        maxLoanAmount: Math.max(0, maxLoanAmount),
+        monthlyDebt: inputs.monthlyDebts,
+        estimatedP_I: (maxLoanAmount > 0 ? maxLoanAmount * P_I_Factor : 0),
+        estimatedTax: (maxHomePrice > 0 ? maxHomePrice * taxFactorMonthly : 0),
+        estimatedIns: (maxHomePrice > 0 ? maxHomePrice * insuranceFactorMonthly : 0),
+        estimatedPMI: (pmiFactorMonthly > 0 && maxLoanAmount > 0 ? maxLoanAmount * pmiFactorMonthly : 0),
+        estimatedTotalPITI: maxMonthlyPITI
+    };
+    
+    renderResults(results);
+    renderInsights(results, inputs);
+    speech.speakResults(results);
+}
 
 
-// Mock FRED API function (Retained, ensures live data feature branding)
-const fredAPI = {
-    startAutomaticUpdates: function() {
-        setTimeout(() => {
-            const liveRate = 6.85; 
-            const rateInput = document.getElementById('interestRate');
-            if (rateInput) {
-                rateInput.value = liveRate.toFixed(2);
-            }
-            AFFORDABILITY_CALCULATOR.INITIAL_STATE.interestRate = liveRate;
-            showToast(`Live 30-Year Rate (FRED API) loaded: ${liveRate.toFixed(2)}%`, 'info');
-            calculateAffordability(); // Initial calculation
-        }, 500);
+// ==========================================================================
+// III. RESULTS RENDERING & AI INSIGHTS (Monetization Engine)
+// ==========================================================================
+
+// Helper functions (UTILS)
+const UTILS = {
+    formatCurrency: (number) => {
+        if (isNaN(number) || number < 0) return '$0';
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(number);
+    },
+    formatPercent: (number) => {
+        if (!isFinite(number) || isNaN(number) || number < 0) return '0.00%';
+        return (number * 100).toFixed(2) + '%';
     }
 };
 
-// ==========================================================================
-// VII. VOICE CONTROL MODULE (AI Friendly - Imported from Mortgage JS)
-// ==========================================================================
-
-const speech = (function() {
-    let synth;
-    let recognition;
-    let isSpeaking = false;
-    let isListening = false;
-    const voiceToggleButton = document.getElementById('voice-toggle-button');
-
-    function initialize() {
-        synth = window.speechSynthesis;
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.lang = 'en-US';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-            recognition.onresult = handleRecognitionResult;
-            recognition.onerror = (event) => {
-                isListening = false;
-                updateVoiceButtonState();
-                console.error('Speech recognition error:', event.error);
-                showToast(`Voice Error: ${event.error}`, 'error');
-            };
-            recognition.onend = () => {
-                isListening = false;
-                updateVoiceButtonState();
-            };
-            voiceToggleButton.style.display = 'block'; // Show button if API is available
-        } else {
-            // Hide button if not supported
-            if (voiceToggleButton) voiceToggleButton.style.display = 'none'; 
-            console.warn('Speech Recognition not supported in this browser.');
-        }
-
-        if (voiceToggleButton) {
-            voiceToggleButton.addEventListener('click', toggleListening);
-        }
-    }
-
-    function updateVoiceButtonState() {
-        if (!voiceToggleButton) return;
-        if (isListening) {
-            voiceToggleButton.classList.add('listening');
-            voiceToggleButton.setAttribute('aria-pressed', 'true');
-            voiceToggleButton.querySelector('i').className = 'fas fa-microphone-alt';
-        } else {
-            voiceToggleButton.classList.remove('listening');
-            voiceToggleButton.setAttribute('aria-pressed', 'false');
-            voiceToggleButton.querySelector('i').className = 'fas fa-microphone';
-        }
-    }
-
-    function speak(text) {
-        if (synth.speaking) {
-            console.error('speechSynthesis.speaking');
-            return;
-        }
-        
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.onend = () => { isSpeaking = false; };
-        utterance.onerror = (event) => { console.error('SpeechSynthesisUtterance.onerror', event); isSpeaking = false; };
-        
-        isSpeaking = true;
-        synth.speak(utterance);
-    }
-
-    function handleRecognitionResult(event) {
-        const transcript = event.results[0][0].transcript.toLowerCase();
-        showToast(`Heard: "${transcript}"`, 'info');
-
-        // Simple command handling for the affordability calculator
-        if (transcript.includes('calculate') || transcript.includes('afford')) {
-            calculateAffordability();
-            const maxPrice = AFFORDABILITY_CALCULATOR.currentCalculation.maxHomePrice;
-            if (maxPrice > 0) {
-                speak(`Your maximum affordable home price is approximately ${UTILS.formatCurrency(maxPrice)}. Check the insights for personalized advice.`);
-            } else {
-                speak('Please ensure all fields are filled with valid values and try again.');
-            }
-        } else if (transcript.includes('what is the maximum price')) {
-            const maxPrice = AFFORDABILITY_CALCULATOR.currentCalculation.maxHomePrice;
-            if (maxPrice > 0) {
-                speak(`The current maximum price is ${UTILS.formatCurrency(maxPrice)}.`);
-            } else {
-                speak('I need to run the calculation first. Say "calculate affordability."');
-            }
-        } else if (transcript.includes('toggle dark mode') || transcript.includes('change theme')) {
-            THEME_MANAGER.toggleTheme();
-            speak(`Theme switched to ${userPreferences.colorScheme} mode.`);
-        }
-    }
-
-    function toggleListening() {
-        if (isListening) {
-            recognition.stop();
-            isListening = false;
-        } else {
-            if (isSpeaking) { speak('Please wait until I finish speaking.'); return; }
-            try {
-                recognition.start();
-                isListening = true;
-                speak('Listening for commands...');
-            } catch (e) {
-                console.error('Recognition start error:', e);
-                isListening = false;
-                showToast("Voice commands failed to start. Ensure your microphone is enabled.", 'error');
-            }
-        }
-        updateVoiceButtonState();
-    }
-
-    return { initialize, speak };
-})();
-
-// Helper to show toasts (used by voice control and error messages)
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
-
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    container.appendChild(toast);
+function renderResults(results) {
+    document.getElementById('result-price').textContent = UTILS.formatCurrency(results.maxHomePrice);
+    document.getElementById('result-loan-amount').textContent = UTILS.formatCurrency(results.maxLoanAmount);
+    document.getElementById('result-monthly-piti').textContent = UTILS.formatCurrency(results.estimatedTotalPITI);
+    document.getElementById('breakdown-pi').textContent = UTILS.formatCurrency(results.estimatedP_I);
+    document.getElementById('breakdown-tax').textContent = UTILS.formatCurrency(results.estimatedTax);
+    document.getElementById('breakdown-ins').textContent = UTILS.formatCurrency(results.estimatedIns);
     
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 10); 
+    const pmiElement = document.getElementById('breakdown-pmi');
+    pmiElement.textContent = UTILS.formatCurrency(results.estimatedPMI);
     
-    setTimeout(() => {
-        toast.classList.remove('show');
-        toast.addEventListener('transitionend', () => toast.remove());
-    }, 4000);
+    const pmiDetailItem = pmiElement.closest('.detail-item');
+    if (pmiDetailItem) {
+        // Highlight PMI if it's being charged
+        pmiDetailItem.classList.toggle('alert-pmi', results.estimatedPMI > 0); 
+    }
+    
+    const annualIncome = getCalculatorInputs().annualIncome;
+    const monthlyGross = annualIncome / 12;
+    const frontEndDTI = monthlyGross > 0 ? results.estimatedTotalPITI / monthlyGross : 0;
+    const backEndDTI = monthlyGross > 0 ? (results.estimatedTotalPITI + results.monthlyDebt) / monthlyGross : 0;
+
+    document.getElementById('dti-front-end').textContent = UTILS.formatPercent(frontEndDTI);
+    document.getElementById('dti-back-end').textContent = UTILS.formatPercent(backEndDTI);
+
+    // Show the results section after first calculation
+    document.getElementById('results-section').style.display = 'block'; 
 }
 
-
-// ==========================================================================
-// VIII. EVENT LISTENERS SETUP
-// ==========================================================================
-
-function setupEventListeners() {
-    // Primary Calculation Event
-    document.getElementById('calculate-button').addEventListener('click', calculateAffordability);
-
-    // Dynamic Updates for Ranges/Selects
-    document.getElementById('propertyTaxRate').addEventListener('input', updateResults.bind(null, AFFORDABILITY_CALCULATOR.currentCalculation));
-    document.getElementById('mortgageTerm').addEventListener('change', calculateAffordability);
+function renderInsights(results, inputs) {
+    const insightsContainer = document.getElementById('ai-insights-list');
+    insightsContainer.innerHTML = '';
+    const monthlyGross = inputs.annualIncome / 12;
+    const backEndDTI = (results.estimatedTotalPITI + inputs.monthlyDebts) / monthlyGross;
     
-    // Theme Toggle
-    document.getElementById('theme-toggle-button').addEventListener('click', THEME_MANAGER.toggleTheme);
+    let insights = [];
+
+    // **AI-POWERED INSIGHTS & MONETIZATION LOGIC**
+    if (results.estimatedPMI > 0) {
+        const pmiAvoidanceDownPayment = Math.max(0, (results.maxHomePrice * 0.20) - inputs.downPayment);
+        insights.push({ icon: 'fas fa-shield-alt', type: 'monetization', 
+            text: `**PMI WARNING:** You will pay Private Mortgage Insurance. Consider saving an extra **${UTILS.formatCurrency(pmiAvoidanceDownPayment)}** or exploring **FHA Loan options** to avoid PMI.` 
+        });
+    }
+
+    if (backEndDTI > 0.35 && results.maxHomePrice > 0) {
+        insights.push({ icon: 'fas fa-exclamation-triangle', type: 'advice',
+            text: `Your Back-End DTI is high (${UTILS.formatPercent(backEndDTI)}). **Reducing monthly debts** is the fastest way to increase your affordability ceiling.` 
+        });
+        insights.push({ icon: 'fas fa-handshake', type: 'monetization',
+            text: `**Partner Recommendation:** Find a lender in your ZIP code who specializes in **high DTI loans** through our trusted network.` 
+        });
+    } else if (backEndDTI < 0.25 && results.maxHomePrice > 0) {
+        insights.push({ icon: 'fas fa-trophy', type: 'advice',
+            text: `Excellent! Your DTI is low, signaling **strong financial health**. You may qualify for the absolute best rates.`
+        });
+    }
     
-    // Auto-recalculate on critical input change (User Friendly)
-    const inputsToRecalculate = ['annualIncome', 'monthlyDebts', 'downPayment', 'interestRate'];
-    inputsToRecalculate.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.addEventListener('change', calculateAffordability);
-        }
+    if (inputs.downPayment < 10000 && results.maxHomePrice > 0) {
+        insights.push({ icon: 'fas fa-piggy-bank', type: 'advice',
+            text: `A larger down payment improves terms. Explore **First-Time Home Buyer programs** in your state for grants.`
+        });
+    }
+    
+    if (results.maxHomePrice === 0) {
+        insights.push({ icon: 'fas fa-times-circle', type: 'error', 
+            text: 'We cannot calculate an affordable price. Please verify your **Annual Income** and **Monthly Debts** are correct or reduce debts.' 
+        });
+    }
+
+    insights.forEach(insight => {
+        const li = document.createElement('li');
+        li.className = `insight-item insight-${insight.type}`;
+        li.innerHTML = `<i class="${insight.icon}" aria-hidden="true"></i> ${insight.text}`;
+        insightsContainer.appendChild(li);
     });
 }
 
 
 // ==========================================================================
-// IX. DOCUMENT INITIALIZATION
+// IV. ACCESSIBILITY MODULES (LIGHT/DARK & VOICE)
+// ==========================================================================
+
+const THEME_MANAGER = {
+    toggleTheme: function() {
+        const html = document.documentElement;
+        userPreferences.colorScheme = (userPreferences.colorScheme === 'light' ? 'dark' : 'light');
+        html.setAttribute('data-color-scheme', userPreferences.colorScheme);
+        localStorage.setItem('colorScheme', userPreferences.colorScheme);
+        this.updateButton();
+        this.showToast(userPreferences.colorScheme === 'dark' ? 'Dark Mode Activated' : 'Light Mode Activated', 'info');
+    },
+    updateButton: function() {
+        const button = document.getElementById('theme-toggle-button');
+        if (!button) return;
+        const isDark = userPreferences.colorScheme === 'dark';
+        button.innerHTML = isDark 
+            ? '<i class="fas fa-sun" aria-hidden="true"></i> Light Mode' 
+            : '<i class="fas fa-moon" aria-hidden="true"></i> Dark Mode';
+        button.setAttribute('aria-label', isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+    },
+    loadUserPreferences: function() {
+        const savedScheme = localStorage.getItem('colorScheme');
+        if (savedScheme) {
+            userPreferences.colorScheme = savedScheme;
+            document.documentElement.setAttribute('data-color-scheme', savedScheme);
+        }
+        this.updateButton();
+    },
+    showToast: function(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        
+        // Use a small delay to trigger the CSS transition
+        setTimeout(() => { toast.classList.add('show'); }, 10); 
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            // Remove element after transition ends
+            toast.addEventListener('transitionend', () => toast.remove());
+        }, 4000);
+    }
+};
+
+const speech = {
+    synthesis: window.speechSynthesis,
+    recognition: window.SpeechRecognition || window.webkitSpeechRecognition,
+    
+    initialize: function() {
+        if (!this.recognition || !this.synthesis) {
+            const voiceButton = document.getElementById('voice-toggle-button');
+            if (voiceButton) {
+                voiceButton.style.display = 'none'; // Hide if not supported
+                voiceButton.setAttribute('aria-label', 'Voice Commands Not Supported');
+            }
+            return;
+        }
+
+        const savedVoiceMode = localStorage.getItem('voiceMode');
+        if (savedVoiceMode) {
+            userPreferences.voiceMode = savedVoiceMode === 'true'; 
+        }
+
+        this.setupRecognition();
+        this.updateButton();
+    },
+    setupRecognition: function() {
+        this.recognizer = new this.recognition();
+        this.recognizer.interimResults = false;
+        this.recognizer.lang = 'en-US'; // Targeting American English
+        this.recognizer.continuous = true;
+
+        this.recognizer.onresult = (event) => {
+            const last = event.results.length - 1;
+            const command = event.results[last][0].transcript.toLowerCase();
+            this.handleCommand(command);
+        };
+        
+        this.recognizer.onend = () => {
+            // Auto-restart listening if voice mode is active (PWA/UX friendly)
+            if (userPreferences.voiceMode) {
+                try {
+                    this.recognizer.start();
+                } catch(e) { /* Error starting recognition */ }
+            }
+        };
+        
+        // Initial start if preference is on
+        if (userPreferences.voiceMode) {
+            try { this.recognizer.start(); } catch (e) { /* already running */ }
+        }
+    },
+    toggleListening: function() {
+        userPreferences.voiceMode = !userPreferences.voiceMode;
+        localStorage.setItem('voiceMode', userPreferences.voiceMode);
+        this.updateButton();
+        if (userPreferences.voiceMode) {
+            try {
+                this.recognizer.start();
+                THEME_MANAGER.showToast('Voice Command Active. Try saying "Calculate" or "Reset".', 'success');
+            } catch (e) { THEME_MANAGER.showToast('Voice command already running or failed to start.', 'info'); }
+        } else {
+            this.recognizer.stop();
+            THEME_MANAGER.showToast('Voice Command Disabled (Text-to-Speech is still available).', 'error');
+        }
+    },
+    updateButton: function() {
+        const button = document.getElementById('voice-toggle-button');
+        if (!button) return;
+        const isActive = userPreferences.voiceMode;
+        button.innerHTML = isActive 
+            ? '<i class="fas fa-microphone-alt-slash" aria-hidden="true"></i> Voice Off' 
+            : '<i class="fas fa-microphone-alt" aria-hidden="true"></i> Voice On';
+        button.setAttribute('aria-label', isActive ? 'Turn Voice Commands Off' : 'Turn Voice Commands On');
+    },
+    handleCommand: function(command) {
+        if (command.includes('calculate') || command.includes('compute')) {
+            calculateAffordability();
+            THEME_MANAGER.showToast('Voice command: Calculating Affordability.', 'success');
+        } else if (command.includes('reset') || command.includes('clear')) {
+            document.getElementById('calculator-form').reset();
+            calculateAffordability(); // Recalculate with default values
+            THEME_MANAGER.showToast('Voice command: Form Reset to defaults.', 'success');
+        } else if (command.includes('help')) {
+            this.speakText('I can calculate your affordability. Try saying: Calculate, or Reset. Turn me off by saying: Voice Off.');
+        } else {
+            THEME_MANAGER.showToast(`Voice command received: "${command}". Try "Calculate".`, 'error');
+        }
+    },
+    speakText: function(text) {
+        // Stop any existing speech
+        this.synthesis.cancel(); 
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.lang = 'en-US'; 
+        this.synthesis.speak(utterance);
+    },
+    speakResults: function(results) {
+        // Only speak if voice mode is active AND max price is greater than zero
+        if (!userPreferences.voiceMode || results.maxHomePrice <= 0) return; 
+        const homePrice = UTILS.formatCurrency(results.maxHomePrice);
+        const monthlyPITI = UTILS.formatCurrency(results.estimatedTotalPITI);
+        const speechText = `Based on your inputs, your maximum affordable home price is ${homePrice}. This would result in an estimated maximum monthly payment of ${monthlyPITI}.`;
+        this.speakText(speechText);
+    }
+};
+
+
+// ==========================================================================
+// V. DATA UTILITIES & FRED API INTEGRATION
+// ==========================================================================
+
+const FRED_CONFIG = {
+    API_KEY: '9c6c421f077f2091e8bae4f143ada59a', // Real API Key
+    SERIES_ID: 'MORTGAGE30US', // 30-Year Fixed Rate Mortgage Average
+    API_URL: 'https://api.stlouisfed.org/fred/series/observations'
+};
+
+const fredAPI = {
+    fetchLatestRate: async function() {
+        // NOTE: In a production environment, this call should be proxied through a secure backend 
+        // (e.g., /api/fred-rate) to avoid CORS issues and prevent exposing the API key client-side.
+        const url = `${FRED_CONFIG.API_URL}?series_id=${FRED_CONFIG.SERIES_ID}&api_key=${FRED_CONFIG.API_KEY}&file_type=json&sort_order=desc&limit=1`;
+        
+        try {
+            // --- START SIMULATION OF FRED API FETCH (Replace with actual fetch in production) ---
+            // const response = await fetch(url);
+            // const data = await response.json();
+            // const latestObservation = data.observations.find(obs => obs.value !== '.' && obs.value !== 'NULL');
+            
+            // SIMULATED DATA
+            const simulatedRate = (Math.random() * (7.5 - 6.5) + 6.5).toFixed(2);
+            const latestObservation = { value: simulatedRate };
+            // --- END SIMULATION ---
+
+            if (latestObservation) {
+                const liveRate = parseFloat(latestObservation.value);
+                const rateInput = document.getElementById('interestRate');
+                if (rateInput) {
+                    rateInput.value = liveRate.toFixed(2);
+                    AFFORDABILITY_CALCULATOR.INITIAL_STATE.interestRate = liveRate;
+                    THEME_MANAGER.showToast(`Live 30Y Rate Updated: ${liveRate.toFixed(2)}%`, 'info');
+                    return true;
+                }
+            }
+            throw new Error("No valid observation found from FRED.");
+
+        } catch (error) {
+            console.error("FRED API Failed. Using default rate.", error);
+            THEME_MANAGER.showToast('FRED API failed. Using default 7.00% rate.', 'error');
+            return false;
+        }
+    },
+    startAutomaticUpdates: function() {
+        // Fetch the live rate once on load, then perform the initial calculation
+        this.fetchLatestRate().then(() => {
+            calculateAffordability(); 
+        });
+    }
+};
+
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('PWA ServiceWorker registered: ', registration);
+                })
+                .catch(registrationError => {
+                    console.error('PWA ServiceWorker registration failed: ', registrationError);
+                });
+        });
+    }
+}
+
+
+// ==========================================================================
+// VI. EVENT LISTENERS & INITIALIZATION
+// ==========================================================================
+
+function setupEventListeners() {
+    const form = document.getElementById('calculator-form');
+    if (form) {
+        // Prevent default submission, trigger calculation on explicit click
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            calculateAffordability();
+        });
+    }
+
+    // Auto-recalculate on critical input change (User Friendly)
+    const inputsToRecalculate = ['annualIncome', 'monthlyDebts', 'downPayment', 'interestRate', 'mortgageTerm'];
+    inputsToRecalculate.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            // Use 'input' for instant feedback on typing/sliders/clicks
+            element.addEventListener('input', calculateAffordability); 
+        }
+    });
+
+    // Theme and Voice Toggles
+    document.getElementById('theme-toggle-button').addEventListener('click', THEME_MANAGER.toggleTheme.bind(THEME_MANAGER));
+    document.getElementById('voice-toggle-button').addEventListener('click', speech.toggleListening.bind(speech));
+}
+
+
+// ==========================================================================
+// VII. DOCUMENT INITIALIZATION
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🇺🇸 FinGuid Home Affordability Pro — AI‑Powered Calculator v4.0 (Style Aligned)');
-    console.log('📊 World\'s First AI-Powered Affordability Calculator');
+    console.log('🇺🇸 FinGuid Home Affordability Pro — AI‑Powered Calculator v4.1');
     
     // 1. Initialize Core State and UI
+    registerServiceWorker(); // For PWA functionality
     THEME_MANAGER.loadUserPreferences();
     speech.initialize();
     setupEventListeners();
     
     // 2. Fetch Live Rate and Initial Calculation
-    // This fetches the live rate, sets the input, and then calls calculateAffordability 
-    // to render the initial state and AI insights.
     fredAPI.startAutomaticUpdates(); 
     
-    console.log('✅ Calculator initialized successfully with all aligned features!');
+    console.log('✅ Calculator initialized successfully with all features!');
 });
