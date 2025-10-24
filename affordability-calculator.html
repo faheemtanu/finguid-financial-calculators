@@ -10,6 +10,9 @@
     <meta name="robots" content="index, follow">
     <meta name="author" content="FinGuid - World's First AI Calculator Platform">
     
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#19343B"> 
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -20,177 +23,167 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="affordability-calculator.css"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 </head>
 <body>
     
-    <header class="main-header">
-        <div class="container">
+    <header class="header">
+        <div class="header-container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-sack-dollar" aria-hidden="true"></i>
-                    <span>Affordability Pro</span>
+                    <a href="/">FinGuid Pro</a>
+                    <span class="tagline">World's Best AI Financial Tools</span>
                 </div>
-                <div class="tagline">
-                    <i class="fas fa-robot" aria-hidden="true"></i> AI-Powered DTI Analysis
-                </div>
+                
+                <span class="features-quick">AI / Voice / PWA / Live Data</span>
+                
                 <div class="accessibility-controls">
-                    <button id="toggle-mode" class="btn-icon" aria-label="Toggle Light/Dark Mode">
-                        <i class="fas fa-moon" aria-hidden="true"></i> Dark Mode
+                    <button id="voice-toggle-button" class="control-button" title="Toggle Voice Commands" aria-label="Toggle Voice Commands" aria-pressed="false">
+                        <i class="fas fa-microphone" aria-hidden="true"></i>
                     </button>
-                    <button id="toggle-voice" class="btn-icon btn-voice" aria-label="Toggle Voice Control">
-                        <i class="fas fa-microphone-alt" aria-hidden="true"></i> Voice On
+                    <button id="theme-toggle-button" class="control-button" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
                     </button>
                 </div>
-            </div>
-            
-            <div class="features-quick">
-                <span><i class="fas fa-check-circle"></i> 28/36 DTI Rule</span>
-                <span><i class="fas fa-sync-alt"></i> Live Rate Update</span>
-                <span><i class="fas fa-shield-alt"></i> PMI Analysis</span>
             </div>
         </div>
     </header>
 
     <main class="main-content">
-        <div class="container calculator-container">
+        <h1 class="calculator-title">
+            Mortgage Affordability <span>Calculator</span>
+        </h1>
+        
+        <div class="calculator-container">
             
-            <div class="card card-light input-section">
+            <section class="input-section">
                 <h2>Your Financial Profile</h2>
-                <p class="section-description">Enter your current financial data to determine your maximum affordable home price.</p>
-                
-                <form id="calculator-form">
+                <form id="affordability-form">
                     
                     <div class="input-group">
-                        <label for="annualIncome">Annual Household Income ($)</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-dollar-sign"></i>
-                            <input type="text" id="annualIncome" placeholder="e.g., 80,000" inputmode="numeric" value="80000" required>
-                        </div>
+                        <label for="annualIncome">Annual Household Income</label>
+                        <input type="text" id="annualIncome" class="input-field" data-type="currency" value="80,000" aria-label="Annual Income">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="monthlyDebts">Total Monthly Debt Payments (Cars, Credit Cards, Loans)</label>
+                        <input type="text" id="monthlyDebts" class="input-field" data-type="currency" value="500" aria-label="Monthly Debts">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="downPayment">Available Down Payment</label>
+                        <input type="text" id="downPayment" class="input-field" data-type="currency" value="20,000" aria-label="Down Payment">
                     </div>
 
-                    <div class="input-group">
-                        <label for="monthlyDebts">Total Monthly Debt Payments (excl. rent) ($)</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-credit-card"></i>
-                            <input type="text" id="monthlyDebts" placeholder="e.g., 500 (car loans, credit cards, student loans)" inputmode="numeric" value="500" required>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="downPayment">Available Down Payment ($)</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-hand-holding-usd"></i>
-                            <input type="text" id="downPayment" placeholder="e.g., 20,000" inputmode="numeric" value="20000" required>
-                        </div>
-                    </div>
-                    
                     <div class="input-split">
                         <div class="input-group">
+                            <label for="interestRate">Estimated Interest Rate (%)</label>
+                            <input type="number" step="0.01" id="interestRate" class="input-field" value="7.00" aria-label="Interest Rate">
+                        </div>
+                        <div class="input-group">
                             <label for="mortgageTerm">Mortgage Term (Years)</label>
-                            <select id="mortgageTerm" required>
-                                <option value="30" selected>30 Years</option>
+                            <select id="mortgageTerm" class="input-select" aria-label="Mortgage Term">
+                                <option value="30">30 Years</option>
+                                <option value="20">20 Years</option>
                                 <option value="15">15 Years</option>
                             </select>
                         </div>
-                        <div class="input-group">
-                            <label for="interestRate">Estimated Interest Rate (%)</label>
-                            <div class="input-with-icon">
-                                <i class="fas fa-percent"></i>
-                                <input type="number" id="interestRate" placeholder="Live Rate Fetching..." step="0.01" value="7.00" required>
-                                <span class="input-note">Live Rate: <i class="fas fa-sync-alt"></i></span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="propertyTaxRate">Annual Property Tax Rate (%)</label>
+                        <div class="range-slider-container">
+                            <input type="range" min="0.5" max="3.0" step="0.01" id="propertyTaxRate" class="input-range" value="1.20" aria-label="Property Tax Rate">
+                            <div class="range-label-minmax">
+                                <span>0.5%</span>
+                                <span id="property-tax-value">1.20%</span>
+                                <span>3.0%</span>
                             </div>
                         </div>
                     </div>
-
-                    <div class="input-group">
-                        <label for="zipCode">Property Location (ZIP Code) *For tax estimates</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-map-pin"></i>
-                            <input type="text" id="zipCode" placeholder="e.g., 90210" maxlength="5">
-                        </div>
-                    </div>
                     
-                    <div class="input-actions">
-                        <button type="submit" id="calculate-btn" class="btn-primary full-width">
-                            <i class="fas fa-calculator" aria-hidden="true"></i> Calculate Affordability
-                        </button>
-                    </div>
-
+                    <button type="button" id="calculate-button" class="button-primary">Calculate Maximum Affordability</button>
                 </form>
-            </div>
+            </section>
             
-            <div class="results-section" id="results-section" style="display:none;">
-                
-                <div class="card card-dark main-result">
-                    <p class="result-label">Max Affordable Home Price</p>
-                    <h3 id="result-price" class="result-value">$0</h3>
-                    <p class="result-loan-summary">Max Loan Amount: <span id="result-loan-amount">$0</span></p>
-                </div>
-                
-                <div class="card card-light breakdown-card">
-                    <h4>Estimated Monthly Housing Payment (PITI)</h4>
-                    <p class="piti-value" id="result-monthly-piti">$0</p>
+            <section class="result-section">
+
+                <div class="card" id="max-price-card">
+                    <h3>Your Maximum Affordable Home Price</h3>
+                    <div class="summary-total">
+                        <div class="label">Based on the 36% DTI Rule (Most Common Limit)</div>
+                        <div class="value" id="max-home-price">$0.00</div>
+                    </div>
                     
-                    <div class="breakdown-details">
+                    <div class="summary-details">
                         <div class="detail-item">
-                            <span>Principal & Interest (P&I)</span>
-                            <span id="breakdown-pi">$0</span>
+                            <span class="label">Max Monthly Payment</span>
+                            <span class="value" id="max-monthly-piti">$0.00</span>
                         </div>
                         <div class="detail-item">
-                            <span>Property Taxes (T)</span>
-                            <span id="breakdown-tax">$0</span>
+                            <span class="label">Maximum Loan Amount</span>
+                            <span class="value" id="max-loan-amount">$0.00</span>
                         </div>
                         <div class="detail-item">
-                            <span>Home Insurance (I)</span>
-                            <span id="breakdown-ins">$0</span>
+                            <span class="label">Front-End DTI (28% Rule)</span>
+                            <span class="value" id="fe-dti-price">$0.00</span>
                         </div>
                         <div class="detail-item">
-                            <span>Private Mortgage Insurance (PMI)</span>
-                            <span id="breakdown-pmi">$0</span>
+                            <span class="label">Down Payment Used</span>
+                            <span class="value" id="dp-used">$0.00</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="card card-light insights-card">
-                    <h4><i class="fas fa-robot"></i> AI Affordability Insights</h4>
-                    <ul id="ai-insights-list" class="insights-list">
-                        </ul>
-                    
-                    <div class="dti-summary">
-                        <h5>Your Debt-to-Income (DTI) Ratios:</h5>
-                        <div class="dti-item">
-                            <span>Front-End DTI (Housing)</span>
-                            <span id="dti-front-end" class="dti-value">0%</span>
-                        </div>
-                        <div class="dti-item">
-                            <span>Back-End DTI (Total Debt)</span>
-                            <span id="dti-back-end" class="dti-value">0%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    
-    <footer class="main-footer">
-        <div class="container">
-            <nav class="footer-nav">
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="/calculators.html">All Calculators</a></li>
-                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                        <li><a href="/resources.html">Resources & Guides</a></li>
+                <div class="card ai-insights">
+                    <h3><i class="fas fa-brain"></i> AI Financial Insights</h3>
+                    <ul class="insights-list" id="insights-list">
+                        <li>Calculate to see personalized, AI-driven recommendations for your home buying journey. (Example: "Consider a lower debt-to-income ratio for better loan offers.")</li>
                     </ul>
                 </div>
+                
+                <div class="monetization-slot">
+                    <h4><i class="fas fa-ad"></i> Partner / Ad Slot (Monetization)</h4>
+                    <p>Sponsored Content: Best Local Mortgage Lenders & Brokers. This area is reserved for high-value advertising and sponsor partnerships.</p>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <nav class="footer-nav">
+                <div class="footer-col">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/affordability-calculator.html">Affordability Calculator</a></li>
+                        <li><a href="/investment-calculator.html">Investment Calculator</a></li>
+                        <li><a href="/retirement-calculator.html">Retirement Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/blog.html">Financial Blog</a></li>
+                        <li><a href="/guides.html">How-to Guides</a></li>
+                        <li><a href="/faq.html">FAQ</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
                 <div class="footer-col">
                     <h4>Company</h4>
                     <ul>
-                        <li><a href="/about.html">About FinGuid</a></li>
+                        <li><a href="/about.html">About Us</a></li>
                         <li><a href="/privacy.html">Privacy Policy</a></li>
                         <li><a href="/terms.html">Terms of Service</a></li>
+                        <li><a href="/careers.html">Careers</a></li>
                     </ul>
                 </div>
+                
                 <div class="footer-col">
                     <h4>Partnership & Ads (Monetization)</h4>
                     <ul>
