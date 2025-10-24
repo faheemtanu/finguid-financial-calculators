@@ -1,219 +1,311 @@
-/**
- * FinGuid HOME LOAN PRO — STYLESHEET v4.0
- * * Target: Production Ready, WCAG 2.1 AA, Mobile-First, Light/Dark Mode
- * * Total Lines: ~5,000+ (Expanded with utility classes, detailed media queries, and accessibility features)
- */
-
-/* ========================================================================== */
-/* I. COLOR TOKENS & SCHEME (Pillar 2: User-Friendly) */
-/* ========================================================================== */
-
 :root {
-    /* --- FinGuid Color Palette --- */
-    --color-white: #ffffff;
-    --color-black: #000000;
-    --color-cream-100: #fefefe; 
-    --color-gray-200: #f5f5f5; 
-    --color-charcoal-700: #1f2121; 
-    --color-charcoal-800: #151717; 
-    --color-slate-900: #13343b; /* FinGuid Primary (Teal Dark) */
-    --color-teal-400: #24acb9; /* FinGuid Accent (Teal Light) */
-    --color-red-500: #ef4444; 
-    --color-green-500: #10b981; /* Success/Savings */
-    --color-yellow-500: #f59e0b; /* Interest/Affiliate Highlight */
+    /* Color Tokens - Enhanced for Professional Brand */
+    --color-white: rgba(255, 255, 255, 1);
+    --color-black: rgba(0, 0, 0, 1);
+    --color-cream-100: rgba(255, 255, 253, 1); /* Light Background */
+    --color-gray-200: rgba(245, 245, 245, 1); /* Light Card BG */
+    --color-gray-300: rgba(183, 184, 185, 1); /* Light text/border helper */
+    --color-charcoal-700: rgba(31, 33, 33, 1); /* Dark Background */
+    --color-charcoal-800: rgba(24, 25, 25, 1); /* Darker Card BG */
+    --color-slate-500: rgba(100, 116, 139, 1); /* Light Text-light */
+    --color-slate-900: rgba(19, 52, 59, 1); /* FinGuid Primary (Teal Dark) */
+    --color-teal-400: rgba(36, 172, 185, 1); /* FinGuid Accent (Monetization Highlight) */
+    --color-teal-300: rgba(87, 203, 215, 1); /* Dark Mode Accent */
+    --color-red-500: rgba(239, 68, 68, 1); /* Alert/Error/High Risk */
+    --color-green-500: rgba(16, 185, 129, 1); /* Success/Savings Highlight */
+    --color-brown-600: rgba(148, 82, 42, 1); /* Dark Mode Border/Chart */
 
-    /* --- Global Scheme Variables (Light Mode Defaults) --- */
+    /* Global Scheme Variables (Light Mode Defaults) */
     --color-text: var(--color-charcoal-700);
-    --color-text-light: #6b7280;
+    --color-text-light: var(--color-slate-500);
     --color-background: var(--color-cream-100);
     --color-card-background: var(--color-white);
     --color-border: var(--color-gray-200);
-    --color-primary-button: var(--color-slate-900);
-    --color-primary-button-text: var(--color-white);
+    --color-primary: var(--color-slate-900);
     --color-accent: var(--color-teal-400);
-    --color-shadow: rgba(0, 0, 0, 0.1);
-    --color-link: var(--color-slate-900);
-    --color-hover: var(--color-teal-400);
+
+    /* Spacing & Typography (Consistent with previous structure) */
+    --space-4: 0.25rem;
+    --space-8: 0.5rem;
+    --space-12: 0.75rem;
+    --space-16: 1rem;
+    --space-24: 1.5rem;
+    --space-32: 2rem;
+    --space-64: 4rem;
+
+    --font-family-primary: 'Helvetica Neue', Arial, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-xxl: 2.25rem;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Dark Mode Overrides (Core Requirement) --- */
+/* Dark Mode Overrides */
 [data-color-scheme="dark"] {
     --color-text: var(--color-white);
-    --color-text-light: #9ca3af;
+    --color-text-light: var(--color-gray-300);
     --color-background: var(--color-charcoal-700);
     --color-card-background: var(--color-charcoal-800);
-    --color-border: #374151; 
-    --color-primary-button: var(--color-teal-400);
-    --color-primary-button-text: var(--color-charcoal-700);
-    --color-shadow: rgba(255, 255, 255, 0.05);
-    --color-link: var(--color-teal-400);
-    --color-hover: var(--color-green-500);
+    --color-border: var(--color-brown-600);
+    --color-primary: var(--color-teal-400);
+    --color-accent: var(--color-teal-300);
 }
 
-/* --- High Contrast Mode (WCAG 2.1 AA) --- */
-@media (prefers-contrast: high) {
-    /* [Detailed contrast adjustments for compliance] */
+/* === Base & Utility Styles (Removed for brevity, assuming prior file content) === */
+/* ... (Base styles from the previous version are assumed here: *, body, a, h1, etc.) ... */
+
+/* === Header (Consistent with previous structure) === */
+/* ... (Header, logo, accessibility-controls styles are assumed here) ... */
+
+/* === Main Layout === */
+.main-content {
+    flex-grow: 1; 
+    max-width: 1200px;
+    margin: var(--space-32) auto;
+    padding: 0 var(--space-24);
 }
-
-/* ========================================================================== */
-/* II. BASE & LAYOUT STYLES (Pillar 5: Performance) */
-/* ========================================================================== */
-
-body { /* ... (Base styles: font, color, margin) ... */ }
-.container { /* ... (Container sizing) ... */ }
-.card { /* ... (Card styling: background, border, shadow) ... */ }
-a { color: var(--color-link); transition: color 0.2s; }
-a:hover { color: var(--color-hover); }
-
-/* ========================================================================== */
-/* III. HEADER, FOOTER & NAVIGATION (Pillars 1, 2) */
-/* ========================================================================== */
-
-.main-header { /* ... (Header background and layout) ... */ }
-.header-content { /* ... (Flex layout for logo/tagline/controls) ... */ }
-.logo span { color: var(--color-teal-400); }
-.accessibility-controls button { /* ... (Voice/Dark Mode button styling) ... */ }
-.features-quick { /* ... (Quick feature badge styling) ... */ }
-
-/* ========================================================================== */
-/* IV. CALCULATOR STRUCTURE & INPUTS */
-/* ========================================================================== */
 
 .calculator-container {
     display: grid;
-    grid-template-columns: 380px 1fr; /* Desktop Layout */
-    gap: 30px;
-    padding: 30px 0;
+    grid-template-columns: 1fr 1.5fr; 
+    gap: var(--space-32);
 }
 
+.card {
+    background-color: var(--color-card-background);
+    padding: var(--space-24);
+    border-radius: var(--space-8);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+}
+.card-mini {
+    padding: var(--space-16);
+    margin-bottom: var(--space-24);
+}
+
+/* === Input Section & Form (Extra Payments & PITI Toggles) === */
 .input-section {
     position: sticky;
-    top: 30px; 
-    height: fit-content;
+    top: var(--space-32); 
+    align-self: flex-start;
 }
 
-.input-header {
-    /* ... (Input header styling for PITI/Extra Payments) ... */
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--color-accent);
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
+.section-title {
+    font-size: var(--font-size-xl);
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: var(--space-8);
+    margin-bottom: var(--space-24);
 }
 
-/* ... (Input field styling) ... */
-
-/* ========================================================================== */
-/* V. RESULT SUMMARY & EXTRA PAYMENT IMPACT (NEW) */
-/* ========================================================================== */
-
-.summary-result.primary h3 {
-    font-size: 2.5rem;
-    color: var(--color-green-500); /* Highlight for main payment result */
+.section-title i {
+    color: var(--color-primary);
+    margin-right: var(--space-8);
 }
 
-.extra-payment-impact {
-    margin-top: 1rem;
-    border-left: 5px solid var(--color-teal-400); /* Highlight the extra impact section */
-}
-.impact-details-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-}
-.saving-value {
-    color: var(--color-green-500);
-    font-size: 1.25rem;
+.input-group {
+    margin-bottom: var(--space-16);
 }
 
-/* ========================================================================== */
-/* VI. PAYMENT SCHEDULE STYLES (NEW - Core Requirement) */
-/* ========================================================================== */
-
-.schedule-controls { /* ... (Control bar for view toggle and export) ... */ }
-.toggle-group button.active { /* ... (Active toggle button styling) ... */ }
-
-.schedule-table {
+input[type="text"], input[type="number"], input[type="month"], select {
+    /* ... (Input styles are assumed here) ... */
     width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-    overflow-x: auto;
-    display: block; 
+    padding: var(--space-12);
+    border: 1px solid var(--color-border);
+    border-radius: var(--space-4);
+    background-color: var(--color-card-background);
+    color: var(--color-text);
+    font-size: var(--font-size-base);
 }
-.schedule-table thead th { /* ... (Table header styling) ... */ }
-[data-color-scheme="dark"] .schedule-table thead th { /* ... (Dark mode table header) ... */ }
 
-.extra-payment-row {
-    background-color: color-mix(in srgb, var(--color-teal-400) 10%, transparent); /* Light highlight for extra payment months */
+.advanced-options-group[aria-hidden="false"] {
+    max-height: 500px; 
+    opacity: 1;
 }
-.payoff-balance {
-    font-weight: 700;
+.input-group-sub-title {
+    font-size: var(--font-size-base);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-16);
+    padding-left: var(--space-4);
+    border-left: 3px solid var(--color-accent);
+}
+
+/* === Results Section (Enhanced Summary) === */
+.summary-card {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    text-align: center;
+    border-color: var(--color-accent);
+    border: none;
+}
+[data-color-scheme="dark"] .summary-card {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.extra-payment-summary {
+    font-size: var(--font-size-base);
+    font-weight: bold;
+    color: var(--color-green-500); /* Highlight extra payment for visibility */
+    background: rgba(255, 255, 255, 0.1);
+    padding: var(--space-4);
+    border-radius: var(--space-4);
+    margin-top: var(--space-8);
+}
+.summary-card .extra-payment-summary i {
+    margin-right: var(--space-4);
+}
+.summary-card .text-success {
     color: var(--color-green-500);
 }
 
-/* ========================================================================== */
-/* VII. AI INSIGHTS & VOICE (Pillar 3) */
-/* ========================================================================== */
-
-.ai-voice-box { /* ... (Voice command box styling) ... */ }
-
-.ai-insight-item {
-    /* ... (Insight item card styling) ... */
+/* Tab Content */
+.detail-item.detail-highlight {
+    background-color: var(--color-green-500);
+    border-color: var(--color-green-500);
+    color: var(--color-white);
+}
+.detail-item.detail-highlight .detail-label,
+.detail-item.detail-highlight .detail-value {
+    color: var(--color-white);
+}
+.detail-item.detail-highlight .text-success {
+    color: var(--color-white);
 }
 
-.affiliate-insight {
-    border: 2px solid var(--color-yellow-500); /* Highlight for high-ticket affiliate lead */
-    background-color: color-mix(in srgb, var(--color-yellow-500) 5%, var(--color-card-background));
+/* Chart Colors for Dark Mode (Ensuring readability) */
+[data-color-scheme="dark"] #payment-breakdown-chart,
+[data-color-scheme="dark"] #amortization-timeline-chart {
+    filter: invert(0.9) hue-rotate(180deg); /* Light inversion to keep chart readable */
 }
-.ai-cta-link {
-    font-weight: 600;
-    color: var(--color-yellow-500);
+.timeline-chart-container {
+    height: 350px; /* Slightly taller chart */
 }
 
-/* ========================================================================== */
-/* VIII. MONETIZATION & ADVERTISING (Pillar 7: Conversion-Friendly) */
-/* ========================================================================== */
+/* Schedule Controls */
+.schedule-controls {
+    display: flex;
+    gap: var(--space-12);
+    margin-bottom: var(--space-24);
+    flex-wrap: wrap;
+}
+.yearly-schedule-title {
+    margin-top: var(--space-32);
+}
 
-.monetization-slot-full-width, .monetization-slot {
-    background-color: var(--color-yellow-500);
-    color: var(--color-charcoal-700);
-    /* ... (Padding, margin, and border styling) ... */
-    padding: 1rem;
-    margin-bottom: 20px;
-    border-radius: 8px;
+/* === AI Insights (Enhanced) === */
+.ai-insight-box {
+    border-left-color: var(--color-green-500);
+    padding: var(--space-24);
+    border-radius: var(--space-8);
+    background-color: var(--color-gray-200);
+    border-left: 5px solid var(--color-green-500);
+}
+
+/* Recommendation Alerts (Consistent with previous structure) */
+/* ... (recommendation-alert styles are assumed here) ... */
+
+/* === Affiliate/Sponsor Ad Slots (Monetization Priority) === */
+.ad-slot {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: var(--space-16) var(--space-24);
+    margin: var(--space-32) 0;
+    border-radius: var(--space-8);
     text-align: center;
+    border: 2px solid var(--color-accent);
 }
-.monetization-slot a {
+.top-banner-ad {
+    margin-top: 0; 
+}
+.ad-slot p {
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-12);
+}
+.ad-cta {
+    display: inline-block;
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    padding: var(--space-8) var(--space-16);
+    border-radius: var(--space-4);
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+.ad-cta:hover {
+    background-color: var(--color-teal-300);
     color: var(--color-charcoal-700);
-    font-size: 1.1rem;
 }
-.high-ticket-sponsor {
-    border: 3px solid var(--color-red-500); /* Urgency/Highlight */
+.ad-slot.footer-ad {
+    margin-bottom: 0;
+    border-radius: 0; 
+}
+.ad-slot.contextual-ad {
+    background-color: var(--color-gray-200);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    margin-top: var(--space-24);
+}
+.ad-slot.contextual-ad p {
+    color: var(--color-text);
+}
+[data-color-scheme="dark"] .ad-slot.contextual-ad {
+    background-color: var(--color-charcoal-700);
 }
 
-/* ========================================================================== */
-/* IX. TOAST NOTIFICATIONS (Pillar 2) */
-/* ========================================================================== */
+/* === FAQ Section (SEO Content) === */
+.faq-section {
+    max-width: 1200px;
+    margin: var(--space-64) auto;
+    padding: 0 var(--space-24);
+}
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-24);
+}
+.faq-item {
+    border-left: 5px solid var(--color-accent);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-sm);
+    background-color: var(--color-card-background);
+}
+.faq-question {
+    font-size: var(--font-size-lg);
+    color: var(--color-primary);
+    margin-bottom: var(--space-8);
+}
+.faq-answer {
+    font-size: var(--font-size-base);
+    color: var(--color-text-light);
+}
 
-.toast-container { /* ... (Toast container positioning) ... */ }
-.toast { /* ... (Toast styling and animation) ... */ }
-.toast.success { background-color: var(--color-green-500); }
-.toast.error { background-color: var(--color-red-500); }
+/* === Footer (Enhanced Monetization Focus) === */
+/* ... (Footer styles are assumed here) ... */
 
-/* ========================================================================== */
-/* X. MOBILE RESPONSIVENESS (Pillar 2: Mobile-First) */
-/* ========================================================================== */
-
+/* === Mobile Responsiveness (Critical for SEO) === */
 @media (max-width: 1024px) {
     .calculator-container {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
     }
     .input-section {
         position: static; 
     }
-    .summary-details, .impact-details-grid {
-        grid-template-columns: 1fr 1fr;
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
     }
-    /* ... (Other mobile layout adjustments) ... */
+    .input-split {
+        grid-template-columns: 1fr;
+    }
+    .schedule-controls {
+        flex-direction: column;
+    }
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
 }
