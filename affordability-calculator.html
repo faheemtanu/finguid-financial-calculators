@@ -3,111 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-Powered Mortgage Affordability Calculator</title>
-    <link rel="stylesheet" href="styles.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <title>Mortgage Affordability Calculator — World's First AI-Powered | FinGuid USA</title>
+    <meta name="description" content="Calculate your maximum affordable home price based on income and debts using the DTI ratio. AI-Powered insights provide personalized home-buying recommendations for Americans.">
+    <meta name="keywords" content="affordability calculator, mortgage affordability, DTI ratio, how much home can I afford, AI home buying, FinGuid, maximum house price, USA home loan">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#19343B"> 
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="affordability-calculator.css"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 </head>
 <body>
-
-    <div class="container">
-        <h1>HOME LOAN PRO Affordability Calculator</h1>
-
-        <div class="controls-panel">
-            <button id="toggle-mode"></button>
-            <button id="toggle-voice"></button>
-        </div>
-
-        <div class="calculator-grid">
-            
-            <div class="input-panel">
-                <h2>Your Financial Profile</h2>
-                <form id="calculator-form">
-                    
-                    <div class="form-group">
-                        <label for="annualIncome">Annual Household Income ($)</label>
-                        <input type="number" id="annualIncome" value="80000" min="0" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="monthlyDebts">Total Monthly Debts ($)</label>
-                        <input type="number" id="monthlyDebts" value="500" min="0" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="downPayment">Available Down Payment ($)</label>
-                        <input type="number" id="downPayment" value="20000" min="0" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="interestRate">Interest Rate (%) - *Live Rate*</label>
-                        <input type="number" id="interestRate" value="7.00" step="0.01" min="0" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="mortgageTerm">Mortgage Term (Years)</label>
-                        <select id="mortgageTerm">
-                            <option value="30" selected>30 Years</option>
-                            <option value="15">15 Years</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="zipCode">Zip Code (Optional)</label>
-                        <input type="text" id="zipCode" placeholder="90210">
-                    </div>
-
-                    <button type="submit" class="calculate-button">Calculate Affordability</button>
-                </form>
-            </div>
-
-            <div id="results-section" class="results-panel" style="display: none;">
-                <h2>Your Affordability Results</h2>
+    
+    <header class="header">
+        <div class="header-container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/">FinGuid Pro</a>
+                    <span class="tagline">World's Best AI Financial Tools</span>
+                </div>
                 
-                <div class="main-result-box">
-                    <p class="label">Maximum Home Price</p>
-                    <div id="result-price" class="result-value">$0</div>
-                </div>
-
-                <div class="detail-group">
-                    <p class="label">Maximum Loan Amount: <span id="result-loan-amount"></span></p>
-                    <p class="label">Max Monthly PITI (Principal, Interest, Tax, Insurance): <span id="result-monthly-piti"></span></p>
-                </div>
-
-                <div class="breakdown-section">
-                    <h3>Monthly Payment Breakdown</h3>
-                    <div class="breakdown-grid">
-                        <div class="detail-item">P&I: <span id="breakdown-pi"></span></div>
-                        <div class="detail-item">Tax: <span id="breakdown-tax"></span></div>
-                        <div class="detail-item">Insurance: <span id="breakdown-ins"></span></div>
-                        <div class="detail-item">PMI: <span id="breakdown-pmi"></span></div>
-                    </div>
-                </div>
-
-                <div class="dti-section">
-                    <h3>Debt-to-Income Ratios</h3>
-                    <div class="dti-grid">
-                        <div class="dti-item">
-                            <p>Front-End DTI (PITI/Income)</p>
-                            <span id="dti-front-end" class="dti-value">0.00%</span>
-                        </div>
-                        <div class="dti-item">
-                            <p>Back-End DTI (PITI+Debt/Income)</p>
-                            <span id="dti-back-end" class="dti-value">0.00%</span>
-                        </div>
-                    </div>
+                <span class="features-quick">AI / Voice / PWA / Live Data</span>
+                
+                <div class="accessibility-controls">
+                    <button id="voice-toggle-button" class="control-button" title="Toggle Voice Commands" aria-label="Toggle Voice Commands" aria-pressed="false">
+                        <i class="fas fa-microphone" aria-hidden="true"></i>
+                    </button>
+                    <button id="theme-toggle-button" class="control-button" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
         </div>
+    </header>
 
-        <div class="insights-section">
-            <h2><i class="fas fa-microchip"></i> AI-Powered Insights</h2>
-            <ul id="ai-insights-list">
-                </ul>
+    <main class="main-content">
+        <h1 class="calculator-title">
+            Mortgage Affordability <span>Calculator</span>
+        </h1>
+        
+        <div class="calculator-container">
+            
+            <section class="input-section">
+                <h2>Your Financial Profile</h2>
+                <form id="affordability-form">
+                    
+                    <div class="input-group">
+                        <label for="annualIncome">Annual Household Income</label>
+                        <input type="text" id="annualIncome" class="input-field" data-type="currency" value="80,000" aria-label="Annual Income">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="monthlyDebts">Total Monthly Debt Payments (Cars, Credit Cards, Loans)</label>
+                        <input type="text" id="monthlyDebts" class="input-field" data-type="currency" value="500" aria-label="Monthly Debts">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="downPayment">Available Down Payment</label>
+                        <input type="text" id="downPayment" class="input-field" data-type="currency" value="20,000" aria-label="Down Payment">
+                    </div>
+
+                    <div class="input-split">
+                        <div class="input-group">
+                            <label for="interestRate">Estimated Interest Rate (%)</label>
+                            <input type="number" step="0.01" id="interestRate" class="input-field" value="7.00" aria-label="Interest Rate">
+                        </div>
+                        <div class="input-group">
+                            <label for="mortgageTerm">Mortgage Term (Years)</label>
+                            <select id="mortgageTerm" class="input-select" aria-label="Mortgage Term">
+                                <option value="30">30 Years</option>
+                                <option value="20">20 Years</option>
+                                <option value="15">15 Years</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="propertyTaxRate">Annual Property Tax Rate (%)</label>
+                        <div class="range-slider-container">
+                            <input type="range" min="0.5" max="3.0" step="0.01" id="propertyTaxRate" class="input-range" value="1.20" aria-label="Property Tax Rate">
+                            <div class="range-label-minmax">
+                                <span>0.5%</span>
+                                <span id="property-tax-value">1.20%</span>
+                                <span>3.0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="calculate-button" class="button-primary">Calculate Maximum Affordability</button>
+                </form>
+            </section>
+            
+            <section class="result-section">
+
+                <div class="card" id="max-price-card">
+                    <h3>Your Maximum Affordable Home Price</h3>
+                    <div class="summary-total">
+                        <div class="label">Based on the 36% DTI Rule (Most Common Limit)</div>
+                        <div class="value" id="max-home-price">$0.00</div>
+                    </div>
+                    
+                    <div class="summary-details">
+                        <div class="detail-item">
+                            <span class="label">Max Monthly Payment</span>
+                            <span class="value" id="max-monthly-piti">$0.00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Maximum Loan Amount</span>
+                            <span class="value" id="max-loan-amount">$0.00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Front-End DTI (28% Rule)</span>
+                            <span class="value" id="fe-dti-price">$0.00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Down Payment Used</span>
+                            <span class="value" id="dp-used">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card ai-insights">
+                    <h3><i class="fas fa-brain"></i> AI Financial Insights</h3>
+                    <ul class="insights-list" id="insights-list">
+                        <li>Calculate to see personalized, AI-driven recommendations for your home buying journey. (Example: "Consider a lower debt-to-income ratio for better loan offers.")</li>
+                    </ul>
+                </div>
+                
+                <div class="monetization-slot">
+                    <h4><i class="fas fa-ad"></i> Partner / Ad Slot (Monetization)</h4>
+                    <p>Sponsored Content: Best Local Mortgage Lenders & Brokers. This area is reserved for high-value advertising and sponsor partnerships.</p>
+                </div>
+
+            </section>
         </div>
-    </div>
+    </main>
 
-    <div id="toast-container"></div>
+    <footer class="footer">
+        <div class="footer-container">
+            <nav class="footer-nav">
+                <div class="footer-col">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/affordability-calculator.html">Affordability Calculator</a></li>
+                        <li><a href="/investment-calculator.html">Investment Calculator</a></li>
+                        <li><a href="/retirement-calculator.html">Retirement Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/blog.html">Financial Blog</a></li>
+                        <li><a href="/guides.html">How-to Guides</a></li>
+                        <li><a href="/faq.html">FAQ</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                        <li><a href="/careers.html">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Partnership & Ads (Monetization)</h4>
+                    <ul>
+                        <li><a href="#advertising">Advertising (Ad Slot)</a></li>
+                        <li><a href="#affiliates">Affiliate Products</a></li>
+                        <li><a href="#sponsor-link">Sponsor Products</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. We monetize via advertising and affiliate partnerships.
+                    </p>
+                </div>
+                
+                <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
     <script src="affordability-calculator.js"></script>
+    
 </body>
 </html>
