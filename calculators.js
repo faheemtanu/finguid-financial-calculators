@@ -1,457 +1,618 @@
-// ===== CALCULATORS PAGE FUNCTIONALITY =====
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-document.addEventListener('DOMContentLoaded', function() {
+  gtag('config', 'G-NYBL2CDNQJ');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Calculators - Free USA Financial Planning Tools</title>
+    <meta name="description" content="Access all our free financial calculators in one place. Mortgage, auto loan, investment, and retirement planning calculators designed for Americans.">
+    <meta name="keywords" content="financial calculators, mortgage calculator, auto loan calculator, investment calculator, retirement planning, USA financial tools">
     
-    // Initialize calculators page
-    initializeCalculatorsPage();
+    <meta property="og:title" content="Financial Calculators - USA Financial Planning Tools">
+    <meta property="og:description" content="Comprehensive suite of free financial calculators designed specifically for Americans. Calculate mortgages, loans, investments, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.finguid.com/calculators.html">
     
-    function initializeCalculatorsPage() {
-        setupCategoryFilters();
-        setupSearchFunctionality();
-        setupCalculatorTracking();
-        initializeNewsletter();
-        
-        // Track page load
-        trackPageLoad();
-    }
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     
-    function setupCategoryFilters() {
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const calculatorCards = document.querySelectorAll('.calculator-card');
-        
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const category = this.dataset.category;
-                
-                // Update active filter button
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Filter calculator cards
-                filterCalculators(category);
-                
-                // Track filter usage
-                trackFilterUsage(category);
-            });
-        });
-    }
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    function filterCalculators(category) {
-        const calculatorCards = document.querySelectorAll('.calculator-card');
-        const noResults = document.getElementById('no-results');
-        let visibleCards = 0;
-        
-        calculatorCards.forEach(card => {
-            const cardCategory = card.dataset.category;
-            
-            if (category === 'all' || cardCategory === category) {
-                card.style.display = 'block';
-                card.classList.add('fade-in-up');
-                visibleCards++;
-            } else {
-                card.style.display = 'none';
-                card.classList.remove('fade-in-up');
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Financial Calculators",
+        "description": "Free financial calculators for Americans including mortgage, auto loan, investment, and retirement planning tools",
+        "url": "https://www.finguid.com/calculators.html",
+        "mainEntity": {
+            "@type": "SoftwareApplication",
+            "name": "USA Financial Calculators",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "Any",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
             }
-        });
-        
-        // Show/hide no results message
-        if (visibleCards === 0) {
-            noResults.style.display = 'block';
-        } else {
-            noResults.style.display = 'none';
-        }
-        
-        // Update URL hash for bookmarking
-        if (category !== 'all') {
-            window.history.replaceState(null, null, `#${category}`);
-        } else {
-            window.history.replaceState(null, null, window.location.pathname);
         }
     }
+    </script>
     
-    function setupSearchFunctionality() {
-        const searchInput = document.getElementById('calculator-search');
-        const calculatorCards = document.querySelectorAll('.calculator-card');
-        const noResults = document.getElementById('no-results');
-        
-        if (searchInput) {
-            // Add debounced search
-            let searchTimeout;
-            
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="/" class="nav-brand">
+                    <i class="fas fa-calculator"></i>
+                    <span class="brand-text">USA Financial Calculators</span>
+                </a>
                 
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    performSearch(searchTerm);
-                }, 300);
-            });
-            
-            // Handle search on enter key
-            searchInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const searchTerm = this.value.toLowerCase().trim();
-                    performSearch(searchTerm);
-                }
-            });
-        }
-    }
-    
-    function performSearch(searchTerm) {
-        const calculatorCards = document.querySelectorAll('.calculator-card');
-        const noResults = document.getElementById('no-results');
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        let visibleCards = 0;
-        
-        if (searchTerm === '') {
-            // Show all cards if search is empty
-            calculatorCards.forEach(card => {
-                card.style.display = 'block';
-                visibleCards++;
-            });
-            noResults.style.display = 'none';
-            
-            // Reset active filter to "all"
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            document.querySelector('[data-category="all"]').classList.add('active');
-            
-        } else {
-            // Search through cards
-            calculatorCards.forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const description = card.querySelector('p').textContent.toLowerCase();
-                const keywords = card.dataset.keywords || '';
-                const features = Array.from(card.querySelectorAll('.feature-tag'))
-                    .map(tag => tag.textContent.toLowerCase()).join(' ');
+                <div class="nav-menu" id="nav-menu">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/calculators.html" class="nav-link active">Calculators</a>
+                    <a href="/resources.html" class="nav-link">Resources</a>
+                    <a href="/partners.html" class="nav-link">Partners</a>
+                    <a href="/contact.html" class="nav-link">Contact</a>
+                </div>
                 
-                const searchableContent = `${title} ${description} ${keywords} ${features}`;
-                
-                if (searchableContent.includes(searchTerm)) {
-                    card.style.display = 'block';
-                    card.classList.add('fade-in-up');
-                    visibleCards++;
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="calculators-page">
+        <section class="calculators-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Financial Calculators</h1>
+                    <p>Comprehensive suite of free financial planning tools designed specifically for Americans. Make informed decisions about mortgages, loans, investments, and retirement planning.</p>
                     
-                    // Highlight search terms (optional)
-                    highlightSearchTerms(card, searchTerm);
-                } else {
-                    card.style.display = 'none';
-                    card.classList.remove('fade-in-up');
-                }
-            });
-            
-            // Reset all filter buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-        }
-        
-        // Show/hide no results
-        if (visibleCards === 0 && searchTerm !== '') {
-            noResults.style.display = 'block';
-        } else {
-            noResults.style.display = 'none';
-        }
-        
-        // Track search
-        if (searchTerm !== '') {
-            trackSearch(searchTerm, visibleCards);
-        }
-    }
-    
-    function highlightSearchTerms(card, searchTerm) {
-        // Simple highlighting (can be enhanced)
-        const title = card.querySelector('h3');
-        const originalTitle = title.dataset.originalText || title.textContent;
-        
-        if (!title.dataset.originalText) {
-            title.dataset.originalText = originalTitle;
-        }
-        
-        const highlightedTitle = originalTitle.replace(
-            new RegExp(searchTerm, 'gi'),
-            match => `<mark>${match}</mark>`
-        );
-        
-        title.innerHTML = highlightedTitle;
-        
-        // Remove highlights after 3 seconds
-        setTimeout(() => {
-            title.innerHTML = originalTitle;
-        }, 3000);
-    }
-    
-    function clearSearch() {
-        const searchInput = document.getElementById('calculator-search');
-        if (searchInput) {
-            searchInput.value = '';
-            performSearch('');
-        }
-    }
-    
-    // Make clearSearch available globally
-    window.clearSearch = clearSearch;
-    
-    function setupCalculatorTracking() {
-        const calculatorCards = document.querySelectorAll('.calculator-card');
-        
-        calculatorCards.forEach(card => {
-            const button = card.querySelector('.btn');
-            const title = card.querySelector('h3').textContent;
-            
-            if (button && !button.disabled) {
-                button.addEventListener('click', function() {
-                    trackCalculatorClick(title);
-                });
-            }
-        });
-    }
-    
-    function initializeNewsletter() {
-        const newsletterForm = document.getElementById('newsletter-form');
-        
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Free Calculators</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">100K+</div>
+                            <div class="stat-label">Calculations Made</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50</div>
+                            <div class="stat-label">States Supported</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="calculator-filters">
+            <div class="container">
+                <div class="filter-header">
+                    <h2>Find the Right Calculator</h2>
+                    <p>Filter by category or search for specific financial tools</p>
+                </div>
                 
-                const email = this.querySelector('input[type="email"]').value;
-                const button = this.querySelector('button');
-                const originalText = button.innerHTML;
-                
-                // Basic email validation
-                if (!isValidEmail(email)) {
-                    showTooltip('Please enter a valid email address', 'error');
-                    return;
-                }
-                
-                // Show loading state
-                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
-                button.disabled = true;
-                
-                // Simulate subscription (replace with real API call)
-                setTimeout(() => {
-                    showTooltip('Successfully subscribed! You\'ll be notified about new calculators.', 'success');
-                    this.reset();
-                    button.innerHTML = originalText;
-                    button.disabled = false;
+                <div class="filter-controls">
+                    <div class="category-filters">
+                        <button class="filter-btn active" data-category="all">
+                            <i class="fas fa-th"></i>
+                            All Calculators
+                        </button>
+                        <button class="filter-btn" data-category="home">
+                            <i class="fas fa-home"></i>
+                            Home & Mortgage
+                        </button>
+                        <button class="filter-btn" data-category="auto">
+                            <i class="fas fa-car"></i>
+                            Auto & Transportation
+                        </button>
+                        <button class="filter-btn" data-category="investment">
+                            <i class="fas fa-chart-line"></i>
+                            Investment & Retirement
+                        </button>
+                        <button class="filter-btn" data-category="debt">
+                            <i class="fas fa-credit-card"></i>
+                            Debt & Credit
+                        </button>
+                        <button class="filter-btn" data-category="business">
+                            <i class="fas fa-briefcase"></i>
+                            Business & Taxes
+                        </button>
+                    </div>
                     
-                    // Track newsletter signup
-                    trackNewsletterSignup(email);
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="calculator-search" placeholder="Search calculators...">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="calculators-grid-section">
+            <div class="container">
+                <div class="calculators-grid" id="calculators-grid">
                     
-                }, 2000);
-            });
-        }
-    }
-    
-    // Check for URL hash on page load
-    function handleInitialHash() {
-        const hash = window.location.hash.replace('#', '');
-        if (hash && document.querySelector(`[data-category="${hash}"]`)) {
-            const filterButton = document.querySelector(`[data-category="${hash}"]`);
-            if (filterButton) {
-                filterButton.click();
-            }
-        }
-    }
-    
-    // Initialize hash handling
-    handleInitialHash();
-    
-    // Handle browser back/forward
-    window.addEventListener('popstate', handleInitialHash);
-});
+                    <div class="calculator-card" data-category="home" data-keywords="mortgage home loan payment pmi tax insurance">
+                        <div class="card-status">
+                            <span class="status-badge available">Available</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-1);">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Mortgage Calculator</h3>
+                            <p>Calculate your monthly mortgage payments including principal, interest, PMI, taxes, and insurance with detailed amortization schedule.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">PMI Calculator</span>
+                                <span class="feature-tag">Amortization Schedule</span>
+                                <span class="feature-tag">Tax Integration</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="/mortgage-calculator.html" class="btn btn-primary">
+                                <i class="fas fa-calculator"></i>
+                                Calculate Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="calculator-card" data-category="home" data-keywords="affordability home loan house budget maximum">
+                        <div class="card-status">
+                            <span class="status-badge available">New!</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-9);"> <i class="fas fa-sack-dollar"></i> </div>
+                        <div class="card-content">
+                            <h3>Affordability Calculator</h3>
+                            <p>Determine the maximum loan amount and home price you can afford based on your income, debts, and down payment.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Max Price</span>
+                                <span class="feature-tag">Debt-to-Income</span>
+                                <span class="feature-tag">DTI Ratio</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="/affordability-calculator.html" class="btn btn-primary">
+                                <i class="fas fa-calculator"></i>
+                                Calculate Now
+                            </a>
+                        </div>
+                    </div>
 
-// ===== UTILITY FUNCTIONS =====
+                    <div class="calculator-card" data-category="home" data-keywords="refinance mortgage refi rate savings">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-2);">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Refinance Calculator</h3>
+                            <p>Determine if refinancing your mortgage makes financial sense. Compare current rates and calculate potential savings.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Break-even Analysis</span>
+                                <span class="feature-tag">Rate Comparison</span>
+                                <span class="feature-tag">Cost Analysis</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
 
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
+                    <div class="calculator-card" data-category="home" data-keywords="rent vs buy home renting buying comparison">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-3);">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Rent vs Buy Calculator</h3>
+                            <p>Compare the costs of renting versus buying a home to make the best financial decision for your situation.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Cost Comparison</span>
+                                <span class="feature-tag">Market Analysis</span>
+                                <span class="feature-tag">ROI Calculator</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
 
-function showTooltip(message, type = 'info') {
-    const tooltip = document.createElement('div');
-    tooltip.className = `tooltip-popup ${type}`;
-    tooltip.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-        <span>${message}</span>
-    `;
-    
-    tooltip.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? 'var(--color-success)' : type === 'error' ? 'var(--color-error)' : 'var(--color-info)'};
-        color: white;
-        padding: 12px 16px;
-        border-radius: 6px;
-        font-size: 14px;
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        animation: slideInRight 0.3s ease-out;
-        max-width: 300px;
-    `;
-    
-    document.body.appendChild(tooltip);
-    
-    setTimeout(() => {
-        tooltip.style.animation = 'slideOutRight 0.3s ease-out';
-        setTimeout(() => tooltip.remove(), 300);
-    }, 5000);
-}
+                    <div class="calculator-card" data-category="auto" data-keywords="auto loan car payment vehicle financing trade">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Week 3</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-4);">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Auto Loan Calculator</h3>
+                            <p>Calculate car payments with trade-in values, taxes, and fees. Compare different financing options easily.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Trade-in Value</span>
+                                <span class="feature-tag">Tax Calculator</span>
+                                <span class="feature-tag">Payment Comparison</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-calendar"></i>
+                                Week 3
+                            </button>
+                        </div>
+                    </div>
 
-// ===== ANALYTICS TRACKING =====
+                    <div class="calculator-card" data-category="auto" data-keywords="lease car leasing payment monthly">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-5);">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Car Lease Calculator</h3>
+                            <p>Calculate monthly lease payments and compare leasing versus buying options for your next vehicle.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Lease vs Buy</span>
+                                <span class="feature-tag">Monthly Payments</span>
+                                <span class="feature-tag">Total Cost</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
 
-function trackPageLoad() {
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'page_view', {
-            'event_category': 'calculators',
-            'event_label': 'calculators_page_loaded'
-        });
-    }
-}
+                    <div class="calculator-card" data-category="investment" data-keywords="investment compound interest retirement savings growth">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Week 4</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-6);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Investment Calculator</h3>
+                            <p>Plan your financial future with compound interest calculations and retirement planning tools.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Compound Interest</span>
+                                <span class="feature-tag">Retirement Planning</span>
+                                <span class="feature-tag">Goal Tracking</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-calendar"></i>
+                                Week 4
+                            </button>
+                        </div>
+                    </div>
 
-function trackFilterUsage(category) {
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'filter_usage', {
-            'event_category': 'calculators',
-            'event_label': category
-        });
-    }
-}
+                    <div class="calculator-card" data-category="investment" data-keywords="401k retirement savings employer match">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-7);">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>401(k) Calculator</h3>
+                            <p>Optimize your retirement savings with 401(k) contribution calculations and employer matching analysis.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Employer Match</span>
+                                <span class="feature-tag">Tax Benefits</span>
+                                <span class="feature-tag">Projection Analysis</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
 
-function trackSearch(searchTerm, resultsCount) {
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'search', {
-            'event_category': 'calculators',
-            'search_term': searchTerm,
-            'results_count': resultsCount
-        });
-    }
-}
+                    <div class="calculator-card" data-category="investment" data-keywords="roth ira traditional ira retirement savings tax">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-8);">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>IRA Calculator</h3>
+                            <p>Compare Roth IRA vs Traditional IRA options and calculate optimal contribution strategies.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Roth vs Traditional</span>
+                                <span class="feature-tag">Tax Analysis</span>
+                                <span class="feature-tag">Contribution Limits</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
 
-function trackCalculatorClick(calculatorName) {
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'calculator_click', {
-            'event_category': 'engagement',
-            'event_label': calculatorName
-        });
-    }
-}
+                    <div class="calculator-card" data-category="debt" data-keywords="credit card debt payoff interest payment strategy">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Week 5</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-1);">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Credit Card Payoff Calculator</h3>
+                            <p>Create effective debt payoff strategies and calculate interest savings with different payment approaches.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Payoff Strategies</span>
+                                <span class="feature-tag">Interest Savings</span>
+                                <span class="feature-tag">Payment Schedule</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-calendar"></i>
+                                Week 5
+                            </button>
+                        </div>
+                    </div>
 
-function trackNewsletterSignup(email) {
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'newsletter_signup', {
-            'event_category': 'conversion',
-            'event_label': 'calculators_page',
-            'value': 1
-        });
-    }
-}
+                    <div class="calculator-card" data-category="debt" data-keywords="personal loan payment schedule interest">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Week 6</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-2);">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Personal Loan Calculator</h3>
+                            <p>Compare personal loan options and calculate monthly payments with detailed payment schedules.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Loan Comparison</span>
+                                <span class="feature-tag">Payment Schedule</span>
+                                <span class="feature-tag">APR Analysis</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-calendar"></i>
+                                Week 6
+                            </button>
+                        </div>
+                    </div>
 
-// ===== KEYBOARD NAVIGATION =====
+                    <div class="calculator-card" data-category="business" data-keywords="business loan sba funding startup">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-3);">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Business Loan Calculator</h3>
+                            <p>Calculate business loan payments and compare SBA loan options for your entrepreneurial ventures.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">SBA Loans</span>
+                                <span class="feature-tag">Cash Flow</span>
+                                <span class="feature-tag">ROI Analysis</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Add keyboard support for filter buttons
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    
-    filterButtons.forEach((button, index) => {
-        button.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                e.preventDefault();
+                    <div class="calculator-card" data-category="business" data-keywords="tax withholding payroll salary income">
+                        <div class="card-status">
+                            <span class="status-badge coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="card-icon" style="background: var(--color-bg-4);">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Tax Withholding Calculator</h3>
+                            <p>Calculate federal and state tax withholdings to optimize your paycheck and avoid surprises.</p>
+                            <div class="card-features">
+                                <span class="feature-tag">Federal & State</span>
+                                <span class="feature-tag">Payroll Planning</span>
+                                <span class="feature-tag">Withholding Optimization</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-clock"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="no-results" class="no-results" style="display: none;">
+                    <div class="no-results-content">
+                        <i class="fas fa-search"></i>
+                        <h3>No calculators found</h3>
+                        <p>Try adjusting your search terms or browse all categories</p>
+                        <button class="btn btn-primary" onclick="clearSearch()">
+                            <i class="fas fa-refresh"></i>
+                            Show All Calculators
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="calculator-features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Why Choose Our Calculators?</h2>
+                    <p>Designed specifically for Americans with accurate, up-to-date financial data</p>
+                </div>
                 
-                const nextIndex = e.key === 'ArrowRight' 
-                    ? (index + 1) % filterButtons.length
-                    : (index - 1 + filterButtons.length) % filterButtons.length;
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-check"></i>
+                        </div>
+                        <h3>100% Accurate</h3>
+                        <p>Industry-standard formulas with real-time data and state-specific tax rates for precise calculations.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Mobile Optimized</h3>
+                        <p>Perfect experience on any device - desktop, tablet, or smartphone with responsive design.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Privacy First</h3>
+                        <p>All calculations are performed locally in your browser. We don't store any personal information.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Detailed Results</h3>
+                        <p>Comprehensive breakdowns, charts, and schedules to help you understand every aspect of your finances.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <h3>Always Updated</h3>
+                        <p>Regular updates with current interest rates, tax rates, and financial regulations for accuracy.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Expert Support</h3>
+                        <p>Backed by financial experts and continuously improved based on user feedback and market changes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="newsletter-cta">
+            <div class="container">
+                <div class="cta-content">
+                    <div class="cta-text">
+                        <h2>Stay Updated with New Calculators</h2>
+                        <p>Be the first to know when we launch new financial planning tools and features.</p>
+                    </div>
+                    <div class="cta-form">
+                        <form id="newsletter-form" class="newsletter-form">
+                            <input type="email" placeholder="Enter your email address" required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-envelope"></i>
+                                Subscribe
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-calculator"></i>
+                        USA Financial Calculators
+                    </div>
+                    <p>Building the world's first AI-enhanced financial calculator platform specifically designed for Americans.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
                 
-                filterButtons[nextIndex].focus();
-            } else if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                button.click();
-            }
-        });
-    });
-    
-    // Add keyboard support for search
-    const searchInput = document.getElementById('calculator-search');
-    if (searchInput) {
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                this.value = '';
-                performSearch('');
-                this.blur();
-            }
-        });
-    }
-});
+                <div class="footer-section">
+                    <h4>Popular Calculators</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/auto-loan-calculator.html">Auto Loan Calculator</a></li>
+                        <li><a href="/investment-calculator.html">Investment Calculator</a></li>
+                        <li><a href="/credit-card-calculator.html">Credit Card Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/blog.html">Financial Blog</a></li>
+                        <li><a href="/guides.html">How-to Guides</a></li>
+                        <li><a href="/faq.html">FAQ</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/partners.html">Partner Program</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 USA Financial Calculators (Finguid.com). All rights reserved. Built with ❤️ for Americans' financial success.</p>
+            </div>
+        </div>
+    </footer>
 
-// ===== PERFORMANCE OPTIMIZATION =====
-
-// Lazy load calculator cards as they come into view
-document.addEventListener('DOMContentLoaded', function() {
-    const calculatorCards = document.querySelectorAll('.calculator-card');
-    
-    const cardObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-up');
-                cardObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '50px'
-    });
-    
-    calculatorCards.forEach(card => {
-        cardObserver.observe(card);
-    });
-});
-
-// ===== RESPONSIVE ENHANCEMENTS =====
-
-function handleMobileSearch() {
-    const searchInput = document.getElementById('calculator-search');
-    const isMobile = window.innerWidth <= 768;
-    
-    if (isMobile && searchInput) {
-        searchInput.addEventListener('focus', function() {
-            // Scroll to search input on mobile
-            setTimeout(() => {
-                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
-        });
-    }
-}
-
-// Initialize mobile enhancements
-document.addEventListener('DOMContentLoaded', handleMobileSearch);
-window.addEventListener('resize', debounce(handleMobileSearch, 250));
-
-// ===== ERROR HANDLING =====
-
-window.addEventListener('error', function(e) {
-    console.error('Calculators page error:', e.error);
-    
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'exception', {
-            'description': `Calculators page: ${e.error.toString()}`,
-            'fatal': false
-        });
-    }
-});
-
-// ===== DEBOUNCE UTILITY =====
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-console.log('✅ Calculators page functionality loaded successfully!');
+    <script src="script.js"></script>
+    <script src="calculators.js"></script>
+</body>
+</html>
