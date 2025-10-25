@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Investment Calculator Pro — World's First AI‑Powered Retirement Planner | FinGuid USA</title>
+    <meta name="description" content="Plan your financial future with the World's First AI-Powered Investment Calculator. Calculate compound interest, retirement savings, and goal tracking with real-time market insights from the FRED API.">
+    <meta name="keywords" content="investment calculator, retirement calculator, compound interest, goal tracker, FRED API, AI finance, USA investment, FinGuid, PWA, SEO friendly">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#19343B">
+    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous">
+
+    <link rel="stylesheet" href="investment-calculator.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content container">
+            <div class="logo">
+                <i class="fas fa-chart-line" aria-hidden="true"></i> FinGuid
+            </div>
+            <div class="tagline">
+                Investment Calculator Pro — World's First AI-Powered Financial Planner
+            </div>
+            <div class="accessibility-controls">
+                <button id="voice-command-button" class="control-button" title="Voice Command"><i class="fas fa-microphone" aria-hidden="true"></i></button>
+                <button id="theme-toggle-button" class="control-button" title="Toggle Light/Dark Mode"><i class="fas fa-sun" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="calculator-main container">
+        <div class="calculator-container">
+
+            <section class="input-section card">
+                <h2>Your Investment Goals</h2>
+                <form id="investment-form">
+                    <div class="form-group">
+                        <label for="initialBalance">Initial Investment ($)</label>
+                        <input type="number" id="initialBalance" value="10000" min="0" step="1000" required>
+                        <span class="range-value">$10,000</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="annualContribution">Annual Contribution ($)</label>
+                        <input type="number" id="annualContribution" value="6000" min="0" step="500" required>
+                        <span class="range-value">$6,000</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timeHorizon">Time Horizon (Years)</label>
+                        <input type="number" id="timeHorizon" value="30" min="1" max="60" required>
+                        <span class="range-value">30 Years</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expectedReturn">Expected Annual Return (%)</label>
+                        <input type="range" id="expectedReturn" value="8" min="0.5" max="20" step="0.1" required>
+                        <span class="range-value">8.0%</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="compoundingFrequency">Compounding Frequency</label>
+                        <select id="compoundingFrequency">
+                            <option value="12">Monthly</option>
+                            <option value="4">Quarterly</option>
+                            <option value="1">Annually</option>
+                        </select>
+                    </div>
+
+                    <div class="monetization-slot affiliate-ad-slot">
+                        <p class="ad-label">Sponsored Product:</p>
+                        <a href="#affiliate-link-1" target="_blank" class="affiliate-link">Open a High-Yield Investment Account Today! <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </form>
+            </section>
+
+            <section class="results-section">
+                <div class="live-rate-summary">
+                    <p>Current US 10-Year Treasury Yield (FRED® Benchmark): <span id="live-rate-display" class="highlight-value">--.--%</span> <i class="fas fa-chart-line"></i></p>
+                </div>
+
+                <div class="summary-details card">
+                    <div class="summary-box">
+                        <div class="label">Projected Final Value</div>
+                        <div id="final-balance" class="value large-value highlight-brand">$0.00</div>
+                    </div>
+                    <div class="summary-box">
+                        <div class="label">Total Principal Contributed</div>
+                        <div id="total-principal" class="value">$0.00</div>
+                    </div>
+                    <div class="summary-box">
+                        <div class="label">Total Interest Earned</div>
+                        <div id="total-interest" class="value">$0.00</div>
+                    </div>
+                    <div class="summary-box">
+                        <div class="label">Rate of Return (Total)</div>
+                        <div id="total-ror" class="value highlight-positive">0.00%</div>
+                    </div>
+                </div>
+
+                <div class="tab-controls-results">
+                    <button class="tab-button active" data-tab="growth-chart"><i class="fas fa-chart-area"></i> Growth Chart</button>
+                    <button class="tab-button" data-tab="details-table"><i class="fas fa-table"></i> Year-by-Year</button>
+                    <button class="tab-button" data-tab="ai-insights"><i class="fas fa-robot"></i> AI Insights & Next Steps</button>
+                </div>
+
+                <div id="growth-chart" class="tab-content active card chart-container">
+                    <canvas id="investment-chart"></canvas>
+                </div>
+
+                <div id="details-table" class="tab-content card table-container">
+                    <h3>Year-by-Year Growth</h3>
+                    <div class="table-scroll">
+                        <table id="growth-table">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Start Balance</th>
+                                    <th>Interest Earned</th>
+                                    <th>Contributions</th>
+                                    <th>End Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                    <button id="export-csv-button" class="export-button"><i class="fas fa-download"></i> Export to CSV</button>
+                </div>
+
+                <div id="ai-insights" class="tab-content card ai-insights-container">
+                    <h3><i class="fas fa-robot"></i> FinGuid AI-Powered Analysis</h3>
+                    <div id="ai-insights-output" class="ai-output">
+                        <p>Enter your investment details to receive a personalized, dynamic financial analysis designed to help Americans plan their future.</p>
+                    </div>
+                    <div class="monetization-slot contextual-ad-slot">
+                        <p class="ad-label">Investment Partner Suggestion:</p>
+                        <a href="#sponsor-link-2" target="_blank" class="affiliate-link secondary-link">Get a Free Retirement Audit from a FinGuid Partner Advisor <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <div class="nav-column">
+                    <h4>FinGuid Platform</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy Analyzer</a></li>
+                        <li><a href="/investment-calculator.html">Investment Calculator</a></li>
+                        <li><a href="https://github.com/faheemtanu/finguid-financial-calculators" target="_blank">GitHub Project</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>Partnership & Ads (Monetization)</h4>
+                    <ul>
+                        <li><a href="#advertising">Advertising (Ad Slot)</a></li>
+                        <li><a href="#affiliates">Affiliate Products</a></li>
+                        <li><a href="#sponsor-link">Sponsor Products</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize via advertising, affiliate partnerships, and sponsored products.**
+                    </p>
+                </div>
+
+                <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
+                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="/register-sw.js"></script>
+    <script src="investment-calculator.js"></script>
+
+</body>
+</html>
