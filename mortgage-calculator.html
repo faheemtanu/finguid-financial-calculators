@@ -1,299 +1,152 @@
 <!DOCTYPE html>
-<html lang="en" data-color-scheme="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Home Loan Pro — World's First AI‑Powered Mortgage Calculator | FinGuid USA</title>
-    <meta name="description" content="World's First AI-Powered Mortgage Calculator with real-time Federal Reserve rates, ZIP code lookup, and smart insights. Calculate your perfect US home loan in seconds.">
-    <meta name="keywords" content="mortgage calculator, home loan calculator, mortgage rates, FRED API, AI mortgage, USA mortgage, property tax calculator, American home buyers, FinGuid">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
-    
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#19343B"> 
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-NYBL2CDNQJ');
-    </script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
-    <link rel="stylesheet" href="mortgage-calculator.css">
-    
+    <title>FinGuid Rent vs Buy AI Analyzer</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body data-color-scheme="light">
 
-    <header class="main-header">
-        <div class="header-content">
-            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
-            <p class="tagline">World's First AI-Powered Home Loan Calculator</p>
-            <div class="features-quick">
-                <span class="feature-quick"><i class="fas fa-microchip"></i> AI Insights</span>
-                <span class="feature-quick"><i class="fas fa-microphone-alt"></i> Voice Control</span>
-                <span class="feature-quick"><i class="fas fa-chart-line"></i> Live FRED Rates</span>
-                <span class="feature-quick"><i class="fas fa-cloud-download-alt"></i> PWA Ready</span>
-            </div>
-            
-            <div class="accessibility-controls">
-                <button id="toggle-color-scheme" aria-label="Toggle Light/Dark Mode" class="control-button">
-                    <i class="fas fa-sun"></i> 
-                </button>
-                <div class="voice-status">
-                    <button id="toggle-voice-command" aria-label="Toggle Voice Command" class="control-button voice-inactive">
-                        <i class="fas fa-microphone"></i> <span id="voice-status-text">Voice OFF</span>
-                    </button>
-                </div>
-                <button id="pwa-install-button" class="control-button install-button hidden">Install App</button>
-            </div>
-        </div>
+    <header>
+        <h1>🇺🇸 Rent vs Buy AI Analyzer</h1>
+        <button id="theme-toggle-button" class="icon-button"><i class="fas fa-moon"></i> Dark Mode</button>
     </header>
 
-    <main class="main-content">
-        <div class="calculator-container card">
-            
-            <section class="input-section" aria-labelledby="input-heading">
-                <h2 id="input-heading" class="section-title">Loan Parameters</h2>
-                <form id="mortgage-form" novalidate>
-                    
-                    <div class="input-group">
-                        <label for="purchase-price">Purchase Price ($)</label>
-                        <input type="text" id="purchase-price" value="350,000" inputmode="numeric" aria-required="true">
-                    </div>
+    <main class="calculator-container">
+        
+        <form id="rent-vs-buy-form" class="input-section card">
+            <h2>1. Input Assumptions</h2>
 
-                    <div class="input-split">
-                        <div class="input-group">
-                            <label for="down-payment">Down Payment ($)</label>
-                            <input type="text" id="down-payment" value="70,000" inputmode="numeric" aria-required="true">
-                        </div>
-                        <div class="input-group">
-                            <label for="interest-rate">Interest Rate (%)</label>
-                            <input type="text" id="interest-rate" value="6.5" inputmode="decimal" aria-required="true" data-fred-rate="true">
-                            <span class="fred-source-note">Live Rate from FRED.</span>
-                        </div>
-                    </div>
+            <div class="input-grid">
+                <label for="home-price">Home Price ($):</label>
+                <input type="number" id="home-price" value="400000" min="0">
+                
+                <label for="down-payment">Down Payment ($):</label>
+                <input type="number" id="down-payment" value="80000" min="0">
 
-                    <div class="input-split">
-                        <div class="input-group">
-                            <label for="loan-term">Loan Term (Years)</label>
-                            <select id="loan-term" aria-required="true">
-                                <option value="30">30 Years</option>
-                                <option value="20">20 Years</option>
-                                <option value="15">15 Years</option>
-                                <option value="10">10 Years</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label for="loan-start-date">Start Date</label>
-                            <input type="month" id="loan-start-date" value="2025-11">
-                        </div>
-                    </div>
-
-                    <div class="input-group advanced-toggle-container">
-                        <button type="button" id="toggle-advanced-options" aria-expanded="false" aria-controls="advanced-options-group" class="toggle-button">
-                            <i class="fas fa-chevron-down"></i> Advanced PITI & Location
-                        </button>
-                    </div>
-
-                    <div id="advanced-options-group" class="input-group-grid advanced-options-group" aria-hidden="true">
-                        <h3 class="input-group-sub-title">Location & PITI Estimates</h3>
-                        <div class="input-split">
-                            <div class="input-group">
-                                <label for="zip-code">ZIP Code (Lookup)</label>
-                                <input type="text" id="zip-code" placeholder="e.g., 90210" inputmode="numeric">
-                                <span class="zip-lookup-status">Auto-populates Property Tax.</span>
-                            </div>
-                            <div class="input-group">
-                                <label for="property-tax">Annual Property Tax ($)</label>
-                                <input type="text" id="property-tax" value="4,000" inputmode="numeric">
-                            </div>
-                        </div>
-                        <div class="input-split">
-                            <div class="input-group">
-                                <label for="insurance">Annual Home Insurance ($)</label>
-                                <input type="text" id="insurance" value="1,200" inputmode="numeric">
-                            </div>
-                            <div class="input-group">
-                                <label for="pmi">Annual PMI (%)</label>
-                                <input type="text" id="pmi" value="0.5" inputmode="decimal">
-                                <span class="input-note">Required if down payment &lt; 20%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="hoa-fees">Monthly HOA Fees ($)</label>
-                            <input type="text" id="hoa-fees" value="0" inputmode="numeric">
-                            <span class="input-note">HOA is not part of PITI but included in total payment estimate.</span>
-                        </div>
-                    </div>
-
-                    <div class="input-group action-group">
-                        <button type="submit" class="primary-button" id="calculate-button">
-                            <i class="fas fa-calculator"></i> Calculate Mortgage
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <section class="results-section" aria-labelledby="results-heading">
-                <h2 id="results-heading" class="section-title">Analysis & Results</h2>
-
-                <div class="summary-card card-mini">
-                    <p class="summary-label">Estimated Monthly Payment (PITI + HOA)</p>
-                    <div class="payment-display">
-                        <span id="monthly-payment-total" class="payment-figure">$1,854.76</span>
-                        <span class="payment-unit">/mo</span>
-                    </div>
-                    <p class="piti-breakdown-summary" id="piti-breakdown-summary">
-                        P&I: $1,475.40 | Tax: $333.33 | Ins: $100.00 | PMI: $0.00
-                    </p>
+                <label for="interest-rate">Interest Rate (%):</label>
+                <div class="input-group">
+                    <input type="number" id="interest-rate" value="6.75" step="0.01" min="0">
+                    <span class="rate-tip" id="fred-rate-tip-value">6.75%</span>
                 </div>
 
-                <div class="tabs-container">
-                    <div class="tab-buttons">
-                        <button class="tab-button active" data-tab="payment-components">Payment Breakdown</button>
-                        <button class="tab-button" data-tab="amortization-timeline">Amortization Timeline</button>
-                        <button class="tab-button" data-tab="ai-insights">AI Insights & Advice</button>
-                        <button class="tab-button" data-tab="schedule-detail">Full Schedule</button>
-                    </div>
+                <label for="loan-term">Loan Term (Years):</label>
+                <select id="loan-term">
+                    <option value="30" selected>30 Years</option>
+                    <option value="15">15 Years</option>
+                </select>
 
-                    <div id="payment-components" class="tab-content active">
-                        <div class="chart-container">
-                            <canvas id="payment-breakdown-chart"></canvas>
-                        </div>
-                        <div class="summary-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Loan Amount</span>
-                                <span class="detail-value" id="total-principal">$280,000.00</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Total Interest Paid</span>
-                                <span class="detail-value" id="total-interest">$259,105.79</span>
-                            </div>
-                            <div class="detail-item detail-total">
-                                <span class="detail-label">Total PITI Payments</span>
-                                <span class="detail-value" id="total-payments">$663,105.79</span>
-                            </div>
-                            <button id="export-csv-button" class="secondary-button"><i class="fas fa-file-csv"></i> Export CSV</button>
-                        </div>
-                    </div>
+                <label for="property-tax">Property Tax Rate (%):</label>
+                <input type="number" id="property-tax" value="1.2" step="0.01" min="0">
 
-                    <div id="amortization-timeline" class="tab-content">
-                        <div class="chart-container">
-                            <canvas id="amortization-timeline-chart"></canvas>
-                        </div>
-                        <div class="timeline-controls">
-                            <label for="year-display-slider">View Details for Year: <span id="year-display-value">15</span></label>
-                            <input type="range" id="year-display-slider" min="1" max="30" value="15">
-                        </div>
-                        <div class="year-summary-details">
-                            <h3 class="input-group-sub-title">Year <span id="year-detail-number">15</span> Summary</h3>
-                            <div class="detail-item">
-                                <span class="detail-label">Principal Paid This Year</span>
-                                <span class="detail-value" id="year-principal-paid">$6,500.00</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Interest Paid This Year</span>
-                                <span class="detail-value" id="year-interest-paid">$11,700.00</span>
-                            </div>
-                            <div class="detail-item detail-total">
-                                <span class="detail-label">Remaining Balance</span>
-                                <span class="detail-value" id="year-remaining-balance">$175,000.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="ai-insights" class="tab-content">
-                        <div class="ai-insight-box card-mini">
-                            <h3 class="input-group-sub-title"><i class="fas fa-microchip"></i> AI Financial Advisor Insight</h3>
-                            <div id="ai-insights-content">
-                                <p>Calculating initial insights based on current parameters...</p>
-                                </div>
-                        </div>
-                    </div>
+                <label for="home-insurance">Home Insurance (Annual $):</label>
+                <input type="number" id="home-insurance" value="1500" min="0">
 
-                    <div id="schedule-detail" class="tab-content">
-                        <div class="amortization-table-container">
-                            <table id="amortization-table">
-                                <thead>
-                                    <tr>
-                                        <th>Pmt #</th>
-                                        <th>Date</th>
-                                        <th>Payment</th>
-                                        <th>Principal</th>
-                                        <th>Interest</th>
-                                        <th>Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    </tbody>
+                <label for="hoa-fees">HOA Fees (Monthly $):</label>
+                <input type="number" id="hoa-fees" value="50" min="0">
+
+                <label for="maintenance">Annual Maintenance (% of Home Value):</label>
+                <input type="number" id="maintenance" value="1.0" step="0.1" min="0">
+
+                <label for="closing-costs-buy">Buying Closing Costs ($):</label>
+                <input type="number" id="closing-costs-buy" value="8000" min="0">
+                
+                <label for="monthly-rent">Monthly Rent ($):</label>
+                <input type="number" id="monthly-rent" value="2000" min="0">
+
+                <label for="renters-insurance">Renters Insurance (Annual $):</label>
+                <input type="number" id="renters-insurance" value="150" min="0">
+
+                <label for="rent-increase">Rent Increase Rate (%):</label>
+                <input type="number" id="rent-increase" value="3.0" step="0.1" min="0">
+
+                <label for="years-stay">Years to Stay:</label>
+                <input type="number" id="years-stay" value="7" min="1" max="60">
+                
+                <label for="home-appreciation">Home Appreciation Rate (%):</label>
+                <input type="number" id="home-appreciation" value="4.0" step="0.1" min="0">
+
+                <label for="investment-return">Investment Return Rate (%):</label>
+                <input type="number" id="investment-return" value="7.0" step="0.1" min="0">
+
+                <label for="tax-rate">Marginal Tax Rate (%):</label>
+                <input type="number" id="tax-rate" value="24" step="1" min="0" max="100">
+
+                <label for="selling-costs">Selling Costs Rate (%):</label>
+                <input type="number" id="selling-costs" value="6.0" step="0.1" min="0">
+            </div>
+        </form>
+
+        <section class="results-section">
+            <div class="summary-card card">
+                <h2>2. Analysis Summary Over <span id="summary-years">7</span> Years</h2>
+                <p class="live-rate-note">Live 30yr Mortgage Rate: <strong id="live-rate-value">6.75%</strong></p>
+
+                <div class="summary-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Total Cost of Renting:</span>
+                        <span class="detail-value" id="total-renting-cost">--.--</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Net Cost of Buying:</span>
+                        <span class="detail-value" id="net-buying-cost">--.--</span>
+                    </div>
+                </div>
+                
+                <div class="net-advantage-box">
+                    <span class="net-advantage-label">Net Financial Advantage:</span>
+                    <span class="detail-value" id="net-advantage">--.--</span>
+                </div>
+            </div>
+
+            <div class="ai-insights card">
+                <h2>3. AI Insights</h2>
+                <div id="ai-insights-output">
+                    <p class="text-info">Enter and adjust the inputs to generate AI-powered insights.</p>
+                </div>
+            </div>
+
+            <div class="detailed-analysis-card card">
+                <h2>4. Detailed Analysis</h2>
+
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="comparison-chart">Chart</button>
+                    <button class="tab-button" data-tab="cost-breakdown">Breakdown</button>
+                </div>
+
+                <div id="comparison-chart" class="tab-content active">
+                    <canvas id="rent-vs-buy-chart"></canvas>
+                </div>
+
+                <div id="cost-breakdown" class="tab-content">
+                    <div class="breakdown-grid">
+                        <div class="breakdown-table">
+                            <h3>Buying Breakdown (<span class="summary-years-detail">7</span> Yrs)</h3>
+                            <table>
+                                <tbody id="buying-breakdown-body">
+                                    <tr><td colspan="2">--</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="breakdown-table">
+                            <h3>Renting Breakdown (<span class="summary-years-detail">7</span> Yrs)</h3>
+                            <table>
+                                <tbody id="renting-breakdown-body">
+                                    <tr><td colspan="2">--</td></tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-logo-info">
-                    <h4 class="logo"><a href="/">FinGuid <span>USA</span></a></h4>
-                    <p>Building a future with AI-enhanced financial clarity.</p>
-                </div>
-                <nav class="footer-nav">
-                    <div class="nav-column">
-                        <h4>Platform & Tools</h4>
-                        <ul>
-                            <li><a href="#mortgage-rates">Live Mortgage Rates (FRED)</a></li>
-                            <li><a href="#property-tax-lookup">Property Tax Lookup (Mock)</a></li>
-                            <li><a href="#pwa-info">PWA & Offline Access</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Legal & Compliance</h4>
-                        <ul>
-                            <li><a href="#disclaimer">Disclaimer & Terms</a></li>
-                            <li><a href="#privacy">Privacy Policy (GDPR/CCPA)</a></li>
-                            <li><a href="#accessibility">Accessibility Statement (WCAG)</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Partnership & Ads (Monetization)</h4>
-                        <ul>
-                            <li><a href="#advertising">Advertising (Ad Slot)</a></li>
-                            <li><a href="#affiliates">Affiliate Products</a></li>
-                            <li><a href="#sponsor-link">Sponsor Products</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-disclaimer">
-                    <p>
-                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. We monetize via advertising and affiliate partnerships.
-                    </p>
-                </div>
-                
-                <div class="footer-badges">
-                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
-                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
-                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <div id="toast-container"></div>
 
-    <div id="toast-container" class="toast-container" aria-live="polite"></div>
-
-    <script src="mortgage-calculator.js"></script>
-    
+    <script src="rent-vs-buy-calculator.js"></script>
 </body>
 </html>
