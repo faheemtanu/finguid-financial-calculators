@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>401(k) Retirement Calculator — World's First AI-Powered Analysis | FinGuid USA</title>
+    <meta name="description" content="Optimize your retirement savings with the World's First AI-Powered 401(k) Calculator. Analyze employer match, tax benefits, and long-term projections. Designed for American financial success by FinGuid.">
+    <meta name="keywords" content="401k calculator, retirement savings, employer match, tax benefits, AI retirement advisor, FinGuid, USA retirement planning, financial calculator, tax-advantaged savings">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#19343B"> 
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="401k-calculator.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content container">
+            <div class="logo">
+                <a href="/" aria-label="FinGuid Home">FinGuid<span class="logo-suffix">.com</span></a>
+            </div>
+            <p class="tagline">World's First AI-Powered 401(k) Analysis</p>
+            
+            <div class="accessibility-controls">
+                <button id="toggle-theme-button" aria-label="Toggle Light/Dark Mode" title="Toggle Light/Dark Mode (L/D Mode)">
+                    <i class="fas fa-sun" aria-hidden="true"></i>
+                </button>
+                <button id="voice-command-button" aria-label="Voice Command" title="Activate Voice Command">
+                    <i class="fas fa-microphone" aria-hidden="true"></i>
+                </button>
+                <button id="text-to-speech-button" aria-label="Text to Speech" title="Read Results Aloud">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="calculator-page container">
+        
+        <div class="calculator-container">
+            
+            <section class="input-section card">
+                <h2>Your Retirement Profile</h2>
+                <div id="401k-input-form" class="input-form">
+                    
+                    <div class="input-group">
+                        <label for="current-age">Current Age (Years)</label>
+                        <input type="number" id="current-age" value="30" min="18" max="65" data-label="Current Age">
+                    </div>
+                    <div class="input-group">
+                        <label for="retirement-age">Target Retirement Age</label>
+                        <input type="number" id="retirement-age" value="65" min="40" max="80" data-label="Retirement Age">
+                    </div>
+                    <div class="input-group">
+                        <label for="current-salary">Current Annual Salary ($)</label>
+                        <input type="number" id="current-salary" value="75000" min="10000" step="500" data-label="Annual Salary">
+                    </div>
+                    <div class="input-group">
+                        <label for="current-balance">Current 401(k) Balance ($)</label>
+                        <input type="number" id="current-balance" value="25000" min="0" step="1000" data-label="Current Balance">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="contribution-rate">Your Annual Contribution (%)</label>
+                        <input type="number" id="contribution-rate" value="10" min="1" max="100" step="0.5" data-label="Contribution Rate">
+                    </div>
+                    <div class="input-group">
+                        <label for="salary-growth-rate">Annual Salary Increase (%)</label>
+                        <input type="number" id="salary-growth-rate" value="3.0" min="0" max="10" step="0.1" data-label="Salary Growth Rate">
+                    </div>
+                    <div class="input-group">
+                        <label for="return-rate">Estimated Annual Return (%)</label>
+                        <input type="number" id="return-rate" value="7.0" min="0" max="15" step="0.1" data-label="Return Rate">
+                        <span class="live-rate" id="fred-rate-display">Market Context: N/A</span>
+                    </div>
+
+                    <div class="input-group input-split">
+                        <div>
+                            <label for="match-rate">Employer Match % (up to)</label>
+                            <input type="number" id="match-rate" value="4" min="0" max="10" step="0.5" data-label="Match Rate Cap">
+                        </div>
+                        <div>
+                            <label for="match-multiplier">Match Multiplier (%)</label>
+                            <select id="match-multiplier" data-label="Match Multiplier">
+                                <option value="100">100% (Dollar-for-Dollar)</option>
+                                <option value="50">50% (50 Cents on the Dollar)</option>
+                                <option value="25">25%</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="tax-bracket">Current Federal Tax Bracket (%)</label>
+                        <input type="number" id="tax-bracket" value="24" min="0" max="37" step="1" data-label="Tax Bracket">
+                    </div>
+                    
+                </div>
+            </section>
+            
+            <section class="results-section">
+                
+                <div class="ad-slot primary-ad-slot" role="complementary" aria-label="Affiliate and Sponsor Product Advertisement">
+                    <p>✨ **Sponsor Spotlight:** High-Yield Retirement Accounts - **Affiliate Link Here**</p>
+                </div>
+
+                <div class="card summary-panel">
+                    <h3>Projected Retirement Value</h3>
+                    <div class="summary-details">
+                        <div class="summary-item">
+                            <i class="fas fa-piggy-bank" aria-hidden="true"></i>
+                            <span class="label">Total Projected Value</span>
+                            <span class="value primary-value" id="projected-value">$1,234,567</span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                            <span class="label">Total Contributions (Yours + Match)</span>
+                            <span class="value" id="total-contributions">$345,678</span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-chart-line" aria-hidden="true"></i>
+                            <span class="label">Total Investment Earnings</span>
+                            <span class="value" id="total-earnings">$888,889</span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-handshake" aria-hidden="true"></i>
+                            <span class="label">Total Employer Match (Free Money!)</span>
+                            <span class="value positive" id="total-match">$45,678</span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-calculator" aria-hidden="true"></i>
+                            <span class="label">Avg. Annual Tax Savings</span>
+                            <span class="value positive" id="annual-tax-saving">$1,800</span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-gift" aria-hidden="true"></i>
+                            <span class="label">Value of Match Lost (Annually)</span>
+                            <span class="value negative" id="match-lost">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card tabs-card">
+                    <div class="tab-controls-results">
+                        <button class="tab-button active" data-tab="projection-chart">Projection Analysis</button>
+                        <button class="tab-button" data-tab="tax-analysis">Tax & Match Benefits</button>
+                        <button class="tab-button" data-tab="ai-insights">AI-Powered Insights</button>
+                    </div>
+
+                    <div id="projection-chart" class="tab-content active">
+                        <h3 class="chart-title">Retirement Savings Projection Timeline</h3>
+                        <div class="chart-container">
+                            <canvas id="projectionChartCanvas"></canvas>
+                        </div>
+                        <p class="chart-caption">This chart shows your balance growth, separating your contributions, employer match, and investment earnings over time.</p>
+                    </div>
+
+                    <div id="tax-analysis" class="tab-content">
+                        <h3 class="analysis-title">Tax and Employer Match Deep Dive</h3>
+                        <div class="analysis-details">
+                            <h4>Employer Match Summary</h4>
+                            <p id="match-summary-text">...</p>
+                            <h4>Annual Tax Benefit</h4>
+                            <p id="tax-benefit-text">...</p>
+                        </div>
+
+                        <div class="affiliate-callout">
+                            <p class="affiliate-title"><i class="fas fa-hand-holding-heart"></i> **Boost Your Retirement!**</p>
+                            <p>Speak to a certified financial advisor to maximize your tax advantages and portfolio returns. **<a href="#affiliate-link-advisor" class="affiliate-link">Find a FinGuid Partner Advisor (Affiliate Link)</a>**</p>
+                        </div>
+                    </div>
+
+                    <div id="ai-insights" class="tab-content">
+                        <h3 class="ai-title"><i class="fas fa-robot"></i> FinGuid AI Retirement Advisor</h3>
+                        <div id="ai-recommendations">
+                            <p class="loading-message">Analyzing your profile and market context...</p>
+                        </div>
+                        
+                        <div class="sponsor-callout">
+                            <p class="sponsor-title"><i class="fas fa-shield-alt"></i> **Protect Your Assets**</p>
+                            <p>Considering your projected value, explore highly-rated, low-fee index funds with our sponsor. **<a href="#sponsor-link-funds" class="sponsor-link">Explore Sponsor Funds Now</a>**</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        &copy; 2025 **FinGuid** - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize via advertising and affiliate partnerships.**
+                    </p>
+                </div>
+                <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> **AI Friendly**</div>
+                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> **SCO Friendly**</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="/register-sw.js"></script> 
+    <script src="401k-calculator.js"></script>
+</body>
+</html>
