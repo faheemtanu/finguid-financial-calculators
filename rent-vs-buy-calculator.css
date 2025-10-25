@@ -1,64 +1,159 @@
 /* === RENT VS BUY CALCULATOR CSS === */
-/* Inherits from the improved refinance-calculator.css base */
-/* (Copy the entire content of refinance-calculator.css from the previous response here) */
+/* Inherits core styles from mortgage/refinance CSS for consistency */
+/* Includes Light/Dark Mode, Responsiveness, FinGuid Branding */
 
-/* Add specific overrides or new styles for Rent vs. Buy below */
+:root {
+    /* === FinGuid Color Tokens (Consistent) === */
+    /* Base Colors */
+    --color-white: rgba(255, 255, 255, 1);
+    --color-black: rgba(0, 0, 0, 1);
+    /* Light Mode Palette */
+    --color-bg-light: #f5f5f5; 
+    --color-card-light: #ffffff; 
+    --color-text-light: #13343B; 
+    --color-border-light: #e0e0e0; 
+    /* Dark Mode Palette */
+    --color-bg-dark: #13343B; 
+    --color-card-dark: #1F333A; 
+    --color-text-dark: #f0f0f0; 
+    --color-border-dark: #2a4048;
+    /* Accent & Primary */
+    --color-primary: #007bff; 
+    --color-secondary: #6c757d;
+    --color-brand-teal: #24ACC5; 
+    --color-brand-dark-teal: #19343B; 
+    /* Status Colors */
+    --color-positive: #28a745; 
+    --color-negative: #dc3545; 
+    --color-info: #ffc107; 
 
-/* Example: Specific colors for Rent vs Buy chart/table */
-.rent-col { color: var(--color-negative); /* Red for renting costs */ }
-.buy-col { color: var(--color-positive); /* Green for buying gains/equity */ }
+    /* Chart Colors */
+    --color-chart-rent: #dc3545; /* Red for Rent (Cost) */
+    --color-chart-buy: #28a745; /* Green for Buy (Potential Benefit) */
+    --color-chart-net-advantage: var(--color-brand-teal); /* Teal for Net */
+    --color-chart-grid: rgba(100, 100, 100, 0.1);
 
-/* Ensure table header colors are distinct */
-.rent-buy-table th.rent-col { background-color: rgba(220, 38, 38, 0.1); }
-.rent-buy-table th.buy-col { background-color: rgba(21, 128, 61, 0.1); }
-
-body[data-color-scheme="dark"] .rent-buy-table th.rent-col { background-color: rgba(220, 38, 38, 0.3); }
-body[data-color-scheme="dark"] .rent-buy-table th.buy-col { background-color: rgba(21, 128, 61, 0.3); }
-
-/* Style the main summary result */
-.summary-total {
-    text-align: center;
-    padding: var(--space-24) 0;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: var(--space-24);
-}
-.summary-total .label {
-    font-size: var(--font-size-base);
-    color: var(--secondary-text-color);
-}
-.summary-total .value {
-    font-size: var(--font-size-3xl); /* Make the main result prominent */
-    font-weight: 900;
-    margin: var(--space-8) 0;
-    line-height: 1.1;
-}
-.summary-total .sub-label {
-    font-size: var(--font-size-sm);
-    font-style: italic;
-    color: var(--color-brand-teal);
-}
-
-/* Ensure Rent vs Buy details grid has balanced columns */
-.rent-vs-buy-details {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    /* Spacing & Typography */
+    --space-4: 4px; --space-8: 8px; --space-16: 16px; --space-24: 24px; --space-32: 32px;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-base: 1rem; --font-size-lg: 1.25rem; --font-size-xl: 1.5rem; --font-size-xxl: 2rem;
+    --border-radius: 8px;
 }
 
-/* Specific styling for AI insight emphasis */
-.ai-insights-card .highlight {
-    font-weight: bold;
-    color: var(--color-brand-teal);
-}
+/* === Base & Theme Styling (Same as Refinance) === */
+body[data-color-scheme="light"] { background-color: var(--color-bg-light); color: var(--color-text-light); }
+body[data-color-scheme="dark"] { background-color: var(--color-bg-dark); color: var(--color-text-dark); }
+body { font-family: var(--font-family); margin: 0; padding: 0; line-height: 1.6; transition: background-color 0.3s, color 0.3s; min-height: 100vh; }
+.card { background-color: var(--color-card-light); border-radius: var(--border-radius); padding: var(--space-24); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; margin-bottom: var(--space-24); border: 1px solid var(--color-border-light); }
+body[data-color-scheme="dark"] .card { background-color: var(--color-card-dark); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); border-color: var(--color-border-dark); }
+.card-title { font-size: var(--font-size-xl); margin-top: 0; margin-bottom: var(--space-16); color: var(--color-brand-teal); }
+.text-positive { color: var(--color-positive); font-weight: bold; }
+.text-negative { color: var(--color-negative); font-weight: bold; }
 
-/* Ensure help text is easily readable */
-.help-text {
-    font-size: 0.8rem;
-    color: var(--color-secondary);
-    margin-top: var(--space-4);
-    display: block;
-}
-.help-text i {
-    margin-right: var(--space-4);
-}
-.text-center {
-    text-align: center;
-}
+/* === HEADER (Same as Refinance) === */
+.main-header { background-color: var(--color-card-light); border-bottom: 1px solid var(--color-border-light); padding: var(--space-16) var(--space-32); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+body[data-color-scheme="dark"] .main-header { background-color: var(--color-card-dark); border-bottom-color: var(--color-border-dark); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+.header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.logo a { font-size: var(--font-size-xxl); font-weight: bold; color: var(--color-brand-teal); text-decoration: none; }
+.logo i { color: var(--color-brand-dark-teal); margin-right: var(--space-8); }
+.features-quick { font-size: var(--font-size-base); color: var(--color-secondary); }
+.accessibility-controls { display: flex; gap: var(--space-8); align-items: center; }
+.live-rate-display { font-size: var(--font-size-base); font-weight: 600; padding: var(--space-4) var(--space-8); border-radius: var(--border-radius); background-color: var(--color-bg-light); }
+body[data-color-scheme="dark"] .live-rate-display { background-color: var(--color-brand-dark-teal); color: var(--color-text-dark); }
+.control-button { background: none; border: 1px solid var(--color-border-light); color: var(--color-text-light); font-size: var(--font-size-lg); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+body[data-color-scheme="dark"] .control-button { border-color: var(--color-border-dark); color: var(--color-text-dark); }
+.control-button:hover { background-color: var(--color-brand-teal); color: var(--color-white); border-color: var(--color-brand-teal); }
+.control-button[aria-pressed="true"] { background-color: var(--color-brand-dark-teal); color: var(--color-white); border-color: var(--color-brand-dark-teal); }
+
+/* === MAIN LAYOUT (Same as Refinance) === */
+.calculator-container { max-width: 1400px; margin: var(--space-32) auto; padding: 0 var(--space-24); display: grid; grid-template-columns: 350px 1fr; gap: var(--space-32); }
+.input-section { position: sticky; top: var(--space-16); align-self: start; }
+.main-title { font-size: 2.5rem; margin-bottom: var(--space-8); color: var(--color-brand-dark-teal); }
+body[data-color-scheme="dark"] .main-title { color: var(--color-brand-teal); }
+.tagline { font-size: var(--font-size-lg); color: var(--color-secondary); margin-bottom: var(--space-24); }
+
+/* === Form Styling (Same as Refinance) === */
+.input-group-form h2 { font-size: var(--font-size-xl); border-bottom: 2px solid var(--color-brand-teal); padding-bottom: var(--space-8); margin-top: var(--space-24); color: var(--color-brand-dark-teal); }
+body[data-color-scheme="dark"] .input-group-form h2 { color: var(--color-text-dark); }
+.input-split { display: flex; gap: var(--space-16); }
+.input-group { flex-grow: 1; margin-bottom: var(--space-16); }
+.input-group label { display: block; margin-bottom: var(--space-4); font-weight: 600; }
+.input-group input[type="number"], .input-group input[type="text"], .input-group select { width: 100%; padding: var(--space-8) var(--space-16); border: 1px solid var(--color-border-light); border-radius: var(--border-radius); box-sizing: border-box; font-size: var(--font-size-base); transition: border-color 0.2s, background-color 0.2s; background-color: var(--color-card-light); color: var(--color-text-light); }
+body[data-color-scheme="dark"] .input-group input[type="number"], body[data-color-scheme="dark"] .input-group input[type="text"], body[data-color-scheme="dark"] .input-group select { background-color: var(--color-bg-dark); border-color: var(--color-border-dark); color: var(--color-text-dark); }
+.input-group input:focus, .input-group select:focus { border-color: var(--color-brand-teal); outline: none; }
+.input-note, .live-rate-tip { font-size: 0.75rem; color: var(--color-secondary); margin-top: var(--space-4); }
+.live-rate-tip { color: var(--color-brand-teal); }
+
+/* === AI Insights & Ad Space (Same as Refinance) === */
+.ai-insights-card { margin-top: var(--space-24); border-left: 5px solid var(--color-brand-teal); }
+.ai-content { margin-bottom: var(--space-16); font-style: italic; font-size: var(--font-size-base); }
+.ad-slot { border: 1px dashed var(--color-border-light); padding: var(--space-16); text-align: center; border-radius: var(--border-radius); background-color: #f9f9f9; margin-top: var(--space-16); }
+body[data-color-scheme="dark"] .ad-slot { border-color: var(--color-brand-teal); background-color: var(--color-card-dark); }
+.ad-label { font-size: 0.8rem; color: var(--color-negative); margin-bottom: var(--space-8); font-weight: bold; }
+.ad-link-button { display: inline-block; padding: var(--space-8) var(--space-16); background-color: var(--color-positive); color: var(--color-white); text-decoration: none; border-radius: var(--border-radius); font-weight: bold; transition: background-color 0.2s; }
+.ad-link-button:hover { background-color: #1f8b36; }
+
+/* === Results Section Styling === */
+.summary-card h2 { color: var(--color-brand-teal); }
+.primary-result { text-align: center; margin-bottom: var(--space-24); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-border-light); }
+body[data-color-scheme="dark"] .primary-result { border-bottom-color: var(--color-border-dark); }
+.result-label { display: block; font-size: var(--font-size-lg); color: var(--color-secondary); margin-bottom: var(--space-8); }
+.result-value { display: block; font-size: var(--font-size-xxl); font-weight: bold; line-height: 1.2; margin-bottom: var(--space-4); }
+.result-sub-value { display: block; font-size: var(--font-size-base); color: var(--color-secondary); }
+#primary-decision.buy { color: var(--color-positive); }
+#primary-decision.rent { color: var(--color-negative); }
+
+.summary-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-16); }
+.detail-item { padding: var(--space-8); border-bottom: 1px solid var(--color-border-light); }
+body[data-color-scheme="dark"] .detail-item { border-bottom-color: var(--color-border-dark); }
+.detail-label { display: block; font-size: 0.9rem; color: var(--color-secondary); }
+.detail-value { font-size: var(--font-size-lg); font-weight: bold; line-height: 1.2; }
+.detail-item.highlight .detail-value { color: var(--color-info); }
+
+/* === Tabs & Content (Same structure as Refinance) === */
+.tabs-nav { display: flex; border-bottom: 2px solid var(--color-border-light); margin-bottom: var(--space-16); gap: var(--space-8); }
+body[data-color-scheme="dark"] .tabs-nav { border-bottom-color: var(--color-border-dark); }
+.tab-button { background: none; border: none; padding: var(--space-16) var(--space-24); cursor: pointer; font-size: var(--font-size-base); font-weight: 600; color: var(--color-secondary); border-bottom: 3px solid transparent; transition: color 0.2s, border-bottom 0.2s; outline: none; }
+.tab-button.active { color: var(--color-brand-teal); border-bottom-color: var(--color-brand-teal); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Chart Styles */
+.chart-container { max-width: 100%; max-height: 400px; margin: var(--space-16) 0; }
+.chart-caption { text-align: center; font-size: var(--font-size-sm); color: var(--color-secondary); margin-top: var(--space-8); }
+
+/* Cost Breakdown Table Styling */
+.amortization-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-16); }
+.secondary-button { padding: var(--space-8) var(--space-16); background-color: transparent; border: 1px solid var(--color-brand-teal); color: var(--color-brand-teal); border-radius: var(--border-radius); cursor: pointer; transition: background-color 0.2s, color 0.2s; }
+.secondary-button:hover:not(:disabled) { background-color: var(--color-brand-teal); color: var(--color-white); }
+.secondary-button:disabled { opacity: 0.5; cursor: not-allowed; }
+.export-button i { margin-right: var(--space-4); }
+
+.amortization-table-container { max-height: 450px; overflow-y: auto; border: 1px solid var(--color-border-light); border-radius: var(--border-radius); }
+body[data-color-scheme="dark"] .amortization-table-container { border-color: var(--color-border-dark); }
+.cost-breakdown-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+.cost-breakdown-table th, .cost-breakdown-table td { padding: var(--space-12); text-align: left; border-bottom: 1px solid var(--color-border-light); }
+body[data-color-scheme="dark"] .cost-breakdown-table th, body[data-color-scheme="dark"] .cost-breakdown-table td { border-bottom-color: var(--color-border-dark); }
+.cost-breakdown-table th { background-color: #f7f7f7; font-weight: 700; position: sticky; top: 0; }
+body[data-color-scheme="dark"] .cost-breakdown-table th { background-color: var(--color-card-dark); }
+.cost-breakdown-table tr:hover { background-color: rgba(36, 172, 185, 0.1); }
+.rent-col { text-align: right; color: var(--color-negative); }
+.buy-col { text-align: right; color: var(--color-positive); }
+
+/* === FOOTER (Same as Refinance) === */
+.main-footer { background-color: var(--color-card-dark); color: var(--color-text-dark); padding: var(--space-32) var(--space-32) var(--space-16); margin-top: var(--space-32); }
+.footer-container { max-width: 1400px; margin: 0 auto; }
+.footer-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-32); padding-bottom: var(--space-24); border-bottom: 1px solid var(--color-border-dark); }
+.nav-column h4 { color: var(--color-brand-teal); font-size: var(--font-size-lg); margin-bottom: var(--space-16); }
+.nav-column ul { list-style: none; padding: 0; }
+.nav-column a { color: var(--color-text-dark); text-decoration: none; display: block; padding: var(--space-4) 0; transition: color 0.2s; }
+.nav-column a:hover { color: var(--color-brand-teal); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding-top: var(--space-16); }
+.footer-disclaimer p { font-size: 0.8rem; max-width: 700px; opacity: 0.8; }
+.footer-badges { display: flex; gap: var(--space-16); flex-wrap: wrap; }
+.badge { font-size: 0.8rem; background-color: var(--color-brand-teal); color: var(--color-brand-dark-teal); padding: var(--space-4) var(--space-8); border-radius: 20px; font-weight: 600; }
+.badge i { margin-right: var(--space-4); }
+
+/* === Toast Notifications (Same as Refinance) === */
+.toast-container { position: fixed; bottom: var(--space-24); left: 50%; transform: translateX(-50%); z-index: 1000; }
+.toast { background-color: var(--color-brand-dark-teal); color: var(--color-white); padding: var(--space-16) var(--space-24); border
