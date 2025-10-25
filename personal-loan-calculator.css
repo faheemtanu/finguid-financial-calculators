@@ -1,0 +1,282 @@
+/* === PERSONAL LOAN CALCULATOR CSS === */
+/* Inherits core variables and utility styles from mortgage-calculator.css/base.css */
+
+/* :root {
+    --color-slate-900: rgba(19, 52, 59, 1);
+    --color-teal-400: rgba(36, 172, 185, 1);
+    --color-cream-100: rgba(255, 255, 253, 1);
+    --color-charcoal-700: rgba(31, 33, 33, 1);
+    --space-16: 1rem;
+    --font-size-lg: 1.125rem;
+    --border-radius: 0.5rem;
+}
+*/
+
+/* === Main Layout === */
+.calculator-main {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Input on left, results on right */
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* === Input Section Styling === */
+.input-section {
+    position: sticky;
+    top: 2rem; /* Stickiness for desktop experience */
+    height: fit-content;
+}
+
+.input-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    margin-bottom: var(--space-16);
+}
+
+.input-helper-text {
+    font-size: 0.8rem;
+    color: var(--color-slate-500); /* Lighter text color */
+    margin-top: 0.25rem;
+}
+
+.rate-display {
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    color: var(--color-teal-400);
+}
+
+
+/* === Results & Tabs Styling === */
+.results-header {
+    margin-bottom: 2rem;
+}
+
+.summary-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-16);
+    margin-top: 1.5rem;
+}
+
+.detail-card {
+    background-color: var(--color-gray-200); /* Light mode card bg */
+    padding: var(--space-16);
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.detail-card .detail-label {
+    font-size: 0.85rem;
+    color: var(--color-slate-500);
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+}
+
+.detail-card .detail-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.detail-card .primary-color {
+    color: var(--color-teal-400);
+}
+
+/* Tab Controls */
+.tab-controls-results {
+    display: flex;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-gray-200);
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.tab-controls-results .tab-button {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-slate-500);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.tab-controls-results .tab-button:hover {
+    color: var(--color-slate-900);
+}
+
+.tab-controls-results .tab-button.active {
+    color: var(--color-slate-900);
+    border-bottom: 3px solid var(--color-teal-400);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Amortization Table */
+.schedule-table-container {
+    overflow-x: auto;
+    padding: var(--space-16);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-16);
+}
+
+.data-table th, .data-table td {
+    padding: 0.75rem 1rem;
+    text-align: right;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.data-table th:first-child, .data-table td:first-child {
+    text-align: left;
+}
+
+.data-table thead th {
+    background-color: var(--color-gray-200);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+/* AI & Comparison Cards */
+.ai-analysis-card, .comparison-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.ai-analysis-card h3, .comparison-card h3 {
+    margin-top: 0;
+    color: var(--color-slate-900);
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.comparison-card.scenario {
+    border: 2px solid var(--color-teal-400);
+}
+
+.placeholder-text {
+    font-style: italic;
+    color: var(--color-slate-500);
+    text-align: center;
+    padding: 2rem;
+}
+
+/* === Monetization Slots === */
+.ad-slot {
+    background-color: var(--color-gray-200);
+    border: 1px dashed var(--color-gray-300);
+    padding: var(--space-16);
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.ad-slot.top-banner-ad img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 0.5rem;
+}
+
+.ad-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-red-500);
+    margin-bottom: 0.5rem;
+}
+
+.affiliate-block {
+    text-align: center;
+    border: 2px solid var(--color-red-500); /* Highlighting for monetization */
+    background-color: var(--color-red-100);
+}
+
+.affiliate-block h4 {
+    color: var(--color-red-700);
+}
+
+/* === Dark Mode Overrides === */
+html[data-color-scheme="dark"] .detail-card {
+    background-color: var(--color-charcoal-800);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+html[data-color-scheme="dark"] .data-table thead th {
+    background-color: var(--color-charcoal-700);
+    border-bottom: 1px solid var(--color-charcoal-800);
+}
+
+html[data-color-scheme="dark"] .data-table td {
+    border-bottom: 1px solid var(--color-charcoal-800);
+}
+
+html[data-color-scheme="dark"] .tab-controls-results {
+    border-bottom-color: var(--color-charcoal-800);
+}
+
+html[data-color-scheme="dark"] .tab-controls-results .tab-button.active {
+    color: var(--color-teal-300);
+    border-bottom-color: var(--color-teal-300);
+}
+
+html[data-color-scheme="dark"] .tab-controls-results .tab-button:hover {
+    color: var(--color-teal-300);
+}
+
+html[data-color-scheme="dark"] .affiliate-block {
+    background-color: var(--color-charcoal-700);
+    border-color: var(--color-red-300);
+}
+
+/* === Mobile Responsiveness === */
+@media (max-width: 1024px) {
+    .calculator-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .input-section {
+        position: static;
+        padding-bottom: 1rem;
+    }
+    .summary-details {
+        grid-template-columns: 1fr;
+    }
+    .input-split {
+        grid-template-columns: 1fr;
+    }
+    .data-table {
+        font-size: 0.85rem;
+    }
+}
+
+/* Keyframe for fade in effect */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
