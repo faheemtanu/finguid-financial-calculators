@@ -1,0 +1,116 @@
+/*
+ * TAX WITHHOLDING CALCULATOR STYLES
+ * FinGuid USA Market Domination Build
+ * NOTE: Assumes core styles (typography, main-header, main-footer, card, buttons, tabs)
+ * are provided by the shared FinGuid stylesheet (e.g., rent-vs-buy-calculator.css).
+ */
+
+/* === Color Variables for Tax (Dynamic Status Indicators) === */
+:root {
+    --color-tax-refund: #28a745; /* Green for positive/refund */
+    --color-tax-due: #dc3545; /* Red for negative/due/Warning */
+    --color-fica: #6c757d; /* Gray for FICA */
+    --color-net-pay: #007bff; /* Blue for Net Pay */
+    --color-background-highlight: var(--color-gray-200); /* Light mode highlight */
+}
+
+/* Dark mode specific overrides for result boxes */
+[data-color-scheme="dark"] {
+    --color-tax-refund: #20c997;
+    --color-tax-due: #ff6384;
+    --color-net-pay: #17a2b8;
+    --color-background-highlight: var(--color-charcoal-800); /* Dark mode highlight */
+}
+
+/* === Paycheck & Annual Projection Summary Layout === */
+.summary-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.projection-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-background-light);
+}
+
+.summary-box {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--color-background-highlight);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+/* Dynamic styling for the final refund/due box */
+.final-verdict-box {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.final-verdict-box.refund {
+    border: 3px solid var(--color-tax-refund);
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.final-verdict-box.due {
+    border: 3px solid var(--color-tax-due);
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.final-verdict-box.optimal {
+     border: 3px solid var(--color-net-pay);
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Specific color for the refund/due box in projection */
+#tax-difference-box {
+    background-color: var(--color-background-highlight);
+    border: 2px solid var(--color-primary);
+}
+
+.summary-box.negative .summary-value {
+    color: var(--color-tax-due);
+    font-weight: 700;
+}
+
+.summary-box.positive .summary-value {
+    color: var(--color-tax-refund);
+    font-weight: 700;
+}
+
+/* === AI Insights Specifics === */
+.ai-insights-box {
+    padding: 15px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-background-highlight);
+}
+
+.ai-recommendation-note {
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 10px;
+    border-left: 5px solid var(--color-primary);
+    background-color: var(--color-background-light);
+}
+
+.negative-insight { color: var(--color-tax-due); }
+.positive-insight { color: var(--color-tax-refund); }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .projection-details {
+        grid-template-columns: 1fr;
+    }
+}
