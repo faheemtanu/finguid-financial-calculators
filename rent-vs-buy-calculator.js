@@ -305,8 +305,18 @@ function calculateRentVsBuy() {
     // Calculate Break-Even Year
     s.breakEvenYear = -1;
     for (let year = 1; year <= s.yearsToStay; year++) {
-        const buyingNetCostYear = s.buyingCosts.yearly[year-1].cumulativeCost - (s.buyingCosts.yearly[year-1].homeValue - (s.amortization[year-1]?.endingBalance || 0) - (s.buyingCosts.yearly[year-1].homeValue * s.sellingCostsRate / 100));
-        const rentingTotalCostYear = s.rentingCosts.yearly[year-1].cumulativeCost + (initialInvestment * Math.pow(1 + investmentReturnDecimal, year) - initialInvestment);
+        const initialInvestmentYear = s.downPayment + s.closingCostsBuy;
+        const investmentReturnDecimalYear = s.investmentReturnRate / 100;
+
+        // Calculate Net Cost of Buying at end of 'year'
+        const yrData = s.buyingCosts.yearly[year-1];
+        const sellingCostYear = yrData.homeValue * (s.sellingCostsRate / 100);
+        const netProceedsYear = yrData.homeValue - (s.amortization[year-1]?.endingBalance || 0) - sellingCostYear;
+        const buyingNetCostYear = yrData.cumulativeCost - netProceedsYear;
+        
+        // Calculate Total Cost of Renting at end of 'year' (includes opportunity cost of initial investment)
+        const opportunityCostYear = initialInvestmentYear * Math.pow(1 + investmentReturnDecimalYear, year) - initialInvestmentYear;
+        const rentingTotalCostYear = s.rentingCosts.yearly[year-1].cumulativeCost + opportunityCostYear;
         
         if (buyingNetCostYear < rentingTotalCostYear) {
             s.breakEvenYear = year;
@@ -341,6 +351,7 @@ function updateUI(mode = 'results') {
         document.getElementById('renting-breakdown-body').innerHTML = '<tr><td colspan="2">--</td></tr>';
         if (rentVsBuyChart) rentVsBuyChart.destroy();
         rentVsBuyChart = null;
+        updateAIInsights('Please enter valid Home Price, Monthly Rent, and Years to Stay to run the AI analysis.'); // Update AI tab
         return;
     }
     
@@ -386,7 +397,7 @@ function updateUI(mode = 'results') {
     // 3. Update Chart
     updateRentVsBuyChart();
 
-    // 4. Update AI Insights
+    // 4. Update AI Insights (Now in a tab)
     updateAIInsights();
 }
 
@@ -395,14 +406,15 @@ function updateUI(mode = 'results') {
  */
 function updateRentVsBuyChart() {
     const s = RENT_VS_BUY_CALCULATOR.STATE;
-    const ctx = document.getElementById('rent-vs-buy-chart').getContext('2d');
+    const ctx = document.getElementById('rent-vs-buy-chart')?.getContext('2d');
+    if (!ctx) return; // Exit if chart canvas is not found
+    
     const years = Array.from({ length: s.yearsToStay }, (_, i) => `Year ${i + 1}`);
     
     // Calculate cumulative net buying cost and renting cost year by year
     const cumulativeNetBuying = s.buyingCosts.yearly.map((yrData, i) => {
-        const initialInvestment = s.downPayment + s.closingCostsBuy;
-        const investmentReturnDecimal = s.investmentReturnRate / 100;
         const sellingCost = yrData.homeValue * (s.sellingCostsRate / 100);
+        // Note: Check for endingBalance to prevent crash on cash purchase (loanAmount <= 0)
         const netProceeds = yrData.homeValue - (s.amortization[i]?.endingBalance || 0) - sellingCost;
         return yrData.cumulativeCost - netProceeds;
     });
@@ -415,8 +427,9 @@ function updateRentVsBuyChart() {
      });
 
     const isDarkMode = document.documentElement.getAttribute('data-color-scheme') === 'dark';
-    const rentColor = isDarkMode ? '#F5B041' : '#ffc107'; // Yellow/Orange for Rent
-    const buyColor = isDarkMode ? '#87CBD7' : '#24ACC5'; // Teal for Buy
+    // Use colors defined in CSS :root vars for consistency (assuming CSS includes them)
+    const rentColor = isDarkMode ? '#F5B041' : '#ffc107'; // Fallback to provided JS colors
+    const buyColor = isDarkMode ? '#87CBD7' : '#24ACC5'; 
 
     const data = {
         labels: years,
@@ -452,11 +465,13 @@ function updateRentVsBuyChart() {
         }
     };
 
+    // Chart.js 3+ update logic
     if (rentVsBuyChart) {
         rentVsBuyChart.data = data;
         rentVsBuyChart.options = options;
         rentVsBuyChart.update();
     } else {
+        // Only create a new chart if canvas element is available
         rentVsBuyChart = new Chart(ctx, { type: 'line', data: data, options: options });
     }
 }
@@ -466,8 +481,11 @@ function updateRentVsBuyChart() {
  */
 function updateAIInsights(errorMessage = null) {
     const outputEl = document.getElementById('ai-insights-output');
+    if (!outputEl) return; // Safety check
+
     if (errorMessage) {
-        outputEl.innerHTML = `<p class="text-negative">${errorMessage}</p>`;
+        outputEl.innerHTML = `<p class="text-negative"><i class="fas fa-exclamation-triangle"></i> ${errorMessage}</p>`;
+        SPEECH.speak(errorMessage.substring(0, 200));
         return;
     }
     
@@ -483,7 +501,7 @@ function updateAIInsights(errorMessage = null) {
     
     // Insight 2: Break-Even Point
     if (s.breakEvenYear > 0 && s.breakEvenYear <= s.yearsToStay) {
-        html += `<p><strong>Key Factor:</strong> Buying becomes the more financially advantageous option after **Year ${s.breakEvenYear}**. Since you plan to stay for ${s.yearsToStay} years, buying aligns with your timeline.</p>`;
+        html += `<p><strong>Key Factor:</strong> Buying becomes the more financially advantageous option after **Year ${s.breakEvenYear}**. Since you plan to stay for ${s.yearsToStay} years, buying aligns well with your long-term goal.</p>`;
     } else if (s.breakEvenYear > s.yearsToStay) {
          html += `<p><strong>Key Factor:</strong> The financial break-even point where buying becomes cheaper is estimated to be **after Year ${s.breakEvenYear}**. Since you plan to stay only ${s.yearsToStay} years, renting may be the better short-term financial choice.</p>`;
     } else if (s.netAdvantage <=0 && s.breakEvenYear === -1){
@@ -495,6 +513,8 @@ function updateAIInsights(errorMessage = null) {
         html += `<p><strong>Market Insight:</strong> Your expected home appreciation (${s.homeAppreciationRate}%) is higher than investment returns (${s.investmentReturnRate}%). This significantly favors buying as your home equity grows faster than alternative investments.</p>`;
     } else if (s.investmentReturnRate > s.homeAppreciationRate + 2) { // Significantly higher investment return
          html += `<p><strong>Investment Insight:</strong> Your expected investment return (${s.investmentReturnRate}%) significantly outperforms home appreciation (${s.homeAppreciationRate}%). Renting and investing the down payment difference yields a strong financial advantage (Opportunity Cost: ${UTILS.formatCurrency(s.opportunityCost)}).</p>`;
+    } else if (Math.abs(s.homeAppreciationRate - s.investmentReturnRate) <= 1) {
+         html += `<p><strong>Investment Insight:</strong> Your home appreciation (${s.homeAppreciationRate}%) and investment return (${s.investmentReturnRate}%) rates are similar. This suggests the decision is highly sensitive to non-financial factors like housing costs and tax benefits.</p>`;
     }
     
     // Insight 4: Tax Impact
@@ -503,23 +523,27 @@ function updateAIInsights(errorMessage = null) {
         html += `<p><strong>Tax Consideration:</strong> Estimated tax savings from mortgage interest and property tax deductions contribute roughly **${UTILS.formatCurrency(totalTaxSavings)}** to the benefit of buying over ${s.yearsToStay} years.</p>`;
     }
 
-    // Monetization/Action CTA based on result
+    // Monetization/Action CTA based on result (Ensuring affiliate focus)
     if (s.netAdvantage > 0) { // Buying favored
         html += `
-            <div class="ad-slot-mini">
-                <p class="ad-label">Next Step / Affiliate Link</p>
-                <a href="#affiliate-link-mortgage-prequal" class="ad-link-button">Get Pre-Qualified for a Mortgage <i class="fas fa-arrow-right"></i></a>
+            <div class="ad-slot-mini ad-slot-result">
+                <p class="ad-label">AI-Powered Next Step (Sponsor/Affiliate)</p>
+                <a href="#affiliate-link-mortgage-prequal" class="ad-link-button">Get Pre-Qualified for a Mortgage Today <i class="fas fa-arrow-right"></i></a>
             </div>`;
     } else { // Renting favored
          html += `
-            <div class="ad-slot-mini">
-                 <p class="ad-label">Next Step / Affiliate Link</p>
-                <a href="#affiliate-link-renters-insurance" class="ad-link-button">Compare Renters Insurance Quotes <i class="fas fa-shield-alt"></i></a>
+            <div class="ad-slot-mini ad-slot-result">
+                 <p class="ad-label">AI-Powered Next Step (Sponsor/Affiliate)</p>
+                <a href="#affiliate-link-renters-insurance" class="ad-link-button">Compare Renters Insurance & Investment Platforms <i class="fas fa-shield-alt"></i></a>
             </div>`;
     }
 
     outputEl.innerHTML = html;
-    SPEECH.speak(outputEl.textContent.substring(0, 200)); // Speak first part of insight
+    // Speak first part of insight only if the AI tab is currently active
+    const aiTabButton = document.querySelector('[data-tab="ai-analysis"]');
+    if (aiTabButton && aiTabButton.classList.contains('active')) {
+        SPEECH.speak(outputEl.textContent.substring(0, 200)); 
+    }
 }
 
 
@@ -538,16 +562,26 @@ function setupEventListeners() {
     form.addEventListener('change', calculateRentVsBuy); // Also for selects/final changes
 
     // --- Tab Switching ---
-    document.querySelectorAll('.tab-button').forEach(button => {
+    document.querySelectorAll('.tabs-nav .tab-button').forEach(button => {
         button.addEventListener('click', (e) => {
             const tabId = e.target.getAttribute('data-tab');
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Set new active tab
             e.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
-            // Ensure chart redraws correctly if its tab is activated
+            
+            // Handle specific tab requirements
             if (tabId === 'comparison-chart' && rentVsBuyChart) {
                 setTimeout(() => rentVsBuyChart.resize(), 10); 
+            }
+            if (tabId === 'ai-analysis') {
+                 // Re-speak content if the AI tab is selected
+                 const aiContent = document.getElementById('ai-insights-output').textContent;
+                 if (aiContent && aiContent.length > 50) { // Check if results are actually there
+                    SPEECH.speak(aiContent.substring(0, 200));
+                 }
             }
         });
     });
