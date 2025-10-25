@@ -1,0 +1,64 @@
+/* === RENT VS BUY CALCULATOR CSS === */
+/* Inherits from the improved refinance-calculator.css base */
+/* (Copy the entire content of refinance-calculator.css from the previous response here) */
+
+/* Add specific overrides or new styles for Rent vs. Buy below */
+
+/* Example: Specific colors for Rent vs Buy chart/table */
+.rent-col { color: var(--color-negative); /* Red for renting costs */ }
+.buy-col { color: var(--color-positive); /* Green for buying gains/equity */ }
+
+/* Ensure table header colors are distinct */
+.rent-buy-table th.rent-col { background-color: rgba(220, 38, 38, 0.1); }
+.rent-buy-table th.buy-col { background-color: rgba(21, 128, 61, 0.1); }
+
+body[data-color-scheme="dark"] .rent-buy-table th.rent-col { background-color: rgba(220, 38, 38, 0.3); }
+body[data-color-scheme="dark"] .rent-buy-table th.buy-col { background-color: rgba(21, 128, 61, 0.3); }
+
+/* Style the main summary result */
+.summary-total {
+    text-align: center;
+    padding: var(--space-24) 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--space-24);
+}
+.summary-total .label {
+    font-size: var(--font-size-base);
+    color: var(--secondary-text-color);
+}
+.summary-total .value {
+    font-size: var(--font-size-3xl); /* Make the main result prominent */
+    font-weight: 900;
+    margin: var(--space-8) 0;
+    line-height: 1.1;
+}
+.summary-total .sub-label {
+    font-size: var(--font-size-sm);
+    font-style: italic;
+    color: var(--color-brand-teal);
+}
+
+/* Ensure Rent vs Buy details grid has balanced columns */
+.rent-vs-buy-details {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+}
+
+/* Specific styling for AI insight emphasis */
+.ai-insights-card .highlight {
+    font-weight: bold;
+    color: var(--color-brand-teal);
+}
+
+/* Ensure help text is easily readable */
+.help-text {
+    font-size: 0.8rem;
+    color: var(--color-secondary);
+    margin-top: var(--space-4);
+    display: block;
+}
+.help-text i {
+    margin-right: var(--space-4);
+}
+.text-center {
+    text-align: center;
+}
