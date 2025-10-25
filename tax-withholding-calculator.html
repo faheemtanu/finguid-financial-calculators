@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tax Withholding Calculator — World's First AI-Powered Paycheck Optimizer | FinGuid USA</title>
+    <meta name="description" content="Calculate federal and state tax withholdings to optimize your paycheck and avoid surprises. Use the World's First AI-Powered Tax Withholding Calculator for personalized payroll planning.">
+    <meta name="keywords" content="tax withholding calculator, payroll calculator, federal tax withholding, state tax withholding, paycheck optimizer, W-4 calculator, AI financial advisor, FinGuid, USA tax, ROI analysis, SCO Friendly, AI Friendly">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    <meta name="theme-color" content="#19343B">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="rent-vs-buy-calculator.css">
+    <link rel="stylesheet" href="tax-withholding-calculator.css">
+
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
+            <p class="tagline">World's First AI-Powered Tax Withholding Optimizer</p>
+
+            <div class="features-quick">
+                <span class="feature-quick"><i class="fas fa-microchip"></i> AI Insights</span>
+                <span class="feature-quick"><i class="fas fa-money-check-alt"></i> Paycheck Planning</span>
+                <span class="feature-quick"><i class="fas fa-chart-bar"></i> Dynamic Taxes</span>
+            </div>
+
+            <div class="accessibility-controls">
+                <button id="toggle-color-scheme" aria-label="Toggle Light/Dark Mode" class="control-button">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <div class="voice-status">
+                    <button id="toggle-voice-command" aria-label="Toggle Voice Command" class="control-button voice-inactive">
+                        <i class="fas fa-microphone"></i> <span id="voice-status-text">Voice OFF</span>
+                    </button>
+                    <button id="toggle-text-to-speech" aria-label="Toggle Text to Speech" class="control-button tts-inactive">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                <button id="pwa-install-button" class="control-button install-button hidden" aria-label="Install App">Install App</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="calculator-container card">
+
+            <section class="input-section" aria-labelledby="input-heading">
+                <h2 id="input-heading" class="section-title"><i class="fas fa-balance-scale"></i> Payroll & W-4 Inputs</h2>
+                <form id="withholding-form" novalidate>
+
+                    <aside class="ad-slot top-ad-slot" role="complementary" aria-label="Sponsor Ad Slot">
+                        <p class="ad-label">ADVERTISEMENT / SPONSOR PRODUCT</p>
+                        <div id="top-ad-placeholder">Your Payroll/Tax Software Sponsor Ad Here (e.g., TurboTax Partner)</div>
+                    </aside>
+
+                    <div class="tab-controls">
+                        <button type="button" class="tab-button active" data-tab="income-details">Income & Paycheck</button>
+                        <button type="button" class="tab-button" data-tab="federal-w4">Federal W-4</button>
+                        <button type="button" class="tab-button" data-tab="state-details">State & Deductions</button>
+                    </div>
+
+                    <div id="income-details" class="input-tab-content active">
+                        <h3 class="input-group-title">Base Income Details</h3>
+                        <div class="input-group input-split">
+                            <label for="annual-salary">Gross Annual Salary ($)</label>
+                            <input type="number" id="annual-salary" value="75000" min="0" step="1000">
+
+                            <label for="pay-frequency">Pay Frequency</label>
+                            <select id="pay-frequency">
+                                <option value="26">Bi-weekly (26x)</option>
+                                <option value="12">Monthly (12x)</option>
+                                <option value="24">Semi-monthly (24x)</option>
+                                <option value="52">Weekly (52x)</option>
+                            </select>
+                        </div>
+                         <div class="input-group input-split">
+                            <label for="filing-status">Filing Status</label>
+                            <select id="filing-status">
+                                <option value="Single" selected>Single</option>
+                                <option value="Married Filing Jointly">Married Filing Jointly</option>
+                                <option value="Head of Household">Head of Household</option>
+                            </select>
+
+                            <label for="other-income">Other Annual Taxable Income ($)</label>
+                            <input type="number" id="other-income" value="0" min="0" step="100">
+                        </div>
+                    </div>
+
+                    <div id="federal-w4" class="input-tab-content hidden">
+                        <h3 class="input-group-title">Federal W-4 Details</h3>
+                         <div class="input-group">
+                            <label for="multiple-jobs">Multiple Jobs / Spouse Works? <i class="fas fa-info-circle tooltip-trigger" title="Check this box on your W-4 if you or your spouse has more than one job (or use the Two Earners/Multiple Jobs Worksheet)."></i></label>
+                            <select id="multiple-jobs">
+                                <option value="0" selected>No</option>
+                                <option value="1">Yes (Use the W-4 'Higher Paying Job' checkbox)</option>
+                                <option value="2">Yes (Allocate between jobs - Advanced)</option>
+                            </select>
+                        </div>
+                        <div class="input-group input-split">
+                            <label for="dependents-credit">Total Dependents Credit ($)</label>
+                            <input type="number" id="dependents-credit" value="0" min="0" step="500">
+
+                            <label for="other-adjustments">Other W-4 Adjustments (Deductions $) <i class="fas fa-info-circle tooltip-trigger" title="Annual amount of other itemized deductions, like mortgage interest, property taxes (up to cap), or charitable giving."></i></label>
+                            <input type="number" id="other-adjustments" value="0" min="0" step="10">
+                        </div>
+                        <div class="input-group">
+                            <label for="extra-withholding">Extra Withholding Amount Per Paycheck ($)</label>
+                            <input type="number" id="extra-withholding" value="0" min="0" step="1" placeholder="Enter amount to be withheld each paycheck">
+                        </div>
+                    </div>
+
+                    <div id="state-details" class="input-tab-content hidden">
+                        <h3 class="input-group-title">State & Deduction Assumptions</h3>
+                        <div class="input-group">
+                            <label for="state-residence">State of Residence</label>
+                            <select id="state-residence">
+                                <option value="None" selected>None (Federal Only)</option>
+                                <option value="CA">California</option>
+                                <option value="NY">New York</option>
+                                <option value="TX">Texas (No Income Tax)</option>
+                                </select>
+                        </div>
+                        <div class="input-group input-split">
+                            <label for="itemized-deductions">Annual Itemized Deductions (Estimate $)</label>
+                            <input type="number" id="itemized-deductions" value="0" min="0" step="1000">
+
+                            <label for="pretax-deductions">Pre-tax Deductions (e.g., 401k, HSA) Annual $</label>
+                            <input type="number" id="pretax-deductions" value="5000" min="0" step="100">
+                        </div>
+
+                         <aside class="affiliate-slot" role="complementary" aria-label="Affiliate Link">
+                            <h4><i class="fas fa-handshake"></i> Tax Preparation & Filing</h4>
+                            <p>Maximize your return with a professional tax filing service! (Affiliate Link)</p>
+                            <a href="#" class="primary-button affiliate-link-cta" id="affiliate-link-1" target="_blank">Compare Top Tax Software Now</a>
+                        </aside>
+                    </div>
+
+                </form>
+            </section>
+
+            <section class="results-section" aria-labelledby="results-heading">
+                <h2 id="results-heading" class="section-title"><i class="fas fa-chart-line"></i> Optimized Paycheck Analysis</h2>
+
+                <div class="monetization-banner">
+                     <p>Sponsored: See how much you can save with a High-Yield Savings Account! (Sponsor Product Link)</p>
+                </div>
+
+                <div class="tab-controls-results">
+                    <button type="button" class="tab-button active" data-tab="paycheck-summary">Paycheck Summary</button>
+                    <button type="button" class="tab-button" data-tab="annual-projection">Annual Projection</button>
+                    <button type="button" class="tab-button" data-tab="ai-insights">AI Optimization</button>
+                </div>
+
+                <div id="paycheck-summary" class="tab-content active">
+                     <h3 class="result-path-title buy-path-title"><i class="fas fa-money-bill-wave"></i> Paycheck Breakdown (<span id="summary-pay-frequency">Bi-weekly</span>)</h3>
+                    <div class="summary-details">
+                        <div class="summary-box">
+                            <p class="summary-label">Gross Pay</p>
+                            <p class="summary-value" id="gross-pay-period">$0</p>
+                        </div>
+                        <div class="summary-box negative">
+                            <p class="summary-label">Pre-Tax Deductions</p>
+                            <p class="summary-value" id="pre-tax-deductions-period">$0</p>
+                        </div>
+                        <div class="summary-box negative">
+                            <p class="summary-label">Federal Withholding</p>
+                            <p class="summary-value" id="federal-withholding-period">$0</p>
+                        </div>
+                        <div class="summary-box negative">
+                            <p class="summary-label">State Withholding</p>
+                            <p class="summary-value" id="state-withholding-period">$0</p>
+                        </div>
+                        <div class="summary-box negative">
+                            <p class="summary-label">FICA (SS + Medicare)</p>
+                            <p class="summary-value" id="fica-period">$0</p>
+                        </div>
+                    </div>
+                     <div class="final-verdict-box" id="final-verdict-box">
+                        <p class="summary-label" style="font-weight: 700; font-size: 1.1em;">Estimated Net Pay</p>
+                        <p class="summary-value" id="net-pay-period" style="font-size: 1.8em; color: var(--color-net-pay);">$0</p>
+                    </div>
+                </div>
+
+                <div id="annual-projection" class="tab-content hidden">
+                    <h3>Annual Tax Projection</h3>
+                    <div class="projection-details">
+                        <div class="summary-box">
+                            <p class="summary-label">Total Taxable Income</p>
+                            <p class="summary-value" id="annual-taxable-income">$0</p>
+                        </div>
+                        <div class="summary-box">
+                            <p class="summary-label">Estimated Total Tax Liability</p>
+                            <p class="summary-value" id="annual-tax-liability">$0</p>
+                        </div>
+                         <div class="summary-box">
+                            <p class="summary-label">Estimated Total Withheld</p>
+                            <p class="summary-value" id="annual-withheld-total">$0</p>
+                        </div>
+                        <div class="summary-box positive" id="tax-difference-box">
+                            <p class="summary-label">Estimated Annual Refund / (Due)</p>
+                            <p class="summary-value" id="annual-tax-difference">$0</p>
+                        </div>
+                    </div>
+                     <p class="chart-caption">Note: A difference near zero means optimal withholding. A large positive value is a large refund (interest-free loan to government). A large negative value means a large tax bill.</p>
+                </div>
+
+                <div id="ai-insights" class="tab-content hidden">
+                    <h3><i class="fas fa-microchip"></i> AI Financial Optimization Insights</h3>
+                    <div id="ai-insights-output" class="ai-insights-box">
+                        <p class="placeholder-text">Enter your details to generate personalized AI analysis on your optimal withholding...</p>
+                    </div>
+
+                    <div class="roi-section">
+                        <h4>Optimal W-4 Strategy</h4>
+                        <p class="ai-recommendation-note" id="ai-recommendation-note"></p>
+                    </div>
+
+                     <aside class="ad-slot bottom-ad-slot" role="complementary" aria-label="Affiliate Ad Slot">
+                        <p class="ad-label">AFFILIATE AD / INVESTMENT SPONSOR</p>
+                        <div id="bottom-ad-placeholder">Invest your excess withholding today with a Top US Broker! (Affiliate Link)</div>
+                    </aside>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <nav class="footer-nav" aria-label="Footer Navigation">
+                <div class="nav-column">
+                    <h4>FinGuid Platform</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/refinance-calculator.html">Refinance Calculator</a></li>
+                        <li><a href="/affordability-calculator.html">Affordability Calculator</a></li>
+                        <li><a href="/rent-vs-buy.html">Rent vs Buy Analyzer</a></li>
+                        <li><a href="/tax-withholding-calculator.html" aria-current="page">Tax Withholding Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>Partnership & Ads (Monetization)</h4>
+                    <ul>
+                        <li><a href="#advertising">Advertising Slots</a></li>
+                        <li><a href="#affiliates">Affiliate Products</a></li>
+                        <li><a href="#sponsor-link">Sponsor Products</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>Legal & Contact</h4>
+                    <ul>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only and rely on user assumptions. Tax laws are complex and change annually. Consult a licensed tax professional. **We monetize exclusively via advertising and affiliate partnerships.**
+                    </p>
+                </div>
+                <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> **SCO Friendly**</div>
+                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> **AI Friendly**</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="/register-sw.js"></script>
+    <script src="tax-withholding-calculator.js"></script>
+
+</body>
+</html>
