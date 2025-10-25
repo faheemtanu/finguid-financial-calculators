@@ -1,0 +1,568 @@
+/* === CAR LEASE CALCULATOR CSS === */
+/* Inherits core variables and styles from the FinGuid platform standard (mortgage-calculator.css base) */
+
+:root {
+    /* === FinGuid Color Tokens (Consistent with provided CSS) === */
+    --color-white: rgba(255, 255, 255, 1);
+    --color-black: rgba(0, 0, 0, 1);
+    --color-cream-100: rgba(255, 255, 253, 1); /* Light Background */
+    --color-gray-200: rgba(245, 245, 245, 1); /* Light Card BG */
+    --color-slate-900: rgba(19, 52, 59, 1); /* FinGuid Primary (Teal Dark) */
+    --color-teal-400: rgba(36, 172, 185, 1); /* FinGuid Accent */
+    --color-positive: #28a745; /* Green */
+    --color-negative: #dc3545; /* Red */
+    --color-info: #ffc107; /* Yellow */
+    --color-chart-lease: #ffc107; /* Lease - Yellow/Orange */
+    --color-chart-buy: var(--color-teal-400); /* Buy - Teal */
+
+    /* Typography & Spacing */
+    --font-family-primary: 'Helvetica Neue', Arial, sans-serif;
+    --font-size-base: 1.1rem;
+    --space-8: 8px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --border-radius: 12px;
+}
+
+/* Base Theme Switching Logic (Dark Mode) */
+[data-color-scheme="light"] {
+    --bg-color: var(--color-cream-100);
+    --card-bg-color: var(--color-gray-200);
+    --text-color: var(--color-slate-900);
+    --secondary-text-color: rgba(19, 52, 59, 0.7);
+    --border-color: rgba(19, 52, 59, 0.1);
+}
+
+[data-color-scheme="dark"] {
+    --bg-color: var(--color-slate-900);
+    --card-bg-color: rgba(31, 51, 57, 1); 
+    --text-color: var(--color-white);
+    --secondary-text-color: rgba(255, 255, 255, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* === GENERAL STYLES === */
+body {
+    font-family: var(--font-family-primary);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-16);
+}
+
+a {
+    color: var(--color-teal-400);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--color-white);
+    background-color: var(--color-teal-400);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+/* === HEADER & FOOTER (Consistent FinGuid Branding) === */
+.main-header, .main-footer {
+    background-color: var(--color-slate-900);
+    color: var(--color-white);
+    padding: var(--space-24) 0;
+}
+
+.main-header .logo a {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--color-teal-400);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tagline {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.accessibility-controls .control-btn {
+    background-color: var(--color-teal-400);
+    color: var(--color-slate-900);
+    border: none;
+    padding: var(--space-8);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: var(--space-8);
+    width: 40px;
+    height: 40px;
+    transition: background-color 0.2s;
+}
+
+.accessibility-controls .control-btn:hover {
+    background-color: #2fb9d4;
+}
+
+.features-quick {
+    text-align: center;
+    padding-top: var(--space-16);
+}
+
+.feature-badge {
+    display: inline-block;
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 4px;
+}
+
+.feature-badge i {
+    color: var(--color-teal-400);
+    margin-right: 4px;
+}
+
+.main-footer {
+    margin-top: var(--space-32);
+}
+
+/* Footer Nav */
+.footer-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-32);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: var(--space-24);
+    margin-bottom: var(--space-24);
+}
+
+.footer-nav h4 {
+    color: var(--color-teal-400);
+    margin-bottom: var(--space-16);
+    font-size: 1.1rem;
+}
+
+.footer-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-nav a {
+    color: rgba(255, 255, 255, 0.8);
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.footer-disclaimer p {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-badges {
+    display: flex;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+    margin-top: var(--space-16);
+}
+
+.footer-badges .badge {
+    font-size: 0.8rem;
+    background-color: var(--color-teal-400);
+    color: var(--color-slate-900);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.footer-badges .badge i { margin-right: 4px; }
+
+
+/* === CALCULATOR LAYOUT === */
+.calculator-hero {
+    text-align: center;
+    margin: var(--space-32) 0;
+}
+
+.calculator-hero h1 {
+    font-size: 2.2rem;
+    margin-bottom: var(--space-8);
+}
+
+.calculator-hero .subtitle {
+    font-size: 1.1rem;
+    color: var(--secondary-text-color);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.calculator-container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: var(--space-32);
+    align-items: flex-start;
+}
+
+.input-section {
+    position: sticky;
+    top: var(--space-32); /* Sticky position for scrolling */
+}
+
+.card {
+    background-color: var(--card-bg-color);
+    padding: var(--space-24);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: var(--space-24);
+    border: 1px solid var(--border-color);
+}
+
+.card-title {
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: var(--space-24);
+    color: var(--color-teal-400);
+}
+
+/* Input Form Styles */
+.input-group {
+    margin-bottom: var(--space-16);
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+
+input[type="number"], select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-size: var(--font-size-base);
+}
+
+input[type="number"]:focus, select:focus {
+    border-color: var(--color-teal-400);
+    box-shadow: 0 0 0 3px rgba(36, 172, 197, 0.2);
+    outline: none;
+}
+
+.input-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+}
+
+.input-sub-heading {
+    color: var(--color-teal-400);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--space-8);
+    margin-top: var(--space-16);
+}
+
+.badge-rate {
+    background-color: var(--color-negative);
+    color: var(--color-white);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    vertical-align: top;
+    margin-left: 4px;
+}
+
+.info-text {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+    margin-top: var(--space-8);
+}
+
+/* Monetization Slots */
+.ad-slot {
+    margin-top: var(--space-24);
+    padding: var(--space-16);
+    border: 2px dashed var(--color-teal-400);
+    border-radius: var(--border-radius);
+    background-color: rgba(36, 172, 197, 0.05);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.monetization-tag {
+    font-weight: 700;
+    color: var(--color-teal-400);
+    margin-top: 0;
+}
+
+
+/* === SUMMARY CARD & TABS === */
+.summary-card {
+    background-color: var(--color-slate-900); /* Highlight summary card */
+    color: var(--color-white);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.summary-card .card-title {
+    color: var(--color-teal-400);
+}
+
+.summary-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+    margin-bottom: var(--space-24);
+    padding-bottom: var(--space-24);
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.summary-item .label {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    opacity: 0.8;
+}
+
+.summary-item .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.total-cost-comparison {
+    text-align: center;
+    padding: var(--space-16);
+    border-radius: 8px;
+    background-color: rgba(36, 172, 197, 0.1); /* Light background for difference */
+}
+
+.total-cost-comparison .label {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.total-cost-comparison .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: color 0.3s;
+}
+
+.total-cost-comparison .value.positive {
+    color: var(--color-positive); /* Buying is better */
+}
+
+.total-cost-comparison .value.negative {
+    color: var(--color-negative); /* Leasing is better */
+}
+
+/* Results Tabs */
+.tab-controls {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: var(--space-24);
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 12px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--secondary-text-color);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.tab-button.active {
+    color: var(--color-teal-400);
+    border-bottom-color: var(--color-teal-400);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content-title {
+    color: var(--color-teal-400);
+    font-size: 1.3rem;
+    margin-top: 0;
+}
+
+.chart-container {
+    height: 300px; 
+    width: 100%;
+}
+
+/* Detailed Costs */
+.cost-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+}
+
+.cost-section h4 {
+    border-bottom: 2px solid var(--color-teal-400);
+    padding-bottom: var(--space-8);
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.cost-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.cost-section li {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px dotted var(--border-color);
+    font-size: 0.95rem;
+}
+
+.cost-section li:last-child {
+    border-bottom: none;
+}
+
+.cost-section li .value {
+    font-weight: 600;
+}
+
+.cost-section li.note-item {
+    font-style: italic;
+    color: var(--secondary-text-color);
+    margin-top: var(--space-8);
+}
+
+.cost-section li .value.total {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-teal-400);
+}
+
+/* AI Insights */
+.ai-summary {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-teal-400);
+    padding: var(--space-16);
+    border: 2px solid var(--color-teal-400);
+    border-radius: var(--border-radius);
+    background-color: rgba(36, 172, 197, 0.05);
+}
+
+.ai-recommendations {
+    margin-top: var(--space-24);
+}
+
+.ai-recommendations h5 {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: var(--space-8);
+}
+
+.ai-recommendations ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.ai-recommendations li {
+    margin-bottom: var(--space-8);
+    font-size: 0.95rem;
+}
+
+/* TOAST NOTIFICATIONS (For Voice/TTS/PWA) */
+.toast-container { 
+    position: fixed; 
+    bottom: var(--space-24); 
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 1000; 
+}
+.toast {
+    background-color: var(--color-slate-900); 
+    color: var(--color-white); 
+    padding: var(--space-16) var(--space-24);
+    border-radius: var(--border-radius); 
+    margin-top: var(--space-8); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0.95; 
+    transform: translateY(100px); 
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+.toast.show { 
+    transform: translateY(0); 
+}
+.toast.info { background-color: var(--color-info); }
+
+
+/* === RESPONSIVENESS (Mobile/All Device Friendly) === */
+@media (max-width: 1024px) {
+    .calculator-container { 
+        grid-template-columns: 1fr; 
+        padding: 0 var(--space-16);
+    }
+    
+    .input-section { 
+        position: static; 
+    }
+    
+    .header-content { 
+        flex-direction: column; 
+        align-items: flex-start; 
+    }
+    
+    .logo { margin-bottom: var(--space-8); }
+    .tagline, .features-quick { margin: var(--space-4) 0; }
+    
+    .accessibility-controls {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: var(--space-8);
+    }
+
+    .input-split, .cost-breakdown {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-details {
+        grid-template-columns: 1fr;
+        padding-top: var(--space-16);
+    }
+    
+    .tab-controls {
+        flex-wrap: wrap;
+    }
+    
+    .tab-button {
+        flex: 1 1 auto;
+        margin-bottom: 4px;
+    }
+
+    .footer-badges {
+        justify-content: center;
+    }
+}
