@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Car Lease Analyzer — World's First AI-Powered Lease vs Buy Calculator | FinGuid USA</title>
+    <meta name="description" content="Calculate monthly lease payments, compare total costs of leasing vs. buying, and get AI-powered insights for your next vehicle purchase in the USA. Real-time rates.">
+    <meta name="keywords" content="car lease calculator, lease vs buy, auto loan calculator, car payment calculator, car lease payment, total cost of ownership, AI financial tool, FinGuid, USA auto finance, SCO Friendly, AI Friendly">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#19343B"> 
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="car-lease-calculator.css"> </head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content container">
+            <div class="logo">
+                <a href="/">FinGuid</a>
+            </div>
+            <div class="tagline">World's First **AI-Enhanced** Financial Calculator Platform | **USA Market Focus** 🇺🇸</div>
+            
+            <div class="accessibility-controls">
+                <button id="theme-toggle" class="control-btn" title="Toggle Light/Dark Mode" aria-label="Toggle Light and Dark Mode">
+                    <i class="fas fa-sun" aria-hidden="true"></i>
+                </button>
+                <button id="voice-command-button" class="control-btn" title="Voice Command" aria-label="Activate Voice Command">
+                    <i class="fas fa-microphone" aria-hidden="true"></i>
+                </button>
+                <button id="tts-button" class="control-btn" title="Text-to-Speech" aria-label="Read Insights Aloud">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="features-quick container">
+            <span class="feature-badge"><i class="fas fa-robot"></i> AI-Friendly</span>
+            <span class="feature-badge"><i class="fas fa-mobile-alt"></i> PWA Ready</span>
+            <span class="feature-badge"><i class="fas fa-search-dollar"></i> SCO Optimized</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="calculator-hero">
+            <h1>World's First **AI-Powered** Car Lease vs Buy Calculator</h1>
+            <p class="subtitle">Calculate monthly lease payments, compare against buying, and get dynamic, data-driven insights tailored for the American audience.</p>
+        </section>
+
+        <section class="calculator-container">
+            
+            <div class="input-section">
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-car-side"></i> Vehicle & Term Inputs</h2>
+                    <form id="car-lease-form">
+                        
+                        <div class="input-group">
+                            <label for="vehicle-price">Vehicle Price ($)</label>
+                            <input type="number" id="vehicle-price" value="35000" min="1000" step="1000" required aria-label="Vehicle Price">
+                        </div>
+                        <div class="input-split">
+                            <div class="input-group">
+                                <label for="down-payment">Cash Down/Cap Cost Reduction ($)</label>
+                                <input type="number" id="down-payment" value="2000" min="0" step="100" aria-label="Cash Down Payment or Cap Cost Reduction">
+                            </div>
+                            <div class="input-group">
+                                <label for="sales-tax-rate">Sales Tax Rate (%)</label>
+                                <input type="number" id="sales-tax-rate" value="7.0" min="0" max="15" step="0.1" aria-label="Sales Tax Rate">
+                            </div>
+                        </div>
+
+                        <div class="input-group input-group-lease">
+                            <label for="lease-term">Lease Term (Months)</label>
+                            <input type="number" id="lease-term" value="36" min="12" max="60" step="12" required aria-label="Lease Term in Months">
+                        </div>
+                        <div class="input-split input-split-lease">
+                            <div class="input-group">
+                                <label for="residual-percentage">Residual Percentage (%)</label>
+                                <input type="number" id="residual-percentage" value="55" min="30" max="80" step="1" required aria-label="Vehicle Residual Percentage">
+                            </div>
+                            <div class="input-group">
+                                <label for="money-factor">Money Factor (e.g. 0.0025)</label>
+                                <input type="number" id="money-factor" value="0.0025" min="0.0001" max="0.01" step="0.0001" required aria-label="Lease Money Factor">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="annual-mileage">Annual Mileage Allowance</label>
+                            <select id="annual-mileage" aria-label="Annual Mileage Allowance">
+                                <option value="10000">10,000 Miles/yr</option>
+                                <option value="12000" selected>12,000 Miles/yr</option>
+                                <option value="15000">15,000 Miles/yr</option>
+                            </select>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h3 class="input-sub-heading"><i class="fas fa-hand-holding-dollar"></i> Buy Option Comparison</h3>
+                        <div class="input-split input-split-buy">
+                            <div class="input-group">
+                                <label for="buy-loan-term">Loan Term (Years)</label>
+                                <input type="number" id="buy-loan-term" value="5" min="3" max="7" step="1" required aria-label="Car Loan Term in Years">
+                            </div>
+                            <div class="input-group">
+                                <label for="buy-interest-rate">Buy Loan Rate (%) <span id="live-rate-badge" class="badge-rate">Live Rate</span></label>
+                                <input type="number" id="buy-interest-rate" value="7.5" min="1.0" max="25.0" step="0.1" required aria-label="Buy Loan Interest Rate">
+                            </div>
+                        </div>
+                        <p class="info-text">**Live Rate:** The rate above is dynamically updated using the FRED API for the 60-Month New Car Loan Rate (`RIFLIN60EN`).</p>
+                    </form>
+
+                    <div class="ad-slot affiliate-products-slot" role="complementary" aria-label="Affiliate link for car financing">
+                        <p class="monetization-tag">💰 **SPONSOR/AFFILIATE SLOT:**</p>
+                        <p>Looking for the **best auto loan rates**? Compare top US lenders instantly. [Link to Partner Auto Loan Comparison Tool]</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="results-section">
+
+                <div class="card summary-card">
+                    <h2 class="card-title"><i class="fas fa-chart-line"></i> Summary Analysis</h2>
+                    <div class="summary-details">
+                        <div class="summary-item lease-payment">
+                            <p class="label">Monthly Lease Payment (Est.)</p>
+                            <p class="value" id="monthly-lease-payment">$0.00</p>
+                        </div>
+                        <div class="summary-item buy-payment">
+                            <p class="label">Monthly Buy Payment (Est.)</p>
+                            <p class="value" id="monthly-buy-payment">$0.00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="total-cost-comparison">
+                        <p class="label">Total Cost Difference Over Lease Term (<span id="lease-term-years">3</span> Years)</p>
+                        <p class="value" id="total-cost-difference">$0.00 (TBD)</p>
+                    </div>
+                </div>
+
+                <div class="card results-tabs">
+                    <div class="tab-controls tab-controls-results">
+                        <button class="tab-button active" data-tab="comparison-chart" aria-controls="comparison-chart">Total Cost Chart</button>
+                        <button class="tab-button" data-tab="cost-details" aria-controls="cost-details">Detailed Costs</button>
+                        <button class="tab-button" data-tab="ai-insights" aria-controls="ai-insights"><i class="fas fa-robot"></i> AI Insights & Recommendation</button>
+                    </div>
+
+                    <div id="comparison-chart" class="tab-content active">
+                        <h3 class="tab-content-title">Projected Total Cost Over <span id="chart-term-length">36</span> Months</h3>
+                        <div class="chart-container">
+                            <canvas id="leaseBuyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="cost-details" class="tab-content">
+                        <h3 class="tab-content-title">Lease vs. Buy Detailed Cost Breakdown</h3>
+                        <div class="cost-breakdown">
+                            <div class="cost-section lease-cost">
+                                <h4><i class="fas fa-file-contract"></i> Lease Costs (<span id="lease-term-details">36</span> Months)</h4>
+                                <ul>
+                                    <li>Monthly Payments Total: <span class="value" id="total-lease-payments">$0.00</span></li>
+                                    <li>Acquisition/Dealer Fees: <span class="value" id="lease-fees">$0.00</span></li>
+                                    <li>Taxes Total: <span class="value" id="lease-taxes">$0.00</span></li>
+                                    <li>Disposition Fee: <span class="value" id="disposition-fee">$0.00</span></li>
+                                    <li>**Total Out-of-Pocket Cost (Lease):** <span class="value total" id="total-lease-cost">$0.00</span></li>
+                                    <li class="note-item"><i class="fas fa-exclamation-triangle"></i> Mileage Penalty (Estimate): <span class="value" id="mileage-penalty-estimate">$0.00</span></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="cost-section buy-cost">
+                                <h4><i class="fas fa-house-chimney-window"></i> Buy Costs (<span id="buy-term-details">5</span> Years)</h4>
+                                <ul>
+                                    <li>Monthly Payments Total: <span class="value" id="total-buy-payments">$0.00</span></li>
+                                    <li>Total Interest Paid: <span class="value" id="total-buy-interest">$0.00</span></li>
+                                    <li>Upfront Sales Tax & Fees: <span class="value" id="buy-upfront-fees">$0.00</span></li>
+                                    <li>Estimated Car Value at Lease Term End: <span class="value" id="buy-future-value">$0.00</span></li>
+                                    <li>**Net Cost (Buy) / True Cost of Ownership:** <span class="value total" id="total-buy-net-cost">$0.00</span></li>
+                                    <li class="note-item"><i class="fas fa-hand-holding-usd"></i> Potential Equity/Sale Proceeds: <span class="value" id="buy-equity">$0.00</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ai-insights" class="tab-content">
+                        <h3 class="tab-content-title"><i class="fas fa-brain"></i> FinGuid AI Analyzer: Personalized Insights</h3>
+                        <div class="ai-report">
+                            <p class="ai-summary" id="ai-summary-text">Analyzing your inputs...</p>
+                            
+                            <div class="ai-recommendations" id="ai-recommendations">
+                                </div>
+
+                            <div class="ad-slot advertising-slot" role="complementary" aria-label="Advertising banner for car insurance">
+                                <p class="monetization-tag">📢 **ADVERTISEMENT:**</p>
+                                <p>Save up to 40% on **Car Insurance** right now! [Link to Sponsor Auto Insurance Quote]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <div class="nav-column">
+                    <h4>Calculators</h4>
+                    <ul>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy Analyzer</a></li>
+                        <li><a href="/car-lease-calculator.html" class="active">Car Lease Calculator</a></li>
+                        <li><a href="#">Auto Loan Calculator (Coming Soon)</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/blog.html">Financial Blog</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>Partnership & Ads (Monetization)</h4>
+                    <ul>
+                        <li><a href="#advertising">Advertising (Ad Slot)</a></li>
+                        <li><a href="#affiliates">Affiliate Products</a></li>
+                        <li><a href="#sponsor-link">Sponsor Products</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        &copy; 2025 **FinGuid** - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize via advertising and affiliate partnerships.**
+                    </p>
+                </div>
+                <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
+                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="car-lease-calculator.js"></script>
+    
+</body>
+</html>
