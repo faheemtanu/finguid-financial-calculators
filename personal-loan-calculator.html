@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Personal Loan Calculator — World's First AI APR Analysis | FinGuid USA</title>
+    <meta name="description" content="Use the World's First AI-Powered Personal Loan Calculator by FinGuid. Compare loan options, calculate monthly payments, review detailed amortization, and get live APR analysis using FRED data. SCO-friendly for Americans.">
+    <meta name="keywords" content="personal loan calculator, loan payment calculator, APR analysis, monthly payment, loan comparison, FinGuid, USA personal finance, FRED API, AI calculator, affiliate marketing, sponsored products">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    <meta name="theme-color" content="#19343B">
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="mortgage-calculator.css"> <link rel="stylesheet" href="personal-loan-calculator.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content container">
+            <div class="logo-area">
+                <a href="/" class="logo">
+                    <i class="fas fa-coins" aria-hidden="true"></i> FinGuid
+                </a>
+                <p class="tagline">World's First AI-Powered Financial Calculators</p>
+            </div>
+            <div class="features-quick">
+                <span class="rate-display">FRED® Live Avg: <strong id="live-interest-rate">--.--%</strong> APR</span>
+            </div>
+            <div class="accessibility-controls">
+                <button id="toggle-theme" aria-label="Toggle Light/Dark Mode" class="control-btn"><i class="fas fa-moon"></i></button>
+                <button id="toggle-voice-command" aria-label="Start Voice Command" class="control-btn"><i class="fas fa-microphone"></i></button>
+                <button id="toggle-text-to-speech" aria-label="Enable Text to Speech" class="control-btn active"><i class="fas fa-volume-up"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="calculator-main container">
+        <div class="calculator-container">
+
+            <section class="input-section card">
+                <h1 class="main-title">Personal Loan Calculator</h1>
+                <p class="section-description">Compare options, calculate your exact monthly payment, and analyze the true cost of borrowing with FinGuid's AI-powered insights.</p>
+
+                <div class="ad-slot top-banner-ad">
+                    <p class="ad-label">AD / SPONSORED PRODUCT</p>
+                    <a href="#affiliate-link-top" target="_blank" rel="sponsored noopener noreferrer">
+                        <img src="/ads/personal-loan-offer-1.webp" alt="Top US Personal Loan Offers: Check Your Rate Now" loading="lazy">
+                        <p class="affiliate-cta">⚡ Check Pre-Qualified Personal Loan Rates in 60 Seconds! (Affiliate)</p>
+                    </a>
+                </div>
+                <form id="personal-loan-form" onsubmit="return false;">
+                    <div class="input-group">
+                        <label for="loan-amount">Loan Amount ($)</label>
+                        <input type="number" id="loan-amount" value="15000" min="500" max="100000" step="500" required>
+                    </div>
+
+                    <div class="input-split">
+                        <div class="input-group">
+                            <label for="interest-rate">Annual Percentage Rate (APR - %)</label>
+                            <input type="number" id="interest-rate" value="11.14" min="1.0" max="36.0" step="0.01" required>
+                            <p class="input-helper-text">Live FRED® Rate Suggestion: <span id="fred-suggestion">--.--%</span></p>
+                        </div>
+                        <div class="input-group">
+                            <label for="loan-term-years">Loan Term (Years)</label>
+                            <input type="number" id="loan-term-years" value="3" min="1" max="7" step="1" required>
+                            <p class="input-helper-text">Or <span id="loan-term-months-display">36</span> Months</p>
+                        </div>
+                    </div>
+
+                    <div class="input-split">
+                         <div class="input-group">
+                            <label for="origination-fee">Origination Fee (%)</label>
+                            <input type="number" id="origination-fee" value="3.0" min="0.0" max="10.0" step="0.1" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="extra-payment">Extra Monthly Payment ($)</label>
+                            <input type="number" id="extra-payment" value="0" min="0" max="1000" step="10">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="calculate-button" class="primary-button full-width">
+                        <i class="fas fa-calculator"></i> Calculate Loan Payment
+                    </button>
+                </form>
+
+                <div class="feature-cta-section">
+                    <h4>💡 AI-Powered Insights Ready</h4>
+                    <p>Our AI analyzes your payment schedule for optimal financial decisions. Click "Calculate" to begin.</p>
+                </div>
+            </section>
+
+            <section class="results-section">
+                <div class="results-header">
+                    <h2>Your Loan Results</h2>
+                    <div class="summary-details">
+                        <div class="detail-card">
+                            <p class="detail-label">Monthly Payment</p>
+                            <p class="detail-value primary-color" id="monthly-payment">$0.00</p>
+                        </div>
+                        <div class="detail-card">
+                            <p class="detail-label">Total Interest Paid</p>
+                            <p class="detail-value" id="total-interest">$0.00</p>
+                        </div>
+                        <div class="detail-card">
+                            <p class="detail-label">Total Cost w/ Fee</p>
+                            <p class="detail-value" id="total-cost">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-controls-results">
+                    <button class="tab-button active" data-tab="payment-schedule"><i class="fas fa-table"></i> Payment Schedule</button>
+                    <button class="tab-button" data-tab="loan-comparison"><i class="fas fa-chart-bar"></i> Loan Comparison</button>
+                    <button class="tab-button" data-tab="apr-analysis"><i class="fas fa-brain"></i> APR & AI Analysis</button>
+                </div>
+
+                <div id="payment-schedule" class="tab-content active">
+                    <div class="card chart-container">
+                        <canvas id="amortization-chart"></canvas>
+                        <p class="chart-caption">Principal vs. Interest Over Loan Term</p>
+                    </div>
+
+                    <div class="schedule-table-container card">
+                        <h3>Detailed Amortization Table</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Payment</th>
+                                    <th>Interest</th>
+                                    <th>Principal</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="amortization-body">
+                                </tbody>
+                        </table>
+                        <button id="export-csv-button" class="secondary-button"><i class="fas fa-download"></i> Export to CSV</button>
+                    </div>
+
+                </div>
+
+                <div id="loan-comparison" class="tab-content">
+                    <div class="card comparison-card">
+                        <h3>Compare Two Loan Options Side-by-Side</h3>
+                        <p class="comparison-tip">Enter multiple scenarios (different terms/rates) to find your best fit. Click 'Save for Comparison' in the input section.</p>
+                        <div id="comparison-results" class="comparison-grid">
+                            <div class="comparison-card empty">
+                                <p>No loans saved for comparison yet.</p>
+                            </div>
+                        </div>
+                        <button id="clear-comparison-button" class="tertiary-button"><i class="fas fa-trash"></i> Clear All Comparisons</button>
+                    </div>
+
+                    <div class="affiliate-block card">
+                        <h4>Compare Rates from Top US Lenders</h4>
+                        <p>FinGuid partners with leading lenders to help Americans find the **best APR**.</p>
+                        <a href="#affiliate-link-comparison" target="_blank" rel="sponsored noopener noreferrer" class="primary-button">
+                            <i class="fas fa-handshake"></i> Check Your Personalized Rates Now! (Affiliate Link)
+                        </a>
+                    </div>
+                </div>
+
+                <div id="apr-analysis" class="tab-content">
+                    <div class="card ai-analysis-card">
+                        <h3><i class="fas fa-robot"></i> FinGuid AI-APR Analysis & Insights</h3>
+                        <div id="ai-insights-content">
+                            <p class="placeholder-text">Enter your loan details and click 'Calculate' to generate world-class, dynamic AI-Powered APR Analysis and insights here.</p>
+                        </div>
+                    </div>
+
+                    <div class="ad-slot right-rail-ad">
+                        <p class="ad-label">ADVERTISEMENT: SPONSOR OPPORTUNITY</p>
+                        <a href="#sponsor-link" target="_blank" rel="sponsored noopener noreferrer">
+                            <p class="affiliate-cta">Need a lower APR? **Sponsor Name** is offering 0% intro APR Credit Cards. Click to see if you qualify.</p>
+                        </a>
+                    </div>
+                    </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <div class="nav-column">
+                    <h4>FinGuid Platform</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy Calculator</a></li>
+                        <li><a href="/personal-loan-calculator.html" class="active">Personal Loan Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>About & Compliance</h4>
+                    <ul>
+                        <li><a href="/about.html">About FinGuid</a></li>
+                        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>Partnership & Ads (Monetization)</h4>
+                    <ul>
+                        <li><a href="#advertising">Advertising (Ad Slot)</a></li>
+                        <li><a href="#affiliates">Affiliate Products</a></li>
+                        <li><a href="#sponsor-link">Sponsor Products</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize via advertising and affiliate partnerships, which are the sole source of income for this platform.**
+                    </p>
+                </div>
+                <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
+                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="/register-sw.js"></script>
+    <script src="personal-loan-calculator.js"></script>
+
+</body>
+</html>
