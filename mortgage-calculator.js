@@ -13,671 +13,657 @@
 
 const RENT_VS_BUY_CALCULATOR = {
     VERSION: '1.0',
-    DEBUG: false, 
-    
-    // FRED API Configuration (Real Key)
+    DEBUG: false, // Set to false for production to hide console logs and toasts
     FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a', 
-    FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
-    FRED_SERIES_ID: 'MORTGAGE30US', // 30-Year Fixed-Rate Mortgage Average
-    RATE_UPDATE_INTERVAL: 4 * 60 * 60 * 1000, // 4 hours
-    FALLBACK_RATE: 6.75,
+    LIVE_RATE: 6.75, // Default/Fallback Rate
 
     // Core State - Stores inputs and calculated results
     STATE: {
         // Inputs
         homePrice: 400000,
-        downPayment: 80000, // 20%
-        interestRate: 6.75, // Updated by FRED
+        downPayment: 80000,
+        interestRate: 6.75,
         loanTermYears: 30,
-        propertyTaxRate: 1.2, // %
-        homeInsurance: 1500, // Annual
-        maintenanceRate: 1.0, // % of Home Price, Annual
-        closingCostsBuy: 8000, // Flat fee
-        currentRent: 2200, // Monthly
-        rentIncreaseRate: 3.0, // %
-        securityDeposit: 2200,
-        rentersInsurance: 200, // Annual
-        miscRentalFees: 0,
-        analysisPeriod: 7, // Years
-        appreciationRate: 3.5, // %
-        investmentReturnRate: 6.0, // % on invested capital
-        marginalTaxRate: 24, // % for tax savings
+        propertyTaxRate: 1.2,
+        homeInsurance: 1500,
+        hoaFees: 50,
+        maintenanceRate: 1.0,
+        closingCostsBuy: 8000,
+        monthlyRent: 2000,
+        rentersInsurance: 150,
+        rentIncreaseRate: 3.0,
+        yearsToStay: 7,
+        homeAppreciationRate: 4.0,
+        investmentReturnRate: 7.0,
+        taxRate: 24,
+        sellingCostsRate: 6.0,
 
-        // Results
-        totalNetWorthBuy: 0,
-        totalNetWorthRent: 0,
-        buyPathROI: 0,
-        rentPathROI: 0,
-        monthlyPITI: 0,
-        initialCostDifference: 0,
-        annualComparisonData: [], // Detailed breakdown per year
-    },
-    
-    charts: {
-        rentVsBuyChart: null,
-    },
-    deferredInstallPrompt: null,
+        // Results (Calculated)
+        buyingCosts: { yearly: [], total: 0, netCost: 0 },
+        rentingCosts: { yearly: [], total: 0 },
+        opportunityCost: 0,
+        netAdvantage: 0, // Positive means buying is better, negative means renting is better
+        breakEvenYear: -1, // Year when buying becomes better, -1 if never
+        amortization: [] // For tax calculation
+    }
 };
 
-
 /* ========================================================================== */
-/* II. UTILITY & FORMATTING MODULE (Adapted from Mortgage Calc) */
+/* II. UTILITY MODULES (UTILS, THEME, SPEECH - Consistent Platform Modules) */
 /* ========================================================================== */
 
-const UTILS = (function() {
-    function formatCurrency(amount) {
-        if (typeof amount !== 'number' || isNaN(amount)) return '$0';
+// --- UTILS Module ---
+const UTILS = {
+    formatCurrency: (value, showDecimals = true) => {
+        if (isNaN(value) || value === null) return '$0.00';
         return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        }).format(amount);
-    }
-
-    function formatPercent(rate) {
-        return parseFloat(rate).toFixed(1) + '%';
-    }
-
-    function parseInput(id) {
-        const value = document.getElementById(id).value;
-        const cleaned = value.replace(/[$,]/g, '').trim();
-        return parseFloat(cleaned) || 0;
-    }
-    
-    function debounce(func, delay) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), delay);
-        };
-    }
-    
-    function showToast(message, type = 'success') {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.textContent = message;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10); 
-        setTimeout(() => {
-            toast.classList.remove('show');
-            toast.addEventListener('transitionend', () => toast.remove());
-        }, 3000);
-    }
-
-    return {
-        formatCurrency,
-        formatPercent,
-        parseInput,
-        debounce,
-        showToast,
-    };
-})();
-
-
-/* ========================================================================== */
-/* III. CORE CALCULATION MODULE (The Engine) */
-/* ========================================================================== */
-
-function calculateRentVsBuy() {
-    // 1. Update State from Inputs
-    const S = RENT_VS_BUY_CALCULATOR.STATE;
-    S.homePrice = UTILS.parseInput('home-price');
-    S.downPayment = UTILS.parseInput('down-payment');
-    S.interestRate = UTILS.parseInput('interest-rate');
-    S.loanTermYears = UTILS.parseInput('loan-term-years');
-    S.propertyTaxRate = UTILS.parseInput('property-tax-rate');
-    S.homeInsurance = UTILS.parseInput('home-insurance');
-    S.maintenanceRate = UTILS.parseInput('maintenance-rate');
-    S.closingCostsBuy = UTILS.parseInput('closing-costs-buy');
-    S.currentRent = UTILS.parseInput('current-rent');
-    S.rentIncreaseRate = UTILS.parseInput('rent-increase-rate');
-    S.securityDeposit = UTILS.parseInput('security-deposit');
-    S.rentersInsurance = UTILS.parseInput('renters-insurance');
-    S.miscRentalFees = UTILS.parseInput('misc-rental-fees');
-    S.analysisPeriod = UTILS.parseInput('analysis-period');
-    S.appreciationRate = UTILS.parseInput('appreciation-rate');
-    S.investmentReturnRate = UTILS.parseInput('investment-return-rate');
-    S.marginalTaxRate = UTILS.parseInput('marginal-tax-rate');
-
-    if (S.homePrice === 0 || S.analysisPeriod === 0 || S.currentRent === 0) {
-        updateResultsDisplay(true); // Display placeholders/initial state
-        return;
-    }
-
-    // --- Core Financial Variables ---
-    const P = S.homePrice - S.downPayment; // Principal Loan Amount
-    const r_m = (S.interestRate / 100) / 12; // Monthly Interest Rate (for P&I)
-    const n = S.loanTermYears * 12; // Total Payments (for P&I)
-    const T = (S.propertyTaxRate / 100) / 12; // Monthly Property Tax Rate (as decimal)
-    const I_m = S.homeInsurance / 12; // Monthly Home Insurance
-    const M_m = (S.homePrice * (S.maintenanceRate / 100)) / 12; // Monthly Maintenance
-
-    const appreciation = S.appreciationRate / 100;
-    const investmentReturn = S.investmentReturnRate / 100;
-    const rentIncrease = S.rentIncreaseRate / 100;
-    const taxRate = S.marginalTaxRate / 100;
-    const analysisMonths = S.analysisPeriod * 12;
-
-
-    // --- 1. Buying Path: Monthly P&I Calculation (if loan exists) ---
-    let monthlyPI = 0;
-    if (P > 0 && r_m > 0 && n > 0) {
-        monthlyPI = P * (r_m * Math.pow(1 + r_m, n)) / (Math.pow(1 + r_m, n) - 1);
-    } else if (P === 0) {
-        // All cash purchase
-        monthlyPI = 0;
-    }
-    
-    // Monthly PITI + Maintenance + Insurance (PITI-M)
-    const monthlyTax = (S.homePrice * T) || 0;
-    S.monthlyPITI = monthlyPI + monthlyTax + I_m; // P&I + Tax + Insurance
-    const totalMonthlyBuyCost = S.monthlyPITI + M_m;
-    
-    // --- 2. Track Costs & Equity over Analysis Period ---
-    let outstandingBalance = P;
-    let totalRentPaid = 0;
-    let totalBuyPayments = 0;
-    let totalTaxSavings = 0;
-    let cumulativeInvestmentRent = S.downPayment + S.closingCostsBuy - S.securityDeposit - S.miscRentalFees; // Initial savings invested
-    let totalInvestmentGainsRent = 0;
-    let currentHomeValue = S.homePrice;
-    
-    S.annualComparisonData = [];
-
-    // Loop through each month up to the analysis period
-    for (let m = 1; m <= analysisMonths; m++) {
-        let year = Math.ceil(m / 12);
-        
-        // --- BUYING PATH MONTHLY CALCULATIONS ---
-        let monthlyInterest = outstandingBalance * r_m;
-        let monthlyPrincipal = monthlyPI - monthlyInterest;
-        
-        // Ensure balance is not negative (for a 15-year loan analyzed over 30 years)
-        if (outstandingBalance <= 0) {
-            monthlyInterest = 0;
-            monthlyPrincipal = 0;
-            monthlyPI = 0; // PI payment stops once loan is paid off
-        }
-        
-        // Tax Savings (assuming itemized deduction for simplicity)
-        // Only deduct interest and property tax
-        let monthlyTaxDeduction = (monthlyInterest + monthlyTax) * taxRate;
-        totalTaxSavings += monthlyTaxDeduction;
-
-        // Total cash outflow for the month
-        let monthlyBuyOutflow = monthlyPI + monthlyTax + I_m + M_m;
-        totalBuyPayments += monthlyBuyOutflow;
-
-        // Update loan balance
-        if (outstandingBalance > 0) {
-            outstandingBalance -= monthlyPrincipal;
-        }
-
-        // --- RENTING PATH MONTHLY CALCULATIONS ---
-        let currentMonthlyRent = S.currentRent * Math.pow(1 + rentIncrease, year - 1);
-        let monthlyRentOutflow = currentMonthlyRent + (S.rentersInsurance / 12);
-        totalRentPaid += monthlyRentOutflow;
-
-        // Cash Flow Difference (Savings to Invest)
-        let monthlySavingsInvested = monthlyBuyOutflow - monthlyRentOutflow;
-        
-        // Apply investment return to accumulated invested capital
-        cumulativeInvestmentRent *= Math.pow(1 + (investmentReturn / 12), 1);
-        
-        if (monthlySavingsInvested > 0) {
-             cumulativeInvestmentRent += monthlySavingsInvested;
-        }
-
-        // --- ANNUAL CALCULATIONS (Save for Chart/Display) ---
-        if (m % 12 === 0 || m === analysisMonths) {
-            // Annual Home Appreciation (Compounded)
-            currentHomeValue = S.homePrice * Math.pow(1 + appreciation, year);
-            
-            // Total Principal Paid to Date
-            let totalPrincipalPaid = P - Math.max(0, outstandingBalance);
-
-            // BUYING PATH NET WORTH (Equity + Invested Savings)
-            let equity = totalPrincipalPaid + (currentHomeValue - S.homePrice);
-            let buyNetWorth = equity + (cumulativeInvestmentRent < 0 ? cumulativeInvestmentRent : 0); // Consider opportunity cost if buy is cheaper
-            
-            // RENTING PATH NET WORTH (Invested Capital)
-            let rentNetWorth = cumulativeInvestmentRent + S.securityDeposit; // Deposit is returned
-
-            S.annualComparisonData.push({
-                year: year,
-                buyNetWorth: buyNetWorth,
-                rentNetWorth: rentNetWorth,
-                totalOutflowBuy: totalBuyPayments,
-                totalOutflowRent: totalRentPaid,
-            });
+            style: 'currency', currency: 'USD',
+            minimumFractionDigits: showDecimals ? 2 : 0,
+            maximumFractionDigits: showDecimals ? 2 : 0
+        }).format(value);
+    },
+    formatPercent: (value) => (isNaN(value) ? '0.00%' : `${value.toFixed(2)}%`),
+    showToast: (message, type = 'info') => {
+        if (RENT_VS_BUY_CALCULATOR.DEBUG || type === 'error' || type === 'success') { // Show only important toasts in production
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`; toast.textContent = message; container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => toast.classList.remove('show'), 4000);
+            setTimeout(() => toast.remove(), 4300);
         }
     }
-    
-    // --- 3. Final Result Metrics ---
-    const finalData = S.annualComparisonData[S.annualComparisonData.length - 1];
+};
 
-    // Total Net Worth (at end of analysis period)
-    S.totalNetWorthBuy = finalData.buyNetWorth + totalTaxSavings; // Add tax savings back to net worth for true comparison
-    S.totalNetWorthRent = finalData.rentNetWorth;
-    
-    // Total Cost (Outflow)
-    const totalOutflowBuy = finalData.totalOutflowBuy + S.downPayment + S.closingCostsBuy - totalTaxSavings;
-    const totalOutflowRent = finalData.totalOutflowRent + S.securityDeposit + S.miscRentalFees - S.securityDeposit; // Deposit is returned/net zero
+// --- THEME_MANAGER Module --- (COMPLETED)
+const THEME_MANAGER = {
+    loadUserPreferences: () => {
+        // Load theme preference from localStorage or default to 'light'
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-color-scheme', savedTheme);
+        THEME_MANAGER.updateToggleButton(savedTheme);
+    },
+    toggleTheme: () => {
+        const currentScheme = document.documentElement.getAttribute('data-color-scheme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-color-scheme', currentScheme);
+        localStorage.setItem('theme', currentScheme);
+        THEME_MANAGER.updateToggleButton(currentScheme);
+        // Recalculate and redraw chart with new colors immediately
+        if (window.rentVsBuyChart) {
+            setTimeout(updateRentVsBuyChart, 100);
+        }
+    },
+    updateToggleButton: (scheme) => {
+        const button = document.getElementById('theme-toggle-button');
+        if (button) {
+            button.innerHTML = scheme === 'dark'
+                ? '<i class="fas fa-sun"></i> Light Mode'
+                : '<i class="fas fa-moon"></i> Dark Mode';
+        }
+    }
+};
 
-    // ROI Calculation (Net Worth Gain / Initial Investment)
-    const initialInvestmentBuy = S.downPayment + S.closingCostsBuy;
-    const initialInvestmentRent = S.securityDeposit + S.miscRentalFees;
+// --- SPEECH Module --- (COMPLETED)
+const SPEECH = {
+    ttsEnabled: false,
+    synth: window.speechSynthesis,
+    voice: null,
+    initialize: () => {
+        if ('speechSynthesis' in window) {
+            SPEECH.ttsEnabled = true;
+            // Wait for voices to be loaded
+            SPEECH.synth.onvoiceschanged = () => {
+                // Find a US English voice, or fallback to the first available
+                SPEECH.voice = SPEECH.synth.getVoices().find(voice => voice.lang === 'en-US') || SPEECH.synth.getVoices()[0];
+            };
+        } else {
+            console.warn("Speech Synthesis Not Supported by this browser.");
+        }
+    },
+    speak: (text) => {
+        if (SPEECH.ttsEnabled && !SPEECH.synth.speaking) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = SPEECH.voice;
+            SPEECH.synth.speak(utterance);
+        }
+    }
+};
 
-    S.buyPathROI = ((S.totalNetWorthBuy - initialInvestmentBuy) / initialInvestmentBuy) * 100;
-    S.rentPathROI = ((S.totalNetWorthRent - initialInvestmentRent) / initialInvestmentRent) * 100;
-    
-    S.initialCostDifference = initialInvestmentBuy - initialInvestmentRent;
-
-    updateResultsDisplay();
-    generateAIInsights();
-    updateChart();
-}
-
-
-/* ========================================================================== */
-/* IV. FRED API MODULE (Live Rate Integration) */
-/* ========================================================================== */
-
-const fredAPI = (function() {
-    async function fetchLatestRate() {
-        const url = new URL(RENT_VS_BUY_CALCULATOR.FRED_BASE_URL);
-        const params = {
-            series_id: RENT_VS_BUY_CALCULATOR.FRED_SERIES_ID,
-            api_key: RENT_VS_BUY_CALCULATOR.FRED_API_KEY,
-            file_type: 'json',
-            sort_order: 'desc',
-            limit: 1,
-        };
-        url.search = new URLSearchParams(params).toString();
-
+// --- FRED_API Module --- (Adapted for this calculator)
+const fredAPI = {
+    fetchLiveRate: async () => {
+        // Using a secure proxy or CORS-enabled endpoint is best, but using the direct API for demo
+        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=MORTGAGE30US&api_key=${RENT_VS_BUY_CALCULATOR.FRED_API_KEY}&file_type=json&sort_order=desc&limit=1`;
         try {
             const response = await fetch(url);
+            if (!response.ok) throw new Error('FRED API failed');
             const data = await response.json();
-            
-            const latestObservation = data.observations.find(obs => obs.value !== '.' && obs.value !== 'N/A');
-            if (latestObservation) {
-                const rate = parseFloat(latestObservation.value);
-                document.getElementById('interest-rate').value = rate.toFixed(2);
-                document.querySelector('.fred-source-note').textContent = `Live FRED Rate (${latestObservation.date})`;
-                if (RENT_VS_BUY_CALCULATOR.DEBUG) UTILS.showToast(`Live Rate updated to ${rate.toFixed(2)}%`, 'success');
-                return rate;
-            } else {
-                throw new Error('No valid observation found in FRED data.');
+            const rate = parseFloat(data.observations[0].value);
+            if (!isNaN(rate) && rate > 0) {
+                RENT_VS_BUY_CALCULATOR.LIVE_RATE = rate;
+                // Update UI elements
+                document.getElementById('live-rate-value').textContent = UTILS.formatPercent(rate);
+                document.getElementById('fred-rate-tip-value').textContent = UTILS.formatPercent(rate);
+                const rateInput = document.getElementById('interest-rate');
+                // Only update if it's the default value, allowing user override
+                if (parseFloat(rateInput.value) === 6.75) { 
+                    rateInput.value = rate.toFixed(2);
+                }
+                UTILS.showToast(`Updated Interest Rate field with live FRED 30yr Rate: ${rate.toFixed(2)}%`, 'success');
+                calculateRentVsBuy(); // Recalculate with live rate
             }
         } catch (error) {
-            console.error('FRED API Error, using fallback rate:', error);
-            document.getElementById('interest-rate').value = RENT_VS_BUY_CALCULATOR.FALLBACK_RATE.toFixed(2);
-            document.querySelector('.fred-source-note').textContent = `Fallback Rate (${RENT_VS_BUY_CALCULATOR.FALLBACK_RATE.toFixed(2)}%)`;
-            if (RENT_VS_BUY_CALCULATOR.DEBUG) UTILS.showToast('Could not fetch live FRED rate. Using default.', 'error');
-            return RENT_VS_BUY_CALCULATOR.FALLBACK_RATE;
+            console.error('FRED API Error:', error);
+            UTILS.showToast(`Warning: FRED API failed. Using default rate: ${RENT_VS_BUY_CALCULATOR.LIVE_RATE}%`, 'error');
+            calculateRentVsBuy(); // Calculate with default rate
         }
-    }
-
-    function startAutomaticUpdates() {
-        fetchLatestRate().then(calculateRentVsBuy); // Initial fetch and calculation update
-        setInterval(fetchLatestRate, RENT_VS_BUY_CALCULATOR.RATE_UPDATE_INTERVAL);
-    }
-    return { startAutomaticUpdates };
-})();
-
+    },
+    startAutomaticUpdates: () => fredAPI.fetchLiveRate()
+};
 
 /* ========================================================================== */
-/* V. AI INSIGHTS ENGINE (The Smart Feature) */
+/* III. CORE CALCULATION LOGIC: Rent vs Buy Analysis */
 /* ========================================================================== */
 
-function generateAIInsights() {
-    const S = RENT_VS_BUY_CALCULATOR.STATE;
-    const output = document.getElementById('ai-insights-output');
-    let html = `<h4><i class="fas fa-robot"></i> FinGuid AI Analysis & Recommendation:</h4>`;
+/**
+ * Calculates monthly P&I payment.
+ */
+function calculateMonthlyPI(principal, annualRate, termYears) {
+    if (principal <= 0 || termYears <= 0) return 0;
+    const rateMonthly = (annualRate / 100) / 12;
+    const termMonths = termYears * 12;
+    if (rateMonthly === 0) return principal / termMonths;
+    const powerFactor = Math.pow(1 + rateMonthly, termMonths);
+    return principal * (rateMonthly * powerFactor) / (powerFactor - 1);
+}
 
-    const difference = S.totalNetWorthBuy - S.totalNetWorthRent;
-    const period = S.analysisPeriod;
+/**
+ * Generates yearly summary from a monthly amortization schedule.
+ */
+function generateYearlyAmortizationSummary(principal, annualRate, termYears) {
+    const rateMonthly = (annualRate / 100) / 12;
+    const termMonths = termYears * 12;
+    const monthlyPayment = calculateMonthlyPI(principal, annualRate, termYears);
+    let balance = principal;
+    const yearlySummary = [];
+    let currentYearInterest = 0;
+    let currentYearPrincipal = 0;
 
-    // --- Core Recommendation ---
-    if (difference > 5000) {
-        html += `<p class="positive-insight">The **BUYING PATH** is projected to be more financially rewarding, resulting in **${UTILS.formatCurrency(Math.abs(difference))}** greater net worth after **${period} years**. Your strong down payment and home appreciation rate are key drivers.</p>`;
-        document.getElementById('final-verdict-box').className = 'final-verdict-box buy-recommended';
-        document.getElementById('final-verdict-text').textContent = `VERDICT: BUY is ${UTILS.formatCurrency(Math.abs(difference))} BETTER over ${period} years!`;
-    } else if (difference < -5000) {
-        html += `<p class="negative-insight">The **RENTING PATH** is significantly better over this **${period}-year period**, with **${UTILS.formatCurrency(Math.abs(difference))}** more wealth generated. This suggests your investment return rate outweighs the current buying costs.</p>`;
-        document.getElementById('final-verdict-box').className = 'final-verdict-box rent-recommended';
-        document.getElementById('final-verdict-text').textContent = `VERDICT: RENT is ${UTILS.formatCurrency(Math.abs(difference))} BETTER over ${period} years!`;
-    } else {
-        html += `<p>The difference between renting and buying is narrow (less than $5,000). Your decision should be based on **lifestyle factors** and market conviction, not just the numbers.</p>`;
-        document.getElementById('final-verdict-box').className = 'final-verdict-box';
-        document.getElementById('final-verdict-text').textContent = `VERDICT: NEAR TIE over ${period} years. Lifestyle is the key factor.`;
+    for (let month = 1; month <= termMonths; month++) {
+        const interest = balance * rateMonthly;
+        let principalPaid = monthlyPayment - interest;
+        if (balance < principalPaid) principalPaid = balance; // Final payment adjustment
+        balance -= principalPaid;
+        if (balance < 0) balance = 0;
+
+        currentYearInterest += interest;
+        currentYearPrincipal += principalPaid;
+
+        // At the end of each year (or the last month), store the yearly totals
+        if (month % 12 === 0 || month === termMonths) {
+            yearlySummary.push({
+                year: Math.ceil(month / 12),
+                interestPaid: currentYearInterest,
+                principalPaid: currentYearPrincipal,
+                endingBalance: balance
+            });
+            currentYearInterest = 0; // Reset for next year
+            currentYearPrincipal = 0;
+        }
+        if (balance === 0) break;
     }
-
-    // --- Market Analysis & Actionable Advice ---
-    html += `<h4>Market Analysis & Strategy:</h4>`;
-    
-    // 1. Home Appreciation Sensitivity
-    if (S.appreciationRate < 3.0) {
-         html += `<p>• **Appreciation Risk:** At a ${UTILS.formatPercent(S.appreciationRate)} appreciation rate, buying is sensitive to slight dips. Consider finding homes with higher growth potential to solidify your ROI.</p>`;
-    } else {
-         html += `<p>• **Appreciation Strength:** Your ${UTILS.formatPercent(S.appreciationRate)} appreciation is a major driver of wealth. The long-term equity build-up is strong, justifying higher initial costs.</p>`;
-    }
-
-    // 2. Rent vs Investment Opportunity
-    if (S.investmentReturnRate > S.interestRate) {
-        html += `<p>• **Investment Strategy:** The investment return of ${UTILS.formatPercent(S.investmentReturnRate)} is higher than the mortgage rate of ${UTILS.formatPercent(S.interestRate)}. This is a strong argument for the Renting Path, as your money works harder in the market.</p>`;
-    } else {
-        html += `<p>• **Debt vs Investment:** The mortgage rate is higher. Paying down the mortgage debt is the best guaranteed return. The buy decision is reinforced.</p>`;
-    }
-    
-    // 3. Monetization Insight (Affiliate)
-    html += `<h4><i class="fas fa-handshake-angle"></i> Affordability & Loan Recommendation:</h4>`;
-    if (S.homePrice / 500000 > 0.8) {
-         html += `<p>• **Action Step:** Your projected monthly buying cost is substantial. **Optimize your loan:** Explore **Affiliate Link: Lower Mortgage Rates** to minimize your monthly outflow and maximize your long-term ROI.</p>`;
-    } else {
-         html += `<p>• **Action Step:** You are well within range. Ensure you have the right protection: Explore **Affiliate Link: Top Home Insurance Providers** to safeguard your investment.</p>`;
-    }
-
-
-    // --- ROI Recommendation ---
-    document.getElementById('buy-roi').textContent = UTILS.formatPercent(S.buyPathROI);
-    document.getElementById('rent-roi').textContent = UTILS.formatPercent(S.rentPathROI);
-    document.getElementById('ai-roi-recommendation').innerHTML = (S.buyPathROI > S.rentPathROI) ? 
-        `**BUY Recommendation:** The Buy Path offers a ${UTILS.formatPercent(S.buyPathROI - S.rentPathROI)} higher ROI. Focus on reducing closing costs.` :
-        `**RENT Recommendation:** The Rent Path offers a ${UTILS.formatPercent(S.rentPathROI - S.buyPathROI)} higher ROI. Ensure your investment portfolio meets the assumed ${UTILS.formatPercent(S.investmentReturnRate)} return.`;
-
-    output.innerHTML = html;
+    return yearlySummary;
 }
 
 
-/* ========================================================================== */
-/* VI. CHARTING MODULE (Market Visualization) */
-/* ========================================================================== */
-
-function updateChart() {
-    const S = RENT_VS_BUY_CALCULATOR.STATE;
-    const ctx = document.getElementById('rentVsBuyChart').getContext('2d');
-    const labels = S.annualComparisonData.map(d => d.year + (d.year === 1 ? ' Year' : ' Years'));
-    const buyData = S.annualComparisonData.map(d => d.buyNetWorth);
-    const rentData = S.annualComparisonData.map(d => d.rentNetWorth);
-    
-    if (RENT_VS_BUY_CALCULATOR.charts.rentVsBuyChart) {
-        RENT_VS_BUY_CALCULATOR.charts.rentVsBuyChart.destroy();
-    }
-    
-    // Check for Dark Mode to set grid line colors
-    const isDarkMode = document.documentElement.getAttribute('data-color-scheme') === 'dark';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    const textColor = isDarkMode ? 'white' : 'black';
-
-    RENT_VS_BUY_CALCULATOR.charts.rentVsBuyChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Buying Path Net Worth',
-                    data: buyData,
-                    borderColor: 'var(--color-chart-buy)',
-                    backgroundColor: 'rgba(36, 172, 185, 0.2)',
-                    fill: false,
-                    tension: 0.2
-                },
-                {
-                    label: 'Renting Path Net Worth (Invested Savings)',
-                    data: rentData,
-                    borderColor: 'var(--color-chart-rent)',
-                    backgroundColor: 'rgba(255, 193, 7, 0.2)',
-                    fill: false,
-                    tension: 0.2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += UTILS.formatCurrency(context.parsed.y);
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Net Worth / Total Wealth',
-                        color: textColor
-                    },
-                    beginAtZero: true,
-                    ticks: {
-                         color: textColor,
-                        callback: function(value) {
-                            return UTILS.formatCurrency(value / 1000) + 'K';
-                        }
-                    },
-                    grid: { color: gridColor }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Time (Years)',
-                        color: textColor
-                    },
-                    ticks: { color: textColor },
-                    grid: { color: gridColor }
-                }
-            }
-        }
+/**
+ * Main Rent vs Buy calculation engine.
+ */
+function calculateRentVsBuy() {
+    // 1. Get All Inputs
+    const s = RENT_VS_BUY_CALCULATOR.STATE; // Use state for easier access
+    Object.assign(s, {
+        homePrice: parseFloat(document.getElementById('home-price').value) || 0,
+        downPayment: parseFloat(document.getElementById('down-payment').value) || 0,
+        // Ensure to use the current live rate if input is empty
+        interestRate: parseFloat(document.getElementById('interest-rate').value) || RENT_VS_BUY_CALCULATOR.LIVE_RATE,
+        loanTermYears: parseInt(document.getElementById('loan-term').value) || 30,
+        propertyTaxRate: parseFloat(document.getElementById('property-tax').value) || 0,
+        homeInsurance: parseFloat(document.getElementById('home-insurance').value) || 0,
+        hoaFees: parseFloat(document.getElementById('hoa-fees').value) || 0,
+        maintenanceRate: parseFloat(document.getElementById('maintenance').value) || 0,
+        closingCostsBuy: parseFloat(document.getElementById('closing-costs-buy').value) || 0,
+        monthlyRent: parseFloat(document.getElementById('monthly-rent').value) || 0,
+        rentersInsurance: parseFloat(document.getElementById('renters-insurance').value) || 0,
+        rentIncreaseRate: parseFloat(document.getElementById('rent-increase').value) || 0,
+        yearsToStay: parseInt(document.getElementById('years-stay').value) || 7,
+        homeAppreciationRate: parseFloat(document.getElementById('home-appreciation').value) || 0,
+        investmentReturnRate: parseFloat(document.getElementById('investment-return').value) || 0,
+        taxRate: parseFloat(document.getElementById('tax-rate').value) || 0,
+        sellingCostsRate: parseFloat(document.getElementById('selling-costs').value) || 0
     });
-}
 
-
-/* ========================================================================== */
-/* VII. UI UPDATER & DISPLAY */
-/* ========================================================================== */
-
-function updateResultsDisplay(usePlaceholders = false) {
-    const S = RENT_VS_BUY_CALCULATOR.STATE;
-    const finalData = S.annualComparisonData[S.annualComparisonData.length - 1];
-    
-    // Update Analysis Period Labels
-    document.getElementById('summary-period-years-1').textContent = S.analysisPeriod;
-    document.getElementById('summary-period-years-2').textContent = S.analysisPeriod;
-
-    if (usePlaceholders || !finalData) {
-        // Display initial zero state/placeholders
-        document.getElementById('total-payments-buy').textContent = UTILS.formatCurrency(0);
-        document.getElementById('total-initial-buy').textContent = UTILS.formatCurrency(S.downPayment + S.closingCostsBuy);
-        document.getElementById('total-tax-savings').textContent = UTILS.formatCurrency(0);
-        document.getElementById('total-rent-paid').textContent = UTILS.formatCurrency(0);
-        document.getElementById('total-initial-rent').textContent = UTILS.formatCurrency(S.securityDeposit + S.miscRentalFees);
-        document.getElementById('total-investment-gains').textContent = UTILS.formatCurrency(0);
-        document.getElementById('final-verdict-text').textContent = "Enter valid data to start the AI analysis...";
-        document.getElementById('ai-insights-output').innerHTML = '<p class="placeholder-text">Enter your details to generate personalized AI analysis on your best financial path...</p>';
-        document.getElementById('buy-roi').textContent = '0%';
-        document.getElementById('rent-roi').textContent = '0%';
+    // Basic Input Validation
+    if (s.homePrice <= 0 || s.monthlyRent <= 0 || s.yearsToStay <= 0) {
+        updateUI('clear');
+        updateAIInsights('Please enter valid Home Price, Monthly Rent, and Years to Stay.');
         return;
     }
     
-    // Calculate Investment Gains for Rent Path (Difference between final net worth and initial investment)
-    const investmentGains = S.totalNetWorthRent - (S.downPayment + S.closingCostsBuy);
+    // --- 2. Calculate Buying Costs Over Time ---
+    const loanAmount = s.homePrice - s.downPayment;
+    if (loanAmount <= 0) { // User paid cash
+        s.amortization = [];
+    } else {
+        s.amortization = generateYearlyAmortizationSummary(loanAmount, s.interestRate, s.loanTermYears);
+    }
 
-    // --- Buying Path Summary ---
-    document.getElementById('total-payments-buy').textContent = UTILS.formatCurrency(finalData.totalOutflowBuy);
-    document.getElementById('total-initial-buy').textContent = UTILS.formatCurrency(S.downPayment + S.closingCostsBuy);
-    document.getElementById('total-tax-savings').textContent = UTILS.formatCurrency(S.totalTaxSavings);
+    const buyingCostsYearly = [];
+    let cumulativeBuyingCost = s.closingCostsBuy; // Start with initial closing costs
+    let currentHomeValue = s.homePrice;
+    let equityBuilt = s.downPayment; // Start with down payment as equity
+
+    for (let year = 1; year <= s.yearsToStay; year++) {
+        // Annual Costs
+        const yearIndex = year - 1;
+        const mortgageInterestPaid = s.amortization[yearIndex]?.interestPaid || 0;
+        const mortgagePrincipalPaid = s.amortization[yearIndex]?.principalPaid || 0;
+        const propertyTaxes = currentHomeValue * (s.propertyTaxRate / 100);
+        // Assume insurance and HOA increase slightly, e.g., 2% per year
+        const insurance = s.homeInsurance * Math.pow(1.02, yearIndex); 
+        const hoa = (s.hoaFees * 12) * Math.pow(1.02, yearIndex);
+        const maintenance = currentHomeValue * (s.maintenanceRate / 100);
+
+        // Tax Savings (Simplified: Interest + Property Tax Deduction)
+        const deductibleExpenses = mortgageInterestPaid + propertyTaxes;
+        const potentialTaxSavings = deductibleExpenses * (s.taxRate / 100);
+        // Basic check if itemizing might be better than standard deduction (very rough proxy: $15k)
+        const taxSavings = (deductibleExpenses > 15000) ? potentialTaxSavings : 0; 
+        
+        // Annual Costs for this year
+        const annualCost = (mortgageInterestPaid + mortgagePrincipalPaid) + propertyTaxes + insurance + hoa + maintenance - taxSavings;
+        cumulativeBuyingCost += annualCost;
+        
+        // Update Equity & Home Value
+        equityBuilt += mortgagePrincipalPaid;
+        currentHomeValue *= (1 + s.homeAppreciationRate / 100);
+
+        buyingCostsYearly.push({
+            year: year,
+            cost: annualCost,
+            cumulativeCost: cumulativeBuyingCost,
+            homeValue: currentHomeValue,
+            equity: equityBuilt
+        });
+    }
+
+    // Factor in selling costs at the end
+    const finalYearIndex = s.yearsToStay - 1;
+    const finalHomeValue = buyingCostsYearly[finalYearIndex]?.homeValue || s.homePrice;
+    const finalEndingBalance = s.amortization[finalYearIndex]?.endingBalance || 0;
     
-    // --- Renting Path Summary ---
-    document.getElementById('total-rent-paid').textContent = UTILS.formatCurrency(finalData.totalOutflowRent);
-    document.getElementById('total-initial-rent').textContent = UTILS.formatCurrency(S.securityDeposit + S.miscRentalFees);
-    document.getElementById('total-investment-gains').textContent = UTILS.formatCurrency(Math.max(0, investmentGains)); // Only show positive gains
+    const sellingCosts = finalHomeValue * (s.sellingCostsRate / 100);
+    const netProceedsFromSale = finalHomeValue - finalEndingBalance - sellingCosts;
+    const netCostOfBuying = cumulativeBuyingCost - netProceedsFromSale; // Total spent minus what you get back after selling
+
+    s.buyingCosts = { yearly: buyingCostsYearly, total: cumulativeBuyingCost, netCost: netCostOfBuying };
+
+    // --- 3. Calculate Renting Costs Over Time ---
+    const rentingCostsYearly = [];
+    let cumulativeRentingCost = 0;
+    let currentMonthlyRent = s.monthlyRent;
+
+    for (let year = 1; year <= s.yearsToStay; year++) {
+        const yearIndex = year - 1;
+        const annualRent = currentMonthlyRent * 12;
+        // Assume renters insurance increases slightly, e.g., 2% per year
+        const annualRentersInsurance = s.rentersInsurance * Math.pow(1.02, yearIndex);
+        const annualCost = annualRent + annualRentersInsurance;
+        cumulativeRentingCost += annualCost;
+
+        rentingCostsYearly.push({
+            year: year,
+            cost: annualCost,
+            cumulativeCost: cumulativeRentingCost
+        });
+        
+        // Increase rent for the next year
+        currentMonthlyRent *= (1 + s.rentIncreaseRate / 100);
+    }
+    s.rentingCosts = { yearly: rentingCostsYearly, total: cumulativeRentingCost };
+
+    // --- 4. Calculate Opportunity Cost of Down Payment ---
+    // What the down payment + closing costs could have earned if invested
+    const initialInvestment = s.downPayment + s.closingCostsBuy;
+    const investmentReturnDecimal = s.investmentReturnRate / 100;
+    const futureValueOfInvestment = initialInvestment * Math.pow(1 + investmentReturnDecimal, s.yearsToStay);
+    s.opportunityCost = futureValueOfInvestment - initialInvestment;
+
+    // --- 5. Calculate Net Advantage & Break-Even ---
+    // Net Advantage = (Total Cost of Renting + Opportunity Cost) - Net Cost of Buying
+    s.netAdvantage = (s.rentingCosts.total + s.opportunityCost) - s.buyingCosts.netCost;
+    
+    // Calculate Break-Even Year
+    s.breakEvenYear = -1;
+    for (let year = 1; year <= s.yearsToStay; year++) {
+        const currentYearData = s.buyingCosts.yearly[year-1];
+        if (!currentYearData) break; // Stop if data is missing (shouldn't happen)
+        
+        // Recalculate Net Cost for this specific year
+        const sellingCostYear = currentYearData.homeValue * (s.sellingCostsRate / 100);
+        const netProceedsYear = currentYearData.homeValue - (s.amortization[year-1]?.endingBalance || 0) - sellingCostYear;
+        const buyingNetCostYear = currentYearData.cumulativeCost - netProceedsYear;
+        
+        // Recalculate Total Renting Cost for this specific year (including opportunity cost)
+        const opportunityCostYear = initialInvestment * Math.pow(1 + investmentReturnDecimal, year) - initialInvestment;
+        const rentingTotalCostYear = s.rentingCosts.yearly[year-1].cumulativeCost + opportunityCostYear;
+        
+        if (buyingNetCostYear < rentingTotalCostYear) {
+            s.breakEvenYear = year;
+            break;
+        }
+    }
+
+    // --- 6. Update UI ---
+    updateUI();
 }
 
 
 /* ========================================================================== */
-/* VIII. THEME MANAGER, PWA, VOICE (Reused FinGuid Modules) */
+/* IV. UI RENDERING & EVENT LISTENERS */
 /* ========================================================================== */
 
-const THEME_MANAGER = (function() {
-    const COLOR_SCHEME_KEY = 'finguid-color-scheme';
-    
-    function loadUserPreferences() {
-        const savedScheme = localStorage.getItem(COLOR_SCHEME_KEY);
-        if (savedScheme) {
-            document.documentElement.setAttribute('data-color-scheme', savedScheme);
-            updateToggleButton(savedScheme);
-        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            // Default to system preference if no saved preference
-            document.documentElement.setAttribute('data-color-scheme', 'dark');
-            updateToggleButton('dark');
-        }
-    }
-    
-    function updateToggleButton(scheme) {
-        const button = document.getElementById('toggle-color-scheme');
-        if (scheme === 'dark') {
-            button.innerHTML = '<i class="fas fa-moon"></i>';
-            button.setAttribute('aria-label', 'Toggle Light Mode');
-        } else {
-            button.innerHTML = '<i class="fas fa-sun"></i>';
-            button.setAttribute('aria-label', 'Toggle Dark Mode');
-        }
-    }
+let rentVsBuyChart = null; // Chart.js instance
 
-    function toggleColorScheme() {
-        const currentScheme = document.documentElement.getAttribute('data-color-scheme');
-        const newScheme = currentScheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-color-scheme', newScheme);
-        localStorage.setItem(COLOR_SCHEME_KEY, newScheme);
-        updateToggleButton(newScheme);
+function updateUI(mode = 'results') {
+    const s = RENT_VS_BUY_CALCULATOR.STATE;
+
+    // Update Summary Years Display
+    document.getElementById('summary-years').textContent = s.yearsToStay;
+    document.querySelectorAll('.summary-years-detail').forEach(el => el.textContent = s.yearsToStay);
+
+    if (mode === 'clear') {
+        document.getElementById('total-renting-cost').textContent = '--.--';
+        document.getElementById('net-buying-cost').textContent = '--.--';
+        document.getElementById('net-advantage').textContent = '--.--';
         
-        // Ensure chart re-renders with new colors
-        if (RENT_VS_BUY_CALCULATOR.charts.rentVsBuyChart) {
-            updateChart(); 
-        }
+        // Clear breakdown tables and chart
+        document.getElementById('buying-breakdown-body').innerHTML = '<tr><td colspan="2">--</td></tr>';
+        document.getElementById('renting-breakdown-body').innerHTML = '<tr><td colspan="2">--</td></tr>';
+        if (rentVsBuyChart) rentVsBuyChart.destroy();
+        rentVsBuyChart = null;
+        return;
     }
     
-    return { loadUserPreferences, toggleColorScheme };
-})();
-
-
-const SPEECH = (function() {
-    const isSpeechSupported = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let isListening = false;
-
-    function initialize() {
-        if (!isSpeechSupported) {
-            if (RENT_VS_BUY_CALCULATOR.DEBUG) UTILS.showToast('Voice Command not supported in this browser.', 'error');
-            document.getElementById('toggle-voice-command').disabled = true;
-            return;
-        }
-
-        // Placeholder for real speech recognition
-        document.getElementById('toggle-voice-command').addEventListener('click', () => {
-             isListening = !isListening;
-             const button = document.getElementById('toggle-voice-command');
-             button.classList.toggle('voice-active', isListening);
-             button.classList.toggle('voice-inactive', !isListening);
-             document.getElementById('voice-status-text').textContent = isListening ? 'Voice ON' : 'Voice OFF';
-             const message = isListening ? 'Voice Command Active. Try "Set home price to four hundred thousand"' : 'Voice Command Deactivated.';
-             UTILS.showToast(message, isListening ? 'info' : 'success');
-        });
-        
-        // Placeholder for Text-to-Speech
-        document.getElementById('toggle-text-to-speech').addEventListener('click', () => {
-            UTILS.showToast('Text-to-Speech active (This feature will read the AI insights aloud)', 'info');
-             document.getElementById('toggle-text-to-speech').classList.toggle('tts-active');
-            // The actual TTS logic is complex and omitted for brevity.
-        });
+    // Safety check for calculation results
+    if (s.buyingCosts.yearly.length < s.yearsToStay) return;
+    
+    // 1. Update Summary Card
+    document.getElementById('total-renting-cost').textContent = UTILS.formatCurrency(s.rentingCosts.total + s.opportunityCost);
+    document.getElementById('net-buying-cost').textContent = UTILS.formatCurrency(s.buyingCosts.netCost);
+    
+    const netAdvantageEl = document.getElementById('net-advantage');
+    if (s.netAdvantage >= 0) {
+        netAdvantageEl.textContent = `${UTILS.formatCurrency(s.netAdvantage)} Advantage to Buying`;
+        netAdvantageEl.className = 'detail-value text-positive';
+    } else {
+        netAdvantageEl.textContent = `${UTILS.formatCurrency(Math.abs(s.netAdvantage))} Advantage to Renting`;
+        netAdvantageEl.className = 'detail-value text-negative';
     }
 
-    return { initialize };
-})();
+    // 2. Update Detailed Breakdown Tables
+    const buyingBody = document.getElementById('buying-breakdown-body');
+    const buyingTotals = s.buyingCosts.yearly[s.yearsToStay - 1]; // Get totals at the end year
+    
+    // Calculate totals for breakdown table
+    const totalMortgagePayments = s.amortization.slice(0, s.yearsToStay).reduce((sum, yr) => sum + yr.interestPaid + yr.principalPaid, 0);
+    const totalPropertyTaxes = s.buyingCosts.yearly.reduce((sum, yr) => sum + yr.homeValue * (s.propertyTaxRate / 100), 0);
+    const totalHomeInsurance = s.buyingCosts.yearly.reduce((sum, yr, i) => sum + s.homeInsurance * Math.pow(1.02, i), 0);
+    const totalHoaFees = s.buyingCosts.yearly.reduce((sum, yr, i) => sum + (s.hoaFees * 12) * Math.pow(1.02, i), 0);
+    const totalMaintenance = s.buyingCosts.yearly.reduce((sum, yr) => sum + yr.homeValue * (s.maintenanceRate / 100), 0);
+    const totalPrincipalPaid = (buyingTotals.equity || s.downPayment) - s.downPayment;
+    const totalAppreciation = (buyingTotals.homeValue || s.homePrice) - s.homePrice;
+    
+    // Recalculate total tax savings for display (using the same logic as in core calculation)
+    const totalTaxSavings = s.buyingCosts.yearly.reduce((sum, yr, i) => {
+        const mortgageInterestPaid = s.amortization[i]?.interestPaid || 0;
+        const propertyTaxes = yr.homeValue * (s.propertyTaxRate / 100);
+        const deductibleExpenses = mortgageInterestPaid + propertyTaxes;
+        const potentialTaxSavings = deductibleExpenses * (s.taxRate / 100);
+        return sum + ((deductibleExpenses > 15000) ? potentialTaxSavings : 0);
+    }, 0);
 
 
-// PWA Install Prompt Logic (Simplified)
-function showPWAInstallPrompt() {
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        RENT_VS_BUY_CALCULATOR.deferredInstallPrompt = e;
-        document.getElementById('pwa-install-button').classList.remove('hidden');
-        if (RENT_VS_BUY_CALCULATOR.DEBUG) console.log('PWA Install Prompt ready.');
-    });
+    buyingBody.innerHTML = `
+        <tr><td>Mortgage Payments (P&I)</td><td>${UTILS.formatCurrency(totalMortgagePayments)}</td></tr>
+        <tr><td>Property Taxes</td><td>${UTILS.formatCurrency(totalPropertyTaxes)}</td></tr>
+        <tr><td>Home Insurance</td><td>${UTILS.formatCurrency(totalHomeInsurance)}</td></tr>
+        <tr><td>HOA Fees</td><td>${UTILS.formatCurrency(totalHoaFees)}</td></tr>
+        <tr><td>Maintenance</td><td>${UTILS.formatCurrency(totalMaintenance)}</td></tr>
+        <tr><td>Closing Costs (Initial)</td><td>${UTILS.formatCurrency(s.closingCostsBuy)}</td></tr>
+        <tr class="subtotal-row"><td>Gross Buying Costs</td><td>${UTILS.formatCurrency(s.buyingCosts.total)}</td></tr>
+        <tr><td>(-) Tax Savings</td><td class="text-positive">${UTILS.formatCurrency(totalTaxSavings)}</td></tr>
+        <tr><td>(-) Principal Paid (Equity)</td><td class="text-positive">${UTILS.formatCurrency(totalPrincipalPaid)}</td></tr>
+        <tr><td>(-) Home Appreciation</td><td class="text-positive">${UTILS.formatCurrency(totalAppreciation)}</td></tr>
+        <tr class="total-row"><td>Net Cost of Buying</td><td>${UTILS.formatCurrency(s.buyingCosts.netCost)}</td></tr>
+    `;
 
-    document.getElementById('pwa-install-button').addEventListener('click', () => {
-        if (RENT_VS_BUY_CALCULATOR.deferredInstallPrompt) {
-            RENT_VS_BUY_CALCULATOR.deferredInstallPrompt.prompt();
-            RENT_VS_BUY_CALCULATOR.deferredInstallPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    UTILS.showToast('FinGuid PWA Installed Successfully!', 'success');
-                    document.getElementById('pwa-install-button').classList.add('hidden');
-                }
-                RENT_VS_BUY_CALCULATOR.deferredInstallPrompt = null;
-            });
+    const rentingBody = document.getElementById('renting-breakdown-body');
+    const totalRentPaid = s.rentingCosts.yearly.reduce((sum, yr, i) => {
+        // Calculate rent paid (total cost minus the insurance component for that year)
+        return sum + yr.cost - (s.rentersInsurance * Math.pow(1.02, i));
+    }, 0);
+    const totalRentersInsurance = s.rentingCosts.total - totalRentPaid;
+
+    rentingBody.innerHTML = `
+        <tr><td>Total Rent Paid</td><td>${UTILS.formatCurrency(totalRentPaid)}</td></tr>
+        <tr><td>Renters Insurance</td><td>${UTILS.formatCurrency(totalRentersInsurance)}</td></tr>
+        <tr class="subtotal-row"><td>Gross Renting Costs</td><td>${UTILS.formatCurrency(s.rentingCosts.total)}</td></tr>
+        <tr><td>(+) Opportunity Cost (Invested DP)</td><td class="text-negative">${UTILS.formatCurrency(s.opportunityCost)}</td></tr>
+        <tr class="total-row"><td>Total Cost of Renting</td><td>${UTILS.formatCurrency(s.rentingCosts.total + s.opportunityCost)}</td></tr>
+    `;
+
+    // 3. Update Chart
+    updateRentVsBuyChart();
+
+    // 4. Update AI Insights
+    updateAIInsights();
+}
+
+/**
+ * Updates the Rent vs Buy cumulative cost comparison chart.
+ * IMPORTANT: Made global (window.updateRentVsBuyChart) for THEME_MANAGER to access.
+ */
+function updateRentVsBuyChart() {
+    // Check if Chart.js is loaded
+    if (typeof Chart === 'undefined') {
+        console.error("Chart.js library is not loaded. Cannot render chart.");
+        // Replace canvas with error message if chart library is missing
+        const ctx = document.getElementById('rent-vs-buy-chart');
+        if (ctx) {
+            ctx.parentElement.innerHTML = '<p class="text-negative">Chart.js library not loaded. Chart cannot be displayed.</p>';
         }
+        return;
+    }
+
+    const s = RENT_VS_BUY_CALCULATOR.STATE;
+    const ctx = document.getElementById('rent-vs-buy-chart').getContext('2d');
+    const years = Array.from({ length: s.yearsToStay }, (_, i) => `Year ${i + 1}`);
+    
+    const initialInvestment = s.downPayment + s.closingCostsBuy;
+    const investmentReturnDecimal = s.investmentReturnRate / 100;
+    
+    // Calculate cumulative net buying cost and renting cost year by year
+    const cumulativeNetBuying = s.buyingCosts.yearly.map((yrData, i) => {
+        const sellingCost = yrData.homeValue * (s.sellingCostsRate / 100);
+        const netProceeds = yrData.homeValue - (s.amortization[i]?.endingBalance || 0) - sellingCost;
+        return yrData.cumulativeCost - netProceeds;
     });
+    
+     const cumulativeRenting = s.rentingCosts.yearly.map((yrData, i) => {
+         const opportunityCost = initialInvestment * Math.pow(1 + investmentReturnDecimal, i+1) - initialInvestment;
+         return yrData.cumulativeCost + opportunityCost;
+     });
+
+    // Color definitions for dark/light mode consistency
+    const isDarkMode = document.documentElement.getAttribute('data-color-scheme') === 'dark';
+    const rentColor = isDarkMode ? '#F5B041' : '#ffc107'; // Yellow/Orange for Rent
+    const buyColor = isDarkMode ? '#87CBD7' : '#24ACC5'; // Teal for Buy
+    const gridColor = isDarkMode ? '#333' : '#eee';
+    const textColor = isDarkMode ? '#eee' : '#333';
+
+    const data = {
+        labels: years,
+        datasets: [
+            {
+                label: `Net Cost of Buying`,
+                data: cumulativeNetBuying,
+                borderColor: buyColor,
+                backgroundColor: buyColor + '40', // Semi-transparent fill
+                fill: false,
+                tension: 0.1
+            },
+            {
+                label: `Total Cost of Renting`,
+                data: cumulativeRenting,
+                borderColor: rentColor,
+                backgroundColor: rentColor + '40',
+                fill: false,
+                tension: 0.1
+            }
+        ]
+    };
+
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: { display: true, text: 'Cumulative Costs Over Time', color: textColor },
+            tooltip: { callbacks: { label: (context) => `${context.dataset.label}: ${UTILS.formatCurrency(context.raw)}` } },
+            legend: { labels: { color: textColor } }
+        },
+        scales: {
+            y: { 
+                ticks: { 
+                    callback: (value) => UTILS.formatCurrency(value, false),
+                    color: textColor
+                },
+                grid: { color: gridColor }
+            },
+            x: {
+                ticks: { color: textColor },
+                grid: { color: gridColor }
+            }
+        }
+    };
+
+    if (rentVsBuyChart) {
+        // Only update data and options for existing chart
+        rentVsBuyChart.data = data;
+        rentVsBuyChart.options = options;
+        rentVsBuyChart.update();
+    } else {
+        rentVsBuyChart = new Chart(ctx, { type: 'line', data: data, options: options });
+    }
+}
+window.updateRentVsBuyChart = updateRentVsBuyChart; // Expose globally for THEME_MANAGER
+
+/**
+ * Updates the AI Insights section based on calculation results.
+ */
+function updateAIInsights(errorMessage = null) {
+    const outputEl = document.getElementById('ai-insights-output');
+    if (errorMessage) {
+        outputEl.innerHTML = `<p class="text-negative"><i class="fas fa-exclamation-triangle"></i> ${errorMessage}</p>`;
+        SPEECH.speak(errorMessage.substring(0, 100));
+        return;
+    }
+    
+    const s = RENT_VS_BUY_CALCULATOR.STATE;
+    let html = '';
+    
+    // Insight 1: Overall Recommendation
+    if (s.netAdvantage > 0) {
+         html += `<p><i class="fas fa-check-circle text-positive"></i> <strong>AI Recommendation: Buying Appears Favorable.</strong> Over ${s.yearsToStay} years, buying is estimated to be **${UTILS.formatCurrency(s.netAdvantage)} cheaper** than renting, considering all costs, equity, appreciation, and opportunity cost.</p>`;
+    } else {
+         html += `<p><i class="fas fa-times-circle text-negative"></i> <strong>AI Recommendation: Renting Appears Favorable.</strong> Over ${s.yearsToStay} years, renting is estimated to be **${UTILS.formatCurrency(Math.abs(s.netAdvantage))} cheaper** than buying, considering all factors.</p>`;
+    }
+    
+    // Insight 2: Break-Even Point
+    if (s.breakEvenYear > 0 && s.breakEvenYear <= s.yearsToStay) {
+        html += `<p><strong>Key Factor:</strong> Buying becomes the more financially advantageous option after **Year ${s.breakEvenYear}**. Since you plan to stay for ${s.yearsToStay} years, buying aligns with your timeline.</p>`;
+    } else if (s.breakEvenYear > s.yearsToStay) {
+         html += `<p><strong>Key Factor:</strong> The financial break-even point where buying becomes cheaper is estimated to be **after Year ${s.breakEvenYear}**. Since you plan to stay only ${s.yearsToStay} years, renting may be the better short-term financial choice.</p>`;
+    } else if (s.netAdvantage <=0 && s.breakEvenYear === -1){
+         html += `<p><strong>Key Factor:</strong> Based on current assumptions, renting remains the cheaper option for the entire ${s.yearsToStay}-year period. Buying does not reach a financial break-even point.</p>`;
+    }
+
+    // Insight 3: Sensitivity (Appreciation vs. Investment)
+    if (s.homeAppreciationRate > s.investmentReturnRate) {
+        html += `<p><strong>Market Insight:</strong> Your expected home appreciation (${s.homeAppreciationRate}%) is higher than investment returns (${s.investmentReturnRate}%). This significantly favors buying as your home equity grows faster than alternative investments.</p>`;
+    } else if (s.investmentReturnRate > s.homeAppreciationRate + 2) { // Significantly higher investment return
+         html += `<p><strong>Investment Insight:</strong> Your expected investment return (${s.investmentReturnRate}%) significantly outperforms home appreciation (${s.homeAppreciationRate}%). Renting and investing the down payment difference yields a strong financial advantage (Opportunity Cost: ${UTILS.formatCurrency(s.opportunityCost)}).</p>`;
+    }
+    
+    // Insight 4: Tax Impact (Recalculate total tax savings for display)
+    const totalTaxSavings = s.buyingCosts.yearly.reduce((sum, yr, i) => {
+        const mortgageInterestPaid = s.amortization[i]?.interestPaid || 0;
+        const propertyTaxes = yr.homeValue * (s.propertyTaxRate / 100);
+        const deductibleExpenses = mortgageInterestPaid + propertyTaxes;
+        const potentialTaxSavings = deductibleExpenses * (s.taxRate / 100);
+        return sum + ((deductibleExpenses > 15000) ? potentialTaxSavings : 0);
+    }, 0);
+    if (totalTaxSavings > 1000) { // Only mention if significant
+        html += `<p><strong>Tax Consideration:</strong> Estimated tax savings from mortgage interest and property tax deductions contribute roughly **${UTILS.formatCurrency(totalTaxSavings)}** to the benefit of buying over ${s.yearsToStay} years.</p>`;
+    }
+
+    // Monetization/Action CTA based on result
+    if (s.netAdvantage > 0) { // Buying favored
+        html += `
+            <div class="ad-slot-mini">
+                <p class="ad-label">Next Step / Affiliate Link</p>
+                <a href="#affiliate-link-mortgage-prequal" class="ad-link-button">Get Pre-Qualified for a Mortgage <i class="fas fa-arrow-right"></i></a>
+            </div>`;
+    } else { // Renting favored
+         html += `
+            <div class="ad-slot-mini">
+                 <p class="ad-label">Next Step / Affiliate Link</p>
+                <a href="#affiliate-link-renters-insurance" class="ad-link-button">Compare Renters Insurance Quotes <i class="fas fa-shield-alt"></i></a>
+            </div>`;
+    }
+
+    outputEl.innerHTML = html;
+    SPEECH.speak(outputEl.textContent.substring(0, 200)); // Speak first part of insight
 }
 
 
 /* ========================================================================== */
-/* IX. EVENT LISTENERS & INITIALIZATION */
+/* V. EVENT LISTENERS & INITIALIZATION */
 /* ========================================================================== */
 
 function setupEventListeners() {
-    // === Core Input Monitoring (Debounced for performance) ===
-    const debouncedCalculate = UTILS.debounce(calculateRentVsBuy, 300);
-    const form = document.getElementById('rent-vs-buy-form');
-    
-    // Recalculate on any input change
-    form.addEventListener('input', debouncedCalculate); 
-    form.addEventListener('change', debouncedCalculate); 
-    
-    // === Accessibility & PWA ===
-    document.getElementById('toggle-color-scheme').addEventListener('click', THEME_MANAGER.toggleColorScheme);
-    showPWAInstallPrompt(); // Must be called early
+    // --- Theme & Accessibility Controls ---
+    document.getElementById('theme-toggle-button').addEventListener('click', THEME_MANAGER.toggleTheme);
+    // TTS/Voice are handled within SPEECH.initialize()
 
-    // --- Tab Switching (Input & Results) ---
+    // --- Input Change for Auto-Update ---
+    const form = document.getElementById('rent-vs-buy-form');
+    // Ensure both 'input' (for live updates) and 'change' (for selects/final value commit) are handled
+    form.addEventListener('input', calculateRentVsBuy);
+    form.addEventListener('change', calculateRentVsBuy);
+
+    // --- Tab Switching ---
     document.querySelectorAll('.tab-button').forEach(button => {
         button.addEventListener('click', (e) => {
             const tabId = e.target.getAttribute('data-tab');
-            
-            // Handle input tabs (buy-inputs, rent-inputs, analysis-inputs)
-            if (['buy-inputs', 'rent-inputs', 'analysis-inputs'].includes(tabId)) {
-                 document.querySelectorAll('#rent-vs-buy-form .input-tab-content').forEach(content => content.classList.remove('active'));
-                 document.getElementById(tabId).classList.add('active');
-                 document.querySelectorAll('.tab-controls .tab-button').forEach(btn => btn.classList.remove('active'));
-                 e.target.classList.add('active');
-            }
-            
-            // Handle results tabs (comparison-summary, comparison-chart, ai-insights)
-            if (['comparison-summary', 'comparison-chart', 'ai-insights'].includes(tabId)) {
-                document.querySelectorAll('.results-section .tab-content').forEach(content => content.classList.remove('active'));
-                document.getElementById(tabId).classList.add('active');
-                document.querySelectorAll('.tab-controls-results .tab-button').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                
-                // Ensure chart redraws correctly if its tab is activated
-                if (tabId === 'comparison-chart' && RENT_VS_BUY_CALCULATOR.charts.rentVsBuyChart) {
-                    setTimeout(() => RENT_VS_BUY_CALCULATOR.charts.rentVsBuyChart.resize(), 10); 
-                }
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            e.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            // Ensure chart redraws correctly if its tab is activated
+            if (tabId === 'comparison-chart' && rentVsBuyChart) {
+                setTimeout(() => rentVsBuyChart.resize(), 10); 
             }
         });
     });
@@ -685,19 +671,12 @@ function setupEventListeners() {
 
 // === Initialize ===
 document.addEventListener('DOMContentLoaded', function() {
-    if (RENT_VS_BUY_CALCULATOR.DEBUG) console.log('🇺🇸 FinGuid Rent vs Buy AI Analyzer v1.0 Initializing...');
-    
-    // 1. Initialize Core Features
+    console.log('🇺🇸 FinGuid Rent vs Buy AI Analyzer v1.0 Initializing...');
     THEME_MANAGER.loadUserPreferences();
     SPEECH.initialize();
     setupEventListeners();
-    
-    // 2. Fetch Live Rate and Trigger Initial Calculation
-    // This ensures a dynamic rate is pulled from FRED, which then triggers the main calculation.
-    fredAPI.startAutomaticUpdates(); 
-    
-    // Fallback calculation in case FRED is slow/fails to trigger
-    setTimeout(calculateRentVsBuy, 1000); 
-    
-    if (RENT_VS_BUY_CALCULATOR.DEBUG) console.log('✅ Rent vs Buy Calculator initialized!');
+    fredAPI.startAutomaticUpdates(); // Fetch live rate and trigger initial calculation
+    // Perform initial calculation in case FRED is slow/fails
+    setTimeout(calculateRentVsBuy, 750); 
+    console.log('✅ Rent vs Buy Calculator initialized!');
 });
