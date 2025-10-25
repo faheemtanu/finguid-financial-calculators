@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Business Loan Calculator — World's First AI SBA & ROI Analyzer | FinGuid USA</title>
+    <meta name="description" content="Calculate business loan payments, compare SBA 7(a) & 504 options, and perform a deep Cash Flow & ROI Analysis with the World's First AI-Powered Business Loan Calculator from FinGuid.">
+    <meta name="keywords" content="business loan calculator, SBA loan calculator, ROI analysis, cash flow analysis, small business loan, startup finance, FRED API, AI financial tool, FinGuid, USA business finance, SCO Friendly, AI Friendly">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#19343B"> 
+    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NYBL2CDNQJ');
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    
+    <link rel="stylesheet" href="mortgage-calculator.css"> <link rel="stylesheet" href="business-loan-calculator.css"> </head>
+
+<body>
+    <header class="main-header">
+        <div class="header-content container">
+            <div class="logo">
+                <a href="https://www.finguid.com" aria-label="FinGuid Home">
+                    <img src="/icons/finguid-logo.svg" alt="FinGuid Logo" height="30">
+                    <span class="brand-name">FinGuid</span>
+                </a>
+            </div>
+            <p class="tagline">World's First **AI-Enhanced** Financial Calculator Platform</p>
+            <div class="accessibility-controls">
+                <button id="voice-command-button" class="control-button" title="Voice Command" aria-label="Activate Voice Command">
+                    <i class="fas fa-microphone" aria-hidden="true"></i>
+                </button>
+                <button id="text-to-speech-button" class="control-button" title="Text to Speech" aria-label="Activate Text to Speech">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+                <button id="theme-toggle" class="control-button" title="Toggle Light/Dark Mode" aria-label="Toggle Light and Dark Mode">
+                    <i class="fas fa-sun" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="calculator-main container">
+        <div class="calculator-container">
+            
+            <section class="input-section card">
+                <h1>Business Loan Calculator</h1>
+                <p class="sub-title">Calculate payments and analyze **Cash Flow & ROI** for your entrepreneurial venture. Rates dynamically updated via FRED® API.</p>
+                
+                <form id="loan-form">
+                    
+                    <div class="input-split">
+                        <div class="input-group">
+                            <label for="loan-amount">Loan Principal ($)</label>
+                            <input type="number" id="loan-amount" min="1000" max="5000000" step="1000" value="100000" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="loan-term">Loan Term (Years)</label>
+                            <input type="number" id="loan-term" min="1" max="25" step="1" value="7" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="interest-rate">Annual Interest Rate (%) <span class="rate-source" id="rate-source"></span></label>
+                        <input type="number" id="interest-rate" min="1.0" max="30.0" step="0.01" value="8.50" required>
+                    </div>
+
+                    <div class="separator">Advanced Business Analysis (For Cash Flow & ROI)</div>
+
+                    <div class="input-split">
+                        <div class="input-group">
+                            <label for="initial-investment">Initial Investment Cost ($)</label>
+                            <input type="number" id="initial-investment" min="0" max="1000000" step="100" value="5000" required>
+                        </div>
+                         <div class="input-group">
+                            <label for="monthly-revenue-increase">Projected Monthly Net Profit Increase ($)</label>
+                            <input type="number" id="monthly-revenue-increase" min="0" max="50000" step="100" value="1500" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="calculate-button" class="primary-button"><i class="fas fa-calculator"></i> Calculate Loan & ROI</button>
+                    </div>
+
+                    <div class="ad-slot affiliate-box">
+                        <p>💡 **Sponsor/Affiliate Product:** **Compare live business loan rates** from our top partners! [Link to Partner Offer]</p>
+                    </div>
+                </form>
+            </section>
+
+            <section class="results-section">
+                <div class="results-summary card">
+                    <h2>Monthly Loan Payment</h2>
+                    <div class="summary-details">
+                        <div class="detail-box">
+                            <i class="fas fa-dollar-sign icon-lg"></i>
+                            <span class="detail-value" id="monthly-payment-result">$0.00</span>
+                            <span class="detail-label">Total Monthly Payment</span>
+                        </div>
+                        <div class="detail-box">
+                            <i class="fas fa-chart-line icon-lg"></i>
+                            <span class="detail-value" id="net-cash-flow-result">$0.00</span>
+                            <span class="detail-label">Net Monthly Cash Flow</span>
+                        </div>
+                        <div class="detail-box">
+                            <i class="fas fa-percent icon-lg"></i>
+                            <span class="detail-value" id="roi-result">0.00%</span>
+                            <span class="detail-label">Total ROI (Loan Term)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-controls-results">
+                    <button class="tab-button active" data-tab="ai-insights"><i class="fas fa-robot"></i> AI Insights</button>
+                    <button class="tab-button" data-tab="sba-options"><i class="fas fa-building"></i> SBA Loan Comparison</button>
+                    <button class="tab-button" data-tab="amortization-chart"><i class="fas fa-chart-area"></i> Payment Breakdown</button>
+                    <button class="tab-button" data-tab="cash-flow-chart"><i class="fas fa-money-check-alt"></i> Cash Flow Projection</button>
+                </div>
+
+                <div class="card tab-content active" id="ai-insights">
+                    <h3>FinGuid AI Analysis & Recommendations</h3>
+                    <div id="ai-insights-content">
+                        <p class="placeholder-text">Enter your loan details and business projections to unlock real-time AI-driven cash flow, ROI, and SBA recommendations.</p>
+                        <div class="ad-slot affiliate-box">
+                            <p>💰 **Affiliate Offer:** Need funding fast? Check your eligibility for **SBA 7(a) Loans** with our trusted lending partner! [Link to SBA Partner]</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card tab-content" id="sba-options">
+                    <h3>SBA Loan Comparison</h3>
+                    <p class="sub-title">Estimate potential payments for the two most common SBA loan types (7(a) and 504) for comparison.</p>
+                    <div id="sba-comparison-table" class="comparison-table">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Loan Type</th><th>Max Loan Term</th><th>Estimated Max Rate (Prime + Spread)</th><th>Est. Monthly Payment</th></tr>
+                            </thead>
+                            <tbody id="sba-tbody">
+                                <tr><td>SBA 7(a)</td><td data-label="Max Term">25 Years</td><td data-label="Max Rate">N/A</td><td data-label="Est. Payment">Calculating...</td></tr>
+                                <tr><td>SBA 504</td><td data-label="Max Term">25 Years</td><td data-label="Max Rate">N/A</td><td data-label="Est. Payment">Calculating...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="disclaimer-text">**Disclaimer:** SBA rates are variable and capped at Prime Rate plus a maximum spread. These are estimates for informational purposes only. The live **Prime Rate** from FRED is used as a benchmark.</p>
+                </div>
+                
+                <div class="card tab-content" id="amortization-chart">
+                    <h3>Amortization & Interest Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="amortizationChart"></canvas>
+                    </div>
+                    <div class="summary-details">
+                        <div class="detail-box-small">
+                            <span class="detail-value" id="total-interest-paid">$0</span>
+                            <span class="detail-label">Total Interest Paid</span>
+                        </div>
+                        <div class="detail-box-small">
+                            <span class="detail-value" id="total-payments">$0</span>
+                            <span class="detail-label">Total Payments</span>
+                        </div>
+                    </div>
+                    <button id="export-csv-button" class="secondary-button"><i class="fas fa-download"></i> Export Schedule (CSV)</button>
+                </div>
+                
+                <div class="card tab-content" id="cash-flow-chart">
+                    <h3>Cash Flow & ROI Analysis</h3>
+                    <p class="sub-title">Visualize the net monthly cash flow impact and cumulative profit/loss over the loan term.</p>
+                    <div class="chart-container">
+                        <canvas id="cashFlowChart"></canvas>
+                    </div>
+                    <div class="summary-details">
+                        <div class="detail-box-small">
+                            <span class="detail-value" id="total-net-profit">$0</span>
+                            <span class="detail-label">Total Net Profit over Term</span>
+                        </div>
+                        <div class="detail-box-small">
+                            <span class="detail-value" id="roi-percentage-detail">0.00%</span>
+                            <span class="detail-label">Return on Investment (ROI)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ad-slot banner-ad">
+                    <p>**ADVERTISEMENT:** Secure Your Future. Business Insurance Solutions. [Large Display Ad]</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <div class="nav-column">
+                    <h4>FinGuid Platform</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                        <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy Analyzer</a></li>
+                        <li><a href="/business-loan-calculator.html">Business Loan Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>Legal & Info</h4>
+                    <ul>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                        <li><a href="/about.html">About FinGuid</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <h4>Partnership & Ads (Monetization)</h4>
+                    <ul>
+                        <li><a href="#advertising">Advertising Opportunities</a></li>
+                        <li><a href="#affiliates">Affiliate Products</a></li>
+                        <li><a href="#sponsor-link">Sponsor Products</a></li>
+                        <li><a href="#partner-friendly">Partner Friendly</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="footer-bottom">
+                <div class="footer-disclaimer">
+                    <p>
+                        &copy; 2025 **FinGuid** - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed financial advisor. **We monetize via advertising and affiliate partnerships.**
+                    </p>
+                </div>
+                <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
+                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="/register-sw.js"></script> <script src="business-loan-calculator.js"></script>
+    
+</body>
+</html>
