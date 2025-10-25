@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Rent vs. Buy Calculator — AI-Powered Analysis | FinGuid USA</title>
-    <meta name="description" content="Should you rent or buy? Use the World's First AI-Powered Rent vs. Buy Calculator to compare costs, analyze market factors, and calculate ROI for your housing decision in the USA.">
-    <meta name="keywords" content="rent vs buy calculator, renting or buying, home buying calculator, renting costs, buying costs, housing market analysis, ROI calculator, AI financial tools, FinGuid, American housing">
+    <title>Rent vs. Buy AI Calculator — World's First Analysis | FinGuid USA</title>
+    <meta name="description" content="Decide whether to rent or buy a home with the World's First AI-Powered Rent vs. Buy Calculator. Compares costs, ROI, and market factors with real-time data for Americans.">
+    <meta name="keywords" content="rent vs buy calculator, rent or buy, home buying calculator, renting cost, buying cost, AI financial advisor, real estate ROI, FinGuid, American housing market">
     <meta name="robots" content="index, follow">
     <meta name="author" content="FinGuid - World's First AI Calculator Platform">
     
@@ -28,7 +28,7 @@
 
     <header class="main-header">
         <div class="header-content">
-            <div class="logo">
+             <div class="logo">
                 <a href="/" aria-label="FinGuid Home"><i class="fas fa-home" aria-hidden="true"></i> FinGuid</a>
             </div>
             
@@ -41,16 +41,13 @@
                     <span id="live-rate-label">Live FRED 30yr:</span> 
                     <span id="live-rate-value">--.--%</span>
                 </div>
-
                 <button id="theme-toggle-button" class="control-button" aria-label="Toggle Light and Dark Mode">
                     <i class="fas fa-sun" data-mode="light"></i>
                     <i class="fas fa-moon" data-mode="dark" style="display:none;"></i>
                 </button>
-                
                 <button id="tts-toggle-button" class="control-button" aria-label="Toggle Text to Speech" aria-pressed="false">
                     <i class="fas fa-volume-up"></i>
                 </button>
-                
                 <button id="voice-command-button" class="control-button" aria-label="Activate Voice Command" aria-pressed="false">
                     <i class="fas fa-microphone"></i>
                 </button>
@@ -62,183 +59,190 @@
         
         <section class="input-section card-floating" aria-label="Rent vs. Buy Calculator Inputs">
             <h1 class="main-title">AI Rent vs. Buy Pro</h1>
-            <p class="tagline">Compare the long-term costs of renting versus buying a home.</p>
+            <p class="tagline">Compare the true costs of renting and buying over time.</p>
 
             <form id="rent-vs-buy-form" class="input-group-form">
                 
-                <h2>Renting Scenario</h2>
-                <div class="input-split">
-                    <div class="input-group">
-                        <label for="monthly-rent">Current Monthly Rent ($)</label>
-                        <input type="number" id="monthly-rent" name="monthly-rent" value="2000" min="0" step="100" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="rent-increase">Annual Rent Increase (%)</label>
-                        <input type="number" id="rent-increase" name="rent-increase" value="3.0" min="0" step="0.1" required>
-                    </div>
-                </div>
+                <h2>Location & Time Horizon</h2>
                  <div class="input-group">
-                    <label for="renters-insurance">Annual Renter's Insurance ($)</label>
-                    <input type="number" id="renters-insurance" name="renters-insurance" value="200" min="0" step="10">
-                </div>
-
+                    <label for="zip-code">Property ZIP Code (Optional)</label>
+                    <input type="text" id="zip-code" name="zip-code" placeholder="e.g., 90210" pattern="\d{5}" title="Enter a 5-digit US ZIP code">
+                    <span class="input-note">Used for estimating taxes and appreciation.</span>
+                 </div>
+                 <div class="input-group">
+                    <label for="years-staying">How long do you plan to stay? (Years)</label>
+                    <input type="number" id="years-staying" name="years-staying" value="7" min="1" max="50" step="1" required>
+                 </div>
 
                 <h2>Buying Scenario</h2>
-                 <div class="input-split">
+                <div class="input-split">
                     <div class="input-group">
                         <label for="home-price">Home Purchase Price ($)</label>
-                        <input type="number" id="home-price" name="home-price" value="350000" min="10000" step="1000" required>
+                        <input type="number" id="home-price" name="home-price" value="400000" min="10000" step="1000" required>
                     </div>
-                     <div class="input-group">
+                    <div class="input-group">
                         <label for="down-payment-percent">Down Payment (%)</label>
-                        <input type="number" id="down-payment-percent" name="down-payment-percent" value="10" min="0" max="100" step="1" required>
+                        <input type="number" id="down-payment-percent" name="down-payment-percent" value="20" min="0" max="100" step="1" required>
                     </div>
                 </div>
                 <div class="input-split">
                     <div class="input-group">
                         <label for="interest-rate">Mortgage Interest Rate (%)</label>
                         <input type="number" id="interest-rate" name="interest-rate" value="6.75" min="0.1" step="0.1" required>
-                         <span class="live-rate-tip">💡 Live FRED Rate: <span id="fred-rate-tip-value">--.--%</span></span>
+                         <span class="live-rate-tip">💡 Tip: Current Live FRED Rate is <span id="fred-rate-tip-value">--.--%</span></span>
                     </div>
                     <div class="input-group">
-                        <label for="loan-term">Loan Term (Years)</label>
-                        <input type="number" id="loan-term" name="loan-term" value="30" min="5" max="30" step="1" required>
-                    </div>
-                </div>
-                 <div class="input-split">
-                     <div class="input-group">
-                        <label for="property-tax-rate">Annual Property Tax Rate (%)</label>
-                        <input type="number" id="property-tax-rate" name="property-tax-rate" value="1.2" min="0" step="0.1" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="home-insurance">Annual Home Insurance ($)</label>
-                        <input type="number" id="home-insurance" name="home-insurance" value="1200" min="0" step="50" required>
-                    </div>
-                </div>
-                 <div class="input-split">
-                    <div class="input-group">
-                        <label for="hoa-fees">Monthly HOA Fees ($)</label>
-                        <input type="number" id="hoa-fees" name="hoa-fees" value="50" min="0" step="10">
-                    </div>
-                     <div class="input-group">
-                        <label for="maintenance-rate">Annual Maintenance (% Price)</label>
-                        <input type="number" id="maintenance-rate" name="maintenance-rate" value="1.0" min="0" step="0.1" required>
+                         <label for="loan-term-years">Loan Term (Years)</label>
+                         <input type="number" id="loan-term-years" name="loan-term-years" value="30" min="5" max="30" step="1" required>
                     </div>
                 </div>
                  <div class="input-group">
-                    <label for="closing-costs-percent">Upfront Buying Costs (% Price)</label>
-                    <input type="number" id="closing-costs-percent" name="closing-costs-percent" value="3.0" min="0" max="10" step="0.1" required>
-                    <span class="help-text">Includes closing costs, inspections, etc.</span>
-                 </div>
-                 <div class="input-group">
-                     <label for="selling-costs-percent">Selling Costs (% Future Price)</label>
-                    <input type="number" id="selling-costs-percent" name="selling-costs-percent" value="6.0" min="0" max="10" step="0.1" required>
-                    <span class="help-text">Realtor commissions, closing costs when selling.</span>
+                    <label for="closing-costs-percent">Closing Costs (% of Home Price)</label>
+                    <input type="number" id="closing-costs-percent" name="closing-costs-percent" value="3" min="0" max="10" step="0.1">
                  </div>
 
+                <h2>Ongoing Costs (Annual Estimates)</h2>
+                <div class="input-split">
+                    <div class="input-group">
+                        <label for="property-tax-rate">Property Tax Rate (%)</label>
+                        <input type="number" id="property-tax-rate" name="property-tax-rate" value="1.2" min="0" max="5" step="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label for="home-insurance-rate">Home Insurance Rate (%)</label>
+                        <input type="number" id="home-insurance-rate" name="home-insurance-rate" value="0.4" min="0" max="2" step="0.1">
+                    </div>
+                </div>
+                <div class="input-split">
+                    <div class="input-group">
+                        <label for="maintenance-rate">Maintenance/Repairs (%)</label>
+                        <input type="number" id="maintenance-rate" name="maintenance-rate" value="1" min="0" max="5" step="0.1">
+                    </div>
+                     <div class="input-group">
+                        <label for="hoa-monthly">Monthly HOA Fees ($)</label>
+                        <input type="number" id="hoa-monthly" name="hoa-monthly" value="0" min="0" step="10">
+                    </div>
+                </div>
 
-                <h2>Market & Investment Assumptions</h2>
+                <h2>Renting Scenario</h2>
+                <div class="input-split">
+                    <div class="input-group">
+                        <label for="monthly-rent">Monthly Rent ($)</label>
+                        <input type="number" id="monthly-rent" name="monthly-rent" value="2000" min="100" step="10" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="rent-increase-rate">Annual Rent Increase (%)</label>
+                        <input type="number" id="rent-increase-rate" name="rent-increase-rate" value="3" min="0" max="10" step="0.1">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="renters-insurance">Annual Renter's Insurance ($)</label>
+                    <input type="number" id="renters-insurance" name="renters-insurance" value="150" min="0" step="10">
+                </div>
+                
+                <h2>Financial Assumptions (Annual Rates)</h2>
                  <div class="input-split">
                     <div class="input-group">
-                        <label for="appreciation-rate">Home Value Appreciation (%/yr)</label>
-                        <input type="number" id="appreciation-rate" name="appreciation-rate" value="4.0" min="-5" max="15" step="0.1" required>
+                        <label for="appreciation-rate">Home Value Appreciation (%)</label>
+                        <input type="number" id="appreciation-rate" name="appreciation-rate" value="4" min="-5" max="15" step="0.1">
                     </div>
                     <div class="input-group">
-                        <label for="investment-rate">Investment Return Rate (%/yr)</label>
-                        <input type="number" id="investment-rate" name="investment-rate" value="7.0" min="0" step="0.1" required>
-                        <span class="help-text">Return if down payment/costs were invested instead.</span>
+                        <label for="investment-return-rate">Investment Return Rate (%)</label>
+                        <input type="number" id="investment-return-rate" name="investment-return-rate" value="7" min="0" max="15" step="0.1">
+                        <span class="input-note">Opportunity cost if down payment was invested.</span>
                     </div>
-                 </div>
-                 <div class="input-group">
-                    <label for="comparison-horizon">Comparison Time Horizon (Years)</label>
-                    <input type="number" id="comparison-horizon" name="comparison-horizon" value="10" min="1" max="50" step="1" required>
                 </div>
+                <div class="input-group">
+                    <label for="marginal-tax-rate">Marginal Tax Rate (%)</label>
+                    <input type="number" id="marginal-tax-rate" name="marginal-tax-rate" value="24" min="0" max="50" step="1">
+                    <span class="input-note">Used for estimating mortgage interest/tax deductions (if applicable).</span>
+                </div>
+
             </form>
             
             <aside class="ai-insights-card card-ad">
-                <h3 class="card-title"><i class="fas fa-brain"></i> AI Rent vs. Buy Insight</h3>
+                <h3 class="card-title"><i class="fas fa-brain"></i> AI Rent vs. Buy Analysis</h3>
                 <div id="ai-insights-output" class="ai-content">
-                    <p>Enter your details above for an AI-driven comparison of renting vs. buying, considering costs, market growth, and investment opportunities.</p>
+                    <p>Enter your details to get an AI-driven comparison of renting versus buying, tailored to your financial situation and the US market.</p>
                 </div>
                 <div class="ad-slot" role="complementary">
                     <p class="ad-label">Sponsor Product / Affiliate Link</p>
-                    <a href="#affiliate-link-realtor" class="ad-link-button">Find a Top-Rated Realtor in Your Area <i class="fas fa-user-tie"></i></a>
+                    <a href="#affiliate-link-agent" class="ad-link-button">Find a Top Real Estate Agent <i class="fas fa-user-tie"></i></a>
                 </div>
             </aside>
         </section>
 
-
         <section class="results-section">
             
             <div class="summary-card card">
-                <h2 class="card-title">Rent vs. Buy Comparison Result</h2>
-                <div class="summary-total" id="summary-total-result">
-                     <span class="label">After <span id="summary-years">10</span> Years...</span>
-                     <span id="net-advantage-summary" class="value">Calculating...</span>
-                     <span id="break-even-summary" class="sub-label">Break-even point: Calculating...</span>
-                </div>
-                <div class="summary-details rent-vs-buy-details">
+                <h2 class="card-title">Rent vs. Buy Decision Summary</h2>
+                 <div class="primary-result">
+                     <span class="result-label">After <span id="summary-years">7</span> Years...</span>
+                     <span id="primary-decision" class="result-value">Calculating...</span>
+                     <span id="net-cost-difference" class="result-sub-value">(Difference: $0)</span>
+                 </div>
+                 <div class="summary-details">
                     <div class="detail-item">
-                        <span class="detail-label">Total Cost of Renting</span>
+                        <span class="detail-label">Total Net Cost of Renting</span>
                         <span id="total-rent-cost" class="detail-value">--.--</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Net Cost of Buying (After Equity/Sale)</span>
-                        <span id="net-buy-cost" class="detail-value">--.--</span>
+                        <span class="detail-label">Total Net Cost of Buying</span>
+                        <span id="total-buy-cost" class="detail-value">--.--</span>
                     </div>
-                     <div class="detail-item">
+                    <div class="detail-item highlight">
+                        <span class="detail-label">Financial Break-Even Point</span>
+                         <span id="break-even-years" class="detail-value">-- Years</span>
+                    </div>
+                    <div class="detail-item">
                         <span class="detail-label">Home Equity Built</span>
                         <span id="home-equity" class="detail-value">--.--</span>
-                    </div>
-                     <div class="detail-item">
-                        <span class="detail-label">Potential Investment Growth (If Rented)</span>
-                        <span id="investment-growth" class="detail-value">--.--</span>
                     </div>
                 </div>
             </div>
             
             <nav class="tabs-nav" aria-label="Calculator Results Views">
-                <button class="tab-button active" data-tab="comparison-chart">Cost Over Time Chart</button>
-                <button class="tab-button" data-tab="cost-breakdown">Detailed Cost Breakdown</button>
+                <button class="tab-button active" data-tab="comparison-chart">Net Cost Comparison Over Time</button>
+                <button class="tab-button" data-tab="cost-breakdown">Detailed Annual Cost Breakdown</button>
             </nav>
 
             <div id="comparison-chart" class="tab-content active card">
-                <h3 class="card-title">Cumulative Net Cost: Renting vs. Buying</h3>
-                 <div class="chart-container" style="height: 450px;">
+                <h3 class="card-title">Cumulative Financial Advantage (Buy vs. Rent)</h3>
+                 <div class="chart-container">
                     <canvas id="rent-vs-buy-chart"></canvas>
                 </div>
-                 <p class="help-text text-center">Lower line indicates the more financially advantageous option over time.</p>
+                <p class="chart-caption">Positive values indicate buying is financially advantageous; negative values favor renting.</p>
             </div>
 
             <div id="cost-breakdown" class="tab-content card">
-                <h3 class="card-title">Year-by-Year Cost Breakdown</h3>
+                <h3 class="card-title">Annual Cost Breakdown (12 Months View)</h3>
                 
-                <div class="amortization-table-container"> <table class="data-table rent-buy-table">
-                        <thead>
+                <div class="amortization-controls">
+                    <button id="prev-page-button" class="secondary-button" disabled><i class="fas fa-chevron-left"></i> Previous Year</button>
+                    <span id="current-year-range">Year 1</span>
+                    <button id="next-page-button" class="secondary-button" disabled>Next Year <i class="fas fa-chevron-right"></i></button>
+                    <button id="export-csv-button" class="secondary-button export-button"><i class="fas fa-file-csv"></i> Export Full Detail</button>
+                </div>
+
+                <div class="amortization-table-container">
+                    <table class="data-table cost-breakdown-table">
+                         <thead>
                             <tr>
-                                <th>Year</th>
-                                <th class="rent-col">Annual Rent Cost</th>
-                                <th class="buy-col">Annual Buying Cost (PITI+Maint+HOA)</th>
-                                <th class="buy-col">Principal Paid (Equity)</th>
-                                <th class="buy-col">Home Value</th>
-                                <th class="rent-col">Cumulative Rent Cost</th>
-                                <th class="buy-col">Cumulative Net Buying Cost *</th>
+                                <th>Metric</th>
+                                <th class="rent-col">Renting Cost</th>
+                                <th class="buy-col">Buying Cost</th>
                             </tr>
                         </thead>
-                        <tbody id="breakdown-table-body">
-                            <tr><td colspan="7">Enter your details to see the year-by-year breakdown.</td></tr>
+                        <tbody id="cost-breakdown-table-body">
+                            <tr><td colspan="3">Enter your details to generate the breakdown.</td></tr>
                         </tbody>
                     </table>
                 </div>
-                 <p class="help-text">* Cumulative Net Buying Cost = Total Payments + Initial Costs - Equity Built - Appreciation + Estimated Future Selling Costs.</p>
             </div>
-
         </section>
-
     </main>
 
     <footer class="main-footer">
-        <div class="footer-container">
+         <div class="footer-container">
             <nav class="footer-nav">
                 <div class="nav-column">
                     <h4>FinGuid Platform</h4>
@@ -247,6 +251,7 @@
                         <li><a href="/affordability-calculator.html">Affordability Calculator</a></li>
                         <li><a href="/refinance-calculator.html">Refinance Calculator</a></li>
                         <li><a href="/rent-vs-buy-calculator.html">Rent vs. Buy (Current)</a></li>
+                        <li><a href="/about.html">About FinGuid</a></li>
                     </ul>
                 </div>
                 <div class="nav-column">
@@ -255,10 +260,10 @@
                         <li><a href="#advertising">Advertising Opportunities</a></li>
                         <li><a href="#affiliates">Affiliate Products</a></li>
                         <li><a href="#sponsor-link">Sponsor Products</a></li>
-                        <li><a href="/partner-program.html">Partner APIs</a></li>
+                        <li><a href="/partner-program.html">Partner Friendly APIs</a></li>
                     </ul>
                 </div>
-                 <div class="nav-column">
+                <div class="nav-column">
                     <h4>Legal & Support</h4>
                     <ul>
                         <li><a href="/privacy.html">Privacy Policy</a></li>
@@ -269,16 +274,18 @@
                 </div>
             </nav>
             <div class="footer-bottom">
-                <div class="footer-disclaimer">
+                 <div class="footer-disclaimer">
                     <p>
-                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult licensed advisors. We monetize via ads/affiliates.
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only and rely on user assumptions. Market conditions vary. Consult licensed real estate and financial advisors for official advice. We monetize via advertising and affiliate partnerships. All rates are for US-based scenarios.
                     </p>
                 </div>
-                <div class="footer-badges">
-                    <div class="badge"><i class="fas fa-shield-alt"></i> SSL Secured</div>
-                    <div class="badge"><i class="fas fa-universal-access"></i> WCAG 2.1 AA</div>
-                    <div class="badge"><i class="fas fa-mobile-alt"></i> Mobile (PWA)</div>
-                    <div class="badge"><i class="fas fa-robot"></i> AI Friendly</div>
+                
+                 <div class="footer-badges">
+                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
+                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
+                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
+                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
                 </div>
             </div>
         </div>
