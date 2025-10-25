@@ -1,0 +1,231 @@
+/* === FinGuid Business Loan Calculator CSS v1.0 === */
+/* Inherits base styles from FinGuid platform (like mortgage-calculator.css) */
+
+/* ========================================================================== */
+/* I. CALCULATOR LAYOUT & COMPONENTS */
+/* ========================================================================== */
+
+.calculator-container {
+    display: grid;
+    grid-template-columns: 350px 1fr; /* Input fixed width, results expands */
+    gap: var(--space-32);
+    padding: var(--space-32) 0;
+}
+
+/* Make Input section sticky on larger screens for better UX */
+.input-section {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-24)); /* Stick below header */
+    height: fit-content;
+}
+
+.input-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+}
+
+.sub-title {
+    margin-bottom: var(--space-24);
+    color: var(--color-slate-500);
+}
+
+.separator {
+    margin: var(--space-24) 0 var(--space-16);
+    text-transform: uppercase;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-teal-400);
+    border-bottom: 1px solid var(--color-gray-300);
+    padding-bottom: var(--space-8);
+}
+
+/* ========================================================================== */
+/* II. RESULTS & ANALYSIS */
+/* ========================================================================== */
+
+.results-section {
+    min-height: 800px; /* Ensure content area is substantial for monetization slots */
+}
+
+/* Summary Box Styling */
+.results-summary .summary-details {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-16);
+    margin-top: var(--space-24);
+}
+
+.detail-box, .detail-box-small {
+    flex-grow: 1;
+    text-align: center;
+    padding: var(--space-16);
+    border-radius: var(--border-radius);
+    background-color: var(--color-gray-200); /* Light background for contrast */
+}
+
+html[data-color-scheme="dark"] .detail-box, html[data-color-scheme="dark"] .detail-box-small {
+    background-color: var(--color-charcoal-800);
+    border: 1px solid var(--color-teal-400);
+}
+
+.detail-box .detail-value {
+    font-size: var(--font-size-xxl);
+    font-weight: var(--font-weight-extra-bold);
+    color: var(--color-slate-900);
+    display: block;
+    line-height: 1.2;
+}
+html[data-color-scheme="dark"] .detail-box .detail-value {
+    color: var(--color-white);
+}
+
+.detail-box .detail-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-slate-500);
+    display: block;
+    margin-top: var(--space-4);
+}
+
+.detail-box .icon-lg {
+    font-size: var(--font-size-lg);
+    color: var(--color-teal-400);
+    margin-bottom: var(--space-8);
+}
+
+/* Comparison Table (SBA) */
+.comparison-table {
+    overflow-x: auto;
+    margin-top: var(--space-16);
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table th, .data-table td {
+    padding: var(--space-12);
+    border: 1px solid var(--color-gray-300);
+    text-align: left;
+}
+html[data-color-scheme="dark"] .data-table th, html[data-color-scheme="dark"] .data-table td {
+    border-color: var(--color-charcoal-700);
+}
+.data-table th {
+    background-color: var(--color-slate-900);
+    color: var(--color-white);
+    font-weight: var(--font-weight-bold);
+}
+
+/* AI Insights */
+#ai-insights-content {
+    min-height: 150px;
+}
+.ai-insight {
+    padding: var(--space-16);
+    border-left: 5px solid var(--color-teal-400);
+    background-color: var(--color-gray-200);
+    margin-bottom: var(--space-16);
+    border-radius: var(--border-radius-sm);
+}
+html[data-color-scheme="dark"] .ai-insight {
+    background-color: var(--color-charcoal-800);
+}
+.ai-insight p {
+    margin: 0;
+}
+.ai-insight strong {
+    color: var(--color-teal-400);
+}
+
+/* ========================================================================== */
+/* III. MONETIZATION SLOTS (Advertising & Affiliate) */
+/* ========================================================================== */
+
+.ad-slot {
+    margin: var(--space-32) 0;
+    padding: var(--space-24);
+    border: 2px dashed var(--color-gray-300);
+    text-align: center;
+    font-style: italic;
+    background-color: var(--color-cream-100);
+    border-radius: var(--border-radius);
+    color: var(--color-slate-900);
+}
+
+.affiliate-box {
+    border-color: var(--color-green-500);
+    background-color: rgba(0, 128, 0, 0.05); /* Light green tint */
+}
+.affiliate-box p {
+    font-style: normal;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-slate-900);
+}
+.affiliate-box a {
+    color: var(--color-green-500);
+    text-decoration: underline;
+}
+
+html[data-color-scheme="dark"] .ad-slot {
+    background-color: var(--color-charcoal-700);
+    border-color: var(--color-slate-500);
+    color: var(--color-white);
+}
+html[data-color-scheme="dark"] .affiliate-box {
+    background-color: rgba(0, 180, 0, 0.1);
+    border-color: var(--color-green-500);
+    color: var(--color-white);
+}
+
+/* ========================================================================== */
+/* IV. RESPONSIVENESS (Mobile/All Device Friendly) */
+/* ========================================================================== */
+@media (max-width: 1024px) {
+    .calculator-container {
+        grid-template-columns: 1fr;
+        padding: var(--space-24) var(--space-16);
+    }
+    .input-section {
+        position: static; /* Remove sticky on mobile */
+        margin-bottom: var(--space-24);
+    }
+    .input-split {
+        grid-template-columns: 1fr; /* Stack inputs */
+    }
+    .results-summary .summary-details {
+        flex-direction: column; /* Stack summary boxes */
+    }
+    .data-table thead {
+        display: none; /* Hide table header on mobile */
+    }
+    .data-table, .data-table tbody, .data-table tr, .data-table td {
+        display: block;
+        width: 100%;
+    }
+    .data-table tr {
+        margin-bottom: var(--space-16);
+        border: 1px solid var(--color-gray-300);
+        border-radius: var(--border-radius);
+    }
+    .data-table td {
+        border: none;
+        border-bottom: 1px solid var(--color-gray-300);
+        position: relative;
+        padding-left: 50%; /* Space for the label */
+        text-align: right;
+    }
+    .data-table td:before {
+        content: attr(data-label); /* Use data-label for content */
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: var(--font-weight-bold);
+        color: var(--color-slate-500);
+    }
+    .data-table td:last-child {
+        border-bottom: 0;
+    }
+}
