@@ -38,6 +38,8 @@
 }
 
 /* Base styling for Light/Dark Mode */
+/* Note: The JS targets the <body>, which is slightly less efficient than targeting <html>, 
+   but works with existing structure. */
 body[data-color-scheme="light"] {
     background-color: var(--color-bg-light);
     color: var(--color-text-light);
@@ -47,7 +49,7 @@ body[data-color-scheme="dark"] {
     color: var(--color-text-dark);
 }
 body {
-    font-family: var(--font-family); margin: 0; padding: 0; line-height: 1.6; transition: background-color 0.3s, color 0.3s, min-height: 100vh;
+    font-family: var(--font-family); margin: 0; padding: 0; line-height: 1.6; transition: background-color 0.3s, color 0.3s; min-height: 100vh;
 }
 
 /* === UTILITY CLASSES === */
@@ -63,6 +65,7 @@ body[data-color-scheme="dark"] .main-header { background-color: var(--color-card
 .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
 .logo a { font-size: var(--font-size-xxl); font-weight: bold; color: var(--color-brand-teal); text-decoration: none; }
 .logo i { color: var(--color-brand-dark-teal); margin-right: var(--space-8); }
+body[data-color-scheme="dark"] .logo i { color: var(--color-white); }
 .features-quick { font-size: var(--font-size-base); color: var(--color-secondary); }
 .accessibility-controls { display: flex; gap: var(--space-8); align-items: center; }
 .live-rate-display { font-size: var(--font-size-base); font-weight: 600; padding: var(--space-4) var(--space-8); border-radius: var(--border-radius); background-color: var(--color-bg-light); }
@@ -94,17 +97,10 @@ body[data-color-scheme="dark"] .input-group input[type="number"] { background-co
 .input-group input[type="number"]:focus { border-color: var(--color-brand-teal); outline: none; }
 
 /* AI Insights & Ad Space */
-/* AI Insights moved to a tab. 'ai-insights-card-results' is the new card style */
-.ai-insights-card-results { border-left: 5px solid var(--color-brand-teal); }
+.ai-insights-card { margin-top: var(--space-24); border-left: 5px solid var(--color-brand-teal); }
 .ai-content { margin-bottom: var(--space-16); font-style: italic; font-size: var(--font-size-base); }
-.ai-content p { margin-bottom: var(--space-16); font-style: normal; }
-.ai-content p i { margin-right: var(--space-8); }
-
 .ad-slot { border: 1px dashed var(--color-border-light); padding: var(--space-16); text-align: center; border-radius: var(--border-radius); background-color: #f9f9f9; }
 body[data-color-scheme="dark"] .ad-slot { border-color: var(--color-brand-teal); background-color: var(--color-card-dark); }
-.ad-slot-mini { border: 1px dashed var(--color-border-light); padding: var(--space-16); text-align: center; border-radius: var(--border-radius); margin-top: var(--space-24); }
-body[data-color-scheme="dark"] .ad-slot-mini { border-color: var(--color-brand-teal); }
-
 .ad-label { font-size: 0.8rem; color: var(--color-negative); margin-bottom: var(--space-8); font-weight: bold; }
 .ad-link-button { display: inline-block; padding: var(--space-8) var(--space-16); background-color: var(--color-positive); color: var(--color-white); text-decoration: none; border-radius: var(--border-radius); font-weight: bold; transition: background-color 0.2s; }
 .ad-link-button:hover { background-color: #1f8b36; }
@@ -126,7 +122,7 @@ body[data-color-scheme="dark"] .summary-total { background-color: var(--color-ca
 /* Tabs Navigation */
 .tabs-nav { display: flex; border-bottom: 2px solid var(--color-border-light); margin-bottom: var(--space-16); gap: var(--space-8); }
 body[data-color-scheme="dark"] .tabs-nav { border-bottom-color: var(--color-border-dark); }
-.tab-button { background: none; border: none; padding: var(--space-16) var(--space-24); cursor: pointer; font-size: var(--font-size-base); font-weight: 600; color: var(--color-secondary); border-bottom: 3px solid transparent; transition: color 0.2s, border-bottom 0.2s; outline: none; white-space: nowrap; } /* Added white-space to prevent wrap on tab title */
+.tab-button { background: none; border: none; padding: var(--space-16) var(--space-24); cursor: pointer; font-size: var(--font-size-base); font-weight: 600; color: var(--color-secondary); border-bottom: 3px solid transparent; transition: color 0.2s, border-bottom 0.2s; outline: none; }
 .tab-button.active { color: var(--color-brand-teal); border-bottom-color: var(--color-brand-teal); }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
@@ -149,25 +145,35 @@ body[data-color-scheme="dark"] .subtotal-row td { border-top-color: var(--color-
 .total-row td { background-color: #f0f0f0; font-weight: bold; font-size: 1rem; }
 body[data-color-scheme="dark"] .total-row td { background-color: var(--color-card-dark); }
 
-/* === FOOTER (Consistent) === */
+/* === FOOTER (Improved Structure) === */
 .main-footer { background-color: var(--color-card-dark); color: var(--color-text-dark); padding: var(--space-32) var(--space-32) var(--space-16); margin-top: var(--space-32); }
 .footer-container { max-width: 1400px; margin: 0 auto; }
+
+/* New: Footer Top Row for Branding and Mission */
+.footer-top-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border-dark); padding-bottom: var(--space-24); margin-bottom: var(--space-24); }
+.footer-logo a { font-size: var(--font-size-xxl); font-weight: bold; color: var(--color-brand-teal); text-decoration: none; }
+.footer-logo i { color: var(--color-white); margin-right: var(--space-8); }
+.footer-mission { max-width: 60%; font-style: italic; opacity: 0.9; }
+
 .footer-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-32); padding-bottom: var(--space-24); border-bottom: 1px solid var(--color-border-dark); }
 .nav-column h4 { color: var(--color-brand-teal); font-size: var(--font-size-lg); margin-bottom: var(--space-16); }
+.nav-column h4 i { margin-right: var(--space-8); }
 .nav-column ul { list-style: none; padding: 0; }
 .nav-column a { color: var(--color-text-dark); text-decoration: none; display: block; padding: var(--space-4) 0; transition: color 0.2s; }
 .nav-column a:hover { color: var(--color-brand-teal); }
-.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding-top: var(--space-16); }
+
+.footer-bottom { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; padding-top: var(--space-16); }
 .footer-disclaimer p { font-size: 0.8rem; max-width: 700px; opacity: 0.8; }
-.footer-badges { display: flex; gap: var(--space-16); flex-wrap: wrap; }
+.footer-badges { display: flex; gap: var(--space-16); flex-wrap: wrap; order: 2; /* Move to the right on large screens */ }
 .badge { font-size: 0.8rem; background-color: var(--color-brand-teal); color: var(--color-brand-dark-teal); padding: var(--space-4) var(--space-8); border-radius: 20px; font-weight: 600; }
 .badge i { margin-right: var(--space-4); }
+
 
 /* === TOAST NOTIFICATIONS === */
 .toast-container { position: fixed; bottom: var(--space-24); left: 50%; transform: translateX(-50%); z-index: 1000; }
 .toast { background-color: var(--color-brand-dark-teal); color: var(--color-white); padding: var(--space-16) var(--space-24); border-radius: var(--border-radius); margin-top: var(--space-8); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); opacity: 0.95; transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
 
-/* === RESPONSIVENESS === */
+/* === RESPONSIVENESS (Updated for improved footer) === */
 @media (max-width: 1024px) {
     .calculator-container { grid-template-columns: 1fr; padding: 0 var(--space-16); }
     .input-section { position: static; }
@@ -175,8 +181,13 @@ body[data-color-scheme="dark"] .total-row td { background-color: var(--color-car
     .accessibility-controls { width: 100%; justify-content: flex-end; }
     .footer-nav { grid-template-columns: 1fr 1fr; }
     .breakdown-container { grid-template-columns: 1fr; }
-    .tabs-nav { flex-wrap: wrap; } /* Allow tabs to wrap on smaller screens */
-    .tab-button { padding: var(--space-12) var(--space-16); }
+
+    /* Footer Specific Adjustments */
+    .footer-top-row { flex-direction: column; align-items: flex-start; } 
+    .footer-mission { max-width: 100%; margin-top: var(--space-16); } 
+    .footer-bottom { flex-direction: column; align-items: flex-start; } 
+    .footer-badges { order: 1; margin-bottom: var(--space-16); } 
+    .footer-disclaimer { order: 2; } 
 }
 @media (max-width: 600px) {
     .input-split { flex-direction: column; gap: 0; }
