@@ -1,224 +1,407 @@
-<!DOCTYPE html>
-<html lang="en" data-color-scheme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+/* === 401(K) CALCULATOR CSS - FinGuid Platform Styling === */
+
+/* Inherits base styles/variables from FinGuid platform */
+:root {
+    /* === FinGuid Color Tokens (Consistent Across Platform) === */
+    --color-white: rgba(255, 255, 255, 1);
+    --color-black: rgba(0, 0, 0, 1);
+    --color-bg-light: #f5f5f5;          /* Light Background */
+    --color-card-light: #ffffff;        /* Light Card BG */
+    --color-text-light: #13343B;        /* Dark Teal/Text */
+    --color-border-light: #e0e0e0;
+
+    --color-bg-dark: #13343B;           /* Dark Background (FinGuid Primary) */
+    --color-card-dark: #1F333A;         /* Darker Card BG */
+    --color-text-dark: #f0f0f0;         /* Light Text */
+    --color-border-dark: #2a4048;
+
+    --color-brand-teal: #24ACC5;        /* FinGuid Accent */
+    --color-brand-dark-teal: #19343B;   /* Primary Dark Color */
+    --color-positive: #28a745;          /* Green for positive change */
+    --color-negative: #dc3545;          /* Red for warnings/loss */
+    --color-info: #ffc107;              /* Yellow for market context */
+
+    /* Spacing & Typography */
+    --space-8: 0.5rem;
+    --space-16: 1rem;
+    --space-24: 1.5rem;
+    --border-radius: 8px;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 2rem;
+}
+
+/* === BASE STYLES & THEME SWITCHING === */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+html[data-color-scheme="light"] body {
+    background-color: var(--color-bg-light);
+    color: var(--color-text-light);
+}
+
+html[data-color-scheme="dark"] body {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-24);
+}
+
+.card {
+    background-color: var(--color-card-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--border-radius);
+    padding: var(--space-24);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+}
+
+html[data-color-scheme="dark"] .card {
+    background-color: var(--color-card-dark);
+    border-color: var(--color-border-dark);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* === HEADER (Hider with Branding) === */
+.main-header {
+    background-color: var(--color-card-light);
+    border-bottom: 1px solid var(--color-border-light);
+    padding: var(--space-16) 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+html[data-color-scheme="dark"] .main-header {
+    background-color: var(--color-card-dark);
+    border-color: var(--color-border-dark);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo a {
+    font-size: var(--font-size-xl);
+    font-weight: 800;
+    color: var(--color-brand-teal);
+    text-decoration: none;
+}
+
+.logo-suffix {
+    font-size: var(--font-size-base);
+    font-weight: 400;
+    color: var(--color-text-light); /* Stays dark in light mode */
+}
+html[data-color-scheme="dark"] .logo-suffix {
+    color: var(--color-text-dark); /* Stays light in dark mode */
+}
+
+.tagline {
+    font-size: var(--font-size-lg);
+    font-weight: 300;
+    color: var(--color-secondary);
+    margin: 0;
+}
+
+.accessibility-controls button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    margin-left: var(--space-8);
+    transition: color 0.2s;
+}
+
+.accessibility-controls button:hover {
+    color: var(--color-brand-teal);
+}
+
+
+/* === CALCULATOR LAYOUT === */
+.calculator-page {
+    flex-grow: 1;
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-24);
+}
+
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Input 1/3, Results 2/3 */
+    gap: var(--space-24);
+}
+
+/* Input Section - Sticky positioning for desktop UX */
+.input-section {
+    position: sticky;
+    top: calc(80px + var(--space-24)); /* Below header + margin */
+    height: fit-content;
+}
+
+/* === INPUTS === */
+.input-form h2 {
+    margin-top: 0;
+}
+
+.input-group {
+    margin-bottom: var(--space-16);
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.input-group input[type="number"], 
+.input-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--border-radius);
+    background-color: var(--color-white);
+    color: var(--color-text-light);
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+html[data-color-scheme="dark"] .input-group input[type="number"], 
+html[data-color-scheme="dark"] .input-group select {
+    background-color: var(--color-charcoal-800);
+    border-color: var(--color-border-dark);
+    color: var(--color-text-dark);
+}
+
+.input-group input:focus, .input-group select:focus {
+    border-color: var(--color-brand-teal);
+    outline: none;
+}
+
+.input-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+}
+
+.live-rate {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: var(--color-info);
+}
+
+/* === MONETIZATION SLOTS (Ads, Sponsors, Affiliates) === */
+.ad-slot, .sponsor-callout, .affiliate-callout {
+    margin-bottom: var(--space-24);
+    padding: var(--space-16);
+    border-radius: var(--border-radius);
+    text-align: center;
+    border: 2px dashed var(--color-brand-teal);
+    background-color: rgba(36, 172, 197, 0.1);
+}
+.ad-slot p, .sponsor-callout p, .affiliate-callout p {
+    margin: 5px 0;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+}
+.affiliate-link, .sponsor-link {
+    color: var(--color-negative); /* Red/Urgency */
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* === RESULTS & SUMMARY === */
+.summary-panel {
+    margin-bottom: var(--space-24);
+}
+
+.summary-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-16);
+}
+
+.summary-item {
+    padding: var(--space-16);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+html[data-color-scheme="dark"] .summary-item {
+    border-color: var(--color-border-dark);
+}
+
+.summary-item i {
+    font-size: var(--font-size-lg);
+    color: var(--color-brand-teal);
+    margin-bottom: var(--space-8);
+}
+
+.summary-item .label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-secondary);
+}
+
+.summary-item .value {
+    display: block;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin-top: 5px;
+}
+
+.primary-value {
+    font-size: 1.8rem !important;
+    color: var(--color-brand-teal);
+}
+
+.positive { color: var(--color-positive); }
+.negative { color: var(--color-negative); }
+
+/* === TABS, CHARTS, AI INSIGHTS === */
+.tabs-card {
+    padding: 0;
+}
+.tab-controls-results {
+    display: flex;
+    border-bottom: 1px solid var(--color-border-light);
+    padding: 0 var(--space-24);
+}
+html[data-color-scheme="dark"] .tab-controls-results {
+    border-color: var(--color-border-dark);
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: var(--space-16) var(--space-24);
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-text-light);
+    transition: color 0.2s, border-bottom 0.2s;
+    border-bottom: 3px solid transparent;
+}
+html[data-color-scheme="dark"] .tab-button {
+    color: var(--color-text-dark);
+}
+
+.tab-button.active {
+    color: var(--color-brand-teal);
+    border-bottom-color: var(--color-brand-teal);
+}
+
+.tab-content {
+    padding: var(--space-24);
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.chart-container {
+    height: 400px;
+}
+
+.analysis-details h4 {
+    color: var(--color-brand-teal);
+    border-bottom: 1px dotted var(--color-border-light);
+    padding-bottom: 5px;
+    margin-top: var(--space-24);
+}
+
+.ai-recommendations .insight-item {
+    border-left: 4px solid var(--color-brand-teal);
+    padding-left: var(--space-16);
+    margin-bottom: var(--space-16);
+    background-color: var(--color-bg-light);
+    padding: 15px;
+    border-radius: var(--border-radius);
+}
+html[data-color-scheme="dark"] .ai-recommendations .insight-item {
+    background-color: var(--color-charcoal-800);
+}
+
+.ai-recommendations .insight-item strong {
+    color: var(--color-negative); /* Highlight key actions */
+}
+
+/* === FOOTER === */
+.main-footer {
+    background-color: var(--color-card-dark);
+    color: var(--color-text-dark);
+    padding: var(--space-24) 0;
+    margin-top: var(--space-24);
+    width: 100%;
+}
+
+.footer-disclaimer p {
+    font-size: 0.8rem;
+    max-width: 900px;
+    opacity: 0.8;
+}
+
+.footer-badges {
+    display: flex;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+    margin-top: var(--space-16);
+}
+
+.badge { 
+    font-size: 0.8rem; 
+    background-color: var(--color-brand-teal); 
+    color: var(--color-brand-dark-teal); 
+    padding: 4px 8px; 
+    border-radius: 20px; 
+    font-weight: 600; 
+}
+.badge i { margin-right: 4px; }
+
+/* === RESPONSIVENESS (Mobile/All Device Friendly) === */
+@media (max-width: 1024px) {
+    .calculator-container { 
+        grid-template-columns: 1fr; /* Single column on mobile */
+        padding: 0 var(--space-16); 
+    }
     
-    <title>401(k) Retirement Calculator — World's First AI-Powered Analysis | FinGuid USA</title>
-    <meta name="description" content="Optimize your retirement savings with the World's First AI-Powered 401(k) Calculator. Analyze employer match, tax benefits, and long-term projections. Designed for American financial success by FinGuid.">
-    <meta name="keywords" content="401k calculator, retirement savings, employer match, tax benefits, AI retirement advisor, FinGuid, USA retirement planning, financial calculator, tax-advantaged savings">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    .input-section { 
+        position: static; /* Remove sticky on mobile */
+        margin-top: var(--space-16);
+    }
     
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#19343B"> 
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
     
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-NYBL2CDNQJ');
-    </script>
+    .tagline {
+        font-size: var(--font-size-base);
+        margin: var(--space-4) 0;
+    }
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="401k-calculator.css">
-</head>
-<body>
-
-    <header class="main-header">
-        <div class="header-content container">
-            <div class="logo">
-                <a href="/" aria-label="FinGuid Home">FinGuid<span class="logo-suffix">.com</span></a>
-            </div>
-            <p class="tagline">World's First AI-Powered 401(k) Analysis</p>
-            
-            <div class="accessibility-controls">
-                <button id="toggle-theme-button" aria-label="Toggle Light/Dark Mode" title="Toggle Light/Dark Mode (L/D Mode)">
-                    <i class="fas fa-sun" aria-hidden="true"></i>
-                </button>
-                <button id="voice-command-button" aria-label="Voice Command" title="Activate Voice Command">
-                    <i class="fas fa-microphone" aria-hidden="true"></i>
-                </button>
-                <button id="text-to-speech-button" aria-label="Text to Speech" title="Read Results Aloud">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <main class="calculator-page container">
-        
-        <div class="calculator-container">
-            
-            <section class="input-section card">
-                <h2>Your Retirement Profile</h2>
-                <div id="401k-input-form" class="input-form">
-                    
-                    <div class="input-group">
-                        <label for="current-age">Current Age (Years)</label>
-                        <input type="number" id="current-age" value="30" min="18" max="65" data-label="Current Age">
-                    </div>
-                    <div class="input-group">
-                        <label for="retirement-age">Target Retirement Age</label>
-                        <input type="number" id="retirement-age" value="65" min="40" max="80" data-label="Retirement Age">
-                    </div>
-                    <div class="input-group">
-                        <label for="current-salary">Current Annual Salary ($)</label>
-                        <input type="number" id="current-salary" value="75000" min="10000" step="500" data-label="Annual Salary">
-                    </div>
-                    <div class="input-group">
-                        <label for="current-balance">Current 401(k) Balance ($)</label>
-                        <input type="number" id="current-balance" value="25000" min="0" step="1000" data-label="Current Balance">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="contribution-rate">Your Annual Contribution (%)</label>
-                        <input type="number" id="contribution-rate" value="10" min="1" max="100" step="0.5" data-label="Contribution Rate">
-                    </div>
-                    <div class="input-group">
-                        <label for="salary-growth-rate">Annual Salary Increase (%)</label>
-                        <input type="number" id="salary-growth-rate" value="3.0" min="0" max="10" step="0.1" data-label="Salary Growth Rate">
-                    </div>
-                    <div class="input-group">
-                        <label for="return-rate">Estimated Annual Return (%)</label>
-                        <input type="number" id="return-rate" value="7.0" min="0" max="15" step="0.1" data-label="Return Rate">
-                        <span class="live-rate" id="fred-rate-display">Market Context: N/A</span>
-                    </div>
-
-                    <div class="input-group input-split">
-                        <div>
-                            <label for="match-rate">Employer Match % (up to)</label>
-                            <input type="number" id="match-rate" value="4" min="0" max="10" step="0.5" data-label="Match Rate Cap">
-                        </div>
-                        <div>
-                            <label for="match-multiplier">Match Multiplier (%)</label>
-                            <select id="match-multiplier" data-label="Match Multiplier">
-                                <option value="100">100% (Dollar-for-Dollar)</option>
-                                <option value="50">50% (50 Cents on the Dollar)</option>
-                                <option value="25">25%</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="tax-bracket">Current Federal Tax Bracket (%)</label>
-                        <input type="number" id="tax-bracket" value="24" min="0" max="37" step="1" data-label="Tax Bracket">
-                    </div>
-                    
-                </div>
-            </section>
-            
-            <section class="results-section">
-                
-                <div class="ad-slot primary-ad-slot" role="complementary" aria-label="Affiliate and Sponsor Product Advertisement">
-                    <p>✨ **Sponsor Spotlight:** High-Yield Retirement Accounts - **Affiliate Link Here**</p>
-                </div>
-
-                <div class="card summary-panel">
-                    <h3>Projected Retirement Value</h3>
-                    <div class="summary-details">
-                        <div class="summary-item">
-                            <i class="fas fa-piggy-bank" aria-hidden="true"></i>
-                            <span class="label">Total Projected Value</span>
-                            <span class="value primary-value" id="projected-value">$1,234,567</span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
-                            <span class="label">Total Contributions (Yours + Match)</span>
-                            <span class="value" id="total-contributions">$345,678</span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-chart-line" aria-hidden="true"></i>
-                            <span class="label">Total Investment Earnings</span>
-                            <span class="value" id="total-earnings">$888,889</span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-handshake" aria-hidden="true"></i>
-                            <span class="label">Total Employer Match (Free Money!)</span>
-                            <span class="value positive" id="total-match">$45,678</span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-calculator" aria-hidden="true"></i>
-                            <span class="label">Avg. Annual Tax Savings</span>
-                            <span class="value positive" id="annual-tax-saving">$1,800</span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-gift" aria-hidden="true"></i>
-                            <span class="label">Value of Match Lost (Annually)</span>
-                            <span class="value negative" id="match-lost">$0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card tabs-card">
-                    <div class="tab-controls-results">
-                        <button class="tab-button active" data-tab="projection-chart">Projection Analysis</button>
-                        <button class="tab-button" data-tab="tax-analysis">Tax & Match Benefits</button>
-                        <button class="tab-button" data-tab="ai-insights">AI-Powered Insights</button>
-                    </div>
-
-                    <div id="projection-chart" class="tab-content active">
-                        <h3 class="chart-title">Retirement Savings Projection Timeline</h3>
-                        <div class="chart-container">
-                            <canvas id="projectionChartCanvas"></canvas>
-                        </div>
-                        <p class="chart-caption">This chart shows your balance growth, separating your contributions, employer match, and investment earnings over time.</p>
-                    </div>
-
-                    <div id="tax-analysis" class="tab-content">
-                        <h3 class="analysis-title">Tax and Employer Match Deep Dive</h3>
-                        <div class="analysis-details">
-                            <h4>Employer Match Summary</h4>
-                            <p id="match-summary-text">...</p>
-                            <h4>Annual Tax Benefit</h4>
-                            <p id="tax-benefit-text">...</p>
-                        </div>
-
-                        <div class="affiliate-callout">
-                            <p class="affiliate-title"><i class="fas fa-hand-holding-heart"></i> **Boost Your Retirement!**</p>
-                            <p>Speak to a certified financial advisor to maximize your tax advantages and portfolio returns. **<a href="#affiliate-link-advisor" class="affiliate-link">Find a FinGuid Partner Advisor (Affiliate Link)</a>**</p>
-                        </div>
-                    </div>
-
-                    <div id="ai-insights" class="tab-content">
-                        <h3 class="ai-title"><i class="fas fa-robot"></i> FinGuid AI Retirement Advisor</h3>
-                        <div id="ai-recommendations">
-                            <p class="loading-message">Analyzing your profile and market context...</p>
-                        </div>
-                        
-                        <div class="sponsor-callout">
-                            <p class="sponsor-title"><i class="fas fa-shield-alt"></i> **Protect Your Assets**</p>
-                            <p>Considering your projected value, explore highly-rated, low-fee index funds with our sponsor. **<a href="#sponsor-link-funds" class="sponsor-link">Explore Sponsor Funds Now</a>**</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <div class="footer-disclaimer">
-                    <p>
-                        &copy; 2025 **FinGuid** - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize via advertising and affiliate partnerships.**
-                    </p>
-                </div>
-                <div class="footer-badges">
-                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> **AI Friendly**</div>
-                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> **SCO Friendly**</div>
-                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
-                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <div id="toast-container" class="toast-container" aria-live="polite"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="/register-sw.js"></script> 
-    <script src="401k-calculator.js"></script>
-</body>
-</html>
+    .accessibility-controls {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: var(--space-8);
+    }
+    
+    .summary-details {
+        grid-template-columns: 1fr;
+    }
+}
