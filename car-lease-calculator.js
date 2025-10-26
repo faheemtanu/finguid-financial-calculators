@@ -1,5 +1,5 @@
 /**
- * CAR LEASE CALCULATOR — AI‑POWERED LEASE VS. BUY ANALYZER - PRODUCTION JS v1.0
+ * CAR LEASE CALCULATOR — AI‑POWERED LEASE VS. BUY ANALYZER - PRODUCTION JS v1.1 (Enhanced AI)
  * FinGuid USA Market Domination Build - World's First AI-Powered Auto Lease Calculator
  * * Target: Production Ready, AI Insights, SEO, PWA, Voice, Monetization Ready
  * * Features Implemented:
@@ -8,7 +8,7 @@
  * ✅ Lease vs. Buy Net Worth Comparison (replicating Rent-vs-Buy logic)
  * ✅ Dynamic Charting (Chart.js: Net Worth Over Time)
  * ✅ FRED API Integration (TERMSCOAUTC60NS) for Money Factor (Key: 9c6c...a59a)
- * ✅ AI-Powered Insights Engine (Linked to Monetization: Gap Insurance, Loan Affiliates)
+ * ✅ ENHANCED AI-Powered Insights Engine (Linked to Monetization: Gap Insurance, Loan Affiliates)
  * ✅ Voice Control (Speech Recognition & Text-to-Speech)
  * ✅ Light/Dark Mode Toggling & User Preferences Storage
  * ✅ PWA Ready Setup (Service Worker Registration)
@@ -21,7 +21,7 @@
 /* ========================================================================== */
 
 const CAR_LEASE_CALCULATOR = {
-    VERSION: '1.0',
+    VERSION: '1.1',
     DEBUG: false, 
     
     // FRED API Configuration (Real Key)
@@ -303,7 +303,7 @@ function calculateLeaseVsBuy() {
 
 
 /* ========================================================================== */
-/* V. AI INSIGHTS ENGINE MODULE (Monetization Focused) */
+/* V. AI INSIGHTS ENGINE MODULE (Enhanced for v1.1) */
 /* ========================================================================== */
 
 function generateAIInsights() {
@@ -314,7 +314,7 @@ function generateAIInsights() {
     const netWorthDifference = S.totalNetWorthBuy - S.totalNetWorthLease;
     const period = S.leaseTerm / 12;
 
-    // --- Core Recommendation & Verdict ---
+    // --- 1. Core Recommendation & Verdict ---
     if (netWorthDifference > 1000) {
         // BUYING is better
         html += `<p class="positive-insight">**AI Verdict: BUYING.** Over your ${period}-year term, buying is projected to leave you **${UTILS.formatCurrency(netWorthDifference)}** wealthier. This is because you are building **${UTILS.formatCurrency(S.buyEndEquity)}** in equity, while the lease is a pure expense.</p>`;
@@ -326,47 +326,76 @@ function generateAIInsights() {
         document.getElementById('final-verdict-box').className = 'final-verdict-box lease-recommended';
         document.getElementById('final-verdict-text').textContent = `VERDICT: LEASE is ${UTILS.formatCurrency(Math.abs(netWorthDifference))} BETTER over ${period} years!`;
     } else {
-        html += `<p class="medium-insight">**AI Verdict: TIE.** The financial difference is negligible. Your choice should be based on lifestyle: Do you prefer a new car every few years (Lease) or long-term ownership (Buy)?</p>`;
+        html += `<p>**AI Verdict: TIE.** The financial difference is negligible. Your choice should be based on lifestyle: Do you prefer a new car every few years (Lease) or long-term ownership (Buy)?</p>`;
         document.getElementById('final-verdict-box').className = 'final-verdict-box';
         document.getElementById('final-verdict-text').textContent = `VERDICT: NEAR TIE. Choose based on lifestyle.`;
     }
 
-    // --- Actionable/Monetization Insights ---
+    // --- 2. Actionable/Monetization Insights (NEW DYNAMIC INSIGHTS) ---
     html += `<h4>Strategic Analysis & Recommendations:</h4>`;
 
-    // 1. High Down Payment on Lease (CRITICAL insight)
+    // Insight 2a: High Down Payment on Lease (CRITICAL)
     if (S.downPayment > 0) {
         html += `
             <div class="recommendation-alert high-priority">
-                <i class="fas fa-exclamation-triangle"></i> **Critical AI Warning: High Down Payment on Lease**
+                <i class="fas fa-exclamation-triangle"></i> **Critical AI Warning: Don't Put Money Down on a Lease**
             </div>
-            <p>You have a **${UTILS.formatCurrency(S.downPayment)}** down payment. **NEVER put a large down payment on a lease.** If the car is totaled, that money is GONE. You are just pre-paying your depreciation.</p>
-            <p><strong><i class="fas fa-handshake"></i> Sponsor Recommendation:</strong> A better strategy is a $0 down lease. If you are worried about payments, use that cash to buy **Gap Insurance**. <a href="#" target="_blank">Get a free Gap Insurance quote from our partner.</a></p>
+            <p>You have a **${UTILS.formatCurrency(S.downPayment)}** down payment. **This is a major financial risk.** If the car is totaled or stolen, that money is GONE. You are just pre-paying your depreciation. A $0 down lease is always safer.</p>
+            <p><strong><i class="fas fa-handshake"></i> Sponsor Recommendation:</strong> If you're in an accident, you are responsible for the "gap" between the car's value and what you owe. Use your down payment money to buy **Gap Insurance** instead. <a href="#" target="_blank">Get a free Gap Insurance quote from our partner.</a></p>
         `;
     }
 
-    // 2. High Money Factor / Rent Charge
+    // Insight 2b: The "1% Rule" of Leasing
+    const onePercentRule = (S.monthlyLeasePayment / S.msrp) * 100;
+    if (onePercentRule <= 1.25) {
+         html += `
+            <div class="recommendation-alert low-priority">
+                <i class="fas fa-thumbs-up"></i> **Deal Quality: Passes the 1% Rule**
+            </div>
+            <p>Your payment of **${UTILS.formatCurrency(S.monthlyLeasePayment, true)}** is **${onePercentRule.toFixed(2)}%** of the MSRP. This is considered an excellent deal (at or below the 1.25% "1% Rule" benchmark). This indicates a high residual value and/or a low money factor.</p>
+        `;
+    } else if (onePercentRule > 1.75) {
+         html += `
+            <div class="recommendation-alert medium-priority">
+                <i class="fas fa-search-dollar"></i> **Deal Quality: Fails the 1% Rule**
+            </div>
+            <p>Your payment is **${onePercentRule.toFixed(2)}%** of the MSRP. This is a high-cost lease, likely due to a low residual value or a high money factor. You should strongly consider the **"Buy"** option or negotiate a better price.</p>
+        `;
+    }
+
+    // Insight 2c: Negotiation Check
+    if (S.negotiatedPrice >= S.msrp) {
+         html += `
+            <div class="recommendation-alert medium-priority">
+                <i class="fas fa-comments-dollar"></i> **Negotiation Opportunity**
+            </div>
+            <p>Your negotiated price is the same as (or worse than) the MSRP. The lease "Cap Cost" is the single most important number you can negotiate. Aim to get this price as far *below* MSRP as possible.</p>
+            <p><strong><i class="fas fa-handshake"></i> Affiliate Recommendation:</strong> Don't walk into the dealer blind. Get pre-approved for a loan *first* to give you negotiating power. <a href="#" target="_blank">See pre-qualified auto loan offers from our partners.</a></p>
+        `;
+    }
+    
+    // Insight 2d: High Money Factor / Rent Charge
     const rentCharge = S.leaseBreakdown.rentCharge * S.leaseTerm;
     if (S.interestRate > 8.0) {
         html += `
             <div class="recommendation-alert medium-priority">
                 <i class="fas fa-money-check-alt"></i> **Opportunity: High Finance Charge**
             </div>
-            <p>Your "Money Factor" (based on the ${S.interestRate}% rate) results in a total finance charge of **${UTILS.formatCurrency(rentCharge)}**. This is high.</p>
-            <p><strong><i class="fas fa-handshake"></i> Affiliate Recommendation:</strong> Your rate is high, likely due to credit. Before leasing, **<a href="#" target="_blank">check your credit score for free with our partner</a>**. You may also get a better deal by **<a href="#" target="_blank">getting a pre-approved auto loan</a>** and choosing the "Buy" path.</p>
+            <p>Your "Money Factor" (based on the ${S.interestRate}% rate) results in a total finance charge of **${UTILS.formatCurrency(rentCharge)}**. This is high and may be due to a poor credit score.</p>
+            <p><strong><i class="fas fa-handshake"></i> Affiliate Recommendation:</strong> Before you lease, **<a href="#" target="_blank">check your credit score for free with our partner</a>**. A better score can save you thousands on the finance charge.</p>
         `;
     }
 
-    // 3. Good Deal Insight
-    if (S.interestRate < 5.0 && S.residualPercent > 60 && S.downPayment === 0) {
+    // Insight 2e: Low Residual Value
+    if (S.residualPercent < 50) {
          html += `
-            <div class="recommendation-alert low-priority">
-                <i class="fas fa-lightbulb"></i> **Wealth Strategy: Strong Lease Deal**
+            <div class="recommendation-alert medium-priority">
+                <i class="fas fa-arrow-down"></i> **Poor Lease Value: Low Residual**
             </div>
-            <p>This appears to be an excellent lease deal. The high residual (${S.residualPercent}%) and low money factor mean your payments are low. Since you have $0 down, your risk is minimized.</p>
-            <p><strong><i class="fas fa-handshake"></i> Affiliate Recommendation:</strong> This is a smart move. To complete your protection, ensure you have the best auto insurance rate. <a href="#" target="_blank">Compare insurance quotes from our partners in 2 minutes.</a></p>
+            <p>The residual value is only **${S.residualPercent}%**. This means the bank expects the car to lose a lot of value, and you have to pay for that depreciation. Cars with low residuals make for expensive leases. Consider a different model or trim.</p>
         `;
     }
+
 
     output.innerHTML = html;
 }
@@ -379,6 +408,15 @@ function generateAIInsights() {
 function updateChart() {
     const S = CAR_LEASE_CALCULATOR.STATE;
     const ctx = document.getElementById('leaseVsBuyChart').getContext('2d');
+    
+    // Ensure data exists
+    if (!S.annualComparisonData || S.annualComparisonData.length === 0) {
+        if (CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart) {
+             CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart.destroy();
+        }
+        return;
+    }
+    
     const labels = S.annualComparisonData.map(d => d.year + (d.year === 1 ? ' Year' : ' Years'));
     const buyData = S.annualComparisonData.map(d => d.buyNetWorth);
     const leaseData = S.annualComparisonData.map(d => d.leaseNetWorth);
@@ -454,7 +492,7 @@ function updateResultsDisplay(usePlaceholders = false) {
     document.getElementById('summary-period-years-1').textContent = period;
     document.getElementById('summary-period-years-2').textContent = period;
 
-    if (usePlaceholders) {
+    if (usePlaceholders || !S.annualComparisonData || S.annualComparisonData.length === 0) {
         // Display initial zero state/placeholders
         document.getElementById('monthly-payment-total').textContent = UTILS.formatCurrency(0, true);
         document.getElementById('payment-breakdown-summary').innerHTML = 'Depreciation: $0.00 | Finance Charge: $0.00 | Tax: $0.00';
@@ -576,6 +614,11 @@ const SPEECH = (function() {
         } else if (command.includes('show ai insights')) {
             showTab('ai-insights');
             responseText = 'Showing AI Insights.';
+            // Also read the insights
+            setTimeout(() => {
+                const insights = document.getElementById('ai-insights-output').textContent;
+                speak(insights);
+            }, 300);
         }
         speak(responseText);
     }
@@ -631,7 +674,11 @@ function showTab(tabId) {
         document.querySelector(`.tab-controls-results .tab-button[data-tab="${tabId}"]`).classList.add('active');
         
         if (tabId === 'comparison-chart' && CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart) {
-            setTimeout(() => CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart.resize(), 10);
+            setTimeout(() => {
+                if(CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart) {
+                    CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart.resize()
+                }
+            }, 10);
         }
     }
 }
@@ -657,7 +704,7 @@ function setupEventListeners() {
 
 // === Initialize ===
 document.addEventListener('DOMContentLoaded', function() {
-    if (CAR_LEASE_CALCULATOR.DEBUG) console.log('🇺🇸 FinGuid Car Lease AI Analyzer v1.0 Initializing...');
+    if (CAR_LEASE_CALCULATOR.DEBUG) console.log('🇺🇸 FinGuid Car Lease AI Analyzer v1.1 Initializing...');
     
     THEME_MANAGER.loadUserPreferences();
     SPEECH.initialize();
