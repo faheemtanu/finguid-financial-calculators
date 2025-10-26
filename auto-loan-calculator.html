@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Auto Loan Pro — World's First AI‑Powered Car Payment Calculator | FinGuid USA</title>
-    <meta name="description" content="Calculate your total car payment, factoring in trade-in, taxes, and fees. Get the current US auto loan rate from the Federal Reserve and world-class AI financial insights from FinGuid.">
-    <meta name="keywords" content="auto loan calculator, car payment calculator, trade-in calculator, auto loan rates, FRED API, AI car finance, USA auto loan, FinGuid, Americans, financial calculator, SCO Friendly, AI Friendly">
+    <title>Auto Loan Calculator — World's First AI-Powered Analysis | FinGuid USA</title>
+    <meta name="description" content="Calculate your car payment with the World's First AI-Powered Auto Loan Calculator. Includes trade-in, taxes, and live interest rates. Get smart AI insights for your next US auto loan.">
+    <meta name="keywords" content="auto loan calculator, car payment calculator, auto loan rates, car loan calculator, AI auto loan, FinGuid, USA auto loan, trade-in value, car sales tax, FRED API">
     <meta name="robots" content="index, follow">
     <meta name="author" content="FinGuid - World's First AI Calculator Platform">
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#19343B"> 
-
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -21,78 +21,74 @@
       gtag('config', 'G-NYBL2CDNQJ');
     </script>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="auto-loan-calculator.css"> </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <link rel="stylesheet" href="auto-loan-calculator.css"> 
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    
+</head>
 <body>
+
     <header class="main-header">
-        <div class="container header-content">
-            <div class="logo">
-                <a href="/" aria-label="FinGuid Home">FinGuid<span class="logo-accent">.</span></a>
-            </div>
-            <div class="branding-meta">
-                <h1>Auto Loan Pro</h1>
-                <p class="tagline">World's First AI-Powered Car Payment Calculator</p>
+        <div class="header-content">
+            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
+            <p class="tagline">World's First AI-Powered Auto Loan Analyzer</p>
+            <div class="features-quick">
+                <span class="feature-quick"><i class="fas fa-microchip"></i> AI Insights</span>
+                <span class="feature-quick"><i class="fas fa-microphone-alt"></i> Voice Control</span>
+                <span class="feature-quick"><i class="fas fa-chart-line"></i> Live FRED Rates</span>
+                <span class="feature-quick"><i class="fas fa-cloud-download-alt"></i> PWA Ready</span>
             </div>
             
             <div class="accessibility-controls">
-                <p class="features-quick">Light/Dark Mode | Voice | PWA Ready</p>
-                <button id="theme-toggle-button" class="control-button" aria-label="Toggle Light/Dark Mode" title="Toggle Light/Dark Mode">
-                    <i class="fas fa-moon"></i>
+                <button id="toggle-color-scheme" aria-label="Toggle Light/Dark Mode" class="control-button">
+                    <i class="fas fa-sun"></i> 
                 </button>
-                <button id="voice-command-button" class="control-button" aria-label="Activate Voice Command" title="Voice Command">
-                    <i class="fas fa-microphone"></i>
-                </button>
+                <div class="voice-status">
+                    <button id="toggle-voice-command" aria-label="Toggle Voice Command" class="control-button voice-inactive">
+                        <i class="fas fa-microphone"></i> <span id="voice-status-text">Voice OFF</span>
+                    </button>
+                    <button id="toggle-text-to-speech" aria-label="Toggle Text to Speech" class="control-button tts-inactive">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                <button id="pwa-install-button" class="control-button install-button hidden">Install App</button>
             </div>
         </div>
-        <nav class="main-nav">
-            <a href="/mortgage-calculator.html">Mortgage</a>
-            <a href="/rent-vs-buy.html">Rent vs Buy</a>
-            <a href="/auto-loan-calculator.html" class="active">Auto Loan</a>
-            <a href="#sponsor-link" class="nav-ad-link">Sponsored Loan Partner</a>
-        </nav>
     </header>
 
-    <main class="container calculator-page">
-        <div class="calculator-container">
+    <main class="main-content">
+        <div class="calculator-container card">
             
-            <section class="input-section card">
-                <h2>Your Vehicle & Financing Details</h2>
-                <form id="auto-loan-form">
+            <section class="input-section" aria-labelledby="input-heading">
+                <h2 id="input-heading" class="section-title">Auto Loan Parameters</h2>
+                <form id="auto-loan-form" novalidate>
                     
-                    <div class="form-group">
+                    <aside class="ad-slot top-ad-slot" role="complementary" aria-label="Sponsor Ad Slot">
+                        <p class="ad-label">ADVERTISEMENT / SPONSOR PRODUCT</p>
+                        <div id="top-ad-placeholder">Your Auto Lender Sponsor Ad Here (e.g., Capital One Auto)</div>
+                    </aside>
+
+                    <div class="input-group">
                         <label for="vehicle-price">Vehicle Price ($)</label>
-                        <input type="number" id="vehicle-price" value="35000" min="0" step="1000" required>
+                        <input type="text" id="vehicle-price" value="35,000" inputmode="numeric" aria-required="true">
                     </div>
-                    <div class="form-group input-split">
-                        <div class="form-group-half">
-                            <label for="down-payment">Down Payment ($)</label>
-                            <input type="number" id="down-payment" value="5000" min="0" step="100">
+
+                    <div class="input-split">
+                        <div class="input-group">
+                            <label for="down-payment">Cash Down Payment ($)</label>
+                            <input type="text" id="down-payment" value="5,000" inputmode="numeric" aria-required="true">
                         </div>
-                        <div class="form-group-half">
+                        <div class="input-group">
                             <label for="trade-in-value">Trade-in Value ($)</label>
-                            <input type="number" id="trade-in-value" value="3000" min="0" step="100">
+                            <input type="text" id="trade-in-value" value="2,000" inputmode="numeric">
                         </div>
                     </div>
-                    
-                    <div class="form-group input-split">
-                        <div class="form-group-half">
-                            <label for="sales-tax-rate">Sales Tax Rate (%)</label>
-                            <input type="number" id="sales-tax-rate" value="6.5" min="0" max="15" step="0.1">
-                        </div>
-                        <div class="form-group-half">
-                            <label for="other-fees">Title, Registration & Fees ($)</label>
-                            <input type="number" id="other-fees" value="500" min="0" step="10">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group input-split">
-                        <div class="form-group-half">
-                            <label for="interest-rate">Interest Rate (%) <span id="fred-rate-label" class="live-rate-tag">Fetching FRED®...</span></label>
-                            <input type="number" id="interest-rate" value="7.64" min="0.1" max="30" step="0.01" required>
-                        </div>
-                        <div class="form-group-half">
+
+                    <div class="input-split">
+                        <div class="input-group">
                             <label for="loan-term">Loan Term (Months)</label>
-                            <select id="loan-term" required>
+                            <select id="loan-term" aria-required="true">
                                 <option value="36">36 Months (3 Years)</option>
                                 <option value="48">48 Months (4 Years)</option>
                                 <option value="60" selected>60 Months (5 Years)</option>
@@ -100,113 +96,195 @@
                                 <option value="84">84 Months (7 Years)</option>
                             </select>
                         </div>
+                        <div class="input-group">
+                            <label for="interest-rate">Interest Rate (%)</label>
+                            <input type="text" id="interest-rate" value="7.5" inputmode="decimal" aria-required="true" data-fred-rate="true">
+                            <span class="fred-source-note">Fetching Live FRED Rate...</span>
+                        </div>
                     </div>
-                    
-                    <div id="loan-summary-input" class="summary-box secondary-summary" style="margin-top: 20px;">
-                        <p>Total Loan Amount: <span id="display-loan-amount">$0.00</span></p>
-                        <p>Total Tax Paid: <span id="display-tax-amount">$0.00</span></p>
+
+                    <div class="input-group advanced-toggle-container">
+                        <button type="button" id="toggle-advanced-options" aria-expanded="false" aria-controls="advanced-options-group" class="toggle-button">
+                            <i class="fas fa-chevron-down"></i> Advanced Taxes & Fees
+                        </button>
                     </div>
-                    
+
+                    <div id="advanced-options-group" class="input-group-grid advanced-options-group" aria-hidden="true">
+                        <h3 class="input-group-sub-title">Taxes & Fees (Optional)</h3>
+                        <div class="input-split">
+                            <div class="input-group">
+                                <label for="sales-tax-rate">Sales Tax Rate (%)</label>
+                                <input type="text" id="sales-tax-rate" value="6.5" inputmode="decimal">
+                                <span class="input-note">Sales tax is often calculated on (Price - Trade-in). Varies by state.</span>
+                            </div>
+                            <div class="input-group">
+                                <label for="fees-other">Title, Registration, & Doc Fees ($)</label>
+                                <input type="text" id="fees-other" value="500" inputmode="numeric">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group action-group">
+                        <button type="submit" class="primary-button" id="calculate-button">
+                            <i class="fas fa-calculator"></i> Calculate Auto Payment
+                        </button>
+                    </div>
                 </form>
             </section>
 
-            <section class="results-section">
-                
-                <div class="card main-result-card">
-                    <p class="result-label">Estimated Monthly Payment</p>
-                    <h2 class="result-value" id="monthly-payment-result">$0.00</h2>
-                    <p class="result-breakdown" id="payment-breakdown-summary">Based on a $0.00 loan amount over 60 months at 7.64%</p>
-                </div>
-                
-                <div class="ad-slot card monetization-slot" id="monetization-top-slot">
-                    <p class="ad-label">ADVERTISEMENT / SPONSORED AUTO LOAN PARTNER</p>
-                    <a href="#affiliate-link-auto-loan" target="_blank" id="sponsor-link">Click here to pre-qualify for a low-rate Auto Loan now!</a>
+            <section class="results-section" aria-labelledby="results-heading">
+                <h2 id="results-heading" class="section-title">Analysis & Results</h2>
+
+                <div class="monetization-banner">
+                     <p>Sponsored: Protect your loan with Gap Insurance. <a href="#">Get a free quote now!</a> (Sponsor Link)</p>
                 </div>
 
-                <div class="tab-controls-results">
-                    <button class="tab-button active" data-tab="ai-insights"><i class="fas fa-robot"></i> AI Insights</button>
-                    <button class="tab-button" data-tab="payment-breakdown"><i class="fas fa-chart-pie"></i> Cost Breakdown</button>
-                    <button class="tab-button" data-tab="payment-comparison"><i class="fas fa-balance-scale"></i> Comparison</button>
-                </div>
-
-                <div id="ai-insights" class="tab-content active card">
-                    <h3><i class="fas fa-robot"></i> FinGuid AI Analysis & Recommendations</h3>
-                    <p id="ai-insight-text">Enter your details above to receive personalized, world-class financial insights.</p>
-                </div>
-
-                <div id="payment-breakdown" class="tab-content card">
-                    <h3>Total Loan Cost Breakdown</h3>
-                    <div class="summary-details">
-                        <div><p>Total Principal Paid</p><strong id="total-principal-paid">$0.00</strong></div>
-                        <div><p>Total Interest Paid</p><strong id="total-interest-paid">$0.00</strong></div>
-                        <div><p>Total Payments (Cost)</p><strong id="total-payments">$0.00</strong></div>
-                        <div><p>Interest as % of Cost</p><strong id="interest-percentage">0.0%</strong></div>
+                <div class="summary-card card-mini">
+                    <p class="summary-label">Estimated Monthly Payment</p>
+                    <div class="payment-display">
+                        <span id="monthly-payment-total" class="payment-figure">$0.00</span>
+                        <span class="payment-unit">/mo</span>
                     </div>
-                    <canvas id="cost-breakdown-chart"></canvas>
+                    <p class="piti-breakdown-summary" id="payment-breakdown-summary">
+                        Principal & Interest: $0.00 | Taxes & Fees: $0.00
+                    </p>
                 </div>
-                
-                <div id="payment-comparison" class="tab-content card">
-                    <h3>Payment Comparison (48, 60, & 72 Month Terms)</h3>
-                    <p>Compare how different loan terms affect your monthly payment and total interest paid.</p>
-                    <table class="comparison-table">
-                        <thead>
-                            <tr>
-                                <th>Term</th>
-                                <th>Monthly Payment</th>
-                                <th>Total Interest</th>
-                                <th>Total Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody id="comparison-table-body">
-                            </tbody>
-                    </table>
+
+                <div class="tabs-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="payment-components">Total Cost Breakdown</button>
+                        <button class="tab-button" data-tab="comparison-table">Loan Comparison</button>
+                        <button class="tab-button" data-tab="ai-insights">AI Insights & Advice</button>
+                        <button class="tab-button" data-tab="schedule-detail">Full Schedule</button>
+                    </div>
+
+                    <div id="payment-components" class="tab-content active">
+                        <div class="chart-container">
+                            <canvas id="payment-breakdown-chart"></canvas>
+                        </div>
+                        <div class="summary-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Total Loan Amount</span>
+                                <span class="detail-value" id="total-loan-amount">$0.00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Total Interest Paid</span>
+                                <span class="detail-value" id="total-interest">$0.00</span>
+                            </div>
+                             <div class="detail-item">
+                                <span class="detail-label">Total Sales Tax</span>
+                                <span class="detail-value" id="total-sales-tax">$0.00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Total Fees</span>
+                                <span class="detail-value" id="total-fees">$0.00</span>
+                            </div>
+                            <div class="detail-item detail-total">
+                                <span class="detail-label">Total Cost (incl. Down Payment)</span>
+                                <span class="detail-value" id="total-payments">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="comparison-table" class="tab-content">
+                        <h3 class="input-group-sub-title">Compare Loan Terms</h3>
+                        <p class="input-note">See how different loan terms affect your monthly payment and the total interest you'll pay, based on your current inputs.</p>
+                        <div class="amortization-table-container">
+                            <table id="loan-comparison-table" class="amortization-table">
+                                <thead>
+                                    <tr>
+                                        <th>Term</th>
+                                        <th>Monthly Payment</th>
+                                        <th>Total Interest Paid</th>
+                                        <th>Total Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="ai-insights" class="tab-content">
+                        <div class="ai-insight-box card-mini">
+                            <h3 class="input-group-sub-title"><i class="fas fa-microchip"></i> FinGuid AI Auto Advisor</h3>
+                            <div id="ai-insights-content">
+                                <p>Calculating initial insights based on current parameters...</p>
+                            </div>
+                        </div>
+                        <aside class="affiliate-slot" role="complementary" aria-label="Affiliate Link">
+                            <h4><i class="fas fa-handshake"></i> Find Your Best Rate</h4>
+                            <p>Our AI recommends checking your score. Get your free credit score before you buy! (Affiliate Link)</p>
+                            <a href="#" class="primary-button affiliate-link-cta" id="affiliate-link-1" target="_blank">Check Your Score (from CreditKarma)</a>
+                        </aside>
+                    </div>
+
+                    <div id="schedule-detail" class="tab-content">
+                        <div class="amortization-table-container">
+                            <table id="amortization-table">
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Payment</th>
+                                        <th>Principal</th>
+                                        <th>Interest</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    </tbody>
+                            </table>
+                        </div>
+                        <button id="export-csv-button" class="secondary-button" style="margin-top: 1rem; width: 100%;"><i class="fas fa-file-csv"></i> Export Full Schedule to CSV</button>
+                    </div>
                 </div>
 
             </section>
         </div>
-        
-        <section class="card monetization-slot" id="monetization-bottom-slot" style="margin-top: 30px;">
-            <h3 style="margin-top: 0;">American Auto Insurance Partners</h3>
-            <p>Save hundreds on your car insurance. Compare rates with our trusted US partners today.</p>
-            <a href="#affiliate-link-insurance" target="_blank" class="cta-button">Compare Insurance Quotes Now</a>
-        </section>
-
     </main>
 
     <footer class="main-footer">
-        <div class="container">
-            <nav class="footer-nav">
-                <div class="nav-column">
-                    <h4>Calculators</h4>
-                    <ul>
-                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                        <li><a href="/rent-vs-buy.html">Rent vs Buy Analyzer</a></li>
-                        <li><a href="/auto-loan-calculator.html" class="active">Auto Loan Calculator</a></li>
-                    </ul>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-logo-info">
+                    <h4 class="logo"><a href="/">FinGuid <span>USA</span></a></h4>
+                    <p>Building a future with AI-enhanced financial clarity.</p>
                 </div>
-                <div class="nav-column">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="/faq.html">FAQ</a></li>
-                        <li><a href="/contact.html">Contact Us</a></li>
-                        <li><a href="/privacy.html">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="nav-column">
-                    <h4>Partnership & Ads</h4>
-                    <ul>
-                        <li><a href="#advertising">Advertising (Ad Slot)</a></li>
-                        <li><a href="#affiliates">Affiliate Products</a></li>
-                        <li><a href="#sponsor-link">Sponsor Products</a></li>
-                    </ul>
-                </div>
-            </nav>
+                <nav class="footer-nav">
+                    <div class="nav-column">
+                        <h4>Platform & Tools</h4>
+                        <ul>
+                            <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                            <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy Analyzer</a></li>
+                            <li><a href="/tax-withholding-calculator.html">Tax Withholding Calc</a></li>
+                            <li><a href="/auto-loan-calculator.html" aria-current="page">Auto Loan Calculator</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-column">
+                        <h4>Legal & Compliance</h4>
+                        <ul>
+                            <li><a href="#disclaimer">Disclaimer & Terms</a></li>
+                            <li><a href="#privacy">Privacy Policy (GDPR/CCPA)</a></li>
+                            <li><a href="#accessibility">Accessibility Statement (WCAG)</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-column">
+                        <h4>Partnership & Ads (Monetization)</h4>
+                        <ul>
+                            <li><a href="#advertising">Advertising (Ad Slot)</a></li>
+                            <li><a href="#affiliates">Affiliate Products</a></li>
+                            <li><a href="#sponsor-link">Sponsor Products</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
             <div class="footer-bottom">
                 <div class="footer-disclaimer">
                     <p>
-                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize via advertising and affiliate partnerships.**
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. We monetize via advertising and affiliate partnerships. Interest rates are sourced from the Federal Reserve (FRED) and are subject to change.
                     </p>
                 </div>
+                
                 <div class="footer-badges">
                     <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
                     <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
@@ -220,8 +298,6 @@
 
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="/register-sw.js"></script> 
     <script src="auto-loan-calculator.js"></script>
     
 </body>
