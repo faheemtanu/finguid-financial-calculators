@@ -1,8 +1,21 @@
-/* === AUTO LOAN CALCULATOR CSS === */
-/* Inherits base styles from FinGuid platform */
+/*
+ * AUTO LOAN CALCULATOR STYLES v1.0
+ * FinGuid USA Market Domination Build
+ * * This file is based on the platform's shared styles (mortgage/rent-vs-buy)
+ * and includes all necessary components:
+ * 1. Base FinGuid Theme (Light/Dark Mode)
+ * 2. Header & Footer Branding
+ * 3. Responsive Layout (Mobile Friendly)
+ * 4. Tab & Card Components
+ * 5. Summary Card (from Mortgage Calc)
+ * 6. Amortization Table (from Mortgage Calc)
+ * 7. MONETIZATION SLOTS (from Rent-vs-Buy Calc)
+ * 8. AI Insight Alerts (from Mortgage Calc)
+ */
 
+/* === 1. Base FinGuid Theme (from provided files) === */
 :root {
-    /* === FinGuid Color Tokens (Consistent Across Platform) === */
+    /* Color Tokens */
     --color-white: rgba(255, 255, 255, 1);
     --color-black: rgba(0, 0, 0, 1);
     --color-cream-100: rgba(255, 255, 253, 1); /* Light Background */
@@ -14,481 +27,814 @@
     --color-slate-900: rgba(19, 52, 59, 1); /* FinGuid Primary (Teal Dark) */
     --color-teal-400: rgba(36, 172, 185, 1); /* FinGuid Accent */
     --color-teal-300: rgba(87, 203, 215, 1); /* Dark Mode Accent */
-    --color-red-500: #dc3545; /* Error/Negative */
-    --color-green-500: #28a745; /* Success/Positive */
-    
-    /* Auto Loan Chart Colors */
-    --color-chart-principal: var(--color-teal-400); /* Teal */
-    --color-chart-interest: var(--color-red-500); /* Red */
-    
-    /* Spacing & Borders */
-    --space-4: 4px;
-    --space-8: 8px;
-    --space-16: 16px;
-    --space-24: 24px;
-    --space-32: 32px;
-    --border-radius: 8px;
-    
+    --color-red-500: rgba(239, 68, 68, 1); /* Alert/Error */
+    --color-green-500: rgba(16, 185, 129, 1); /* Success */
+    --color-brown-600: rgba(148, 82, 42, 1); /* Dark Mode Border/Chart */
+    --color-info: rgba(255, 193, 7, 0.8); /* Yellow/Info */
+
+    /* Global Scheme Variables (Light Mode Defaults) */
+    --color-text: var(--color-charcoal-700);
+    --color-text-light: var(--color-slate-500);
+    --color-background: var(--color-cream-100);
+    --color-card-background: var(--color-white);
+    --color-border: var(--color-gray-200);
+    --color-primary: var(--color-slate-900);
+    --color-accent: var(--color-teal-400);
+
+    /* Spacing */
+    --space-4: 0.25rem;
+    --space-8: 0.5rem;
+    --space-12: 0.75rem;
+    --space-16: 1rem;
+    --space-24: 1.5rem;
+    --space-32: 2rem;
+    --space-64: 4rem;
+
     /* Typography */
+    --font-family-primary: 'Helvetica Neue', Arial, sans-serif;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
     --font-size-lg: 1.25rem;
-    --font-size-xl: 2.5rem;
-    
-    /* Light Mode Variables */
-    --bg-color: var(--color-cream-100);
-    --card-bg-color: var(--color-gray-200);
-    --text-color: var(--color-slate-900);
-    --border-color: var(--color-gray-300);
+    --font-size-xl: 1.5rem;
+    --font-size-xxl: 2.25rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
 }
 
-/* === Dark Mode Overrides === */
-html[data-color-scheme="dark"] {
-    --bg-color: var(--color-charcoal-700);
-    --card-bg-color: var(--color-charcoal-800);
-    --text-color: var(--color-white);
-    --border-color: var(--color-slate-500);
+/* Dark Mode Overrides */
+[data-color-scheme="dark"] {
+    --color-text: var(--color-white);
+    --color-text-light: var(--color-gray-300);
+    --color-background: var(--color-charcoal-700);
+    --color-card-background: var(--color-charcoal-800);
+    --color-border: var(--color-brown-600);
+    --color-primary: var(--color-teal-400);
+    --color-accent: var(--color-teal-300);
 }
 
-/* === BASE STYLES & LAYOUT === */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    :root {
+        --color-border: var(--color-black);
+        --color-text: var(--color-black);
+        --color-background: var(--color-white);
+        --color-card-background: var(--color-white);
+    }
+    [data-color-scheme="dark"] {
+        --color-border: var(--color-white);
+        --color-text: var(--color-white);
+        --color-background: var(--color-black);
+        --color-card-background: var(--color-black);
+    }
+    input, select, button {
+        border: 2px solid var(--color-text) !important;
+    }
+}
+
+
+/* === 2. Base Styles (Body, Layout, Card) === */
+* {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family-primary);
+    background-color: var(--color-background);
+    color: var(--color-text);
     transition: background-color 0.3s, color 0.3s;
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.container {
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+a:hover {
+    color: var(--color-primary);
+}
+
+h1, h2, h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-16);
+    line-height: 1.2;
+}
+
+.main-content {
+    flex-grow: 1; /* Allows main content to take up remaining space */
     max-width: 1200px;
-    margin: 0 auto;
+    margin: var(--space-32) auto;
     padding: 0 var(--space-24);
-}
-
-.card {
-    background-color: var(--card-bg-color);
-    border-radius: var(--border-radius);
-    padding: var(--space-24);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
-    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .calculator-container {
     display: grid;
-    grid-template-columns: 1fr 2fr; /* 1/3 for inputs, 2/3 for results */
+    grid-template-columns: 1fr 1.5fr; /* Inputs vs Results */
     gap: var(--space-32);
-    padding: var(--space-32) 0;
 }
 
-/* === HEADER & NAVIGATION (FinGuid Branding) === */
+/* Card Styling */
+.card {
+    background-color: var(--color-card-background);
+    padding: var(--space-24);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+}
+.card-mini {
+    padding: var(--space-16);
+    margin-bottom: var(--space-24);
+}
+
+/* === 3. Header (Branding & Accessibility) === */
 .main-header {
-    background-color: var(--color-slate-900);
-    color: var(--color-white);
-    padding-top: var(--space-16);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-card-background);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-16) var(--space-24);
+    box-shadow: var(--shadow-sm);
 }
-
 .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
-    padding-bottom: var(--space-16);
+    justify-content: space-between;
 }
-
+.logo {
+    font-size: var(--font-size-xl);
+    font-weight: 900;
+    margin: 0;
+}
 .logo a {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--color-white);
+    color: var(--color-slate-900);
     text-decoration: none;
 }
-
-.logo-accent {
-    color: var(--color-teal-400);
+.logo span {
+    color: var(--color-accent);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    margin-left: var(--space-4);
 }
-
-.branding-meta h1 {
-    font-size: var(--font-size-lg);
-    margin: 0;
+[data-color-scheme="dark"] .logo a {
     color: var(--color-white);
 }
-
 .tagline {
-    font-size: var(--font-size-sm);
-    opacity: 0.7;
-    margin: 0;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-light);
+    margin: 0 var(--space-24) 0 0;
+    flex-grow: 1;
 }
-
-.main-nav {
-    background-color: var(--color-charcoal-800);
-    padding: var(--space-8) 0;
+.features-quick {
     display: flex;
-    gap: var(--space-24);
+    gap: var(--space-16);
+    flex-wrap: wrap;
+    margin-right: var(--space-24);
     font-size: var(--font-size-sm);
-    font-weight: 600;
+    color: var(--color-accent);
 }
-
-.main-nav a {
-    color: var(--color-white);
-    text-decoration: none;
-    padding: 0 var(--space-8);
-    transition: color 0.2s;
-}
-
-.main-nav a:hover, .main-nav a.active {
-    color: var(--color-teal-400);
-}
-
-.nav-ad-link {
-    color: var(--color-green-500) !important;
-    margin-left: auto;
-    padding-right: var(--space-24);
-}
-
-/* === ACCESSIBILITY CONTROLS === */
 .accessibility-controls {
+    display: flex;
+    gap: var(--space-12);
+    align-items: center;
+}
+.control-button {
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: var(--space-8);
+    border-radius: var(--space-4);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    font-size: var(--font-size-sm);
+    /* Making buttons rounder as per rent-vs-buy */
+    border-radius: 50%; 
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.control-button:hover {
+    background-color: var(--color-gray-200);
+}
+[data-color-scheme="dark"] .control-button:hover {
+    background-color: var(--color-charcoal-800);
+}
+.voice-status {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--space-8);
 }
-
-.features-quick {
-    font-size: var(--font-size-xs);
-    opacity: 0.6;
-    margin-right: var(--space-16);
+.voice-inactive {
+    color: var(--color-text-light);
 }
-
-.control-button {
-    background: none;
-    border: 1px solid var(--border-color);
+.voice-active {
+    color: var(--color-red-500);
+    border-color: var(--color-red-500);
+    animation: pulse 1s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+.tts-inactive { color: var(--color-text-light); }
+.tts-active { color: var(--color-accent); border-color: var(--color-accent); }
+.install-button {
+    background-color: var(--color-green-500);
     color: var(--color-white);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    transition: background-color 0.2s, border-color 0.2s;
+    border-color: var(--color-green-500);
+    border-radius: var(--space-4); /* Not round */
+    width: auto;
+    padding: var(--space-8) var(--space-12);
+}
+.hidden {
+    display: none !important;
 }
 
-.control-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* === INPUT SECTION === */
+/* === 4. Input Section & Form Elements === */
 .input-section {
-    position: sticky; /* Keep inputs visible on long results scroll */
-    top: var(--space-32);
-    height: fit-content;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: var(--space-32); /* Keep inputs in view on scroll */
+    align-self: flex-start;
 }
-
-.form-group {
+.section-title {
+    font-size: var(--font-size-xl);
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: var(--space-8);
+    margin-bottom: var(--space-24);
+}
+.input-group {
     margin-bottom: var(--space-16);
 }
-
-.form-group label {
+.input-group label {
     display: block;
-    margin-bottom: var(--space-8);
-    font-weight: 600;
+    margin-bottom: var(--space-4);
+    font-weight: bold;
     font-size: var(--font-size-sm);
 }
-
-.form-group input, .form-group select {
+input[type="text"], input[type="number"], select {
     width: 100%;
     padding: var(--space-12);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    box-sizing: border-box;
-    transition: border-color 0.2s, background-color 0.2s;
+    background-color: var(--color-card-background);
+    color: var(--color-text);
+    font-size: var(--font-size-base);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
-
+input:focus, select:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.2);
+}
 .input-split {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-16);
 }
-
-.form-group-half {
-    flex: 1;
-}
-
-.live-rate-tag {
+.input-note, .fred-source-note {
+    display: block;
     font-size: var(--font-size-xs);
-    font-weight: 400;
-    color: var(--color-teal-400);
-    margin-left: var(--space-8);
+    color: var(--color-text-light);
+    margin-top: var(--space-4);
 }
-
-/* === RESULTS SECTION === */
-.main-result-card {
-    text-align: center;
-    border: 2px solid var(--color-teal-400);
-    margin-bottom: var(--space-24);
-    background-color: var(--card-bg-color);
+.fred-source-note {
+    color: var(--color-green-500);
 }
-
-.result-label {
+[data-color-scheme="dark"] .fred-source-note {
+    color: var(--color-teal-300);
+}
+/* Advanced Options Toggle */
+.advanced-toggle-container {
+    margin-top: var(--space-24);
+}
+.toggle-button {
+    background: none;
+    border: none;
+    color: var(--color-accent);
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    transition: color 0.2s;
+    padding: 0;
+    font-size: var(--font-size-base);
+}
+.toggle-button i {
+    transition: transform 0.3s;
+}
+.toggle-button[aria-expanded="true"] i {
+    transform: rotate(180deg);
+}
+.advanced-options-group {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease-in-out, opacity 0.4s ease;
+    padding-top: var(--space-16);
+    border-top: 1px dashed var(--color-border);
+}
+.advanced-options-group[aria-hidden="false"] {
+    max-height: 500px; /* Sufficiently large */
+    opacity: 1;
+}
+.input-group-sub-title {
+    font-size: var(--font-size-base);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-16);
+    padding-left: var(--space-4);
+    border-left: 3px solid var(--color-accent);
+}
+/* Action Button */
+.action-group {
+    margin-top: var(--space-32);
+}
+.primary-button {
+    width: 100%;
+    padding: var(--space-16);
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--border-radius);
     font-size: var(--font-size-lg);
-    margin: 0;
-    opacity: 0.7;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+.primary-button:hover:not(:disabled) {
+    opacity: 0.9;
+}
+[data-color-scheme="dark"] .primary-button {
+    background-color: var(--color-accent);
+    color: var(--color-charcoal-700);
+    border-color: var(--color-accent);
+}
+[data-color-scheme="dark"] .primary-button:hover:not(:disabled) {
+    background-color: var(--color-teal-300);
 }
 
-.result-value {
-    font-size: var(--font-size-xl);
-    font-weight: 800;
-    color: var(--color-teal-400);
-    margin: var(--space-8) 0;
+/* === 5. Results Section (Summary, Tabs, Charts) === */
+.results-section {
+    padding: 0;
 }
 
-.result-breakdown {
+/* Summary Card (from Mortgage Calc) */
+.summary-card {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    text-align: center;
+    border: none;
+}
+[data-color-scheme="dark"] .summary-card {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+.summary-label {
     font-size: var(--font-size-sm);
     opacity: 0.8;
+    margin-bottom: var(--space-4);
 }
-
-/* === MONETIZATION/AD SLOT === */
-.monetization-slot {
-    padding: var(--space-16);
-    text-align: center;
-    background-color: var(--color-slate-900);
-    color: var(--color-white);
-    border: 1px solid var(--color-teal-400);
-    margin-bottom: var(--space-24);
+.payment-display {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: var(--space-8);
 }
-
-.ad-label {
-    font-size: var(--font-size-xs);
-    opacity: 0.7;
-    margin: 0 0 var(--space-8) 0;
+.payment-figure {
+    font-size: var(--font-size-xxl);
+    font-weight: 900;
+    line-height: 1;
 }
-
-.monetization-slot a {
-    color: var(--color-green-500);
-    font-weight: 700;
-    text-decoration: none;
+.payment-unit {
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    margin-left: var(--space-4);
 }
-
-.cta-button {
-    display: inline-block;
-    background-color: var(--color-teal-400);
-    color: var(--color-slate-900);
-    padding: var(--space-8) var(--space-16);
-    border-radius: var(--border-radius);
-    text-decoration: none;
-    font-weight: 700;
-    margin-top: var(--space-8);
-    transition: opacity 0.2s;
-}
-
-.cta-button:hover {
+.piti-breakdown-summary { /* Renamed for auto loan */
+    font-size: var(--font-size-sm);
     opacity: 0.9;
 }
 
-/* === TABS & TAB CONTENT === */
-.tab-controls-results {
+/* Tabs */
+.tabs-container {
+    margin-top: var(--space-24);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background-color: var(--color-card-background);
+}
+.tab-buttons {
     display: flex;
-    gap: var(--space-8);
-    margin-bottom: var(--space-16);
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 1px solid var(--color-border);
+    overflow-x: auto;
+    background-color: var(--color-gray-200);
 }
-
+[data-color-scheme="dark"] .tab-buttons {
+    background-color: var(--color-charcoal-800);
+}
 .tab-button {
-    background: none;
-    border: none;
+    flex-shrink: 0;
     padding: var(--space-12) var(--space-16);
+    border: none;
+    background: none;
     cursor: pointer;
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    color: var(--color-slate-500);
+    font-weight: 500;
+    color: var(--color-text-light);
+    transition: color 0.2s, border-bottom 0.2s;
     border-bottom: 3px solid transparent;
-    transition: color 0.2s, border-bottom-color 0.2s;
 }
-
+.tab-button:hover {
+    color: var(--color-text);
+}
 .tab-button.active {
-    color: var(--color-teal-400);
-    border-bottom-color: var(--color-teal-400);
+    color: var(--color-accent);
+    border-bottom: 3px solid var(--color-accent);
+    font-weight: bold;
 }
-
 .tab-content {
+    padding: var(--space-24);
     display: none;
 }
-
 .tab-content.active {
     display: block;
 }
 
+/* Chart Styles */
+.chart-container {
+    height: 300px;
+    width: 100%;
+    margin-bottom: var(--space-24);
+}
+
+/* Summary Details Grid */
 .summary-details {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-16);
-    margin-bottom: var(--space-16);
-    padding: var(--space-8) 0;
-    border-bottom: 1px dashed var(--border-color);
 }
-
-.summary-details p {
-    margin: 0;
-    font-size: var(--font-size-sm);
-    opacity: 0.8;
-}
-
-.summary-details strong {
-    display: block;
-    font-size: var(--font-size-lg);
-    margin-top: var(--space-4);
-    color: var(--text-color);
-}
-
-/* === COMPARISON TABLE (New Feature) === */
-.comparison-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: var(--space-16);
-    font-size: var(--font-size-sm);
-}
-
-.comparison-table th, .comparison-table td {
+.detail-item {
+    border: 1px solid var(--color-border);
     padding: var(--space-12);
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--color-gray-200);
 }
-
-.comparison-table th {
-    background-color: rgba(36, 172, 185, 0.1);
-    font-weight: 700;
+[data-color-scheme="dark"] .detail-item {
+    background-color: var(--color-charcoal-700);
 }
-
-.comparison-table tr:hover {
-    background-color: rgba(36, 172, 185, 0.05);
+.detail-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-4);
 }
-
-/* === FOOTER (FinGuid Branding & Badges) === */
-.main-footer {
+.detail-value {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    color: var(--color-primary);
+}
+.detail-item.detail-total {
+    grid-column: 1 / -1;
     background-color: var(--color-slate-900);
     color: var(--color-white);
-    padding: var(--space-32) 0;
-    margin-top: var(--space-32);
+    border-color: var(--color-slate-900);
+}
+.detail-item.detail-total .detail-label,
+.detail-item.detail-total .detail-value {
+    color: var(--color-white);
 }
 
-.footer-nav {
+/* Secondary Button (Export CSV) */
+.secondary-button {
+    grid-column: 1 / -1;
+    padding: var(--space-12);
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+.secondary-button:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+[data-color-scheme="dark"] .secondary-button {
+    background-color: var(--color-charcoal-800);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+[data-color-scheme="dark"] .secondary-button:hover {
+    background-color: var(--color-accent);
+    color: var(--color-charcoal-700);
+}
+
+/* AI Insights Box */
+.ai-insight-box {
+    background-color: var(--color-gray-200);
+    border-left: 5px solid var(--color-green-500);
+    padding: var(--space-24);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--space-24);
+}
+[data-color-scheme="dark"] .ai-insight-box {
+    background-color: var(--color-charcoal-700);
+    border-left-color: var(--color-green-500);
+}
+#ai-insights-content p {
+    margin-bottom: var(--space-16);
+}
+.recommendation-alert {
+    padding: var(--space-16);
+    margin: var(--space-16) 0;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    color: var(--color-white);
+}
+.recommendation-alert.high-priority {
+    background-color: var(--color-red-500);
+}
+.recommendation-alert.medium-priority {
+    background-color: var(--color-teal-400);
+    color: var(--color-charcoal-700);
+}
+[data-color-scheme="dark"] .recommendation-alert.medium-priority {
+    color: var(--color-white);
+}
+.recommendation-alert.low-priority {
+    background-color: var(--color-green-500);
+}
+.recommendation-alert a {
+    color: var(--color-white);
+    text-decoration: underline;
+    font-weight: 900;
+}
+
+/* Amortization Table */
+.amortization-table-container {
+    max-height: 400px;
+    overflow-y: scroll;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+}
+.amortization-table { /* Applied to both tables */
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    text-align: left;
+}
+.amortization-table th, .amortization-table td {
+    padding: var(--space-8) var(--space-12);
+    border-bottom: 1px solid var(--color-border);
+}
+.amortization-table th {
+    background-color: var(--color-gray-200);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: var(--color-primary);
+}
+[data-color-scheme="dark"] .amortization-table th {
+    background-color: var(--color-charcoal-800);
+}
+.amortization-table tbody tr:hover {
+    background-color: var(--color-gray-200);
+}
+[data-color-scheme="dark"] .amortization-table tbody tr:hover {
+    background-color: var(--color-charcoal-700);
+}
+
+/* === 6. MONETIZATION SLOTS (CRITICAL) === */
+/* Styles from rent-vs-buy-calculator.css */
+.ad-slot, .monetization-banner, .affiliate-slot {
+    background-color: var(--color-gray-200);
+    padding: var(--space-16);
+    margin: var(--space-24) 0;
+    border-radius: var(--border-radius);
+    text-align: center;
+    border: 1px dashed var(--color-slate-500);
+}
+[data-color-scheme="dark"] .ad-slot, 
+[data-color-scheme="dark"] .monetization-banner, 
+[data-color-scheme="dark"] .affiliate-slot {
+    background-color: var(--color-charcoal-800);
+    border-color: var(--color-teal-400);
+}
+.ad-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-red-500);
+    font-weight: bold;
+    margin-bottom: var(--space-8);
+}
+.affiliate-slot {
+    background-color: rgba(36, 172, 185, 0.1); /* Light Teal background */
+    border: 2px solid var(--color-teal-400);
+}
+[data-color-scheme="dark"] .affiliate-slot {
+    background-color: rgba(36, 172, 185, 0.15);
+}
+.affiliate-link-cta {
+    display: inline-block;
+    background-color: var(--color-teal-400);
+    color: var(--color-white);
+    padding: var(--space-12) var(--space-24);
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    margin-top: var(--space-8);
+    transition: background-color 0.2s;
+    text-decoration: none;
+}
+.affiliate-link-cta:hover { 
+    background-color: var(--color-slate-900); 
+    color: var(--color-white);
+}
+.monetization-banner {
+    background-color: var(--color-info);
+    color: var(--color-slate-900);
+    font-weight: 600;
+}
+[data-color-scheme="dark"] .monetization-banner {
+    background-color: var(--color-info);
+    color: var(--color-slate-900);
+}
+
+
+/* === 7. Footer (from Mortgage Calc) === */
+.main-footer {
+    margin-top: var(--space-64);
+    background-color: var(--color-charcoal-700);
+    color: var(--color-white);
+    padding-top: var(--space-32);
+    border-top: 5px solid var(--color-accent);
+}
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-24) var(--space-32);
+}
+.footer-content {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     padding-bottom: var(--space-24);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-.nav-column h4 {
-    color: var(--color-teal-400);
-    margin-top: 0;
-    border-bottom: 2px solid var(--color-teal-400);
-    padding-bottom: var(--space-4);
+.footer-logo-info {
+    flex-basis: 300px;
+    margin-bottom: var(--space-24);
 }
-
-.nav-column ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.nav-column a {
+.footer-logo-info .logo a {
     color: var(--color-white);
-    text-decoration: none;
+}
+.footer-logo-info p {
     font-size: var(--font-size-sm);
     opacity: 0.8;
-    transition: opacity 0.2s;
-    display: block;
-    padding: var(--space-4) 0;
 }
-
-.nav-column a:hover {
-    opacity: 1;
-    color: var(--color-teal-300);
+.footer-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-32);
+    flex-grow: 1;
+    margin-left: var(--space-32);
 }
-
+.nav-column h4 {
+    color: var(--color-accent);
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-12);
+}
+.nav-column ul {
+    list-style: none;
+}
+.nav-column ul li a {
+    color: var(--color-gray-300);
+    font-size: var(--font-size-sm);
+    line-height: 2;
+    transition: color 0.2s;
+}
+.nav-column ul li a:hover {
+    color: var(--color-white);
+}
 .footer-bottom {
+    padding-top: var(--space-24);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: var(--space-16);
     flex-wrap: wrap;
-    gap: var(--space-16);
 }
-
+.footer-disclaimer {
+    flex-basis: 60%;
+}
 .footer-disclaimer p {
     font-size: var(--font-size-xs);
-    max-width: 600px;
-    opacity: 0.7;
-    margin: 0;
+    opacity: 0.6;
 }
-
 .footer-badges {
     display: flex;
-    gap: var(--space-8);
+    gap: var(--space-16);
     flex-wrap: wrap;
+    margin-top: var(--space-16);
 }
-
 .badge {
     font-size: var(--font-size-xs);
-    background-color: var(--color-teal-400);
-    color: var(--color-slate-900);
+    background-color: rgba(255, 255, 255, 0.1);
     padding: var(--space-4) var(--space-8);
-    border-radius: 20px;
-    font-weight: 600;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    opacity: 0.8;
 }
 
-.badge i {
-    margin-right: var(--space-4);
+/* === 8. Toast Notifications === */
+.toast-container {
+    position: fixed;
+    bottom: var(--space-24);
+    right: var(--space-24);
+    z-index: 1000;
+}
+.toast {
+    margin-top: var(--space-8);
+    padding: var(--space-12) var(--space-24);
+    border-radius: var(--border-radius);
+    color: var(--color-white);
+    box-shadow: var(--shadow-md);
+    transform: translateY(100px);
+    transition: transform 0.3s ease-out;
+}
+.toast.show {
+    transform: translateY(0);
+}
+.toast.success {
+    background-color: var(--color-green-500);
+}
+.toast.error {
+    background-color: var(--color-red-500);
 }
 
-/* === RESPONSIVENESS (Mobile/All Device Friendly) === */
+/* === 9. Mobile Responsiveness (SCO & User Friendly) === */
 @media (max-width: 1024px) {
-    .calculator-container { 
-        grid-template-columns: 1fr; 
-        padding: var(--space-16) 0;
+    .calculator-container {
+        grid-template-columns: 1fr;
     }
-    .input-section { 
-        position: static; 
-        box-shadow: none; 
+    .input-section {
+        position: static; /* Remove sticky on mobile */
     }
     .header-content {
         flex-direction: column;
         align-items: flex-start;
-        gap: var(--space-8);
     }
-    .accessibility-controls {
-        order: 3;
-        width: 100%;
-        justify-content: space-between;
-        margin-top: var(--space-8);
+    .logo {
+        margin-bottom: var(--space-8);
+    }
+    .tagline, .features-quick {
+        margin: var(--space-4) 0;
+    }
+    .tagline {
+        font-size: var(--font-size-base);
     }
     .features-quick {
-        margin: 0;
+        order: 3;
+        font-size: var(--font-size-xs);
+        margin-bottom: var(--space-16);
     }
-    .main-nav {
-        justify-content: space-around;
-        gap: 0;
+    .accessibility-controls {
+        order: 2;
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: var(--space-8);
     }
-    .main-nav a {
-        padding: 0;
+    .input-split {
+        grid-template-columns: 1fr;
     }
-    .nav-ad-link {
-        display: none; /* Hide for mobile compactness */
+    .summary-details {
+        grid-template-columns: 1fr;
     }
     .footer-nav {
+        grid-template-columns: 1fr;
+        margin-left: 0;
+    }
+    .footer-content {
         flex-direction: column;
-        gap: var(--space-24);
     }
     .footer-bottom {
         flex-direction: column;
         align-items: flex-start;
     }
-}
-
-/* === TEXT-TO-SPEECH (TTS) Styling === */
-.tts-highlight {
-    background-color: yellow;
-    color: black;
-    transition: background-color 0.1s;
+    .footer-disclaimer, .footer-badges {
+        flex-basis: 100%;
+        margin-top: var(--space-16);
+    }
 }
