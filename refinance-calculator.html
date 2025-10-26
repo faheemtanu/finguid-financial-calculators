@@ -1,260 +1,446 @@
-<!DOCTYPE html>
-<html lang="en" data-color-scheme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Refinance Calculator — World's First AI-Powered Break-Even Analysis | FinGuid USA</title>
-    <meta name="description" content="Use the World's First AI-Powered Refinance Calculator to determine if refinancing your US mortgage makes financial sense. Get a Break-Even Analysis, compare rates, and calculate potential savings instantly.">
-    <meta name="keywords" content="mortgage refinance calculator, break-even analysis, refinance savings, current mortgage rates, FRED API, AI refinance advisor, FinGuid, USA home buyers, SCO Friendly, AI Friendly">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
-    <meta name="theme-color" content="#19343B"> 
-    
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-NYBL2CDNQJ');
-    </script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" />
-    <link rel="stylesheet" href="refinance-calculator.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    
-</head>
-<body>
+/*
+ * REFINANCE CALCULATOR STYLES — FinGuid USA Market Domination Build
+ * NOTE: This extends the core FinGuid platform CSS from the provided mortgage/rent-vs-buy files.
+ * It includes color tokens, base layout, and full responsiveness.
+ */
 
-    <header class="main-header">
-        <div class="header-content">
-            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
-            <p class="tagline">World's First AI-Powered Refinance Analyzer</p>
-            
-            <div class="accessibility-controls">
-                <button id="voice-command-button" class="control-button" title="Start Voice Command"><i class="fas fa-microphone"></i></button>
-                <button id="tts-button" class="control-button" title="Text-to-Speech"><i class="fas fa-volume-up"></i></button>
-                <button id="theme-toggle-button" class="control-button" title="Toggle Light/Dark Mode"><i class="fas fa-sun"></i></button>
-            </div>
-            
-            <div class="features-quick">
-                 <span class="feature-quick"><i class="fas fa-mobile-alt"></i> PWA Ready</span>
-                 <span class="feature-quick"><i class="fas fa-fire-alt"></i> SCO Friendly</span>
-                 <span class="feature-quick"><i class="fas fa-robot"></i> AI Friendly</span>
-            </div>
-        </div>
-    </header>
+/* ========================================================================== */
+/* I. FIN GUID CORE COLOR TOKENS & TYPOGRAPHY */
+/* ========================================================================== */
 
-    <main class="calculator-main">
-        <div class="calculator-container">
-            
-            <section class="input-section card">
-                <h2>Refinance Decision Engine</h2>
-                <div class="current-rate-display">
-                    <i class="fas fa-chart-line"></i> Live 30-Yr Fixed Rate: <span id="current-live-rate">Fetching...</span>
-                    <span class="rate-source">(Source: FRED API)</span>
-                </div>
+:root {
+    /* === FinGuid Color Tokens === */
+    --color-white: rgba(255, 255, 255, 1);
+    --color-black: rgba(0, 0, 0, 1);
+    --color-cream-100: rgba(255, 255, 253, 1); /* Light Background */
+    --color-gray-200: rgba(245, 245, 245, 1); /* Light Card BG */
+    --color-gray-300: rgba(183, 184, 185, 1); /* Light text/border helper */
+    --color-charcoal-700: rgba(31, 33, 33, 1); /* Dark Background */
+    --color-charcoal-800: rgba(24, 25, 25, 1); /* Darker Card BG */
+    --color-slate-500: rgba(100, 116, 139, 1); /* Light Text-light */
+    --color-slate-900: rgba(19, 52, 59, 1); /* FinGuid Primary (Teal Dark) */
+    --color-teal-400: rgba(36, 172, 185, 1); /* FinGuid Accent */
+    --color-teal-300: rgba(87, 203, 215, 1); /* Dark Mode Accent */
+    --color-red-600: rgba(220, 53, 69, 1); /* Error/Warning */
+    --color-green-500: rgba(40, 167, 69, 1); /* Success */
 
-                <form id="refinance-form" class="input-form">
-                    
-                    <div class="input-group">
-                        <h3>1. Current Mortgage Details</h3>
-                        <label for="original-loan-amount">Original Loan Amount ($)</label>
-                        <input type="text" id="original-loan-amount" value="400,000" data-type="currency">
-                        
-                        <label for="original-rate">Original Interest Rate (%)</label>
-                        <input type="text" id="original-rate" value="6.5" data-type="percent">
-                        
-                        <label for="original-term">Original Loan Term (Years)</label>
-                        <input type="number" id="original-term" value="30" min="5" max="40">
-                        
-                        <label for="months-made">Months Already Paid</label>
-                        <input type="number" id="months-made" value="36" min="0">
-                    </div>
-                    
-                    <div class="input-group">
-                        <h3>2. New Loan Proposal</h3>
-                        <label for="new-rate">Proposed New Interest Rate (%)</label>
-                        <input type="text" id="new-rate" value="" data-type="percent" placeholder="Will auto-fill from FRED API">
-                        
-                        <label for="new-term">New Loan Term (Years)</label>
-                        <input type="number" id="new-term" value="30" min="5" max="30">
-                        
-                        <label for="cash-out-amount">Cash-Out Amount (Optional $)</label>
-                        <input type="text" id="cash-out-amount" value="0" data-type="currency">
-                    </div>
-                    
-                    <div class="input-group">
-                        <h3>3. Refinance Costs</h3>
-                        <label for="closing-costs-percent">Closing Costs (% of New Loan)</label>
-                        <input type="text" id="closing-costs-percent" value="2.0" data-type="percent">
-                        
-                        <label for="closing-costs-flat">Flat Closing Fees ($)</label>
-                        <input type="text" id="closing-costs-flat" value="2,500" data-type="currency">
-                        
-                        <label for="taxes-insurance">Monthly PITI (Taxes/Insurance) ($)</label>
-                        <input type="text" id="taxes-insurance" value="450" data-type="currency">
-                    </div>
-                    
-                    <div class="partner-promo">
-                         <i class="fas fa-handshake"></i> **Sponsor Product Placement:** <a href="#sponsor-link" class="affiliate-link">Get a Free Refinance Quote from our AI Partner!</a>
-                    </div>
-                    
-                    <button type="submit" id="calculate-button">Calculate Refinance Savings <i class="fas fa-calculator"></i></button>
+    --color-primary: var(--color-slate-900);
+    --color-secondary: var(--color-teal-400);
+    --color-background: var(--color-cream-100);
+    --color-card-background: var(--color-white);
+    --color-text-primary: var(--color-charcoal-700);
+    --color-text-secondary: var(--color-slate-500);
+    --color-border: var(--color-gray-200);
 
-                </form>
-            </section>
+    /* Spacing & Sizing */
+    --space-8: 0.5rem;
+    --space-16: 1rem;
+    --space-24: 1.5rem;
+    --space-32: 2rem;
+    --border-radius: 8px;
 
-            <section class="results-section">
-                
-                <div class="summary-card card">
-                    <h2>Refinance Feasibility Report</h2>
-                    <div class="summary-details">
-                        <div class="summary-box">
-                            <span class="summary-label">Monthly Savings (or Cost)</span>
-                            <span id="monthly-impact" class="summary-value positive">$0</span>
-                        </div>
-                         <div class="summary-box">
-                            <span class="summary-label">Total Refinance Costs</span>
-                            <span id="total-refi-cost" class="summary-value">$0</span>
-                        </div>
-                        <div class="summary-box important">
-                            <span class="summary-label">**Break-Even Point** (Months)</span>
-                            <span id="break-even-point" class="summary-value">0</span>
-                        </div>
-                        <div class="summary-box">
-                            <span class="summary-label">Total Interest Saved (New Term)</span>
-                            <span id="total-interest-saved" class="summary-value">$0</span>
-                        </div>
-                    </div>
-                </div>
-                
-                 <div class="ad-slot-horizontal card">
-                    <p>
-                        **Ad Slot / Premium Affiliate Partner Banner:** <a href="#affiliate-link-1">Find the lowest mortgage rates in your area using our partner tool!</a>
-                    </p>
-                </div>
-                
-                <div class="tab-controls-results card">
-                    <button class="tab-button active" data-tab="ai-insights">AI Insights & Action Plan</button>
-                    <button class="tab-button" data-tab="break-even-chart">Break-Even Chart</button>
-                    <button class="tab-button" data-tab="cost-analysis">Cost & Payment Analysis</button>
-                </div>
+    /* Typography */
+    --font-family: 'Arial', sans-serif;
+    --font-size-base: 1rem;
+}
 
-                <div id="ai-insights" class="tab-content active card">
-                    <h3><i class="fas fa-robot"></i> FinGuid AI Refinance Verdict</h3>
-                    <div class="ai-insights-box">
-                        <p id="ai-verdict-title" class="ai-verdict-title">Analyze your inputs to get personalized advice.</p>
-                        <ul id="ai-recommendations">
-                             <li>**Data Point:** We are using the current live 30-Year Fixed-Rate from the FRED API for your comparison.</li>
-                            <li>**Monetization Insight:** Since your break-even point is **LOW** (or HIGH), we recommend you check out our exclusive affiliate offers for faster approval: <a href="#affiliate-link-2">Partner Loan Providers</a>.</li>
-                        </ul>
-                    </div>
-                </div>
+/* === Dark Mode Overrides === */
+[data-color-scheme="dark"] {
+    --color-primary: var(--color-teal-300);
+    --color-secondary: var(--color-teal-400);
+    --color-background: var(--color-charcoal-700);
+    --color-card-background: var(--color-charcoal-800);
+    --color-text-primary: var(--color-white);
+    --color-text-secondary: var(--color-slate-500);
+    --color-border: var(--color-charcoal-800);
+}
 
-                <div id="break-even-chart" class="tab-content hidden card">
-                    <h3>Break-Even vs. Net Savings</h3>
-                     <div class="chart-container">
-                        <canvas id="refi-break-even-chart"></canvas>
-                    </div>
-                </div>
-                
-                <div id="cost-analysis" class="tab-content hidden card">
-                    <h3>Detailed Cost and Payment Analysis</h3>
-                    <div class="summary-details detailed-breakdown">
-                         <div class="summary-box">
-                            <span class="summary-label">Original P&I Payment</span>
-                            <span id="original-pi" class="summary-value">$0</span>
-                        </div>
-                        <div class="summary-box">
-                            <span class="summary-label">New P&I Payment</span>
-                            <span id="new-pi" class="summary-value">$0</span>
-                        </div>
-                         <div class="summary-box">
-                            <span class="summary-label">Current Loan Balance</span>
-                            <span id="current-loan-balance" class="summary-value">$0</span>
-                        </div>
-                        <div class="summary-box">
-                            <span class="summary-label">New Loan Amount (incl. Cash-Out)</span>
-                            <span id="new-loan-principal" class="summary-value">$0</span>
-                        </div>
-                    </div>
-                    
-                    <h4 class="cost-title">Refinance Cost Breakdown</h4>
-                     <div class="summary-details cost-breakdown">
-                         <div class="summary-box">
-                            <span class="summary-label">Percentage-based Fees</span>
-                            <span id="cost-percent" class="summary-value">$0</span>
-                        </div>
-                         <div class="summary-box">
-                            <span class="summary-label">Flat Fees / Title Costs</span>
-                            <span id="cost-flat" class="summary-value">$0</span>
-                        </div>
-                         <div class="summary-box">
-                            <span class="summary-label">Total Costs (Financed or Paid)</span>
-                            <span id="total-costs-paid" class="summary-value">$0</span>
-                        </div>
-                    </div>
-                </div>
+/* ========================================================================== */
+/* II. BASE LAYOUT & HEADER/FOOTER (Shared FinGuid Components) */
+/* ========================================================================== */
 
-            </section>
-        </div>
-    </main>
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
 
-    <footer class="main-footer">
-        <div class="footer-content-wrap">
-            <div class="footer-links-container">
-                <nav class="footer-nav">
-                    <div class="nav-column">
-                        <h4>FinGuid Resources</h4>
-                        <ul>
-                            <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                            <li><a href="/rent-vs-buy.html">Rent vs Buy Analyzer</a></li>
-                            <li><a href="/tax-withholding.html">Tax Withholding Tool</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Partnership & Ads (Monetization Focus)</h4>
-                        <ul>
-                            <li><a href="#advertising">Advertise With Us</a></li>
-                            <li><a href="#affiliates">Affiliate Products (High Earning)</a></li>
-                            <li><a href="#sponsor-link">Sponsor Products (Cash-Out Leads)</a></li>
-                            <li><a href="/partners.html">Become a Partner</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Legal & Contact</h4>
-                        <ul>
-                            <li><a href="/privacy.html">Privacy Policy</a></li>
-                            <li><a href="/terms.html">Terms of Service</a></li>
-                            <li><a href="/contact.html">Contact Us</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-disclaimer">
-                    <p>
-                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize exclusively via advertising, sponsor products, and affiliate partnerships.**
-                    </p>
-                </div>
-                <div class="footer-badges">
-                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
-                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
-                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
-                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
-                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
-                </div>
-            </div>
-        </div>
-    </footer>
+header {
+    background-color: var(--color-card-background);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-16) var(--space-32);
+    margin-bottom: var(--space-24);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
 
-    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    <script src="/register-sw.js"></script> <script src="refinance-calculator.js"></script>
-    
-</body>
-</html>
+.logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.accessibility-controls button {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    margin-left: var(--space-8);
+    font-size: 1.2rem;
+    padding: var(--space-8);
+    border-radius: var(--border-radius);
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.accessibility-controls button:hover {
+    color: var(--color-primary);
+    background-color: var(--color-border);
+}
+
+/* Main Calculator Layout */
+.calculator-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-32);
+    padding: 0 var(--space-32);
+}
+
+.card {
+    background-color: var(--color-card-background);
+    padding: var(--space-24);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ========================================================================== */
+/* III. INPUT SECTION STYLES (Refinance Specific) */
+/* ========================================================================== */
+
+.input-section h3 {
+    color: var(--color-primary);
+    margin-top: 0;
+    padding-bottom: var(--space-8);
+    border-bottom: 2px solid var(--color-secondary);
+    margin-bottom: var(--space-16);
+}
+
+.input-group {
+    margin-bottom: var(--space-16);
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+}
+
+input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    background-color: var(--color-card-background);
+    color: var(--color-text-primary);
+    transition: border-color 0.2s;
+}
+
+input[type="number"]:focus, select:focus {
+    border-color: var(--color-secondary);
+    outline: none;
+}
+
+/* Range Slider Styling */
+.range-group {
+    display: flex;
+    align-items: center;
+}
+.range-group input[type="range"] {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+.range-group input[type="number"] {
+    width: 100px;
+    text-align: right;
+}
+
+.refi-loan-details {
+    margin-top: var(--space-24);
+    padding-top: var(--space-24);
+    border-top: 1px dashed var(--color-border);
+}
+
+.input-section .cta-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    margin-top: var(--space-16);
+}
+
+.input-section .cta-button:hover:not(:disabled) {
+    background-color: var(--color-primary);
+}
+
+/* ========================================================================== */
+/* IV. RESULTS & AI INSIGHTS SECTION */
+/* ========================================================================== */
+
+.results-section .tab-controls {
+    display: flex;
+    margin-bottom: var(--space-16);
+    border-bottom: 2px solid var(--color-border);
+}
+
+.results-section .tab-button {
+    background: none;
+    border: none;
+    padding: var(--space-16) var(--space-24);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.2s, border-bottom 0.2s;
+    margin-bottom: -2px; /* To hide the border gap */
+}
+
+.results-section .tab-button.active {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-secondary);
+}
+
+.tab-content {
+    display: none;
+    padding-top: var(--space-8);
+}
+.tab-content.active {
+    display: block;
+}
+
+/* Summary Box */
+.summary-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-16);
+    margin-bottom: var(--space-24);
+}
+
+.summary-box {
+    text-align: center;
+    padding: var(--space-16);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+}
+
+.summary-label {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
+.summary-value.positive {
+    color: var(--color-green-500); /* Savings */
+}
+
+.summary-value.negative {
+    color: var(--color-red-600); /* Loss */
+}
+
+.key-metric-callout {
+    background-color: var(--color-border);
+    padding: var(--space-16);
+    border-radius: var(--border-radius);
+    margin-top: var(--space-16);
+    text-align: center;
+}
+
+.key-metric-callout h4 {
+    color: var(--color-primary);
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+}
+
+.key-metric-callout p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--color-secondary);
+    margin: 0;
+}
+
+/* AI Insights Specifics */
+.ai-insights-box {
+    padding: var(--space-16);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    margin-top: var(--space-16);
+    background-color: var(--color-gray-200); /* Light highlight for AI */
+    transition: background-color 0.3s;
+}
+
+[data-color-scheme="dark"] .ai-insights-box {
+    background-color: var(--color-charcoal-800);
+}
+
+.ai-insights-box i {
+    color: var(--color-secondary);
+    margin-right: 8px;
+}
+
+.ai-insights-box h4 {
+    color: var(--color-primary);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 8px;
+    margin-top: 0;
+}
+
+.ai-recommendation {
+    padding: 10px;
+    border-left: 4px solid var(--color-green-500);
+    margin-top: var(--space-8);
+}
+
+.ai-warning {
+    padding: 10px;
+    border-left: 4px solid var(--color-red-600);
+    margin-top: var(--space-8);
+}
+
+/* Chart Container */
+#refinance-chart-container {
+    height: 400px;
+    width: 100%;
+}
+
+/* ========================================================================== */
+/* V. MONETIZATION & AD SLOTS */
+/* ========================================================================== */
+
+.monetization-slot {
+    background-color: #fff6e8; /* Light callout for ad */
+    border: 1px solid #ffcc80; /* Orange border */
+    padding: var(--space-16);
+    border-radius: var(--border-radius);
+    text-align: center;
+    margin-bottom: var(--space-24);
+    font-size: 0.9rem;
+}
+
+.monetization-slot h5 {
+    color: #ff9800; /* Darker orange */
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+}
+
+.monetization-slot a {
+    color: var(--color-primary);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+[data-color-scheme="dark"] .monetization-slot {
+    background-color: #3e321e;
+    border-color: #8c5d28;
+    color: var(--color-white);
+}
+
+/* ========================================================================== */
+/* VI. FOOTER & RESPONSIVENESS (PWA, SCO, Mobile Friendly) */
+/* ========================================================================== */
+
+footer {
+    margin-top: var(--space-32);
+    padding: var(--space-32) 0;
+    background-color: var(--color-card-background);
+    border-top: 1px solid var(--color-border);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-32);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-16);
+    margin-top: var(--space-16);
+    flex-wrap: wrap;
+}
+
+.footer-disclaimer p {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+.footer-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--color-border);
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+    .calculator-container {
+        grid-template-columns: 1fr;
+        padding: 0 var(--space-16);
+    }
+    header, footer {
+        padding: var(--space-16);
+    }
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .accessibility-controls {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: var(--space-8);
+        order: 2;
+    }
+    .footer-bottom {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+    }
+    .footer-badges {
+        margin-bottom: var(--space-16);
+    }
+}
