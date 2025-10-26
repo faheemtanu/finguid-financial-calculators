@@ -1,8 +1,15 @@
-/* === REFINANCE CALCULATOR CSS === */
-/* FinGuid USA Market Domination Build - Inherits core base styles */
+/*
+ * REFINANCE CALCULATOR STYLES — FinGuid USA Market Domination Build
+ * NOTE: This extends the core FinGuid platform CSS from the provided mortgage/rent-vs-buy files.
+ * It includes color tokens, base layout, and full responsiveness.
+ */
+
+/* ========================================================================== */
+/* I. FIN GUID CORE COLOR TOKENS & TYPOGRAPHY */
+/* ========================================================================== */
 
 :root {
-    /* === FinGuid Color Tokens (Consistent with Mortgage/Rent vs Buy) === */
+    /* === FinGuid Color Tokens === */
     --color-white: rgba(255, 255, 255, 1);
     --color-black: rgba(0, 0, 0, 1);
     --color-cream-100: rgba(255, 255, 253, 1); /* Light Background */
@@ -14,139 +21,426 @@
     --color-slate-900: rgba(19, 52, 59, 1); /* FinGuid Primary (Teal Dark) */
     --color-teal-400: rgba(36, 172, 185, 1); /* FinGuid Accent */
     --color-teal-300: rgba(87, 203, 215, 1); /* Dark Mode Accent */
-    --color-red-500: rgba(239, 68, 68, 1); /* Alert/Error */
-    --color-green-500: rgba(16, 185, 129, 1); /* Success/Savings */
-    
-    /* Global Scheme Variables (Light Mode Defaults) */
-    --color-text: var(--color-charcoal-700);
-    --color-text-light: var(--color-slate-500);
+    --color-red-600: rgba(220, 53, 69, 1); /* Error/Warning */
+    --color-green-500: rgba(40, 167, 69, 1); /* Success */
+
+    --color-primary: var(--color-slate-900);
+    --color-secondary: var(--color-teal-400);
     --color-background: var(--color-cream-100);
     --color-card-background: var(--color-white);
+    --color-text-primary: var(--color-charcoal-700);
+    --color-text-secondary: var(--color-slate-500);
     --color-border: var(--color-gray-200);
-    --color-primary: var(--color-slate-900);
-    --color-accent: var(--color-teal-400);
 
-    /* Typography & Spacing */
-    --font-family-primary: 'Helvetica Neue', Arial, sans-serif;
-    --font-size-base: 1rem;
+    /* Spacing & Sizing */
     --space-8: 0.5rem;
     --space-16: 1rem;
     --space-24: 1.5rem;
+    --space-32: 2rem;
     --border-radius: 8px;
 
-    /* Refinance Specific Chart/Status Colors */
-    --color-savings: var(--color-green-500);
-    --color-cost: var(--color-red-500);
-    --color-current-loan: var(--color-slate-500);
-    --color-new-loan: var(--color-teal-400);
+    /* Typography */
+    --font-family: 'Arial', sans-serif;
+    --font-size-base: 1rem;
 }
 
-/* Dark Mode Overrides */
+/* === Dark Mode Overrides === */
 [data-color-scheme="dark"] {
-    --color-text: var(--color-white);
-    --color-text-light: var(--color-gray-300);
+    --color-primary: var(--color-teal-300);
+    --color-secondary: var(--color-teal-400);
     --color-background: var(--color-charcoal-700);
     --color-card-background: var(--color-charcoal-800);
-    --color-border: var(--color-charcoal-800); /* Darker border in dark mode */
-    --color-primary: var(--color-teal-400);
-    --color-accent: var(--color-teal-300);
+    --color-text-primary: var(--color-white);
+    --color-text-secondary: var(--color-slate-500);
+    --color-border: var(--color-charcoal-800);
 }
 
-/* === General Layout (Based on existing FinGuid structure) === */
-* { box-sizing: border-box; }
-body { margin: 0; font-family: var(--font-family-primary); background-color: var(--color-background); color: var(--color-text); line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
+/* ========================================================================== */
+/* II. BASE LAYOUT & HEADER/FOOTER (Shared FinGuid Components) */
+/* ========================================================================== */
 
-.main-header { background-color: var(--color-card-background); border-bottom: 1px solid var(--color-border); padding: var(--space-16) 0; }
-.header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 var(--space-16); }
-.logo a { color: var(--color-primary); text-decoration: none; font-size: 1.8rem; font-weight: 700; }
-.logo span { color: var(--color-accent); font-size: 0.8em; font-weight: 300; margin-left: 4px; }
-.tagline { color: var(--color-text-light); font-size: 0.9rem; }
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
 
-.calculator-main { padding: var(--space-24) 0; }
-.calculator-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 3fr; gap: var(--space-24); padding: 0 var(--space-16); }
+header {
+    background-color: var(--color-card-background);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-16) var(--space-32);
+    margin-bottom: var(--space-24);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
 
-.card { background-color: var(--color-card-background); border-radius: var(--border-radius); padding: var(--space-24); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border: 1px solid var(--color-border); transition: all 0.3s; }
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-/* === Input Form Styling === */
-.input-section { position: sticky; top: var(--space-24); height: min-content; }
-.input-form h3 { border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-8); margin-bottom: var(--space-16); color: var(--color-primary); }
-.input-group { margin-bottom: var(--space-24); }
-.input-group label { display: block; margin-top: var(--space-16); margin-bottom: var(--space-8); font-size: var(--font-size-base); font-weight: 600; color: var(--color-text); }
-.input-group input[type="text"], .input-group input[type="number"] { width: 100%; padding: var(--space-12); border: 1px solid var(--color-border); border-radius: var(--border-radius); background-color: var(--color-background); color: var(--color-text); transition: border-color 0.3s, box-shadow 0.3s; }
-.input-group input:focus { border-color: var(--color-accent); outline: none; box-shadow: 0 0 0 2px rgba(var(--color-accent), 0.2); }
+.logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
 
-#calculate-button { width: 100%; padding: var(--space-16); background-color: var(--color-primary); color: var(--color-white); border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 1.1rem; font-weight: 700; margin-top: var(--space-24); transition: background-color 0.3s; }
-#calculate-button:hover { background-color: var(--color-teal-400); }
+.accessibility-controls button {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    margin-left: var(--space-8);
+    font-size: 1.2rem;
+    padding: var(--space-8);
+    border-radius: var(--border-radius);
+    transition: color 0.2s, background-color 0.2s;
+}
 
-/* === Live Rate Display === */
-.current-rate-display { background-color: var(--color-gray-200); border: 1px dashed var(--color-accent); padding: var(--space-16); border-radius: var(--border-radius); margin-bottom: var(--space-24); font-weight: 600; text-align: center; }
-.current-rate-display i { color: var(--color-accent); margin-right: var(--space-8); }
-#current-live-rate { color: var(--color-red-500); font-size: 1.2rem; margin-left: var(--space-8); }
-.rate-source { display: block; font-size: 0.8rem; font-weight: 400; color: var(--color-text-light); margin-top: var(--space-4); }
+.accessibility-controls button:hover {
+    color: var(--color-primary);
+    background-color: var(--color-border);
+}
 
-/* === Summary & Results Styling === */
-.summary-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-16); margin-bottom: var(--space-24); }
-.detailed-breakdown { grid-template-columns: repeat(2, 1fr); }
-.summary-box { padding: var(--space-16); border-radius: var(--border-radius); background-color: var(--color-gray-200); text-align: center; transition: background-color 0.3s; }
-[data-color-scheme="dark"] .summary-box { background-color: var(--color-charcoal-800); }
+/* Main Calculator Layout */
+.calculator-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-32);
+    padding: 0 var(--space-32);
+}
 
-.summary-label { display: block; font-size: 0.9rem; color: var(--color-text-light); margin-bottom: var(--space-4); }
-.summary-value { display: block; font-size: 1.8rem; font-weight: 800; color: var(--color-primary); }
-.summary-box.important { background-color: rgba(var(--color-accent), 0.1); border: 2px solid var(--color-accent); }
-.summary-box.positive .summary-value { color: var(--color-savings); }
-.summary-box.negative .summary-value { color: var(--color-cost); }
+.card {
+    background-color: var(--color-card-background);
+    padding: var(--space-24);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
 
-.cost-title { border-top: 1px solid var(--color-border); padding-top: var(--space-16); margin-top: var(--space-24); color: var(--color-primary); }
+/* ========================================================================== */
+/* III. INPUT SECTION STYLES (Refinance Specific) */
+/* ========================================================================== */
 
-/* === Tab Controls === */
-.tab-controls-results { display: flex; justify-content: flex-start; margin-bottom: var(--space-16); padding: var(--space-8); }
-.tab-button { background: none; border: none; padding: var(--space-8) var(--space-16); margin-right: var(--space-8); cursor: pointer; font-size: 1rem; color: var(--color-text-light); border-bottom: 2px solid transparent; transition: all 0.3s; }
-.tab-button.active { color: var(--color-primary); font-weight: 700; border-bottom: 2px solid var(--color-accent); }
+.input-section h3 {
+    color: var(--color-primary);
+    margin-top: 0;
+    padding-bottom: var(--space-8);
+    border-bottom: 2px solid var(--color-secondary);
+    margin-bottom: var(--space-16);
+}
 
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.chart-container { position: relative; height: 350px; }
+.input-group {
+    margin-bottom: var(--space-16);
+}
 
-/* === AI Insights and Monetization (Affiliate/Ads) === */
-.ai-insights-box { border-left: 4px solid var(--color-accent); padding: var(--space-16); background-color: var(--color-gray-200); }
-[data-color-scheme="dark"] .ai-insights-box { background-color: var(--color-charcoal-800); }
-.ai-verdict-title { font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-16); }
-.ai-recommendations li { margin-bottom: var(--space-8); color: var(--color-text); }
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+}
 
-.partner-promo, .ad-slot-horizontal { 
-    background-color: var(--color-gray-200); 
-    border: 2px solid var(--color-savings);
+input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    background-color: var(--color-card-background);
+    color: var(--color-text-primary);
+    transition: border-color 0.2s;
+}
+
+input[type="number"]:focus, select:focus {
+    border-color: var(--color-secondary);
+    outline: none;
+}
+
+/* Range Slider Styling */
+.range-group {
+    display: flex;
+    align-items: center;
+}
+.range-group input[type="range"] {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+.range-group input[type="number"] {
+    width: 100px;
+    text-align: right;
+}
+
+.refi-loan-details {
+    margin-top: var(--space-24);
+    padding-top: var(--space-24);
+    border-top: 1px dashed var(--color-border);
+}
+
+.input-section .cta-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    margin-top: var(--space-16);
+}
+
+.input-section .cta-button:hover:not(:disabled) {
+    background-color: var(--color-primary);
+}
+
+/* ========================================================================== */
+/* IV. RESULTS & AI INSIGHTS SECTION */
+/* ========================================================================== */
+
+.results-section .tab-controls {
+    display: flex;
+    margin-bottom: var(--space-16);
+    border-bottom: 2px solid var(--color-border);
+}
+
+.results-section .tab-button {
+    background: none;
+    border: none;
+    padding: var(--space-16) var(--space-24);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.2s, border-bottom 0.2s;
+    margin-bottom: -2px; /* To hide the border gap */
+}
+
+.results-section .tab-button.active {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-secondary);
+}
+
+.tab-content {
+    display: none;
+    padding-top: var(--space-8);
+}
+.tab-content.active {
+    display: block;
+}
+
+/* Summary Box */
+.summary-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-16);
+    margin-bottom: var(--space-24);
+}
+
+.summary-box {
+    text-align: center;
+    padding: var(--space-16);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+}
+
+.summary-label {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
+.summary-value.positive {
+    color: var(--color-green-500); /* Savings */
+}
+
+.summary-value.negative {
+    color: var(--color-red-600); /* Loss */
+}
+
+.key-metric-callout {
+    background-color: var(--color-border);
     padding: var(--space-16);
     border-radius: var(--border-radius);
     margin-top: var(--space-16);
     text-align: center;
-    font-weight: 600;
 }
-.ad-slot-horizontal {
+
+.key-metric-callout h4 {
+    color: var(--color-primary);
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+}
+
+.key-metric-callout p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--color-secondary);
+    margin: 0;
+}
+
+/* AI Insights Specifics */
+.ai-insights-box {
+    padding: var(--space-16);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    margin-top: var(--space-16);
+    background-color: var(--color-gray-200); /* Light highlight for AI */
+    transition: background-color 0.3s;
+}
+
+[data-color-scheme="dark"] .ai-insights-box {
+    background-color: var(--color-charcoal-800);
+}
+
+.ai-insights-box i {
+    color: var(--color-secondary);
+    margin-right: 8px;
+}
+
+.ai-insights-box h4 {
+    color: var(--color-primary);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 8px;
+    margin-top: 0;
+}
+
+.ai-recommendation {
+    padding: 10px;
+    border-left: 4px solid var(--color-green-500);
+    margin-top: var(--space-8);
+}
+
+.ai-warning {
+    padding: 10px;
+    border-left: 4px solid var(--color-red-600);
+    margin-top: var(--space-8);
+}
+
+/* Chart Container */
+#refinance-chart-container {
+    height: 400px;
+    width: 100%;
+}
+
+/* ========================================================================== */
+/* V. MONETIZATION & AD SLOTS */
+/* ========================================================================== */
+
+.monetization-slot {
+    background-color: #fff6e8; /* Light callout for ad */
+    border: 1px solid #ffcc80; /* Orange border */
+    padding: var(--space-16);
+    border-radius: var(--border-radius);
+    text-align: center;
     margin-bottom: var(--space-24);
+    font-size: 0.9rem;
 }
-.affiliate-link { color: var(--color-red-500); text-decoration: none; font-weight: 700; }
-.affiliate-link:hover { text-decoration: underline; }
 
-/* === Footer and Utility Styles (Toast, Controls) === */
-.main-footer { background-color: var(--color-card-background); border-top: 1px solid var(--color-border); padding: var(--space-24) 0; color: var(--color-text); }
-.footer-content-wrap { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-16); }
-.footer-nav { display: flex; justify-content: space-between; margin-bottom: var(--space-24); }
-.nav-column h4 { color: var(--color-primary); margin-bottom: var(--space-16); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-4); }
-.nav-column ul { list-style: none; padding: 0; margin: 0; }
-.nav-column a { color: var(--color-text-light); text-decoration: none; font-size: 0.9rem; line-height: 2; }
-.footer-bottom { border-top: 1px solid var(--color-border); padding-top: var(--space-16); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--color-text-light); }
-.footer-badges { display: flex; gap: var(--space-16); }
-.badge { display: flex; align-items: center; gap: var(--space-4); color: var(--color-accent); }
+.monetization-slot h5 {
+    color: #ff9800; /* Darker orange */
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+}
 
-/* === Responsiveness (Mobile First / All Device Friendly) === */
+.monetization-slot a {
+    color: var(--color-primary);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+[data-color-scheme="dark"] .monetization-slot {
+    background-color: #3e321e;
+    border-color: #8c5d28;
+    color: var(--color-white);
+}
+
+/* ========================================================================== */
+/* VI. FOOTER & RESPONSIVENESS (PWA, SCO, Mobile Friendly) */
+/* ========================================================================== */
+
+footer {
+    margin-top: var(--space-32);
+    padding: var(--space-32) 0;
+    background-color: var(--color-card-background);
+    border-top: 1px solid var(--color-border);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-32);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-16);
+    margin-top: var(--space-16);
+    flex-wrap: wrap;
+}
+
+.footer-disclaimer p {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+.footer-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--color-border);
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 1024px) {
-    .calculator-container { grid-template-columns: 1fr; }
-    .input-section { position: static; }
-    .header-content { flex-direction: column; align-items: flex-start; }
-    .accessibility-controls { order: -1; margin-bottom: var(--space-8); width: 100%; justify-content: flex-end; }
-    .features-quick { display: none; } /* Hide quick features on small screen for cleaner header */
-    .summary-details { grid-template-columns: 1fr; }
-    .footer-nav { flex-direction: column; gap: var(--space-24); }
-    .footer-bottom { flex-direction: column; align-items: flex-start; gap: var(--space-16); }
+    .calculator-container {
+        grid-template-columns: 1fr;
+        padding: 0 var(--space-16);
+    }
+    header, footer {
+        padding: var(--space-16);
+    }
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .accessibility-controls {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: var(--space-8);
+        order: 2;
+    }
+    .footer-bottom {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+    }
+    .footer-badges {
+        margin-bottom: var(--space-16);
+    }
 }
