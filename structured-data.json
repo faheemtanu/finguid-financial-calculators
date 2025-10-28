@@ -1,0 +1,20 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Car Lease Calculator",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "description": "Car Lease Calculator: SEO-optimized, live rates, AI insights, dark/light mode, WCAG AA accessible, and comprehensive buy vs lease comparison.",
+  "url": "https://finguid.com/car-lease-calculator-enhanced.html",
+  "featureList": [
+    "Live FRED API rates",
+    "20+ dynamic AI insights",
+    "Buy details section",
+    "Market & Tax analysis",
+    "Enhanced chart via Chart.js",
+    "Dark/light mode",
+    "Accessibility: WCAG AA",
+    "Mobile-responsive",
+    "PWA ready"
+  ]
+}
