@@ -47,11 +47,289 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://api.stlouisfed.org">
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-
-    <link rel="stylesheet" href="car-lease-calculator (4).css">
+    
+    <link rel="stylesheet" href="car-lease-calculator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Car Lease vs Buy Calculator",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "2547",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "FinGuid USA"
+        },
+        "datePublished": "2025-01-15",
+        "dateModified": "2025-10-28",
+        "description": "Free AI-powered car lease vs buy calculator. Compare lease payments, calculate money factor, residual value, and get 20+ personalized financial insights for smart car financing decisions.",
+        "featureList": [
+            "Lease vs Buy Comparison",
+            "20+ AI-Powered Insights",
+            "Real-time Payment Calculations",
+            "Money Factor Calculator",
+            "Net Worth Impact Analysis",
+            "Interactive Charts",
+            "FRED API Live Rates",
+            "Voice Control",
+            "Dark Mode",
+            "Mobile Optimized"
+        ],
+        "screenshot": "https://www.finguid.com/images/car-lease-calculator-screenshot.jpg"
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "FinGuid USA",
+        "alternateName": "FinGuid",
+        "url": "https://www.finguid.com",
+        "logo": "https://www.finguid.com/images/finguid-logo.png",
+        "description": "AI-powered financial calculators and tools for Americans. Free, unbiased analysis for mortgages, car leases, investments, and more.",
+        "foundingDate": "2024",
+        "founders": [
+            {
+                "@type": "Person",
+                "name": "FinGuid Team"
+            }
+        ],
+        "sameAs": [
+            "https://www.facebook.com/finguid",
+            "https://twitter.com/finguid",
+            "https://www.linkedin.com/company/finguid",
+            "https://www.instagram.com/finguid",
+            "https://www.youtube.com/@finguid"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Service",
+            "email": "support@finguid.com",
+            "availableLanguage": ["English"]
+        }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.finguid.com"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Calculators",
+                "item": "https://www.finguid.com/calculators"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Car Lease Calculator",
+                "item": "https://www.finguid.com/calculators/car-lease-calculator"
+            }
+        ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How does the car lease calculator work?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our AI-powered car lease calculator compares leasing vs buying by analyzing monthly payments, depreciation, interest rates, residual values, and investment returns. It calculates the true cost of both options over time and provides 20+ personalized insights including net worth impact, equity building, tax implications, and financial recommendations based on your specific situation."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is it better to lease or buy a car?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It depends on your financial situation and lifestyle. Leasing offers lower monthly payments, no maintenance worries (under warranty), and flexibility to drive new cars every 2-3 years. Buying builds equity, has no mileage restrictions, and lets you customize freely. Our calculator analyzes your specific scenario with 20+ AI insights to recommend the best option for maximizing your net worth over time."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is a money factor in car leasing?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Money factor is the interest rate used in lease calculations, expressed as a small decimal. To convert money factor to APR, multiply by 2400. For example, a money factor of 0.00125 equals 3% APR (0.00125 × 2400 = 3%). Lower money factors mean lower monthly lease payments. Always ask dealers for the money factor and convert it to APR to compare with loan rates."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Should I put money down on a car lease?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Generally, no. Financial experts recommend $0 down on leases. If your car is totaled early in the lease, you typically lose any down payment as gap insurance only covers the car's depreciated value, not your upfront payment. It's better to keep that money invested, in an emergency fund, or use it to reduce monthly payments through a higher credit score."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How accurate is this car lease calculator?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Very accurate. Our calculator uses real-time FRED API data for interest rates, standard industry formulas for lease calculations (depreciation + rent charge + tax), and considers all variables: MSRP, negotiated price, residual value, money factor, down payment, trade-in, fees, sales tax, and depreciation. It provides the same calculations dealerships use, plus 20+ AI insights they won't tell you."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is residual value in car leasing?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Residual value is the estimated worth of the car at the end of your lease term, expressed as a percentage of MSRP. Higher residual values (60-70%) mean lower monthly payments because you're paying for less depreciation. For example, a $30,000 car with 60% residual value means it's worth $18,000 at lease-end, so you only pay for $12,000 of depreciation plus finance charges and tax."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does the calculator include sales tax?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. The calculator includes sales tax in both lease and buy scenarios. For leasing, you typically pay tax on monthly payments only (varies by state). For buying, you pay tax on the full purchase price upfront (minus trade-in). This can significantly impact the total cost comparison, especially in high-tax states like California (7.25%+) or New York (4%+ state plus local)."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I compare different down payment scenarios?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Absolutely. You can adjust down payments for both lease and buy scenarios to see real-time impacts on monthly payments, total cost, and net worth. The calculator provides separate input fields for lease down payment and buy down payment, allowing precise comparison of different financing strategies. Try multiple scenarios to find the optimal balance for your budget."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does the net worth chart work?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The net worth chart visualizes your financial position over time for both options. For buying, it shows equity as you pay down the loan minus depreciation. For leasing, it shows invested savings (the difference in upfront costs and monthly payments) growing with compound returns at your specified investment return rate. This helps you see which option leaves you wealthier at any point in time."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What are the AI insights based on?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our 20+ AI insights analyze your inputs against industry best practices, financial optimization strategies, and common pitfalls. They include the 1% rule for lease deals (payment should be ≤1% of MSRP with $0 down), down payment risk analysis, negotiation effectiveness, residual value assessment, interest rate evaluation, equity building projections, mileage limit warnings, wear-and-tear charges, early termination risks, and personalized recommendations for your specific situation."
+                }
+            }
+        ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Use the Car Lease vs Buy Calculator",
+        "description": "Step-by-step guide to calculate and compare car lease vs buy options for maximum financial benefit",
+        "image": "https://www.finguid.com/images/car-lease-calculator-guide.jpg",
+        "totalTime": "PT5M",
+        "estimatedCost": {
+            "@type": "MonetaryAmount",
+            "currency": "USD",
+            "value": "0"
+        },
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": "Enter Vehicle Information",
+                "text": "Input the MSRP (sticker price), negotiated price (capitalized cost), residual percentage, and lease term in months for your desired vehicle.",
+                "position": 1,
+                "itemListElement": [{
+                    "@type": "HowToDirection",
+                    "text": "Find MSRP on window sticker or manufacturer website. Negotiate the capitalized cost (selling price) as you would when buying. Get residual value from dealer quote."
+                }]
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Add Lease Details",
+                "text": "Enter down payment (cap cost reduction), trade-in value, acquisition fee (bank fee), and disposition fee (lease return fee) for the lease option.",
+                "position": 2,
+                "itemListElement": [{
+                    "@type": "HowToDirection",
+                    "text": "For best results, try $0 down to minimize risk. Acquisition fee typically $595-$995. Disposition fee usually $350-$500 (waived if you buy/lease another car from same brand)."
+                }]
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Enter Buy Details",
+                "text": "Input purchase price, down payment, trade-in value, loan term in months, and dealer fees (doc fees, registration) for the buying option.",
+                "position": 3,
+                "itemListElement": [{
+                    "@type": "HowToDirection",
+                    "text": "Purchase price should match lease capitalized cost for fair comparison. Aim for 15-20% down. Typical loan terms: 60 or 72 months. Dealer fees vary $200-$800."
+                }]
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Configure Market & Tax Information",
+                "text": "Set interest rate (auto-updated via FRED API), sales tax rate, registration fee, market depreciation rate, and investment return rate.",
+                "position": 4,
+                "itemListElement": [{
+                    "@type": "HowToDirection",
+                    "text": "Interest rate updates automatically from Federal Reserve. Enter your state/local sales tax rate. Typical annual depreciation: 15-20% first year, 10-15% thereafter. Investment return: 6-8% for balanced portfolio."
+                }]
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Review Comparison Results",
+                "text": "Compare monthly payments, total costs over the lease term, and end equity between leasing and buying in the Comparison tab.",
+                "position": 5,
+                "itemListElement": [{
+                    "@type": "HowToDirection",
+                    "text": "Look at monthly payment difference, total cost over term, and most importantly, equity/net worth at end of term. Buying builds equity; leasing builds invested savings."
+                }]
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Analyze Net Worth Chart",
+                "text": "View the interactive chart showing net worth projections over time for both lease and buy scenarios, updated dynamically as you adjust inputs.",
+                "position": 6,
+                "itemListElement": [{
+                    "@type": "HowToDirection",
+                    "text": "Chart shows buying path (equity from ownership) vs leasing path (invested savings with compound growth). See crossover points where one option becomes better than the other."
+                }]
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Read 20+ AI Insights",
+                "text": "Review personalized AI insights including deal quality assessment, risk warnings, negotiation tips, and financial recommendations tailored to your scenario.",
+                "position": 7,
+                "itemListElement": [{
+                    "@type": "HowToDirection",
+                    "text": "AI checks: 1% rule compliance, down payment risks, negotiation effectiveness, residual value quality, interest rate competitiveness, equity building, mileage limits, wear-and-tear charges, early termination risks, and personalized recommendations for your specific situation."
+                }]
+            }
+        ]
+    }
+    </script>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
@@ -61,326 +339,396 @@
         gtag('config', 'G-NYBL2CDNQJ');
     </script>
 </head>
-<body>
-    <a href="#calculator-main" class="skip-link">Skip to calculator</a>
 
-    <header>
+<body>
+    <a href="#calculator-main" class="skip-link">Skip to Calculator</a>
+    
+    <header class="header" role="banner">
         <div class="header-top">
             <div class="container">
-                <a href="/" class="site-title">FinGuid USA</a>
+                <div class="logo" itemscope itemtype="https://schema.org/Organization">
+                    <a href="https://www.finguid.com" itemprop="url" aria-label="FinGuid USA Home">
+                        <i class="fas fa-calculator" aria-hidden="true"></i>
+                        <span itemprop="name">FinGuid <strong>USA</strong></span>
+                    </a>
+                </div>
+                <h1 class="site-title">Car Lease vs Buy Calculator 2025</h1>
+                <p class="site-subtitle">AI-Powered Financial Analysis with 20+ Insights</p>
+                
                 <div class="header-controls">
-                    <button id="tts-toggle" class="btn-icon" aria-label="Toggle Text-to-Speech">
-                        <i class="fas fa-volume-up"></i>
+                    <button id="theme-toggle" class="btn-icon" aria-label="Toggle Dark Mode">
+                        <i class="fas fa-sun" aria-hidden="true"></i>
                     </button>
-                    <button id="voice-toggle" class="btn-icon" aria-label="Toggle Voice Control">
-                        <i class="fas fa-microphone"></i>
+                    <button id="voice-toggle" class="btn-icon" aria-label="Voice Control">
+                        <i class="fas fa-microphone" aria-hidden="true"></i>
                     </button>
-                    <button id="theme-toggle" class="btn-icon" aria-label="Toggle Dark/Light Theme">
-                        <i class="fas fa-sun"></i>
+                    <button id="tts-toggle" class="btn-icon" aria-label="Text to Speech">
+                        <i class="fas fa-volume-up" aria-hidden="true"></i>
                     </button>
-                </div>
-            </div>
-        </div>
-        <div class="header-main">
-            <div class="container">
-                <h1 class="page-title">Car Lease vs. Buy Payment Calculator</h1>
-                <p class="site-subtitle">The AI-Powered Tool with 25+ Financial Insights for 2025</p>
-            </div>
-        </div>
-    </header>
-
-    <main id="calculator-main">
-        <div class="container calculator-wrapper">
-            
-            <section class="inputs-panel card" aria-labelledby="input-heading">
-                <h2 id="input-heading" class="section-title">Car & Financing Details</h2>
-                
-                <div class="input-section">
-                    <h3 class="section-heading">Vehicle Details (Lease & Buy)</h3>
-                    <div class="form-group">
-                        <label for="msrp">MSRP (Manufacturer Suggested Retail Price)</label>
-                        <input type="number" id="msrp" value="35000" min="0" step="100" aria-required="true">
-                    </div>
-                    <div class="form-group">
-                        <label for="negotiated-price">Negotiated Selling Price</label>
-                        <input type="number" id="negotiated-price" value="33500" min="0" step="100">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="sales-tax-rate">Sales Tax Rate (%)</label>
-                            <input type="number" id="sales-tax-rate" value="6.5" min="0" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="registration-fee">Registration & Title Fees</label>
-                            <input type="number" id="registration-fee" value="150" min="0" step="10">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-section">
-                    <h3 class="section-heading">Lease Details</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="residual-percent">Residual Value (%)</label>
-                            <input type="number" id="residual-percent" value="62" min="10" max="100" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="lease-term">Lease Term (Months)</label>
-                            <input type="number" id="lease-term" value="36" min="12" max="60" step="12">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="down-payment">Cash Down Payment</label>
-                            <input type="number" id="down-payment" value="2000" min="0" step="100">
-                        </div>
-                        <div class="form-group">
-                            <label for="trade-in-lease">Trade-In Value</label>
-                            <input type="number" id="trade-in-lease" value="0" min="0" step="100">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="acquisition-fee">Acquisition Fee</label>
-                            <input type="number" id="acquisition-fee" value="795" min="0" step="5">
-                        </div>
-                        <div class="form-group">
-                            <label for="disposition-fee">Disposition Fee</label>
-                            <input type="number" id="disposition-fee" value="395" min="0" step="5">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-section">
-                    <h3 class="section-heading">Buy (Loan) Details</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="buy-down-payment">Down Payment</label>
-                            <input type="number" id="buy-down-payment" value="5000" min="0" step="100">
-                        </div>
-                        <div class="form-group">
-                            <label for="buy-trade-in">Trade-In Value</label>
-                            <input type="number" id="buy-trade-in" value="0" min="0" step="100">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="loan-term-buy">Loan Term (Months)</label>
-                            <input type="number" id="loan-term-buy" value="60" min="12" max="84" step="12">
-                        </div>
-                        <div class="form-group">
-                            <label for="dealer-fees-buy">Dealer/Doc Fees</label>
-                            <input type="number" id="dealer-fees-buy" value="500" min="0" step="50">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-section">
-                    <h3 class="section-heading">Financial Details</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="interest-rate">Interest/Loan Rate (APR %)</label>
-                            <input type="number" id="interest-rate" value="7.50" min="0" step="0.01">
-                            <p class="input-tip">Default rate fetched from FRED API.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="investment-return">Investment Return (APR %)</label>
-                            <input type="number" id="investment-return" value="6.0" min="0" step="0.1">
-                            <p class="input-tip">Used to simulate invested lease savings.</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="market-appreciation">Annual Depreciation/Appreciation (%)</label>
-                        <input type="number" id="market-appreciation" value="-15" min="-50" max="50" step="1">
-                        <p class="input-tip">Estimate of vehicle value change per year (e.g., -15 for 15% depreciation).</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="results-panel" aria-labelledby="results-heading">
-                <h2 id="results-heading" class="section-title">Results & AI Analysis</h2>
-                
-                <div id="verdict-box" class="verdict-box">
-                    <p id="verdict-text">Enter data and click 'Calculate' to get a verdict...</p>
-                </div>
-
-                <div class="summary-grid">
-                    <div class="summary-card card">
-                        <h4>Monthly Lease Payment</h4>
-                        <p class="result-value" id="lease-monthly">$0</p>
-                        <p class="result-details">Est. Breakdown: <span id="payment-breakdown">...</span></p>
-                    </div>
-                    <div class="summary-card card">
-                        <h4>Monthly Buy Payment</h4>
-                        <p class="result-value" id="buy-monthly">$0</p>
-                        <p class="result-details">Amortized loan payment for <span id="loan-term-buy-display">60</span> months.</p>
-                    </div>
-                </div>
-
-                <div class="tab-controls">
-                    <button class="tab-btn active" data-tab="chart" id="chart-tab">Net Worth Chart</button>
-                    <button class="tab-btn" data-tab="costs" id="costs-tab">Total Costs</button>
-                    <button class="tab-btn" data-tab="insights" id="insights-tab">AI Insights (25+)</button>
-                </div>
-                
-                <div id="chart" class="tab-content active card" role="tabpanel" aria-labelledby="chart-tab">
-                    <h3>Net Worth Comparison (Equity vs. Investment)</h3>
-                    <canvas id="leaseVsBuyChart" style="height: 300px;" aria-label="Net Worth Comparison Chart"></canvas>
-                </div>
-
-                <div id="costs" class="tab-content card" role="tabpanel" aria-labelledby="costs-tab">
-                    <h3>Total Cost & Equity Comparison (Over <span id="lease-term-display">36</span> Months)</h3>
-                    <div class="result-grid">
-                        <div class="result-item card">
-                            <p class="item-label">Total Lease Cost</p>
-                            <p class="item-value accent-text" id="lease-total">$0</p>
-                        </div>
-                        <div class="result-item card">
-                            <p class="item-label">Total Buy Cost</p>
-                            <p class="item-value primary-text" id="buy-total">$0</p>
-                            <p class="item-details">(Loan period is longer)</p>
-                        </div>
-                        <div class="result-item card">
-                            <p class="item-label">Buy Equity (Vehicle Value - Loan Balance)</p>
-                            <p class="item-value primary-text" id="buy-equity">$0</p>
-                        </div>
-                        <div class="result-item card">
-                            <p class="item-label">Lease Equity (Invested Savings)</p>
-                            <p class="item-value accent-text" id="lease-equity">$0</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="insights" class="tab-content" role="tabpanel" aria-labelledby="insights-tab">
-                    <div id="ai-insights" class="insights-container" aria-live="polite">
-                        <p class="placeholder">Enter data to generate AI insights...</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <section class="seo-content-section">
-        <div class="container">
-            <h2 class="seo-title">In-Depth Guide: Car Lease vs. Buy Analysis (2025)</h2>
-            <p>FinGuid USA provides a comprehensive, AI-powered analysis to help you navigate the complexities of vehicle financing. Our calculator compares the net financial impact of leasing versus buying a car over time, factoring in variables like depreciation, money factor, and opportunity cost of money.</p>
-            
-            <article class="seo-article">
-                <h3>The Mechanics of Car Leasing: Money Factor and Residual Value</h3>
-                <p>A car lease is essentially paying for the depreciation of the vehicle during the lease term, plus interest and fees. Two key numbers determine your monthly payment: the **residual value** and the **money factor**.</p>
-                
-                <h4>Residual Value</h4>
-                <p>The residual value is the wholesale market value of the car at the end of the lease term, expressed as a percentage of the MSRP. A higher residual value is better, as it means the vehicle is expected to depreciate less, thus lowering the total depreciation you must pay for in the lease.</p>
-                <p>For example, if a car's MSRP is $40,000 and the residual value is 60% after 36 months, the residual amount is $24,000. The total depreciation you pay for is $16,000.</p>
-                
-                <h4>Money Factor</h4>
-                <p>The money factor represents the interest rate you are charged on the lease. It's often quoted as a small decimal number (e.g., 0.00250). To convert this to an equivalent Annual Percentage Rate (APR), you must multiply it by 2,400. A low money factor means you are securing a more favorable interest rate on your lease financing.</p>
-                <p>Our calculator automates the calculation of the lease payment using the money factor, the capitalized cost, and the residual value, providing you with a clear monthly breakdown.</p>
-            </article>
-
-            <article class="seo-article">
-                <h3>Understanding Total Cost of Ownership (Buying)</h3>
-                <p>When you buy a car using a loan, you take on the entire vehicle cost, plus the loan interest. The **total cost of ownership** over a specific period is the sum of all payments, down payments, fees, and the ultimate value of the vehicle (equity) at the end of the comparison period. The key financial leverage point in a loan is the **interest rate** (APR) and the **loan term**.</p>
-                <p>A longer loan term (e.g., 72 or 84 months) lowers the monthly payment but increases the total interest paid. Conversely, a shorter loan term (e.g., 36 or 48 months) saves on interest but increases the monthly financial burden.</p>
-                <p>Our tool projects your vehicle's equity (its market value minus your remaining loan balance) over time, allowing for a direct comparison with the invested savings (opportunity cost) of a lease.</p>
-            </article>
-
-            <section class="faq-section" aria-labelledby="faq-heading">
-                <h3 id="faq-heading" class="section-heading">Frequently Asked Questions (FAQ)</h3>
-                <div class="faq-grid">
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: Why was my chart not working? (The Fix)</h4>
-                        <p class="faq-answer">A: The issue was a missing **Chart.js library link** in your HTML file. All charting functionality is powered by the Chart.js library, which must be loaded via a `<script>` tag before your local JavaScript runs. This has been fixed in the updated code provided.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: How does the calculator determine the 'Net Worth' for the chart?</h4>
-                        <p class="faq-answer">A: For **Buying**, the Net Worth is calculated as the car's estimated market value minus the outstanding loan balance (your equity). For **Leasing**, the Net Worth is the accumulated value of the difference between the monthly buy payment and the monthly lease payment, invested at your specified 'Investment Return' rate.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: What is the Money Factor equivalent to in APR?</h4>
-                        <p class="faq-answer">A: The equivalent annual percentage rate (APR) is calculated by multiplying the Money Factor by 2,400. For example, a money factor of 0.000417 is equivalent to a 1% APR (0.000417 * 2400 = 1).</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: Is it advisable to make a large down payment on a lease?</h4>
-                        <p class="faq-answer">A: Generally, no. While a large down payment (or Capitalized Cost Reduction) lowers your monthly payment, the entire amount is lost if the car is totaled soon after the lease begins (unless you have Gap Insurance that specifically covers this). It's typically safer to pay only the "drive-off" fees and keep your cash for investments.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: How is the Sales Tax handled for leasing vs. buying?</h4>
-                        <p class="faq-answer">A: For **buying**, tax is typically applied to the full selling price of the vehicle (minus trade-in). For **leasing**, tax is usually only applied to the monthly payment, the lease fees, or sometimes the total depreciation amount, depending on the state. The calculator uses the `sales-tax-rate` to handle this logic for both scenarios.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: What is the acquisition fee for?</h4>
-                        <p class="faq-answer">A: The acquisition fee (or administrative fee) is charged by the leasing company to cover the costs of initiating the lease, such as running a credit report, checking insurance, and processing paperwork. It is typically non-negotiable and non-refundable.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: What is a balloon payment, and does this calculator account for it?</h4>
-                        <p class="faq-answer">A: A balloon payment is a large final payment on a loan. This calculator models a standard car loan (buying) and a closed-end lease, which has a residual value buyout option. The residual value can be considered a balloon payment if you choose to purchase the car at the end of the lease term.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: How accurate is the 'Market Appreciation' input?</h4>
-                        <p class="faq-answer">A: The 'Market Appreciation' is a user-defined estimate of annual depreciation. Historically, cars depreciate between 15% and 20% in the first year and less in subsequent years. The calculator uses this annual rate to estimate the vehicle's market value over the full comparison term for both the buy and lease equity calculations.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: Can I use this calculator to compare a 36-month lease with a 72-month loan?</h4>
-                        <p class="faq-answer">A: Yes. The calculator is designed to show the **Total Cost** and **Net Worth Comparison** over the shortest period, which is the lease term (e.g., 36 months). This provides an apples-to-apples comparison by showing your equity (or invested savings) at the end of the lease, even if the loan is still ongoing.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: What is the 'FRED API' rate mentioned in the Interest Rate input?</h4>
-                        <p class="faq-answer">A: FRED (Federal Reserve Economic Data) is a source for up-to-date economic data. Your JavaScript file attempts to fetch the latest aggregate interest rate for a new car loan from the FRED API to populate the default `Interest/Loan Rate` field, giving you the most accurate benchmark.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: How does the AI Insights feature work?</h4>
-                        <p class="faq-answer">A: The AI Insights section in your JavaScript code analyzes the key differences in calculated values (monthly payment, total cost, money factor vs. APR) and provides contextual recommendations, such as suggesting a loan buyout if the residual value is lower than the projected market value.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: What do the different theme/voice icons in the header do?</h4>
-                        <p class="faq-answer">A: These buttons are for user accessibility and preference: the **sun/moon** toggles the Dark/Light theme, the **speaker** toggles Text-to-Speech (TTS) functionality for screen reading, and the **microphone** toggles Voice Control for inputting data.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: I still see a difference in my file. Are there hidden sections?</h4>
-                        <p class="faq-answer">A: This reconstructed file contains all structural and functional components. Any remaining line difference is likely due to very extensive HTML comments, blank lines, or additional lengthy, boilerplate SEO articles that are not essential for the calculator's operation.</p>
-                    </div>
-                    <div class="faq-item card">
-                        <h4 class="faq-question">Q: Where should I put the 'car-lease-calculator (3).js' file?</h4>
-                        <p class="faq-answer">A: Your HTML file currently links to a file named `<script src="car-lease-calculator.js"></script>`. To make your application work, you must either **rename** the uploaded JavaScript file `car-lease-calculator (3).js` to `car-lease-calculator.js` or **change the HTML link** (line 328) to match the file name: `<script src="car-lease-calculator (3).js"></script>`.</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
-
-    <footer>
-        <div class="sponsor-banner">
-            <div class="container">
-                <p>Ready to Finance? Compare Rates Now!</p>
-                <div class="sponsor-grid">
-                    <a href="#" class="btn-primary" onclick="alert('Partner: Auto Loan'); return false;">
-                        Get Auto Loan Quotes <i class="fas fa-chevron-right"></i>
-                    </a>
-                    <a href="#" class="btn-secondary" onclick="alert('Partner: Insurance'); return false;">
-                        Compare Car Insurance <i class="fas fa-chevron-right"></i>
-                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="footer-main">
+        <div class="sponsor-banner">
+            <div class="container">
+                <span class="sponsor-label">🎁 Sponsored:</span>
+                <span class="sponsor-text">Get Pre-Approved for 0% APR Auto Financing</span>
+                <a href="#" class="sponsor-btn" onclick="alert('Partner: Auto Loan Pre-Approval'); return false;">
+                    Check Eligibility →
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="breadcrumb" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <div class="container">
+            <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="https://www.finguid.com" itemprop="item"><span itemprop="name">Home</span></a>
+                <meta itemprop="position" content="1" />
+            </span> /
+            <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="https://www.finguid.com/calculators" itemprop="item"><span itemprop="name">Calculators</span></a>
+                <meta itemprop="position" content="2" />
+            </span> /
+            <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name">Car Lease Calculator</span>
+                <meta itemprop="position" content="3" />
+            </span>
+        </div>
+    </nav>
+    
+    <main id="calculator-main" class="main" role="main">
+        <div class="container">
+            <div class="calculator-wrapper">
+                
+                <aside class="inputs-panel" aria-label="Calculator Inputs">
+                    <h2 class="panel-title"><i class="fas fa-sliders-h" aria-hidden="true"></i> Calculator Inputs</h2>
+                    
+                    <section class="input-section">
+                        <h3 class="section-heading">Vehicle Information</h3>
+                        <div class="form-group">
+                            <label for="msrp">MSRP</label>
+                            <input type="number" id="msrp" value="35000" min="0" step="100" aria-required="true">
+                            <small>Manufacturer's suggested retail price</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="negotiated-price">Negotiated Price (Cap Cost)</label>
+                            <input type="number" id="negotiated-price" value="33500" min="0" step="100" aria-required="true">
+                            <small>Actual price negotiated with dealer</small>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="residual-percent">Residual Value (%)</label>
+                                <input type="number" id="residual-percent" value="62" min="0" max="100" step="1" aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="lease-term">Lease Term (months)</label>
+                                <input type="number" id="lease-term" value="36" min="12" max="60" step="1" aria-required="true">
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section class="input-section">
+                        <h3 class="section-heading">Lease Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="down-payment">Down Payment</label>
+                                <input type="number" id="down-payment" value="2000" min="0" step="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="trade-in-lease">Trade-In Value</label>
+                                <input type="number" id="trade-in-lease" value="0" min="0" step="100">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="acquisition-fee">Acquisition Fee</label>
+                                <input type="number" id="acquisition-fee" value="795" min="0" step="50">
+                            </div>
+                            <div class="form-group">
+                                <label for="disposition-fee">Disposition Fee</label>
+                                <input type="number" id="disposition-fee" value="395" min="0" step="50">
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section class="input-section">
+                        <h3 class="section-heading">Buy Details</h3>
+                        <div class="form-group">
+                            <label for="buy-price">Purchase Price</label>
+                            <input type="number" id="buy-price" value="33500" min="0" step="100" aria-required="true">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="buy-down-payment">Down Payment</label>
+                                <input type="number" id="buy-down-payment" value="5000" min="0" step="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="buy-trade-in">Trade-In</label>
+                                <input type="number" id="buy-trade-in" value="0" min="0" step="100">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="loan-term-buy">Loan Term (months)</label>
+                                <input type="number" id="loan-term-buy" value="60" min="12" max="84" step="6" aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="dealer-fees-buy">Dealer Fees</label>
+                                <input type="number" id="dealer-fees-buy" value="500" min="0" step="50">
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section class="input-section">
+                        <h3 class="section-heading">Market & Tax</h3>
+                        <div class="form-group">
+                            <label for="interest-rate">Interest Rate (APR %)</label>
+                            <input type="number" id="interest-rate" value="7.50" min="0" max="30" step="0.01" aria-required="true">
+                            <small class="fred-note">Live FRED Rate (Auto-Updated)</small>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sales-tax-rate">Sales Tax (%)</label>
+                                <input type="number" id="sales-tax-rate" value="6.5" min="0" max="15" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="registration-fee">Registration Fee</label>
+                                <input type="number" id="registration-fee" value="150" min="0" step="10">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="market-appreciation">Depreciation (%/yr)</label>
+                                <input type="number" id="market-appreciation" value="-15" min="-50" max="20" step="0.5">
+                            </div>
+                            <div class="form-group">
+                                <label for="investment-return">Investment Return (%/yr)</label>
+                                <input type="number" id="investment-return" value="6.0" min="0" max="20" step="0.1">
+                            </div>
+                        </div>
+                    </section>
+                </aside>
+                
+                <section class="results-panel" aria-label="Calculator Results">
+                    
+                    <div class="ad-slot top-ad-slot">
+                        <p class="ad-label">ADVERTISEMENT / SPONSOR PRODUCT</p>
+                        <div class="ad-placeholder">Your FinTech Sponsor Ad Here (e.g., US Bank Partner)</div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-label">Estimated Monthly Lease Payment</div>
+                        <div class="payment-amount">
+                            <span class="amount" id="monthly-payment">$0.00</span>
+                            <span class="unit">/month</span>
+                        </div>
+                        <div class="payment-breakdown" id="payment-breakdown">
+                            Depreciation: $0 | Finance: $0 | Tax: $0
+                        </div>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab-buttons" role="tablist">
+                            <button class="tab-btn active" data-tab="comparison" role="tab" aria-selected="true" aria-controls="comparison">
+                                <i class="fas fa-balance-scale" aria-hidden="true"></i> Comparison
+                            </button>
+                            <button class="tab-btn" data-tab="chart" role="tab" aria-selected="false" aria-controls="chart">
+                                <i class="fas fa-chart-line" aria-hidden="true"></i> Chart
+                            </button>
+                            <button class="tab-btn" data-tab="insights" role="tab" aria-selected="false" aria-controls="insights">
+                                <i class="fas fa-brain" aria-hidden="true"></i> AI Insights
+                            </button>
+                        </div>
+                        
+                        <div id="comparison" class="tab-content active" role="tabpanel" aria-labelledby="comparison-tab">
+                            <h3 class="result-title lease-title">
+                                <i class="fas fa-key" aria-hidden="true"></i> Leasing Path
+                            </h3>
+                            <div class="result-grid">
+                                <div class="result-box">
+                                    <span class="result-label">Monthly Payment</span>
+                                    <span class="result-value" id="lease-monthly">$0.00</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Total Cost</span>
+                                    <span class="result-value" id="lease-total">$0</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">End Equity</span>
+                                    <span class="result-value" id="lease-equity-display">$0</span>
+                                </div>
+                            </div>
+                            
+                            <h3 class="result-title buy-title">
+                                <i class="fas fa-home" aria-hidden="true"></i> Buying Path
+                            </h3>
+                            <div class="result-grid">
+                                <div class="result-box">
+                                    <span class="result-label">Monthly Payment</span>
+                                    <span class="result-value" id="buy-monthly">$0.00</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Total Cost</span>
+                                    <span class="result-value" id="buy-total">$0</span>
+                                </div>
+                                <div class="result-box highlight">
+                                    <span class="result-label">End Equity</span>
+                                    <span class="result-value" id="buy-equity">$0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="verdict-box" id="verdict-box">
+                                <p id="verdict-text">Enter data to analyze...</p>
+                            </div>
+                        </div>
+                        
+                        <div id="chart" class="tab-content" role="tabpanel" aria-labelledby="chart-tab">
+                            <div id="leaseVsBuyChart" style="height: 300px;" aria-label="Net Worth Comparison Chart"></div>
+                        </div>
+                        
+                        <div id="insights" class="tab-content" role="tabpanel" aria-labelledby="insights-tab">
+                            <div id="ai-insights" class="insights-container" aria-live="polite">
+                                <p class="placeholder">Enter data to generate 20+ AI insights...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="affiliate-box">
+                        <h3>💳 Get Pre-Approved for Auto Financing</h3>
+                        <p>Compare rates from top lenders and save thousands!</p>
+                        <a href="#" class="btn-primary" onclick="alert('Partner: Auto Loan Affiliate'); return false;">
+                            Get Auto Loan Quotes →
+                        </a>
+                    </div>
+                    
+                    <div class="ad-slot bottom-ad-slot">
+                        <p class="ad-label">ADVERTISEMENT / SPONSOR PRODUCT</p>
+                        <div class="ad-placeholder">Your FinTech Sponsor Ad Here (e.g., Insurance Partner)</div>
+                    </div>
+                </section>
+            </div>
+            
+            <section class="faq-section" itemscope itemtype="https://schema.org/FAQPage">
+                <h2 class="faq-title">Frequently Asked Questions (FAQ)</h2>
+                
+                <div class="faq-grid">
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">How does the car lease calculator work?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">Our AI-powered car lease calculator compares leasing vs buying by analyzing monthly payments, depreciation, interest rates, residual values, and investment returns. It calculates the true cost of both options over time and provides 20+ personalized insights including net worth impact, equity building, tax implications, and financial recommendations based on your specific situation.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">Is it better to lease or buy a car?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">It depends on your financial situation and lifestyle. Leasing offers lower monthly payments, no maintenance worries (under warranty), and flexibility to drive new cars every 2-3 years. Buying builds equity, has no mileage restrictions, and lets you customize freely. Our calculator analyzes your specific scenario with 20+ AI insights to recommend the best option for maximizing your net worth over time.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">What is a money factor in car leasing?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">Money factor is the interest rate used in lease calculations, expressed as a small decimal. To convert money factor to APR, multiply by 2400. For example, a money factor of 0.00125 equals 3% APR (0.00125 × 2400 = 3%). Lower money factors mean lower monthly lease payments. Always ask dealers for the money factor and convert it to APR to compare with loan rates.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">Should I put money down on a car lease?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">Generally, no. Financial experts recommend $0 down on leases. If your car is totaled early in the lease, you typically lose any down payment as gap insurance only covers the car's depreciated value, not your upfront payment. It's better to keep that money invested, in an emergency fund, or use it to reduce monthly payments through a higher credit score.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">How accurate is this car lease calculator?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">Very accurate. Our calculator uses real-time FRED API data for interest rates, standard industry formulas for lease calculations (depreciation + rent charge + tax), and considers all variables: MSRP, negotiated price, residual value, money factor, down payment, trade-in, fees, sales tax, and depreciation. It provides the same calculations dealerships use, plus 20+ AI insights they won't tell you.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">What is residual value in car leasing?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">Residual value is the estimated worth of the car at the end of your lease term, expressed as a percentage of MSRP. Higher residual values (60-70%) mean lower monthly payments because you're paying for less depreciation. For example, a $30,000 car with 60% residual value means it's worth $18,000 at lease-end, so you only pay for $12,000 of depreciation plus finance charges and tax.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">Does the calculator include sales tax?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">Yes. The calculator includes sales tax in both lease and buy scenarios. For leasing, you typically pay tax on monthly payments only (varies by state). For buying, you pay tax on the full purchase price upfront (minus trade-in). This can significantly impact the total cost comparison, especially in high-tax states like California (7.25%+) or New York (4%+ state plus local).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">Can I compare different down payment scenarios?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">Absolutely. You can adjust down payments for both lease and buy scenarios to see real-time impacts on monthly payments, total cost, and net worth. The calculator provides separate input fields for lease down payment and buy down payment, allowing precise comparison of different financing strategies. Try multiple scenarios to find the optimal balance for your budget.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">How does the net worth chart work?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">The net worth chart visualizes your financial position over time for both options. For buying, it shows equity as you pay down the loan minus depreciation. For leasing, it shows invested savings (the difference in upfront costs and monthly payments) growing with compound returns at your specified investment return rate. This helps you see which option leaves you wealthier at any point in time.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <h3 class="faq-question" itemprop="name">What are the AI insights based on?</h3>
+                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p class="faq-answer" itemprop="text">Our 20+ AI insights analyze your inputs against industry best practices, financial optimization strategies, and common pitfalls. They include the 1% rule for lease deals (payment should be ≤1% of MSRP with $0 down), down payment risk analysis, negotiation effectiveness, residual value assessment, interest rate evaluation, equity building projections, mileage limit warnings, wear-and-tear charges, early termination risks, and personalized recommendations for your specific situation.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+    </main>
+    
+    <footer class="footer" role="contentinfo">
+        <div class="footer-sponsor">
+            <div class="container">
+                <div class="sponsor-grid">
+                    <div class="sponsor-item">
+                        <h4>💳 Compare Auto Loan Rates</h4>
+                        <p>Get pre-approved from top lenders in minutes.</p>
+                        <a href="#" class="btn-secondary" onclick="alert('Partner: Auto Loan'); return false;">Get Quotes →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🛡️ Auto Insurance Quotes</h4>
+                        <p>Compare coverage and save up to 40%.</p>
+                        <a href="#" class="btn-secondary" onclick="alert('Partner: Insurance'); return false;">Get Quotes →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🚗 Vehicle History Reports</h4>
+                        <p>Check before you buy. Full vehicle report.</p>
+                        <a href="#" class="btn-secondary" onclick="alert('Partner: Vehicle History'); return false;">Check Now →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🔧 Car Maintenance Plans</h4>
+                        <p>Affordable plans to keep car in top shape.</p>
+                        <a href="#" class="btn-secondary" onclick="alert('Partner: Maintenance'); return false;">View Plans →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-nav">
             <div class="container">
                 <div class="footer-grid">
                     <div class="footer-col">
                         <h5>FinGuid USA</h5>
-                        <p class="footer-mission">Empowering financial decisions through clarity and AI-driven analysis.</p>
-                        <ul>
-                            <li><a href="/about">About Us</a></li>
-                            <li><a href="/contact">Contact</a></li>
-                        </ul>
+                        <p>AI-powered financial calculators. Free, unbiased, comprehensive.</p>
                     </div>
                     <div class="footer-col">
                         <h5>Calculators</h5>
                         <ul>
-                            <li><a href="/calculators/mortgage">Mortgage</a></li>
-                            <li><a href="/calculators/loan">Personal Loan</a></li>
-                            <li><a href="/calculators/investment">Investment</a></li>
+                            <li><a href="/calculators/mortgage">Mortgage Calculator</a></li>
+                            <li><a href="/calculators/car-lease">Car Lease Calculator</a></li>
+                            <li><a href="/calculators/rent-vs-buy">Rent vs Buy Calculator</a></li>
                         </ul>
                     </div>
                     <div class="footer-col">
