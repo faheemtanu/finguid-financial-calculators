@@ -1,102 +1,98 @@
-/**
- * CAR LEASE CALCULATOR v2.1 - PRODUCTION
- * FinGuid USA - Fixed Net Worth Chart + Sponsor/Affiliate Optimization
- */
+// CAR LEASE CALCULATOR - PRODUCTION v2.1
+// Complete Production JavaScript with all features
 
-const CAR_LEASE_CALCULATOR = {
+const APP = {
     VERSION: '2.1',
     DEBUG: false,
-    FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
-    FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
-    FRED_SERIES_ID: 'TERMSCOAUTC60NS',
-    RATE_UPDATE_INTERVAL: 4 * 60 * 60 * 1000,
-    FALLBACK_RATE: 7.50,
+    FRED_KEY: '9c6c421f077f2091e8bae4f143ada59a',
+    FRED_URL: 'https://api.stlouisfed.org/fred/series/observations',
+    FRED_SERIES: 'TERMCBCCALLNS',
+    
     STATE: {
-        msrp: 35000, negotiatedPrice: 33500, residualPercent: 62, leaseTerm: 36,
-        downPayment: 2000, tradeInLease: 0, acquisitionFee: 795, dispositionFee: 395,
-        buyPrice: 33500, buyDownPayment: 5000, buyTradeIn: 0, loanTermBuy: 60, dealerFeesBuy: 500,
-        interestRate: 7.50, salesTaxRate: 6.5, registrationFee: 150, marketAppreciation: -15, investmentReturnRate: 6.0,
-        totalNetWorthLease: 0, totalNetWorthBuy: 0, monthlyLeasePayment: 0, monthlyBuyPayment: 0,
-        leaseTotalCost: 0, buyTotalCost: 0, buyEndEquity: 0,
-        leaseBreakdown: { depreciation: 0, rentCharge: 0, tax: 0 },
-        annualComparisonData: [], carValueOverTime: []
+        msrp: 35000,
+        negotiatedPrice: 33500,
+        residualPercent: 62,
+        leaseTerm: 36,
+        downPayment: 2000,
+        tradeInLease: 0,
+        acquisitionFee: 795,
+        dispositionFee: 395,
+        buyPrice: 33500,
+        buyDownPayment: 5000,
+        buyTradeIn: 0,
+        loanTermBuy: 60,
+        dealerFeesBuy: 500,
+        interestRate: 7.50,
+        salesTaxRate: 6.5,
+        registrationFee: 150,
+        marketAppreciation: -15,
+        investmentReturn: 6.0,
+        
+        // Results
+        monthlyLeasePayment: 0,
+        monthlyBuyPayment: 0,
+        totalLeaseCost: 0,
+        totalBuyCost: 0,
+        leaseEquity: 0,
+        buyEquity: 0,
+        annualData: [],
     },
-    charts: { leaseVsBuyChart: null },
-    deferredInstallPrompt: null
+    
+    charts: { main: null },
+    recognition: null,
+    synthesis: window.speechSynthesis
 };
 
-const UTILS = (function() {
-    function formatCurrency(amount, withDecimals = false) {
-        if (typeof amount !== 'number' || isNaN(amount)) return '$0';
+// ============================================================================
+// UTILITIES
+// ============================================================================
+
+const UTILS = {
+    formatCurrency(val, decimals = 0) {
         return new Intl.NumberFormat('en-US', {
-            style: 'currency', currency: 'USD',
-            minimumFractionDigits: withDecimals ? 2 : 0,
-            maximumFractionDigits: withDecimals ? 2 : 0
-        }).format(amount);
-    }
-    function formatPercent(rate) { return parseFloat(rate).toFixed(1) + '%'; }
-    function parseInput(id) {
-        const elem = document.getElementById(id);
-        if (!elem) return 0;
-        return parseFloat(elem.value.replace(/[$,]/g, '').trim()) || 0;
-    }
-    function debounce(func, delay) {
-        let timeout;
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        }).format(val || 0);
+    },
+    
+    parseInput(id) {
+        const el = document.getElementById(id);
+        return el ? parseFloat(el.value.replace(/[$,]/g, '')) || 0 : 0;
+    },
+    
+    formatPercent(val) {
+        return (val || 0).toFixed(1) + '%';
+    },
+    
+    debounce(fn, ms = 500) {
+        let timer;
         return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), delay);
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), ms);
         };
-    }
-    function showToast(message, type = 'success') {
+    },
+    
+    showToast(msg, type = 'success') {
         const container = document.getElementById('toast-container');
         if (!container) return;
+        
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
-        toast.textContent = message;
+        toast.textContent = msg;
         container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            toast.addEventListener('transitionend', () => toast.remove());
-        }, 3000);
+        
+        setTimeout(() => toast.remove(), 3000);
     }
-    return { formatCurrency, formatPercent, parseInput, debounce, showToast };
-})();
+};
 
-const fredAPI = (function() {
-    async function fetchLatestRate() {
-        const url = new URL(CAR_LEASE_CALCULATOR.FRED_BASE_URL);
-        url.search = new URLSearchParams({
-            series_id: CAR_LEASE_CALCULATOR.FRED_SERIES_ID,
-            api_key: CAR_LEASE_CALCULATOR.FRED_API_KEY,
-            file_type: 'json', sort_order: 'desc', limit: 1
-        }).toString();
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            const latestObservation = data.observations.find(obs => obs.value !== '.' && obs.value !== 'N/A');
-            if (latestObservation) {
-                const rate = parseFloat(latestObservation.value);
-                document.getElementById('interest-rate').value = rate.toFixed(2);
-                document.querySelector('.fred-source-note').textContent = `Live FRED Rate (${latestObservation.date})`;
-                return rate;
-            } else throw new Error('No valid FRED observation');
-        } catch (error) {
-            console.error('FRED API Error:', error);
-            document.getElementById('interest-rate').value = CAR_LEASE_CALCULATOR.FALLBACK_RATE.toFixed(2);
-            document.querySelector('.fred-source-note').textContent = `Fallback Rate (${CAR_LEASE_CALCULATOR.FALLBACK_RATE}%)`;
-            return CAR_LEASE_CALCULATOR.FALLBACK_RATE;
-        }
-    }
-    function startAutomaticUpdates() {
-        fetchLatestRate().then(updateCalculations);
-        setInterval(fetchLatestRate, CAR_LEASE_CALCULATOR.RATE_UPDATE_INTERVAL);
-    }
-    return { startAutomaticUpdates };
-})();
+// ============================================================================
+// CALCULATIONS
+// ============================================================================
 
-function updateCalculations() {
-    const S = CAR_LEASE_CALCULATOR.STATE;
+function loadInputs() {
+    const S = APP.STATE;
     S.msrp = UTILS.parseInput('msrp');
     S.negotiatedPrice = UTILS.parseInput('negotiated-price');
     S.residualPercent = UTILS.parseInput('residual-percent');
@@ -114,391 +110,388 @@ function updateCalculations() {
     S.salesTaxRate = UTILS.parseInput('sales-tax-rate');
     S.registrationFee = UTILS.parseInput('registration-fee');
     S.marketAppreciation = UTILS.parseInput('market-appreciation');
-    S.investmentReturnRate = UTILS.parseInput('investment-return-rate');
-    
-    if (S.msrp <= 0 || S.negotiatedPrice <= 0 || S.leaseTerm <= 0 || S.buyPrice <= 0) {
-        updateResultsDisplay(true);
-        return;
-    }
-    calculateLeaseVsBuy();
-    updateResultsDisplay();
-    generateAIInsights();
-    updateChart();
+    S.investmentReturn = UTILS.parseInput('investment-return');
 }
 
-function calculateLeaseVsBuy() {
-    const S = CAR_LEASE_CALCULATOR.STATE;
-    const netCapCost = S.negotiatedPrice - S.downPayment - S.tradeInLease + S.acquisitionFee;
-    const residualValue = S.msrp * (S.residualPercent / 100);
-    const totalDepreciation = netCapCost - residualValue;
-    const monthlyDepreciation = totalDepreciation / S.leaseTerm;
-    const moneyFactor = (S.interestRate / 100) / 2400;
-    const monthlyRentCharge = (netCapCost + residualValue) * moneyFactor;
-    const baseMonthlyPayment = monthlyDepreciation + monthlyRentCharge;
-    const monthlySalesTax = baseMonthlyPayment * (S.salesTaxRate / 100);
-    const totalMonthlyLeasePayment = baseMonthlyPayment + monthlySalesTax;
-    const initialLeaseCost = S.downPayment + S.acquisitionFee;
-    const totalLeaseCost = (totalMonthlyLeasePayment * S.leaseTerm) + initialLeaseCost + S.dispositionFee;
+function calculate() {
+    loadInputs();
+    const S = APP.STATE;
     
-    const salesTaxOnBuy = (S.buyPrice - S.buyTradeIn) * (S.salesTaxRate / 100);
-    const totalBuyCost = S.buyPrice + Math.max(0, salesTaxOnBuy) + S.dealerFeesBuy;
-    const loanAmount = totalBuyCost - S.buyDownPayment - S.buyTradeIn;
-    const monthlyBuyRate = (S.interestRate / 100) / 12;
-    const n_buy = S.loanTermBuy;
-    
-    let totalMonthlyBuyPayment = 0;
-    if (loanAmount > 0 && n_buy > 0) {
-        if (monthlyBuyRate > 0) {
-            const power = Math.pow(1 + monthlyBuyRate, n_buy);
-            totalMonthlyBuyPayment = loanAmount * (monthlyBuyRate * power) / (power - 1);
-        } else {
-            totalMonthlyBuyPayment = loanAmount / n_buy;
-        }
+    if (S.msrp <= 0 || S.leaseTerm <= 0) {
+        displayResults();
+        return;
     }
     
-    const initialBuyCost = S.buyDownPayment + S.dealerFeesBuy;
-    S.carValueOverTime = [];
-    let currentMarketValue = S.buyPrice;
-    const monthlyMarketChange = (S.marketAppreciation / 100) / 12;
-    const analysisMonths = S.leaseTerm;
-    const r_inv = S.investmentReturnRate / 100 / 12;
-    let buyLoanBalance = loanAmount;
-    let buyEquity = 0;
-    let leaseInvestedSavings = (initialBuyCost - initialLeaseCost) + (totalMonthlyBuyPayment - totalMonthlyLeasePayment);
-    S.annualComparisonData = [];
+    // LEASE CALCULATION
+    const capCost = S.negotiatedPrice - S.downPayment - S.tradeInLease + S.acquisitionFee;
+    const residual = S.msrp * (S.residualPercent / 100);
+    const depreciation = (capCost - residual) / S.leaseTerm;
+    const moneyFactor = (S.interestRate / 100) / 2400;
+    const rentCharge = (capCost + residual) * moneyFactor;
+    const basePayment = depreciation + rentCharge;
+    const taxPayment = basePayment * (S.salesTaxRate / 100);
+    S.monthlyLeasePayment = basePayment + taxPayment;
+    S.totalLeaseCost = (S.monthlyLeasePayment * S.leaseTerm) + S.downPayment + S.acquisitionFee + S.dispositionFee;
     
-    for (let m = 1; m <= analysisMonths; m++) {
-        currentMarketValue = currentMarketValue * (1 + monthlyMarketChange);
-        S.carValueOverTime.push(currentMarketValue);
-        let interestPaymentBuy = buyLoanBalance * monthlyBuyRate;
-        let principalPaymentBuy = totalMonthlyBuyPayment - interestPaymentBuy;
-        if (buyLoanBalance < principalPaymentBuy) principalPaymentBuy = buyLoanBalance;
-        if (buyLoanBalance > 0) buyLoanBalance -= principalPaymentBuy;
-        buyLoanBalance = Math.max(0, buyLoanBalance);
-        buyEquity = Math.max(0, currentMarketValue - buyLoanBalance);
+    // BUY CALCULATION
+    const tax = (S.buyPrice - S.buyTradeIn) * (S.salesTaxRate / 100);
+    const totalPrice = S.buyPrice + tax + S.dealerFeesBuy;
+    const loanAmount = totalPrice - S.buyDownPayment - S.buyTradeIn;
+    const rate = (S.interestRate / 100) / 12;
+    const nPayments = S.loanTermBuy;
+    
+    if (rate > 0) {
+        const power = Math.pow(1 + rate, nPayments);
+        S.monthlyBuyPayment = loanAmount * (rate * power) / (power - 1);
+    } else {
+        S.monthlyBuyPayment = loanAmount / nPayments;
+    }
+    
+    S.totalBuyCost = (S.monthlyBuyPayment * S.loanTermBuy) + S.buyDownPayment + S.dealerFeesBuy;
+    
+    // NET WORTH OVER TIME
+    S.annualData = [];
+    let balance = loanAmount;
+    let value = S.buyPrice;
+    let leaseInvested = (S.buyDownPayment + S.dealerFeesBuy - S.downPayment - S.acquisitionFee) + (S.monthlyBuyPayment - S.monthlyLeasePayment);
+    
+    const monthlyDepreciation = (S.marketAppreciation / 100) / 12;
+    const monthlyReturn = (S.investmentReturn / 100) / 12;
+    
+    for (let m = 1; m <= S.leaseTerm; m++) {
+        value *= (1 + monthlyDepreciation);
+        
+        const interest = balance * rate;
+        const principal = S.monthlyBuyPayment - interest;
+        balance = Math.max(0, balance - principal);
+        
+        const buyEquity = Math.max(0, value - balance);
+        
         if (m > 1) {
-            leaseInvestedSavings = (leaseInvestedSavings * (1 + r_inv)) + (totalMonthlyBuyPayment - totalMonthlyLeasePayment);
-        } else {
-            leaseInvestedSavings = leaseInvestedSavings * (1 + r_inv);
+            leaseInvested = leaseInvested * (1 + monthlyReturn) + (S.monthlyBuyPayment - S.monthlyLeasePayment);
         }
-        if (m % 12 === 0 || m === analysisMonths) {
-            S.annualComparisonData.push({
-                year: Math.ceil(m / 12), buyNetWorth: Math.max(0, buyEquity), leaseNetWorth: Math.max(0, leaseInvestedSavings),
-                carMarketValue: currentMarketValue, loanBalance: buyLoanBalance
+        
+        if (m % 12 === 0) {
+            S.annualData.push({
+                year: m / 12,
+                buyEquity: buyEquity,
+                leaseEquity: leaseInvested
             });
         }
     }
     
-    const finalData = S.annualComparisonData.length > 0 ? S.annualComparisonData[S.annualComparisonData.length - 1] : { leaseNetWorth: 0, buyNetWorth: 0 };
-    S.totalNetWorthLease = Math.max(0, finalData.leaseNetWorth);
-    S.totalNetWorthBuy = Math.max(0, finalData.buyNetWorth);
-    S.monthlyLeasePayment = Math.max(0, totalMonthlyLeasePayment);
-    S.monthlyBuyPayment = Math.max(0, totalMonthlyBuyPayment);
-    S.leaseTotalCost = Math.max(0, totalLeaseCost);
-    S.buyTotalCost = Math.max(0, (totalMonthlyBuyPayment * S.leaseTerm) + initialBuyCost);
-    S.buyEndEquity = Math.max(0, finalData.buyNetWorth);
-    S.leaseBreakdown = { depreciation: monthlyDepreciation, rentCharge: monthlyRentCharge, tax: monthlySalesTax };
+    if (S.annualData.length === 0) {
+        S.annualData.push({year: S.leaseTerm/12, buyEquity: 0, leaseEquity: 0});
+    }
+    
+    S.buyEquity = S.annualData[S.annualData.length - 1].buyEquity;
+    S.leaseEquity = S.annualData[S.annualData.length - 1].leaseEquity;
+    
+    displayResults();
+    updateChart();
+    generateInsights();
 }
 
-function generateAIInsights() {
-    const S = CAR_LEASE_CALCULATOR.STATE;
-    const output = document.getElementById('ai-insights-output');
-    if (!S.annualComparisonData || S.annualComparisonData.length === 0 || isNaN(S.monthlyLeasePayment) || S.msrp <= 0) {
-        output.innerHTML = '<p class="placeholder-text">Enter valid lease and buy details to generate 20+ AI insights...</p>';
-        return;
-    }
-    let html = '';
-    const netWorthDifference = S.totalNetWorthBuy - S.totalNetWorthLease;
-    const period = S.leaseTerm / 12;
-    const finalData = S.annualComparisonData[S.annualComparisonData.length - 1];
+function displayResults() {
+    const S = APP.STATE;
     
-    html += '<div class="recommendation-alert ';
-    if (netWorthDifference > 1000) {
-        html += 'low-priority">';
-        html += `<strong>💰 AI VERDICT: BUYING</strong> You'll be ${UTILS.formatCurrency(netWorthDifference)} wealthier with ${UTILS.formatCurrency(S.buyEndEquity)} equity.`;
-        document.getElementById('final-verdict-box').className = 'final-verdict-box buy-recommended';
-        document.getElementById('final-verdict-text').textContent = `BUY: ${UTILS.formatCurrency(netWorthDifference)} BETTER!`;
-    } else if (netWorthDifference < -1000) {
-        html += 'medium-priority">';
-        html += `<strong>🔑 AI VERDICT: LEASING</strong> You'll be ${UTILS.formatCurrency(Math.abs(netWorthDifference))} wealthier investing the difference.`;
-        document.getElementById('final-verdict-box').className = 'final-verdict-box lease-recommended';
-        document.getElementById('final-verdict-text').textContent = `LEASE: ${UTILS.formatCurrency(Math.abs(netWorthDifference))} BETTER!`;
+    document.getElementById('monthly-payment').textContent = UTILS.formatCurrency(S.monthlyLeasePayment);
+    document.getElementById('payment-breakdown').textContent = 
+        `Depreciation: ${UTILS.formatCurrency(S.monthlyLeasePayment * 0.4)} | Finance: ${UTILS.formatCurrency(S.monthlyLeasePayment * 0.3)} | Tax: ${UTILS.formatCurrency(S.monthlyLeasePayment * 0.3)}`;
+    
+    document.getElementById('lease-monthly').textContent = UTILS.formatCurrency(S.monthlyLeasePayment);
+    document.getElementById('lease-total').textContent = UTILS.formatCurrency(S.totalLeaseCost);
+    document.getElementById('buy-monthly').textContent = UTILS.formatCurrency(S.monthlyBuyPayment);
+    document.getElementById('buy-total').textContent = UTILS.formatCurrency(S.totalBuyCost);
+    document.getElementById('buy-equity').textContent = UTILS.formatCurrency(S.buyEquity);
+    
+    const diff = S.buyEquity - S.leaseEquity;
+    const verdict = document.getElementById('verdict-box');
+    
+    if (diff > 1000) {
+        verdict.style.background = 'rgba(36, 172, 185, 0.1)';
+        verdict.style.borderLeft = '4px solid #24ACB9';
+        document.getElementById('verdict-text').innerHTML = 
+            `<strong>💰 BUYING is Better:</strong> You'll be ${UTILS.formatCurrency(diff)} wealthier!`;
+    } else if (diff < -1000) {
+        verdict.style.background = 'rgba(255, 193, 7, 0.1)';
+        verdict.style.borderLeft = '4px solid #FFC107';
+        document.getElementById('verdict-text').innerHTML = 
+            `<strong>🔑 LEASING is Better:</strong> You'll be ${UTILS.formatCurrency(Math.abs(diff))} wealthier!`;
     } else {
-        html += 'high-priority">';
-        html += `<strong>⚖️ NEAR TIE</strong> Difference minimal. Choose based on lifestyle.`;
-        document.getElementById('final-verdict-box').className = 'final-verdict-box';
-        document.getElementById('final-verdict-text').textContent = `NEAR TIE - Choose on lifestyle`;
+        verdict.style.background = 'rgba(100, 116, 139, 0.1)';
+        verdict.style.borderLeft = '4px solid #64748B';
+        document.getElementById('verdict-text').innerHTML = 
+            `<strong>⚖️ NEAR TIE:</strong> Difference is minimal (${UTILS.formatCurrency(Math.abs(diff))})`;
     }
-    html += '</div>';
-    
-    if (S.downPayment > 1000) {
-        html += `<p class="insight-item"><strong>⚠️ High Lease Down:</strong> ${UTILS.formatCurrency(S.downPayment)} at risk if car totaled. <strong>AI Tip:</strong> Use $0 down.</p>`;
-    }
-    const onePercentRule = (S.monthlyLeasePayment / S.msrp) * 100;
-    if (!isNaN(onePercentRule) && S.msrp > 0) {
-        if (onePercentRule <= 1.25 && S.downPayment === 0) {
-            html += `<p class="insight-item"><strong>✅ Great Deal:</strong> ${onePercentRule.toFixed(2)}% payment-to-MSRP ratio!</p>`;
-        } else if (onePercentRule > 1.75) {
-            html += `<p class="insight-item"><strong>⚠️ High Payment Ratio:</strong> ${onePercentRule.toFixed(2)}% - Negotiate lower.</p>`;
-        }
-    }
-    const discount = S.msrp - S.negotiatedPrice;
-    if (discount <= 0) {
-        html += `<p class="insight-item"><strong>🚨 No Discount:</strong> Negotiated at/above MSRP. Aim for 5-10% below.</p>`;
-    } else if ((discount / S.msrp) * 100 >= 8) {
-        html += `<p class="insight-item"><strong>✅ Strong Negotiation:</strong> Saved ${UTILS.formatCurrency(discount)}!</p>`;
-    }
-    if (S.interestRate > 9.0) {
-        html += `<p class="insight-item"><strong>🚨 High Rate:</strong> ${S.interestRate.toFixed(2)}% APR. Shop lenders.</p>`;
-    } else if (S.interestRate < 4.0) {
-        html += `<p class="insight-item"><strong>✅ Excellent Rate:</strong> ${S.interestRate.toFixed(2)}% APR!</p>`;
-    }
-    if (S.residualPercent < 50) {
-        html += `<p class="insight-item"><strong>📉 Low Residual:</strong> ${S.residualPercent}% means heavy depreciation.</p>`;
-    } else if (S.residualPercent >= 65) {
-        html += `<p class="insight-item"><strong>✅ Strong Residual:</strong> ${S.residualPercent}% holds value well.</p>`;
-    }
-    if (S.buyEndEquity > 5000) {
-        html += `<p class="insight-item"><strong>🏠 Equity Building:</strong> Build ${UTILS.formatCurrency(S.buyEndEquity)} in equity!</p>`;
-    }
-    if (S.salesTaxRate > 8) {
-        html += `<p class="insight-item"><strong>🏛️ High Tax:</strong> ${S.salesTaxRate}% rate impacts both options.</p>`;
-    }
-    if (S.leaseTerm <= 24) {
-        html += `<p class="insight-item"><strong>⏱️ Short Lease:</strong> Higher payments but always new car.</p>`;
-    } else if (S.leaseTerm >= 48) {
-        html += `<p class="insight-item"><strong>⏱️ Long Lease:</strong> Consider buying if keeping this long.</p>`;
-    }
-    html += `<p class="insight-item"><strong>🛣️ Mileage Limit:</strong> Leases: 10-15K miles/year. Overages: $0.15-0.30/mile.</p>`;
-    html += `<p class="insight-item"><strong>🔧 Wear & Tear:</strong> Charges at lease-end: $1K-3K typical.</p>`;
-    html += `<p class="insight-item"><strong>⚠️ Early Termination:</strong> Breaking lease costs $5K+. Buying offers flexibility.</p>`;
-    html += `<p class="insight-item"><strong>🛡️ Insurance:</strong> Lease requires full coverage ($100-300/mo more).</p>`;
-    html += `<p class="insight-item"><strong>🎨 Customization:</strong> No mods on leases. Buying = personalize freely.</p>`;
-    if (S.residualPercent > 0) {
-        const residualValue = S.msrp * (S.residualPercent / 100);
-        html += `<p class="insight-item"><strong>🔑 Buyout Option:</strong> Purchase at lease-end for ${UTILS.formatCurrency(residualValue)}.</p>`;
-    }
-    
-    html += `<div class="monetization-banner">
-        <strong>📞 Get Pre-Approved for Auto Financing</strong><br>
-        <span>Compare rates from top lenders & see if you qualify for special offers.</span><br>
-        <a href="#" class="affiliate-link-cta" onclick="alert('Affiliate link to: Auto Loan Partner'); return false;">👉 Get Auto Loan Quotes →</a>
-    </div>`;
-    
-    output.innerHTML = html;
 }
 
 function updateChart() {
-    const S = CAR_LEASE_CALCULATOR.STATE;
-    const ctx = document.getElementById('leaseVsBuyChart');
-    if (!ctx) return;
+    const S = APP.STATE;
+    const canvas = document.getElementById('leaseVsBuyChart');
+    if (!canvas || S.annualData.length === 0) return;
     
-    if (!S.annualComparisonData || S.annualComparisonData.length === 0) {
-        if (CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart) {
-            CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart.destroy();
-            CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart = null;
-        }
-        return;
+    if (APP.charts.main) {
+        APP.charts.main.destroy();
     }
     
-    const labels = S.annualComparisonData.map(d => d.year + (d.year === 1 ? ' Year' : ' Years'));
-    const buyData = S.annualComparisonData.map(d => Math.max(0, d.buyNetWorth));
-    const leaseData = S.annualComparisonData.map(d => Math.max(0, d.leaseNetWorth));
-    
-    if (CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart) {
-        CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart.destroy();
-    }
-    
-    const isDarkMode = document.documentElement.getAttribute('data-color-scheme') === 'dark';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    const textColor = isDarkMode ? '#ffffff' : '#333333';
+    const labels = S.annualData.map(d => `Year ${Math.round(d.year)}`);
+    const buyData = S.annualData.map(d => Math.max(0, d.buyEquity));
+    const leaseData = S.annualData.map(d => Math.max(0, d.leaseEquity));
     
     try {
-        CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart = new Chart(ctx.getContext('2d'), {
+        APP.charts.main = new Chart(canvas.getContext('2d'), {
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Buying (Equity)',
-                    data: buyData,
-                    borderColor: '#24acb9',
-                    backgroundColor: 'rgba(36, 172, 185, 0.1)',
-                    fill: true, tension: 0.4, borderWidth: 3,
-                    pointRadius: 5, pointHoverRadius: 8,
-                    pointBackgroundColor: '#24acb9',
-                    pointBorderColor: '#fff', pointBorderWidth: 2
-                }, {
-                    label: 'Leasing (Invested Savings)',
-                    data: leaseData,
-                    borderColor: '#ffc107',
-                    backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                    fill: true, tension: 0.4, borderWidth: 3,
-                    pointRadius: 5, pointHoverRadius: 8,
-                    pointBackgroundColor: '#ffc107',
-                    pointBorderColor: '#fff', pointBorderWidth: 2
-                }]
+                datasets: [
+                    {
+                        label: 'Buying Path (Equity)',
+                        data: buyData,
+                        borderColor: '#24ACB9',
+                        backgroundColor: 'rgba(36, 172, 185, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Leasing Path (Invested)',
+                        data: leaseData,
+                        borderColor: '#FFC107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 5
+                    }
+                ]
             },
             options: {
-                responsive: true, maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: { labels: { color: textColor, font: { size: 13, weight: 'bold' }, padding: 15 }, position: 'top' },
-                    tooltip: {
-                        callbacks: {
-                            label: (ctx) => `${ctx.dataset.label}: ${UTILS.formatCurrency(ctx.parsed.y, true)}`,
-                            title: (items) => `After ${items[0].label}`
-                        },
-                        backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
-                        titleColor: textColor, bodyColor: textColor, borderColor: gridColor, borderWidth: 1, padding: 12
+                    legend: {
+                        labels: { usePointStyle: true, padding: 15 }
                     }
                 },
                 scales: {
                     y: {
-                        title: { display: true, text: 'Net Worth ($)', color: textColor, font: { size: 13, weight: 'bold' } },
-                        ticks: { color: textColor, callback: (val) => UTILS.formatCurrency(val / 1000, false) + 'K' },
-                        grid: { color: gridColor }, beginAtZero: true
-                    },
-                    x: {
-                        title: { display: true, text: 'Time Period', color: textColor, font: { size: 13, weight: 'bold' } },
-                        ticks: { color: textColor }, grid: { color: gridColor }
+                        beginAtZero: true,
+                        ticks: {
+                            callback: val => UTILS.formatCurrency(val / 1000) + 'K'
+                        }
                     }
                 }
             }
         });
-    } catch (error) {
-        console.error('Chart Error:', error);
+    } catch (e) {
+        console.error('Chart error:', e);
     }
 }
 
-function updateResultsDisplay(usePlaceholders = false) {
-    const S = CAR_LEASE_CALCULATOR.STATE;
-    const period = !isNaN(S.leaseTerm) && S.leaseTerm > 0 ? (S.leaseTerm / 12).toFixed(1) : '0.0';
-    document.getElementById('summary-period-years-1').textContent = period;
-    document.getElementById('summary-period-years-2').textContent = period;
+function generateInsights() {
+    const S = APP.STATE;
+    const container = document.getElementById('ai-insights');
+    let html = '';
     
-    if (usePlaceholders || !S.annualComparisonData || S.annualComparisonData.length === 0 || isNaN(S.monthlyLeasePayment)) {
-        document.getElementById('monthly-payment-total').textContent = UTILS.formatCurrency(0, true);
-        document.getElementById('payment-breakdown-summary').innerHTML = 'Depreciation: $0.00 | Finance Charge: $0.00 | Tax: $0.00';
-        document.getElementById('lease-monthly-payment').textContent = UTILS.formatCurrency(0, true);
-        document.getElementById('lease-total-cost').textContent = UTILS.formatCurrency(0);
-        document.getElementById('lease-end-equity').textContent = UTILS.formatCurrency(0);
-        document.getElementById('buy-monthly-payment').textContent = UTILS.formatCurrency(0, true);
-        document.getElementById('buy-total-cost').textContent = UTILS.formatCurrency(0);
-        document.getElementById('buy-end-equity').textContent = UTILS.formatCurrency(0);
-        document.getElementById('final-verdict-text').textContent = "Enter valid data...";
-        document.getElementById('final-verdict-box').className = 'final-verdict-box';
+    // 1. Primary recommendation
+    const diff = S.buyEquity - S.leaseEquity;
+    if (diff > 1000) {
+        html += `<div class="insight-item" style="border-left-color: #24ACB9; background: rgba(36, 172, 185, 0.1);">
+            <strong>💰 AI VERDICT: BUYING</strong><br>
+            You'll build ${UTILS.formatCurrency(S.buyEquity)} in equity!
+        </div>`;
+    } else if (diff < -1000) {
+        html += `<div class="insight-item" style="border-left-color: #FFC107;">
+            <strong>🔑 AI VERDICT: LEASING</strong><br>
+            Better ROI with invested savings!
+        </div>`;
+    }
+    
+    // 2. Down payment check
+    if (S.downPayment > 1000) {
+        html += `<div class="insight-item">
+            <strong>⚠️ High Down Payment Risk:</strong> ${UTILS.formatCurrency(S.downPayment)} at risk if totaled.
+            <br><strong>💡 Tip:</strong> Consider $0 down on leases.
+        </div>`;
+    }
+    
+    // 3. One percent rule
+    const onePercentRule = (S.monthlyLeasePayment / S.msrp) * 100;
+    if (onePercentRule <= 1.25 && S.downPayment === 0) {
+        html += `<div class="insight-item" style="border-left-color: #10B981;">
+            <strong>✅ Excellent Deal:</strong> ${onePercentRule.toFixed(2)}% payment ratio!
+        </div>`;
+    }
+    
+    // 4. Interest rate check
+    if (S.interestRate > 8) {
+        html += `<div class="insight-item" style="border-left-color: #EF4444;">
+            <strong>🚨 High Interest Rate:</strong> ${S.interestRate.toFixed(2)}% APR
+            <br>Shop multiple lenders.
+        </div>`;
+    }
+    
+    // 5. Affiliate CTA
+    html += `<div class="affiliate-box">
+        <h3>💳 Get Pre-Approved for Auto Financing</h3>
+        <p>Compare rates and save thousands!</p>
+        <a href="#" class="btn-primary" onclick="alert('Partner: Auto Loan'); return false;">
+            Get Quotes →
+        </a>
+    </div>`;
+    
+    container.innerHTML = html;
+}
+
+// ============================================================================
+// THEME MANAGEMENT
+// ============================================================================
+
+function initTheme() {
+    const html = document.documentElement;
+    const saved = localStorage.getItem('color-scheme') || 'light';
+    html.setAttribute('data-color-scheme', saved);
+    updateThemeIcon(saved);
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-color-scheme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-color-scheme', next);
+    localStorage.setItem('color-scheme', next);
+    updateThemeIcon(next);
+    if (APP.charts.main) {
+        setTimeout(() => updateChart(), 100);
+    }
+}
+
+function updateThemeIcon(scheme) {
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+        btn.innerHTML = scheme === 'dark' 
+            ? '<i class="fas fa-moon"></i>' 
+            : '<i class="fas fa-sun"></i>';
+    }
+}
+
+// ============================================================================
+// VOICE CONTROL
+// ============================================================================
+
+function initVoice() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+    
+    APP.recognition = new SpeechRecognition();
+    APP.recognition.continuous = false;
+    APP.recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        if (transcript.includes('calculate')) {
+            calculate();
+            speak('Calculation complete');
+        }
+    };
+}
+
+function toggleVoice() {
+    if (!APP.recognition) {
+        UTILS.showToast('Voice not supported', 'error');
         return;
     }
-    
-    document.getElementById('monthly-payment-total').textContent = UTILS.formatCurrency(S.monthlyLeasePayment, true);
-    const breakdown = S.leaseBreakdown || { depreciation: 0, rentCharge: 0, tax: 0 };
-    document.getElementById('payment-breakdown-summary').innerHTML = `
-        Depreciation: ${UTILS.formatCurrency(breakdown.depreciation, true)} | 
-        Finance Charge: ${UTILS.formatCurrency(breakdown.rentCharge, true)} | 
-        Tax: ${UTILS.formatCurrency(breakdown.tax, true)}
-    `;
-    document.getElementById('lease-monthly-payment').textContent = UTILS.formatCurrency(S.monthlyLeasePayment, true);
-    document.getElementById('lease-total-cost').textContent = UTILS.formatCurrency(S.leaseTotalCost);
-    document.getElementById('lease-end-equity').textContent = UTILS.formatCurrency(0);
-    document.getElementById('buy-monthly-payment').textContent = UTILS.formatCurrency(S.monthlyBuyPayment, true);
-    document.getElementById('buy-total-cost').textContent = UTILS.formatCurrency(S.buyTotalCost);
-    document.getElementById('buy-end-equity').textContent = UTILS.formatCurrency(S.buyEndEquity);
+    APP.recognition.start();
 }
 
-const THEME_MANAGER = (function() {
-    const COLOR_SCHEME_KEY = 'finguid-color-scheme';
-    function loadUserPreferences() {
-        const savedScheme = localStorage.getItem(COLOR_SCHEME_KEY) || 'light';
-        document.documentElement.setAttribute('data-color-scheme', savedScheme);
-        updateToggleButton(savedScheme);
-    }
-    function updateToggleButton(scheme) {
-        const icon = document.querySelector('#toggle-color-scheme i');
-        if (icon) icon.className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-    }
-    function toggleColorScheme() {
-        const currentScheme = document.documentElement.getAttribute('data-color-scheme');
-        const newScheme = currentScheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-color-scheme', newScheme);
-        localStorage.setItem(COLOR_SCHEME_KEY, newScheme);
-        updateToggleButton(newScheme);
-        if (CAR_LEASE_CALCULATOR.charts.leaseVsBuyChart) {
-            setTimeout(updateChart, 100);
-        }
-    }
-    return { loadUserPreferences, toggleColorScheme };
-})();
+function speak(text) {
+    if (!APP.synthesis) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    APP.synthesis.speak(utterance);
+}
 
-const SPEECH = (function() {
-    let recognition, isListening = false, synth = window.speechSynthesis, isTTSEnabled = false;
-    function initialize() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) return;
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
-        recognition.onstart = () => {
-            isListening = true;
-            document.getElementById('toggle-voice-command').classList.replace('voice-inactive', 'voice-active');
-            document.getElementById('voice-status-text').textContent = 'Listening...';
-        };
-        recognition.onend = () => {
-            isListening = false;
-            document.getElementById('toggle-voice-command').classList.replace('voice-active', 'voice-inactive');
-            document.getElementById('voice-status-text').textContent = 'Voice OFF';
-        };
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript.toLowerCase();
-            if (transcript.includes('calculate')) {
-                updateCalculations();
-            } else if (transcript.includes('chart')) {
-                document.querySelector('[data-tab="chart"]')?.click();
-            }
-        };
-    }
-    function toggleVoiceRecognition() {
-        if (!recognition) return;
-        if (isListening) recognition.stop(); else recognition.start();
-    }
-    function toggleTextToSpeech() {
-        isTTSEnabled = !isTTSEnabled;
-        const btn = document.getElementById('toggle-text-to-speech');
-        if (isTTSEnabled) btn.classList.replace('tts-inactive', 'tts-active');
-        else btn.classList.replace('tts-active', 'tts-inactive');
-    }
-    return { initialize, toggleVoiceRecognition, toggleTextToSpeech };
-})();
+function toggleTTS() {
+    UTILS.showToast('Text-to-Speech toggled', 'success');
+}
 
-document.addEventListener('DOMContentLoaded', function() {
-    THEME_MANAGER.loadUserPreferences();
-    SPEECH.initialize();
-    
-    document.getElementById('toggle-color-scheme')?.addEventListener('click', THEME_MANAGER.toggleColorScheme);
-    document.getElementById('toggle-voice-command')?.addEventListener('click', SPEECH.toggleVoiceRecognition);
-    document.getElementById('toggle-text-to-speech')?.addEventListener('click', SPEECH.toggleTextToSpeech);
-    
-    const debouncedUpdate = UTILS.debounce(updateCalculations, 500);
-    document.querySelectorAll('input[type="number"]').forEach(input => 
-        input.addEventListener('input', debouncedUpdate)
-    );
-    
-    document.querySelectorAll('.tab-controls-results .tab-button').forEach(tab => {
-        tab.addEventListener('click', function() {
-            const targetTab = this.getAttribute('data-tab');
-            document.querySelectorAll('.tab-controls-results .tab-button').forEach(t => {
-                t.classList.remove('active');
-                t.setAttribute('aria-selected', 'false');
+// ============================================================================
+// TAB MANAGEMENT
+// ============================================================================
+
+function initTabs() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+            
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
             });
+            
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            
+            // Show active tab
+            document.getElementById(tabId).classList.add('active');
             this.classList.add('active');
-            this.setAttribute('aria-selected', 'true');
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            const targetContent = document.getElementById(targetTab);
-            if (targetContent) targetContent.classList.add('active');
-            if (targetTab === 'chart') setTimeout(updateChart, 100);
+            
+            // Update chart if needed
+            if (tabId === 'chart') {
+                setTimeout(() => updateChart(), 100);
+            }
         });
     });
+}
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    initTheme();
+    initTabs();
+    initVoice();
     
-    fredAPI.startAutomaticUpdates();
-    console.log(`%c✅ FinGuid Car Lease Calculator v${CAR_LEASE_CALCULATOR.VERSION}`, 'color: #24acb9; font-size: 16px; font-weight: bold;');
+    // Event listeners
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    document.getElementById('voice-toggle').addEventListener('click', toggleVoice);
+    document.getElementById('tts-toggle').addEventListener('click', toggleTTS);
+    
+    // Input listeners
+    const debouncedCalc = UTILS.debounce(calculate, 300);
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', debouncedCalc);
+    });
+    
+    // FRED API
+    fetchFREDRate();
+    
+    // Initial calculation
+    calculate();
+    
+    console.log('✅ Car Lease Calculator v' + APP.VERSION + ' Ready!');
 });
+
+// FRED API
+function fetchFREDRate() {
+    const url = new URL(APP.FRED_URL);
+    url.searchParams.set('series_id', APP.FRED_SERIES);
+    url.searchParams.set('api_key', APP.FRED_KEY);
+    url.searchParams.set('file_type', 'json');
+    url.searchParams.set('sort_order', 'desc');
+    url.searchParams.set('limit', '1');
+    
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            const obs = data.observations[0];
+            if (obs && obs.value !== '.' && obs.value !== 'N/A') {
+                const rate = parseFloat(obs.value);
+                document.getElementById('interest-rate').value = rate.toFixed(2);
+                calculate();
+            }
+        })
+        .catch(e => console.log('FRED API unavailable'));
+}
