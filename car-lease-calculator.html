@@ -2,86 +2,77 @@
 <html lang="en" data-color-scheme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <!-- 20+ KEYWORDS FOR FIRST PAGE RANKING -->
-    <title>Car Lease vs Buy Calculator 2025 | AI-Powered Lease Payment Calculator | Money Factor Calculator | Vehicle Lease Calculator | Compare Lease or Buy | Car Payment Calculator | Lease vs Buy Analysis | Best Lease Calculator | Auto Lease Calculator | FinGuid USA</title>
-    
-    <meta name="description" content="Free car lease vs buy calculator with 20+ AI insights. Compare lease payment calculations, money factor, residual value, vehicle depreciation. Get personalized recommendations for smart car financing decisions in 2025.">
-    <meta name="keywords" content="car lease calculator, lease vs buy calculator, auto lease calculator, car lease payment calculator, money factor calculator, lease calculator, vehicle lease calculator, car payment calculator, lease or buy calculator, should i lease or buy, car depreciation calculator, lease buyout calculator, car lease vs buy, lease payment calculator, auto loan calculator, vehicle depreciation, car financing, lease vs purchase, residual value calculator">
-    
+    <title>Car Lease vs Buy Calculator 2025 | Money Factor Calculator | AI-Powered - FinGuid USA</title>
+    <meta name="description" content="Free car lease vs buy calculator with 20+ AI insights. Compare lease payments, money factor, residual value. Get personalized recommendations for smart car financing decisions.">
+    <meta name="keywords" content="car lease calculator, lease vs buy calculator, auto lease calculator, money factor calculator, vehicle lease calculator, car payment calculator">
     <meta name="author" content="FinGuid USA">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="theme-color" content="#19343B">
     <link rel="canonical" href="https://www.finguid.com/calculators/car-lease-calculator">
-    
-    <!-- OPEN GRAPH -->
-    <meta property="og:locale" content="en_US">
-    <meta property="og:type" content="website">
     <meta property="og:title" content="Car Lease vs Buy Calculator 2025 | AI-Powered Analysis">
     <meta property="og:description" content="Free car lease calculator with 20+ AI insights. Compare lease vs buy and make smart financing decisions.">
+    <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.finguid.com/calculators/car-lease-calculator">
-    <meta property="og:site_name" content="FinGuid USA">
-    <meta property="og:image" content="https://www.finguid.com/images/car-lease-calculator.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    
-    <!-- TWITTER CARDS -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Car Lease vs Buy Calculator 2025">
-    <meta name="twitter:description" content="AI-powered lease vs buy analysis with 20+ insights">
-    <meta name="twitter:image" content="https://www.finguid.com/images/car-lease-calculator.jpg">
-    <meta name="twitter:site" content="@finguid">
-    
     <link rel="icon" href="/favicon.ico">
-    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="car-lease-calculator.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
-    <!-- STRUCTURED DATA 1: WebApplication -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Car Lease vs Buy Calculator",
         "applicationCategory": "FinanceApplication",
-        "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "2547"},
-        "featureList": ["Lease vs Buy Comparison", "20+ AI Insights", "Money Factor Calculator", "Net Worth Chart", "FRED API Live Rates", "Dark Mode", "Mobile Responsive"]
+        "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "2547"}
     }
     </script>
     
-    <!-- STRUCTURED DATA 2: Organization -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "FinGuid USA",
-        "url": "https://www.finguid.com",
-        "logo": "https://www.finguid.com/logo.png",
-        "sameAs": ["https://www.facebook.com/finguid", "https://twitter.com/finguid"]
-    }
-    </script>
-    
-    <!-- STRUCTURED DATA 3: FAQPage -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {"@type": "Question", "name": "How does car lease vs buy calculator work?", "acceptedAnswer": {"@type": "Answer", "text": "Compares leasing vs buying by analyzing monthly payments, depreciation, money factor, residual value."}},
-            {"@type": "Question", "name": "What is money factor in leasing?", "acceptedAnswer": {"@type": "Answer", "text": "Interest rate in lease. Multiply by 2400 to get APR. Lower = lower lease payment."}},
-            {"@type": "Question", "name": "Is this lease calculator accurate?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Uses industry formulas and real FRED API rates for accurate car lease calculations."}}
-        ]
-    }
-    </script>
+    <style>
+        /* CHART CONTAINER - FIXED OVERFLOW ISSUE */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 75%;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .chart-container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        /* RESPONSIVE CHART SIZES */
+        @media (max-width: 1024px) {
+            .chart-container {
+                padding-bottom: 80%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .chart-container {
+                padding-bottom: 100%;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .chart-container {
+                padding-bottom: 120%;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <a href="#calculator" class="skip-link">Skip to Calculator</a>
     
-    <!-- HEADER -->
     <header class="header">
         <div class="header-top">
             <div class="container">
@@ -91,9 +82,8 @@
                         <span>FinGuid <strong>USA</strong></span>
                     </a>
                 </div>
-                <h1 class="site-title">Car Lease vs Buy Calculator 2025 - AI-Powered Analysis</h1>
-                <p class="site-subtitle">Compare Lease Payment Calculator | Money Factor Calculator | Net Worth Impact Analysis</p>
-                
+                <h1 class="site-title">Car Lease vs Buy Calculator 2025</h1>
+                <p class="site-subtitle">Compare Lease Payment | Money Factor | Net Worth Impact</p>
                 <div class="header-controls">
                     <button id="theme-toggle" class="btn-icon" aria-label="Toggle Dark Mode">
                         <i class="fas fa-sun"></i>
@@ -102,17 +92,15 @@
             </div>
         </div>
         
-        <!-- SPONSOR BANNER -->
         <div class="sponsor-banner">
             <div class="container">
                 <span class="sponsor-label">🎁 Sponsored:</span>
-                <span class="sponsor-text">Compare Auto Loan Rates | Get Pre-Approved for 0% APR Financing</span>
+                <span class="sponsor-text">Compare Auto Loan Rates | Get Pre-Approved for 0% APR</span>
                 <a href="#" class="sponsor-btn" onclick="alert('Partner: Auto Loan'); return false;">Check Eligibility →</a>
             </div>
         </div>
     </header>
     
-    <!-- BREADCRUMB -->
     <nav class="breadcrumb">
         <div class="container">
             <a href="https://www.finguid.com">Home</a> / 
@@ -121,7 +109,6 @@
         </div>
     </nav>
     
-    <!-- MAIN -->
     <main id="calculator" class="main">
         <div class="container">
             <div class="calculator-wrapper">
@@ -130,7 +117,6 @@
                 <aside class="inputs-panel">
                     <h2 class="panel-title"><i class="fas fa-sliders-h"></i> Calculator Inputs</h2>
                     
-                    <!-- Vehicle -->
                     <section class="input-section">
                         <h3 class="section-heading">Vehicle Information</h3>
                         <div class="form-group">
@@ -141,7 +127,7 @@
                         <div class="form-group">
                             <label for="negotiated-price">Negotiated Price</label>
                             <input type="number" id="negotiated-price" value="33500" min="0" step="100">
-                            <small>Cap cost negotiated</small>
+                            <small>Cap cost</small>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
@@ -149,13 +135,12 @@
                                 <input type="number" id="residual-percent" value="62" min="0" max="100" step="1">
                             </div>
                             <div class="form-group">
-                                <label for="lease-term">Lease Term (mo)</label>
+                                <label for="lease-term">Lease (months)</label>
                                 <input type="number" id="lease-term" value="36" min="12" max="60" step="1">
                             </div>
                         </div>
                     </section>
                     
-                    <!-- Lease -->
                     <section class="input-section">
                         <h3 class="section-heading">Lease Details</h3>
                         <div class="form-row">
@@ -180,7 +165,6 @@
                         </div>
                     </section>
                     
-                    <!-- Buy -->
                     <section class="input-section">
                         <h3 class="section-heading">Buy Details</h3>
                         <div class="form-group">
@@ -199,7 +183,7 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="loan-term-buy">Loan (mo)</label>
+                                <label for="loan-term-buy">Loan (months)</label>
                                 <input type="number" id="loan-term-buy" value="60" min="12" max="84" step="6">
                             </div>
                             <div class="form-group">
@@ -209,7 +193,6 @@
                         </div>
                     </section>
                     
-                    <!-- Market & Tax -->
                     <section class="input-section">
                         <h3 class="section-heading">Market & Tax</h3>
                         <div class="form-group">
@@ -243,52 +226,65 @@
                 <!-- RESULTS -->
                 <section class="results-panel">
                     
-                    <!-- AD SLOT -->
                     <div class="ad-slot">
                         <p class="ad-label">ADVERTISEMENT</p>
                         <div class="ad-placeholder">Your FinTech Ad</div>
                     </div>
                     
-                    <!-- SUMMARY -->
                     <div class="summary-card">
                         <div class="summary-label">Monthly Lease Payment</div>
                         <div class="payment-amount">
                             <span class="amount" id="monthly-payment">$0.00</span>
                             <span class="unit">/month</span>
                         </div>
-                        <div class="payment-breakdown" id="payment-breakdown">
-                            Depreciation: $0 | Finance: $0 | Tax: $0
-                        </div>
+                        <div class="payment-breakdown" id="payment-breakdown">Depreciation: $0 | Finance: $0 | Tax: $0</div>
                     </div>
                     
-                    <!-- TABS -->
                     <div class="tabs">
                         <div class="tab-buttons" role="tablist">
-                            <button class="tab-btn active" data-tab="comparison" role="tab">
+                            <button class="tab-btn active" data-tab="comparison" role="tab" aria-selected="true">
                                 <i class="fas fa-balance-scale"></i> Comparison
                             </button>
-                            <button class="tab-btn" data-tab="chart" role="tab">
+                            <button class="tab-btn" data-tab="chart" role="tab" aria-selected="false">
                                 <i class="fas fa-chart-line"></i> Chart
                             </button>
-                            <button class="tab-btn" data-tab="insights" role="tab">
+                            <button class="tab-btn" data-tab="insights" role="tab" aria-selected="false">
                                 <i class="fas fa-brain"></i> AI Insights (20+)
                             </button>
                         </div>
                         
-                        <!-- COMPARISON -->
+                        <!-- COMPARISON TAB -->
                         <div id="comparison" class="tab-content active" role="tabpanel">
                             <h3 class="result-title lease-title"><i class="fas fa-key"></i> Leasing Path</h3>
                             <div class="result-grid">
-                                <div class="result-box"><span class="result-label">Monthly</span><span class="result-value" id="lease-monthly">$0</span></div>
-                                <div class="result-box"><span class="result-label">Total</span><span class="result-value" id="lease-total">$0</span></div>
-                                <div class="result-box"><span class="result-label">Equity</span><span class="result-value">$0</span></div>
+                                <div class="result-box">
+                                    <span class="result-label">Monthly</span>
+                                    <span class="result-value" id="lease-monthly">$0</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Total</span>
+                                    <span class="result-value" id="lease-total">$0</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Equity</span>
+                                    <span class="result-value">$0</span>
+                                </div>
                             </div>
                             
                             <h3 class="result-title buy-title"><i class="fas fa-home"></i> Buying Path</h3>
                             <div class="result-grid">
-                                <div class="result-box"><span class="result-label">Monthly</span><span class="result-value" id="buy-monthly">$0</span></div>
-                                <div class="result-box"><span class="result-label">Total</span><span class="result-value" id="buy-total">$0</span></div>
-                                <div class="result-box highlight"><span class="result-label">Equity</span><span class="result-value" id="buy-equity">$0</span></div>
+                                <div class="result-box">
+                                    <span class="result-label">Monthly</span>
+                                    <span class="result-value" id="buy-monthly">$0</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Total</span>
+                                    <span class="result-value" id="buy-total">$0</span>
+                                </div>
+                                <div class="result-box highlight">
+                                    <span class="result-label">Equity</span>
+                                    <span class="result-value" id="buy-equity">$0</span>
+                                </div>
                             </div>
                             
                             <div class="verdict-box" id="verdict-box">
@@ -296,29 +292,29 @@
                             </div>
                         </div>
                         
-                        <!-- CHART -->
+                        <!-- CHART TAB - FIXED CONTAINER -->
                         <div id="chart" class="tab-content" role="tabpanel">
-                            <p style="text-align: center; color: #666; margin-bottom: 15px;">Net Worth Comparison - Lease vs Buy Over Time</p>
-                            <canvas id="leaseVsBuyChart" width="400" height="300"></canvas>
+                            <p style="text-align: center; color: #666; margin-bottom: 15px; font-weight: 600;">Net Worth Comparison Over Time</p>
+                            <div class="chart-container">
+                                <canvas id="leaseVsBuyChart" aria-label="Net Worth Comparison Chart"></canvas>
+                            </div>
                         </div>
                         
-                        <!-- AI INSIGHTS -->
+                        <!-- AI INSIGHTS TAB -->
                         <div id="insights" class="tab-content" role="tabpanel">
                             <h3 style="color: #24ACB9; margin-bottom: 20px;"><i class="fas fa-lightbulb"></i> 22 AI Insights</h3>
-                            <div id="ai-insights" class="insights-container">
-                                <p style="text-align: center; color: #999;">Enter data for 20+ AI insights...</p>
+                            <div id="ai-insights" class="insights-container" aria-live="polite">
+                                <p style="text-align: center; color: #999;">Enter data for insights...</p>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- AFFILIATE -->
                     <div class="affiliate-box">
                         <h3>💳 Get Pre-Approved for Auto Financing</h3>
                         <p>Compare rates and save thousands!</p>
                         <a href="#" onclick="alert('Partner'); return false;" class="btn-primary">Get Quotes →</a>
                     </div>
                     
-                    <!-- AD SLOT -->
                     <div class="ad-slot">
                         <p class="ad-label">ADVERTISEMENT</p>
                         <div class="ad-placeholder">Your FinTech Ad</div>
@@ -328,29 +324,28 @@
         </div>
     </main>
     
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-sponsor">
             <div class="container">
                 <div class="sponsor-grid">
                     <div class="sponsor-item">
                         <h4>💳 Auto Loan Rates</h4>
-                        <p>Get pre-approved in minutes.</p>
+                        <p>Get pre-approved.</p>
                         <a href="#" onclick="alert('Partner'); return false;">Get Quotes →</a>
                     </div>
                     <div class="sponsor-item">
                         <h4>🛡️ Auto Insurance</h4>
-                        <p>Save up to 40%.</p>
+                        <p>Save 40%.</p>
                         <a href="#" onclick="alert('Partner'); return false;">Compare →</a>
                     </div>
                     <div class="sponsor-item">
                         <h4>🚗 Vehicle History</h4>
-                        <p>Check before buying.</p>
+                        <p>Check reports.</p>
                         <a href="#" onclick="alert('Partner'); return false;">Check Now →</a>
                     </div>
                     <div class="sponsor-item">
                         <h4>🔧 Car Maintenance</h4>
-                        <p>Affordable plans.</p>
+                        <p>Maintenance plans.</p>
                         <a href="#" onclick="alert('Partner'); return false;">View Plans →</a>
                     </div>
                 </div>
