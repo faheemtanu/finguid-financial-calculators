@@ -1,5 +1,5 @@
 /*
- * INVESTMENT CALCULATOR STYLES v1.0
+ * INVESTMENT CALCULATOR STYLES v1.1
  * FinGuid USA Market Domination Build
  * Inherits base styles from rent-vs-buy-calculator.css
  */
@@ -28,18 +28,25 @@
 /* Goal Planning Input Area */
 .goal-options {
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-24);
+    gap: var(--space-16); /* Reduced gap slightly */
     align-items: start; /* Align items to the top */
 }
 
 .goal-option {
     border: 1px dashed var(--color-border);
-    padding: var(--space-16);
+    padding: var(--space-12); /* Reduced padding slightly */
     border-radius: var(--border-radius);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes button to bottom */
+    min-height: 150px; /* Ensure consistent height */
 }
 .goal-option label {
     font-weight: bold;
+    font-size: var(--font-size-sm); /* Slightly smaller label */
+    display: block;
+    margin-bottom: var(--space-4);
 }
 .goal-option input {
     margin-bottom: var(--space-12);
@@ -50,19 +57,27 @@
     background-color: var(--color-info) !important; /* Use info color for goal results */
     color: var(--color-slate-900) !important;
     margin-top: var(--space-24);
+    border: 2px solid var(--color-accent-dark); /* Add border for emphasis */
 }
 [data-color-scheme="dark"] .goal-summary {
      background-color: var(--color-info) !important;
      color: var(--color-slate-900) !important;
+     border-color: var(--color-accent);
 }
 
 .goal-summary .summary-label {
     opacity: 1;
     font-weight: bold;
+    color: var(--color-slate-900); /* Ensure text color contrasts */
 }
 .goal-summary .payment-figure {
     color: var(--color-slate-900) !important;
 }
+.goal-summary .piti-breakdown-summary { /* Reusing class name */
+     color: var(--color-slate-900) !important;
+     opacity: 0.9;
+}
+
 
 /* Inflation Adjusted Value in Summary */
 .inflation-adjusted-value {
@@ -71,8 +86,9 @@
     margin-top: var(--space-4);
     color: inherit; /* Inherit color from summary card */
 }
-[data-color-scheme="dark"] .summary-card {
-    background-color: var(--color-primary) !important; /* Ensure primary color override */
+/* Ensure dark mode summary card color is correct */
+[data-color-scheme="dark"] .summary-card:not(.goal-summary) {
+    background-color: var(--color-primary) !important;
 }
 
 /* Chart Wrapper */
@@ -80,6 +96,7 @@
     height: 350px;
     width: 100%;
     margin-bottom: var(--space-24);
+    position: relative; /* Needed for Chart.js responsiveness */
 }
 
 /* Sub Heading Style */
@@ -91,10 +108,11 @@
     font-style: italic;
 }
 
-/* Data Table Styles (Inherited from mortgage calc via rent-vs-buy) */
+/* Data Table Styles (Inherited) */
 .amortization-table-container {
     max-height: 400px; /* Adjust as needed */
     overflow-y: auto;
+    margin-bottom: var(--space-16); /* Add margin below table */
 }
 
 /* Ensure secondary buttons style correctly */
@@ -109,6 +127,11 @@
     font-size: var(--font-size-base);
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
+    text-align: center; /* Ensure text is centered */
+}
+
+.secondary-button i {
+    margin-right: var(--space-8);
 }
 
 .secondary-button:hover {
@@ -125,10 +148,49 @@
     color: var(--color-charcoal-700);
 }
 
+/* FRED Attribution */
+.fred-attribution {
+    font-size: 0.65rem; /* Smaller font size */
+    color: var(--color-text-light);
+    margin-top: var(--space-4);
+    line-height: 1.2;
+}
+/* Footer Disclaimer Responsiveness */
+.footer-disclaimer p {
+    word-break: break-word; /* Allow long words/URLs to break */
+    hyphens: auto; /* Add hyphens if needed */
+}
+.footer-disclaimer .fred-attribution {
+     display: block; /* Ensure it takes its own line */
+     margin-top: var(--space-8);
+}
+
+
+/* Skip Link Style */
+.skip-link {
+    position: absolute;
+    top: -100px; /* Hidden initially */
+    left: 10px;
+    background: var(--color-primary);
+    color: white;
+    padding: var(--space-8) var(--space-16);
+    z-index: 1000;
+    transition: top 0.3s ease-in-out;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: bold;
+}
+.skip-link:focus {
+    top: 10px; /* Bring into view on focus */
+}
+
 
 /* Responsive adjustments for goal options */
 @media (max-width: 600px) {
     .goal-options {
         grid-template-columns: 1fr;
     }
+     .goal-option {
+         min-height: auto; /* Remove fixed height on mobile */
+     }
 }
