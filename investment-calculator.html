@@ -22,11 +22,11 @@
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
-    <link rel="stylesheet" href="rent-vs-buy-calculator.css">
-    <link rel="stylesheet" href="investment-calculator.css"> <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="rent-vs-buy-calculator.css"> <link rel="stylesheet" href="investment-calculator.css"> <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 </head>
 <body>
+    <a href="#investment-form" class="skip-link">Skip to Calculator Inputs</a>
 
     <header class="main-header">
         <div class="header-content">
@@ -38,6 +38,7 @@
                 <span class="feature-quick"><i class="fas fa-chart-line"></i> Growth Projection</span>
                 <span class="feature-quick"><i class="fas fa-bullseye"></i> Goal Planning</span>
                 <span class="feature-quick"><i class="fas fa-cloud-download-alt"></i> PWA Ready</span>
+                 <span class="feature-quick"><i class="fas fa-microphone-alt"></i> Voice Command</span>
             </div>
 
             <div class="accessibility-controls">
@@ -49,7 +50,7 @@
                         <i class="fas fa-microphone"></i> <span id="voice-status-text">Voice OFF</span>
                     </button>
                     <button id="toggle-text-to-speech" aria-label="Toggle Text to Speech" class="control-button tts-inactive">
-                        <i class="fas fa-volume-up"></i>
+                        <i class="fas fa-volume-up"></i> <span class="sr-only">Toggle Text to Speech</span>
                     </button>
                 </div>
                 <button id="pwa-install-button" class="control-button install-button hidden" aria-label="Install App">Install App</button>
@@ -70,67 +71,77 @@
                     </aside>
 
                     <div class="tab-controls input-tabs">
-                        <button type="button" class="tab-button active" data-tab="calc-fv">Calculate Future Value</button>
-                        <button type="button" class="tab-button" data-tab="calc-goal">Plan Financial Goal</button>
+                        <button type="button" class="tab-button active" data-tab="calc-fv" aria-controls="calc-fv calc-goal" aria-selected="true">Calculate Future Value</button>
+                        <button type="button" class="tab-button" data-tab="calc-goal" aria-controls="calc-fv calc-goal" aria-selected="false">Plan Financial Goal</button>
                     </div>
 
-                    <div id="calc-fv" class="input-tab-content active">
+                    <div id="calc-fv" class="input-tab-content active" role="tabpanel">
                         <h3 class="input-group-title">Investment Details</h3>
                         <div class="input-group input-split">
-                            <label for="initial-investment">Initial Investment ($)</label>
-                            <input type="number" id="initial-investment" value="10000" min="0" step="100">
-
-                            <label for="monthly-contribution">Monthly Contribution ($)</label>
-                            <input type="number" id="monthly-contribution" value="500" min="0" step="50">
+                            <div>
+                                <label for="initial-investment">Initial Investment ($)</label>
+                                <input type="number" id="initial-investment" value="10000" min="0" step="100" aria-required="true">
+                            </div>
+                            <div>
+                                <label for="monthly-contribution">Monthly Contribution ($)</label>
+                                <input type="number" id="monthly-contribution" value="500" min="0" step="50">
+                            </div>
                         </div>
                         <div class="input-group input-split">
-                            <label for="years-to-grow">Years to Grow</label>
-                            <input type="number" id="years-to-grow" value="20" min="1" step="1">
-
-                            <label for="expected-return-rate">Expected Annual Return (%) <i class="fas fa-info-circle tooltip-trigger" title="Average annual rate of return expected (e.g., S&P 500 average is ~10%)."></i></label>
-                            <input type="number" id="expected-return-rate" value="7.0" min="0" step="0.1">
+                             <div>
+                                <label for="years-to-grow">Years to Grow</label>
+                                <input type="number" id="years-to-grow" value="20" min="1" step="1" aria-required="true">
+                             </div>
+                            <div>
+                                <label for="expected-return-rate">Expected Annual Return (%) <i class="fas fa-info-circle tooltip-trigger" title="Average annual rate of return expected (e.g., S&P 500 average is ~10%)."></i></label>
+                                <input type="number" id="expected-return-rate" value="7.0" min="-10" max="30" step="0.1" aria-required="true">
+                            </div>
                         </div>
                     </div>
 
-                    <div id="calc-goal" class="input-tab-content hidden">
+                    <div id="calc-goal" class="input-tab-content hidden" role="tabpanel">
                          <h3 class="input-group-title">Financial Goal</h3>
                           <div class="input-group">
                             <label for="financial-goal">Financial Goal Amount ($)</label>
-                            <input type="number" id="financial-goal" value="1000000" min="0" step="10000">
+                            <input type="number" id="financial-goal" value="1000000" min="0" step="10000" aria-required="true">
                         </div>
                         <div class="input-group input-split">
-                            <label for="initial-investment-goal">Initial Investment ($)</label>
-                            <input type="number" id="initial-investment-goal" value="10000" min="0" step="100">
-
-                            <label for="expected-return-rate-goal">Expected Annual Return (%)</label>
-                            <input type="number" id="expected-return-rate-goal" value="7.0" min="0" step="0.1">
+                            <div>
+                                <label for="initial-investment-goal">Initial Investment ($)</label>
+                                <input type="number" id="initial-investment-goal" value="10000" min="0" step="100">
+                            </div>
+                            <div>
+                                <label for="expected-return-rate-goal">Expected Annual Return (%)</label>
+                                <input type="number" id="expected-return-rate-goal" value="7.0" min="-10" max="30" step="0.1" aria-required="true">
+                            </div>
                         </div>
                          <h4 class="sub-heading">Calculate ONE of the following:</h4>
                          <div class="input-group input-split goal-options">
                              <div class="goal-option">
-                                 <label for="monthly-contribution-goal">Monthly Contribution ($)</label>
-                                 <input type="number" id="monthly-contribution-goal" value="500" min="0" step="50">
+                                 <label for="monthly-contribution-goal">With Monthly Contribution ($)</label>
+                                 <input type="number" id="monthly-contribution-goal" value="500" min="0" step="50" aria-label="Enter Monthly Contribution to Calculate Time Needed">
                                  <button type="button" class="secondary-button" id="calculate-time-button">Calculate Time Needed</button>
                              </div>
                               <div class="goal-option">
-                                 <label for="years-to-grow-goal">Years to Reach Goal</label>
-                                 <input type="number" id="years-to-grow-goal" value="20" min="1" step="1">
+                                 <label for="years-to-grow-goal">Within Years</label>
+                                 <input type="number" id="years-to-grow-goal" value="20" min="1" step="1" aria-label="Enter Years to Calculate Contribution Needed">
                                  <button type="button" class="secondary-button" id="calculate-contribution-button">Calculate Contribution Needed</button>
                              </div>
                          </div>
                     </div>
 
-                    <h3 class="input-group-title sub-title">Economic Factors (Optional)</h3>
+                    <h3 class="input-group-title sub-title">Economic Factors</h3>
                      <div class="input-group">
-                        <label for="inflation-rate">Expected Annual Inflation (%) <span class="fred-source-note">Fetching Live FRED Rate...</span></label>
-                        <input type="number" id="inflation-rate" value="3.0" min="0" step="0.1" readonly>
-                         <p class="input-note">Live rate used for inflation-adjusted projections.</p>
+                        <label for="inflation-rate">Expected Annual Inflation (%)</label>
+                        <input type="number" id="inflation-rate" value="3.0" min="0" max="20" step="0.1" readonly aria-describedby="inflation-note">
+                         <p class="input-note fred-source-note" id="inflation-note">Fetching Live FRED® Rate...</p>
+                         <p class="input-note fred-attribution">Source: U.S. BLS, retrieved from FRED®, Federal Reserve Bank of St. Louis.</p>
                     </div>
 
                     <aside class="affiliate-slot" role="complementary" aria-label="Affiliate Link">
                         <h4><i class="fas fa-handshake"></i> Need Investment Ideas?</h4>
                         <p>Explore diversified, low-cost ETFs & Mutual Funds. (Affiliate Link)</p>
-                        <a href="#" class="primary-button affiliate-link-cta" id="affiliate-link-1" target="_blank">See Top Investment Platforms</a>
+                        <a href="#" class="primary-button affiliate-link-cta" id="affiliate-link-1" target="_blank" rel="noopener sponsored">See Top Investment Platforms</a>
                     </aside>
 
                 </form>
@@ -140,10 +151,10 @@
                 <h2 id="results-heading" class="section-title"><i class="fas fa-chart-pie"></i> Investment Projection & Analysis</h2>
 
                 <div class="monetization-banner">
-                     <p>Sponsored: Plan for Retirement with a Certified Financial Planner. <a href="#">Get a Free Consultation!</a> (Sponsor Link)</p>
+                     <p>Sponsored: Plan for Retirement with a Certified Financial Planner. <a href="#" rel="noopener sponsored">Get a Free Consultation!</a> (Sponsor Link)</p>
                 </div>
 
-                <div class="summary-card card-mini">
+                <div id="fv-results-summary" class="summary-card card-mini">
                     <p class="summary-label">Projected Future Value</p>
                     <div class="payment-display"> <span id="future-value-total" class="payment-figure">$0</span>
                     </div>
@@ -166,22 +177,22 @@
 
 
                 <div class="tab-controls-results">
-                    <button type="button" class="tab-button active" data-tab="growth-chart">Growth Chart</button>
-                    <button type="button" class="tab-button" data-tab="ai-insights">AI Insights & Advice</button>
-                    <button type="button" class="tab-button" data-tab="data-table">Annual Data</button>
+                    <button type="button" class="tab-button active" data-tab="growth-chart" aria-controls="growth-chart ai-insights data-table" aria-selected="true">Growth Chart</button>
+                    <button type="button" class="tab-button" data-tab="ai-insights" aria-controls="growth-chart ai-insights data-table" aria-selected="false">AI Insights & Advice</button>
+                    <button type="button" class="tab-button" data-tab="data-table" aria-controls="growth-chart ai-insights data-table" aria-selected="false">Annual Data</button>
                 </div>
 
-                <div id="growth-chart" class="tab-content active">
+                <div id="growth-chart" class="tab-content active" role="tabpanel">
                     <h3>Investment Growth Over Time</h3>
                      <p class="chart-caption">Visualizing nominal value, total contributions, and inflation-adjusted value.</p>
-                    <div class="chart-wrapper">
+                    <div class="chart-wrapper" role="img" aria-label="Investment growth chart showing total value, principal invested, and inflation-adjusted value over time.">
                         <canvas id="investmentGrowthChart"></canvas>
                     </div>
                 </div>
 
-                <div id="ai-insights" class="tab-content hidden">
+                <div id="ai-insights" class="tab-content hidden" role="tabpanel">
                     <h3><i class="fas fa-microchip"></i> AI Investment Advisor</h3>
-                    <div id="ai-insights-output" class="ai-insights-box">
+                    <div id="ai-insights-output" class="ai-insights-box" aria-live="polite">
                         <p class="placeholder-text">Enter your investment details to generate personalized AI analysis...</p>
                     </div>
 
@@ -191,21 +202,22 @@
                     </aside>
                 </div>
 
-                 <div id="data-table" class="tab-content hidden">
+                 <div id="data-table" class="tab-content hidden" role="tabpanel">
                     <h3>Annual Investment Breakdown</h3>
-                    <div class="amortization-table-container"> <table id="annual-data-table" class="amortization-table">
+                    <div class="amortization-table-container"> <table id="annual-data-table" class="amortization-table" aria-label="Annual Investment Breakdown Table">
                             <thead>
                                 <tr>
-                                    <th>Year</th>
-                                    <th>Start Balance</th>
-                                    <th>Contributions</th>
-                                    <th>Interest Earned</th>
-                                    <th>End Balance</th>
-                                    <th>Inflation Adj. Balance</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Start Balance</th>
+                                    <th scope="col">Contributions</th>
+                                    <th scope="col">Interest Earned</th>
+                                    <th scope="col">End Balance</th>
+                                    <th scope="col">Inflation Adj. Balance</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                </tbody>
+                                <tr><td colspan="6">Calculating data...</td></tr>
+                            </tbody>
                         </table>
                     </div>
                      <button id="export-csv-button" class="secondary-button" style="margin-top: 1rem;"><i class="fas fa-file-csv"></i> Export Annual Data to CSV</button>
@@ -233,22 +245,22 @@
                             <li><a href="/auto-loan-calculator.html">Auto Loan Calculator</a></li>
                              <li><a href="/car-lease-calculator.html">Car Lease Calculator</a></li>
                              <li><a href="/investment-calculator.html" aria-current="page">Investment Calculator</a></li>
-                        </ul>
+                             </ul>
                     </div>
                     <div class="nav-column">
                         <h4>Legal & Compliance</h4>
                         <ul>
-                            <li><a href="#disclaimer">Disclaimer & Terms</a></li>
-                            <li><a href="#privacy">Privacy Policy (GDPR/CCPA)</a></li>
-                            <li><a href="#accessibility">Accessibility Statement (WCAG)</a></li>
+                            <li><a href="/terms">Disclaimer & Terms</a></li>
+                            <li><a href="/privacy">Privacy Policy (GDPR/CCPA)</a></li>
+                            <li><a href="/accessibility">Accessibility Statement (WCAG)</a></li>
                         </ul>
                     </div>
                     <div class="nav-column">
                         <h4>Partnership & Ads (Monetization)</h4>
                         <ul>
-                            <li><a href="#advertising">Advertising (Ad Slot)</a></li>
-                            <li><a href="#affiliates">Affiliate Products</a></li>
-                            <li><a href="#sponsor-link">Sponsor Products</a></li>
+                            <li><a href="/advertise">Advertising (Ad Slot)</a></li>
+                            <li><a href="/affiliates">Affiliate Products</a></li>
+                            <li><a href="/sponsors">Sponsor Products</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -256,7 +268,9 @@
             <div class="footer-bottom">
                 <div class="footer-disclaimer">
                     <p>
-                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Investment projections are estimates based on user inputs and market assumptions; actual results may vary significantly. Past performance is not indicative of future results. Consult a qualified financial advisor before making investment decisions. **We monetize exclusively via advertising and affiliate partnerships.** Inflation data sourced from FRED, Federal Reserve Bank of St. Louis.
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Investment projections are estimates based on user inputs and market assumptions; actual results may vary significantly. Past performance is not indicative of future results. Consult a qualified financial advisor before making investment decisions. **We monetize exclusively via advertising and affiliate partnerships.**
+                        <br>
+                        <span class="fred-attribution">Inflation data retrieved from FRED®, Federal Reserve Bank of St. Louis (Source: U.S. Bureau of Labor Statistics, Consumer Price Index for All Urban Consumers: All Items in U.S. City Average [CPIAUCSL], retrieved from FRED, Federal Reserve Bank of St. Louis; https://fred.stlouisfed.org/series/CPIAUCSL).</span>
                     </p>
                 </div>
 
@@ -274,8 +288,7 @@
 
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-    <script src="/register-sw.js"></script>
-    <script src="investment-calculator.js"></script>
+    <script src="/register-sw.js"></script> <script src="investment-calculator.js"></script>
 
 </body>
 </html>
