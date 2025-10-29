@@ -1,9 +1,13 @@
 /*
- * 401(k) CALCULATOR — AI-POWERED RETIREMENT OPTIMIZER - PRODUCTION CSS v1.0
+ * 401(k) CALCULATOR — AI-POWERED RETIREMENT OPTIMIZER - PRODUCTION CSS v1.1
  * FinGuid USA Market Domination Build
  * * This file inherits its core design, layout, and color variables from
  * the existing FinGuid platform (e.g., mortgage-calculator.css, car-lease-calculator.css)
  * to ensure 100% brand and UX consistency.
+ *
+ * * v1.1 Update: Fixed layout overlap issue by applying the car-lease
+ * * two-panel card layout. Both input and results are now distinct
+ * * cards with solid backgrounds.
  */
 
 /* ========================================================================== */
@@ -148,11 +152,6 @@ h1, h2, h3 { color: var(--color-primary); margin-bottom: var(--space-16); line-h
     margin: var(--space-32) auto;
     padding: 0 var(--space-24);
 }
-.calculator-container {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr; /* Inputs vs Results */
-    gap: var(--space-32);
-}
 .card {
     background-color: var(--color-card-background);
     padding: var(--space-24);
@@ -162,17 +161,49 @@ h1, h2, h3 { color: var(--color-primary); margin-bottom: var(--space-16); line-h
 }
 .card-mini { padding: var(--space-16); margin-bottom: var(--space-24); }
 
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Inputs vs Results */
+    gap: var(--space-32);
+}
+
 /* ========================================================================== */
-/* III. INPUT SECTION STYLES (from mortgage-calculator.css) */
+/* LAYOUT FIX v1.1 - Use car-lease two-panel card layout */
 /* ========================================================================== */
 
+/* 1. Remove padding/styling from the main container */
+.calculator-container.card {
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+}
+
+/* 2. Make BOTH sections distinct cards */
+.input-section,
+.results-section {
+    background-color: var(--color-card-background);
+    padding: var(--space-24);
+    border-radius: var(--space-8);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+}
+
+/* 3. Re-apply sticky behavior to the input-section card */
 .input-section {
     position: sticky;
     top: var(--space-32);
     align-self: flex-start;
-    height: calc(100vh - var(--space-64));
+    /* Use max-height, not height, for sticky scrolling */
+    max-height: calc(100vh - var(--space-64));
     overflow-y: auto;
 }
+
+
+/* ========================================================================== */
+/* III. INPUT SECTION STYLES (from mortgage-calculator.css) */
+/* ========================================================================== */
+
 .section-title {
     font-size: var(--font-size-xl);
     border-bottom: 2px solid var(--color-accent);
@@ -576,7 +607,12 @@ input:focus, select:focus {
 
 @media (max-width: 1024px) {
     .calculator-container { grid-template-columns: 1fr; }
-    .input-section { position: static; height: auto; overflow-y: visible; }
+    /* This rule is modified in v1.1 */
+    .input-section {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+    }
     .header-content { flex-direction: column; align-items: flex-start; }
     .logo { margin-bottom: var(--space-8); }
     .tagline, .features-quick { margin: var(--space-4) 0; }
