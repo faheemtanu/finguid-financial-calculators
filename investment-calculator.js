@@ -1,9 +1,18 @@
 /**
- * INVESTMENT CALCULATOR PRO — World's First AI‑Powered Retirement Planner - PRODUCTION JS v1.0
- * FinGuid USA Market Domination Build
+ * INVESTMENT CALCULATOR — AI‑POWERED GROWTH & GOAL PLANNER - PRODUCTION JS v1.0
+ * FinGuid USA Market Domination Build - World's First AI-Powered Investment Calculator
  * * Target: Production Ready, AI Insights, SEO, PWA, Voice, Monetization Ready
- * * FRED API: 9c6c421f077f2091e8bae4f143ada59a
- * * Google Analytics: G-NYBL2CDNQJ (in HTML)
+ * * Features Implemented:
+ * ✅ Compound Interest Calculation (Lump Sum + Contributions)
+ * ✅ Goal Planning Modes (Time to Goal, Contribution Needed)
+ * ✅ Live Inflation Adjustment (FRED API: CPIAUCSL)
+ * ✅ Dynamic Charting (Chart.js: Growth, Contributions, Inflation Impact)
+ * ✅ Dynamic AI-Powered Insights Engine (Monetization Focused)
+ * ✅ Voice Control & Text-to-Speech Stubs
+ * ✅ Light/Dark Mode Toggling & User Preferences Storage
+ * ✅ PWA Ready Setup
+ * ✅ Data Table & CSV Export
+ * * FRED API Key: 9c6c421f077f2091e8bae4f143ada59a
  * * © 2025 FinGuid - World's First AI Calculator Platform for Americans
  */
 
@@ -13,505 +22,887 @@
 
 const INVESTMENT_CALCULATOR = {
     VERSION: '1.0',
-    DEBUG: false, // Set to true for console logging
-    FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a', 
-    
-    // FRED Series for Live Market Context (10-Year Treasury Yield as a benchmark)
-    FRED_SERIES_ID: 'DGS10', 
-    FALLBACK_RATE: 4.5, // Fallback rate for DGS10 in case of API failure
+    DEBUG: false,
 
+    // FRED API Configuration (Real Key)
+    FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
+    FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
+    FRED_INFLATION_SERIES_ID: 'CPIAUCSL', // Consumer Price Index for All Urban Consumers
+    RATE_UPDATE_INTERVAL: 12 * 60 * 60 * 1000, // 12 hours (Inflation data updates less frequently)
+    FALLBACK_INFLATION_RATE: 3.0, // Fallback inflation rate
+
+    // Core State - Stores inputs and calculated results
     STATE: {
-        initialBalance: 10000,
-        annualContribution: 6000,
-        timeHorizon: 30,
-        expectedReturn: 8.0,
-        compoundingFrequency: 12, // Monthly
-        liveBenchmarkRate: 0.0,
-        results: null
+        // Inputs (Defaults)
+        calculationMode: 'calc-fv', // 'calc-fv', 'calc-goal-time', 'calc-goal-contribution'
+        initialInvestment: 10000,
+        monthlyContribution: 500,
+        yearsToGrow: 20,
+        expectedReturnRate: 7.0, // %
+        financialGoal: 1000000,
+        inflationRate: 3.0, // % - Updated by FRED
+
+        // Results
+        futureValue: 0,
+        totalPrincipal: 0,
+        totalGains: 0,
+        inflationAdjustedFV: 0,
+        yearsToGoal: null,
+        contributionNeeded: null,
+        annualData: [], // Detailed breakdown per year
     },
-    
-    // Chart instance holder
+
     charts: {
-        investmentChart: null
-    }
+        investmentGrowthChart: null,
+    },
+    deferredInstallPrompt: null,
 };
 
+
 /* ========================================================================== */
-/* II. PLATFORM UTILITIES (FRED API, THEME, SPEECH) */
+/* II. UTILITY & FORMATTING MODULE (Reused from FinGuid Platform) */
 /* ========================================================================== */
 
-const UTILS = {
-    // Utility for showing non-intrusive messages (toasts)
-    showToast: (message, type = 'info') => {
-        if (!INVESTMENT_CALCULATOR.DEBUG) return; // Only show in debug mode
-        const toastContainer = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.textContent = message;
-        toastContainer.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 100);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 500);
-        }, 3000);
-    },
-
-    // Formats a number as USD currency
-    formatCurrency: (amount) => {
+const UTILS = (function() {
+    function formatCurrency(amount, withDecimals = false) {
+        if (typeof amount !== 'number' || isNaN(amount)) return '$0';
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
+            minimumFractionDigits: withDecimals ? 2 : 0,
+            maximumFractionDigits: withDecimals ? 2 : 0,
         }).format(amount);
-    },
-
-    // Formats a number as a percentage
-    formatPercent: (rate) => {
-        return `${(rate).toFixed(2)}%`;
     }
-};
 
-const THEME_MANAGER = {
-    // Loads user theme preference from localStorage or defaults to 'light'
-    loadUserPreferences: () => {
-        const savedTheme = localStorage.getItem('finguid-theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-color-scheme', savedTheme);
-        }
-        document.getElementById('theme-toggle-button').addEventListener('click', THEME_MANAGER.toggleTheme);
-    },
-
-    // Toggles between 'light' and 'dark' mode
-    toggleTheme: () => {
-        const currentTheme = document.documentElement.getAttribute('data-color-scheme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-color-scheme', newTheme);
-        localStorage.setItem('finguid-theme', newTheme);
-        // Redraw chart to ensure colors update
-        if (INVESTMENT_CALCULATOR.charts.investmentChart) {
-            INVESTMENT_CALCULATOR.charts.investmentChart.update();
-        }
-        UTILS.showToast(`Switched to ${newTheme} mode.`, 'info');
-    }
-};
-
-const SPEECH = {
-    // Placeholder for real speech module based on existing files
-    initialize: () => {
-        document.getElementById('voice-command-button').addEventListener('click', () => {
-            // Placeholder: The actual speech logic would go here.
-            UTILS.showToast('Voice Command activated (feature requires full browser compatibility).', 'info');
-            // SPEECH.startListening();
+     function formatNumber(num, decimals = 0) {
+        if (typeof num !== 'number' || isNaN(num)) return '0';
+        return num.toLocaleString('en-US', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
         });
-        if (INVESTMENT_CALCULATOR.DEBUG) console.log('Speech Module Initialized.');
     }
-};
 
+    function formatPercent(rate) {
+         if (typeof rate !== 'number' || isNaN(rate)) return '0.0%';
+        return rate.toFixed(1) + '%';
+    }
 
-const FRED_API = {
-    FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
-    
-    // Fetches the latest observation for the specified FRED series ID
-    fetchLiveRate: async (seriesId) => {
-        const url = `${FRED_API.FRED_BASE_URL}?series_id=${seriesId}&api_key=${INVESTMENT_CALCULATOR.FRED_API_KEY}&file_type=json&sort_order=desc&limit=1`;
-        
+    function parseInput(id) {
+        const value = document.getElementById(id).value;
+        const cleaned = value.replace(/[$,]/g, '').trim();
+        return parseFloat(cleaned) || 0;
+    }
+
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            toast.addEventListener('transitionend', () => toast.remove());
+        }, 3000);
+    }
+
+    return { formatCurrency, formatNumber, formatPercent, parseInput, debounce, showToast };
+})();
+// END UTILITY & FORMATTING MODULE
+
+/* ========================================================================== */
+/* III. DATA LAYER: FRED API MODULE (Inflation Rate) */
+/* ========================================================================== */
+
+const fredAPI = (function() {
+    async function fetchLatestInflationRate() {
+        if (INVESTMENT_CALCULATOR.DEBUG) {
+            console.warn('DEBUG MODE: Using mock Inflation rate.');
+            return INVESTMENT_CALCULATOR.FALLBACK_INFLATION_RATE;
+        }
+
+        const url = new URL(INVESTMENT_CALCULATOR.FRED_BASE_URL);
+        const params = {
+            series_id: INVESTMENT_CALCULATOR.FRED_INFLATION_SERIES_ID,
+            api_key: INVESTMENT_CALCULATOR.FRED_API_KEY,
+            file_type: 'json',
+            sort_order: 'desc',
+            limit: 13, // Get 13 months to calculate YoY change
+            observation_start: new Date(Date.now() - 14 * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // Approx 14 months ago
+        };
+        url.search = new URLSearchParams(params).toString();
+
         try {
             const response = await fetch(url);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`FRED API returned status: ${response.status}`);
             }
             const data = await response.json();
-            const latestValue = parseFloat(data.observations[0].value);
-            return isNaN(latestValue) ? INVESTMENT_CALCULATOR.FALLBACK_RATE : latestValue;
+
+            const observations = data.observations.filter(obs => obs.value !== '.' && obs.value !== 'N/A').reverse(); // oldest first
+
+            if (observations.length >= 13) {
+                const latestValue = parseFloat(observations[observations.length - 1].value);
+                const priorYearValue = parseFloat(observations[observations.length - 13].value);
+                const inflationRate = ((latestValue - priorYearValue) / priorYearValue) * 100;
+
+                const rate = Math.max(0, inflationRate); // Ensure rate is not negative
+                document.getElementById('inflation-rate').value = rate.toFixed(1);
+                document.querySelector('#inflation-rate + .fred-source-note').textContent = `Live FRED Rate (${observations[observations.length - 1].date})`;
+                console.log(`📈 FRED Inflation Rate updated: ${rate.toFixed(1)}%`);
+                 if (INVESTMENT_CALCULATOR.DEBUG) UTILS.showToast(`Live Inflation Rate updated to ${rate.toFixed(1)}%`, 'success');
+                return rate;
+            } else {
+                throw new Error('Not enough valid observations found in FRED data.');
+            }
         } catch (error) {
-            if (INVESTMENT_CALCULATOR.DEBUG) console.error("FRED API Error:", error);
-            UTILS.showToast('FRED API failed to fetch live benchmark rate. Using fallback.', 'error');
-            return INVESTMENT_CALCULATOR.FALLBACK_RATE;
+            console.error('FRED Inflation API Error, using fallback rate:', error);
+            document.getElementById('inflation-rate').value = INVESTMENT_CALCULATOR.FALLBACK_INFLATION_RATE.toFixed(1);
+            document.querySelector('#inflation-rate + .fred-source-note').textContent = `Fallback Rate (${INVESTMENT_CALCULATOR.FALLBACK_INFLATION_RATE.toFixed(1)}%)`;
+             if (INVESTMENT_CALCULATOR.DEBUG) UTILS.showToast('Could not fetch live inflation rate. Using fallback.', 'error');
+            return INVESTMENT_CALCULATOR.FALLBACK_INFLATION_RATE;
         }
-    },
-
-    // Automatic rate update and initial calculation
-    startAutomaticUpdates: async () => {
-        const rate = await FRED_API.fetchLiveRate(INVESTMENT_CALCULATOR.FRED_SERIES_ID);
-        INVESTMENT_CALCULATOR.STATE.liveBenchmarkRate = rate;
-
-        // Display the rate
-        const displayElement = document.getElementById('live-rate-display');
-        displayElement.textContent = UTILS.formatPercent(rate);
-        
-        if (INVESTMENT_CALCULATOR.DEBUG) console.log(`FRED Live Benchmark Rate (${INVESTMENT_CALCULATOR.FRED_SERIES_ID}): ${rate.toFixed(2)}%`);
-        
-        // Trigger initial calculation after rate is fetched
-        calculateInvestment(); 
     }
-};
+
+    function startAutomaticUpdates() {
+        fetchLatestInflationRate().then(rate => {
+            INVESTMENT_CALCULATOR.STATE.inflationRate = rate;
+            updateCalculations(); // Initial calculation after fetching rate
+        });
+        setInterval(async () => {
+             const rate = await fetchLatestInflationRate();
+             INVESTMENT_CALCULATOR.STATE.inflationRate = rate;
+             // Optionally trigger re-calculation if rate changes significantly
+             // updateCalculations();
+        }, INVESTMENT_CALCULATOR.RATE_UPDATE_INTERVAL);
+    }
+    return { startAutomaticUpdates };
+})();
+// END FRED API MODULE
 
 
 /* ========================================================================== */
-/* III. CORE CALCULATION LOGIC (Compound Interest / Annuity) */
+/* IV. CORE CALCULATION ENGINE (Compound Interest & Goal Planning) */
 /* ========================================================================== */
 
 /**
- * Calculates the future value of an investment with periodic contributions (Annuity Future Value + Single Sum Future Value).
- * @returns {Array} An array of growth data objects [{year, startBalance, interest, contribution, endBalance}]
+ * Main calculation function dispatcher based on selected mode.
  */
-function calculateGrowthSchedule(state) {
-    let { initialBalance, annualContribution, expectedReturn, timeHorizon, compoundingFrequency } = state;
+function updateCalculations() {
+    const S = INVESTMENT_CALCULATOR.STATE;
 
-    const rate_per_period = (expectedReturn / 100) / compoundingFrequency;
-    const periods_per_year = compoundingFrequency;
-    const annual_contribution_per_period = annualContribution / periods_per_year;
+    // Determine calculation mode
+    S.calculationMode = document.querySelector('.input-tabs .tab-button.active').getAttribute('data-tab');
 
-    let balance = initialBalance;
-    const schedule = [];
-    let totalPrincipal = initialBalance;
-    let totalInterest = 0;
+    // Get common inputs
+    S.inflationRate = UTILS.parseInput('inflation-rate');
 
-    for (let year = 1; year <= timeHorizon; year++) {
+    // Get mode-specific inputs and run calculation
+    if (S.calculationMode === 'calc-fv') {
+        S.initialInvestment = UTILS.parseInput('initial-investment');
+        S.monthlyContribution = UTILS.parseInput('monthly-contribution');
+        S.yearsToGrow = UTILS.parseInput('years-to-grow');
+        S.expectedReturnRate = UTILS.parseInput('expected-return-rate');
+        calculateFutureValue();
+    } else { // Goal Planning modes share many inputs
+        S.financialGoal = UTILS.parseInput('financial-goal');
+        S.initialInvestment = UTILS.parseInput('initial-investment-goal');
+        S.expectedReturnRate = UTILS.parseInput('expected-return-rate-goal');
+         if (S.calculationMode === 'calc-goal-time') {
+            S.monthlyContribution = UTILS.parseInput('monthly-contribution-goal');
+            calculateTimeToGoal();
+        } else if (S.calculationMode === 'calc-goal-contribution') {
+            S.yearsToGrow = UTILS.parseInput('years-to-grow-goal');
+            calculateContributionNeeded();
+        }
+    }
+
+    // Update UI elements common to all modes
+    updateResultsDisplay();
+    generateAIInsights();
+    updateChart();
+    updateDataTable();
+}
+
+/**
+ * Calculates future value based on current state inputs.
+ */
+function calculateFutureValue() {
+    const S = INVESTMENT_CALCULATOR.STATE;
+    if (S.yearsToGrow <= 0 || S.expectedReturnRate < 0) return;
+
+    const r = S.expectedReturnRate / 100; // Annual rate as decimal
+    const n = S.yearsToGrow;
+    const initial = S.initialInvestment;
+    const pmt = S.monthlyContribution * 12; // Annual contribution
+
+    let futureValue = initial * Math.pow(1 + r, n); // FV of initial investment
+    if (r > 0) {
+        futureValue += pmt * ( (Math.pow(1 + r, n) - 1) / r ); // FV of annual contributions
+    } else {
+         futureValue += pmt * n; // Simple sum if rate is 0
+    }
+
+
+    const totalPrincipal = initial + (pmt * n);
+    const totalGains = futureValue - totalPrincipal;
+
+    // Inflation Adjustment
+    const i = S.inflationRate / 100;
+    const inflationAdjustedFV = futureValue / Math.pow(1 + i, n);
+
+    S.futureValue = futureValue;
+    S.totalPrincipal = totalPrincipal;
+    S.totalGains = totalGains;
+    S.inflationAdjustedFV = inflationAdjustedFV;
+    S.yearsToGoal = null; // Clear goal-specific results
+    S.contributionNeeded = null;
+
+    // Generate Annual Data for Chart/Table
+    generateAnnualData(initial, pmt, r, n, i);
+}
+
+/**
+ * Calculates the number of years needed to reach a financial goal.
+ * Uses an iterative approach as solving for 'n' algebraically is complex.
+ */
+function calculateTimeToGoal() {
+    const S = INVESTMENT_CALCULATOR.STATE;
+     if (S.financialGoal <= S.initialInvestment || S.expectedReturnRate < 0) {
+        S.yearsToGoal = 0; // Already reached or invalid rate
+        S.futureValue = S.initialInvestment;
+        S.totalPrincipal = S.initialInvestment;
+        S.totalGains = 0;
+        S.inflationAdjustedFV = S.initialInvestment;
+        S.contributionNeeded = null;
+        S.annualData = [];
+        return;
+     }
+     if (S.monthlyContribution <= 0 && S.initialInvestment * (1 + S.expectedReturnRate / 100) <= S.initialInvestment) {
+        S.yearsToGoal = Infinity; // Goal unreachable if no growth and no contributions
+        S.futureValue = S.initialInvestment;
+        S.totalPrincipal = S.initialInvestment;
+        S.totalGains = 0;
+        S.inflationAdjustedFV = S.initialInvestment;
+        S.contributionNeeded = null;
+        S.annualData = [];
+         UTILS.showToast("Goal may be unreachable with current inputs.", "error");
+        return;
+     }
+
+    const r = S.expectedReturnRate / 100;
+    const initial = S.initialInvestment;
+    const pmt = S.monthlyContribution * 12;
+    const goal = S.financialGoal;
+    const i = S.inflationRate / 100;
+
+    let years = 0;
+    let currentFV = initial;
+    const maxYears = 100; // Prevent infinite loop
+
+    S.annualData = [];
+     let balance = initial;
+
+    while (currentFV < goal && years < maxYears) {
+        years++;
+         const annualInterest = balance * r;
+         balance = (balance + pmt) * (1 + r); // Add contribution then apply interest
+         currentFV = balance; // FV at end of year
+
+         const inflationAdjusted = currentFV / Math.pow(1 + i, years);
+         S.annualData.push({
+             year: years,
+             startBalance: balance / (1+r) - pmt, // Approx start balance
+             contributions: pmt,
+             interestEarned: annualInterest, // Approx interest earned
+             endBalance: currentFV,
+             inflationAdjustedBalance: inflationAdjusted
+         });
+
+    }
+
+    if (years >= maxYears) {
+         S.yearsToGoal = Infinity; // Consider unreachable
+         UTILS.showToast("Goal may take over 100 years to reach.", "error");
+    } else {
+        S.yearsToGoal = years;
+        S.yearsToGrow = years; // Update yearsToGrow for consistency
+        // Recalculate final values precisely for the determined number of years
+        calculateFutureValue(); // This updates FV, principal, gains, adjusted FV
+    }
+     S.contributionNeeded = null; // Clear other goal result
+}
+
+/**
+ * Calculates the monthly contribution needed to reach a goal in a set time.
+ */
+function calculateContributionNeeded() {
+    const S = INVESTMENT_CALCULATOR.STATE;
+    if (S.yearsToGrow <= 0 || S.expectedReturnRate < 0 || S.financialGoal <= 0) return;
+
+
+    const r = S.expectedReturnRate / 100; // Annual rate
+    const n = S.yearsToGrow;
+    const initial = S.initialInvestment;
+    const goal = S.financialGoal;
+    const i = S.inflationRate / 100;
+
+    const fvInitial = initial * Math.pow(1 + r, n); // FV of initial investment
+
+    let pmt = 0; // Annual contribution needed
+     if (fvInitial >= goal) {
+        pmt = 0; // Initial amount already meets the goal
+        S.contributionNeeded = 0;
+     } else if (r > 0) {
+        const fvAnnuityFactor = (Math.pow(1 + r, n) - 1) / r;
+        pmt = (goal - fvInitial) / fvAnnuityFactor;
+        S.contributionNeeded = pmt / 12;
+    } else { // Rate is 0
+         pmt = (goal - initial) / n;
+         S.contributionNeeded = pmt / 12;
+    }
+    S.contributionNeeded = Math.max(0, S.contributionNeeded); // Cannot be negative
+
+    // Update state for consistency and generate annual data
+    S.monthlyContribution = S.contributionNeeded;
+    calculateFutureValue(); // Calculate FV, gains, etc. based on the needed contribution
+    S.yearsToGoal = null; // Clear other goal result
+}
+
+
+/**
+ * Generates year-by-year data for the chart and table.
+ */
+function generateAnnualData(initial, pmt, r, n, i) {
+    const S = INVESTMENT_CALCULATOR.STATE;
+    S.annualData = [];
+    let balance = initial;
+
+    for (let year = 1; year <= n; year++) {
         const startBalance = balance;
-        let yearlyInterest = 0;
-        let yearlyContribution = 0;
+        const interestEarned = balance * r;
+        balance = (balance + pmt) * (1 + r); // Add contribution then apply interest
 
-        for (let period = 1; period <= periods_per_year; period++) {
-            // 1. Calculate interest for the period
-            const interestForPeriod = balance * rate_per_period;
-            
-            // 2. Add interest to yearly total
-            yearlyInterest += interestForPeriod;
-            totalInterest += interestForPeriod;
-            balance += interestForPeriod;
+        const inflationAdjusted = balance / Math.pow(1 + i, year);
 
-            // 3. Add contribution at the end of the period
-            balance += annual_contribution_per_period;
-            yearlyContribution += annual_contribution_per_period;
-        }
-
-        // Adjust for last contribution, as it's included in totalPrincipal for calculation ease
-        const annualContributionFinal = year === timeHorizon ? annualContribution : annualContribution;
-        
-        // This accounts for the annual contribution made *after* the initial balance is set, but only the principal part
-        if (year > 1) {
-             totalPrincipal += annualContributionFinal;
-        }
-        
-        // NOTE: The totalPrincipal calculation should include the initialBalance and annualContribution * timeHorizon
-        
-        schedule.push({
+        S.annualData.push({
             year: year,
             startBalance: startBalance,
-            interest: yearlyInterest,
-            contribution: annualContributionFinal,
-            endBalance: balance
+            contributions: pmt,
+            interestEarned: interestEarned + pmt *r, // Interest on balance + interest on contributions (approx)
+            endBalance: balance,
+            inflationAdjustedBalance: inflationAdjusted
         });
     }
-
-    // Recalculate total principal for accurate reporting
-    totalPrincipal = initialBalance + (annualContribution * timeHorizon);
-    
-    // Final results
-    INVESTMENT_CALCULATOR.STATE.results = {
-        schedule: schedule,
-        finalBalance: balance,
-        totalPrincipal: totalPrincipal,
-        totalInterest: balance - totalPrincipal,
-        totalReturnRate: ((balance / totalPrincipal) - 1) * 100
-    };
-
-    return INVESTMENT_CALCULATOR.STATE.results;
-}
-
-
-/**
- * Main function to read inputs, calculate, and render results.
- */
-function calculateInvestment() {
-    // 1. Read and update state from inputs
-    const initialBalance = parseFloat(document.getElementById('initialBalance').value) || 0;
-    const annualContribution = parseFloat(document.getElementById('annualContribution').value) || 0;
-    const timeHorizon = parseInt(document.getElementById('timeHorizon').value) || 1;
-    const expectedReturn = parseFloat(document.getElementById('expectedReturn').value) || 0;
-    const compoundingFrequency = parseInt(document.getElementById('compoundingFrequency').value) || 12;
-
-    INVESTMENT_CALCULATOR.STATE = {
-        ...INVESTMENT_CALCULATOR.STATE,
-        initialBalance, annualContribution, timeHorizon, expectedReturn, compoundingFrequency
-    };
-
-    if (timeHorizon < 1) return; // Prevent calculation for invalid input
-
-    // 2. Calculate the growth schedule and results
-    const results = calculateGrowthSchedule(INVESTMENT_CALCULATOR.STATE);
-
-    // 3. Render the summary
-    document.getElementById('final-balance').textContent = UTILS.formatCurrency(results.finalBalance);
-    document.getElementById('total-principal').textContent = UTILS.formatCurrency(results.totalPrincipal);
-    document.getElementById('total-interest').textContent = UTILS.formatCurrency(results.totalInterest);
-    document.getElementById('total-ror').textContent = UTILS.formatPercent(results.totalReturnRate);
-    
-    // Update chart and details table
-    renderChart(results.schedule);
-    renderDetailsTable(results.schedule);
-    generateAIInsights(results);
 }
 
 /* ========================================================================== */
-/* IV. RENDERING & VISUALIZATION */
+/* V. AI INSIGHTS ENGINE (Monetization Focused) */
 /* ========================================================================== */
 
-function renderChart(schedule) {
-    const ctx = document.getElementById('investment-chart').getContext('2d');
-    
-    // Data for stacking: Principal starts with initial balance, then adds contribution.
-    const initialPrincipal = schedule[0] ? schedule[0].startBalance : 0;
-    const principalData = [initialPrincipal];
-    const interestData = [0];
-    
-    let cumulativePrincipal = INVESTMENT_CALCULATOR.STATE.initialBalance;
-    
-    schedule.forEach(yearData => {
-        // Principal is initial balance + cumulative contributions
-        cumulativePrincipal += yearData.contribution;
-        principalData.push(cumulativePrincipal);
-        
-        // Interest is the difference between end balance and total principal
-        interestData.push(yearData.endBalance - cumulativePrincipal);
-    });
-    
-    // Ensure all arrays have the same length (timeHorizon + 1 for starting point)
-    const labels = [0, ...schedule.map(d => d.year)];
-    
-    // If chart exists, destroy it first
-    if (INVESTMENT_CALCULATOR.charts.investmentChart) {
-        INVESTMENT_CALCULATOR.charts.investmentChart.destroy();
+function generateAIInsights() {
+    const S = INVESTMENT_CALCULATOR.STATE;
+    const output = document.getElementById('ai-insights-output');
+    let html = `<h4><i class="fas fa-robot"></i> FinGuid AI Investment Advisor:</h4>`;
+
+     // Ensure calculations have run and results are valid
+     if (S.futureValue <= 0 && S.initialInvestment > 0) {
+        output.innerHTML = '<p class="placeholder-text">Enter valid investment parameters to generate AI analysis...</p>';
+        return;
     }
-    
-    const isDark = document.documentElement.getAttribute('data-color-scheme') === 'dark';
-    const chartTextColor = isDark ? '#f0f0f0' : '#13343B';
 
-    INVESTMENT_CALCULATOR.charts.investmentChart = new Chart(ctx, {
-        type: 'bar',
+    const goalMet = S.calculationMode !== 'calc-fv' && S.futureValue >= S.financialGoal;
+    const timeHorizon = S.yearsToGrow;
+    const finalFV = S.futureValue;
+    const finalAdjustedFV = S.inflationAdjustedFV;
+    const gainsRatio = S.totalGains / finalFV;
+
+    // --- Core Verdict based on Goal (if applicable) ---
+    if (S.calculationMode === 'calc-goal-time' || S.calculationMode === 'calc-goal-contribution') {
+        if (S.yearsToGoal === Infinity || S.contributionNeeded >= (S.annualSalary || 75000)/12 * 0.5 ) { // Assuming high needed contribution relative to typical salary
+            html += `<p class="negative-insight">**Goal Alert: Current plan seems unrealistic.** Reaching ${UTILS.formatCurrency(S.financialGoal)} may take too long or require very high contributions. Consider adjusting your goal, increasing your return rate assumption, or extending your timeline.</p>`;
+        } else if (goalMet || S.yearsToGoal > 0 || S.contributionNeeded > 0) {
+             html += `<p class="positive-insight">**Goal Status: On Track!** Your plan projects you can reach your goal of ${UTILS.formatCurrency(S.financialGoal)}. See results for details on time or contribution needed.</p>`;
+        }
+    } else {
+        // General FV projection comment
+         html += `<p>Your projection shows a future value of **${UTILS.formatCurrency(finalFV)}**. After adjusting for inflation, the estimated value in today's dollars is **${UTILS.formatCurrency(finalAdjustedFV)}**.</p>`;
+    }
+
+
+    // --- Actionable/Monetization Insights ---
+    html += `<h4>Strategic Analysis & Recommendations:</h4>`;
+    let insightsAdded = 0;
+
+    // 1. Impact of Inflation
+    if (finalFV > 0 && (finalFV - finalAdjustedFV) / finalFV > 0.3 && timeHorizon > 10) { // If inflation erodes > 30%
+        insightsAdded++;
+        html += `
+            <div class="recommendation-alert medium-priority">
+                <i class="fas fa-arrow-trend-down"></i> **Inflation Impact Warning**
+            </div>
+            <p>Inflation is projected to erode over **${UTILS.formatPercent((finalFV - finalAdjustedFV) / finalFV * 100)}** of your future value over ${timeHorizon} years. To combat this, aim for investments with returns significantly higher than the ${UTILS.formatPercent(S.inflationRate)} inflation rate.</p>
+            <p><strong><i class="fas fa-handshake"></i> Affiliate Recommendation:</strong> Explore growth-oriented investments like diversified stock market ETFs. <a href="#" target="_blank" rel="noopener affiliate">Compare top US brokerage accounts offering low-cost ETFs.</a></p>
+        `;
+    }
+
+    // 2. Power of Compounding (if gains are > 50% of FV)
+    if (gainsRatio > 0.5 && timeHorizon >= 15) {
+        insightsAdded++;
+        html += `
+            <div class="recommendation-alert low-priority">
+                <i class="fas fa-seedling"></i> **Power of Compounding is Working!**
+            </div>
+            <p>Over **${UTILS.formatPercent(gainsRatio * 100)}** of your projected future value comes from compound gains, not just your contributions! The longer you invest, the more powerful this effect becomes.</p>
+             <p><strong><i class="fas fa-handshake"></i> Sponsor Recommendation:</strong> Maximize compounding by contributing consistently. Consider automating your investments. <a href="#" target="_blank" rel="noopener sponsored">Learn about automated investing with our partner Robo-Advisors.</a></p>
+       `;
+    }
+
+    // 3. Low Contribution Alert
+    if (S.monthlyContribution < 100 && S.initialInvestment < 5000) {
+        insightsAdded++;
+         html += `
+            <div class="recommendation-alert medium-priority">
+                <i class="fas fa-triangle-exclamation"></i> **Opportunity: Increase Contributions**
+            </div>
+            <p>Your current monthly contribution of **${UTILS.formatCurrency(S.monthlyContribution)}** is low. Even small increases can significantly impact your future value due to compounding. Aim for 10-15% of your income if possible.</p>
+            <p><strong><i class="fas fa-handshake"></i> Affiliate Recommendation:</strong> Find ways to save more. <a href="#" target="_blank" rel="noopener affiliate">Explore top budgeting apps to optimize your spending.</a></p>
+        `;
+    }
+
+    // 4. Rate of Return Reality Check
+     if (S.expectedReturnRate > 12.0) {
+        insightsAdded++;
+         html += `
+            <div class="recommendation-alert high-priority">
+                <i class="fas fa-magnifying-glass-chart"></i> **Expectation Check: High Return Rate**
+            </div>
+            <p>An expected annual return of **${UTILS.formatPercent(S.expectedReturnRate)}** is very optimistic and historically difficult to sustain consistently. Consider using a more conservative rate (e.g., 7-10%) for planning.</p>
+             <p><strong><i class="fas fa-handshake"></i> Sponsor Recommendation:</strong> Understand investment risk. <a href="#" target="_blank" rel="noopener sponsored">Connect with a financial advisor to create a realistic portfolio strategy.</a></p>
+       `;
+    } else if (S.expectedReturnRate < S.inflationRate + 1) {
+         insightsAdded++;
+         html += `
+             <div class="recommendation-alert medium-priority">
+                 <i class="fas fa-arrow-down"></i> **Growth Alert: Low Return Rate vs. Inflation**
+             </div>
+             <p>Your expected return (**${UTILS.formatPercent(S.expectedReturnRate)}**) is barely outpacing inflation (**${UTILS.formatPercent(S.inflationRate)}**). Your money's purchasing power may not grow significantly. Explore options to potentially increase returns while managing risk.</p>
+             <p><strong><i class="fas fa-handshake"></i> Affiliate Recommendation:</strong> Diversification is key. <a href="#" target="_blank" rel="noopener affiliate">Explore investment options beyond basic savings accounts with our partner brokers.</a></p>
+         `;
+     }
+
+
+    // 5. Short Time Horizon Issue (for large goals)
+    if (timeHorizon < 5 && S.financialGoal > S.initialInvestment * 2 && S.calculationMode !== 'calc-fv') {
+        insightsAdded++;
+         html += `
+            <div class="recommendation-alert medium-priority">
+                <i class="fas fa-clock"></i> **Timeline Alert: Short Horizon for Goal**
+            </div>
+            <p>Reaching a significant financial goal in under 5 years often requires very high contributions or assumes high-risk, high-return investments. Ensure your plan is realistic.</p>
+       `;
+    }
+
+    // Fallback / General Advice
+     if (insightsAdded === 0) {
+        html += `
+            <div class="recommendation-alert low-priority">
+                <i class="fas fa-check-circle"></i> **Solid Foundation**
+            </div>
+            <p>Your investment parameters appear reasonable. Consistency and time are your greatest allies in building wealth.</p>
+            <p><strong><i class="fas fa-handshake"></i> Next Step:</strong> Consider tax-advantaged accounts like IRAs or 401(k)s to maximize your growth. <a href="#" target="_blank" rel="noopener affiliate">Learn more about retirement accounts with our partner resources.</a></p>
+        `;
+    }
+
+
+    output.innerHTML = html;
+}
+
+/* ========================================================================== */
+/* VI. CHARTING MODULE (Investment Growth) */
+/* ========================================================================== */
+
+function updateChart() {
+    const S = INVESTMENT_CALCULATOR.STATE;
+    const ctx = document.getElementById('investmentGrowthChart').getContext('2d');
+
+    if (!S.annualData || S.annualData.length === 0) {
+        // Clear or hide chart if no data
+        if (INVESTMENT_CALCULATOR.charts.investmentGrowthChart) {
+            INVESTMENT_CALCULATOR.charts.investmentGrowthChart.destroy();
+            INVESTMENT_CALCULATOR.charts.investmentGrowthChart = null;
+        }
+        // Optionally display placeholder
+        // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        // ctx.fillText('Enter data to generate chart.', ctx.canvas.width / 2, ctx.canvas.height / 2);
+        return;
+    }
+
+    const labels = S.annualData.map(d => `Year ${d.year}`);
+    const totalValueData = S.annualData.map(d => d.endBalance);
+    const principalData = S.annualData.map((d, i) => S.initialInvestment + d.contributions * (i + 1));
+    const inflationAdjustedData = S.annualData.map(d => d.inflationAdjustedBalance);
+
+
+    if (INVESTMENT_CALCULATOR.charts.investmentGrowthChart) {
+        INVESTMENT_CALCULATOR.charts.investmentGrowthChart.destroy();
+    }
+
+    const isDarkMode = document.documentElement.getAttribute('data-color-scheme') === 'dark';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDarkMode ? 'white' : 'black';
+
+    INVESTMENT_CALCULATOR.charts.investmentGrowthChart = new Chart(ctx, {
+        type: 'line',
         data: {
             labels: labels,
             datasets: [
                 {
-                    label: 'Total Interest Earned',
-                    data: interestData,
-                    backgroundColor: 'rgba(36, 172, 197, 0.7)', // var(--color-chart-interest)
-                    stack: 'Stack 0',
+                    label: 'Total Value (Nominal)',
+                    data: totalValueData,
+                    borderColor: 'var(--color-chart-total)',
+                    backgroundColor: 'rgba(19, 52, 59, 0.1)', // Corresponds to --color-primary lightened
+                    fill: true,
+                    tension: 0.1,
+                     yAxisID: 'y-value',
                 },
                 {
-                    label: 'Total Principal Contributed',
+                    label: 'Total Principal Invested',
                     data: principalData,
-                    backgroundColor: 'rgba(0, 123, 255, 0.7)', // var(--color-chart-principal)
-                    stack: 'Stack 0',
+                    borderColor: 'var(--color-chart-principal)',
+                     borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.1,
+                     yAxisID: 'y-value',
+                },
+                 {
+                    label: 'Value (Inflation-Adjusted)',
+                    data: inflationAdjustedData,
+                    borderColor: 'var(--color-chart-inflation)',
+                    fill: false,
+                    tension: 0.1,
+                     yAxisID: 'y-value',
+                     hidden: S.inflationRate <= 0 // Hide if inflation is zero
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                x: {
-                    stacked: true,
-                    title: { display: true, text: 'Year', color: chartTextColor },
-                    ticks: { color: chartTextColor }
-                },
-                y: {
-                    stacked: true,
-                    title: { display: true, text: 'Balance ($)', color: chartTextColor },
-                    ticks: { 
-                        color: chartTextColor,
-                        callback: function(value) { return UTILS.formatCurrency(value).replace('$', ''); }
+             interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { labels: { color: textColor } },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => `${context.dataset.label}: ${UTILS.formatCurrency(context.parsed.y)}`
                     }
                 }
             },
-            plugins: {
-                legend: { labels: { color: chartTextColor } },
-                tooltip: { callbacks: { label: (context) => `${context.dataset.label}: ${UTILS.formatCurrency(context.parsed.y)}` } }
+            scales: {
+                y: { // Renamed from 'y-value' for simplicity if only one axis needed
+                    title: { display: true, text: 'Value ($)', color: textColor },
+                    ticks: { color: textColor, callback: (value) => UTILS.formatCurrency(value / 1000) + 'K' },
+                    grid: { color: gridColor },
+                    beginAtZero: true
+                },
+                x: {
+                    title: { display: true, text: 'Time (Years)', color: textColor },
+                    ticks: { color: textColor },
+                    grid: { color: gridColor }
+                }
             }
         }
     });
 }
 
-function renderDetailsTable(schedule) {
-    const tableBody = document.querySelector('#growth-table tbody');
-    tableBody.innerHTML = '';
+/* ========================================================================== */
+/* VII. DATA TABLE & EXPORT */
+/* ========================================================================== */
 
-    schedule.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${row.year}</td>
-            <td>${UTILS.formatCurrency(row.startBalance)}</td>
-            <td class="${row.interest > 0 ? 'highlight-positive' : ''}">${UTILS.formatCurrency(row.interest)}</td>
-            <td>${UTILS.formatCurrency(row.contribution)}</td>
-            <td><strong class="highlight-brand">${UTILS.formatCurrency(row.endBalance)}</strong></td>
+function updateDataTable() {
+    const S = INVESTMENT_CALCULATOR.STATE;
+    const tableBody = document.querySelector('#annual-data-table tbody');
+    tableBody.innerHTML = ''; // Clear previous data
+
+    if (!S.annualData || S.annualData.length === 0) {
+        // Optionally display a placeholder row
+         tableBody.innerHTML = '<tr><td colspan="6">No data to display. Enter parameters and calculate.</td></tr>';
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    S.annualData.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.year}</td>
+            <td>${UTILS.formatCurrency(item.startBalance)}</td>
+            <td>${UTILS.formatCurrency(item.contributions)}</td>
+            <td>${UTILS.formatCurrency(item.interestEarned)}</td>
+            <td>${UTILS.formatCurrency(item.endBalance)}</td>
+            <td>${UTILS.formatCurrency(item.inflationAdjustedBalance)}</td>
         `;
-        tableBody.appendChild(tr);
+        fragment.appendChild(row);
     });
+    tableBody.appendChild(fragment);
 }
 
-/* ========================================================================== */
-/* V. AI INSIGHTS ENGINE (Conditional Logic & Dynamic Recommendations) */
-/* ========================================================================== */
-
-function generateAIInsights(results) {
-    const { finalBalance, totalPrincipal, totalInterest, totalReturnRate } = results;
-    const { timeHorizon, expectedReturn, annualContribution, initialBalance, liveBenchmarkRate } = INVESTMENT_CALCULATOR.STATE;
-    const insightOutput = document.getElementById('ai-insights-output');
-    let insightsHTML = '<h3>Personalized FinGuid Investment Summary</h3>';
-
-    const principalPct = (totalPrincipal / finalBalance) * 100;
-    const interestPct = (totalInterest / finalBalance) * 100;
-
-    // Insight 1: General Summary
-    insightsHTML += `<p><i class="fas fa-magic"></i> Based on your inputs, your total investment of <strong>${UTILS.formatCurrency(totalPrincipal)}</strong> is projected to grow into a massive <strong>${UTILS.formatCurrency(finalBalance)}</strong> over ${timeHorizon} years. Your wealth will increase by <strong>${UTILS.formatCurrency(totalInterest)}</strong> solely from compound interest.</p>`;
-
-    // Insight 2: Compound Interest Effectiveness
-    if (interestPct > 50) {
-        insightsHTML += `<p><i class="fas fa-rocket"></i> **Compound Interest is Your Ally!** Over ${timeHorizon} years, <strong>${interestPct.toFixed(1)}%</strong> of your final balance is generated by interest, demonstrating the power of time and consistent growth. Keep contributions steady!</p>`;
-    } else {
-        insightsHTML += `<p><i class="fas fa-hand-holding-usd"></i> Your own principal contributions (<strong>${principalPct.toFixed(1)}%</strong> of the total) are currently the driving force. To boost the *interest earned* portion, consider increasing your annual contribution or extending your time horizon.</p>`;
-    }
-    
-    // Insight 3: Live Rate Comparison / Risk Context (FRED DGS10)
-    if (expectedReturn < liveBenchmarkRate + 2) {
-        insightsHTML += `<p><i class="fas fa-exclamation-triangle"></i> **Risk Alert:** Your expected return of ${UTILS.formatPercent(expectedReturn)} is quite close to the current long-term benchmark rate of ${UTILS.formatPercent(liveBenchmarkRate)}. This suggests a potentially low-risk portfolio (like bonds). Consider increasing risk tolerance for higher potential returns to better combat inflation.</p>`;
-    } else if (expectedReturn > 10) {
-        insightsHTML += `<p><i class="fas fa-chart-line"></i> **Aggressive Growth Strategy:** A ${UTILS.formatPercent(expectedReturn)} return is ambitious, typically requiring heavy investment in growth stocks. Ensure your risk tolerance is high and your portfolio is well-diversified to pursue this target. </p>`;
-    } else {
-        insightsHTML += `<p><i class="fas fa-check-circle"></i> **Balanced Approach:** Your expected return is sensible for a diversified portfolio. The real-time benchmark rate is ${UTILS.formatPercent(liveBenchmarkRate)}.</p>`;
-    }
-    
-    // Insight 4: Retirement Goal Tracking (Simple Goal: 1 Million)
-    const millionTarget = 1000000;
-    if (finalBalance >= millionTarget) {
-        insightsHTML += `<p><i class="fas fa-trophy"></i> **Millionaire Goal Reached!** You are projected to surpass the $1 Million mark with this plan. Consider exploring advanced withdrawal strategies with a partner advisor (see our sponsor links).</p>`;
-    } else if (finalBalance * 1.25 >= millionTarget) { // Close to goal
-        insightsHTML += `<p><i class="fas fa-bullseye"></i> **Close to $1M!** Your current path projects ${UTILS.formatCurrency(finalBalance)}. Increasing your annual contribution by just 25% (to ${UTILS.formatCurrency(annualContribution * 1.25)}) could likely push you over the <strong>$1 Million</strong> goal. Run the calculation again to check!</p>`;
-    }
-
-    // Call to Action (Monetization)
-    insightsHTML += '<p class="ai-cta"><i class="fas fa-money-bill-alt"></i> **Next Step:** To secure your financial future, get matched with a **FinGuid-vetted Retirement Planner** via our affiliate partners. This is how we keep this world-class tool **free** for Americans!</p>';
-
-    insightOutput.innerHTML = insightsHTML;
-}
-
-function exportAmortizationToCSV() {
-    const results = INVESTMENT_CALCULATOR.STATE.results;
-    if (!results || results.schedule.length === 0) {
-        UTILS.showToast('Please calculate your investment first.', 'error');
+function exportDataToCSV() {
+    const S = INVESTMENT_CALCULATOR.STATE;
+    if (!S.annualData || S.annualData.length === 0) {
+        UTILS.showToast('No data available to export.', 'error');
         return;
     }
 
     let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Year,Start Balance,Interest Earned,Contributions,End Balance\n";
+    const header = ['Year', 'Start Balance ($)', 'Contributions ($)', 'Interest Earned ($)', 'End Balance ($)', 'Inflation Adjusted Balance ($)'];
+    csvContent += header.join(',') + '\n';
 
-    results.schedule.forEach(row => {
-        const rowString = [
-            row.year,
-            row.startBalance.toFixed(2),
-            row.interest.toFixed(2),
-            row.contribution.toFixed(2),
-            row.endBalance.toFixed(2)
-        ].join(',');
-        csvContent += rowString + "\n";
+    S.annualData.forEach(item => {
+        const row = [
+            item.year,
+            item.startBalance.toFixed(2),
+            item.contributions.toFixed(2),
+            item.interestEarned.toFixed(2),
+            item.endBalance.toFixed(2),
+            item.inflationAdjustedBalance.toFixed(2),
+        ];
+        csvContent += row.join(',') + '\n';
     });
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "FinGuid_Investment_Growth_Schedule.csv");
+    link.setAttribute("download", `investment_projection_${S.yearsToGrow}yrs.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
-    UTILS.showToast('Investment schedule exported to CSV!', 'success');
+
+    UTILS.showToast('Annual data exported to CSV!', 'success');
 }
 
-// Function to handle tab switching
-function showTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-    
-    document.getElementById(tabId).classList.add('active');
-    document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
-    
-    // Ensure chart redraws correctly if its tab is activated
-    if (tabId === 'growth-chart' && INVESTMENT_CALCULATOR.charts.investmentChart) {
-        setTimeout(() => INVESTMENT_CALCULATOR.charts.investmentChart.resize(), 10);
+
+/* ========================================================================== */
+/* VIII. UI UPDATER & DISPLAY */
+/* ========================================================================== */
+
+function updateResultsDisplay() {
+    const S = INVESTMENT_CALCULATOR.STATE;
+    const fvSummary = document.getElementById('future-value-total');
+    const fvSummaryDetails = document.getElementById('investment-summary-details');
+    const inflationAdjSummary = document.getElementById('inflation-adjusted-value');
+    const goalSummary = document.getElementById('goal-results-summary');
+    const goalFigure = document.getElementById('goal-result-figure');
+    const goalUnit = document.getElementById('goal-result-unit');
+    const goalDetails = document.getElementById('goal-details-summary');
+
+
+    // Update FV Summary (always visible but might show $0)
+    fvSummary.textContent = UTILS.formatCurrency(S.futureValue);
+    fvSummaryDetails.innerHTML = `Total Principal: ${UTILS.formatCurrency(S.totalPrincipal)} | Total Gains: ${UTILS.formatCurrency(S.totalGains)}`;
+     inflationAdjSummary.innerHTML = `Inflation-Adjusted: ${UTILS.formatCurrency(S.inflationAdjustedFV)} <span class="input-note">(in today's dollars, assuming ${UTILS.formatPercent(S.inflationRate)} inflation)</span>`;
+
+     // Update Goal Summary (conditionally visible)
+    goalSummary.classList.add('hidden'); // Hide by default
+    if (S.calculationMode === 'calc-goal-time' && S.yearsToGoal !== null) {
+        goalSummary.classList.remove('hidden');
+        if(S.yearsToGoal === Infinity) {
+             goalFigure.textContent = 'Never';
+             goalUnit.textContent = '';
+             goalDetails.textContent = 'Goal may be unreachable with current inputs.';
+        } else {
+             goalFigure.textContent = UTILS.formatNumber(S.yearsToGoal);
+             goalUnit.textContent = S.yearsToGoal === 1 ? 'Year' : 'Years';
+             goalDetails.textContent = `To reach ${UTILS.formatCurrency(S.financialGoal)}`;
+        }
+
+    } else if (S.calculationMode === 'calc-goal-contribution' && S.contributionNeeded !== null) {
+        goalSummary.classList.remove('hidden');
+         goalFigure.textContent = UTILS.formatCurrency(S.contributionNeeded, true);
+         goalUnit.textContent = '/ month';
+         goalDetails.textContent = `Needed for ${UTILS.formatNumber(S.yearsToGrow)} years to reach ${UTILS.formatCurrency(S.financialGoal)}`;
+    }
+
+     // Hide/Show relevant summaries
+    if (S.calculationMode === 'calc-fv') {
+        document.querySelector('.summary-card:not(.goal-summary)').classList.remove('hidden');
+        goalSummary.classList.add('hidden');
+    } else {
+         document.querySelector('.summary-card:not(.goal-summary)').classList.add('hidden'); // Hide standard FV summary when goal planning
+        // Goal summary visibility handled above
     }
 }
 
 
 /* ========================================================================== */
-/* VI. DOCUMENT INITIALIZATION & EVENT LISTENERS */
+/* IX. THEME MANAGER, PWA, VOICE (Reused FinGuid Modules - Stubs) */
+/* ========================================================================== */
+
+const THEME_MANAGER = (function() {
+    const COLOR_SCHEME_KEY = 'finguid-color-scheme';
+    function loadUserPreferences() {
+        const savedScheme = localStorage.getItem(COLOR_SCHEME_KEY) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-color-scheme', savedScheme);
+        updateToggleButton(savedScheme);
+    }
+    function updateToggleButton(scheme) {
+        const icon = document.querySelector('#toggle-color-scheme i');
+        if (icon) icon.className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+    function toggleColorScheme() {
+        const currentScheme = document.documentElement.getAttribute('data-color-scheme');
+        const newScheme = currentScheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-color-scheme', newScheme);
+        localStorage.setItem(COLOR_SCHEME_KEY, newScheme);
+        updateToggleButton(newScheme);
+        if (INVESTMENT_CALCULATOR.charts.investmentGrowthChart) updateChart(); // Redraw chart
+    }
+    return { loadUserPreferences, toggleColorScheme };
+})();
+
+
+const SPEECH = (function() {
+    // Basic stubs - integrate actual Web Speech API if needed
+     function initialize() {
+        document.getElementById('toggle-voice-command').addEventListener('click', () => {
+             UTILS.showToast('Voice Command activated (stub).', 'info');
+             document.getElementById('toggle-voice-command').classList.toggle('voice-active');
+              document.getElementById('voice-status-text').textContent = document.getElementById('toggle-voice-command').classList.contains('voice-active') ? 'Voice ON' : 'Voice OFF';
+
+        });
+        document.getElementById('toggle-text-to-speech').addEventListener('click', (e) => {
+            const isActive = e.currentTarget.classList.toggle('tts-active');
+             e.currentTarget.classList.toggle('tts-inactive', !isActive);
+             UTILS.showToast(isActive ? 'Text-to-Speech active (stub).' : 'Text-to-Speech inactive.', 'info');
+        });
+    }
+    return { initialize };
+})();
+
+
+function showPWAInstallPrompt() {
+    const installButton = document.getElementById('pwa-install-button');
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        INVESTMENT_CALCULATOR.deferredInstallPrompt = e;
+        installButton.classList.remove('hidden');
+    });
+    installButton.addEventListener('click', () => {
+        if (INVESTMENT_CALCULATOR.deferredInstallPrompt) {
+            INVESTMENT_CALCULATOR.deferredInstallPrompt.prompt();
+            INVESTMENT_CALCULATOR.deferredInstallPrompt.userChoice.then((choice) => {
+                if (choice.outcome === 'accepted') UTILS.showToast('FinGuid App Installed!', 'success');
+                INVESTMENT_CALCULATOR.deferredInstallPrompt = null;
+                installButton.classList.add('hidden');
+            });
+        }
+    });
+}
+
+/* ========================================================================== */
+/* X. EVENT LISTENERS & INITIALIZATION */
 /* ========================================================================== */
 
 function setupEventListeners() {
+    const debouncedCalculate = UTILS.debounce(updateCalculations, 300);
     const form = document.getElementById('investment-form');
-    
-    // Listen for all input/change events on the form
-    form.addEventListener('input', (e) => {
-        // Update range value displays dynamically
-        if (e.target.type === 'range' || e.target.type === 'number') {
-            const display = e.target.closest('.form-group').querySelector('.range-value');
-            if (display) {
-                if (e.target.id === 'expectedReturn') {
-                    display.textContent = `${e.target.value}%`;
-                } else if (e.target.id === 'timeHorizon') {
-                    display.textContent = `${e.target.value} Years`;
-                } else {
-                    display.textContent = UTILS.formatCurrency(e.target.value);
-                }
-            }
-        }
-        calculateInvestment();
-    });
-    
-    // Tab switching setup
-    document.querySelectorAll('.tab-controls-results .tab-button').forEach(button => {
+
+    // Recalculate on any input change within the form
+    form.addEventListener('input', debouncedCalculate);
+    form.addEventListener('change', debouncedCalculate); // For select dropdowns if added
+
+    // Theme, PWA, Voice buttons
+    document.getElementById('toggle-color-scheme').addEventListener('click', THEME_MANAGER.toggleColorScheme);
+    // Voice/TTS listeners are set in SPEECH.initialize()
+
+    // Tab Switching for Input Modes
+    document.querySelectorAll('.input-tabs .tab-button').forEach(button => {
         button.addEventListener('click', (e) => {
-            showTab(e.target.getAttribute('data-tab'));
+            const tabId = e.target.getAttribute('data-tab');
+            document.querySelectorAll('#investment-form .input-tab-content').forEach(content => content.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            document.querySelectorAll('.input-tabs .tab-button').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            // Update state and recalculate immediately when switching modes
+             INVESTMENT_CALCULATOR.STATE.calculationMode = tabId;
+             updateCalculations();
         });
     });
-    
-    // CSV Export
-    document.getElementById('export-csv-button').addEventListener('click', exportAmortizationToCSV);
-}
 
-// Function to register the PWA service worker (placeholder)
-function registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/register-sw.js').then(registration => {
-                if (INVESTMENT_CALCULATOR.DEBUG) console.log('PWA ServiceWorker registered: ', registration.scope);
-            }).catch(error => {
-                if (INVESTMENT_CALCULATOR.DEBUG) console.log('PWA ServiceWorker registration failed: ', error);
-            });
+    // Tab Switching for Results
+     document.querySelectorAll('.tab-controls-results .tab-button').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const tabId = e.target.getAttribute('data-tab');
+            document.querySelectorAll('.results-section .tab-content').forEach(content => content.classList.add('hidden'));
+             document.getElementById(tabId).classList.remove('hidden'); // Show selected
+             document.querySelectorAll('.tab-controls-results .tab-button').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+
+            // Ensure chart redraws if its tab is activated
+            if (tabId === 'growth-chart') {
+                setTimeout(() => {
+                    if (INVESTMENT_CALCULATOR.charts.investmentGrowthChart) {
+                        INVESTMENT_CALCULATOR.charts.investmentGrowthChart.resize();
+                    } else {
+                        updateChart(); // Attempt to create if it doesn't exist
+                    }
+                }, 50);
+            }
         });
-    }
+    });
+
+     // Goal Calculation Buttons
+     document.getElementById('calculate-time-button').addEventListener('click', () => {
+         INVESTMENT_CALCULATOR.STATE.calculationMode = 'calc-goal-time';
+         updateCalculations();
+         UTILS.showToast('Calculating time needed to reach goal...', 'info');
+     });
+     document.getElementById('calculate-contribution-button').addEventListener('click', () => {
+         INVESTMENT_CALCULATOR.STATE.calculationMode = 'calc-goal-contribution';
+         updateCalculations();
+         UTILS.showToast('Calculating contribution needed...', 'info');
+     });
+
+    // Export CSV Button
+    document.getElementById('export-csv-button').addEventListener('click', exportDataToCSV);
+
+     // Ensure initial tab content visibility matches button state
+    document.querySelectorAll('.input-tabs .tab-button').forEach(btn => {
+        const tabId = btn.getAttribute('data-tab');
+        document.getElementById(tabId).classList.toggle('hidden', !btn.classList.contains('active'));
+         document.getElementById(tabId).classList.toggle('active', btn.classList.contains('active')); // Also add active class to visible one
+    });
+     document.querySelectorAll('.tab-controls-results .tab-button').forEach(btn => {
+        const tabId = btn.getAttribute('data-tab');
+        document.getElementById(tabId).classList.toggle('hidden', !btn.classList.contains('active'));
+         document.getElementById(tabId).classList.toggle('active', btn.classList.contains('active'));
+    });
 }
 
-
+// === Initialize ===
 document.addEventListener('DOMContentLoaded', function() {
-    if (INVESTMENT_CALCULATOR.DEBUG) console.log('🇺🇸 FinGuid Investment Calculator Pro v1.0 Initializing...');
+    if (INVESTMENT_CALCULATOR.DEBUG) console.log('🇺🇸 FinGuid Investment AI Planner v1.0 Initializing...');
 
     // 1. Initialize Core Features
-    registerServiceWorker(); // For PWA functionality
-    THEME_MANAGER.loadUserPreferences(); // Load saved theme (Dark/Light Mode)
-    SPEECH.initialize(); // Initialize Speech Module
-    setupEventListeners(); // Set up all input monitors
-    
-    // 2. Set default tab view
-    showTab('growth-chart'); 
-    
-    // 3. Fetch Live Rate and Initial Calculation
-    // This fetches the live rate, sets the benchmark, and then calls calculateInvestment()
-    FRED_API.startAutomaticUpdates(); 
-    
-    // Fallback calculation in case FRED is slow/fails
-    setTimeout(calculateInvestment, 1500); 
+    THEME_MANAGER.loadUserPreferences();
+    SPEECH.initialize();
+    setupEventListeners();
+    showPWAInstallPrompt();
 
-    if (INVESTMENT_CALCULATOR.DEBUG) console.log('✅ Investment Calculator initialized successfully!');
+    // 2. Fetch Live Inflation Rate and Trigger Initial Calculation
+    fredAPI.startAutomaticUpdates(); // This includes the initial calculation call
+
+    // Set default tab visibility based on initial state
+    showTab('calc-fv'); // Show Future Value inputs
+    showTab('growth-chart'); // Show Growth Chart results
+
+    if (INVESTMENT_CALCULATOR.DEBUG) console.log('✅ Investment Calculator initialized!');
 });
