@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Credit Card Payoff Calculator — World's First AI-Powered Debt Strategist | FinGuid USA</title>
-    <meta name="description" content="Calculate credit card debt payoff strategies and save thousands in interest with the World's First AI-Powered Payoff Calculator. Compare Avalanche vs Snowball approaches and find your debt-free date.">
-    <meta name="keywords" content="credit card payoff calculator, debt payoff calculator, interest savings, credit card debt, debt snowball, debt avalanche, AI financial advisor, FinGuid, USA debt, debt strategy, SCO Friendly, AI Friendly">
+    <title>AI Credit Card Payoff Calculator — Debt Free Strategy | FinGuid USA</title>
+    <meta name="description" content="World's First AI-Powered Credit Card Payoff Calculator. Compare Snowball vs. Avalanche, calculate interest saved, and create a debt-free plan with AI insights.">
+    <meta name="keywords" content="credit card payoff calculator, debt payoff calculator, debt snowball, debt avalanche, get out of debt, credit card interest calculator, AI debt planner, FinGuid, USA debt, balance transfer, debt consolidation">
     <meta name="robots" content="index, follow">
     <meta name="author" content="FinGuid - World's First AI Calculator Platform">
-    <meta name="theme-color" content="#19343B"> 
     
     <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+    <meta name="theme-color" content="#19343B"> 
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
@@ -22,211 +21,247 @@
       gtag('config', 'G-NYBL2CDNQJ');
     </script>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-    
-    <link rel="stylesheet" href="mortgage-calculator (13).css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="credit-card-payoff-calculator.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    
 </head>
 <body>
 
     <header class="main-header">
-        <div class="header-content container">
-            <div class="logo">
-                <a href="/" aria-label="FinGuid Home">
-                    <i class="fas fa-robot"></i> FinGuid
-                </a>
-                <span class="tagline">World's First AI Calculator Platform</span>
+        <div class="header-content">
+            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
+            <p class="tagline">World's First AI-Powered Debt Payoff Analyzer</p>
+            <div class="features-quick">
+                <span class="feature-quick"><i class="fas fa-microchip"></i> AI Insights</span>
+                <span class="feature-quick"><i class="fas fa-microphone-alt"></i> Voice Control</span>
+                <span class="feature-quick"><i class="fas fa-chart-line"></i> Live FRED Rates</span>
+                <span class="feature-quick"><i class="fas fa-cloud-download-alt"></i> PWA Ready</span>
             </div>
             
-            <div class="features-quick">
-                <span class="badge"><i class="fas fa-fire-alt"></i> SEO Friendly</span>
-                <span class="badge"><i class="fas fa-robot"></i> AI Friendly</span>
-                <span class="badge"><i class="fas fa-mobile-alt"></i> PWA Ready</span>
-            </div>
-
             <div class="accessibility-controls">
-                <button id="theme-toggle" aria-label="Toggle Light/Dark Mode"><i class="fas fa-moon"></i></button>
-                <button id="voice-input-toggle" aria-label="Toggle Voice Command"><i class="fas fa-microphone"></i></button>
-                <button id="text-to-speech-toggle" aria-label="Toggle Text to Speech"><i class="fas fa-volume-up"></i></button>
+                <button id="toggle-color-scheme" aria-label="Toggle Light/Dark Mode" class="control-button">
+                    <i class="fas fa-sun"></i> 
+                </button>
+                <div class="voice-status">
+                    <button id="toggle-voice-command" aria-label="Toggle Voice Command" class="control-button voice-inactive">
+                        <i class="fas fa-microphone"></i> <span id="voice-status-text">Voice OFF</span>
+                    </button>
+                    <button id="toggle-text-to-speech" aria-label="Toggle Text to Speech" class="control-button tts-inactive">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                <button id="pwa-install-button" class="control-button install-button hidden">Install App</button>
             </div>
         </div>
     </header>
 
-    <main class="calculator-main">
-        <div class="container calculator-container">
+    <main class="main-content">
+        <div class="calculator-container card">
             
             <section class="input-section" aria-labelledby="input-heading">
-                <h1 id="input-heading" class="section-title">Credit Card Payoff Strategist</h1>
-                <p class="description">Calculate interest savings and find the fastest path to debt freedom.</p>
+                <h2 id="input-heading" class="section-title"><i class="fas fa-credit-card"></i> Your Debt Details</h2>
                 
-                <div class="ad-slot affiliate-banner" role="complementary" aria-label="Affiliate link for a balance transfer offer">
-                    <p class="ad-label">Sponsored Product / Affiliate Offer</p>
-                    <a href="#affiliate-link-1" class="affiliate-cta"><i class="fas fa-hand-holding-usd"></i> Balance Transfer Offer: Get 0% APR for 18 Months!</a>
-                </div>
-                
-                <form id="cc-payoff-form" class="calculator-form">
-                    
-                    <div class="input-group">
-                        <label for="currentBalance">Current Card Balance ($)</label>
-                        <input type="number" id="currentBalance" value="5000" min="1" step="1" required>
-                        <div class="input-tip">Total amount you owe on the card.</div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="apr">APR (%)</label>
-                        <input type="number" id="apr" value="29.99" min="0.01" max="100" step="0.01" required>
-                        <div class="input-tip">Your card's interest rate.</div>
-                    </div>
+                <aside class="affiliate-slot high-value-affiliate" role="complementary" aria-label="Debt Consolidation Loan Sponsor">
+                    <h4><i class="fas fa-bolt"></i> High APR? Consolidate & Save!</h4>
+                    <p>Lower your interest rate and get one simple monthly payment. Compare top US lenders.</p>
+                    <a href="#affiliate-consolidation" class="primary-button affiliate-link-cta" target="_blank" rel="sponsored">See Consolidation Rates</a>
+                </aside>
 
-                    <div class="input-group">
-                        <label for="minPaymentRate">Minimum Payment Rule</label>
-                        <div class="input-split">
-                            <input type="number" id="minPaymentRate" value="2" min="0.5" max="100" step="0.5">
-                            <span class="addon">% of Balance</span>
+                <form id="payoff-form" novalidate>
+                    
+                    <h3 class="input-group-sub-title">Your Credit Cards</h3>
+                    <div id="card-list-container">
+                        <div class="card-input-group">
+                            <button type="button" class="remove-card-btn" aria-label="Remove this card" style="display: none;"><i class="fas fa-times"></i></button>
+                            <div class="input-group">
+                                <label for="card-name-1">Card Name (Optional)</label>
+                                <input type="text" id="card-name-1" class="card-name" placeholder="e.g., Chase Sapphire">
+                            </div>
+                            <div class="input-split">
+                                <div class="input-group">
+                                    <label for="card-balance-1">Current Balance ($)</label>
+                                    <input type="text" id="card-balance-1" class="card-balance" inputmode="numeric" value="8000" aria-required="true">
+                                </div>
+                                <div class="input-group">
+                                    <label for="card-apr-1">Interest Rate (APR %)</label>
+                                    <input type="text" id="card-apr-1" class="card-apr" inputmode="decimal" value="22.9" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="input-split">
+                                <div class="input-group">
+                                    <label for="card-min-payment-1">Min. Payment ($)</label>
+                                    <input type="text" id="card-min-payment-1" class="card-min-payment" inputmode="numeric" value="160" aria-required="true">
+                                </div>
+                                <div class="input-group min-payment-percent">
+                                    <label for="card-min-percent-1">or (% of Balance)</label>
+                                    <input type="text" id="card-min-percent-1" class="card-min-percent" inputmode="decimal" value="2" aria-label="Minimum Payment Percent">
+                                </div>
+                            </div>
+                            <span class="input-note">Enter either flat $ amount OR % of balance for min. payment. We'll use the greater of the two.</span>
                         </div>
-                        <div class="input-split">
-                            <input type="number" id="minPaymentFloor" value="25" min="1" step="1">
-                            <span class="addon">Minimum Floor ($)</span>
                         </div>
-                        <div class="input-tip">The greater of X% of balance or $Y. (Typical: 1%-3% or $25)</div>
-                    </div>
+                    <button type="button" id="add-card-btn" class="secondary-button"><i class="fas fa-plus"></i> Add Another Card</button>
 
-                    <div class="input-group">
-                        <label for="extraPayment">Extra Monthly Payment ($)</label>
-                        <input type="number" id="extraPayment" value="50" min="0" step="1">
-                        <div class="input-tip">Amount you can afford to pay *in addition* to the minimum.</div>
-                    </div>
+                    <h3 class="input-group-sub-title">Your Payoff Strategy</h3>
+                    <span class="fred-source-note">Live Avg. US Credit Card APR: <span id="fred-rate-display">...</span>%</span>
                     
                     <div class="input-group">
-                        <label for="targetDate">Target Payoff Date (Optional)</label>
-                        <input type="date" id="targetDate">
-                        <div class="input-tip">See what payment is required to hit this date.</div>
+                        <label for="payoff-strategy">Payoff Method</label>
+                        <select id="payoff-strategy">
+                            <option value="avalanche">Debt Avalanche (Highest APR First)</option>
+                            <option value="snowball">Debt Snowball (Lowest Balance First)</option>
+                            <option value="custom">Fixed Monthly Payment (You Decide)</option>
+                            <option value="minimum">Minimum Payments Only (Not Recommended)</option>
+                        </select>
                     </div>
 
-                    <button type="submit" id="calculate-button" class="cta-button" aria-label="Calculate Credit Card Payoff Schedule"><i class="fas fa-calculator"></i> Calculate Strategy</button>
+                    <div class="input-group" id="monthly-payment-group">
+                        <label for="monthly-payment">Total Monthly Payment ($)</label>
+                        <input type="text" id="monthly-payment" value="750" inputmode="numeric">
+                        <span class="input-note">Enter your total budget for all cards. We'll distribute it based on your strategy.</span>
+                    </div>
+
+                    <div class="input-group action-group">
+                        <button type="submit" class="primary-button" id="calculate-button">
+                            <i class="fas fa-calculator"></i> Calculate Payoff Plan
+                        </button>
+                    </div>
+
+                    <aside class="affiliate-slot" role="complementary" aria-label="Balance Transfer Card Sponsor">
+                        <h4><i class="fas fa-percent"></i> Stop Paying Interest!</h4>
+                        <p>Move your high-APR balance to a 0% introductory APR card. (Affiliate Link)</p>
+                        <a href="#affiliate-transfer" class="secondary-button affiliate-link-cta" target="_blank" rel="sponsored">Find 0% APR Cards</a>
+                    </aside>
 
                 </form>
-
-                <div class="ad-slot advertising-display" role="complementary" aria-label="Display ad slot">
-                    <p class="ad-label">Advertising Partner</p>
-                    <p>Ad Space: High-Value Financial Audience</p>
-                </div>
-
             </section>
-            
+
             <section class="results-section" aria-labelledby="results-heading">
-                <h2 id="results-heading" class="section-title">Your Payoff Analysis</h2>
+                <h2 id="results-heading" class="section-title">Debt-Free Analysis</h2>
 
-                <div id="payoff-summary" class="summary-grid">
-                    <div class="summary-card baseline-card">
-                        <div class="summary-label">Baseline (Min. Pay)</div>
-                        <div class="summary-value" id="min-pay-years">0.0 Years</div>
-                        <div class="summary-detail" id="min-pay-interest">Interest: $0.00</div>
+                <div class="summary-card card-mini">
+                    <p class="summary-label">You'll be Debt Free In:</p>
+                    <div class="payment-display">
+                        <span id="payoff-time-total" class="payment-figure">--</span>
                     </div>
-                    <div class="summary-card extra-pay-card">
-                        <div class="summary-label">Accelerated Payoff</div>
-                        <div class="summary-value" id="extra-pay-years">0.0 Years</div>
-                        <div class="summary-detail" id="extra-pay-interest">Interest: $0.00</div>
-                    </div>
-                    <div class="summary-card savings-card">
-                        <div class="summary-label">Total Interest Savings</div>
-                        <div class="summary-value savings-highlight" id="interest-savings">$0.00</div>
-                        <div class="summary-detail" id="time-saved">0.0 Months Saved</div>
-                    </div>
+                    <p class="piti-breakdown-summary" id="payoff-summary-details">
+                        Total Interest Saved: $-- | Payoff Date: --
+                    </p>
                 </div>
 
-                <div class="tab-controls-results">
-                    <button class="tab-button active" data-tab="strategy-comparison">Comparison</button>
-                    <button class="tab-button" data-tab="payoff-schedule">Schedule</button>
-                    <button class="tab-button" data-tab="ai-insights">AI Insights</button>
-                </div>
-                
-                <div class="tab-content-wrapper">
-                    
-                    <div id="strategy-comparison" class="tab-content active">
-                        <h3 class="chart-title">Debt Balance Comparison Over Time</h3>
-                        <div class="chart-container">
-                            <canvas id="balanceChart"></canvas>
+                <div class="tabs-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="ai-insights">AI Insights & Advice</button>
+                        <button class="tab-button" data-tab="strategy-comparison">Strategy Comparison</button>
+                        <button class="tab-button" data-tab="payoff-schedule">Payoff Schedule</button>
+                    </div>
+
+                    <div id="ai-insights" class="tab-content active">
+                        <div class="ai-insight-box card-mini">
+                            <h3 class="input-group-sub-title"><i class="fas fa-microchip"></i> AI Debt Advisor Insight</h3>
+                            <div id="ai-insights-content">
+                                <p>Enter your card details and a payoff strategy to generate your personalized AI debt-free plan...</p>
+                            </div>
                         </div>
                     </div>
-                    
+
+                    <div id="strategy-comparison" class="tab-content">
+                        <h3 class="input-group-sub-title">Payoff Strategy Comparison</h3>
+                        <p>See how each method impacts your total interest and payoff timeline, using your $<span id="comparison-budget-display">750</span>/mo budget.</p>
+                        <div class="chart-container" style="height: 350px;">
+                            <canvas id="strategy-comparison-chart"></canvas>
+                        </div>
+                    </div>
+
                     <div id="payoff-schedule" class="tab-content">
-                        <h3 class="schedule-title">Detailed Payoff Schedule (Accelerated)</h3>
-                        <div class="schedule-controls">
-                            <label for="schedule-strategy">Strategy:</label>
-                            <select id="schedule-strategy">
-                                <option value="extra">Fixed Extra Payment</option>
-                                <option value="min">Minimum Payment Only</option>
-                                <option value="target">Target Date Payment</option>
-                            </select>
-                            <button id="export-csv-button" class="export-button"><i class="fas fa-file-csv"></i> Export CSV</button>
-                        </div>
-                        <div class="table-container">
-                            <table id="amortization-table" class="data-table">
+                        <h3 class="input-group-sub-title">Month-by-Month Payoff Schedule</h3>
+                        <div class="amortization-table-container">
+                            <table id="payoff-schedule-table">
                                 <thead>
                                     <tr>
                                         <th>Month</th>
                                         <th>Payment</th>
-                                        <th>Interest</th>
                                         <th>Principal</th>
+                                        <th>Interest</th>
                                         <th>Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td colspan="5">Enter your inputs and click 'Calculate Strategy' to see the schedule.</td></tr>
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
                     </div>
-
-                    <div id="ai-insights" class="tab-content">
-                        <h3 class="insights-title"><i class="fas fa-brain"></i> FinGuid AI Insights Engine</h3>
-                        <div id="ai-recommendations" class="insights-box">
-                            <p>Calculating 🧠 AI strategy...</p>
-                        </div>
-                        <div class="ad-slot contextual-affiliate" role="complementary" aria-label="Contextual affiliate link for debt consolidation">
-                            <p class="ad-label">AI Recommended Action / Affiliate Link</p>
-                            <a href="#affiliate-link-2" class="affiliate-cta cta-red"><i class="fas fa-siren-on"></i> High APR Alert! Check Debt Consolidation Options Here.</a>
-                        </div>
-                    </div>
-                    
                 </div>
+
             </section>
         </div>
+
+        <section class="seo-content card" aria-labelledby="seo-heading">
+            <h2 id="seo-heading">Understanding Your Credit Card Debt</h2>
+            <p>Navigating credit card debt can be overwhelming for many Americans. The key is understanding how interest (APR) works and having a clear strategy. Using a tool like our AI-powered payoff calculator helps you create a concrete plan, visualizing your debt-free date and motivating you to stay on track.</p>
+            
+            <h3>Frequently Asked Questions (FAQs)</h3>
+
+            <h4>What is the fastest way to pay off credit card debt?</h4>
+            <p>The **Debt Avalanche** method is mathematically the fastest and cheapest way. With this strategy, you pay the minimum on all cards, then apply all extra funds to the card with the highest APR (interest rate). Once that card is paid off, you "avalanche" that full payment onto the card with the next-highest APR. This minimizes the total interest you pay.</p>
+
+            <h4>Is the Debt Snowball or Debt Avalanche method better?</h4>
+            <p>It depends on your personality.
+                <ul>
+                    <li>The **Avalanche** method (highest APR first) will save you the most money and get you out of debt the fastest.</li>
+                    <li>The **Snowball** method (lowest balance first) is psychologically powerful. You pay off small debts quickly, giving you "wins" that build motivation to keep going.</li>
+                </ul>
+                Our calculator lets you compare both side-by-side to see the real-world difference in time and money for your specific situation.
+            </p>
+
+            <h4>How does a debt consolidation loan work?</h4>
+            <p>A debt consolidation loan combines all your high-interest credit card debts into a single new loan, ideally with a much lower interest rate. You get one manageable monthly payment. This can be a powerful tool if you get a good rate, but you must be disciplined not to run up your credit card balances again. Our AI insights will flag if consolidation might be a good option for you.</p>
+
+            <h4>What about a 0% APR balance transfer card?</h4>
+            <p>This is another popular strategy. You transfer your high-APR balances to a new card offering 0% interest for an introductory period (e.g., 12-21 months). This allows 100% of your payment to go toward the principal. It's highly effective *if* you can pay off the full balance before the 0% period ends and can afford the typical 3-5% transfer fee. This is a key affiliate product for financial platforms.</p>
+
+            <h4>How is credit card interest calculated?</h4>
+            <p>Interest is typically calculated daily based on your Average Daily Balance. Your APR (Annual Percentage Rate) is divided by 365 to get a daily rate. This rate is applied to your balance each day, and the charges are added to your account, which is why balances can feel like they're growing so quickly.</p>
+
+            <h4>Why is just paying the minimum so bad?</h4>
+            <p>Minimum payments are designed by banks to keep you in debt for as long as possible. Often, the minimum payment is only slightly more than the interest charge for the month, meaning very little principal is paid down. It can take decades to pay off a balance by paying only the minimum, and you'll pay many times the original amount in interest.</p>
+        </section>
+
     </main>
 
     <footer class="main-footer">
-        <div class="container">
-            <div class="footer-top">
-                <div class="footer-about">
-                    <div class="logo-footer"><i class="fas fa-robot"></i> FinGuid</div>
-                    <p>World's First AI-Powered Calculator Platform, dedicated to helping Americans make smarter financial decisions.</p>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-logo-info">
+                    <h4 class="logo"><a href="/">FinGuid <span>USA</span></a></h4>
+                    <p>Building a future with AI-enhanced financial clarity for all Americans.</p>
                 </div>
-                <nav class="footer-nav" aria-label="Footer Navigation">
+                <nav class="footer-nav">
                     <div class="nav-column">
-                        <h4>Calculators</h4>
+                        <h4>Platform & Tools</h4>
                         <ul>
                             <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                            <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy Calculator</a></li>
-                            <li><a href="/credit-card-payoff-calculator.html">Credit Card Payoff</a></li>
+                            <li><a href="/rent-vs-buy-calculator.html">Rent vs. Buy Calculator</a></li>
+                            <li><a href="/401k-calculator.html">401(k) Calculator</a></li>
+                            <li><a href="/credit-card-payoff-calculator.html" aria-current="page">Debt Payoff Calculator</a></li>
                         </ul>
                     </div>
                     <div class="nav-column">
-                        <h4>Company</h4>
+                        <h4>Legal & Compliance</h4>
                         <ul>
-                            <li><a href="/about.html">About Us</a></li>
-                            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
-                            <li><a href="/terms-of-service.html">Terms of Service</a></li>
-                            <li><a href="/contact.html">Contact Us</a></li>
+                            <li><a href="#disclaimer">Disclaimer & Terms</a></li>
+                            <li><a href="#privacy">Privacy Policy (GDPR/CCPA)</a></li>
+                            <li><a href="#accessibility">Accessibility Statement (WCAG)</a></li>
                         </ul>
                     </div>
                     <div class="nav-column">
                         <h4>Partnership & Ads (Monetization)</h4>
                         <ul>
-                            <li><a href="#advertising">Advertising (Ad Slot)</a></li>
-                            <li><a href="#affiliates">Affiliate Products</a></li>
-                            <li><a href="#sponsor-link">Sponsor Products</a></li>
+                            <li><a href="#advertising" rel="sponsored">Advertising Slots</a></li>
+                            <li><a href="#affiliates" rel="sponsored">Affiliate Products</a></li>
+                            <li><a href="#sponsor-link" rel="sponsored">Sponsor Products</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -234,7 +269,7 @@
             <div class="footer-bottom">
                 <div class="footer-disclaimer">
                     <p>
-                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize via advertising, sponsor, and affiliate partnerships.**
+                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **We monetize via advertising and affiliate partnerships.** Our insights are not financial advice.
                     </p>
                 </div>
                 
@@ -242,8 +277,6 @@
                     <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
                     <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
                     <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
-                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
-                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
                 </div>
             </div>
         </div>
