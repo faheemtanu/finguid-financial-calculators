@@ -1,30 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-color-scheme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="World's First AI-Powered 401(k) Calculator by FinGuid USA. Optimize retirement savings with employer match analysis, tax benefits, and personalized AI insights.">
-    <meta name="keywords" content="401k calculator, retirement calculator, employer match, tax savings, retirement planning, AI financial advisor">
-    <meta name="author" content="FinGuid USA">
     
-    <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="FinGuid USA - AI-Powered 401(k) Calculator">
-    <meta property="og:description" content="Optimize your retirement savings with intelligent 401(k) projections, employer match analysis, and AI-driven insights.">
+    <title>401(k) Calculator — World's First AI-Powered Retirement Optimizer | FinGuid USA</title>
+    <meta name="description" content="World's First AI-Powered 401(k) Calculator. Optimize your retirement savings with employer match analysis, tax benefit projections, and AI-driven insights for Americans.">
+    <meta name="keywords" content="401k calculator, retirement calculator, employer match calculator, retirement savings, 401k contribution, AI retirement planning, FinGuid, USA retirement, tax savings, retirement planning tool">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    <meta property="og:title" content="401(k) Calculator — World's First AI-Powered Retirement Optimizer">
+    <meta property="og:description" content="Optimize your retirement savings with employer match analysis and AI-driven insights.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.finguid.com">
     
-    <!-- PWA -->
-    <meta name="theme-color" content="#24ACB9">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="FinGuid 401k">
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRmluR3VpZCBVU0EgNDAxKGspIENhbGN1bGF0b3IiLCJzaG9ydF9uYW1lIjoiRmluR3VpZCA0MDFrIiwiZGVzY3JpcHRpb24iOiJBSS1wb3dlcmVkIDQwMShrKSByZXRpcmVtZW50IGNhbGN1bGF0b3IiLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiI0ZGRkZGNSIsInRoZW1lX2NvbG9yIjoiIzI0QUNCOSIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgd2lkdGg9JzE5MicgaGVpZ2h0PScxOTInJTNFJTNDcmVjdCBmaWxsPSclMjMyNEFDQjknIHdpZHRoPScxOTInIGhlaWdodD0nMTkyJy8lM0UlM0MvdHN2ZyUzRSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
-    
-    <title>FinGuid USA - World's First AI-Powered 401(k) Calculator</title>
-    
-    <!-- External Resources -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#133C3B">
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
@@ -32,391 +22,355 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-NYBL2CDNQJ');
+        gtag('config', 'G-NYBL2CDNQJ', {
+            'page_path': '/401k-calculator.html',
+            'page_title': '401(k) Calculator'
+        });
     </script>
     
-    <!-- Schema.org Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "FinGuid USA 401(k) Calculator",
-        "applicationCategory": "FinanceApplication",
-        "offers": {
-            "@type": "Offer",
-            "price": "0"
-        },
-        "description": "AI-powered 401(k) retirement calculator with employer match analysis and tax benefit projections"
-    }
-    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa3IW2lEnf3lGY6i7cg0wgyL8E/i6t4ep+UJzlMDQNU3CQMjMQeeL28QIfsbyQyxxpD9RJiGjvVv3m5gl/Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
+    <link rel="stylesheet" href="401k-style.css">
+    
 </head>
 <body>
-    <!-- Header -->
-    <header class="header" role="banner">
-        <div class="header-container">
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="header-content">
             <div class="header-left">
-                <div class="logo">
-                    <i class="fas fa-chart-line"></i>
-                    <div>
-                        <h1 class="logo-title">FinGuid USA</h1>
-                        <p class="logo-tagline">World's First AI-Powered 401(k) Optimizer</p>
-                    </div>
-                </div>
-                <div class="feature-badges">
-                    <span class="badge"><i class="fas fa-robot"></i> AI Insights</span>
-                    <span class="badge"><i class="fas fa-dollar-sign"></i> Employer Match</span>
-                    <span class="badge"><i class="fas fa-chart-bar"></i> Tax Savings</span>
+                <h1 class="logo"><a href="/" aria-label="FinGuid Home">FinGuid <span>USA</span></a></h1>
+                <p class="tagline">World's First AI-Powered 401(k) Optimizer</p>
+                <div class="features-quick">
+                    <span class="feature-quick"><i class="fas fa-microchip"></i> AI Insights</span>
+                    <span class="feature-quick"><i class="fas fa-hand-holding-usd"></i> Employer Match</span>
+                    <span class="feature-quick"><i class="fas fa-chart-line"></i> Tax Savings</span>
                 </div>
             </div>
-            <div class="header-right">
-                <button id="darkModeToggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle Dark Mode">
-                    <i class="fas fa-moon"></i>
+            
+            <div class="accessibility-controls">
+                <button id="toggle-color-scheme" aria-label="Toggle Light/Dark Mode" class="control-button" title="Toggle Dark/Light Mode">
+                    <i class="fas fa-sun"></i>
                 </button>
-                <button id="voiceToggle" class="icon-btn" aria-label="Toggle voice control" title="Voice Control OFF">
-                    <i class="fas fa-microphone"></i>
-                </button>
-                <button id="ttsToggle" class="icon-btn" aria-label="Toggle text to speech" title="Text-to-Speech">
-                    <i class="fas fa-volume-up"></i>
-                </button>
-                <button id="installBtn" class="icon-btn install-btn" aria-label="Install app" title="Install App" style="display: none;">
-                    <i class="fas fa-download"></i>
-                </button>
+                <div class="voice-status">
+                    <button id="toggle-voice-command" aria-label="Toggle Voice Command" class="control-button voice-inactive" title="Toggle Voice Control">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="toggle-text-to-speech" aria-label="Toggle Text to Speech" class="control-button tts-inactive" title="Toggle Text-to-Speech">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                <button id="pwa-install-button" class="control-button install-button hidden" title="Install as App">📱 Install App</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-container" role="main">
-        <div class="calculator-layout">
-            <!-- Left Column - Input Section (Sticky) -->
-            <aside class="input-section" role="form" aria-label="401(k) calculator inputs">
-                <div class="input-card">
-                    <h2 class="section-title"><i class="fas fa-user"></i> Personal &amp; Income</h2>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="calculator-container">
+            
+            <!-- LEFT: INPUT SECTION (STICKY) -->
+            <section class="input-section card" aria-labelledby="input-heading">
+                <h2 id="input-heading" class="section-title">Retirement Inputs</h2>
+                <form id="401k-form" novalidate>
                     
-                    <div class="form-group">
-                        <label for="currentAge">Current Age</label>
-                        <input type="number" id="currentAge" min="18" max="99" value="30" aria-required="true">
+                    <!-- Personal & Income -->
+                    <h3 class="input-group-sub-title">Personal & Income</h3>
+                    <div class="input-split">
+                        <div class="input-group">
+                            <label for="current-age">Current Age</label>
+                            <input type="number" id="current-age" value="30" min="18" max="99" aria-label="Current Age">
+                        </div>
+                        <div class="input-group">
+                            <label for="retirement-age">Retirement Age</label>
+                            <input type="number" id="retirement-age" value="65" min="19" max="100" aria-label="Retirement Age">
+                        </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="retirementAge">Retirement Age</label>
-                        <input type="number" id="retirementAge" min="19" max="100" value="65" aria-required="true">
+                    <div class="input-group">
+                        <label for="annual-salary">Gross Annual Salary ($)</label>
+                        <input type="text" id="annual-salary" value="80,000" inputmode="numeric" aria-label="Gross Annual Salary">
                     </div>
                     
-                    <div class="form-group">
-                        <label for="salary">Gross Annual Salary</label>
-                        <input type="text" id="salary" value="$80,000" aria-required="true">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="filingStatus">Filing Status</label>
-                        <select id="filingStatus" aria-required="true">
-                            <option value="single">Single</option>
-                            <option value="married_filing_jointly">Married Filing Jointly</option>
-                            <option value="head_of_household">Head of Household</option>
+                    <div class="input-group">
+                        <label for="filing-status">Filing Status (for Tax)</label>
+                        <select id="filing-status" aria-label="Tax Filing Status">
+                            <option value="Single" selected>Single</option>
+                            <option value="Married Filing Jointly">Married Filing Jointly</option>
+                            <option value="Head of Household">Head of Household</option>
                         </select>
                     </div>
-                    
+
                     <!-- Ad Slot -->
-                    <div class="ad-slot">
-                        <span class="ad-label">ADVERTISEMENT</span>
-                        <div class="ad-content">
-                            <p>Partner Ad Space</p>
+                    <aside class="ad-slot" role="complementary" aria-label="Sponsored Advertisement">
+                        <p class="ad-label">ADVERTISEMENT</p>
+                        <div class="ad-placeholder">💼 Sponsored: Optimize your payroll with [Payroll Partner]</div>
+                    </aside>
+
+                    <!-- Contributions & Match -->
+                    <h3 class="input-group-sub-title">Contributions & Match</h3>
+                    <div class="input-group">
+                        <label for="current-balance">Current 401(k) Balance ($)</label>
+                        <input type="text" id="current-balance" value="25,000" inputmode="numeric" aria-label="Current 401k Balance">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="contribution-percent">Your Contribution (% of Salary)</label>
+                        <input type="number" id="contribution-percent" value="6" min="0" max="100" step="1" aria-label="Your Contribution Percentage">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="employer-match-percent">Employer Match (%)</label>
+                        <input type="number" id="employer-match-percent" value="100" min="0" step="0.1" aria-label="Employer Match Percentage">
+                        <span class="input-note">e.g., 100% or 50%</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="match-up-to-percent">Up to First (% of Salary)</label>
+                        <input type="number" id="match-up-to-percent" value="6" min="0" step="0.1" aria-label="Match Up To Percentage">
+                        <span class="input-note">The % of your salary your employer will match</span>
+                    </div>
+
+                    <!-- Projections & Assumptions -->
+                    <h3 class="input-group-sub-title">Projections & Assumptions</h3>
+                    <div class="input-split">
+                        <div class="input-group">
+                            <label for="salary-increase">Annual Salary Increase (%)</label>
+                            <input type="number" id="salary-increase" value="3" min="0" step="0.5" aria-label="Annual Salary Increase">
+                        </div>
+                        <div class="input-group">
+                            <label for="rate-of-return">Annual Rate of Return (%)</label>
+                            <input type="number" id="rate-of-return" value="7" min="0" step="0.5" aria-label="Annual Rate of Return">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group checkbox-group">
+                        <input type="checkbox" id="include-catch-up" aria-label="Include Catch-Up Contributions">
+                        <label for="include-catch-up">Include Catch-Up Contributions (Age 50+)</label>
+                    </div>
+
+                    <div class="input-group checkbox-group">
+                        <input type="checkbox" id="include-inflation" aria-label="Show Inflation-Adjusted Returns">
+                        <label for="include-inflation">Show Inflation-Adjusted (Real) Returns</label>
+                        <span class="fred-source-note">Uses live FRED inflation data</span>
+                    </div>
+
+                    <!-- Calculate Button -->
+                    <div class="input-group action-group">
+                        <button type="submit" class="primary-button" id="calculate-button">
+                            <i class="fas fa-calculator"></i> Calculate Projection
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- RIGHT: RESULTS SECTION -->
+            <section class="results-section" aria-labelledby="results-heading">
+                <h2 id="results-heading" class="section-title">Analysis & Results</h2>
+
+                <!-- Summary Card -->
+                <div class="summary-card card-mini">
+                    <p class="summary-label">Projected Total at Retirement</p>
+                    <div class="payment-display">
+                        <span id="projected-total" class="payment-figure">$1,250,000</span>
+                    </div>
+                    <p class="piti-breakdown-summary" id="projection-summary-details">
+                        Your Cont: $250k | Employer Match: $150k | Total Growth: $850k
+                    </p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="projection-chart" aria-selected="true">📊 Projections Chart</button>
+                        <button class="tab-button" data-tab="summary-details" aria-selected="false">📋 Summary & Tax</button>
+                        <button class="tab-button" data-tab="ai-insights" aria-selected="false">🤖 AI Insights & Advice</button>
+                        <button class="tab-button" data-tab="schedule-detail" aria-selected="false">📅 Full Schedule</button>
+                    </div>
+
+                    <!-- Tab 1: Chart -->
+                    <div id="projection-chart" class="tab-content active">
+                        <div class="chart-container">
+                            <canvas id="401k-projection-chart"></canvas>
+                        </div>
+                        <aside class="affiliate-slot" role="complementary" aria-label="Partner Advertisement">
+                            <h4><i class="fas fa-handshake"></i> Need a Professional Plan?</h4>
+                            <p>Your projection looks good, but a pro can perfect it. Connect with a Vetted US Financial Advisor today!</p>
+                            <a href="#" class="primary-button affiliate-link-cta" target="_blank" onclick="trackAffiliateClick('advisor'); return false;">Find an Advisor (Affiliate)</a>
+                        </aside>
+                    </div>
+
+                    <!-- Tab 2: Summary & Tax -->
+                    <div id="summary-details" class="tab-content">
+                        <h3 class="input-group-sub-title">First Year Projections</h3>
+                        <div class="summary-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Your Annual Contribution</span>
+                                <span class="detail-value" id="your-annual-contribution">$4,800.00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Employer's Annual Match</span>
+                                <span class="detail-value" id="employer-annual-match">$4,800.00</span>
+                            </div>
+                            <div class="detail-item detail-total">
+                                <span class="detail-label">Total First Year Contribution</span>
+                                <span class="detail-value" id="total-annual-contribution">$9,600.00</span>
+                            </div>
+                        </div>
+
+                        <h3 class="input-group-sub-title" style="margin-top: 24px;">Estimated Tax Benefits</h3>
+                        <div class="summary-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Est. Marginal Tax Rate</span>
+                                <span class="detail-value" id="marginal-tax-rate">22.0%</span>
+                            </div>
+                            <div class="detail-item detail-total success-box">
+                                <span class="detail-label">Estimated Annual Tax Savings</span>
+                                <span class="detail-value" id="annual-tax-savings">$1,056.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab 3: AI Insights -->
+                    <div id="ai-insights" class="tab-content">
+                        <div class="ai-insight-box card-mini">
+                            <h3 class="input-group-sub-title"><i class="fas fa-microchip"></i> AI Financial Advisor Insight</h3>
+                            <div id="ai-insights-content">
+                                <p>Calculating initial insights based on your current parameters...</p>
+                            </div>
+                        </div>
+                        <aside class="ad-slot bottom-ad-slot" role="complementary" aria-label="Sponsor Advertisement">
+                            <p class="ad-label">SPONSORED ROLLOVERS</p>
+                            <div class="ad-placeholder">🔄 Changing jobs? Roll over your 401(k) with [Sponsor Service]</div>
+                        </aside>
+                    </div>
+
+                    <!-- Tab 4: Schedule -->
+                    <div id="schedule-detail" class="tab-content">
+                        <div class="amortization-table-container">
+                            <table id="projection-table">
+                                <thead>
+                                    <tr>
+                                        <th>Age</th>
+                                        <th>Salary</th>
+                                        <th>Your Cont.</th>
+                                        <th>Match</th>
+                                        <th>Gains</th>
+                                        <th>End Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <div class="input-card">
-                    <h2 class="section-title"><i class="fas fa-wallet"></i> Contributions &amp; Match</h2>
-                    
-                    <div class="form-group">
-                        <label for="currentBalance">Current 401(k) Balance</label>
-                        <input type="text" id="currentBalance" value="$25,000">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="contribution">Your Contribution (%)</label>
-                        <input type="number" id="contribution" min="0" max="100" step="0.5" value="6">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="matchPercent">Employer Match (%)</label>
-                        <input type="number" id="matchPercent" min="0" max="200" step="25" value="100">
-                        <small>e.g., 100% or 50%</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="matchLimit">Up to First (% of salary)</label>
-                        <input type="number" id="matchLimit" min="0" max="100" step="0.5" value="6">
-                        <small>The % of your salary your employer will match</small>
-                    </div>
-                </div>
-
-                <div class="input-card">
-                    <h2 class="section-title"><i class="fas fa-chart-line"></i> Projections &amp; Assumptions</h2>
-                    
-                    <div class="form-group">
-                        <label for="salaryIncrease">Annual Salary Increase (%)</label>
-                        <input type="number" id="salaryIncrease" min="0" max="20" step="0.1" value="3">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="rateOfReturn">Annual Rate of Return (%)</label>
-                        <input type="number" id="rateOfReturn" min="0" max="30" step="0.1" value="7">
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <label>
-                            <input type="checkbox" id="includeCatchup">
-                            <span>Include Catch-Up Contributions (Age 50+)</span>
-                        </label>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <label>
-                            <input type="checkbox" id="includeInflation">
-                            <span>Show Inflation-Adjusted (Real) Returns</span>
-                        </label>
-                        <small class="inflation-note">Uses live FRED inflation data: <span id="inflationRate">2.5%</span></small>
-                    </div>
-                </div>
-
-                <button id="calculateBtn" class="btn-primary btn-large">
-                    <i class="fas fa-calculator"></i> Calculate Projection
-                </button>
-            </aside>
-
-            <!-- Right Column - Results Section -->
-            <section class="results-section" role="region" aria-label="Calculation results">
-                <div id="resultsContainer" class="results-hidden">
-                    <!-- Summary Card -->
-                    <div class="summary-card">
-                        <h2 class="summary-title">Projected Total at Retirement</h2>
-                        <div class="summary-amount" id="summaryAmount">$0</div>
-                        <div class="summary-breakdown" id="summaryBreakdown">
-                            Your Cont: $0 | Employer Match: $0 | Total Growth: $0
-                        </div>
-                    </div>
-
-                    <!-- Tabs Navigation -->
-                    <div class="tabs-container">
-                        <div class="tabs-nav" role="tablist">
-                            <button class="tab-btn active" data-tab="projections" role="tab" aria-selected="true">
-                                <i class="fas fa-chart-area"></i> Projections Chart
-                            </button>
-                            <button class="tab-btn" data-tab="summary" role="tab" aria-selected="false">
-                                <i class="fas fa-receipt"></i> Summary &amp; Tax
-                            </button>
-                            <button class="tab-btn" data-tab="insights" role="tab" aria-selected="false">
-                                <i class="fas fa-robot"></i> AI Insights
-                            </button>
-                            <button class="tab-btn" data-tab="schedule" role="tab" aria-selected="false">
-                                <i class="fas fa-table"></i> Full Schedule
-                            </button>
-                        </div>
-
-                        <!-- Tab Content -->
-                        <div class="tabs-content">
-                            <!-- Projections Tab -->
-                            <div class="tab-pane active" id="projections" role="tabpanel">
-                                <div class="chart-container">
-                                    <canvas id="projectionsChart" aria-label="401(k) balance projection chart"></canvas>
-                                </div>
-                                
-                                <!-- Affiliate Slot -->
-                                <div class="affiliate-card">
-                                    <h3><i class="fas fa-handshake"></i> Need Professional Help?</h3>
-                                    <p>Connect with a fiduciary financial advisor to optimize your retirement strategy</p>
-                                    <button class="btn-secondary affiliate-btn" data-partner="advisor">
-                                        <i class="fas fa-external-link-alt"></i> Find an Advisor
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Summary & Tax Tab -->
-                            <div class="tab-pane" id="summary" role="tabpanel">
-                                <div class="summary-grid">
-                                    <h3><i class="fas fa-calendar-alt"></i> First Year Projections</h3>
-                                    <div class="info-grid">
-                                        <div class="info-item">
-                                            <label>Your Annual Contribution</label>
-                                            <span id="firstYearContribution">$0</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <label>Employer's Annual Match</label>
-                                            <span id="firstYearMatch">$0</span>
-                                        </div>
-                                        <div class="info-item highlight">
-                                            <label>Total First Year Contribution</label>
-                                            <span id="firstYearTotal">$0</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <h3 class="mt-32"><i class="fas fa-piggy-bank"></i> Estimated Tax Benefits</h3>
-                                    <div class="info-grid">
-                                        <div class="info-item">
-                                            <label>Marginal Tax Rate</label>
-                                            <span id="taxRate">0%</span>
-                                        </div>
-                                        <div class="info-item success-highlight">
-                                            <label>Estimated Annual Tax Savings</label>
-                                            <span id="taxSavings">$0</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- AI Insights Tab -->
-                            <div class="tab-pane" id="insights" role="tabpanel">
-                                <div class="ai-insights-container">
-                                    <div class="ai-header">
-                                        <i class="fas fa-microchip"></i>
-                                        <h3>AI-Powered Insights &amp; Recommendations</h3>
-                                    </div>
-                                    <div id="insightsList" class="insights-list">
-                                        <!-- Dynamic AI insights will be inserted here -->
-                                    </div>
-                                    
-                                    <!-- Affiliate Partners Grid -->
-                                    <div class="partners-grid">
-                                        <h3><i class="fas fa-handshake"></i> Recommended Partner Services</h3>
-                                        <div class="partners-cards" id="partnersCards">
-                                            <!-- Partner cards will be inserted here -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Schedule Tab -->
-                            <div class="tab-pane" id="schedule" role="tabpanel">
-                                <div class="schedule-container">
-                                    <div class="table-wrapper">
-                                        <table class="schedule-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Age</th>
-                                                    <th>Salary</th>
-                                                    <th>Your Contrib.</th>
-                                                    <th>Match</th>
-                                                    <th>Gains</th>
-                                                    <th>End Balance</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="scheduleBody">
-                                                <!-- Schedule rows will be inserted here -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Initial State Message -->
-                <div id="initialMessage" class="initial-message">
-                    <i class="fas fa-calculator"></i>
-                    <h3>Ready to Optimize Your Retirement?</h3>
-                    <p>Enter your information on the left and click "Calculate Projection" to see your personalized 401(k) analysis with AI-powered insights.</p>
-                </div>
             </section>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-        <div class="footer-container">
-            <!-- Partner Spotlight Section -->
-            <section class="footer-partners" aria-label="Partner services">
-                <h3>Trusted Partner Services</h3>
-                <div class="partner-cards">
-                    <div class="partner-card">
-                        <i class="fas fa-robot"></i>
-                        <h4>Robo-Advisors</h4>
-                        <p>Start investing with low-fee automated portfolios</p>
-                        <button class="partner-link" data-partner="robo">Compare Advisors</button>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-sponsor">
+            <div class="container">
+                <h3 style="text-align: center; margin-bottom: 24px; color: var(--color-primary);">Our Partners & Sponsors</h3>
+                <div class="sponsor-grid">
+                    <div class="sponsor-item">
+                        <h4>📈 Low-Fee Robo-Advisors</h4>
+                        <p>Start investing with a low-fee, automated portfolio. Perfect for hands-off retirement growth.</p>
+                        <a href="#" onclick="trackAffiliateClick('robo'); return false;">Compare Advisors →</a>
                     </div>
-                    <div class="partner-card">
-                        <i class="fas fa-handshake"></i>
-                        <h4>Financial Advisor Match</h4>
-                        <p>Connect with pre-vetted fiduciary advisors</p>
-                        <button class="partner-link" data-partner="advisor">Get Matched</button>
+                    <div class="sponsor-item">
+                        <h4>🤝 Financial Advisor Match</h4>
+                        <p>Connect with a pre-vetted, fiduciary financial advisor in your state to build a custom retirement plan.</p>
+                        <a href="#" onclick="trackAffiliateClick('advisor'); return false;">Get Matched →</a>
                     </div>
-                    <div class="partner-card">
-                        <i class="fas fa-piggy-bank"></i>
-                        <h4>High-Yield Savings</h4>
-                        <p>Grow your emergency fund faster</p>
-                        <button class="partner-link" data-partner="savings">See Rates</button>
+                    <div class="sponsor-item">
+                        <h4>🏦 High-Yield Savings</h4>
+                        <p>Grow your emergency fund faster. Compare top high-yield savings accounts from US banks.</p>
+                        <a href="#" onclick="trackAffiliateClick('hysa'); return false;">See Rates →</a>
                     </div>
-                    <div class="partner-card">
-                        <i class="fas fa-exchange-alt"></i>
-                        <h4>401(k) Rollover Service</h4>
-                        <p>Roll over 401(k) from previous employer</p>
-                        <button class="partner-link" data-partner="rollover">Start Rollover</button>
+                    <div class="sponsor-item">
+                        <h4>🔄 401(k) Rollover Service</h4>
+                        <p>Changing jobs? Don't leave your 401(k) behind. Easily roll it over into a new IRA penalty-free.</p>
+                        <a href="#" onclick="trackAffiliateClick('rollover'); return false;">Start Rollover →</a>
                     </div>
                 </div>
-            </section>
-
-            <!-- Footer Navigation -->
-            <nav class="footer-nav" aria-label="Footer navigation">
-                <div class="footer-column">
-                    <h4>About FinGuid USA</h4>
-                    <ul>
-                        <li><a href="https://www.finguid.com" target="_blank">About Us</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Our Mission</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Contact</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Careers</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Financial Calculators</h4>
-                    <ul>
-                        <li><a href="https://www.finguid.com" target="_blank">401(k) Calculator</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Mortgage Calculator</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Car Lease Calculator</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Tax Withholding Calculator</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Resources &amp; Learning</h4>
-                    <ul>
-                        <li><a href="https://www.finguid.com" target="_blank">Financial Blog</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Retirement Guide</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Tax Planning</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">FAQ</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Company &amp; Legal</h4>
-                    <ul>
-                        <li><a href="https://www.finguid.com" target="_blank">Privacy Policy</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Terms of Service</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Affiliate Disclosure</a></li>
-                        <li><a href="https://www.finguid.com" target="_blank">Disclaimer</a></li>
-                    </ul>
-                </div>
-            </nav>
-
-            <!-- Footer Bottom -->
-            <div class="footer-bottom">
-                <div class="footer-bottom-content">
-                    <p class="copyright">&copy; 2025 FinGuid USA. All rights reserved.</p>
-                    <div class="footer-badges">
-                        <span class="badge-small"><i class="fas fa-lock"></i> SSL Secured</span>
-                        <span class="badge-small"><i class="fas fa-universal-access"></i> WCAG 2.1 AA</span>
-                        <span class="badge-small"><i class="fas fa-mobile-alt"></i> Mobile PWA</span>
+            </div>
+        </div>
+        
+        <div class="footer-nav">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h5>About FinGuid USA</h5>
+                        <p>World's first AI-powered financial calculator platform. Free, unbiased, comprehensive tools for smart financial decisions by Americans for Americans.</p>
+                        <p><strong>Email:</strong> support@finguid.com</p>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h5>Financial Calculators</h5>
+                        <ul>
+                            <li><a href="/mortgage-calculator.html">🏠 Mortgage Calculator</a></li>
+                            <li><a href="/car-lease-calculator.html">🚗 Car Lease Calculator</a></li>
+                            <li><a href="/tax-withholding-calculator.html">💸 Tax Withholding</a></li>
+                            <li><a href="/401k-calculator.html" aria-current="page">📈 401(k) Calculator</a></li>
+                            <li><a href="#">👴 Retirement Calculator</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h5>Resources & Learning</h5>
+                        <ul>
+                            <li><a href="#">📰 Financial Blog</a></li>
+                            <li><a href="#">📖 401(k) Guide</a></li>
+                            <li><a href="#">📚 Financial Glossary</a></li>
+                            <li><a href="#">🎓 Calculator Help</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h5>Company & Legal</h5>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Disclaimer</a></li>
+                        </ul>
                     </div>
                 </div>
-                <p class="disclaimer">Disclaimer: This calculator provides estimates for educational purposes only. Results are not guaranteed and should not be considered financial advice. Consult with a qualified financial advisor for personalized guidance. FinGuid USA may earn commissions from partner referrals.</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 FinGuid USA. All Rights Reserved. | AI-Powered Financial Calculators for Americans</p>
+            <p>
+                <a href="#">Privacy Policy</a> • 
+                <a href="#">Terms of Service</a> • 
+                <a href="#">Disclaimer</a> • 
+                <a href="#">Contact Us</a>
+            </p>
+            <p style="font-size: 0.75rem; color: var(--color-text-light); margin-top: 12px;">
+                <strong>Disclaimer:</strong> Estimates are for informational purposes only and are based on user inputs and assumptions. This calculator is not financial advice. Consult a licensed financial advisor. FinGuid monetizes through advertising and affiliate partnerships.
+            </p>
+            <div class="footer-badges">
+                <div class="badge"><i class="fas fa-shield-alt"></i> SSL Secured</div>
+                <div class="badge"><i class="fas fa-universal-access"></i> WCAG 2.1 AA</div>
+                <div class="badge"><i class="fas fa-mobile-alt"></i> Mobile Optimized (PWA)</div>
             </div>
         </div>
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- External Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="app.js"></script>
+    <script src="401k-script.js"></script>
+    
 </body>
 </html>
