@@ -738,96 +738,69 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-/* ========================================================================== */
-/* 401(k) CALCULATOR — WORLD'S FIRST AI-POWERED RETIREMENT OPTIMIZER */
-/* Production-Ready CSS v1.0 - FinGuid USA Platform */
-/* ========================================================================== */
+```css
+/*
+ * 401(k) CALCULATOR — AI-POWERED RETIREMENT OPTIMIZER - PRODUCTION CSS v2.0
+ * FinGuid USA - Compact Header Edition with Enhanced AI Insights
+ */
 
-/* ========================================================================== */
-/* I. CSS VARIABLES & COLOR SYSTEM */
-/* ========================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Using design system variables - removed duplicate :root declarations */
-
-/* ========================================================================== */
-/* II. BASE & RESET STYLES */
-/* ========================================================================== */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
+html { 
+    scroll-behavior: smooth; 
     font-size: var(--font-size-base);
     font-family: var(--font-family-base);
     line-height: var(--line-height-normal);
     color: var(--color-text);
     background-color: var(--color-background);
     -webkit-font-smoothing: antialiased;
-    scroll-behavior: smooth;
 }
 
 body {
-    margin: 0;
-    padding: 0;
+    font-family: var(--font-family-base);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: background-color var(--duration-normal), color var(--duration-normal);
+    line-height: var(--line-height-normal);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    transition: background-color var(--duration-normal) var(--ease-standard), 
-                color var(--duration-normal) var(--ease-standard);
+    margin: 0;
+    padding: 0;
 }
 
-a {
-    color: var(--color-primary);
-    text-decoration: none;
+a { 
+    color: var(--color-primary); 
+    text-decoration: none; 
     transition: color var(--duration-fast) var(--ease-standard);
 }
+a:hover { color: var(--color-primary-hover); }
 
-a:hover {
-    color: var(--color-primary-hover);
-}
-
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 { 
+    color: var(--color-text); 
+    line-height: var(--line-height-tight);
     margin: 0;
     font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    color: var(--color-text);
     letter-spacing: var(--letter-spacing-tight);
 }
 
-h1 {
-    font-size: var(--font-size-4xl);
-}
-h2 {
-    font-size: var(--font-size-3xl);
-}
-h3 {
-    font-size: var(--font-size-2xl);
-}
-h4 {
-    font-size: var(--font-size-xl);
-}
-h5 {
-    font-size: var(--font-size-lg);
-}
-h6 {
-    font-size: var(--font-size-md);
-}
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-md); }
 
-button {
-    font-family: inherit;
-}
+button { font-family: inherit; }
 
 /* ========================================================================== */
-/* III. HEADER STYLES */
+/* COMPACT HEADER - ALL ELEMENTS IN ONE LINE */
 /* ========================================================================== */
 
 .main-header {
     background-color: var(--color-surface);
     border-bottom: 1px solid var(--color-border);
-    padding: var(--space-24);
+    padding: var(--space-12) var(--space-24);
     box-shadow: var(--shadow-sm);
     position: sticky;
     top: 0;
@@ -840,19 +813,23 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--space-24);
+    gap: var(--space-16);
+    flex-wrap: nowrap;
 }
 
 .header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
     flex: 1;
-    min-width: 300px;
+    min-width: 0;
 }
 
 .logo {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
-    margin: 0 0 var(--space-8) 0;
+    margin: 0;
+    white-space: nowrap;
 }
 
 .logo a {
@@ -868,48 +845,56 @@ button {
 }
 
 .tagline {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
-    margin: 0 0 var(--space-8) 0;
+    margin: 0;
+    white-space: nowrap;
+    display: none;
 }
 
 .features-quick {
     display: flex;
-    gap: var(--space-16);
-    flex-wrap: wrap;
+    gap: var(--space-12);
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-size: var(--font-size-xs);
 }
 
 .feature-quick {
-    font-size: var(--font-size-sm);
     color: var(--color-primary);
     display: flex;
     align-items: center;
     gap: var(--space-4);
+    white-space: nowrap;
 }
 
-/* Accessibility Controls */
+.feature-quick i {
+    font-size: var(--font-size-sm);
+}
+
+/* Accessibility Controls - Compact */
 .accessibility-controls {
     display: flex;
-    gap: var(--space-12);
+    gap: var(--space-8);
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 .control-button {
     background: var(--color-secondary);
     border: 1px solid var(--color-border);
     color: var(--color-text);
-    padding: var(--space-8) var(--space-12);
-    border-radius: var(--radius-sm);
+    padding: var(--space-8);
+    border-radius: var(--radius-base);
     cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-standard);
+    transition: all var(--duration-normal) var(--ease-standard);
     font-size: var(--font-size-sm);
     display: flex;
     align-items: center;
-    gap: var(--space-4);
-    white-space: nowrap;
-    font-family: var(--font-family-base);
-    font-weight: var(--font-weight-medium);
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
 }
 
 .control-button:hover {
@@ -917,7 +902,7 @@ button {
 }
 
 .control-button:focus-visible {
-    outline: none;
+    outline: var(--focus-outline);
     box-shadow: var(--focus-ring);
 }
 
@@ -946,27 +931,41 @@ button {
 
 .install-button {
     background-color: var(--color-success);
-    color: var(--color-btn-primary-text);
+    color: var(--color-surface);
     border-color: var(--color-success);
+    font-size: var(--font-size-xs);
+    padding: var(--space-8) var(--space-12);
+    white-space: nowrap;
 }
 
-.install-button:hover {
-    background-color: var(--color-success);
+.install-button:hover:not(:disabled) {
     opacity: 0.9;
+}
+
+.install-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .hidden {
     display: none !important;
 }
 
+.voice-status {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
 @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(var(--color-error-rgb), 0.4); }
-    70% { box-shadow: 0 0 0 var(--space-10) rgba(var(--color-error-rgb), 0); }
+    70% { box-shadow: 0 0 0 10px rgba(var(--color-error-rgb), 0); }
     100% { box-shadow: 0 0 0 0 rgba(var(--color-error-rgb), 0); }
 }
 
 /* ========================================================================== */
-/* IV. MAIN CONTENT LAYOUT */
+/* MAIN CONTENT LAYOUT */
 /* ========================================================================== */
 
 .main-content {
@@ -1002,7 +1001,7 @@ button {
 }
 
 /* ========================================================================== */
-/* V. INPUT SECTION STYLES */
+/* INPUT SECTION */
 /* ========================================================================== */
 
 .input-section {
@@ -1015,11 +1014,11 @@ button {
 
 .section-title {
     font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
     border-bottom: 2px solid var(--color-primary);
     padding-bottom: var(--space-8);
     margin-bottom: var(--space-24);
     color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
 }
 
 .input-group {
@@ -1038,16 +1037,23 @@ input[type="text"],
 input[type="number"],
 select {
     width: 100%;
-    padding: var(--space-8) var(--space-12);
-    font-size: var(--font-size-md);
-    line-height: 1.5;
-    color: var(--color-text);
-    background-color: var(--color-surface);
+    padding: var(--space-12);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-base);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-base);
     font-family: var(--font-family-base);
-    transition: border-color var(--duration-fast) var(--ease-standard),
+    line-height: var(--line-height-normal);
+    transition: border-color var(--duration-fast) var(--ease-standard), 
                 box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--color-primary);
+    outline: var(--focus-outline);
+    box-shadow: var(--focus-ring);
 }
 
 select {
@@ -1073,12 +1079,6 @@ select {
 
 [data-color-scheme="light"] select {
     background-image: var(--select-caret-light);
-}
-
-input:focus,
-select:focus {
-    border-color: var(--color-primary);
-    outline: var(--focus-outline);
 }
 
 .input-split {
@@ -1111,6 +1111,7 @@ select:focus {
     display: flex;
     align-items: flex-start;
     gap: var(--space-8);
+    margin-top: var(--space-8);
 }
 
 .checkbox-group input[type="checkbox"] {
@@ -1134,31 +1135,33 @@ select:focus {
     padding: var(--space-16);
     background-color: var(--color-primary);
     color: var(--color-btn-primary-text);
-    border: none;
+    border: 1px solid var(--color-primary);
     border-radius: var(--radius-base);
     font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     cursor: pointer;
     transition: all var(--duration-normal) var(--ease-standard);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-8);
-    font-family: var(--font-family-base);
+    line-height: var(--line-height-normal);
 }
 
 .primary-button:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
 .primary-button:active:not(:disabled) {
     background-color: var(--color-primary-active);
+    border-color: var(--color-primary-active);
 }
 
 .primary-button:focus-visible {
-    outline: none;
+    outline: var(--focus-outline);
     box-shadow: var(--focus-ring);
 }
 
@@ -1167,7 +1170,6 @@ select:focus {
     cursor: not-allowed;
 }
 
-/* Ad Slots */
 .ad-slot {
     background: var(--color-secondary);
     border: 1px dashed var(--color-border);
@@ -1192,14 +1194,13 @@ select:focus {
 }
 
 /* ========================================================================== */
-/* VI. RESULTS SECTION STYLES */
+/* RESULTS SECTION */
 /* ========================================================================== */
 
 .results-section {
     min-height: 600px;
 }
 
-/* Summary Card */
 .summary-card {
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: var(--color-btn-primary-text);
@@ -1224,7 +1225,7 @@ select:focus {
 .payment-figure {
     font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-bold);
-    line-height: 1;
+    line-height: var(--line-height-tight);
 }
 
 .piti-breakdown-summary {
@@ -1235,15 +1236,15 @@ select:focus {
 /* Tabs */
 .tabs-container {
     margin-top: var(--space-24);
-    border: 1px solid var(--color-card-border);
-    border-radius: var(--radius-base);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     background-color: var(--color-surface);
 }
 
 .tab-buttons {
     display: flex;
-    border-bottom: 1px solid var(--color-card-border);
+    border-bottom: 1px solid var(--color-border);
     overflow-x: auto;
     background-color: var(--color-secondary);
     gap: 0;
@@ -1257,20 +1258,25 @@ select:focus {
     cursor: pointer;
     font-weight: var(--font-weight-medium);
     color: var(--color-text-secondary);
-    transition: all var(--duration-fast) var(--ease-standard);
+    transition: all var(--duration-normal) var(--ease-standard);
     border-bottom: 3px solid transparent;
     white-space: nowrap;
-    font-family: var(--font-family-base);
 }
 
 .tab-button:hover {
     color: var(--color-text);
+    background-color: var(--color-secondary-hover);
+}
+
+.tab-button:focus-visible {
+    outline: var(--focus-outline);
+    box-shadow: var(--focus-ring);
 }
 
 .tab-button.active {
     color: var(--color-primary);
     border-bottom: 3px solid var(--color-primary);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
 }
 
 .tab-content {
@@ -1288,7 +1294,6 @@ select:focus {
     to { opacity: 1; }
 }
 
-/* Chart */
 .chart-container {
     height: 350px;
     width: 100%;
@@ -1296,7 +1301,6 @@ select:focus {
     position: relative;
 }
 
-/* Summary Details Grid */
 .summary-details {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1304,9 +1308,9 @@ select:focus {
 }
 
 .detail-item {
-    border: 1px solid var(--color-card-border);
+    border: 1px solid var(--color-border);
     padding: var(--space-12);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-base);
     background-color: var(--color-secondary);
 }
 
@@ -1319,7 +1323,7 @@ select:focus {
 
 .detail-value {
     font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     color: var(--color-text);
 }
 
@@ -1336,7 +1340,7 @@ select:focus {
 }
 
 .detail-item.success-box {
-    background-color: rgba(var(--color-success-rgb), 0.15);
+    background-color: rgba(var(--color-success-rgb), 0.1);
     border-color: var(--color-success);
 }
 
@@ -1344,24 +1348,54 @@ select:focus {
     color: var(--color-success);
 }
 
-/* AI Insights */
+/* ========================================================================== */
+/* AI INSIGHTS - ENHANCED */
+/* ========================================================================== */
+
 .ai-insight-box {
     background-color: var(--color-secondary);
     border-left: 5px solid var(--color-success);
     padding: var(--space-24);
-    border-radius: var(--radius-base);
+    border-radius: var(--radius-lg);
+}
+
+#ai-insights-content {
+    line-height: var(--line-height-normal);
 }
 
 #ai-insights-content p {
     margin-bottom: var(--space-16);
 }
 
+#ai-insights-content strong {
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+}
+
+#ai-insights-content .affiliate-cta {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+#ai-insights-content .affiliate-cta:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
 .recommendation-alert {
     padding: var(--space-16);
     margin: var(--space-16) 0;
-    border-radius: var(--radius-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-btn-primary-text);
+    border-radius: var(--radius-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-surface);
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+}
+
+.recommendation-alert i {
+    font-size: var(--font-size-lg);
 }
 
 .recommendation-alert.high-priority {
@@ -1377,12 +1411,47 @@ select:focus {
     background-color: var(--color-success);
 }
 
-/* Affiliate Slot */
-.affiliate-slot {
-    background: rgba(var(--color-primary-rgb), 0.05);
-    border: 1px solid var(--color-card-border);
-    border-left: 5px solid var(--color-primary);
+.ai-insight-item {
+    background-color: rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.1);
+    border-left: 4px solid var(--color-primary);
+    padding: var(--space-16);
+    margin-bottom: var(--space-16);
     border-radius: var(--radius-base);
+}
+
+.ai-insight-item.priority-high {
+    background-color: rgba(var(--color-error-rgb), 0.1);
+    border-left-color: var(--color-error);
+}
+
+.ai-insight-item.priority-medium {
+    background-color: rgba(var(--color-warning-rgb), 0.1);
+    border-left-color: var(--color-warning);
+}
+
+.ai-insight-item.priority-low {
+    background-color: rgba(var(--color-success-rgb), 0.1);
+    border-left-color: var(--color-success);
+}
+
+.ai-insight-item h4 {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-8);
+    color: var(--color-text);
+}
+
+.ai-insight-item p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.affiliate-slot {
+    background: linear-gradient(135deg, rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.05), rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.05));
+    border: 1px solid var(--color-border);
+    border-left: 5px solid var(--color-primary);
+    border-radius: var(--radius-lg);
     padding: var(--space-16);
     margin: var(--space-24) 0;
 }
@@ -1403,14 +1472,26 @@ select:focus {
     font-size: var(--font-size-sm);
     padding: var(--space-8) var(--space-16);
     display: inline-block;
+    background: var(--color-primary);
+    color: var(--color-btn-primary-text);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-base);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
+    text-decoration: none;
 }
 
-/* Table Styles */
+.affiliate-link-cta:hover {
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+}
+
+/* Table */
 .amortization-table-container {
     max-height: 400px;
     overflow-y: auto;
-    border: 1px solid var(--color-card-border);
-    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
 }
 
 #projection-table {
@@ -1423,7 +1504,7 @@ select:focus {
 #projection-table th,
 #projection-table td {
     padding: var(--space-8) var(--space-12);
-    border-bottom: 1px solid var(--color-card-border);
+    border-bottom: 1px solid var(--color-border);
     text-align: right;
 }
 
@@ -1433,8 +1514,7 @@ select:focus {
     top: 0;
     z-index: 10;
     color: var(--color-text);
-    font-weight: var(--font-weight-semibold);
-    text-align: right;
+    font-weight: var(--font-weight-bold);
 }
 
 #projection-table tbody tr:hover {
@@ -1442,7 +1522,7 @@ select:focus {
 }
 
 /* ========================================================================== */
-/* VII. FOOTER STYLES */
+/* FOOTER */
 /* ========================================================================== */
 
 .footer {
@@ -1453,8 +1533,8 @@ select:focus {
 
 .footer-sponsor {
     background: var(--color-bg-5);
-    padding: var(--space-32) 0;
-    border-bottom: 1px solid var(--color-card-border);
+    padding: 40px 0;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .container {
@@ -1473,8 +1553,8 @@ select:focus {
     text-align: center;
     padding: var(--space-16);
     border-radius: var(--radius-base);
-    background: var(--color-background);
-    transition: all var(--duration-fast) var(--ease-standard);
+    background: var(--color-surface);
+    transition: all var(--duration-normal) var(--ease-standard);
     border: 1px solid var(--color-card-border);
 }
 
@@ -1502,19 +1582,19 @@ select:focus {
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: var(--color-btn-primary-text);
     text-decoration: none;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-base);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-sm);
-    transition: all var(--duration-fast) var(--ease-standard);
+    transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .sponsor-item a:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.3);
 }
 
 .footer-nav {
-    padding: var(--space-32) 0;
+    padding: 40px 0;
 }
 
 .footer-grid {
@@ -1533,7 +1613,7 @@ select:focus {
 .footer-col p {
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
-    line-height: 1.6;
+    line-height: var(--line-height-normal);
     margin-bottom: var(--space-12);
 }
 
@@ -1549,7 +1629,7 @@ select:focus {
     color: var(--color-text-secondary);
     text-decoration: none;
     font-size: var(--font-size-sm);
-    transition: all var(--duration-fast) var(--ease-standard);
+    transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .footer-col a:hover {
@@ -1572,7 +1652,12 @@ select:focus {
 .footer-bottom a {
     color: var(--color-primary);
     text-decoration: none;
-    margin: 0 var(--space-12);
+    margin: 0 var(--space-8);
+    transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline;
 }
 
 .footer-badges {
@@ -1587,18 +1672,15 @@ select:focus {
     font-size: var(--font-size-xs);
     background-color: var(--color-surface);
     padding: var(--space-4) var(--space-8);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-base);
     display: flex;
     align-items: center;
     gap: var(--space-4);
     opacity: 0.8;
-    border: 1px solid var(--color-card-border);
+    border: 1px solid var(--color-border);
 }
 
-/* ========================================================================== */
-/* VIII. TOAST NOTIFICATIONS */
-/* ========================================================================== */
-
+/* Toast Notifications */
 .toast-container {
     position: fixed;
     bottom: var(--space-24);
@@ -1611,7 +1693,7 @@ select:focus {
     margin-top: var(--space-8);
     padding: var(--space-12) var(--space-24);
     border-radius: var(--radius-base);
-    color: var(--color-btn-primary-text);
+    color: var(--color-surface);
     box-shadow: var(--shadow-md);
     transform: translateY(100px);
     transition: transform var(--duration-normal) var(--ease-standard);
@@ -1637,7 +1719,7 @@ select:focus {
 }
 
 /* ========================================================================== */
-/* IX. RESPONSIVE DESIGN */
+/* RESPONSIVE - TABLET */
 /* ========================================================================== */
 
 @media (max-width: 1024px) {
@@ -1651,22 +1733,8 @@ select:focus {
         overflow-y: visible;
     }
 
-    .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
     .header-left {
-        width: 100%;
-    }
-
-    .tagline {
-        font-size: var(--font-size-base);
-    }
-
-    .accessibility-controls {
-        width: 100%;
-        justify-content: flex-end;
+        flex: 1;
     }
 
     .input-split {
@@ -1680,72 +1748,77 @@ select:focus {
     .footer-grid {
         grid-template-columns: 1fr;
     }
-
-    .sponsor-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
 }
 
+/* ========================================================================== */
+/* RESPONSIVE - MOBILE */
+/* ========================================================================== */
+
 @media (max-width: 768px) {
-    .main-content {
-        padding: 0 var(--space-16);
-        margin: var(--space-24) auto;
+    .main-header {
+        padding: var(--space-8) var(--space-16);
     }
 
     .header-content {
-        padding: 0;
+        flex-wrap: wrap;
+        gap: var(--space-8);
+    }
+
+    .header-left {
+        width: 100%;
+        margin-bottom: var(--space-8);
     }
 
     .logo {
-        font-size: var(--font-size-lg);
+        font-size: var(--font-size-base);
     }
 
     .tagline {
-        font-size: var(--font-size-base);
-        margin: 0;
+        display: none;
     }
 
     .features-quick {
-        order: 3;
-        width: 100%;
-        margin-top: var(--space-16);
+        gap: var(--space-8);
         font-size: var(--font-size-xs);
     }
 
     .accessibility-controls {
         width: 100%;
-        margin-top: var(--space-8);
+        order: 3;
         gap: var(--space-8);
     }
 
     .control-button {
-        padding: var(--space-8);
+        min-width: 32px;
+        height: 32px;
+        padding: var(--space-4);
+    }
+
+    .install-button {
+        padding: var(--space-4) var(--space-8);
         font-size: var(--font-size-xs);
     }
 
-    .control-button i {
-        font-size: var(--font-size-sm);
+    .main-content {
+        padding: 0 var(--space-16);
+        margin: var(--space-16) auto;
     }
 
-    .tab-button {
-        padding: var(--space-8) var(--space-12);
-        font-size: var(--font-size-xs);
+    .card {
+        padding: var(--space-16);
     }
 
-    .tab-buttons {
-        overflow-x: auto;
+    .payment-figure {
+        font-size: var(--font-size-2xl);
     }
 
     .chart-container {
         height: 250px;
     }
 
-    .payment-figure {
-        font-size: var(--font-size-3xl);
-    }
-
-    .sponsor-grid {
-        grid-template-columns: 1fr;
+    .tab-button {
+        padding: var(--space-8) var(--space-12);
+        font-size: var(--font-size-xs);
     }
 
     #projection-table {
@@ -1756,35 +1829,68 @@ select:focus {
     #projection-table td {
         padding: var(--space-4) var(--space-8);
     }
+
+    .sponsor-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-@media (max-width: 480px) {
-    .main-header {
-        padding: var(--space-16);
-    }
+/* ========================================================================== */
+/* RESPONSIVE - MOBILE SMALL */
+/* ========================================================================== */
 
+@media (max-width: 480px) {
     .header-content {
-        gap: var(--space-16);
+        gap: var(--space-4);
     }
 
     .logo {
-        font-size: var(--font-size-base);
-    }
-
-    .tagline {
         font-size: var(--font-size-sm);
     }
 
     .features-quick {
-        gap: var(--space-8);
+        display: none;
     }
 
-    .feature-quick {
+    .accessibility-controls {
+        gap: var(--space-4);
+    }
+
+    .control-button {
+        min-width: 28px;
+        height: 28px;
         font-size: var(--font-size-xs);
     }
 
+    .tab-button {
+        padding: var(--space-6) var(--space-8);
+        font-size: var(--font-size-xs);
+    }
+
+    .summary-card {
+        padding: var(--space-12);
+    }
+
+    .payment-figure {
+        font-size: var(--font-size-xl);
+    }
+
+    .main-content {
+        padding: 0 var(--space-12);
+        margin: var(--space-12) auto;
+    }
+
     .card {
-        padding: var(--space-16);
+        padding: var(--space-12);
+        border-radius: var(--radius-base);
+    }
+
+    .section-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .input-group {
+        margin-bottom: var(--space-12);
     }
 
     .primary-button {
@@ -1792,50 +1898,28 @@ select:focus {
         font-size: var(--font-size-base);
     }
 
-    .payment-figure {
-        font-size: var(--font-size-2xl);
-    }
-
-    .tab-button {
-        font-size: var(--font-size-xs);
-        padding: var(--space-8) var(--space-12);
+    .tab-content {
+        padding: var(--space-16);
     }
 
     .summary-details {
-        grid-template-columns: 1fr;
+        gap: var(--space-12);
     }
 
-    .detail-item.detail-total {
-        grid-column: 1;
+    .detail-item {
+        padding: var(--space-8);
     }
 
-    .accessibility-controls {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .control-button {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .footer-sponsor {
-        padding: var(--space-16) 0;
+    .ai-insight-box {
+        padding: var(--space-16);
     }
 
     .footer-nav {
-        padding: var(--space-16) 0;
+        padding: var(--space-24) 0;
     }
 
     .sponsor-item {
         padding: var(--space-12);
     }
-
-    .sponsor-item h4 {
-        font-size: var(--font-size-sm);
-    }
-
-    .sponsor-item p {
-        font-size: var(--font-size-xs);
-    }
 }
+```
