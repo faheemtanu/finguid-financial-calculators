@@ -1,623 +1,892 @@
-<!DOCTYPE html>
-<html lang="en" data-color-scheme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+:root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1); /* FinGuid Primary (Teal Dark) */
+  --color-teal-300: rgba(50, 184, 198, 1); /* FinGuid Accent Light */
+  --color-teal-400: rgba(36, 172, 185, 1); /* FinGuid Accent */
+  --color-red-500: rgba(220, 38, 38, 1);
+  --color-green-500: rgba(34, 197, 94, 1);
+  --color-yellow-500: rgba(255, 193, 7, 1);
 
-    <title>Financial Goal Planner — AI-Powered Retirement & Savings Calculator | FinGuid USA</title>
-    <meta name="description" content="Plan your financial goals with AI precision. Calculate time to retirement, monthly savings needed, or investment returns required. Live inflation data, smart insights, and personalized advice for Americans.">
-    <meta name="keywords" content="financial goal planner, retirement calculator, savings calculator, goal planning, investment planner, AI financial planning, FinGuid USA, retirement planning, financial independence, FIRE calculator, college savings calculator, house down payment calculator">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+  /* Spacing */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-48: 3rem;
 
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Financial Goal Planner — AI-Powered Calculator | FinGuid USA">
-    <meta property="og:description" content="Achieve your financial goals faster with AI-powered planning. Free calculator with live inflation data from the Federal Reserve.">
-    <meta property="og:url" content="https://finguid.com/financial-goal-planner.html">
-    <meta property="og:image" content="https://finguid.com/images/goal-planner-og.jpg"> <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Financial Goal Planner — AI-Powered Calculator">
-    <meta name="twitter:description" content="Plan retirement, house down payment, or college funds with AI insights and live inflation data.">
+  /* Typography */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
 
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#19343B">
-    <link rel="canonical" href="https://finguid.com/financial-goal-planner.html">
+  /* Border & Shadows */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-NYBL2CDNQJ');
-    </script>
+  /* Themed Variables (Light Mode Default) */
+  --bg-color-primary: var(--color-cream-100);
+  --bg-color-secondary: var(--color-white);
+  --text-color-primary: var(--color-charcoal-700);
+  --text-color-secondary: var(--color-slate-500);
+  --border-color: var(--color-gray-200);
+  --highlight-color: var(--color-teal-400);
+  --input-bg-color: var(--color-gray-200);
+  --input-border-color: var(--color-gray-300);
+  --cta-bg-color: var(--color-slate-900);
+  --cta-text-color: var(--color-white);
+  --secondary-cta-bg-color: var(--color-teal-400);
+  --secondary-cta-text-color: var(--color-white);
+}
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="mortgage-calculator.css"> 
-    <link rel="stylesheet" href="goal-planner-styles.css"> 
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+/* Dark Mode Overrides */
+html[data-color-scheme="dark"] {
+  --bg-color-primary: var(--color-charcoal-800);
+  --bg-color-secondary: var(--color-charcoal-700);
+  --text-color-primary: var(--color-cream-100);
+  --text-color-secondary: var(--color-gray-300);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --highlight-color: var(--color-teal-300);
+  --input-bg-color: rgba(255, 255, 255, 0.1);
+  --input-border-color: rgba(255, 255, 255, 0.2);
+  --cta-bg-color: var(--color-teal-400);
+  --cta-text-color: var(--color-charcoal-700);
+  --secondary-cta-bg-color: var(--color-slate-900);
+  --secondary-cta-text-color: var(--color-white);
+}
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "FinGuid Financial Goal Planner",
-      "applicationCategory": "FinanceApplication",
-      "description": "AI-powered financial goal planning calculator with retirement planning, savings goals, and investment tracking for Americans. Uses live Federal Reserve (FRED) inflation data.",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "2847"
-      },
-      "featureList": [
-        "Retirement Planning Calculator",
-        "College Savings Calculator",
-        "House Down Payment Planner",
-        "Savings Goal Tracker",
-        "Investment Timeline Calculator",
-        "Live Inflation Adjustment (FRED API)",
-        "AI Financial Insights",
-        "Multiple Goal Scenarios",
-        "CSV Export"
-      ]
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color-primary);
+    background-color: var(--bg-color-primary);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-24);
+}
+
+/* Accessibility & Utility */
+.hidden {
+    display: none !important;
+}
+.highlight {
+    color: var(--highlight-color);
+    font-weight: 700;
+}
+
+/* Header & Branding (SCO & Friendly) */
+.header {
+    background-color: var(--bg-color-secondary);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-16) 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo a {
+    font-size: var(--font-size-2xl);
+    font-weight: 900;
+    color: var(--color-slate-900);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+html[data-color-scheme="dark"] .logo a {
+    color: var(--highlight-color);
+}
+
+.logo i {
+    color: var(--highlight-color);
+    margin-right: var(--space-8);
+}
+
+.brand-subtext {
+    font-size: var(--font-size-sm);
+    color: var(--text-color-secondary);
+    font-weight: 400;
+    margin-left: var(--space-4);
+}
+
+.hero-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin: 0 var(--space-16);
+    flex-grow: 1;
+    text-align: center;
+}
+
+.accessibility-controls button {
+    background: var(--input-bg-color);
+    border: 1px solid var(--input-border-color);
+    color: var(--text-color-primary);
+    padding: var(--space-8);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: var(--space-8);
+}
+
+.accessibility-controls button:hover {
+    background-color: var(--highlight-color);
+    color: var(--color-white);
+    border-color: var(--highlight-color);
+}
+
+html[data-color-scheme="dark"] .accessibility-controls .light-icon { display: none; }
+html[data-color-scheme="light"] .accessibility-controls .dark-icon { display: none; }
+
+/* Main Content Layout */
+.main-content {
+    padding: var(--space-32) 0;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* 1/3 for input, 2/3 for results */
+    gap: var(--space-32);
+}
+
+/* Cards & Sections */
+.card {
+    background-color: var(--bg-color-secondary);
+    padding: var(--space-24);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--space-24);
+    border: 1px solid var(--border-color);
+}
+
+.card-title {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-24);
+    color: var(--color-slate-900);
+}
+
+html[data-color-scheme="dark"] .card-title {
+    color: var(--highlight-color);
+}
+
+.card-title i {
+    color: var(--highlight-color);
+    margin-right: var(--space-8);
+}
+
+.card-subtitle {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-16);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Input Forms */
+.form-group {
+    margin-bottom: var(--space-24);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-24);
+}
+
+.input-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--space-8);
+}
+
+input[type="number"], input[type="email"] {
+    width: 100%;
+    padding: var(--space-12);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--input-border-color);
+    background-color: var(--input-bg-color);
+    color: var(--text-color-primary);
+    font-size: var(--font-size-base);
+    transition: border-color 0.2s;
+}
+
+input[type="number"]:focus, input[type="email"]:focus {
+    outline: none;
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 0 2px rgba(var(--highlight-color), 0.2);
+}
+
+.input-hint {
+    font-size: var(--font-size-sm);
+    color: var(--text-color-secondary);
+    margin-top: var(--space-4);
+}
+
+.ai-insight-hint {
+    font-style: italic;
+    color: var(--highlight-color);
+}
+.ai-insight-hint a {
+    color: var(--highlight-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Goal Type Selection */
+.goal-type-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-12);
+}
+
+.goal-type-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-16) var(--space-8);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: var(--input-bg-color);
+    font-weight: 600;
+    text-align: center;
+}
+
+.goal-type-option i {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-8);
+    color: var(--highlight-color);
+}
+
+.goal-type-option input[type="radio"] {
+    display: none;
+}
+
+.goal-type-option input[type="radio"]:checked + i {
+    color: var(--cta-bg-color);
+}
+.goal-type-option input[type="radio"]:checked + i,
+.goal-type-option input[type="radio"]:checked ~ * {
+    color: var(--cta-bg-color);
+}
+
+html[data-color-scheme="dark"] .goal-type-option input[type="radio"]:checked ~ * {
+    color: var(--highlight-color);
+}
+
+.goal-type-option input[type="radio"]:checked + i + span,
+.goal-type-option input[type="radio"]:checked ~ span {
+    color: var(--text-color-primary);
+}
+
+
+.goal-type-option input[type="radio"]:checked + i + span + span,
+.goal-type-option input[type="radio"]:checked ~ span + span {
+    color: var(--text-color-primary);
+}
+
+
+.goal-type-option:has(input[type="radio"]:checked) {
+    border-color: var(--highlight-color);
+    background-color: var(--bg-color-secondary);
+    box-shadow: 0 0 0 2px var(--highlight-color);
+}
+
+/* Calculation Mode Selection */
+.mode-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-12);
+}
+
+.mode-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-16) var(--space-8);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: var(--input-bg-color);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-align: center;
+}
+
+.mode-option i {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-4);
+    color: var(--text-color-secondary);
+}
+
+.mode-option input[type="radio"] {
+    display: none;
+}
+
+.mode-option:has(input[type="radio"]:checked) {
+    border-color: var(--highlight-color);
+    background-color: var(--bg-color-secondary);
+    box-shadow: 0 0 0 2px var(--highlight-color);
+}
+
+.mode-option:has(input[type="radio"]:checked) i {
+    color: var(--highlight-color);
+}
+
+/* CTAs (Buttons) */
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12) var(--space-24);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    text-align: center;
+}
+
+.cta-button i {
+    margin-right: var(--space-8);
+}
+
+.cta-button.primary {
+    background-color: var(--cta-bg-color);
+    color: var(--cta-text-color);
+    border: 2px solid var(--cta-bg-color);
+}
+
+.cta-button.primary:hover {
+    background-color: var(--highlight-color);
+    border-color: var(--highlight-color);
+    color: var(--color-white);
+    box-shadow: var(--shadow-md);
+}
+
+.cta-button.secondary {
+    background-color: transparent;
+    color: var(--secondary-cta-bg-color);
+    border: 2px solid var(--secondary-cta-bg-color);
+}
+
+.cta-button.secondary:hover {
+    background-color: var(--secondary-cta-bg-color);
+    color: var(--secondary-cta-text-color);
+}
+
+.submit-button {
+    width: 100%;
+    margin-top: var(--space-24);
+}
+
+.small-button {
+    font-size: var(--font-size-base);
+    padding: var(--space-8) var(--space-16);
+}
+
+/* Advanced Options */
+.advanced-options-toggle {
+    text-align: right;
+    margin: var(--space-16) 0;
+}
+
+#advanced-toggle {
+    color: var(--text-color-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+}
+
+#advanced-toggle:hover {
+    color: var(--highlight-color);
+}
+
+.advanced-options {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+}
+
+.advanced-options[aria-hidden="false"] {
+    max-height: 300px; /* Max height large enough to contain content */
+}
+
+/* Results Display */
+.results-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-32);
+    text-align: center;
+    margin-top: -16px; /* Pull up to align with section title visually */
+}
+
+.primary-result {
+    margin-bottom: var(--space-24);
+}
+
+.result-label {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    display: block;
+}
+
+.result-value {
+    font-size: var(--font-size-4xl);
+    font-weight: 900;
+    color: var(--highlight-color);
+    display: block;
+}
+
+.results-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-24);
+    width: 100%;
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-24);
+}
+
+.summary-item strong {
+    font-size: var(--font-size-xl);
+    display: block;
+    margin-top: var(--space-4);
+}
+
+/* AI Recommendations */
+.ai-recommendations {
+    padding: var(--space-16) var(--space-24);
+    background-color: rgba(var(--highlight-color), 0.1);
+    border: 1px solid var(--highlight-color);
+    box-shadow: none;
+}
+
+.ai-recommendations .card-subtitle {
+    border-bottom: none;
+    margin-bottom: var(--space-8);
+}
+
+#ai-insights-container p {
+    margin-bottom: var(--space-12);
+    font-size: var(--font-size-base);
+}
+
+.placeholder-text {
+    font-style: italic;
+    color: var(--text-color-secondary);
+}
+
+/* Tab Navigation */
+.tab-navigation {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: var(--space-16);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    padding: var(--space-12) var(--space-16);
+    margin-right: var(--space-8);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.tab-button i {
+    margin-right: var(--space-8);
+}
+
+.tab-button:hover, .tab-button.active {
+    color: var(--highlight-color);
+    border-bottom-color: var(--highlight-color);
+}
+
+.results-tab-pane {
+    padding: var(--space-24);
+}
+
+/* Chart */
+#goal-progress-chart {
+    max-height: 400px;
+    width: 100%;
+    margin-bottom: var(--space-16);
+}
+
+/* Milestones/Timeline */
+.milestone-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-24);
+}
+
+.milestone-item {
+    display: flex;
+    align-items: center;
+    padding: var(--space-16);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background-color: var(--input-bg-color);
+}
+
+.milestone-icon {
+    font-size: var(--font-size-2xl);
+    color: var(--highlight-color);
+    margin-right: var(--space-16);
+}
+
+.milestone-year {
+    font-size: var(--font-size-sm);
+    color: var(--text-color-secondary);
+}
+
+.milestone-amount {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    display: block;
+}
+
+/* Ad/Affiliate Slots (Monetization & SCO) */
+.ad-affiliate-slot {
+    padding: var(--space-24);
+    border: 2px dashed var(--highlight-color);
+    border-radius: var(--border-radius-md);
+    text-align: center;
+    margin: var(--space-32) 0;
+    background-color: rgba(var(--highlight-color), 0.05);
+}
+
+.ad-tag {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    color: var(--color-red-500);
+    margin-bottom: var(--space-8);
+}
+
+.primary-ad-slot h2 {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--space-12);
+}
+
+.secondary-ad-slot h4 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-8);
+}
+
+/* SEO FAQ Section */
+.seo-faq-section {
+    padding: var(--space-32) 0;
+}
+
+.section-title {
+    font-size: var(--font-size-3xl);
+    text-align: center;
+    margin-bottom: var(--space-32);
+    color: var(--color-slate-900);
+}
+
+html[data-color-scheme="dark"] .section-title {
+    color: var(--highlight-color);
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-24);
+}
+
+.faq-item {
+    border: 1px solid var(--border-color);
+    padding: var(--space-24);
+    border-radius: var(--border-radius-md);
+    background-color: var(--bg-color-secondary);
+}
+
+.faq-question {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-slate-900);
+    margin-bottom: var(--space-8);
+}
+
+html[data-color-scheme="dark"] .faq-question {
+    color: var(--highlight-color);
+}
+
+.faq-answer {
+    font-size: var(--font-size-base);
+    color: var(--text-color-secondary);
+}
+
+/* Lead Form Section */
+.lead-form-section {
+    text-align: center;
+    padding: var(--space-32);
+    background-color: var(--highlight-color);
+    color: var(--color-white);
+}
+
+.lead-form-section .card-title {
+    color: var(--color-white);
+}
+
+.lead-form-section .card-title i {
+    color: var(--color-white);
+}
+
+.lead-form-section p {
+    margin-bottom: var(--space-24);
+}
+
+.lead-form-section .form-row {
+    max-width: 600px;
+    margin: 0 auto;
+    gap: var(--space-16);
+    grid-template-columns: 2fr 1fr;
+}
+
+.lead-form-section input[type="email"] {
+    background-color: var(--color-white);
+    color: var(--color-charcoal-700);
+    border: none;
+}
+
+/* Footer (Branding & SCO) */
+.footer {
+    background-color: var(--color-slate-900);
+    color: var(--color-white);
+    padding: var(--space-32) 0 var(--space-16) 0;
+    font-size: var(--font-size-sm);
+}
+
+.footer-top {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: var(--space-24);
+    margin-bottom: var(--space-16);
+}
+
+.footer-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-24);
+}
+
+.nav-column h4 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-16);
+    color: var(--highlight-color);
+}
+
+.nav-column ul {
+    list-style: none;
+}
+
+.nav-column li {
+    margin-bottom: var(--space-8);
+}
+
+.nav-column a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-column a:hover {
+    color: var(--highlight-color);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.footer-disclaimer {
+    max-width: 70%;
+}
+
+.footer-disclaimer p {
+    margin-bottom: var(--space-8);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-disclaimer strong {
+    color: var(--color-white);
+}
+
+.footer-badges {
+    display: flex;
+    gap: var(--space-12);
+    flex-wrap: wrap;
+}
+
+.badge {
+    background-color: var(--highlight-color);
+    color: var(--color-slate-900);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+}
+
+.badge i {
+    margin-right: var(--space-4);
+}
+
+/* Toast Notification (AI/Voice/PWA Prompts) */
+.toast-container {
+    position: fixed;
+    bottom: var(--space-24);
+    right: var(--space-24);
+    z-index: 1000;
+}
+
+.toast {
+    background-color: var(--color-charcoal-700);
+    color: var(--color-white);
+    padding: var(--space-16);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+    margin-top: var(--space-16);
+    opacity: 0.95;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+}
+.toast.show {
+    transform: translateY(0);
+}
+.toast.success {
+    background-color: var(--color-green-500);
+}
+.toast.error {
+    background-color: var(--color-red-500);
+}
+
+/* === Mobile Responsiveness (SCO & User Friendly) === */
+@media (max-width: 1024px) {
+    .calculator-grid {
+        grid-template-columns: 1fr;
     }
-    </script>
-</head>
-<body>
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .hero-title {
+        order: 3;
+        width: 100%;
+        text-align: left;
+        font-size: var(--font-size-xl);
+        margin: var(--space-8) 0;
+    }
+    .accessibility-controls {
+        order: 2;
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: var(--space-8);
+        display: flex;
+    }
+    .logo {
+        order: 1;
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    .goal-type-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .mode-grid {
+        grid-template-columns: 1fr;
+    }
+    .results-summary-grid {
+        grid-template-columns: 1fr;
+    }
+    .primary-result {
+        grid-column: 1;
+    }
+    .milestone-list {
+        grid-template-columns: 1fr;
+    }
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-nav {
+        grid-template-columns: 1fr;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-disclaimer {
+        max-width: 100%;
+        margin-bottom: var(--space-16);
+    }
+    .lead-form-section .form-row {
+        grid-template-columns: 1fr;
+    }
+    .tab-navigation {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
 
-    <header class="main-header">
-        <div class="header-content">
-            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
-            <p class="tagline">World's First AI-Powered Financial Goal Planner</p>
-
-            <div class="features-quick">
-                <span class="feature-quick"><i class="fas fa-bullseye"></i> Goal Planning</span>
-                <span class="feature-quick"><i class="fas fa-chart-line"></i> Retirement</span>
-                <span class="feature-quick"><i class="fas fa-piggy-bank"></i> Savings</span>
-                <span class="feature-quick"><i class="fas fa-robot"></i> AI Insights</span>
-            </div>
-
-            <div class="accessibility-controls">
-                <button id="toggle-color-scheme" aria-label="Toggle Light/Dark Mode" class="control-button">
-                    <i class="fas fa-sun"></i>
-                </button>
-                <div class="voice-status">
-                    <button id="toggle-voice-command" aria-label="Toggle Voice Command" class="control-button voice-inactive">
-                        <i class="fas fa-microphone"></i> <span id="voice-status-text">Voice OFF</span>
-                    </button>
-                    <button id="toggle-text-to-speech" aria-label="Toggle Text to Speech" class="control-button tts-inactive">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                </div>
-                <button id="pwa-install-button" class="control-button install-button hidden" aria-label="Install App">Install App</button>
-            </div>
-        </div>
-    </header>
-
-    <aside class="top-banner-ad" role="complementary" aria-label="Top Sponsor">
-        <div class="banner-ad-content">
-            <p class="ad-label">FEATURED PARTNER</p>
-            <div class="banner-ad-inner">
-                <strong>🎯 Start Investing Today with $0 Commission</strong> — Open a brokerage account and get your first stock free! (Sponsor)
-                <a href="#sponsor-broker" class="cta-link" target="_blank" rel="sponsored noopener">Learn More →</a>
-            </div>
-        </div>
-    </aside>
-
-    <main class="main-content">
-        
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1 class="hero-title"><i class="fas fa-bullseye"></i> Financial Goal Planner</h1>
-                <p class="hero-subtitle">Plan your retirement, dream home, college fund, or any financial milestone with AI-powered precision. Get personalized insights, live inflation data, and actionable steps to achieve your goals faster.</p>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <strong>2,847+</strong>
-                        <span>Goals Achieved by Users</span>
-                    </div>
-                    <div class="stat-item">
-                        <strong>$4.2B+</strong>
-                        <span>Total Planned Value</span>
-                    </div>
-                    <div class="stat-item">
-                        <strong>AI-Powered</strong>
-                        <span>Smart Insights</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="calculator-container card">
-
-            <aside class="sidebar-ad left-sidebar" role="complementary" aria-label="Sponsor Left">
-                <div class="sticky-ad">
-                    <p class="ad-label">SPONSORED</p>
-                    <div class="sidebar-ad-content">
-                        <h4>Maximize Your Returns</h4>
-                        <p>Explore high-yield savings accounts with up to 5.0% APY from our partners.</p>
-                        <a href="#affiliate-hysa" class="secondary-button" target="_blank" rel="sponsored noopener">Compare Rates</a>
-                    </div>
-                    <div id="left-sidebar-ad-160x600" style="min-height: 600px; background: var(--color-surface); border: 1px dashed var(--color-border); margin-top: 20px; text-align: center; padding: 20px; display: flex; align-items: center; justify-content: center;">
-                        <span style="color: var(--color-text-secondary); font-size: 12px;">Ad Space 160x600</span>
-                    </div>
-                </div>
-            </aside>
-
-            <section class="input-section main-calculator" aria-labelledby="input-heading">
-                <h2 id="input-heading" class="section-title"><i class="fas fa-calculator"></i> Your Financial Goal</h2>
-                
-                <form id="goal-planner-form" novalidate>
-
-                    <div class="goal-type-selection">
-                        <h3 class="input-group-sub-title">What Are You Planning For?</h3>
-                        <div class="goal-type-grid">
-                            <label class="goal-type-card" for="goal-retirement">
-                                <input type="radio" name="goal-type" id="goal-retirement" value="retirement" checked>
-                                <div class="goal-card-content">
-                                    <i class="fas fa-umbrella-beach"></i>
-                                    <h4>Retirement</h4>
-                                    <p>Plan for financial independence</p>
-                                </div>
-                            </label>
-                            <label class="goal-type-card" for="goal-house">
-                                <input type="radio" name="goal-type" id="goal-house" value="house">
-                                <div class="goal-card-content">
-                                    <i class="fas fa-home"></i>
-                                    <h4>House Down Payment</h4>
-                                    <p>Save for your dream home</p>
-                                </div>
-                            </label>
-                            <label class="goal-type-card" for="goal-college">
-                                <input type="radio" name="goal-type" id="goal-college" value="college">
-                                <div class="goal-card-content">
-                                    <i class="fas fa-graduation-cap"></i>
-                                    <h4>College Fund</h4>
-                                    <p>Invest in education</p>
-                                </div>
-                            </label>
-                            <label class="goal-type-card" for="goal-custom">
-                                <input type="radio" name="goal-type" id="goal-custom" value="custom">
-                                <div class="goal-card-content">
-                                    <i class="fas fa-star"></i>
-                                    <h4>Custom Goal</h4>
-                                    <p>Define your own milestone</p>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <aside class="affiliate-slot inline-affiliate" role="complementary">
-                        <h4><i class="fas fa-handshake"></i> Recommended for You (Affiliate)</h4>
-                        <p>Open a high-yield savings account today and earn 5X more than traditional banks.</p>
-                        <a href="#affiliate-hysa-2" class="primary-button affiliate-link-cta" target="_blank" rel="sponsored noopener">View Top Savings Accounts →</a>
-                    </aside>
-
-                    <h3 class="input-group-sub-title">Goal Details</h3>
-                    <div class="input-group input-split">
-                        <label for="goal-amount">Target Goal Amount ($)</label>
-                        <input type="text" id="goal-amount" value="1,000,000" inputmode="numeric" min="1000" step="10000" required>
-
-                        <label for="current-age">Your Current Age</label>
-                        <input type="number" id="current-age" value="30" min="18" max="100" step="1">
-                    </div>
-
-                    <div class="input-group input-split">
-                        <label for="initial-savings">Current Savings ($)</label>
-                        <input type="text" id="initial-savings" value="50,000" inputmode="numeric" min="0" step="1000">
-
-                        <label for="monthly-contribution-goal">Monthly Contribution ($)</label>
-                        <input type="text" id="monthly-contribution-goal" value="1,000" inputmode="numeric" min="0" step="50">
-                    </div>
-
-                    <h3 class="input-group-sub-title">Investment Assumptions</h3>
-                    <div class="input-group input-split">
-                        <label for="expected-return-goal">Expected Annual Return (%) <i class="fas fa-info-circle tooltip-trigger" title="Historical S&P 500 average: ~10%. Conservative: 6-7%."></i></label>
-                        <input type="text" id="expected-return-goal" value="7.0" inputmode="decimal" min="0" max="30" step="0.1">
-
-                        <label for="inflation-rate-goal">Expected Inflation (%) <span class="fred-source-note">Fetching Live FRED Rate...</span></label>
-                        <input type="text" id="inflation-rate-goal" value="3.0" inputmode="decimal" min="0" max="15" step="0.1" readonly>
-                    </div>
-
-                    <h3 class="input-group-sub-title">What Do You Want to Calculate?</h3>
-                    <div class="calculation-mode-selection">
-                        <div class="mode-option">
-                            <button type="button" class="mode-button active" data-mode="time" aria-pressed="true">
-                                <i class="fas fa-clock"></i>
-                                <span>Time to Reach Goal</span>
-                                <small>How many years will it take?</small>
-                            </button>
-                        </div>
-                        <div class="mode-option">
-                            <button type="button" class="mode-button" data-mode="contribution" aria-pressed="false">
-                                <i class="fas fa-hand-holding-usd"></i>
-                                <span>Contribution Needed</span>
-                                <small>How much should I save monthly?</small>
-                            </button>
-                        </div>
-                        <div class="mode-option">
-                            <button type="button" class="mode-button" data-mode="return" aria-pressed="false">
-                                <i class="fas fa-percentage"></i>
-                                <span>Return Required</span>
-                                <small>What return rate do I need?</small>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="mode-specific-input" class="mode-specific-section">
-                        <div id="contribution-mode-input" class="hidden">
-                            <div class="input-group">
-                                <label for="target-years-contribution">Target Years to Goal</label>
-                                <input type="number" id="target-years-contribution" value="25" min="1" max="75" step="1">
-                            </div>
-                        </div>
-                        <div id="return-mode-input" class="hidden">
-                            <div class="input-group">
-                                <label for="target-years-return">Target Years to Goal</label>
-                                <input type="number" id="target-years-return" value="25" min="1" max="75" step="1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <aside class="monetization-banner" role="complementary">
-                        <p><strong>Sponsored:</strong> Talk to a Certified Financial Planner (CFP®) for personalized advice. <a href="#sponsor-cfp" target="_blank" rel="sponsored noopener">Get Free Consultation →</a></p>
-                    </aside>
-
-                </form>
-            </section>
-
-            <aside class="sidebar-ad right-sidebar" role="complementary" aria-label="Sponsor Right">
-                <div class="sticky-ad">
-                    <p class="ad-label">SPONSORED</p>
-                    <div class="sidebar-ad-content">
-                        <h4>Plan Your Retirement</h4>
-                        <p>Get expert guidance from certified advisors on our partner network.</p>
-                        <a href="#affiliate-advisor" class="secondary-button" target="_blank" rel="sponsored noopener">Find Advisor</a>
-                    </div>
-                    <div id="right-sidebar-ad-160x600" style="min-height: 600px; background: var(--color-surface); border: 1px dashed var(--color-border); margin-top: 20px; text-align: center; padding: 20px; display: flex; align-items: center; justify-content: center;">
-                        <span style="color: var(--color-text-secondary); font-size: 12px;">Ad Space 160x600</span>
-                    </div>
-                </div>
-            </aside>
-
-        </div>
-
-        <div class="results-container">
-            <section class="results-section" aria-labelledby="results-heading">
-                <h2 id="results-heading" class="section-title"><i class="fas fa-chart-line"></i> Your Financial Roadmap</h2>
-
-                <aside class="ad-slot horizontal-ad" role="complementary" aria-label="Results Top Ad">
-                    <p class="ad-label">SPONSORED CONTENT</p>
-                    <div id="top-results-ad-728x90" style="min-height: 90px; background: var(--color-surface); border: 1px dashed var(--color-border); text-align: center; padding: 20px; display: flex; align-items: center; justify-content: center;">
-                        <span style="color: var(--color-text-secondary); font-size: 12px;">Ad Space 728x90 Leaderboard</span>
-                    </div>
-                </aside>
-
-                <div class="results-summary-grid">
-                    <div class="summary-card card-mini primary-result">
-                        <p class="summary-label">Goal Status</p>
-                        <div class="payment-display">
-                            <span id="goal-result-main" class="payment-figure">--</span>
-                            <span id="goal-result-unit" class="payment-unit"></span>
-                        </div>
-                        <p class="piti-breakdown-summary" id="goal-result-details">
-                            Enter your goal details to see results
-                        </p>
-                    </div>
-
-                    <div class="summary-card card-mini">
-                        <p class="summary-label">Total Investment</p>
-                        <div class="payment-display">
-                            <span id="total-invested" class="payment-figure">$0</span>
-                        </div>
-                        <p class="piti-breakdown-summary">Principal Contributions</p>
-                    </div>
-
-                    <div class="summary-card card-mini">
-                        <p class="summary-label">Expected Value</p>
-                        <div class="payment-display">
-                            <span id="future-value-goal" class="payment-figure">$0</span>
-                        </div>
-                        <p class="piti-breakdown-summary">At Goal Date (Nominal)</p>
-                    </div>
-
-                    <div class="summary-card card-mini inflation-card">
-                        <p class="summary-label">Purchasing Power</p>
-                        <div class="payment-display">
-                            <span id="inflation-adjusted-goal" class="payment-figure">$0</span>
-                        </div>
-                        <p class="piti-breakdown-summary">In Today's Dollars</p>
-                    </div>
-                </div>
-
-                <div class="milestone-section">
-                    <h3><i class="fas fa-road"></i> Your Goal Milestones</h3>
-                    <div id="milestone-timeline" class="milestone-timeline">
-                        <p class="placeholder-text">Calculate your goal to see key milestones along your journey</p>
-                    </div>
-                </div>
-
-                <div class="tabs-container">
-                    <div class="tab-buttons">
-                        <button class="tab-button active" data-tab="progress-chart" role="tab" aria-selected="true" aria-controls="progress-chart">Progress Chart</button>
-                        <button class="tab-button" data-tab="ai-roadmap" role="tab" aria-selected="false" aria-controls="ai-roadmap">AI Roadmap & Insights</button>
-                        <button class="tab-button" data-tab="yearly-breakdown" role="tab" aria-selected="false" aria-controls="yearly-breakdown">Yearly Breakdown</button>
-                    </div>
-
-                    <div id="progress-chart" class="tab-content active" role="tabpanel" aria-labelledby="progress-chart-tab">
-                        <h3>Goal Achievement Progress</h3>
-                        <p class="chart-caption">Track your savings growth, investment gains, and purchasing power over time</p>
-                        <div class="chart-container" style="height: 400px;">
-                            <canvas id="goalProgressChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div id="ai-roadmap" class="tab-content hidden" role="tabpanel" aria-labelledby="ai-roadmap-tab">
-                        <div id="ai-roadmap-output" class="ai-insight-box">
-                            <p class="placeholder-text">Enter your goal details to receive personalized AI-powered financial advice...</p>
-                        </div>
-
-                        <aside class="ad-slot horizontal-ad" role="complementary" aria-label="Mid Results Ad">
-                            <p class="ad-label">SPONSORED RECOMMENDATION</p>
-                            <div id="mid-results-ad-728x90" style="min-height: 90px; background: var(--color-surface); border: 1px dashed var(--color-border); text-align: center; padding: 20px; margin: 30px 0; display: flex; align-items: center; justify-content: center;">
-                                <span style="color: var(--color-text-secondary); font-size: 12px;">Ad Space 728x90 Leaderboard</span>
-                            </div>
-                        </aside>
-
-                        <div class="affiliate-recommendations">
-                            <h4><i class="fas fa-star"></i> Recommended Tools & Services (Affiliate)</h4>
-                            <div class="recommendation-grid">
-                                <div class="recommendation-card">
-                                    <i class="fas fa-chart-line"></i>
-                                    <h5>Investment Platforms</h5>
-                                    <p>Start investing with zero commissions</p>
-                                    <a href="#affiliate-broker" class="affiliate-link" target="_blank" rel="sponsored noopener">Compare Brokers →</a>
-                                </div>
-                                <div class="recommendation-card">
-                                    <i class="fas fa-piggy-bank"></i>
-                                    <h5>High-Yield Savings</h5>
-                                    <p>Earn up to 5.0% APY on your cash</p>
-                                    <a href="#affiliate-hysa-3" class="affiliate-link" target="_blank" rel="sponsored noopener">View Best Rates →</a>
-                                </div>
-                                <div class="recommendation-card">
-                                    <i class="fas fa-user-tie"></i>
-                                    <h5>Financial Advisors</h5>
-                                    <p>Get professional guidance</p>
-                                    <a href="#affiliate-advisor-2" class="affiliate-link" target="_blank" rel="sponsored noopener">Find CFP® →</a>
-                                </div>
-                                <div class="recommendation-card">
-                                    <i class="fas fa-book"></i>
-                                    <h5>Financial Education</h5>
-                                    <p>Learn investing fundamentals</p>
-                                    <a href="#affiliate-books" class="affiliate-link" target="_blank" rel="sponsored noopener">Top Books →</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="yearly-breakdown" class="tab-content hidden" role="tabpanel" aria-labelledby="yearly-breakdown-tab">
-                        <h3>Annual Progress Breakdown</h3>
-                        <div class="amortization-table-container">
-                            <table id="goal-annual-table" class="amortization-table">
-                                <thead>
-                                    <tr>
-                                        <th>Year</th>
-                                        <th>Age</th>
-                                        <th>Start Balance</th>
-                                        <th>Contributions</th>
-                                        <th>Investment Gains</th>
-                                        <th>End Balance</th>
-                                        <th>Today's $ Value</th>
-                                        <th>Progress</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="8" style="text-align: center; padding: 40px;">
-                                            Enter your goal details to generate yearly breakdown
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <button id="export-goal-csv" class="secondary-button" style="margin-top: 1rem;">
-                            <i class="fas fa-file-csv"></i> Export Data to CSV
-                        </button>
-                    </div>
-
-                </div>
-
-                <aside class="ad-slot horizontal-ad bottom-ad" role="complementary" aria-label="Results Bottom Ad">
-                    <p class="ad-label">SPONSORED CONTENT</p>
-                    <div id="bottom-results-ad-728x90" style="min-height: 90px; background: var(--color-surface); border: 1px dashed var(--color-border); text-align: center; padding: 20px; margin-top: 30px; display: flex; align-items: center; justify-content: center;">
-                        <span style="color: var(--color-text-secondary); font-size: 12px;">Ad Space 728x90 Leaderboard</span>
-                    </div>
-                </aside>
-
-            </section>
-        </div>
-
-        <section class="educational-content">
-            <div class="content-wrapper">
-                <h2><i class="fas fa-lightbulb"></i> How Financial Goal Planning Works</h2>
-                
-                <div class="content-grid">
-                    <article class="content-card">
-                        <h3>Understanding Your Goals</h3>
-                        <p>Financial goal planning starts with defining clear, measurable objectives. Whether you're planning for retirement, saving for a house down payment, or building a college fund, our AI-powered calculator helps you create a realistic roadmap based on your current financial situation and future aspirations.</p>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>The Power of Compound Growth</h3>
-                        <p>Your investments grow exponentially through compound interest. The formula we use accounts for both your initial savings and regular contributions: <strong>FV = P(1+r)^n + PMT × ((1+r)^n - 1) / r</strong>, where FV is future value, P is principal, r is return rate, n is years, and PMT is annual payment.</p>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>Inflation Adjustment (Live Data)</h3>
-                        <p>We use live data from the Federal Reserve (FRED API) to factor in inflation, showing you the real purchasing power of your future savings. This ensures your goal amount truly reflects what you'll need in today's dollars.</p>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>AI-Powered Insights</h3>
-                        <p>Our advanced AI analyzes your inputs and provides personalized recommendations on contribution amounts, investment strategies, timeline feasibility, and risk management. Get actionable advice tailored to your unique financial situation.</p>
-                    </article>
-                </div>
-
-                <div class="faq-section" itemscope itemtype="https://schema.org/FAQPage">
-                    <h3 style="text-align: center; font-size: var(--font-size-2xl); margin-bottom: 24px;">Frequently Asked Questions</h3>
-                    
-                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                        <h4 itemprop="name"><i class="fas fa-question-circle"></i> How accurate is this financial goal planner?</h4>
-                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                            <div itemprop="text">
-                                <p>Our calculator uses industry-standard financial formulas and live inflation data from the Federal Reserve. While past performance doesn't guarantee future results, our projections are based on historical averages (S&P 500 average: ~10% annually) and conservative estimates to help you plan realistically.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                        <h4 itemprop="name"><i class="fas fa-question-circle"></i> What's a realistic expected return rate?</h4>
-                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                            <div itemprop="text">
-                                <p>For stock market investments (index funds, ETFs), 7-10% is historically reasonable. Conservative investors might use 5-6%, while aggressive portfolios could assume 10-12%. Bond-heavy portfolios typically yield 3-5%. Always use conservative estimates for important goals like retirement.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                        <h4 itemprop="name"><i class="fas fa-question-circle"></i> Should I adjust my goal for inflation?</h4>
-                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                            <div itemprop="text">
-                                <p>Yes! Inflation erodes purchasing power over time. If you need $1 million in 30 years, you should plan for more than $1 million in nominal dollars. Our calculator automatically shows both nominal and inflation-adjusted values using live FRED data.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                        <h4 itemprop="name"><i class="fas fa-question-circle"></i> How often should I review my financial goals?</h4>
-                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                            <div itemprop="text">
-                                <p>Review your goals at least annually or after major life events (marriage, children, job change, inheritance). Market conditions, income changes, and life circumstances all affect your ability to reach goals. Regular reviews keep you on track.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="lead-gen-section">
-            <div class="lead-gen-content">
-                <h2><i class="fas fa-envelope"></i> Get Your Personalized Financial Plan</h2>
-                <p>Speak with a certified financial planner from our partner network who can help you optimize your strategy and stay on track to reach your goals.</p>
-                
-                <form id="lead-form" class="lead-form">
-                    <div class="form-row">
-                        <input type="text" name="fullname" placeholder="Full Name" required>
-                        <input type="email" name="email" placeholder="Email Address" required>
-                    </div>
-                    <div class="form-row">
-                        <input type="tel" name="phone" placeholder="Phone Number" required>
-                        <select name="goal_type" required>
-                            <option value="">Select Your Primary Goal</option>
-                            <option value="retirement">Retirement Planning</option>
-                            <option value="house">House Down Payment</option>
-                            <option value="college">College Fund</option>
-                            <option value="investment">General Investment</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="primary-button submit-lead">
-                        <i class="fas fa-paper-plane"></i> Get Free Consultation (Partner Link)
-                    </button>
-                    <p class="disclaimer-text">By submitting, you agree to be contacted by our financial partners. We respect your privacy.</p>
-                </form>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-logo-info">
-                    <h4 class="logo"><a href="/">FinGuid <span>USA</span></a></h4>
-                    <p>Empowering Americans to achieve financial independence through AI-enhanced planning tools.</p>
-                    <div class="social-links">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-                <nav class="footer-nav">
-                    <div class="nav-column">
-                        <h4>Financial Calculators</h4>
-                        <ul>
-                            <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                            <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy</a></li>
-                            <li><a href="/401k-calculator.html">401(k) Calculator</a></li>
-                            <li><a href="/financial-goal-planner.html" aria-current="page">Goal Planner</a></li>
-                            <li><a href="/credit-card-payoff-calculator.html">Debt Payoff Calculator</a></li>
-                            <li><a href="/tax-withholding-calculator.html">Tax Calculator</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Resources</h4>
-                        <ul>
-                            <li><a href="/guides">Financial Guides</a></li>
-                            <li><a href="/blog">Blog & Articles</a></li>
-                            <li><a href="/faq">FAQ</a></li>
-                            <li><a href="/glossary">Financial Glossary</a></li>
-                            <li><a href="/api">API Access</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Legal & Compliance</h4>
-                        <ul>
-                            <li><a href="/terms">Terms of Service</a></li>
-                            <li><a href="/privacy">Privacy Policy (GDPR/CCPA)</a></li>
-                            <li><a href="/disclaimer">Financial Disclaimer</a></li>
-                            <li><a href="/accessibility">Accessibility (WCAG)</a></li>
-                            <li><a href="/cookies">Cookie Policy</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Partnership</h4>
-                        <ul>
-                            <li><a href="/advertise" rel="sponsored">Advertise With Us</a></li>
-                            <li><a href="/affiliates" rel="sponsored">Affiliate Program</a></li>
-                            <li><a href="/sponsors" rel="sponsored">Become a Sponsor</a></li>
-                            <li><a href="/contact">Contact Us</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-disclaimer">
-                    <p>
-                        &copy; 2025 FinGuid USA - World's First AI-Powered Financial Calculator Platform. <strong>Financial Disclaimer:</strong> This calculator provides estimates for educational and planning purposes only. Actual investment returns vary and past performance does not guarantee future results. Always consult a qualified financial advisor before making investment decisions. We are not liable for decisions made based on calculator outputs. <strong>Monetization Disclosure:</strong> We earn revenue through advertising, affiliate partnerships, and sponsored content. Inflation data sourced from FRED (Federal Reserve Economic Data).
-                    </p>
-                </div>
-
-                <div class="footer-badges">
-                    <div class="badge"><i class="fas fa-shield-alt"></i> SSL Secured</div>
-                    <div class="badge"><i class="fas fa-universal-access"></i> WCAG 2.1 AA</div>
-                    <div class="badge"><i class="fas fa-mobile-alt"></i> PWA Ready</div>
-                    <div class="badge"><i class="fas fa-robot"></i> AI-Powered</div>
-                    <div class="badge"><i class="fas fa-chart-line"></i> Live FRED Data</div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <div id="toast-container" class="toast-container" aria-live="polite"></div>
-
-    <script src="/register-sw.js"></script>
-    <script src="financial-goal-planner.js"></script>
-
-</body>
-</html>
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--space-16);
+    }
+    .hero-title {
+        font-size: var(--font-size-lg);
+    }
+    .goal-type-grid {
+        grid-template-columns: 1fr;
+    }
+    .toast-container {
+        bottom: var(--space-16);
+        right: var(--space-16);
+    }
+}
