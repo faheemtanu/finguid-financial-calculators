@@ -1,849 +1,1841 @@
-// ===== CONFIGURATION & CONSTANTS =====
-const CONFIG = {
-    IRS_LIMIT_2024: 23000,
-    CATCHUP_LIMIT: 7500,
-    DEFAULT_INFLATION: 0.025,
-    FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
-    FRED_SERIES_ID: 'CPIAUCSL',
-    GA_TRACKING_ID: 'G-NYBL2CDNQJ'
-};
+:root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
 
-const TAX_BRACKETS_2024 = {
-    single: [
-        { limit: 11600, rate: 0.10 },
-        { limit: 47150, rate: 0.12 },
-        { limit: 100525, rate: 0.22 },
-        { limit: 191950, rate: 0.24 },
-        { limit: 243725, rate: 0.32 },
-        { limit: 609350, rate: 0.35 },
-        { limit: 10000000, rate: 0.37 }
-    ],
-    married_filing_jointly: [
-        { limit: 23200, rate: 0.10 },
-        { limit: 94300, rate: 0.12 },
-        { limit: 201050, rate: 0.22 },
-        { limit: 383900, rate: 0.24 },
-        { limit: 487450, rate: 0.32 },
-        { limit: 731200, rate: 0.35 },
-        { limit: 10000000, rate: 0.37 }
-    ],
-    head_of_household: [
-        { limit: 16550, rate: 0.10 },
-        { limit: 63100, rate: 0.12 },
-        { limit: 100500, rate: 0.22 },
-        { limit: 191950, rate: 0.24 },
-        { limit: 243700, rate: 0.32 },
-        { limit: 609350, rate: 0.35 },
-        { limit: 10000000, rate: 0.37 }
-    ]
-};
+  /* RGB versions for opacity control */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
 
-const AFFILIATE_PARTNERS = [
-    { name: 'Robo-Advisor', icon: 'fas fa-robot', cta: 'Compare Advisors', key: 'robo' },
-    { name: 'Financial Advisor Match', icon: 'fas fa-handshake', cta: 'Get Matched', key: 'advisor' },
-    { name: 'High-Yield Savings', icon: 'fas fa-piggy-bank', cta: 'See Rates', key: 'savings' },
-    { name: '401(k) Rollover', icon: 'fas fa-exchange-alt', cta: 'Start Rollover', key: 'rollover' }
-];
+  /* Background color tokens (Light Mode) */
+  --color-bg-1: rgba(59, 130, 246, 0.08); /* Light blue */
+  --color-bg-2: rgba(245, 158, 11, 0.08); /* Light yellow */
+  --color-bg-3: rgba(34, 197, 94, 0.08); /* Light green */
+  --color-bg-4: rgba(239, 68, 68, 0.08); /* Light red */
+  --color-bg-5: rgba(147, 51, 234, 0.08); /* Light purple */
+  --color-bg-6: rgba(249, 115, 22, 0.08); /* Light orange */
+  --color-bg-7: rgba(236, 72, 153, 0.08); /* Light pink */
+  --color-bg-8: rgba(6, 182, 212, 0.08); /* Light cyan */
 
-// ===== STATE MANAGEMENT =====
-let appState = {
-    currentTheme: 'light',
-    voiceEnabled: false,
-    ttsEnabled: false,
-    inflationRate: CONFIG.DEFAULT_INFLATION,
-    lastCalculation: null,
-    chart: null
-};
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
 
-// ===== UTILITY FUNCTIONS =====
-const Utils = {
-    formatCurrency: (value) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(value);
-    },
-    
-    parseCurrency: (value) => {
-        if (typeof value === 'number') return value;
-        return parseFloat(value.toString().replace(/[$,]/g, '')) || 0;
-    },
-    
-    formatPercent: (value, decimals = 1) => {
-        return `${value.toFixed(decimals)}%`;
-    },
-    
-    showToast: (message, duration = 3000) => {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), duration);
-    },
-    
-    trackEvent: (category, action, label = '') => {
-        if (typeof gtag === 'function') {
-            gtag('event', action, {
-                'event_category': category,
-                'event_label': label
-            });
-        }
-    }
-};
+  /* Common style patterns */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 
-// ===== CALCULATION ENGINE =====
-const Calculator = {
-    getMarginalTaxRate: (income, filingStatus) => {
-        const brackets = TAX_BRACKETS_2024[filingStatus] || TAX_BRACKETS_2024.single;
-        for (let bracket of brackets) {
-            if (income <= bracket.limit) {
-                return bracket.rate;
-            }
-        }
-        return brackets[brackets.length - 1].rate;
-    },
-    
-    calculateContributionLimit: (age, includeCatchup) => {
-        let limit = CONFIG.IRS_LIMIT_2024;
-        if (includeCatchup && age >= 50) {
-            limit += CONFIG.CATCHUP_LIMIT;
-        }
-        return limit;
-    },
-    
-    calculateEmployerMatch: (salary, contributionPercent, matchPercent, matchLimit) => {
-        const yourContribution = salary * (contributionPercent / 100);
-        const matchableAmount = salary * (matchLimit / 100);
-        const employerMatch = Math.min(yourContribution, matchableAmount) * (matchPercent / 100);
-        return employerMatch;
-    },
-    
-    calculateProjection: (inputs) => {
-        const {
-            currentAge,
-            retirementAge,
-            salary,
-            currentBalance,
-            contributionPercent,
-            matchPercent,
-            matchLimit,
-            salaryIncrease,
-            rateOfReturn,
-            includeCatchup,
-            includeInflation,
-            filingStatus
-        } = inputs;
-        
-        const years = retirementAge - currentAge;
-        const schedule = [];
-        const inflationAdjustment = includeInflation ? appState.inflationRate : 0;
-        const realReturn = rateOfReturn - inflationAdjustment;
-        
-        let balance = currentBalance;
-        let currentSalary = salary;
-        let totalContributions = 0;
-        let totalMatch = 0;
-        let totalGrowth = 0;
-        
-        for (let year = 0; year < years; year++) {
-            const age = currentAge + year;
-            const contributionLimit = this.calculateContributionLimit(age, includeCatchup);
-            
-            // Calculate contributions
-            let yourContribution = currentSalary * (contributionPercent / 100);
-            yourContribution = Math.min(yourContribution, contributionLimit);
-            
-            const employerMatch = this.calculateEmployerMatch(
-                currentSalary,
-                Math.min(contributionPercent, (contributionLimit / currentSalary) * 100),
-                matchPercent,
-                matchLimit
-            );
-            
-            const totalYearContribution = yourContribution + employerMatch;
-            
-            // Calculate investment growth
-            const beginningBalance = balance;
-            const gains = beginningBalance * (realReturn / 100);
-            balance = beginningBalance + totalYearContribution + gains;
-            
-            // Track totals
-            totalContributions += yourContribution;
-            totalMatch += employerMatch;
-            totalGrowth += gains;
-            
-            schedule.push({
-                age,
-                salary: currentSalary,
-                contribution: yourContribution,
-                match: employerMatch,
-                gains,
-                balance
-            });
-            
-            // Increase salary for next year
-            currentSalary *= (1 + salaryIncrease / 100);
-        }
-        
-        return {
-            finalBalance: balance,
-            totalContributions,
-            totalMatch,
-            totalGrowth,
-            schedule,
-            firstYear: schedule[0] || {}
-        };
-    }
-};
+  /* RGB versions for opacity control */
+  --color-success-rgb: 33, 128, 141;
+  --color-error-rgb: 192, 21, 47;
+  --color-warning-rgb: 168, 75, 47;
+  --color-info-rgb: 98, 108, 113;
 
-// ===== AI INSIGHTS ENGINE =====
-const AIEngine = {
-    generateInsights: (inputs, results) => {
-        const insights = [];
-        const { contributionPercent, matchPercent, matchLimit, currentAge, retirementAge, salary, rateOfReturn } = inputs;
-        const { finalBalance, totalMatch, firstYear } = results;
-        
-        // Insight 1: Employer Match Analysis
-        if (contributionPercent < matchLimit) {
-            const missedMatch = ((matchLimit - contributionPercent) / 100) * salary * (matchPercent / 100);
-            insights.push({
-                priority: 'high',
-                icon: 'fas fa-exclamation-triangle',
-                title: 'Missing Free Money!',
-                text: `You're contributing ${contributionPercent}% but your employer matches up to ${matchLimit}%. You're missing ${Utils.formatCurrency(missedMatch)} in free employer match annually. Consider increasing your contribution to maximize this benefit.`
-            });
-        } else {
-            insights.push({
-                priority: 'low',
-                icon: 'fas fa-check-circle',
-                title: 'Full Employer Match Secured',
-                text: `Excellent! You're contributing enough to receive the full employer match of ${Utils.formatCurrency(firstYear.match || 0)} annually. This is essentially free money for your retirement.`
-            });
-        }
-        
-        // Insight 2: Catch-up Contributions
-        const yearsTo50 = 50 - currentAge;
-        if (currentAge >= 50) {
-            insights.push({
-                priority: 'medium',
-                icon: 'fas fa-rocket',
-                title: 'Catch-Up Contributions Available',
-                text: `At age ${currentAge}, you're eligible for catch-up contributions allowing an additional $${CONFIG.CATCHUP_LIMIT.toLocaleString()} annually. This could significantly boost your retirement savings.`
-            });
-        } else if (yearsTo50 <= 10 && yearsTo50 > 0) {
-            insights.push({
-                priority: 'low',
-                icon: 'fas fa-clock',
-                title: 'Future Catch-Up Opportunity',
-                text: `In ${yearsTo50} years, you'll be eligible for catch-up contributions of $${CONFIG.CATCHUP_LIMIT.toLocaleString()} annually. Plan ahead to take advantage of this opportunity.`
-            });
-        }
-        
-        // Insight 3: Retirement Readiness
-        const yearsToRetirement = retirementAge - currentAge;
-        const estimatedNeeds = salary * 0.8 * 25; // 80% replacement, 4% withdrawal rule
-        const readinessPercent = (finalBalance / estimatedNeeds) * 100;
-        
-        if (readinessPercent >= 100) {
-            insights.push({
-                priority: 'low',
-                icon: 'fas fa-trophy',
-                title: 'On Track for Retirement',
-                text: `Based on the 4% withdrawal rule, your projected balance of ${Utils.formatCurrency(finalBalance)} could support annual retirement income of ${Utils.formatCurrency(finalBalance * 0.04)}. You're ${Math.round(readinessPercent)}% funded relative to an 80% salary replacement goal.`
-            });
-        } else if (readinessPercent >= 70) {
-            insights.push({
-                priority: 'medium',
-                icon: 'fas fa-chart-line',
-                title: 'Nearly There',
-                text: `You're ${Math.round(readinessPercent)}% of the way to a comfortable retirement. Consider increasing contributions by ${Math.ceil((100 - readinessPercent) / 10)}% to reach your goal.`
-            });
-        } else {
-            insights.push({
-                priority: 'high',
-                icon: 'fas fa-exclamation-circle',
-                title: 'Retirement Gap Alert',
-                text: `Your projected balance covers ${Math.round(readinessPercent)}% of estimated retirement needs. Consider increasing contributions, working longer, or consulting a financial advisor to close this gap.`
-            });
-        }
-        
-        // Insight 4: Tax Efficiency
-        const marginalRate = Calculator.getMarginalTaxRate(salary, inputs.filingStatus);
-        const taxSavings = firstYear.contribution * marginalRate;
-        insights.push({
-            priority: 'medium',
-            icon: 'fas fa-percent',
-            title: 'Tax Savings Benefit',
-            text: `Your 401(k) contributions reduce your taxable income by ${Utils.formatCurrency(firstYear.contribution || 0)}, saving approximately ${Utils.formatCurrency(taxSavings)} in taxes annually at your ${Utils.formatPercent(marginalRate * 100, 0)} marginal rate.`
-        });
-        
-        // Insight 5: Investment Return Impact
-        if (rateOfReturn < 6) {
-            insights.push({
-                priority: 'medium',
-                icon: 'fas fa-chart-bar',
-                title: 'Conservative Investment Returns',
-                text: `Your assumed ${rateOfReturn}% return is conservative. Historical S&P 500 returns average 10-11% annually. A diversified portfolio aligned with your risk tolerance could potentially improve long-term results.`
-            });
-        } else if (rateOfReturn > 10) {
-            insights.push({
-                priority: 'medium',
-                icon: 'fas fa-balance-scale',
-                title: 'Aggressive Return Assumption',
-                text: `Your ${rateOfReturn}% return assumption is optimistic. While possible, it's wise to plan conservatively. Consider what-if scenarios with lower returns to ensure you're prepared for various market conditions.`
-            });
-        }
-        
-        // Insight 6: Time Horizon
-        if (yearsToRetirement > 30) {
-            insights.push({
-                priority: 'low',
-                icon: 'fas fa-hourglass-start',
-                title: 'Time is Your Biggest Asset',
-                text: `With ${yearsToRetirement} years until retirement, you have time for compound growth to work its magic. Even small increases in contributions now can result in significant gains over time.`
-            });
-        } else if (yearsToRetirement < 10) {
-            insights.push({
-                priority: 'high',
-                icon: 'fas fa-hourglass-end',
-                title: 'Approaching Retirement',
-                text: `With only ${yearsToRetirement} years to retirement, it's crucial to maximize contributions now. Consider catch-up contributions if eligible and review your asset allocation with a financial advisor.`
-            });
-        }
-        
-        // Insight 7: Salary Growth Impact
-        const avgSalaryIncrease = inputs.salaryIncrease;
-        if (avgSalaryIncrease < 2) {
-            insights.push({
-                priority: 'low',
-                icon: 'fas fa-arrow-up',
-                title: 'Conservative Salary Projection',
-                text: `Your ${avgSalaryIncrease}% annual salary increase is modest. Career advancement, job changes, or skill development could accelerate salary growth and increase retirement savings potential.`
-            });
-        }
-        
-        // Insight 8: Action Items
-        const actions = [];
-        if (contributionPercent < matchLimit) actions.push(`Increase contribution to ${matchLimit}% to maximize employer match`);
-        if (currentAge >= 50) actions.push('Enable catch-up contributions');
-        if (readinessPercent < 80) actions.push('Consider increasing total savings rate by 2-3%');
-        actions.push('Review and rebalance portfolio annually');
-        actions.push('Consult with a fiduciary financial advisor');
-        
-        insights.push({
-            priority: 'low',
-            icon: 'fas fa-tasks',
-            title: 'Recommended Action Items',
-            text: actions.map((action, i) => `${i + 1}. ${action}`).join(' | ')
-        });
-        
-        return insights;
-    }
-};
+  /* Typography */
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
 
-// ===== UI CONTROLLER =====
-const UI = {
-    getInputValues: () => {
-        return {
-            currentAge: parseInt(document.getElementById('currentAge').value) || 30,
-            retirementAge: parseInt(document.getElementById('retirementAge').value) || 65,
-            salary: Utils.parseCurrency(document.getElementById('salary').value),
-            currentBalance: Utils.parseCurrency(document.getElementById('currentBalance').value),
-            contributionPercent: parseFloat(document.getElementById('contribution').value) || 6,
-            matchPercent: parseFloat(document.getElementById('matchPercent').value) || 100,
-            matchLimit: parseFloat(document.getElementById('matchLimit').value) || 6,
-            salaryIncrease: parseFloat(document.getElementById('salaryIncrease').value) || 3,
-            rateOfReturn: parseFloat(document.getElementById('rateOfReturn').value) || 7,
-            includeCatchup: document.getElementById('includeCatchup').checked,
-            includeInflation: document.getElementById('includeInflation').checked,
-            filingStatus: document.getElementById('filingStatus').value
-        };
-    },
-    
-    validateInputs: (inputs) => {
-        if (inputs.currentAge >= inputs.retirementAge) {
-            Utils.showToast('Retirement age must be greater than current age');
-            return false;
-        }
-        if (inputs.salary <= 0) {
-            Utils.showToast('Please enter a valid salary');
-            return false;
-        }
-        if (inputs.contributionPercent < 0 || inputs.contributionPercent > 100) {
-            Utils.showToast('Contribution percentage must be between 0-100%');
-            return false;
-        }
-        return true;
-    },
-    
-    displayResults: (inputs, results) => {
-        // Show results container
-        document.getElementById('resultsContainer').classList.remove('results-hidden');
-        document.getElementById('initialMessage').style.display = 'none';
-        
-        // Update summary card
-        document.getElementById('summaryAmount').textContent = Utils.formatCurrency(results.finalBalance);
-        document.getElementById('summaryBreakdown').textContent = 
-            `Your Cont: ${Utils.formatCurrency(results.totalContributions)} | ` +
-            `Employer Match: ${Utils.formatCurrency(results.totalMatch)} | ` +
-            `Total Growth: ${Utils.formatCurrency(results.totalGrowth)}`;
-        
-        // Update summary tab
-        const firstYear = results.firstYear;
-        document.getElementById('firstYearContribution').textContent = Utils.formatCurrency(firstYear.contribution || 0);
-        document.getElementById('firstYearMatch').textContent = Utils.formatCurrency(firstYear.match || 0);
-        document.getElementById('firstYearTotal').textContent = Utils.formatCurrency((firstYear.contribution || 0) + (firstYear.match || 0));
-        
-        const marginalRate = Calculator.getMarginalTaxRate(inputs.salary, inputs.filingStatus);
-        const taxSavings = firstYear.contribution * marginalRate;
-        document.getElementById('taxRate').textContent = Utils.formatPercent(marginalRate * 100, 0);
-        document.getElementById('taxSavings').textContent = Utils.formatCurrency(taxSavings);
-        
-        // Update chart
-        this.updateChart(results.schedule);
-        
-        // Generate AI insights
-        const insights = AIEngine.generateInsights(inputs, results);
-        this.displayInsights(insights);
-        
-        // Update schedule table
-        this.updateScheduleTable(results.schedule);
-        
-        // Display partner cards
-        this.displayPartnerCards();
-        
-        // Speak results if TTS enabled
-        if (appState.ttsEnabled) {
-            Speech.speak(`Your projected retirement balance is ${Utils.formatCurrency(results.finalBalance)}`);
-        }
-        
-        Utils.trackEvent('Calculator', 'calculation_completed', 'success');
-    },
-    
-    updateChart: (schedule) => {
-        const ctx = document.getElementById('projectionsChart');
-        const isDark = appState.currentTheme === 'dark';
-        
-        const labels = schedule.map(row => row.age);
-        const balances = schedule.map(row => row.balance);
-        const contributions = schedule.map(row => {
-            let total = row.contribution + row.match;
-            for (let i = 0; i < schedule.indexOf(row); i++) {
-                total += schedule[i].contribution + schedule[i].match;
-            }
-            return total;
-        });
-        
-        if (appState.chart) {
-            appState.chart.destroy();
-        }
-        
-        appState.chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [
-                    {
-                        label: 'Total Balance',
-                        data: balances,
-                        borderColor: '#24ACB9',
-                        backgroundColor: 'rgba(36, 172, 185, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Total Contributions',
-                        data: contributions,
-                        borderColor: '#133C3B',
-                        backgroundColor: 'rgba(19, 60, 59, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: isDark ? '#FFFFFF' : '#1F2121',
-                            font: { size: 12 }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: (context) => {
-                                return `${context.dataset.label}: ${Utils.formatCurrency(context.parsed.y)}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' },
-                        ticks: { color: isDark ? '#B7B8B9' : '#646C8B' },
-                        title: { display: true, text: 'Age', color: isDark ? '#FFFFFF' : '#1F2121' }
-                    },
-                    y: {
-                        grid: { color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' },
-                        ticks: {
-                            color: isDark ? '#B7B8B9' : '#646C8B',
-                            callback: (value) => Utils.formatCurrency(value)
-                        },
-                        title: { display: true, text: 'Balance', color: isDark ? '#FFFFFF' : '#1F2121' }
-                    }
-                }
-            }
-        });
-    },
-    
-    displayInsights: (insights) => {
-        const container = document.getElementById('insightsList');
-        container.innerHTML = insights.map(insight => `
-            <div class="insight-card priority-${insight.priority}">
-                <div class="insight-header">
-                    <i class="insight-icon ${insight.icon}"></i>
-                    <span class="insight-title">${insight.title}</span>
-                    <span class="priority-badge ${insight.priority}">${insight.priority}</span>
-                </div>
-                <p class="insight-text">${insight.text}</p>
-            </div>
-        `).join('');
-    },
-    
-    displayPartnerCards: () => {
-        const container = document.getElementById('partnersCards');
-        container.innerHTML = AFFILIATE_PARTNERS.map(partner => `
-            <div class="partner-mini-card" data-partner="${partner.key}">
-                <i class="${partner.icon}"></i>
-                <h4>${partner.name}</h4>
-                <button class="partner-cta" data-partner="${partner.key}">${partner.cta}</button>
-            </div>
-        `).join('');
-    },
-    
-    updateScheduleTable: (schedule) => {
-        const tbody = document.getElementById('scheduleBody');
-        tbody.innerHTML = schedule.map(row => `
-            <tr>
-                <td>${row.age}</td>
-                <td>${Utils.formatCurrency(row.salary)}</td>
-                <td>${Utils.formatCurrency(row.contribution)}</td>
-                <td>${Utils.formatCurrency(row.match)}</td>
-                <td>${Utils.formatCurrency(row.gains)}</td>
-                <td><strong>${Utils.formatCurrency(row.balance)}</strong></td>
-            </tr>
-        `).join('');
-    }
-};
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
 
-// ===== THEME MANAGER =====
-const Theme = {
-    init: () => {
-        const savedTheme = appState.currentTheme;
-        this.apply(savedTheme);
-    },
-    
-    toggle: () => {
-        const newTheme = appState.currentTheme === 'light' ? 'dark' : 'light';
-        this.apply(newTheme);
-        Utils.trackEvent('UI', 'theme_toggle', newTheme);
-    },
-    
-    apply: (theme) => {
-        appState.currentTheme = theme;
-        document.documentElement.setAttribute('data-theme', theme);
-        
-        const icon = document.querySelector('#darkModeToggle i');
-        if (theme === 'dark') {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
-        
-        // Re-render chart if exists
-        if (appState.chart && appState.lastCalculation) {
-            UI.updateChart(appState.lastCalculation.schedule);
-        }
-    }
-};
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
 
-// ===== SPEECH & VOICE CONTROL =====
-const Speech = {
-    recognition: null,
-    synthesis: window.speechSynthesis,
-    
-    initVoice: () => {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            console.log('Speech recognition not supported');
-            return;
-        }
-        
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        this.recognition = new SpeechRecognition();
-        this.recognition.continuous = true;
-        this.recognition.interimResults = false;
-        this.recognition.lang = 'en-US';
-        
-        this.recognition.onresult = (event) => {
-            const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
-            this.processVoiceCommand(transcript);
-        };
-        
-        this.recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-        };
-    },
-    
-    toggleVoice: () => {
-        if (!this.recognition) {
-            Utils.showToast('Voice recognition not supported in this browser');
-            return;
-        }
-        
-        appState.voiceEnabled = !appState.voiceEnabled;
-        const btn = document.getElementById('voiceToggle');
-        
-        if (appState.voiceEnabled) {
-            this.recognition.start();
-            btn.classList.add('voice-active');
-            btn.title = 'Voice Control ON';
-            Utils.showToast('Voice control activated. Try saying "calculate" or "show results"');
-            Utils.trackEvent('Features', 'voice_enabled', 'on');
-        } else {
-            this.recognition.stop();
-            btn.classList.remove('voice-active');
-            btn.title = 'Voice Control OFF';
-            Utils.showToast('Voice control deactivated');
-            Utils.trackEvent('Features', 'voice_enabled', 'off');
-        }
-    },
-    
-    processVoiceCommand: (transcript) => {
-        console.log('Voice command:', transcript);
-        
-        if (transcript.includes('calculate') || transcript.includes('compute')) {
-            document.getElementById('calculateBtn').click();
-            this.speak('Calculating your retirement projection');
-        } else if (transcript.includes('dark mode') || transcript.includes('light mode')) {
-            Theme.toggle();
-            this.speak(`Switched to ${appState.currentTheme} mode`);
-        } else if (transcript.includes('results') || transcript.includes('show me')) {
-            this.speak('Displaying your retirement projection results');
-        }
-    },
-    
-    toggleTTS: () => {
-        appState.ttsEnabled = !appState.ttsEnabled;
-        const btn = document.getElementById('ttsToggle');
-        
-        if (appState.ttsEnabled) {
-            btn.classList.add('active');
-            Utils.showToast('Text-to-speech enabled');
-            this.speak('Text to speech is now enabled');
-            Utils.trackEvent('Features', 'tts_enabled', 'on');
-        } else {
-            btn.classList.remove('active');
-            this.synthesis.cancel();
-            Utils.showToast('Text-to-speech disabled');
-            Utils.trackEvent('Features', 'tts_enabled', 'off');
-        }
-    },
-    
-    speak: (text) => {
-        if (!appState.ttsEnabled) return;
-        
-        this.synthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1.0;
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
-        this.synthesis.speak(utterance);
-    }
-};
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
+    0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
+    0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 
-// ===== PWA MANAGER =====
-const PWA = {
-    deferredPrompt: null,
-    
-    init: () => {
-        // Register service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(() => {
-                console.log('Service worker registration not available');
-            });
-        }
-        
-        // Handle install prompt
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            this.deferredPrompt = e;
-            document.getElementById('installBtn').style.display = 'flex';
-        });
-        
-        // Handle install click
-        document.getElementById('installBtn').addEventListener('click', async () => {
-            if (!this.deferredPrompt) return;
-            
-            this.deferredPrompt.prompt();
-            const { outcome } = await this.deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                Utils.showToast('App installed successfully!');
-                Utils.trackEvent('PWA', 'install', 'accepted');
-            }
-            
-            this.deferredPrompt = null;
-            document.getElementById('installBtn').style.display = 'none';
-        });
-    }
-};
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
 
-// ===== FRED API INTEGRATION =====
-const FREDApi = {
-    fetchInflationRate: async () => {
-        try {
-            const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${CONFIG.FRED_SERIES_ID}&api_key=${CONFIG.FRED_API_KEY}&file_type=json&sort_order=desc&limit=13`;
-            
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if (data.observations && data.observations.length >= 13) {
-                const latest = parseFloat(data.observations[0].value);
-                const yearAgo = parseFloat(data.observations[12].value);
-                const inflationRate = ((latest - yearAgo) / yearAgo) * 100;
-                
-                appState.inflationRate = inflationRate / 100;
-                document.getElementById('inflationRate').textContent = Utils.formatPercent(inflationRate);
-                
-                console.log('FRED inflation rate updated:', inflationRate);
-            }
-        } catch (error) {
-            console.error('Error fetching FRED data:', error);
-            document.getElementById('inflationRate').textContent = Utils.formatPercent(CONFIG.DEFAULT_INFLATION * 100);
-        }
-    }
-};
-
-// ===== TAB NAVIGATION =====
-const Tabs = {
-    init: () => {
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.getAttribute('data-tab');
-                this.switchTab(tabId);
-                Utils.trackEvent('Navigation', 'tab_switch', tabId);
-            });
-        });
-    },
-    
-    switchTab: (tabId) => {
-        // Update buttons
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-            btn.setAttribute('aria-selected', 'false');
-        });
-        document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-        document.querySelector(`[data-tab="${tabId}"]`).setAttribute('aria-selected', 'true');
-        
-        // Update panes
-        document.querySelectorAll('.tab-pane').forEach(pane => {
-            pane.classList.remove('active');
-        });
-        document.getElementById(tabId).classList.add('active');
-    }
-};
-
-// ===== AFFILIATE TRACKING =====
-const Affiliates = {
-    init: () => {
-        document.addEventListener('click', (e) => {
-            if (e.target.matches('[data-partner]') || e.target.closest('[data-partner]')) {
-                const partner = e.target.getAttribute('data-partner') || e.target.closest('[data-partner]').getAttribute('data-partner');
-                this.trackClick(partner);
-            }
-        });
-    },
-    
-    trackClick: (partner) => {
-        Utils.showToast(`Redirecting to ${partner} partner...`);
-        Utils.trackEvent('Affiliate', 'click', partner);
-        console.log('Affiliate click:', partner);
-        // In production, redirect to actual affiliate links
-    }
-};
-
-// ===== MAIN CALCULATOR FUNCTION =====
-function calculate() {
-    const inputs = UI.getInputValues();
-    
-    if (!UI.validateInputs(inputs)) {
-        return;
-    }
-    
-    const results = Calculator.calculateProjection(inputs);
-    appState.lastCalculation = results;
-    
-    UI.displayResults(inputs, results);
+  /* Layout */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
 }
 
-// ===== FORMAT CURRENCY INPUTS =====
-function formatCurrencyInput(input) {
-    input.addEventListener('blur', () => {
-        const value = Utils.parseCurrency(input.value);
-        input.value = Utils.formatCurrency(value);
-    });
-    
-    input.addEventListener('focus', () => {
-        const value = Utils.parseCurrency(input.value);
-        input.value = value > 0 ? value : '';
-    });
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* RGB versions for opacity control (Dark Mode) */
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+
+    /* Background color tokens (Dark Mode) */
+    --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
+    --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
+    --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
+    --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
+    --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
+    --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
+    --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
+    --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+
+    /* Semantic Color Tokens (Dark Mode) */
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+    /* Common style patterns - updated for dark mode */
+    --focus-ring: 0 0 0 3px var(--color-focus-ring);
+    --focus-outline: 2px solid var(--color-primary);
+    --status-bg-opacity: 0.15;
+    --status-border-opacity: 0.25;
+    --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+    /* RGB versions for dark mode */
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
 }
 
-// ===== INITIALIZATION =====
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all modules
-    Theme.init();
-    Tabs.init();
-    PWA.init();
-    Speech.initVoice();
-    Affiliates.init();
-    
-    // Fetch live inflation data
-    FREDApi.fetchInflationRate();
-    
-    // Format currency inputs
-    formatCurrencyInput(document.getElementById('salary'));
-    formatCurrencyInput(document.getElementById('currentBalance'));
-    
-    // Event listeners
-    document.getElementById('calculateBtn').addEventListener('click', calculate);
-    document.getElementById('darkModeToggle').addEventListener('click', () => Theme.toggle());
-    document.getElementById('voiceToggle').addEventListener('click', () => Speech.toggleVoice());
-    document.getElementById('ttsToggle').addEventListener('click', () => Speech.toggleTTS());
-    
-    // Auto-calculate on input change (debounced)
-    let debounceTimer;
-    document.querySelectorAll('input, select').forEach(input => {
-        input.addEventListener('input', () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                if (appState.lastCalculation) {
-                    calculate();
-                }
-            }, 500);
-        });
-    });
-    
-    console.log('FinGuid 401(k) Calculator initialized');
-    Utils.showToast('Welcome to FinGuid USA! Enter your details to get started.');
-});
+/* Data attribute for manual theme switching */
+[data-color-scheme="dark"] {
+  /* RGB versions for opacity control (dark mode) */
+  --color-gray-400-rgb: 119, 124, 124;
+  --color-teal-300-rgb: 50, 184, 198;
+  --color-gray-300-rgb: 167, 169, 169;
+  --color-gray-200-rgb: 245, 245, 245;
+
+  /* Colorful background palette - Dark Mode */
+  --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
+  --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
+  --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
+  --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
+  --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
+  --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
+  --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
+  --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+
+  /* Semantic Color Tokens (Dark Mode) */
+  --color-background: var(--color-charcoal-700);
+  --color-surface: var(--color-charcoal-800);
+  --color-text: var(--color-gray-200);
+  --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+  --color-primary: var(--color-teal-300);
+  --color-primary-hover: var(--color-teal-400);
+  --color-primary-active: var(--color-teal-800);
+  --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+  --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+  --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+  --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+  --color-error: var(--color-red-400);
+  --color-success: var(--color-teal-300);
+  --color-warning: var(--color-orange-400);
+  --color-info: var(--color-gray-300);
+  --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+  --color-btn-primary-text: var(--color-slate-900);
+  --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
+  --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+  --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+  /* Common style patterns - updated for dark mode */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  /* RGB versions for dark mode */
+  --color-success-rgb: var(--color-teal-300-rgb);
+  --color-error-rgb: var(--color-red-400-rgb);
+  --color-warning-rgb: var(--color-orange-400-rgb);
+  --color-info-rgb: var(--color-gray-300-rgb);
+}
+
+[data-color-scheme="light"] {
+  /* RGB versions for opacity control (light mode) */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+
+  /* RGB versions for light mode */
+  --color-success-rgb: var(--color-teal-500-rgb);
+  --color-error-rgb: var(--color-red-500-rgb);
+  --color-warning-rgb: var(--color-orange-500-rgb);
+  --color-info-rgb: var(--color-slate-500-rgb);
+}
+
+/* Base styles */
+html {
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+}
+h2 {
+  font-size: var(--font-size-3xl);
+}
+h3 {
+  font-size: var(--font-size-2xl);
+}
+h4 {
+  font-size: var(--font-size-xl);
+}
+h5 {
+  font-size: var(--font-size-lg);
+}
+h6 {
+  font-size: var(--font-size-md);
+}
+
+p {
+  margin: 0 0 var(--space-16) 0;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+code,
+pre {
+  font-family: var(--font-family-mono);
+  font-size: calc(var(--font-size-base) * 0.95);
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-sm);
+}
+
+code {
+  padding: var(--space-1) var(--space-4);
+}
+
+pre {
+  padding: var(--space-16);
+  margin: var(--space-16) 0;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+  border: none;
+  text-decoration: none;
+  position: relative;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn--primary:active {
+  background: var(--color-primary-active);
+}
+
+.btn--secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover {
+  background: var(--color-secondary-hover);
+}
+
+.btn--secondary:active {
+  background: var(--color-secondary-active);
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--outline:hover {
+  background: var(--color-secondary);
+}
+
+.btn--sm {
+  padding: var(--space-4) var(--space-12);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+}
+
+.btn--lg {
+  padding: var(--space-10) var(--space-20);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-md);
+}
+
+.btn--full-width {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form elements */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: var(--space-8) var(--space-12);
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+textarea.form-control {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+}
+
+select.form-control {
+  padding: var(--space-8) var(--space-12);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: var(--select-caret-light);
+  background-repeat: no-repeat;
+  background-position: right var(--space-12) center;
+  background-size: 16px;
+  padding-right: var(--space-32);
+}
+
+/* Add a dark mode specific caret */
+@media (prefers-color-scheme: dark) {
+  select.form-control {
+    background-image: var(--select-caret-dark);
+  }
+}
+
+/* Also handle data-color-scheme */
+[data-color-scheme="dark"] select.form-control {
+  background-image: var(--select-caret-dark);
+}
+
+[data-color-scheme="light"] select.form-control {
+  background-image: var(--select-caret-light);
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  outline: var(--focus-outline);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-8);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.form-group {
+  margin-bottom: var(--space-16);
+}
+
+/* Card component */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card__body {
+  padding: var(--space-16);
+}
+
+.card__header,
+.card__footer {
+  padding: var(--space-16);
+  border-bottom: 1px solid var(--color-card-border-inner);
+}
+
+/* Status indicators - simplified with CSS variables */
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.status--success {
+  background-color: rgba(
+    var(--color-success-rgb, 33, 128, 141),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-success);
+  border: 1px solid
+    rgba(var(--color-success-rgb, 33, 128, 141), var(--status-border-opacity));
+}
+
+.status--error {
+  background-color: rgba(
+    var(--color-error-rgb, 192, 21, 47),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-error);
+  border: 1px solid
+    rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
+}
+
+.status--warning {
+  background-color: rgba(
+    var(--color-warning-rgb, 168, 75, 47),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-warning);
+  border: 1px solid
+    rgba(var(--color-warning-rgb, 168, 75, 47), var(--status-border-opacity));
+}
+
+.status--info {
+  background-color: rgba(
+    var(--color-info-rgb, 98, 108, 113),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-info);
+  border: 1px solid
+    rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
+}
+
+/* Container layout */
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: var(--space-16);
+  padding-left: var(--space-16);
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: var(--container-sm);
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: var(--container-md);
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: var(--container-lg);
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: var(--container-xl);
+  }
+}
+
+/* Utility classes */
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-8 {
+  gap: var(--space-8);
+}
+.gap-16 {
+  gap: var(--space-16);
+}
+
+.m-0 {
+  margin: 0;
+}
+.mt-8 {
+  margin-top: var(--space-8);
+}
+.mb-8 {
+  margin-bottom: var(--space-8);
+}
+.mx-8 {
+  margin-left: var(--space-8);
+  margin-right: var(--space-8);
+}
+.my-8 {
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.p-0 {
+  padding: 0;
+}
+.py-8 {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+}
+.px-8 {
+  padding-left: var(--space-8);
+  padding-right: var(--space-8);
+}
+.py-16 {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+.px-16 {
+  padding-left: var(--space-16);
+  padding-right: var(--space-16);
+}
+
+.block {
+  display: block;
+}
+.hidden {
+  display: none;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+/* Dark mode specifics */
+[data-color-scheme="dark"] .btn--outline {
+  border: 1px solid var(--color-border-secondary);
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
+    format('woff2');
+}
+
+/* END PERPLEXITY DESIGN SYSTEM */
+/* ========================================================================== */
+/* 401(k) CALCULATOR — WORLD'S FIRST AI-POWERED RETIREMENT OPTIMIZER */
+/* Production-Ready CSS v1.0 - FinGuid USA Platform */
+/* ========================================================================== */
+
+/* ========================================================================== */
+/* I. CSS VARIABLES & COLOR SYSTEM */
+/* ========================================================================== */
+
+/* Using design system variables - removed duplicate :root declarations */
+
+/* ========================================================================== */
+/* II. BASE & RESET STYLES */
+/* ========================================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color var(--duration-normal) var(--ease-standard), 
+                color var(--duration-normal) var(--ease-standard);
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-standard);
+}
+
+a:hover {
+    color: var(--color-primary-hover);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text);
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+    font-size: var(--font-size-4xl);
+}
+h2 {
+    font-size: var(--font-size-3xl);
+}
+h3 {
+    font-size: var(--font-size-2xl);
+}
+h4 {
+    font-size: var(--font-size-xl);
+}
+h5 {
+    font-size: var(--font-size-lg);
+}
+h6 {
+    font-size: var(--font-size-md);
+}
+
+button {
+    font-family: inherit;
+}
+
+/* ========================================================================== */
+/* III. HEADER STYLES */
+/* ========================================================================== */
+
+.main-header {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-24);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-24);
+}
+
+.header-left {
+    flex: 1;
+    min-width: 300px;
+}
+
+.logo {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 var(--space-8) 0;
+}
+
+.logo a {
+    color: var(--color-text);
+    transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.logo span {
+    color: var(--color-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    margin-left: var(--space-4);
+}
+
+.tagline {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-8) 0;
+}
+
+.features-quick {
+    display: flex;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+}
+
+.feature-quick {
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+/* Accessibility Controls */
+.accessibility-controls {
+    display: flex;
+    gap: var(--space-12);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.control-button {
+    background: var(--color-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: var(--space-8) var(--space-12);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-standard);
+    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    white-space: nowrap;
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-medium);
+}
+
+.control-button:hover {
+    background-color: var(--color-secondary-hover);
+}
+
+.control-button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.control-button i {
+    font-size: var(--font-size-base);
+}
+
+.voice-inactive {
+    color: var(--color-text-secondary);
+}
+
+.voice-active {
+    color: var(--color-error);
+    border-color: var(--color-error);
+    animation: pulse 1s infinite;
+}
+
+.tts-inactive {
+    color: var(--color-text-secondary);
+}
+
+.tts-active {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.install-button {
+    background-color: var(--color-success);
+    color: var(--color-btn-primary-text);
+    border-color: var(--color-success);
+}
+
+.install-button:hover {
+    background-color: var(--color-success);
+    opacity: 0.9;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(var(--color-error-rgb), 0.4); }
+    70% { box-shadow: 0 0 0 var(--space-10) rgba(var(--color-error-rgb), 0); }
+    100% { box-shadow: 0 0 0 0 rgba(var(--color-error-rgb), 0); }
+}
+
+/* ========================================================================== */
+/* IV. MAIN CONTENT LAYOUT */
+/* ========================================================================== */
+
+.main-content {
+    flex-grow: 1;
+    max-width: var(--container-xl);
+    width: 100%;
+    margin: var(--space-32) auto;
+    padding: 0 var(--space-24);
+}
+
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: var(--space-32);
+}
+
+.card {
+    background-color: var(--color-surface);
+    padding: var(--space-24);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-card-border);
+    transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.card-mini {
+    padding: var(--space-16);
+    margin-bottom: var(--space-24);
+}
+
+/* ========================================================================== */
+/* V. INPUT SECTION STYLES */
+/* ========================================================================== */
+
+.input-section {
+    position: sticky;
+    top: 100px;
+    align-self: flex-start;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+}
+
+.section-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: var(--space-8);
+    margin-bottom: var(--space-24);
+    color: var(--color-text);
+}
+
+.input-group {
+    margin-bottom: var(--space-16);
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: var(--space-8);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: var(--space-8) var(--space-12);
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    font-family: var(--font-family-base);
+    transition: border-color var(--duration-fast) var(--ease-standard),
+                box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: var(--select-caret-light);
+    background-repeat: no-repeat;
+    background-position: right var(--space-12) center;
+    background-size: 16px;
+    padding-right: var(--space-32);
+}
+
+@media (prefers-color-scheme: dark) {
+    select {
+        background-image: var(--select-caret-dark);
+    }
+}
+
+[data-color-scheme="dark"] select {
+    background-image: var(--select-caret-dark);
+}
+
+[data-color-scheme="light"] select {
+    background-image: var(--select-caret-light);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--color-primary);
+    outline: var(--focus-outline);
+}
+
+.input-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+}
+
+.input-note,
+.fred-source-note {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    margin-top: var(--space-4);
+}
+
+.fred-source-note {
+    color: var(--color-success);
+}
+
+.input-group-sub-title {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin: var(--space-24) 0 var(--space-16) 0;
+    padding-left: var(--space-4);
+    border-left: 3px solid var(--color-primary);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-8);
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    accent-color: var(--color-primary);
+    margin-top: var(--space-4);
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+    font-weight: var(--font-weight-normal);
+}
+
+.action-group {
+    margin-top: var(--space-32);
+}
+
+.primary-button {
+    width: 100%;
+    padding: var(--space-16);
+    background-color: var(--color-primary);
+    color: var(--color-btn-primary-text);
+    border: none;
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    font-family: var(--font-family-base);
+}
+
+.primary-button:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.primary-button:active:not(:disabled) {
+    background-color: var(--color-primary-active);
+}
+
+.primary-button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.primary-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Ad Slots */
+.ad-slot {
+    background: var(--color-secondary);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-base);
+    padding: var(--space-16);
+    text-align: center;
+    margin: var(--space-24) 0;
+}
+
+.ad-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-8);
+}
+
+.ad-placeholder {
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+/* ========================================================================== */
+/* VI. RESULTS SECTION STYLES */
+/* ========================================================================== */
+
+.results-section {
+    min-height: 600px;
+}
+
+/* Summary Card */
+.summary-card {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    color: var(--color-btn-primary-text);
+    text-align: center;
+    border: none;
+    box-shadow: var(--shadow-md);
+}
+
+.summary-label {
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+    margin-bottom: var(--space-4);
+}
+
+.payment-display {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: var(--space-8);
+}
+
+.payment-figure {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+}
+
+.piti-breakdown-summary {
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+}
+
+/* Tabs */
+.tabs-container {
+    margin-top: var(--space-24);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-base);
+    overflow: hidden;
+    background-color: var(--color-surface);
+}
+
+.tab-buttons {
+    display: flex;
+    border-bottom: 1px solid var(--color-card-border);
+    overflow-x: auto;
+    background-color: var(--color-secondary);
+    gap: 0;
+}
+
+.tab-button {
+    flex-shrink: 0;
+    padding: var(--space-12) var(--space-16);
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    transition: all var(--duration-fast) var(--ease-standard);
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    font-family: var(--font-family-base);
+}
+
+.tab-button:hover {
+    color: var(--color-text);
+}
+
+.tab-button.active {
+    color: var(--color-primary);
+    border-bottom: 3px solid var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+.tab-content {
+    padding: var(--space-24);
+    display: none;
+    animation: fadeIn var(--duration-normal) var(--ease-standard);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Chart */
+.chart-container {
+    height: 350px;
+    width: 100%;
+    margin-bottom: var(--space-24);
+    position: relative;
+}
+
+/* Summary Details Grid */
+.summary-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+}
+
+.detail-item {
+    border: 1px solid var(--color-card-border);
+    padding: var(--space-12);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-secondary);
+}
+
+.detail-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+}
+
+.detail-value {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+}
+
+.detail-item.detail-total {
+    grid-column: 1 / -1;
+    background-color: var(--color-primary);
+    color: var(--color-btn-primary-text);
+    border-color: var(--color-primary);
+}
+
+.detail-item.detail-total .detail-label,
+.detail-item.detail-total .detail-value {
+    color: var(--color-btn-primary-text);
+}
+
+.detail-item.success-box {
+    background-color: rgba(var(--color-success-rgb), 0.15);
+    border-color: var(--color-success);
+}
+
+.detail-item.success-box .detail-value {
+    color: var(--color-success);
+}
+
+/* AI Insights */
+.ai-insight-box {
+    background-color: var(--color-secondary);
+    border-left: 5px solid var(--color-success);
+    padding: var(--space-24);
+    border-radius: var(--radius-base);
+}
+
+#ai-insights-content p {
+    margin-bottom: var(--space-16);
+}
+
+.recommendation-alert {
+    padding: var(--space-16);
+    margin: var(--space-16) 0;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-btn-primary-text);
+}
+
+.recommendation-alert.high-priority {
+    background-color: var(--color-error);
+}
+
+.recommendation-alert.medium-priority {
+    background-color: var(--color-warning);
+    color: var(--color-text);
+}
+
+.recommendation-alert.low-priority {
+    background-color: var(--color-success);
+}
+
+/* Affiliate Slot */
+.affiliate-slot {
+    background: rgba(var(--color-primary-rgb), 0.05);
+    border: 1px solid var(--color-card-border);
+    border-left: 5px solid var(--color-primary);
+    border-radius: var(--radius-base);
+    padding: var(--space-16);
+    margin: var(--space-24) 0;
+}
+
+.affiliate-slot h4 {
+    color: var(--color-text);
+    margin-bottom: var(--space-8);
+}
+
+.affiliate-slot p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-16);
+}
+
+.affiliate-link-cta {
+    width: auto;
+    font-size: var(--font-size-sm);
+    padding: var(--space-8) var(--space-16);
+    display: inline-block;
+}
+
+/* Table Styles */
+.amortization-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-sm);
+}
+
+#projection-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    text-align: right;
+}
+
+#projection-table th,
+#projection-table td {
+    padding: var(--space-8) var(--space-12);
+    border-bottom: 1px solid var(--color-card-border);
+    text-align: right;
+}
+
+#projection-table th {
+    background-color: var(--color-secondary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+    text-align: right;
+}
+
+#projection-table tbody tr:hover {
+    background-color: var(--color-secondary);
+}
+
+/* ========================================================================== */
+/* VII. FOOTER STYLES */
+/* ========================================================================== */
+
+.footer {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-64);
+}
+
+.footer-sponsor {
+    background: var(--color-bg-5);
+    padding: var(--space-32) 0;
+    border-bottom: 1px solid var(--color-card-border);
+}
+
+.container {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: 0 var(--space-24);
+}
+
+.sponsor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-24);
+}
+
+.sponsor-item {
+    text-align: center;
+    padding: var(--space-16);
+    border-radius: var(--radius-base);
+    background: var(--color-background);
+    transition: all var(--duration-fast) var(--ease-standard);
+    border: 1px solid var(--color-card-border);
+}
+
+.sponsor-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.sponsor-item h4 {
+    margin-bottom: var(--space-8);
+    color: var(--color-text);
+    font-size: var(--font-size-base);
+}
+
+.sponsor-item p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-12);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+}
+
+.sponsor-item a {
+    display: inline-block;
+    padding: var(--space-8) var(--space-20);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    color: var(--color-btn-primary-text);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.sponsor-item a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.footer-nav {
+    padding: var(--space-32) 0;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: var(--space-32);
+}
+
+.footer-col h5 {
+    margin-bottom: var(--space-16);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+}
+
+.footer-col p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    margin-bottom: var(--space-12);
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col li {
+    margin-bottom: var(--space-10);
+}
+
+.footer-col a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.footer-col a:hover {
+    color: var(--color-primary);
+}
+
+.footer-bottom {
+    padding: var(--space-24) 0;
+    text-align: center;
+    background: var(--color-secondary);
+    border-top: 1px solid var(--color-border);
+}
+
+.footer-bottom p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-12);
+}
+
+.footer-bottom a {
+    color: var(--color-primary);
+    text-decoration: none;
+    margin: 0 var(--space-12);
+}
+
+.footer-badges {
+    display: flex;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-16);
+}
+
+.badge {
+    font-size: var(--font-size-xs);
+    background-color: var(--color-surface);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    opacity: 0.8;
+    border: 1px solid var(--color-card-border);
+}
+
+/* ========================================================================== */
+/* VIII. TOAST NOTIFICATIONS */
+/* ========================================================================== */
+
+.toast-container {
+    position: fixed;
+    bottom: var(--space-24);
+    right: var(--space-24);
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.toast {
+    margin-top: var(--space-8);
+    padding: var(--space-12) var(--space-24);
+    border-radius: var(--radius-base);
+    color: var(--color-btn-primary-text);
+    box-shadow: var(--shadow-md);
+    transform: translateY(100px);
+    transition: transform var(--duration-normal) var(--ease-standard);
+    pointer-events: auto;
+    max-width: 350px;
+    word-wrap: break-word;
+}
+
+.toast.show {
+    transform: translateY(0);
+}
+
+.toast.success {
+    background-color: var(--color-success);
+}
+
+.toast.error {
+    background-color: var(--color-error);
+}
+
+.toast.info {
+    background-color: var(--color-primary);
+}
+
+/* ========================================================================== */
+/* IX. RESPONSIVE DESIGN */
+/* ========================================================================== */
+
+@media (max-width: 1024px) {
+    .calculator-container {
+        grid-template-columns: 1fr;
+    }
+
+    .input-section {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-left {
+        width: 100%;
+    }
+
+    .tagline {
+        font-size: var(--font-size-base);
+    }
+
+    .accessibility-controls {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .input-split {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-details {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sponsor-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 0 var(--space-16);
+        margin: var(--space-24) auto;
+    }
+
+    .header-content {
+        padding: 0;
+    }
+
+    .logo {
+        font-size: var(--font-size-lg);
+    }
+
+    .tagline {
+        font-size: var(--font-size-base);
+        margin: 0;
+    }
+
+    .features-quick {
+        order: 3;
+        width: 100%;
+        margin-top: var(--space-16);
+        font-size: var(--font-size-xs);
+    }
+
+    .accessibility-controls {
+        width: 100%;
+        margin-top: var(--space-8);
+        gap: var(--space-8);
+    }
+
+    .control-button {
+        padding: var(--space-8);
+        font-size: var(--font-size-xs);
+    }
+
+    .control-button i {
+        font-size: var(--font-size-sm);
+    }
+
+    .tab-button {
+        padding: var(--space-8) var(--space-12);
+        font-size: var(--font-size-xs);
+    }
+
+    .tab-buttons {
+        overflow-x: auto;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    .payment-figure {
+        font-size: var(--font-size-3xl);
+    }
+
+    .sponsor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #projection-table {
+        font-size: var(--font-size-xs);
+    }
+
+    #projection-table th,
+    #projection-table td {
+        padding: var(--space-4) var(--space-8);
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        padding: var(--space-16);
+    }
+
+    .header-content {
+        gap: var(--space-16);
+    }
+
+    .logo {
+        font-size: var(--font-size-base);
+    }
+
+    .tagline {
+        font-size: var(--font-size-sm);
+    }
+
+    .features-quick {
+        gap: var(--space-8);
+    }
+
+    .feature-quick {
+        font-size: var(--font-size-xs);
+    }
+
+    .card {
+        padding: var(--space-16);
+    }
+
+    .primary-button {
+        padding: var(--space-12);
+        font-size: var(--font-size-base);
+    }
+
+    .payment-figure {
+        font-size: var(--font-size-2xl);
+    }
+
+    .tab-button {
+        font-size: var(--font-size-xs);
+        padding: var(--space-8) var(--space-12);
+    }
+
+    .summary-details {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-item.detail-total {
+        grid-column: 1;
+    }
+
+    .accessibility-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .control-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .footer-sponsor {
+        padding: var(--space-16) 0;
+    }
+
+    .footer-nav {
+        padding: var(--space-16) 0;
+    }
+
+    .sponsor-item {
+        padding: var(--space-12);
+    }
+
+    .sponsor-item h4 {
+        font-size: var(--font-size-sm);
+    }
+
+    .sponsor-item p {
+        font-size: var(--font-size-xs);
+    }
+}
