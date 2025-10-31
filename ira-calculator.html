@@ -1,274 +1,517 @@
 <!DOCTYPE html>
-<html lang="en" data-color-scheme="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>IRA Calculator — World's First AI-Powered Roth vs Traditional Analysis | FinGuid USA</title>
-    <meta name="description" content="Calculate your optimal IRA contribution strategy with FinGuid's AI-Powered Calculator. Compare Roth vs. Traditional IRA tax benefits and see your future retirement value. SCO Friendly for Americans.">
-    <meta name="keywords" content="IRA calculator, Roth IRA vs Traditional IRA, retirement calculator, IRA contribution limits, 2025 IRA, FinGuid, AI financial calculator, tax analysis, optimal contribution, SCO Friendly, AI Friendly">
+    <meta name="description" content="IRA Calculator - World's First AI-Enhanced Financial Calculator Platform. Compare Roth vs Traditional IRAs with intelligent tax analysis, real-time calculations, and AI-powered optimization for 2025.">
+    <meta name="keywords" content="IRA calculator, Roth IRA, Traditional IRA, financial calculator, AI calculator, tax planning, retirement planning">
+    <meta name="author" content="FinGuid - World's First AI Financial Calculator Platform">
     <meta name="robots" content="index, follow">
-    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
-    
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#19343B"> 
-    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
-    
+    <meta property="og:title" content="IRA Calculator - World's First AI Financial Calculator">
+    <meta property="og:description" content="Advanced IRA calculator with AI insights, real-time tax analysis, and optimization tools.">
+    <meta property="og:type" content="website">
+
+    <title>IRA Calculator - World's First AI Financial Calculator Platform | FinGuid</title>
+
+    <link rel="stylesheet" href="ira-calculator.css">
+
+    <!-- Structured Data - SoftwareApplication Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "IRA Calculator - World's First AI Financial Calculator",
+        "description": "Advanced IRA calculator comparing Roth and Traditional IRAs with AI-powered optimization",
+        "url": "https://finguid.com/ira-calculator",
+        "applicationCategory": "FinanceApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is the difference between Roth IRA and Traditional IRA?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Traditional IRA contributions may be tax-deductible upfront, earnings grow tax-deferred, and you pay taxes on withdrawals. Roth IRA uses after-tax contributions, with tax-free growth and tax-free withdrawals in retirement."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What are the 2025 IRA contribution limits?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "2025 IRA contribution limit is $7,000 for individuals under age 50, and $8,000 for those 50 and older with catch-up contributions."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I contribute to both Roth and Traditional IRA?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, you can contribute to both, but combined contributions cannot exceed the annual limit of $7,000 or $8,000 if age 50+."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is a backdoor Roth IRA?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Strategy for high-income earners: contribute to Traditional IRA (non-deductible) and immediately convert to Roth to access Roth benefits despite income limits."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is Required Minimum Distribution (RMD)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Minimum amount you must withdraw from Traditional IRA starting at age 73. Roth IRAs have no RMD requirements during account owner's lifetime."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-NYBL2CDNQJ');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NYBL2CDNQJ', {
+            'page_path': '/ira-calculator'
+        });
     </script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="ira-calculator.css">
 </head>
-<body>
+<body data-color-scheme="light">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <header class="header">
-        <div class="header-container">
-            <div class="header-content">
-                <a href="/" class="logo" aria-label="FinGuid Home">
-                    Fin**Guid** 🇺🇸
-                </a>
-                <h1 class="tagline">World's First AI-Enhanced IRA Calculator & Tax Analyzer</h1>
-                <div class="features-quick">
-                    <i class="fas fa-robot" aria-hidden="true"></i> AI Insights | 
-                    <i class="fas fa-microchip" aria-hidden="true"></i> FRED Live | 
-                    <i class="fas fa-mobile-alt" aria-hidden="true"></i> PWA
+    <!-- HEADER - UNIFIED SINGLE LINE WITH CALCULATOR IMAGE -->
+    <header class="header" role="banner">
+        <div class="header-content">
+            <div class="header-main">
+                <!-- Calculator Icon/Logo -->
+                <div class="calculator-icon">📊</div>
+
+                <!-- Brand Section -->
+                <div class="brand-section">
+                    <span class="brand-name">FinGuid</span>
+                    <span class="brand-tagline">World's First AI Financial Calculator Platform</span>
+                </div>
+
+                <!-- Controls -->
+                <div class="header-controls">
+                    <button class="btn-icon" id="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle Dark Mode">🌙</button>
+                    <button class="btn-icon" id="voice-btn" aria-label="Voice command" title="Voice Command">🎤</button>
+                    <button class="btn-icon" id="help-btn" aria-label="Help" title="Help & Shortcuts">❓</button>
                 </div>
             </div>
-            <div class="accessibility-controls">
-                <button id="voice-command-button" class="control-button" title="Voice Command" aria-label="Toggle Voice Command">
-                    <i class="fas fa-microphone" aria-hidden="true"></i>
-                </button>
-                <button id="theme-toggle-button" class="control-button" title="Toggle Light/Dark Mode" aria-label="Toggle Light and Dark Mode">
-                    <i class="fas fa-sun" aria-hidden="true"></i>
-                </button>
-            </div>
+        </div>
+
+        <!-- Advertisement Space - 728x90 -->
+        <div class="ad-banner-728x90">
+            <div class="ad-label">Advertisement - 728x90</div>
+            <div class="ad-content">Your ad here</div>
         </div>
     </header>
 
-    <main class="calculator-container">
-        
-        <section class="input-section card">
-            <h2>Your Retirement Profile</h2>
-            
-            <form id="ira-calculator-form">
-                
-                <div class="input-split">
-                    <div class="input-group">
-                        <label for="current-age">Current Age (Years)</label>
-                        <input type="number" id="current-age" value="35" min="18" max="75" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="retirement-age">Retirement Age (Years)</label>
-                        <input type="number" id="retirement-age" value="65" min="50" max="85" required>
-                    </div>
-                </div>
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+        <div class="container">
+            <a href="/">FinGuid</a> / <a href="/calculators">Calculators</a> / <a href="/ira-calculator" aria-current="page">IRA Calculator</a>
+        </div>
+    </nav>
 
-                <div class="input-group">
-                    <label for="filing-status">Tax Filing Status</label>
-                    <select id="filing-status" required>
-                        <option value="single">Single / Head of Household</option>
-                        <option value="married-joint">Married Filing Jointly</option>
-                        <option value="married-separate">Married Filing Separately</option>
-                    </select>
-                </div>
-                
-                <div class="input-group">
-                    <label for="magi">Current Modified Adjusted Gross Income (MAGI) ($)</label>
-                    <input type="number" id="magi" value="85000" min="0" required>
-                </div>
+    <!-- MAIN CONTENT -->
+    <main class="main" id="main-content" role="main">
+        <div class="container">
+            <!-- Calculator Wrapper -->
+            <div class="calculator-wrapper">
+                <!-- LEFT PANEL: INPUTS -->
+                <div class="inputs-panel" role="region" aria-label="Calculator Inputs">
+                    <h2 class="panel-title">📋 Your Information</h2>
 
-                <div class="input-group">
-                    <label for="current-tax-rate">Current Marginal Tax Rate (%)</label>
-                    <input type="number" id="current-tax-rate" value="22" min="10" max="40" step="1" required>
-                    <p class="input-helper">The tax rate you pay on your last dollar earned now.</p>
-                </div>
-                <div class="input-group">
-                    <label for="retirement-tax-rate">Expected Retirement Tax Rate (%)</label>
-                    <input type="number" id="retirement-tax-rate" value="15" min="0" max="40" step="1" required>
-                    <p class="input-helper">The tax rate you expect to pay on withdrawals later.</p>
-                </div>
+                    <!-- Personal Information Section -->
+                    <div class="input-section">
+                        <h3 class="section-heading">👤 Personal Info</h3>
 
-                <div class="input-group">
-                    <label for="workplace-plan">Covered by a Workplace Retirement Plan?</label>
-                    <select id="workplace-plan" required>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
-
-                <hr class="separator">
-
-                <h2>Investment Details</h2>
-                <div class="input-split">
-                    <div class="input-group">
-                        <label for="starting-balance">Current IRA/Savings Balance ($)</label>
-                        <input type="number" id="starting-balance" value="10000" min="0" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="annual-contribution">Annual Contribution ($)</label>
-                        <input type="number" id="annual-contribution" value="7000" min="1" required>
-                        <p class="contribution-limit-hint input-helper"></p>
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label for="return-rate">Expected Annual Return Rate (%)</label>
-                    <input type="number" id="return-rate" value="8.0" min="0.1" max="15.0" step="0.1" required>
-                    <p class="input-helper">Typical stock market return is 8-10% long-term.</p>
-                </div>
-
-                <button type="submit" class="calculate-button">
-                    <i class="fas fa-calculator" aria-hidden="true"></i> Calculate My Optimal IRA Strategy
-                </button>
-            </form>
-            
-            <div class="ad-slot-placeholder-mobile">
-                <p>Sponsored: **Find Low-Cost IRA Accounts Here** (Affiliate/Sponsor Link)</p>
-            </div>
-            
-        </section>
-
-        <section class="results-section card">
-            <h2 id="results-heading">IRA Analysis Results</h2>
-            
-            <div class="tab-controls-results">
-                <button class="tab-button active" data-tab="summary-report">Summary Report</button>
-                <button class="tab-button" data-tab="tax-analysis">Tax & Limits</button>
-                <button class="tab-button" data-tab="comparison-chart">Growth Chart</button>
-                <button class="tab-button" data-tab="ai-insights"><i class="fas fa-robot"></i> AI Insights</button>
-            </div>
-
-            <div id="summary-report" class="tab-content active">
-                <div class="summary-key-stats">
-                    <div class="stat-box">
-                        <p class="stat-label">Years to Retirement</p>
-                        <p class="stat-value" id="years-to-retirement">--</p>
-                    </div>
-                    <div class="stat-box">
-                        <p class="stat-label">Max Allowed Contribution (2025)</p>
-                        <p class="stat-value" id="max-contribution-allowed">--</p>
-                    </div>
-                    <div class="stat-box">
-                        <p class="stat-label">Estimated Current Tax Savings (Traditional)</p>
-                        <p class="stat-value" id="traditional-tax-savings">--</p>
-                    </div>
-                </div>
-
-                <div class="comparison-summary">
-                    <h3>IRA Future Value Comparison (Age 65)</h3>
-                    <div class="comparison-grid">
-                        <div class="comparison-item card">
-                            <h4>Roth IRA (Tax-Free Withdrawal)</h4>
-                            <p class="future-value-label">Tax-Free Retirement Income</p>
-                            <p class="future-value-amount" id="roth-future-value">--</p>
+                        <div class="form-group">
+                            <label for="current-age">Current Age:</label>
+                            <input type="number" id="current-age" value="35" min="18" max="100" placeholder="35">
                         </div>
-                        <div class="comparison-item card">
-                            <h4>Traditional IRA (Taxable Withdrawal)</h4>
-                            <p class="future-value-label">Pre-Tax Retirement Balance</p>
-                            <p class="future-value-amount" id="traditional-future-value">--</p>
+
+                        <div class="form-group">
+                            <label for="retirement-age">Retirement Age:</label>
+                            <input type="number" id="retirement-age" value="67" min="50" max="100" placeholder="67">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="filing-status">Filing Status:</label>
+                            <select id="filing-status">
+                                <option value="single">Single</option>
+                                <option value="mfj">Married Filing Jointly</option>
+                                <option value="mfs">Married Filing Separately</option>
+                                <option value="hoh">Head of Household</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label><input type="checkbox" id="has-workplace-plan"> Workplace retirement plan (401k)</label>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div id="tax-analysis" class="tab-content">
-                <h3>IRA Contribution Eligibility (2025 Limits)</h3>
-                <div id="eligibility-report" class="report-box">
-                    <p>Enter your details and click Calculate to see your eligibility and limits.</p>
-                </div>
-                
-                <hr class="separator">
-                
-                <h3>Tax Analysis: The Roth vs. Traditional Choice</h3>
-                <div id="tax-choice-analysis" class="report-box">
-                    <p>The optimal choice depends on whether your current tax rate (pre-tax Traditional benefit) or your expected retirement tax rate (tax-free Roth benefit) is higher. Results will be shown here.</p>
-                </div>
+                    <!-- Income & Tax Section -->
+                    <div class="input-section">
+                        <h3 class="section-heading">💵 Income & Taxes</h3>
 
-                <div class="monetization-callout">
-                    <p>🚀 **Sponsor Product:** Maximize your retirement savings with a personalized wealth management plan. **Click here for a Free Consultation.**</p>
-                </div>
-            </div>
+                        <div class="form-group">
+                            <label for="gross-income">Gross Income (MAGI):</label>
+                            <input type="number" id="gross-income" value="80000" min="0" placeholder="80000">
+                        </div>
 
-            <div id="comparison-chart" class="tab-content">
-                <canvas id="iraGrowthChart"></canvas>
-            </div>
-            
-            <div id="ai-insights" class="tab-content">
-                <div class="ai-report-box card">
-                    <p class="ai-header"><i class="fas fa-robot"></i> **FinGuid AI Retirement Analyzer**</p>
-                    <div id="ai-insights-content">
-                        <p>FinGuid's AI will provide a personalized strategy and live market context here once you run the calculation.</p>
-                        <ul>
-                            <li>**Optimal Strategy:** Roth vs. Traditional recommendation.</li>
-                            <li>**Risk/Return Analysis:** Context based on the FRED 10-Year Treasury rate.</li>
-                            <li>**Monetization Insight:** Recommendations on next steps and partner products.</li>
-                        </ul>
+                        <div class="form-group">
+                            <label for="current-tax-bracket">Current Tax Bracket (%):</label>
+                            <input type="number" id="current-tax-bracket" value="22" min="10" max="37" step="0.1" placeholder="22">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="retirement-tax-bracket">Retirement Tax Bracket (%):</label>
+                            <input type="number" id="retirement-tax-bracket" value="22" min="10" max="37" step="0.1" placeholder="22">
+                        </div>
                     </div>
-                    <div class="fred-api-status">
-                         <p>Live Market Data: <span id="fred-rate-display">--</span></p>
+
+                    <!-- Contribution Section -->
+                    <div class="input-section">
+                        <h3 class="section-heading">💰 Contributions</h3>
+
+                        <div class="form-group">
+                            <label for="annual-contribution">Annual Contribution:</label>
+                            <input type="number" id="annual-contribution" value="7000" min="0" max="8000" placeholder="7000">
+                        </div>
+
+                        <div class="form-group">
+                            <label><input type="checkbox" id="age-50-plus"> Age 50+ (Catch-up eligible)</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="existing-balance">Existing IRA Balance:</label>
+                            <input type="number" id="existing-balance" value="25000" min="0" placeholder="25000">
+                        </div>
+                    </div>
+
+                    <!-- Investment Assumptions -->
+                    <div class="input-section">
+                        <h3 class="section-heading">📈 Investment Assumptions</h3>
+
+                        <div class="form-group">
+                            <label for="annual-return">Expected Annual Return (%):</label>
+                            <input type="number" id="annual-return" value="7" min="0" max="15" step="0.1" placeholder="7">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Inflation Rate (%):</label>
+                            <div class="inflation-display">
+                                <span id="inflation-value">3.0%</span>
+                                <span class="fed-note">(Live from FRED)</span>
+                            </div>
+                            <input type="number" id="inflation-rate" value="3" min="0" max="10" step="0.1" placeholder="3">
+                        </div>
+                    </div>
+
+                    <!-- Calculate Button -->
+                    <button class="btn-primary" id="calculate-btn" style="width: 100%; margin-top: 24px;">📊 Calculate & Compare</button>
+                </div>
+
+                <!-- RIGHT PANEL: RESULTS -->
+                <div class="results-panel" role="region" aria-label="Calculator Results">
+                    <h2 class="panel-title">📊 Results & Analysis</h2>
+
+                    <!-- Summary Card -->
+                    <div class="summary-card" id="summary-card" style="display: none;">
+                        <div class="summary-label">RECOMMENDED PATH</div>
+                        <div class="recommendation-text" id="recommendation-text">
+                            Select your options and click Calculate
+                        </div>
+                        <div class="recommendation-reason" id="recommendation-reason">
+                            Your analysis will appear here
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <div class="tab-buttons" role="tablist">
+                            <button class="tab-btn active" data-tab="traditional" role="tab" aria-selected="true">📋 Traditional</button>
+                            <button class="tab-btn" data-tab="roth" role="tab" aria-selected="false">🔐 Roth</button>
+                            <button class="tab-btn" data-tab="comparison" role="tab" aria-selected="false">⚖️ Comparison</button>
+                            <button class="tab-btn" data-tab="insights" role="tab" aria-selected="false">✨ AI Insights</button>
+                        </div>
+
+                        <!-- Traditional IRA Tab -->
+                        <div class="tab-content active" id="tab-traditional" role="tabpanel">
+                            <h3 class="result-title">📋 Traditional IRA</h3>
+                            <div class="result-grid">
+                                <div class="result-box highlight">
+                                    <span class="result-label">Monthly Payment</span>
+                                    <span class="result-value" id="trad-monthly-contrib">$583.33</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Tax Savings Now</span>
+                                    <span class="result-value" id="trad-tax-savings">$1,540</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Tax Deductible</span>
+                                    <span class="result-value" id="trad-deductible">Yes</span>
+                                </div>
+                            </div>
+                            <div class="result-grid">
+                                <div class="result-box">
+                                    <span class="result-label">Balance @ Retirement</span>
+                                    <span class="result-value" id="trad-retirement-balance">$892,450</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Annual RMD @ 73</span>
+                                    <span class="result-value" id="trad-rmd">$44,123</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Retirement Tax</span>
+                                    <span class="result-value" id="trad-retirement-tax">$196,139</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Roth IRA Tab -->
+                        <div class="tab-content" id="tab-roth" role="tabpanel">
+                            <h3 class="result-title">🔐 Roth IRA</h3>
+                            <div class="result-grid">
+                                <div class="result-box highlight">
+                                    <span class="result-label">Monthly Payment</span>
+                                    <span class="result-value" id="roth-monthly-contrib">$583.33</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Current Tax Cost</span>
+                                    <span class="result-value" id="roth-tax-cost">$1,540</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Income Eligible</span>
+                                    <span class="result-value" id="roth-eligible">Yes</span>
+                                </div>
+                            </div>
+                            <div class="result-grid">
+                                <div class="result-box">
+                                    <span class="result-label">Tax-Free Balance</span>
+                                    <span class="result-value" id="roth-retirement-balance">$892,450</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">RMD Required</span>
+                                    <span class="result-value" id="roth-rmd">No</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">After-Tax Value</span>
+                                    <span class="result-value" id="roth-after-tax">$892,450</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Comparison Tab -->
+                        <div class="tab-content" id="tab-comparison" role="tabpanel">
+                            <h3 class="result-title">⚖️ Comparison Analysis</h3>
+                            <div style="position: relative; width: 100%; height: 400px; margin-bottom: 24px;">
+                                <canvas id="ira-comparison-chart"></canvas>
+                            </div>
+                            <div class="verdict-box" id="comparison-verdict">
+                                <strong>Your Best Strategy:</strong>
+                                <p id="comparison-text">Enter data and calculate to see recommendation</p>
+                            </div>
+                        </div>
+
+                        <!-- AI Insights Tab -->
+                        <div class="tab-content" id="tab-insights" role="tabpanel">
+                            <h3 class="result-title">✨ AI-Powered Insights</h3>
+                            <div class="insights-container" id="insights-container">
+                                <div style="text-align: center; color: var(--text-light); padding: 32px 16px;">
+                                    Enter your information and click Calculate
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px;">
+                        <button class="btn-primary" id="export-btn" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">📥 Export PDF</button>
+                        <button class="btn-primary" id="share-btn" style="background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);">🔗 Share</button>
                     </div>
                 </div>
             </div>
-            
-        </section>
-        
+        </div>
     </main>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <nav class="footer-nav">
-                <div class="nav-column">
-                    <h4>Calculators</h4>
-                    <ul>
-                        <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                        <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy Analyzer</a></li>
-                        <li><a href="/ira-calculator.html">IRA Calculator (Current)</a></li>
-                    </ul>
+    <!-- COMPREHENSIVE FAQ SECTION -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>❓ Frequently Asked Questions</h2>
+
+            <details class="faq-item">
+                <summary>What is the difference between Roth IRA and Traditional IRA?</summary>
+                <p>Traditional IRA contributions may be tax-deductible, earnings grow tax-deferred, and you pay taxes on withdrawals. Roth IRA uses after-tax contributions with tax-free growth and tax-free withdrawals in retirement.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>What are the 2025 IRA contribution limits?</summary>
+                <p>2025 IRA limit is $7,000 for those under 50, and $8,000 for age 50+ (includes $1,000 catch-up). This is a combined limit for all IRAs.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Can I contribute to both Roth and Traditional IRA?</summary>
+                <p>Yes, but combined contributions cannot exceed the annual limit ($7,000 or $8,000 if 50+).</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>What is a backdoor Roth IRA?</summary>
+                <p>Strategy for high earners: contribute to Traditional IRA (non-deductible) and immediately convert to Roth to access Roth benefits despite income limits.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>What is Required Minimum Distribution (RMD)?</summary>
+                <p>Minimum amount required to withdraw from Traditional IRA starting at age 73. Roth IRAs have no RMD requirements during account owner's lifetime.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Can I withdraw from Roth IRA early without penalty?</summary>
+                <p>You can withdraw contributions anytime penalty-free. Earnings have restrictions before 59½ unless you qualify for exceptions like first-time home purchase.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>What is the Roth IRA income limit?</summary>
+                <p>2025 phase-out: $150k-$165k (Single), $236k-$246k (MFJ). If income exceeds limits, consider backdoor Roth strategy.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Is Traditional IRA contribution tax deductible?</summary>
+                <p>May be deductible if no workplace plan, or deduction phases out: $79k-$89k (Single), $126k-$146k (MFJ) if workplace plan active.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>What is a spousal IRA?</summary>
+                <p>Non-working spouse can have own IRA funded from working spouse's income (filing jointly). Both can contribute up to limits if combined income sufficient.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>What is a SEP IRA?</summary>
+                <p>For self-employed and small business owners. Contribute up to 25% of net self-employment income or $70,000 (2025), whichever is less.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" role="contentinfo">
+        <!-- Sponsor Section -->
+        <div class="footer-sponsor">
+            <div class="container">
+                <h4>🏆 Trusted Financial Partners</h4>
+                <div class="sponsor-grid">
+                    <a href="#" onclick="window.gtag && gtag('event', 'affiliate_click', {'event_category': 'ira', 'event_label': 'charles_schwab'}); return false;">Charles Schwab</a>
+                    <a href="#" onclick="window.gtag && gtag('event', 'affiliate_click', {'event_category': 'ira', 'event_label': 'fidelity'}); return false;">Fidelity Investments</a>
+                    <a href="#" onclick="window.gtag && gtag('event', 'affiliate_click', {'event_category': 'ira', 'event_label': 'vanguard'}); return false;">Vanguard</a>
+                    <a href="#" onclick="window.gtag && gtag('event', 'affiliate_click', {'event_category': 'ira', 'event_label': 'tax_software'}); return false;">Tax Software</a>
                 </div>
-                <div class="nav-column">
-                    <h4>FinGuid Resources</h4>
-                    <ul>
-                        <li><a href="/blog/ai-investing-tips.html">AI Investing Blog</a></li>
-                        <li><a href="/about.html">About FinGuid</a></li>
-                        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
-                    </ul>
+            </div>
+        </div>
+
+        <!-- Footer Navigation -->
+        <div class="footer-nav">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h5>About</h5>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/about">About FinGuid</a></li>
+                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Calculators</h5>
+                        <ul>
+                            <li><a href="/mortgage-calculator">Mortgage Calculator</a></li>
+                            <li><a href="/car-lease-calculator">Car Lease Calculator</a></li>
+                            <li><a href="/retirement-calculator">Retirement Calculator</a></li>
+                            <li><a href="/investment-calculator">Investment Calculator</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Resources</h5>
+                        <ul>
+                            <li><a href="/ira-guide">IRA Planning Guide</a></li>
+                            <li><a href="/retirement-planning">Retirement Planning</a></li>
+                            <li><a href="/tax-tips">Tax Tips</a></li>
+                            <li><a href="/investment-strategies">Investment Strategies</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Legal</h5>
+                        <ul>
+                            <li><a href="/privacy">Privacy Policy</a></li>
+                            <li><a href="/terms">Terms of Service</a></li>
+                            <li><a href="/disclaimer">Disclaimer</a></li>
+                            <li><a href="/cookie-policy">Cookie Policy</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="nav-column">
-                    <h4>Partnership & Monetization</h4>
-                    <ul>
-                        <li><a href="#advertising">Advertising (Ad Slot)</a></li>
-                        <li><a href="#affiliates">Affiliate Products</a></li>
-                        <li><a href="#sponsor-link">Sponsor Products</a></li>
-                    </ul>
-                </div>
-            </nav>
-            <div class="footer-bottom">
-                <div class="footer-disclaimer">
-                    <p>
-                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. **OUR ONLY SOURCE OF INCOME IS ADVERTISING, SPONSOR, AND AFFILIATE PARTNERSHIPS.**
-                    </p>
-                </div>
-                <div class="footer-badges">
-                    <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
-                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
-                    <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
-                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
-                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
-                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <p><strong>&copy; 2025 FinGuid - World's First AI Financial Calculator Platform</strong></p>
+                <p>🌍 Designed for Americans | Advanced AI Technology | Multiple Financial Calculators | Trusted by Thousands</p>
+                <p style="font-size: 0.875rem; margin-top: 12px;">Disclaimer: Educational tool only. Not financial, tax, or legal advice. Consult professionals before making investment decisions.</p>
             </div>
         </div>
     </footer>
 
-    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <!-- Help Modal -->
+    <div id="help-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: var(--card); padding: 32px; border-radius: 12px; max-width: 600px; max-height: 80vh; overflow-auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="margin: 0; color: #24ACB9;">❓ Help & Shortcuts</h2>
+                <button onclick="document.getElementById('help-modal').style.display='none';" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
+            </div>
+            <div style="color: var(--text-light); line-height: 1.8;">
+                <h3 style="color: #24ACB9; margin-top: 16px;">🎤 Voice Commands</h3>
+                <p>Click microphone and say: "Calculate", "Roth", "Traditional", "Show insights", "Dark mode"</p>
+
+                <h3 style="color: #24ACB9; margin-top: 16px;">📱 Mobile Friendly</h3>
+                <p>Works perfectly on all devices - phone, tablet, desktop</p>
+
+                <h3 style="color: #24ACB9; margin-top: 16px;">📊 How to Use</h3>
+                <ol style="padding-left: 20px;">
+                    <li>Enter your age and retirement age</li>
+                    <li>Select filing status and enter income</li>
+                    <li>Enter contribution amount</li>
+                    <li>Click "Calculate & Compare"</li>
+                    <li>View results and AI insights</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="ira-calculator.js"></script>
-    
 </body>
 </html>
