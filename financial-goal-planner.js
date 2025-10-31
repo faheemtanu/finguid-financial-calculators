@@ -132,19 +132,6 @@ const Utils = (function() {
         }
     }
 
-    function exportToCSV(data, filename) {
-        const csvContent = data.map(row => row.join(',')).join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', filename);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
     // Expose public methods
     return {
         formatCurrency,
@@ -154,8 +141,7 @@ const Utils = (function() {
         setElementText,
         setElementHTML,
         setInputValue,
-        toggleClass,
-        exportToCSV
+        toggleClass
     };
 })();
 
@@ -163,7 +149,7 @@ const Utils = (function() {
 // S: FRED API SERVICE (SRP: Fetching external data)
 // ==========================================================================
 const FredService = (function(Config, Utils) {
-    'use strict';
+    'useD strict';
 
     async function fetchFREDRate(seriesId, inputId, noteId, dataExtractor) {
         const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${Config.FRED_API_KEY}&file_type=json&sort_order=desc&limit=12`;
@@ -668,7 +654,7 @@ const AppController = (function(Config, Utils, Solver, Chart, AI, Fred, Speech) 
         Utils.setElementText(Config.DOM.primaryUnit, results.unit);
 
         const finalProjection = projection.length > 0 ? projection[projection.length - 1] : { balance: inputs.currentSavings };
-        Utils.setElementText(Config.DOM.projectionSummary, `Goal: ${Utils.formatCurrency(inflatedGoal)} | Final Balance: ${Utils.formatCurrency(finalProjection.balance)}`);
+        Utils.setElementText(Config.DOM.projectionSummary, `Inflated Goal: ${Utils.formatCurrency(inflatedGoal)} | Final Balance: ${Utils.formatCurrency(finalProjection.balance)}`);
         
         // Update details tab
         const totalContributions = inputs.currentSavings + projection.reduce((acc, p) => {
@@ -818,27 +804,6 @@ const AppController = (function(Config, Utils, Solver, Chart, AI, Fred, Speech) 
             icon.className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
         } catch (e) {}
     }
-
-    function handleExportCSV() {
-        if (state.projection.length === 0) {
-            Utils.showToast("No data to export. Please calculate first.", "error");
-            return;
-        }
-
-        const csvData = [
-            ['Year', 'Annual Contribution', 'Growth', 'Balance'],
-            ...state.projection.map(p => [
-                p.year,
-                p.contribution.toFixed(2),
-                p.growth.toFixed(2),
-                p.balance.toFixed(2)
-            ])
-        ];
-
-        Utils.exportToCSV(csvData, `financial-goal-plan-${Date.now()}.csv`);
-        Utils.showToast("CSV exported successfully!", "success");
-        Utils.trackEvent('export_csv', { goal_name: state.inputs.goalName });
-    }
     
     function initialize() {
         document.addEventListener('DOMContentLoaded', () => {
@@ -859,9 +824,6 @@ const AppController = (function(Config, Utils, Solver, Chart, AI, Fred, Speech) 
                 btn.addEventListener('click', () => showTab(btn.getAttribute('data-tab')));
             });
 
-            // CSV Export
-            document.getElementById('export-csv-button').addEventListener('click', handleExportCSV);
-
             // Initialize Speech
             Speech.initialize(handleVoiceCommand);
             document.getElementById('toggle-voice-command').addEventListener('click', Speech.toggleListening);
@@ -871,33 +833,6 @@ const AppController = (function(Config, Utils, Solver, Chart, AI, Fred, Speech) 
             
             // Fetch live data
             Fred.initialize(); 
-            
-            // Advanced options toggle
-            document.getElementById('toggle-advanced-options').addEventListener('click', () => {
-                const btn = document.getElementById('toggle-advanced-options');
-                const content = document.getElementById('advanced-options-group');
-                const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-                btn.setAttribute('aria-expanded', !isExpanded);
-                content.setAttribute('aria-hidden', isExpanded);
-            });
-
-            // PWA Install
-            let deferredPrompt;
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                document.getElementById('pwa-install-button').classList.remove('hidden');
-            });
-
-            document.getElementById('pwa-install-button').addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`User response to install prompt: ${outcome}`);
-                    deferredPrompt = null;
-                    document.getElementById('pwa-install-button').classList.add('hidden');
-                }
-            });
             
             // Initial setup
             toggleMonthlyInput(); 
