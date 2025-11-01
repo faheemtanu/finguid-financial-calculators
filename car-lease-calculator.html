@@ -594,5 +594,62 @@
     
     <div id="toast-container" class="toast-container"></div>
     <script src="car-lease-calculator.js"></script>
+
+    <!-- Cookie Consent Banner (GDPR/CCPA Compliance) -->
+    <div id="cookieConsentBanner" class="cookie-consent-banner">
+        <div class="cookie-consent-content">
+            <p><strong>🍪 We Value Your Privacy</strong></p>
+            <p>We use cookies and similar technologies to enhance your experience, analyze traffic, and show personalized ads. By clicking "Accept All", you consent to our use of cookies. You can manage preferences or opt-out in settings.</p>
+            <p class="cookie-links">
+                <a href="#privacy-policy">Privacy Policy</a> | 
+                <a href="#cookie-policy">Cookie Policy</a> | 
+                <a href="#ccpa-rights">Your Privacy Rights (CCPA)</a>
+            </p>
+            <div class="cookie-consent-buttons">
+                <button id="acceptAllCookies" class="btn-accept">Accept All</button>
+                <button id="rejectCookies" class="btn-reject">Reject Non-Essential</button>
+                <button id="manageCookies" class="btn-manage">Manage Preferences</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Settings Modal -->
+    <div id="cookieSettingsModal" class="cookie-modal" style="display: none;">
+        <div class="cookie-modal-content">
+            <span class="cookie-modal-close">&times;</span>
+            <h3>Cookie Preferences</h3>
+            <div class="cookie-category">
+                <label>
+                    <input type="checkbox" id="essentialCookies" checked disabled>
+                    <strong>Essential Cookies (Required)</strong>
+                    <p>Necessary for the website to function properly.</p>
+                </label>
+            </div>
+            <div class="cookie-category">
+                <label>
+                    <input type="checkbox" id="analyticsCookies">
+                    <strong>Analytics Cookies</strong>
+                    <p>Help us understand how visitors interact with our website.</p>
+                </label>
+            </div>
+            <div class="cookie-category">
+                <label>
+                    <input type="checkbox" id="advertisingCookies">
+                    <strong>Advertising Cookies</strong>
+                    <p>Used to deliver personalized ads and track ad performance.</p>
+                </label>
+            </div>
+            <div class="cookie-modal-buttons">
+                <button id="savePreferences" class="btn-accept">Save Preferences</button>
+                <button id="cancelPreferences" class="btn-reject">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FTC Affiliate Disclosure -->
+    <div class="affiliate-disclosure">
+        <p><strong>⚠️ Affiliate Disclosure:</strong> This page may contain affiliate links. If you click on an affiliate link and make a purchase, we may receive a commission at no additional cost to you. This helps support our website and allows us to continue providing free tools and resources. We only recommend products or services we believe will add value to our users. <a href="#disclosure-policy">Read Full Disclosure</a></p>
+    </div>
+
 </body>
 </html>
