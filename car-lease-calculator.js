@@ -770,3 +770,256 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Calculator Ready!');
 });
+
+
+
+// ============================================
+// GDPR/CCPA Cookie Consent Management System
+// ============================================
+
+class CookieConsentManager {
+    constructor() {
+        this.cookieConsent = this.getCookie('cookieConsent');
+        this.init();
+    }
+
+    init() {
+        // Show banner if no consent recorded
+        if (!this.cookieConsent) {
+            this.showBanner();
+        } else {
+            // Load scripts based on saved preferences
+            this.loadScriptsBasedOnConsent();
+        }
+
+        // Event listeners
+        document.getElementById('acceptAllCookies')?.addEventListener('click', () => this.acceptAll());
+        document.getElementById('rejectCookies')?.addEventListener('click', () => this.rejectNonEssential());
+        document.getElementById('manageCookies')?.addEventListener('click', () => this.openSettings());
+        document.getElementById('savePreferences')?.addEventListener('click', () => this.savePreferences());
+        document.getElementById('cancelPreferences')?.addEventListener('click', () => this.closeSettings());
+        document.querySelector('.cookie-modal-close')?.addEventListener('click', () => this.closeSettings());
+    }
+
+    showBanner() {
+        const banner = document.getElementById('cookieConsentBanner');
+        if (banner) {
+            banner.classList.add('show');
+        }
+    }
+
+    hideBanner() {
+        const banner = document.getElementById('cookieConsentBanner');
+        if (banner) {
+            banner.classList.remove('show');
+        }
+    }
+
+    acceptAll() {
+        const consent = {
+            essential: true,
+            analytics: true,
+            advertising: true,
+            timestamp: new Date().toISOString()
+        };
+        this.setCookie('cookieConsent', JSON.stringify(consent), 365);
+        this.hideBanner();
+        this.loadScriptsBasedOnConsent();
+        console.log('All cookies accepted');
+    }
+
+    rejectNonEssential() {
+        const consent = {
+            essential: true,
+            analytics: false,
+            advertising: false,
+            timestamp: new Date().toISOString()
+        };
+        this.setCookie('cookieConsent', JSON.stringify(consent), 365);
+        this.hideBanner();
+        console.log('Non-essential cookies rejected');
+    }
+
+    openSettings() {
+        const modal = document.getElementById('cookieSettingsModal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
+
+        // Pre-populate checkboxes if preferences exist
+        if (this.cookieConsent) {
+            const consent = JSON.parse(this.cookieConsent);
+            document.getElementById('analyticsCookies').checked = consent.analytics || false;
+            document.getElementById('advertisingCookies').checked = consent.advertising || false;
+        }
+    }
+
+    closeSettings() {
+        const modal = document.getElementById('cookieSettingsModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    savePreferences() {
+        const consent = {
+            essential: true,
+            analytics: document.getElementById('analyticsCookies')?.checked || false,
+            advertising: document.getElementById('advertisingCookies')?.checked || false,
+            timestamp: new Date().toISOString()
+        };
+        this.setCookie('cookieConsent', JSON.stringify(consent), 365);
+        this.hideBanner();
+        this.closeSettings();
+        this.loadScriptsBasedOnConsent();
+        console.log('Cookie preferences saved:', consent);
+    }
+
+    loadScriptsBasedOnConsent() {
+        const consent = this.getCookie('cookieConsent');
+        if (!consent) return;
+
+        const preferences = JSON.parse(consent);
+
+        // Load Analytics Scripts (Google Analytics, etc.)
+        if (preferences.analytics) {
+            this.loadAnalyticsScripts();
+        }
+
+        // Load Advertising Scripts (Google AdSense, etc.)
+        if (preferences.advertising) {
+            this.loadAdvertisingScripts();
+        }
+    }
+
+    loadAnalyticsScripts() {
+        // Example: Google Analytics
+        // Uncomment and add your GA ID when ready
+        /*
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID';
+        document.head.appendChild(script);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+        */
+        console.log('Analytics scripts loaded');
+    }
+
+    loadAdvertisingScripts() {
+        // Example: Google AdSense
+        // Uncomment and add your AdSense ID when ready
+        /*
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX';
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+        */
+        console.log('Advertising scripts loaded');
+    }
+
+    // Cookie utility functions
+    setCookie(name, value, days) {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax;Secure`;
+    }
+
+    getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    deleteCookie(name) {
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+    }
+}
+
+// CCPA "Do Not Sell My Personal Information" Handler
+class CCPAComplianceManager {
+    constructor() {
+        this.doNotSell = this.getDoNotSellPreference();
+        this.init();
+    }
+
+    init() {
+        // Add CCPA opt-out link functionality
+        const ccpaLinks = document.querySelectorAll('a[href="#ccpa-rights"]');
+        ccpaLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showCCPAOptions();
+            });
+        });
+    }
+
+    showCCPAOptions() {
+        const optOut = confirm(
+            'Do you want to opt-out of the sale of your personal information?\n\n' +
+            'California residents have the right to opt-out of the sale of personal information under CCPA.\n\n' +
+            'Click OK to opt-out, or Cancel to keep current settings.'
+        );
+
+        if (optOut) {
+            this.setDoNotSellPreference(true);
+            alert('Your preference has been saved. We will not sell your personal information.');
+        }
+    }
+
+    setDoNotSellPreference(value) {
+        localStorage.setItem('ccpa_do_not_sell', value.toString());
+        this.doNotSell = value;
+        console.log('CCPA Do Not Sell preference:', value);
+    }
+
+    getDoNotSellPreference() {
+        const preference = localStorage.getItem('ccpa_do_not_sell');
+        return preference === 'true';
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Cookie Consent Manager
+    window.cookieConsentManager = new CookieConsentManager();
+
+    // Initialize CCPA Compliance Manager
+    window.ccpaManager = new CCPAComplianceManager();
+
+    console.log('Privacy compliance systems initialized');
+});
+
+// FTC Affiliate Link Disclosure Handler
+function addAffiliateLinkDisclaimer() {
+    // Add rel="nofollow" and "sponsored" to affiliate links for FTC compliance
+    const affiliateLinks = document.querySelectorAll('a[href*="affiliate"], a[href*="ref="], a[href*="utm_"]');
+
+    affiliateLinks.forEach(link => {
+        // Add required attributes for FTC compliance
+        if (!link.hasAttribute('rel')) {
+            link.setAttribute('rel', 'nofollow sponsored');
+        }
+
+        // Add visual indicator
+        if (!link.querySelector('.affiliate-indicator')) {
+            const indicator = document.createElement('sup');
+            indicator.className = 'affiliate-indicator';
+            indicator.textContent = '⚡';
+            indicator.title = 'Affiliate Link - We may earn a commission';
+            link.appendChild(indicator);
+        }
+    });
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', addAffiliateLinkDisclaimer);
