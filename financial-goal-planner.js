@@ -1,1244 +1,828 @@
 /**
- * FINANCIAL GOAL PLANNER - World's First AI-Powered Savings Calculator
- * FinGuid USA - Production v1.1 (S.O.L.I.D. Architecture)
- *
- * Features:
- * - Solves for Monthly Contribution, Final Value, or Time
- * - Inflation-adjusted goal calculation
- * - Dynamic projection chart (Chart.js)
- * - Year-by-year savings schedule
- * - AI-Powered Insights Engine (Dynamic & Conditional)
- * - FRED API Integration (CPI for Inflation, 10-Yr Treasury for Return Benchmark)
- * - Voice Command & Text-to-Speech
- * - PWA & Dark/Light Mode support
- * - GA-ID: G-NYBL2CDNQJ
- * - FRED-API-KEY: 9c6c421f077f2091e8bae4f143ada59a
+ * FINANCIAL GOAL PLANNER — AI-POWERED CALCULATOR v1.0
+ * FinGuid USA Market Domination Build
+ * 
+ * FEATURES:
+ * ✅ Multiple Goal Types (Retirement, House, College, Custom)
+ * ✅ Three Calculation Modes (Time, Contribution, Return Required)
+ * ✅ Live FRED API Inflation Data
+ * ✅ AI-Powered Roadmap & Insights
+ * ✅ Milestone Timeline
+ * ✅ What-If Scenario Analysis
+ * ✅ Interactive Charts (Chart.js)
+ * ✅ CSV Export
+ * ✅ Dark Mode Support
+ * ✅ Mobile Responsive
+ * 
+ * © 2025 FinGuid USA - World's First AI Financial Calculator Platform
  */
 
-// ==========================================================================
-// S: CONFIGURATION MODULE (SRP: Storing static config)
-// ==========================================================================
-const Config = (function() {
-    'use strict';
+/* ========================================================================== */
+/* I. GLOBAL CONFIGURATION */
+/* ========================================================================== */
 
-    return {
-        GA_ID: 'G-NYBL2CDNQJ',
-        FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
-        FRED_SERIES_INFLATION: 'CPIAUCSL', // Consumer Price Index
-        FRED_SERIES_RETURN: 'DGS10',      // 10-Year Treasury
-        DOM: {
-            form: 'goal-form',
-            goalSelect: 'goal-name-select',
-            goalCustomGroup: 'goal-name-custom-group',
-            goalCustomInput: 'goal-name-custom',
-            modeSelect: 'calculation-mode',
-            monthlyInputGroup: 'monthly-contribution-group',
-            summaryLabel: 'summary-label',
-            primaryResult: 'primary-result-display',
-            primaryUnit: 'primary-result-unit',
-            projectionSummary: 'projection-summary',
-            totalGoal: 'total-goal',
-            totalContributions: 'total-contributions',
-            totalGrowth: 'total-growth',
-            finalBalance: 'final-balance',
-            projectionCanvas: 'projection-canvas',
-            projectionTableBody: '#projection-table tbody',
-            aiContent: 'ai-insights-content',
-            fredInflationNote: 'fred-inflation-note',
-            fredReturnNote: 'fred-return-note'
-        },
-        charts: {
-            projection: null
-        }
-    };
-})();
+const GOAL_PLANNER = {
+    VERSION: '1.0',
+    DEBUG: false,
 
-// ==========================================================================
-// S: UTILITY MODULE (SRP: Formatting, Parsing, DOM Helpers)
-// ==========================================================================
-const Utils = (function() {
-    'use strict';
+    // FRED API Configuration
+    FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
+    FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
+    FRED_INFLATION_SERIES_ID: 'CPIAUCSL',
+    FALLBACK_INFLATION_RATE: 3.0,
 
-    function formatCurrency(amount, decimals = 0) {
+    // State Management
+    STATE: {
+        goalType: 'retirement',
+        calculationMode: 'time',
+        goalAmount: 1000000,
+        currentAge: 30,
+        initialSavings: 50000,
+        monthlyContribution: 1000,
+        expectedReturn: 7.0,
+        inflationRate: 3.0,
+        targetYears: 25,
+        
+        // Results
+        yearsToGoal: null,
+        contributionNeeded: null,
+        returnRequired: null,
+        futureValue: 0,
+        totalInvested: 0,
+        inflationAdjustedValue: 0,
+        annualData: [],
+        milestones: [],
+    },
+
+    charts: {
+        progressChart: null,
+        scenarioChart: null,
+    }
+};
+
+/* ========================================================================== */
+/* II. UTILITY FUNCTIONS */
+/* ========================================================================== */
+
+const UTILS = {
+    formatCurrency(amount, decimals = 0) {
         if (typeof amount !== 'number' || isNaN(amount)) return '$0';
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals
+            maximumFractionDigits: decimals,
         }).format(amount);
-    }
+    },
 
-    function parseInput(id, isCurrency = true) {
-        const elem = document.getElementById(id);
-        if (!elem) {
-            console.error(`Element not found: ${id}`);
-            return 0;
-        }
-        const value = elem.value;
-        if (isCurrency) {
-            const clean = value.replace(/[$,]/g, '').trim();
-            return parseFloat(clean) || 0;
-        }
+    formatNumber(num, decimals = 0) {
+        if (typeof num !== 'number' || isNaN(num)) return '0';
+        return num.toLocaleString('en-US', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+        });
+    },
+
+    formatPercent(rate) {
+        if (typeof rate !== 'number' || isNaN(rate)) return '0.0%';
+        return rate.toFixed(1) + '%';
+    },
+
+    parseInput(id) {
+        const element = document.getElementById(id);
+        if (!element) return 0;
+        const value = element.value.replace(/[$,]/g, '').trim();
         return parseFloat(value) || 0;
-    }
+    },
 
-    function showToast(message, type = 'success') {
+    debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    },
+
+    showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
         if (!container) return;
         const toast = document.createElement('div');
-        toast.className = `toast ${type} show`;
-        toast.setAttribute('role', 'alert');
-        toast.textContent = message;
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
         container.appendChild(toast);
-        
+        setTimeout(() => toast.classList.add('show'), 10);
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
+};
 
-    function trackEvent(eventName, eventData = {}) {
-        if (typeof gtag === 'function') {
-            gtag('event', eventName, eventData);
-        }
-    }
-    
-    function setElementText(id, text) {
-        const el = document.getElementById(id);
-        if (el) {
-            el.textContent = text;
-        }
-    }
-    
-    function setElementHTML(id, html) {
-        const el = document.getElementById(id);
-        if (el) {
-            el.innerHTML = html;
-        }
-    }
-    
-    function setInputValue(id, value) {
-        const el = document.getElementById(id);
-        if (el) {
-            el.value = value;
-        }
-    }
-    
-    function toggleClass(id, className, show) {
-        const el = document.getElementById(id);
-        if (el) {
-            el.classList.toggle(className, show);
-        }
-    }
+/* ========================================================================== */
+/* III. FRED API MODULE */
+/* ========================================================================== */
 
-    function exportToCSV(data, filename) {
-        const csvContent = data.map(row => row.join(',')).join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', filename);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+const fredAPI = {
+    async fetchLatestInflationRate() {
+        if (GOAL_PLANNER.DEBUG) {
+            return GOAL_PLANNER.FALLBACK_INFLATION_RATE;
+        }
 
-    // Expose public methods
-    return {
-        formatCurrency,
-        parseInput,
-        showToast,
-        trackEvent,
-        setElementText,
-        setElementHTML,
-        setInputValue,
-        toggleClass,
-        exportToCSV
-    };
-})();
-
-// ==========================================================================
-// S: FRED API SERVICE (SRP: Fetching external data)
-// ==========================================================================
-const FredService = (function(Config, Utils) {
-    'use strict';
-
-    async function fetchFREDRate(seriesId, inputId, noteId, dataExtractor) {
-        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${Config.FRED_API_KEY}&file_type=json&sort_order=desc&limit=12`;
+        const url = new URL(GOAL_PLANNER.FRED_BASE_URL);
+        const params = {
+            series_id: GOAL_PLANNER.FRED_INFLATION_SERIES_ID,
+            api_key: GOAL_PLANNER.FRED_API_KEY,
+            file_type: 'json',
+            sort_order: 'desc',
+            limit: 13,
+        };
+        url.search = new URLSearchParams(params).toString();
 
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error(`FRED API response not ok for ${seriesId}`);
+            if (!response.ok) throw new Error(`FRED API Error: ${response.status}`);
             
             const data = await response.json();
-            const rate = dataExtractor(data);
+            const observations = data.observations.filter(obs => obs.value !== '.' && obs.value !== 'N/A').reverse();
 
-            if (rate !== null) {
-                const roundedRate = Math.round(rate * 10) / 10;
-                Utils.setInputValue(inputId, roundedRate);
-                Utils.setElementHTML(noteId, `Using current FRED live rate: <strong>${roundedRate}%</strong>.`);
-                return roundedRate;
+            if (observations.length >= 13) {
+                const latestValue = parseFloat(observations[observations.length - 1].value);
+                const priorYearValue = parseFloat(observations[observations.length - 13].value);
+                const inflationRate = ((latestValue - priorYearValue) / priorYearValue) * 100;
+                const rate = Math.max(0, inflationRate);
+                
+                const inflationInput = document.getElementById('inflation-rate-goal');
+                if (inflationInput) inflationInput.value = rate.toFixed(1);
+                
+                const noteElement = document.querySelector('.fred-source-note');
+                if (noteElement) noteElement.textContent = `Live FRED Rate (${observations[observations.length - 1].date})`;
+                
+                return rate;
+            } else {
+                throw new Error('Insufficient FRED data');
             }
         } catch (error) {
-            console.error(`Error fetching FRED data for ${seriesId}:`, error);
+            console.error('FRED API Error:', error);
+            const inflationInput = document.getElementById('inflation-rate-goal');
+            if (inflationInput) inflationInput.value = GOAL_PLANNER.FALLBACK_INFLATION_RATE.toFixed(1);
+            
+            const noteElement = document.querySelector('.fred-source-note');
+            if (noteElement) noteElement.textContent = 'Fallback Rate';
+            
+            return GOAL_PLANNER.FALLBACK_INFLATION_RATE;
         }
-        return Utils.parseInput(inputId, false); // Return default/user input if API fails
+    },
+
+    async initialize() {
+        const rate = await this.fetchLatestInflationRate();
+        GOAL_PLANNER.STATE.inflationRate = rate;
+        updateCalculations();
+    }
+};
+
+/* ========================================================================== */
+/* IV. CALCULATION ENGINE */
+/* ========================================================================== */
+
+function updateCalculations() {
+    const S = GOAL_PLANNER.STATE;
+    
+    // Read inputs
+    S.goalAmount = UTILS.parseInput('goal-amount');
+    S.currentAge = UTILS.parseInput('current-age');
+    S.initialSavings = UTILS.parseInput('initial-savings');
+    S.monthlyContribution = UTILS.parseInput('monthly-contribution-goal');
+    S.expectedReturn = UTILS.parseInput('expected-return-goal');
+    S.inflationRate = UTILS.parseInput('inflation-rate-goal');
+
+    // Calculate based on mode
+    if (S.calculationMode === 'time') {
+        calculateTimeToGoal();
+    } else if (S.calculationMode === 'contribution') {
+        S.targetYears = UTILS.parseInput('target-years-contribution');
+        calculateContributionNeeded();
+    } else if (S.calculationMode === 'return') {
+        S.targetYears = UTILS.parseInput('target-years-return');
+        calculateReturnRequired();
     }
 
-    function extractCPI(data) {
-        // Calculate year-over-year inflation from latest CPI data point
-        const latest = data.observations.find(obs => obs.value !== '.');
-        if (!latest) return null;
+    updateUI();
+    updateChart();
+    generateMilestones();
+    generateAIRoadmap();
+    updateDataTable();
+}
+
+function calculateTimeToGoal() {
+    const S = GOAL_PLANNER.STATE;
+    const r = S.expectedReturn / 100;
+    const initial = S.initialSavings;
+    const pmt = S.monthlyContribution * 12;
+    const goal = S.goalAmount;
+
+    if (goal <= initial) {
+        S.yearsToGoal = 0;
+        S.futureValue = initial;
+        S.totalInvested = initial;
+        S.inflationAdjustedValue = initial;
+        S.annualData = [];
+        return;
+    }
+
+    let years = 0;
+    let balance = initial;
+    const maxYears = 100;
+    S.annualData = [];
+
+    while (balance < goal && years < maxYears) {
+        years++;
+        const startBalance = balance;
+        const gains = balance * r + pmt * r;
+        balance = (balance + pmt) * (1 + r);
         
-        const latestValue = parseFloat(latest.value);
-        const latestDate = new Date(latest.date);
+        const inflationAdjusted = balance / Math.pow(1 + S.inflationRate / 100, years);
         
-        // Find the observation from 12 months ago
-        const yearAgo = new Date(latestDate);
-        yearAgo.setFullYear(yearAgo.getFullYear() - 1);
-
-        const yearAgoObs = data.observations
-            .filter(obs => obs.value !== '.')
-            .sort((a, b) => new Date(a.date) - new Date(b.date))
-            .find(obs => new Date(obs.date) >= yearAgo);
-
-        if (yearAgoObs) {
-            const yearAgoValue = parseFloat(yearAgoObs.value);
-            // CPI inflation calculation: ((latest / yearAgo) - 1) * 100
-            const inflationRate = ((latestValue / yearAgoValue) - 1) * 100;
-            return inflationRate;
-        }
-
-        return null;
+        S.annualData.push({
+            year: years,
+            age: S.currentAge + years,
+            startBalance,
+            contributions: pmt,
+            gains,
+            endBalance: balance,
+            inflationAdjusted,
+            progress: (balance / goal) * 100
+        });
     }
 
-    function extract10YearTreasury(data) {
-        // 10-year Treasury yield for benchmark
-        const latest = data.observations.find(obs => obs.value !== '.');
-        if (latest) {
-            return parseFloat(latest.value);
-        }
-        return null;
+    S.yearsToGoal = years >= maxYears ? Infinity : years;
+    S.futureValue = balance;
+    S.totalInvested = initial + (pmt * years);
+    S.inflationAdjustedValue = balance / Math.pow(1 + S.inflationRate / 100, years);
+}
+
+function calculateContributionNeeded() {
+    const S = GOAL_PLANNER.STATE;
+    const r = S.expectedReturn / 100;
+    const n = S.targetYears;
+    const initial = S.initialSavings;
+    const goal = S.goalAmount;
+
+    const fvInitial = initial * Math.pow(1 + r, n);
+    
+    if (fvInitial >= goal) {
+        S.contributionNeeded = 0;
+    } else if (r > 0) {
+        const fvAnnuityFactor = (Math.pow(1 + r, n) - 1) / r;
+        const pmt = (goal - fvInitial) / fvAnnuityFactor;
+        S.contributionNeeded = pmt / 12;
+    } else {
+        const pmt = (goal - initial) / n;
+        S.contributionNeeded = pmt / 12;
     }
 
-    function fetchInflationRate() {
-        return fetchFREDRate(
-            Config.FRED_SERIES_INFLATION,
-            'inflation-rate',
-            Config.DOM.fredInflationNote,
-            extractCPI
-        );
-    }
+    S.monthlyContribution = S.contributionNeeded;
+    generateAnnualData(initial, S.contributionNeeded * 12, r, n);
+}
 
-    function fetchReturnBenchmark() {
-        return fetchFREDRate(
-            Config.FRED_SERIES_RETURN,
-            'return-rate',
-            Config.DOM.fredReturnNote,
-            extract10YearTreasury
-        );
-    }
+function calculateReturnRequired() {
+    const S = GOAL_PLANNER.STATE;
+    const n = S.targetYears;
+    const initial = S.initialSavings;
+    const pmt = S.monthlyContribution * 12;
+    const goal = S.goalAmount;
 
-    // Expose public methods
-    return {
-        fetchInflationRate,
-        fetchReturnBenchmark
-    };
-})(Config, Utils);
+    // Binary search for required return rate
+    let low = 0, high = 0.30; // 0% to 30%
+    let iterations = 0;
+    const maxIterations = 100;
 
-// ==========================================================================
-// S: FINANCIAL CALCULATOR MODULE (SRP: Core TVM logic)
-// ==========================================================================
-const FinancialSolver = (function(Utils) {
-    'use strict';
-
-    const PERIODS_PER_YEAR = 12;
-
-    /**
-     * Future Value of an Annuity (FVA) + Future Value of a Lump Sum (FV)
-     * FV = PV * (1 + i)^n + PMT * [((1 + i)^n - 1) / i]
-     * @param {number} pv - Present Value (starting balance)
-     * @param {number} pmt - Payment (monthly contribution)
-     * @param {number} n - Total periods (timeline in years * 12)
-     * @param {number} i - Rate per period (annual return / 12)
-     * @returns {number} Final value (Future Value)
-     */
-    function solveForFinalValue(pv, pmt, n, i) {
-        const fv_pv = pv * Math.pow(1 + i, n);
-        let fv_pmt = 0;
-        if (i !== 0) {
-            fv_pmt = pmt * ((Math.pow(1 + i, n) - 1) / i);
+    while (iterations < maxIterations && high - low > 0.0001) {
+        const mid = (low + high) / 2;
+        const fv = initial * Math.pow(1 + mid, n) + pmt * ((Math.pow(1 + mid, n) - 1) / mid);
+        
+        if (fv < goal) {
+            low = mid;
         } else {
-            fv_pmt = pmt * n; // Simple interest/no growth case
+            high = mid;
         }
-        return fv_pv + fv_pmt;
+        iterations++;
     }
 
-    /**
-     * Solve for Payment (PMT)
-     * PMT = [FV - PV * (1 + i)^n] * [i / ((1 + i)^n - 1)]
-     * @param {number} fv_needed - The portion of the goal that needs to be covered by contributions (Goal - FV of PV)
-     * @param {number} i - Rate per period (annual return / 12)
-     * @param {number} n - Total periods (timeline in years * 12)
-     * @returns {number} Monthly payment (PMT)
-     */
-    function solveForMonthly(fv_needed, i, n) {
-        if (n <= 0) return fv_needed;
-        if (i === 0) return fv_needed / n;
-
-        // FVA = PMT * [((1 + i)^n - 1) / i]
-        const fv_pmt_factor = (Math.pow(1 + i, n) - 1) / i;
-        
-        if (fv_pmt_factor === 0) return Infinity; // Should not happen with n > 0
-
-        const pmt = fv_needed / fv_pmt_factor;
-        return pmt;
-    }
-
-    /**
-     * Solve for Number of Periods (N) using log functions
-     * n = ln((FV*i + PMT) / (PV*i + PMT)) / ln(1 + i)
-     * @param {number} fv - Future Value (Goal)
-     * @param {number} pv - Present Value (starting balance)
-     * @param {number} pmt - Payment (monthly contribution)
-     * @param {number} i - Rate per period (annual return / 12)
-     * @returns {number} Number of periods (n)
-     */
-    function solveForTimeline(fv, pv, pmt, i) {
-        if (i === 0) return (fv - pv) / pmt;
-        
-        // This calculation only works if contributions are positive and the goal is reachable
-        if (pmt <= 0) return Infinity; // Can't reach goal with no savings
-
-        // Check for basic reachability
-        if (fv <= pv) return 0;
-
-        try {
-            const numerator = Math.log((fv * i + pmt) / (pv * i + pmt));
-            const denominator = Math.log(1 + i);
-            
-            if (denominator === 0) return Infinity;
-
-            const n = numerator / denominator;
-            return Math.ceil(n); // Number of periods (months)
-        } catch (e) {
-            console.error("Timeline calculation error:", e);
-            return Infinity;
-        }
-    }
-
-    /**
-     * Calculates the inflation-adjusted goal amount.
-     * @param {number} nominalGoal - The current cost of the goal.
-     * @param {number} timelineYears - The number of years until the goal is needed.
-     * @param {number} inflationRate - The annual inflation rate (as a percentage, e.g., 3).
-     * @returns {number} The inflation-adjusted goal amount (Future Value).
-     */
-    function adjustForInflation(nominalGoal, timelineYears, inflationRate) {
-        const r = inflationRate / 100;
-        return nominalGoal * Math.pow(1 + r, timelineYears);
-    }
-
-    /**
-     * Generates a year-by-year projection schedule.
-     * @param {number} pv - Present Value (starting balance)
-     * @param {number} pmt - Monthly contribution
-     * @param {number} years - Total years
-     * @param {number} annualReturn - Annual return rate (%)
-     * @returns {Array<Object>} Array of yearly projection objects.
-     */
-    function generateProjection(pv, pmt, years, annualReturn) {
-        const projection = [];
-        let balance = pv;
-        const i = annualReturn / 100 / PERIODS_PER_YEAR; // Rate per month
-        const totalMonths = Math.ceil(years * PERIODS_PER_YEAR);
-        
-        let totalCash = pv;
-        let cumulativeGrowth = 0;
-
-        for (let month = 1; month <= totalMonths; month++) {
-            const monthlyInterest = balance * i;
-            const newBalance = balance + pmt + monthlyInterest;
-
-            cumulativeGrowth += monthlyInterest;
-            balance = newBalance;
-            totalCash += pmt;
-
-            // Store yearly data on the last month of the year
-            if (month % PERIODS_PER_YEAR === 0 || month === totalMonths) {
-                const year = Math.ceil(month / PERIODS_PER_YEAR);
-                const yearEndBalance = balance;
-                
-                // Adjust contribution/growth for the first year if starting with PV
-                let annualContribution = pmt * (month % PERIODS_PER_YEAR === 0 ? PERIODS_PER_YEAR : month);
-                let annualGrowth = cumulativeGrowth;
-
-                if (year > 1) {
-                    // For subsequent years, calculate growth and contribution for just that year
-                    const prevYearBalance = projection.length > 0 ? projection[projection.length - 1].balance : pv;
-                    const thisYearStartBalance = prevYearBalance;
-
-                    let monthlyBalance = thisYearStartBalance;
-                    let yearGrowth = 0;
-                    
-                    const monthsInYear = month % PERIODS_PER_YEAR === 0 ? PERIODS_PER_YEAR : month % PERIODS_PER_YEAR;
-
-                    for(let m = 1; m <= monthsInYear; m++) {
-                        const mInterest = monthlyBalance * i;
-                        yearGrowth += mInterest;
-                        monthlyBalance = monthlyBalance + pmt + mInterest;
-                    }
-                    
-                    annualContribution = pmt * monthsInYear;
-                    annualGrowth = yearGrowth;
-                } else if (month === totalMonths) {
-                    // This handles the case where total years is < 1
-                    annualContribution = pmt * totalMonths;
-                } else {
-                    // First full year (Year 1)
-                    annualGrowth = cumulativeGrowth;
-                }
-
-                projection.push({
-                    year: year,
-                    contribution: annualContribution,
-                    growth: annualGrowth,
-                    balance: yearEndBalance
-                });
-
-                // Reset for next year (except balance which carries over)
-                cumulativeGrowth = 0; 
-            }
-        }
-        return projection;
-    }
+    S.returnRequired = ((low + high) / 2) * 100;
+    S.expectedReturn = S.returnRequired;
     
-    // Expose public methods
-    return {
-        solveForFinalValue,
-        solveForMonthly,
-        solveForTimeline,
-        adjustForInflation,
-        generateProjection,
-        PERIODS_PER_YEAR
-    };
-})(Utils);
+    generateAnnualData(initial, pmt, S.returnRequired / 100, n);
+}
 
-// ==========================================================================
-// S: AI INSIGHTS MODULE (SRP: Generating conditional advice)
-// ==========================================================================
-const AIInsights = (function(Utils, FinancialSolver) {
-    'use strict';
+function generateAnnualData(initial, pmt, r, n) {
+    const S = GOAL_PLANNER.STATE;
+    S.annualData = [];
+    let balance = initial;
+
+    for (let year = 1; year <= n; year++) {
+        const startBalance = balance;
+        const gains = balance * r + pmt * r;
+        balance = (balance + pmt) * (1 + r);
+        
+        const inflationAdjusted = balance / Math.pow(1 + S.inflationRate / 100, year);
+
+        S.annualData.push({
+            year,
+            age: S.currentAge + year,
+            startBalance,
+            contributions: pmt,
+            gains,
+            endBalance: balance,
+            inflationAdjusted,
+            progress: (balance / S.goalAmount) * 100
+        });
+    }
+
+    S.futureValue = balance;
+    S.totalInvested = initial + (pmt * n);
+    S.inflationAdjustedValue = balance / Math.pow(1 + S.inflationRate / 100, n);
+}
+
+/* ========================================================================== */
+/* V. UI UPDATE FUNCTIONS */
+/* ========================================================================== */
+
+function updateUI() {
+    const S = GOAL_PLANNER.STATE;
     
-    /**
-     * Generates HTML content for AI-powered financial insights based on results.
-     * @param {Object} results - The main calculation result object.
-     * @param {Object} inputs - The user inputs object.
-     * @param {number} inflatedGoal - The inflation-adjusted goal amount.
-     * @returns {string} HTML string containing the insights.
-     */
-    function generate(results, inputs, inflatedGoal) {
-        let html = '';
-        const annualReturn = inputs.returnRate / 100;
-        const timelineYears = inputs.timelineYears;
-        const totalContributions = inputs.startingBalance + (inputs.monthlyContribution * inputs.timelineYears * FinancialSolver.PERIODS_PER_YEAR);
-        
-        // --- 1. General Check for Goal Feasibility ---
-        if (inputs.mode === 'monthly') {
-            const monthlyNeeded = results.value;
-            
-            if (monthlyNeeded <= 0) {
-                html += `
-                <div class="recommendation-alert low-priority">
-                    <i class="fas fa-check-circle"></i> <strong>Goal Reached!</strong>
-                </div>
-                <p>Congratulations! Based on your current savings and expected returns, you will reach your goal of <strong>${Utils.formatCurrency(inflatedGoal)}</strong> in <strong>${inputs.timelineYears} years</strong> without any further monthly contributions. Consider investing any extra cash to exceed your goal.</p>
-                `;
-            } else if (monthlyNeeded > 0 && monthlyNeeded < 100) {
-                html += `
-                <p>Your monthly savings target is **${Utils.formatCurrency(monthlyNeeded)}**. This is a highly achievable goal! By automating this small amount, you can ensure you hit your target on time.</p>
-                `;
-            } else if (monthlyNeeded > 2000) {
-                html += `
-                <div class="recommendation-alert high-priority">
-                    <i class="fas fa-exclamation-triangle"></i> <strong>High Target Alert</strong>
-                </div>
-                <p>Your required monthly contribution is quite high at **${Utils.formatCurrency(monthlyNeeded)}**. This may strain your current budget. To reduce this, consider:</p>
-                <ul>
-                    <li>**Increasing your timeline:** Adding 5 years to your plan could reduce the payment significantly.</li>
-                    <li>**Increasing expected return:** Reviewing your investment strategy for potentially higher growth, though this involves more risk.</li>
-                    <li>**Lowering your target goal:** Re-evaluating the actual final amount you need.</li>
-                </ul>
-                `;
-            }
-        } else if (inputs.mode === 'final_value') {
-            const finalBalance = results.value;
-            
-            if (finalBalance >= inflatedGoal) {
-                html += `
-                <div class="recommendation-alert low-priority">
-                    <i class="fas fa-trophy"></i> <strong>Target Exceeded!</strong>
-                </div>
-                <p>Your plan is on track to reach **${Utils.formatCurrency(finalBalance)}**, exceeding your inflation-adjusted goal of ${Utils.formatCurrency(inflatedGoal)}.</p>
-                <p>The extra **${Utils.formatCurrency(finalBalance - inflatedGoal)}** provides a great buffer against market volatility or unexpected expenses. Well done!</p>
-                `;
-            } else {
-                const monthlyNeeded = FinancialSolver.solveForMonthly(inflatedGoal - finalBalance, annualReturn / 12, inputs.timelineYears * 12);
-                html += `
-                <div class="recommendation-alert medium-priority">
-                    <i class="fas fa-warning"></i> <strong>Goal Shortfall Warning</strong>
-                </div>
-                <p>At your current saving rate of **${Utils.formatCurrency(inputs.monthlyContribution)}/mo** you will only have **${Utils.formatCurrency(finalBalance)}**, missing your goal by **${Utils.formatCurrency(inflatedGoal - finalBalance)}**. To get back on track, you would need to save **${Utils.formatCurrency(monthlyNeeded)}/mo**.</p>
-                `;
-            }
-        } else if (inputs.mode === 'timeline') {
-            if (results.value > inputs.timelineYears * 1.5) {
-                html += `
-                <div class="recommendation-alert high-priority">
-                    <i class="fas fa-warning"></i> <strong>Timeline Warning</strong>
-                </div>
-                <p>At **${Utils.formatCurrency(inputs.monthlyContribution)}/mo**, it will take **${results.value} years** to reach your goal, which is significantly longer than your initial target of **${inputs.timelineYears} years**. Consider increasing your monthly contribution or lowering your goal amount.</p>
-                `;
-            } else if (results.value <= inputs.timelineYears) {
-                html += `
-                <div class="recommendation-alert low-priority">
-                    <i class="fas fa-chart-line"></i> <strong>Goal Ahead of Schedule!</strong>
-                </div>
-                <p>Great news! You are on track to reach your goal in **${results.value} years**, well ahead of your **${inputs.timelineYears}-year** target. You could consider reducing your contributions or moving the goal date closer!</p>
-                `;
-            }
-        }
-        
-        // --- 2. Inflation & Return Insight ---
-        if (inputs.inflationRate > inputs.returnRate) {
-             html += `
-            <div class="recommendation-alert high-priority">
-                <i class="fas fa-leaf"></i> <strong>Inflation Risk Alert</strong>
-            </div>
-            <p>Your assumed **Inflation Rate (${inputs.inflationRate}%)** is higher than your **Expected Annual Return (${inputs.returnRate}%)**. This means the purchasing power of your money is actually shrinking. For long-term goals, you should aim for investments that are expected to beat inflation.</p>
-            `;
-        } else if (inputs.inflationRate > 4) {
-             html += `
-            <p>Your plan uses a high inflation rate. While necessary, remember that high inflation significantly increases your future goal target. Make sure you are using investments with strong historical growth to combat this.</p>
-            `;
-        }
+    const mainResult = document.getElementById('goal-result-main');
+    const resultUnit = document.getElementById('goal-result-unit');
+    const resultDetails = document.getElementById('goal-result-details');
+    
+    if (S.calculationMode === 'time') {
+        if (mainResult) mainResult.textContent = S.yearsToGoal === Infinity ? 'Never' : UTILS.formatNumber(S.yearsToGoal);
+        if (resultUnit) resultUnit.textContent = S.yearsToGoal === 1 ? 'Year' : 'Years';
+        if (resultDetails) resultDetails.textContent = `To reach ${UTILS.formatCurrency(S.goalAmount)} (Age ${S.currentAge + S.yearsToGoal})`;
+    } else if (S.calculationMode === 'contribution') {
+        if (mainResult) mainResult.textContent = UTILS.formatCurrency(S.contributionNeeded, 2);
+        if (resultUnit) resultUnit.textContent = '/ month';
+        if (resultDetails) resultDetails.textContent = `For ${S.targetYears} years to reach ${UTILS.formatCurrency(S.goalAmount)}`;
+    } else if (S.calculationMode === 'return') {
+        if (mainResult) mainResult.textContent = UTILS.formatPercent(S.returnRequired);
+        if (resultUnit) resultUnit.textContent = 'annual return';
+        if (resultDetails) resultDetails.textContent = `Needed for ${S.targetYears} years with ${UTILS.formatCurrency(S.monthlyContribution, 0)}/mo`;
+    }
 
-        // --- 3. Compounding Insight (Long-Term Goals) ---
-        if (timelineYears >= 15 && totalContributions < (inflatedGoal * 0.5)) {
+    // Update summary cards
+    const totalInvestedEl = document.getElementById('total-invested');
+    const futureValueEl = document.getElementById('future-value-goal');
+    const inflationAdjustedEl = document.getElementById('inflation-adjusted-goal');
+    
+    if (totalInvestedEl) totalInvestedEl.textContent = UTILS.formatCurrency(S.totalInvested);
+    if (futureValueEl) futureValueEl.textContent = UTILS.formatCurrency(S.futureValue);
+    if (inflationAdjustedEl) inflationAdjustedEl.textContent = UTILS.formatCurrency(S.inflationAdjustedValue);
+}
+
+function generateMilestones() {
+    const S = GOAL_PLANNER.STATE;
+    const container = document.getElementById('milestone-timeline');
+    if (!container || !S.annualData.length) return;
+
+    const milestones = [
+        { percent: 25, icon: 'flag', label: '25% Progress' },
+        { percent: 50, icon: 'flag-checkered', label: 'Halfway There!' },
+        { percent: 75, icon: 'trophy', label: '75% Complete' },
+        { percent: 100, icon: 'crown', label: 'Goal Achieved!' }
+    ];
+
+    let html = '<div class="milestone-list">';
+    
+    milestones.forEach(milestone => {
+        const yearData = S.annualData.find(d => d.progress >= milestone.percent);
+        if (yearData) {
             html += `
-            <p>For your long **${timelineYears}-year** timeline, you are benefiting strongly from **compounding**. You only need to contribute **${Utils.formatCurrency(totalContributions)}** to achieve a goal of **${Utils.formatCurrency(inflatedGoal)}**! The majority of your final wealth comes from investment growth.</p>
+                <div class="milestone-item">
+                    <div class="milestone-icon"><i class="fas fa-${milestone.icon}"></i></div>
+                    <div class="milestone-content">
+                        <h4>${milestone.label}</h4>
+                        <p>Year ${yearData.year} (Age ${yearData.age}) — ${UTILS.formatCurrency(yearData.endBalance)}</p>
+                    </div>
+                </div>
             `;
         }
-        
-        if (html === '') {
-             html = '<p>Your plan is balanced. Adjust your inputs to see more personalized insights!</p>';
-        }
-
-        return html;
-    }
-
-    return {
-        generate
-    };
-})(Utils, FinancialSolver);
-
-// ==========================================================================
-// S: SPEECH & VOICE MODULE (SRP: Handling a11y speech features)
-// ==========================================================================
-const SpeechModule = (function(Utils) {
-    'use strict';
-
-    let recognition;
-    const synth = window.speechSynthesis;
-    let isListening = false;
-
-    function speak(text) {
-        if (!synth) {
-            Utils.showToast("Text-to-Speech is not supported in this browser.", "error");
-            return;
-        }
-        if (synth.speaking) {
-            synth.cancel();
-        }
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        synth.speak(utterance);
-    }
-
-    function initialize(onCommandCallback) {
-        if (!('webkitSpeechRecognition' in window)) {
-            console.warn("Speech Recognition not supported in this browser.");
-            return;
-        }
-
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
-
-        recognition.onresult = (event) => {
-            const command = event.results[0][0].transcript.toLowerCase().trim();
-            console.log("Voice Command Recognized:", command);
-            onCommandCallback(command);
-        };
-
-        recognition.onerror = (event) => {
-            console.error("Speech Recognition Error:", event.error);
-            if (event.error !== 'no-speech') {
-                 Utils.showToast(`Voice Error: ${event.error}`, 'error');
-            }
-            isListening = false;
-            document.getElementById('voice-toggle').setAttribute('aria-pressed', 'false');
-            document.getElementById('voice-toggle').classList.remove('active');
-        };
-        
-        recognition.onend = () => {
-             if (isListening) {
-                 // Restart listening if it stopped automatically and should still be active
-                 // This ensures continuous listening if the user is actively speaking commands
-                 try {
-                    recognition.start();
-                 } catch (e) {
-                     // Sometimes fails if another recognition is still active
-                     console.warn("Could not restart recognition:", e);
-                 }
-             }
-        };
-
-        document.getElementById('voice-toggle').addEventListener('click', () => {
-            if (isListening) {
-                recognition.stop();
-                isListening = false;
-                Utils.showToast("Voice commands disabled.");
-            } else {
-                recognition.start();
-                isListening = true;
-                Utils.showToast("Voice commands enabled. Try 'Calculate plan' or 'Read insights'.");
-            }
-            document.getElementById('voice-toggle').setAttribute('aria-pressed', isListening);
-            document.getElementById('voice-toggle').classList.toggle('active', isListening);
-        });
-    }
+    });
     
-    // Expose public methods
-    return {
-        initialize,
-        speak
-    };
-})(Utils);
+    html += '</div>';
+    container.innerHTML = html;
+}
 
-// ==========================================================================
-// S: CHART MODULE (SRP: Handling Chart.js initialization and updates)
-// ==========================================================================
-const ChartModule = (function(Config, Utils) {
-    'use strict';
+function generateAIRoadmap() {
+    const S = GOAL_PLANNER.STATE;
+    const output = document.getElementById('ai-roadmap-output');
+    if (!output) return;
 
-    function createChart(ctx, data, inputs) {
-        const labels = Array.from({ length: data.length }, (_, i) => `Year ${i + 1}`);
-        const balances = data.map(p => p.balance);
-        const contributions = data.map(p => p.contribution);
-        
-        // Calculate cumulative growth for the chart
-        const growth = data.map((p, index) => p.balance - data[index].contribution - (index > 0 ? data[index-1].balance : inputs.startingBalance));
+    if (!S.annualData.length) {
+        output.innerHTML = '<p class="placeholder-text">Enter your goal details to receive AI-powered insights...</p>';
+        return;
+    }
 
-        if (Config.charts.projection) {
-            Config.charts.projection.destroy();
+    let html = `<h4><i class="fas fa-robot"></i> Your AI-Powered Financial Roadmap:</h4>`;
+
+    // Goal achievability analysis
+    const isAchievable = S.yearsToGoal !== Infinity && S.yearsToGoal <= 50;
+    const timeHorizon = S.calculationMode === 'time' ? S.yearsToGoal : S.targetYears;
+    const totalGains = S.futureValue - S.totalInvested;
+    const gainsPercent = (totalGains / S.futureValue) * 100;
+
+    if (!isAchievable) {
+        html += `
+            <div class="recommendation-alert high-priority">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Goal May Be Unrealistic</strong>
+            </div>
+            <p>Based on your current plan, reaching ${UTILS.formatCurrency(S.goalAmount)} may take over 50 years or be unattainable. Consider:</p>
+            <ul>
+                <li>Increasing monthly contributions significantly</li>
+                <li>Adjusting goal amount to be more realistic</li>
+                <li>Extending timeline if possible</li>
+                <li>Seeking higher-return investment opportunities (with appropriate risk)</li>
+            </ul>
+        `;
+    } else {
+        html += `
+            <div class="recommendation-alert low-priority">
+                <i class="fas fa-check-circle"></i> <strong>Goal Status: Achievable!</strong>
+            </div>
+            <p>Your goal of ${UTILS.formatCurrency(S.goalAmount)} is achievable in approximately ${timeHorizon} years based on your current plan.</p>
+        `;
+    }
+
+    // Compound growth insight
+    if (gainsPercent > 50 && timeHorizon >= 15) {
+        html += `
+            <div class="recommendation-alert low-priority">
+                <i class="fas fa-seedling"></i> <strong>Compound Growth Working For You</strong>
+            </div>
+            <p>Over ${UTILS.formatPercent(gainsPercent)} of your projected wealth comes from investment gains, not contributions! This demonstrates the power of compound growth over ${timeHorizon} years.</p>
+            <p><strong>Affiliate Recommendation:</strong> Maximize compound growth with low-cost index funds. <a href="#" target="_blank">Compare top investment platforms →</a></p>
+        `;
+    }
+
+    // Return rate analysis
+    if (S.calculationMode === 'return' && S.returnRequired > 12) {
+        html += `
+            <div class="recommendation-alert high-priority">
+                <i class="fas fa-chart-line"></i> <strong>High Return Rate Required</strong>
+            </div>
+            <p>Achieving your goal requires ${UTILS.formatPercent(S.returnRequired)} annual returns, which is historically very difficult to sustain. The S&P 500's long-term average is ~10%. Consider:</p>
+            <ul>
+                <li>Increasing monthly contributions to reduce required return</li>
+                <li>Extending your timeline</li>
+                <li>Consulting a financial advisor for high-growth strategies</li>
+            </ul>
+            <p><strong>Sponsor Recommendation:</strong> <a href="#" target="_blank">Connect with a certified financial planner →</a></p>
+        `;
+    }
+
+    // Contribution feasibility
+    if (S.calculationMode === 'contribution' && S.contributionNeeded > S.monthlyContribution * 3) {
+        html += `
+            <div class="recommendation-alert medium-priority">
+                <i class="fas fa-wallet"></i> <strong>High Monthly Contribution Required</strong>
+            </div>
+            <p>Reaching your goal requires ${UTILS.formatCurrency(S.contributionNeeded, 0)} monthly, which is significantly higher than your current ${UTILS.formatCurrency(S.monthlyContribution, 0)}. Consider:</p>
+            <ul>
+                <li>Extending your timeline to reduce monthly burden</li>
+                <li>Looking for ways to increase income</li>
+                <li>Optimizing budget to free up more savings</li>
+            </ul>
+            <p><strong>Affiliate Recommendation:</strong> <a href="#" target="_blank">Top budgeting apps to maximize savings →</a></p>
+        `;
+    }
+
+    // Inflation impact
+    const inflationErosion = ((S.futureValue - S.inflationAdjustedValue) / S.futureValue) * 100;
+    if (inflationErosion > 30 && timeHorizon > 15) {
+        html += `
+            <div class="recommendation-alert medium-priority">
+                <i class="fas fa-fire"></i> <strong>Significant Inflation Impact</strong>
+            </div>
+            <p>Inflation will erode ${UTILS.formatPercent(inflationErosion)} of your future value's purchasing power over ${timeHorizon} years. Your ${UTILS.formatCurrency(S.futureValue)} will have the buying power of only ${UTILS.formatCurrency(S.inflationAdjustedValue)} in today's dollars.</p>
+            <p>Ensure your goal amount accounts for this, or aim for returns exceeding ${UTILS.formatPercent(S.inflationRate + 3)} to stay ahead of inflation.</p>
+        `;
+    }
+
+    // Age-based advice
+    const goalAge = S.currentAge + timeHorizon;
+    if (S.goalType === 'retirement') {
+        if (goalAge < 60) {
+            html += `
+                <div class="recommendation-alert low-priority">
+                    <i class="fas fa-calendar-check"></i> <strong>Early Retirement Track</strong>
+                </div>
+                <p>You're on track for early retirement at age ${goalAge}! Consider maximizing tax-advantaged accounts (401k, IRA) to keep more of your gains.</p>
+                <p><strong>Recommendation:</strong> <a href="#" target="_blank">Learn about retirement account optimization →</a></p>
+            `;
+        } else if (goalAge > 70) {
+            html += `
+                <div class="recommendation-alert medium-priority">
+                    <i class="fas fa-hourglass-end"></i> <strong>Late Retirement Timeline</strong>
+                </div>
+                <p>Your projected retirement age is ${goalAge}. If you'd like to retire earlier, consider increasing contributions or seeking professional advice to optimize your strategy.</p>
+            `;
         }
+    }
 
-        const newChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Total Balance',
-                        data: balances,
-                        borderColor: 'rgba(36, 172, 185, 1)',
-                        backgroundColor: 'rgba(36, 172, 185, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        borderWidth: 3,
-                        pointRadius: 3,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: 'Total Contributions (Annual)',
-                        data: data.map(p => p.contribution),
-                        borderColor: 'rgba(255, 159, 64, 1)',
-                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
-                        tension: 0.4,
-                        fill: false,
-                        borderWidth: 2,
-                        pointRadius: 2,
-                        yAxisID: 'y'
+    output.innerHTML = html;
+}
+
+/* ========================================================================== */
+/* VI. CHARTING */
+/* ========================================================================== */
+
+function updateChart() {
+    const S = GOAL_PLANNER.STATE;
+    const canvas = document.getElementById('goalProgressChart');
+    if (!canvas || !S.annualData.length) return;
+
+    const ctx = canvas.getContext('2d');
+    
+    if (GOAL_PLANNER.charts.progressChart) {
+        GOAL_PLANNER.charts.progressChart.destroy();
+    }
+
+    const labels = S.annualData.map(d => `Year ${d.year}`);
+    const balanceData = S.annualData.map(d => d.endBalance);
+    const principalData = S.annualData.map(d => S.initialSavings + d.contributions * d.year);
+    const inflationData = S.annualData.map(d => d.inflationAdjusted);
+    const goalLine = S.annualData.map(() => S.goalAmount);
+
+    const isDarkMode = document.documentElement.getAttribute('data-color-scheme') === 'dark';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDarkMode ? '#ffffff' : '#000000';
+    const primaryColor = isDarkMode ? '#14b8a6' : '#19343B';
+    const accentColor = isDarkMode ? '#5eead4' : '#2dd4bf';
+
+    GOAL_PLANNER.charts.progressChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Account Balance',
+                    data: balanceData,
+                    borderColor: primaryColor,
+                    backgroundColor: isDarkMode ? 'rgba(20, 184, 166, 0.1)' : 'rgba(25, 52, 59, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                },
+                {
+                    label: 'Goal Target',
+                    data: goalLine,
+                    borderColor: '#f59e0b',
+                    borderDash: [10, 5],
+                    fill: false,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                },
+                {
+                    label: 'Total Invested',
+                    data: principalData,
+                    borderColor: accentColor,
+                    borderDash: [5, 5],
+                    fill: false,
+                    borderWidth: 2,
+                },
+                {
+                    label: 'Inflation-Adjusted Value',
+                    data: inflationData,
+                    borderColor: '#ef4444',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 2,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    labels: { color: textColor, font: { size: 12 } }
+                },
+                tooltip: {
+                    backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
+                    titleColor: textColor,
+                    bodyColor: textColor,
+                    callbacks: {
+                        label: (context) => `${context.dataset.label}: ${UTILS.formatCurrency(context.parsed.y)}`
                     }
-                ],
+                }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--color-text'),
-                            font: {
-                                size: 12
-                            }
-                        }
+            scales: {
+                y: {
+                    title: { display: true, text: 'Value ($)', color: textColor },
+                    ticks: {
+                        color: textColor,
+                        callback: (value) => UTILS.formatCurrency(value / 1000) + 'K'
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += Utils.formatCurrency(context.parsed.y, 0);
-                                }
-                                return label;
-                            }
-                        }
-                    }
+                    grid: { color: gridColor }
                 },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Year',
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--color-text')
-                        },
-                        ticks: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--color-text')
-                        },
-                        grid: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--color-border')
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Value ($)',
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--color-text')
-                        },
-                        ticks: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--color-text'),
-                            callback: function(value) {
-                                return Utils.formatCurrency(value, 0).replace('$', '');
-                            }
-                        },
-                        grid: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--color-border')
-                        }
-                    }
+                x: {
+                    title: { display: true, text: 'Time (Years)', color: textColor },
+                    ticks: { color: textColor },
+                    grid: { color: gridColor }
                 }
             }
+        }
+    });
+}
+
+/* ========================================================================== */
+/* VII. DATA TABLE */
+/* ========================================================================== */
+
+function updateDataTable() {
+    const S = GOAL_PLANNER.STATE;
+    const tbody = document.querySelector('#goal-annual-table tbody');
+    if (!tbody) return;
+
+    if (!S.annualData.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">Enter goal details to generate yearly breakdown</td></tr>';
+        return;
+    }
+
+    let html = '';
+    S.annualData.forEach(row => {
+        html += `
+            <tr>
+                <td>${row.year}</td>
+                <td>${row.age}</td>
+                <td>${UTILS.formatCurrency(row.startBalance)}</td>
+                <td>${UTILS.formatCurrency(row.contributions)}</td>
+                <td>${UTILS.formatCurrency(row.gains)}</td>
+                <td>${UTILS.formatCurrency(row.endBalance)}</td>
+                <td>${UTILS.formatCurrency(row.inflationAdjusted)}</td>
+                <td>${UTILS.formatNumber(row.progress, 1)}%</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+function exportCSV() {
+    const S = GOAL_PLANNER.STATE;
+    if (!S.annualData.length) {
+        UTILS.showToast('No data to export', 'error');
+        return;
+    }
+
+    let csv = 'Year,Age,Start Balance,Contributions,Gains,End Balance,Inflation-Adjusted,Progress\n';
+    S.annualData.forEach(row => {
+        csv += `${row.year},${row.age},${row.startBalance.toFixed(2)},${row.contributions.toFixed(2)},${row.gains.toFixed(2)},${row.endBalance.toFixed(2)},${row.inflationAdjusted.toFixed(2)},${row.progress.toFixed(1)}%\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `financial_goal_plan_${S.goalType}_${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    UTILS.showToast('Data exported successfully!', 'success');
+}
+
+/* ========================================================================== */
+/* VIII. TAB MANAGEMENT */
+/* ========================================================================== */
+
+function showResultTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+        content.classList.remove('active');
+    });
+    
+    const tab = document.getElementById(tabId);
+    if (tab) {
+        tab.classList.remove('hidden');
+        tab.classList.add('active');
+    }
+    
+    document.querySelectorAll('.tab-controls-results .tab-button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+    });
+    
+    if (tabId === 'progress-chart' && GOAL_PLANNER.charts.progressChart) {
+        setTimeout(() => GOAL_PLANNER.charts.progressChart.resize(), 100);
+    }
+}
+
+/* ========================================================================== */
+/* IX. THEME & PWA */
+/* ========================================================================== */
+
+const THEME_MANAGER = {
+    loadUserPreferences() {
+        const savedScheme = localStorage.getItem('finguid-color-scheme') || 
+                           (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-color-scheme', savedScheme);
+        this.updateToggleButton(savedScheme);
+    },
+    
+    updateToggleButton(scheme) {
+        const icon = document.querySelector('#toggle-color-scheme i');
+        if (icon) icon.className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    },
+    
+    toggleColorScheme() {
+        const currentScheme = document.documentElement.getAttribute('data-color-scheme');
+        const newScheme = currentScheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-color-scheme', newScheme);
+        localStorage.setItem('finguid-color-scheme', newScheme);
+        this.updateToggleButton(newScheme);
+        if (GOAL_PLANNER.charts.progressChart) updateChart();
+    }
+};
+
+/* ========================================================================== */
+/* X. EVENT LISTENERS & INITIALIZATION */
+/* ========================================================================== */
+
+function setupEventListeners() {
+    const form = document.getElementById('goal-planner-form');
+    if (!form) return;
+
+    const debouncedCalc = UTILS.debounce(updateCalculations, 300);
+    form.addEventListener('input', debouncedCalc);
+    form.addEventListener('change', debouncedCalc);
+
+    // Goal type selection
+    document.querySelectorAll('input[name="goal-type"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            GOAL_PLANNER.STATE.goalType = e.target.value;
+            updateCalculations();
         });
+    });
 
-        Config.charts.projection = newChart;
-        return newChart;
-    }
-    
-    function update(canvasId, projectionData, inputs) {
-        const ctx = document.getElementById(canvasId).getContext('2d');
-        if (Config.charts.projection) {
-            Config.charts.projection.destroy();
-        }
-        createChart(ctx, projectionData, inputs);
-    }
-
-    return {
-        create: createChart,
-        update
-    };
-})(Config, Utils);
-
-// ==========================================================================
-// S: APPLICATION CONTROLLER (SRP: Orchestrating the UI and other modules)
-// ==========================================================================
-const AppController = (function(Config, Utils, FinancialSolver, ChartModule, AIInsights, FredService, SpeechModule) {
-    'use strict';
-
-    let state = {
-        inputs: {},
-        results: {},
-        projection: [],
-        inflatedGoal: 0
-    };
-    
-    /**
-     * @returns {Object} An object containing parsed user inputs.
-     */
-    function getInputs() {
-        const goalName = document.getElementById(Config.DOM.goalSelect).value;
-        const customGoal = goalName === 'Custom' ? document.getElementById(Config.DOM.goalCustomInput).value : goalName;
-        
-        const inputs = {
-            goalName: customGoal,
-            mode: document.getElementById(Config.DOM.modeSelect).value,
-            nominalGoal: Utils.parseInput('goal-amount'),
-            startingBalance: Utils.parseInput('starting-balance'),
-            timelineYears: Utils.parseInput('goal-timeline', false),
-            monthlyContribution: Utils.parseInput('monthly-contribution'),
-            returnRate: Utils.parseInput('return-rate', false),
-            inflationRate: Utils.parseInput('inflation-rate', false),
-        };
-        
-        // Validate core numeric inputs
-        if (inputs.timelineYears <= 0 && inputs.mode !== 'timeline') inputs.timelineYears = 1;
-        if (inputs.returnRate < 0) inputs.returnRate = 0;
-        if (inputs.inflationRate < 0) inputs.inflationRate = 0;
-
-        return inputs;
-    }
-    
-    /**
-     * Handles the core financial calculation logic.
-     */
-    function handleCalculation() {
-        const inputs = getInputs();
-        state.inputs = inputs;
-
-        const r = inputs.returnRate / 100;
-        const i = r / FinancialSolver.PERIODS_PER_YEAR; // Monthly rate
-        const years = inputs.timelineYears;
-
-        // 1. Calculate inflation-adjusted goal
-        state.inflatedGoal = FinancialSolver.adjustForInflation(inputs.nominalGoal, years, inputs.inflationRate);
-        const inflatedGoal = state.inflatedGoal;
-
-        const pv = inputs.startingBalance;
-        const n = Math.ceil(years * FinancialSolver.PERIODS_PER_YEAR); // Total months
-
-        let results = {};
-        let finalPmt = inputs.monthlyContribution; // Default
-        let finalYears = inputs.timelineYears;
-
-        switch (inputs.mode) {
-            case 'monthly':
-                // FV_PV = PV * (1 + i)^n
-                const fv_pv = pv * Math.pow(1 + i, n);
-                const fv_needed = inflatedGoal - fv_pv;
-                finalPmt = FinancialSolver.solveForMonthly(fv_needed, i, n);
-                if (finalPmt < 0) finalPmt = 0; // If starting balance > goal, contribution is 0
-
-                results = {
-                    label: `Monthly Savings for ${inputs.goalName}`,
-                    value: finalPmt,
-                    unit: "/mo"
-                };
-                
-                state.projection = FinancialSolver.generateProjection(pv, finalPmt, inputs.timelineYears, inputs.returnRate);
-                break;
-
-            case 'final_value':
-                finalPmt = inputs.monthlyContribution;
-                const finalValue = FinancialSolver.solveForFinalValue(pv, finalPmt, n, i);
-                
-                results = {
-                    label: `Final Value of ${inputs.goalName}`,
-                    value: finalValue,
-                    unit: ""
-                };
-                
-                state.projection = FinancialSolver.generateProjection(pv, finalPmt, inputs.timelineYears, inputs.returnRate);
-                break;
-
-            case 'timeline':
-                finalPmt = inputs.monthlyContribution;
-                const totalMonths = FinancialSolver.solveForTimeline(inflatedGoal, pv, finalPmt, i);
-                finalYears = totalMonths / FinancialSolver.PERIODS_PER_YEAR;
-                
-                // If final years is Infinity, set it to max 50 for projection chart
-                const projectionYears = finalYears === Infinity ? 50 : Math.ceil(finalYears);
-
-                results = {
-                    label: `Years to Reach ${inputs.goalName}`,
-                    value: finalYears.toFixed(1),
-                    unit: "years"
-                };
-
-                state.projection = FinancialSolver.generateProjection(pv, finalPmt, projectionYears, inputs.returnRate);
-                break;
-
-            default:
-                break;
-        }
-
-        state.results = results;
-        updateUI();
-        Utils.trackEvent('goal_planner', 'calculation', { mode: inputs.mode, goal: inputs.goalName });
-    }
-    
-    /**
-     * Updates all UI elements with the latest results.
-     */
-    function updateUI() {
-        const { inputs, results, projection, inflatedGoal } = state;
-
-        // --- 1. Primary Result Card ---
-        Utils.setElementText(Config.DOM.summaryLabel, results.label);
-        
-        let primaryValue = results.value;
-        let primaryUnit = results.unit;
-        
-        if (inputs.mode === 'monthly' || inputs.mode === 'final_value') {
-            // Currency formatting for money results
-            primaryValue = Utils.formatCurrency(primaryValue, 0); 
-        } else if (inputs.mode === 'timeline') {
-            // Timeline results already formatted to 1 decimal
-            primaryValue = results.value;
-            if (primaryValue === (Infinity / FinancialSolver.PERIODS_PER_YEAR).toFixed(1)) {
-                 primaryValue = ">50";
-                 primaryUnit = "years";
-            } else if (primaryValue === (0).toFixed(1) && results.value > 0) {
-                // If it rounds to 0.0 but is actually positive, show a small number
-                primaryValue = "<0.1";
-            }
-        }
-        
-        Utils.setElementText(Config.DOM.primaryResult, primaryValue);
-        Utils.setElementText(Config.DOM.primaryUnit, primaryUnit);
-        
-        Utils.setElementText(Config.DOM.projectionSummary, 
-            `Assuming ${inputs.returnRate}% return and ${inputs.inflationRate}% inflation over ${inputs.timelineYears} years.`);
-
-        // --- 2. Detailed Breakdown (Summary Tab) ---
-        const finalItem = projection[projection.length - 1];
-        const finalBalance = finalItem ? finalItem.balance : inputs.startingBalance;
-        
-        let totalCashContributed = inputs.startingBalance;
-        let totalGrowth = finalBalance - totalCashContributed;
-        
-        if (inputs.mode !== 'timeline' || finalBalance > inflatedGoal) {
-             const finalYearIndex = projection.findIndex(item => item.balance >= inflatedGoal);
-             if (finalYearIndex !== -1) {
-                 // For monthly and final_value modes, we calculate based on full timeline
-                 const totalMonths = inputs.timelineYears * FinancialSolver.PERIODS_PER_YEAR;
-                 totalCashContributed = inputs.startingBalance + (inputs.monthlyContribution * totalMonths);
-                 totalGrowth = finalBalance - totalCashContributed;
-             }
-        } else {
-             // For timeline mode, total contributions is calculated from the exact required number of months
-             totalCashContributed = inputs.startingBalance + (inputs.monthlyContribution * state.results.value * FinancialSolver.PERIODS_PER_YEAR);
-             totalGrowth = finalBalance - totalCashContributed;
-        }
-        
-        // Recalculate if mode is 'monthly' and the calculated monthly payment is used
-        if (inputs.mode === 'monthly') {
-             const finalPmt = state.results.value;
-             const totalMonths = inputs.timelineYears * FinancialSolver.PERIODS_PER_YEAR;
-             totalCashContributed = inputs.startingBalance + (finalPmt * totalMonths);
-             
-             // Recalculate Final Balance based on the required monthly payment
-             const n = Math.ceil(inputs.timelineYears * FinancialSolver.PERIODS_PER_YEAR);
-             const i = (inputs.returnRate / 100) / FinancialSolver.PERIODS_PER_YEAR;
-             const recalculatedFinalBalance = FinancialSolver.solveForFinalValue(inputs.startingBalance, finalPmt, n, i);
-             
-             totalGrowth = recalculatedFinalBalance - totalCashContributed;
-             Utils.setElementText(Config.DOM.finalBalance, Utils.formatCurrency(recalculatedFinalBalance, 0));
-        } else {
-             Utils.setElementText(Config.DOM.finalBalance, Utils.formatCurrency(finalBalance, 0));
-        }
-        
-        Utils.setElementText(Config.DOM.totalGoal, Utils.formatCurrency(inflatedGoal, 0));
-        Utils.setElementText(Config.DOM.totalContributions, Utils.formatCurrency(totalCashContributed, 0));
-        Utils.setElementText(Config.DOM.totalGrowth, Utils.formatCurrency(totalGrowth, 0));
-        
-        // --- 3. AI Insights ---
-        const aiHtml = AIInsights.generate(results, inputs, inflatedGoal);
-        Utils.setElementHTML(Config.DOM.aiContent, aiHtml);
-
-        // --- 4. Schedule Table ---
-        updateScheduleTable(projection, inputs);
-
-        // --- 5. Projection Chart ---
-        const ctx = document.getElementById(Config.DOM.projectionCanvas);
-        if (ctx) {
-            ChartModule.create(ctx, projection, inputs);
-        }
-    }
-    
-    /**
-     * Updates the year-by-year schedule table.
-     * @param {Array<Object>} projection - The yearly projection data.
-     * @param {Object} inputs - The user inputs object.
-     */
-    function updateScheduleTable(projection, inputs) {
-        const tbody = document.querySelector(Config.DOM.projectionTableBody);
-        if (!tbody) return;
-        tbody.innerHTML = '';
-
-        let cumulativeBalance = inputs.startingBalance;
-        let cumulativeContribution = inputs.startingBalance;
-
-        projection.forEach((item, index) => {
-             // The projection data already contains the annual contribution and growth for the year.
-             // We need to calculate the cumulative contribution and reset the annual contribution/growth.
+    // Calculation mode selection
+    document.querySelectorAll('.mode-button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const mode = btn.getAttribute('data-mode');
+            GOAL_PLANNER.STATE.calculationMode = mode;
             
-             // Calculate cash contributed *this year*
-             const yearContribution = item.contribution; 
-             const yearGrowth = item.growth;
-             
-             cumulativeContribution += yearContribution;
-             cumulativeBalance = item.balance; // Balance at end of year
+            document.querySelectorAll('.mode-button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Show/hide mode-specific inputs
+            document.getElementById('contribution-mode-input').classList.toggle('hidden', mode !== 'contribution');
+            document.getElementById('return-mode-input').classList.toggle('hidden', mode !== 'return');
+            
+            updateCalculations();
+        });
+    });
 
-             const row = document.createElement('tr');
-             row.innerHTML = `
-                 <td>${item.year}</td>
-                 <td>${Utils.formatCurrency(yearContribution, 0)}</td>
-                 <td>${Utils.formatCurrency(yearGrowth, 0)}</td>
-                 <td>${Utils.formatCurrency(cumulativeBalance, 0)}</td>
-             `;
-             tbody.appendChild(row);
+    // Result tab switching
+    document.querySelectorAll('.tab-controls-results .tab-button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const tabId = btn.getAttribute('data-tab');
+            showResultTab(tabId);
+        });
+    });
+
+    // Theme toggle
+    const themeBtn = document.getElementById('toggle-color-scheme');
+    if (themeBtn) themeBtn.addEventListener('click', () => THEME_MANAGER.toggleColorScheme());
+
+    // CSV export
+    const exportBtn = document.getElementById('export-goal-csv');
+    if (exportBtn) exportBtn.addEventListener('click', exportCSV);
+
+    // Lead form
+    const leadForm = document.getElementById('lead-form');
+    if (leadForm) {
+        leadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            UTILS.showToast('Thank you! A financial advisor will contact you soon.', 'success');
+            leadForm.reset();
         });
     }
+}
 
-    /**
-     * Toggles the visibility of the Monthly Contribution input field 
-     * based on the selected calculation mode.
-     */
-    function toggleMonthlyInput() {
-        const mode = document.getElementById(Config.DOM.modeSelect).value;
-        const isSolvingForMonthly = mode === 'monthly';
-        const isSolvingForTimeline = mode === 'timeline';
+/* ========================================================================== */
+/* XI. INITIALIZATION */
+/* ========================================================================== */
 
-        // Monthly contribution input is hidden if we are solving FOR it.
-        Utils.toggleClass(Config.DOM.monthlyInputGroup, 'hidden', isSolvingForMonthly);
-        
-        // Goal amount input is hidden if we are solving FOR Final Value (not strictly needed by the current logic, but good practice for clarity)
-        Utils.toggleClass('goal-amount-group', 'hidden', mode === 'final_value');
-        
-        // Timeline input is hidden if we are solving FOR it.
-        Utils.toggleClass('goal-timeline-group', 'hidden', isSolvingForTimeline);
-        
-        // Set required attribute based on visibility
-        document.getElementById('monthly-contribution').required = !isSolvingForMonthly;
-        document.getElementById('goal-amount').required = mode !== 'final_value';
-        document.getElementById('goal-timeline').required = mode !== 'timeline';
-        
-        // Force re-calculation on mode change
-        handleCalculation();
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🎯 FinGuid Financial Goal Planner v1.0 Initializing...');
+
+    THEME_MANAGER.loadUserPreferences();
+    setupEventListeners();
+    showResultTab('progress-chart');
+
+    await fredAPI.initialize();
+
+    console.log('✅ Goal Planner initialized successfully!');
+});
+
+window.addEventListener('resize', UTILS.debounce(() => {
+    if (GOAL_PLANNER.charts.progressChart) {
+        GOAL_PLANNER.charts.progressChart.resize();
     }
-    
-    /**
-     * Toggles the visibility of the custom goal name input field.
-     */
-    function toggleCustomGoalInput() {
-        const goal = document.getElementById(Config.DOM.goalSelect).value;
-        const isCustom = goal === 'Custom';
-        
-        Utils.toggleClass(Config.DOM.goalCustomGroup, 'hidden', !isCustom);
-        document.getElementById(Config.DOM.goalCustomInput).required = isCustom;
-        
-        handleCalculation();
-    }
-    
-    /**
-     * Handles the tab switching logic.
-     * @param {string} tabId - The ID of the tab to activate.
-     */
-    function handleTabSwitch(tabId) {
-        const tabContents = document.querySelectorAll('.tab-content');
-        const tabButtons = document.querySelectorAll('.tab-button');
-
-        tabContents.forEach(content => {
-            Utils.toggleClass(content.id, 'hidden', content.id !== tabId);
-            content.setAttribute('aria-selected', content.id === tabId);
-        });
-
-        tabButtons.forEach(button => {
-            Utils.toggleClass(button.id, 'active', button.getAttribute('aria-controls') === tabId);
-            button.setAttribute('aria-selected', button.getAttribute('aria-controls') === tabId);
-        });
-        
-        // Re-render chart on tab switch to ensure it renders correctly after being hidden
-        if (tabId === 'projection-chart') {
-             if (state.projection && state.projection.length > 0) {
-                 ChartModule.update(Config.DOM.projectionCanvas, state.projection, state.inputs);
-             }
-        }
-        
-        Utils.trackEvent('goal_planner', 'tab_switch', { tab: tabId });
-    }
-    
-    /**
-     * Processes a voice command received from the SpeechModule.
-     * @param {string} command - The text command.
-     */
-    function processVoiceCommand(command) {
-        Utils.showToast(`Command: "${command}"`, 'info');
-        
-        if (command.includes('calculate') || command.includes('plan')) {
-            handleCalculation();
-            SpeechModule.speak("Calculation complete. Results updated.");
-        } else if (command.includes('read insights') || command.includes('what do you think')) {
-            const insightsText = document.getElementById(Config.DOM.aiContent).innerText;
-            SpeechModule.speak(insightsText.replace(/\n/g, '. '));
-        } else if (command.includes('monthly contribution')) {
-            Utils.setInputValue(Config.DOM.modeSelect, 'monthly');
-            toggleMonthlyInput();
-            SpeechModule.speak("Switched mode to solve for monthly contribution.");
-        } else if (command.includes('final value') || command.includes('balance')) {
-            Utils.setInputValue(Config.DOM.modeSelect, 'final_value');
-            toggleMonthlyInput();
-            SpeechModule.speak("Switched mode to solve for final value.");
-        } else if (command.includes('timeline') || command.includes('years')) {
-            Utils.setInputValue(Config.DOM.modeSelect, 'timeline');
-            toggleMonthlyInput();
-            SpeechModule.speak("Switched mode to solve for timeline in years.");
-        } else {
-             SpeechModule.speak("Sorry, I didn't recognize that command.");
-        }
-    }
-
-
-    /**
-     * Initializes all event listeners and external services.
-     */
-    function initialize() {
-        // --- 1. Fetch FRED API Data on load ---
-        FredService.fetchInflationRate();
-        FredService.fetchReturnBenchmark();
-        
-        // --- 2. Initialize Voice Module ---
-        SpeechModule.initialize(processVoiceCommand);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- 3. Event Listeners for Form Changes (Recalculate on Change) ---
-            const form = document.getElementById(Config.DOM.form);
-            if (form) {
-                // Use 'submit' event on form instead of 'change' on every input
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    handleCalculation();
-                });
-            }
-            
-            // Recalculate on selection changes
-            document.getElementById(Config.DOM.modeSelect).addEventListener('change', toggleMonthlyInput);
-            document.getElementById(Config.DOM.goalSelect).addEventListener('change', toggleCustomGoalInput);
-            
-            // Keyup/input event listeners for smoother updates without hitting enter
-            const inputFields = document.querySelectorAll('input[type="number"], input[type="text"]');
-            inputFields.forEach(input => {
-                input.addEventListener('input', Utils.debounce(handleCalculation, 750));
-            });
-
-            // --- 4. Tab Listeners ---
-            document.getElementById('summary-tab').addEventListener('click', () => handleTabSwitch('summary-details'));
-            document.getElementById('projection-chart-tab').addEventListener('click', () => handleTabSwitch('projection-chart'));
-            document.getElementById('schedule-tab').addEventListener('click', () => handleTabSwitch('schedule-table'));
-            
-            // --- 5. Action Buttons ---
-            document.getElementById('export-csv-btn').addEventListener('click', () => {
-                const header = ["Year", "Annual Contribution", "Investment Growth", "End Balance"];
-                const data = state.projection.map(item => [
-                    item.year, 
-                    item.contribution.toFixed(2), 
-                    item.growth.toFixed(2), 
-                    item.balance.toFixed(2)
-                ]);
-                Utils.exportToCSV([header, ...data], `${state.inputs.goalName}-Savings-Schedule.csv`);
-                Utils.showToast("Exported to CSV!", 'success');
-                Utils.trackEvent('goal_planner', 'export', { goal: state.inputs.goalName });
-            });
-            
-            document.getElementById('read-results-btn').addEventListener('click', () => {
-                const insightsText = document.getElementById(Config.DOM.aiContent).innerText;
-                SpeechModule.speak(insightsText.replace(/\n/g, '. '));
-                Utils.trackEvent('goal_planner', 'read_insights');
-            });
-
-            // --- 6. Dark/Light Mode Toggle ---
-            const colorSchemeToggle = document.getElementById('theme-toggle');
-            if (colorSchemeToggle) {
-                 const savedScheme = localStorage.getItem('colorScheme');
-                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                 let currentScheme = savedScheme || (prefersDark ? 'dark' : 'light');
-
-                 const setTheme = (scheme) => {
-                     document.documentElement.setAttribute('data-color-scheme', scheme);
-                     localStorage.setItem('colorScheme', scheme);
-                     colorSchemeToggle.setAttribute('aria-pressed', scheme === 'dark');
-                     const iconClass = scheme === 'dark' ? 'fa-sun' : 'fa-moon';
-                     colorSchemeToggle.innerHTML = `<i class="fas ${iconClass}"></i>`;
-                     
-                     // If chart exists, re-render to update colors
-                     if (Config.charts.projection) {
-                         ChartModule.update(Config.DOM.projectionCanvas, state.projection, state.inputs);
-                     }
-                     
-                     Utils.trackEvent('theme_toggle', { theme: scheme });
-                 };
-                 
-                 setTheme(currentScheme);
-
-                 colorSchemeToggle.addEventListener('click', () => {
-                     currentScheme = currentScheme === 'dark' ? 'light' : 'dark';
-                     setTheme(currentScheme);
-                 });
-            }
-
-            // --- 7. FAQ Accessibility (Accordion) ---
-            const faqItems = document.querySelectorAll('.faq-item');
-            faqItems.forEach(item => {
-                const summary = item.querySelector('summary');
-                const content = item.querySelector('[itemprop="acceptedAnswer"]');
-                
-                // Initialize aria attributes
-                content.setAttribute('aria-hidden', !item.open);
-                summary.setAttribute('aria-expanded', item.open);
-
-                item.addEventListener('toggle', () => {
-                    const isExpanded = item.open;
-                    summary.setAttribute('aria-expanded', isExpanded);
-                    content.setAttribute('aria-hidden', !isExpanded);
-                });
-            });
-
-            // --- 8. PWA Install ---
-            let deferredPrompt;
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                document.getElementById('pwa-install-button').classList.remove('hidden');
-            });
-
-            document.getElementById('pwa-install-button').addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`User response to install prompt: ${outcome}`);
-                    deferredPrompt = null;
-                    document.getElementById('pwa-install-button').classList.add('hidden');
-                }
-            });
-            
-            // --- 9. Initial setup ---
-            toggleMonthlyInput(); 
-            toggleCustomGoalInput();
-            handleCalculation(); // Run initial calculation
-            
-            console.log('✅ Goal Planner Ready!');
-        });
-    }
-
-    return {
-        initialize
-    };
-
-})(Config, Utils, FinancialSolver, ChartModule, AIInsights, FredService, SpeechModule);
-
-// ==========================================================================
-// START THE APPLICATION
-// ==========================================================================
-AppController.initialize();
+}, 250));
