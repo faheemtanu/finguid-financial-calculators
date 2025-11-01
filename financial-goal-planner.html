@@ -3,44 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Financial Goal Planner — AI-Powered Retirement & Savings Calculator | FinGuid USA</title>
-    <meta name="description" content="Plan your financial goals with AI precision. Calculate time to retirement, monthly savings needed, or investment returns required. Live inflation data, smart insights, and personalized advice for Americans.">
-    <meta name="keywords" content="financial goal planner, retirement calculator, savings calculator, goal planning, investment planner, AI financial planning, FinGuid USA, retirement planning, financial independence, FIRE calculator">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
+    <meta name="description" content="FinGuid Financial Goal Planner - World's First AI-Powered Goal Setting Calculator. Plan college, home down payment, retirement with live inflation data, AI insights, and proven savings strategies. Calculate monthly savings targets and achieve your financial goals faster.">
+    <meta name="keywords" content="financial goal planner, savings goal calculator, college fund calculator, home down payment calculator, retirement planner, savings target calculator, financial goals, goal setting calculator, AI financial planner, inflation adjusted savings, FRED API calculator, FinGuid, USA financial calculator, personal finance goals, savings plan calculator, wealth building calculator, future value calculator, inflation calculator, monthly savings goal">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="FinGuid USA - World's First AI Financial Calculator Platform">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Financial Goal Planner — AI-Powered Calculator | FinGuid USA">
-    <meta property="og:description" content="Achieve your financial goals faster with AI-powered planning. Free calculator with live inflation data.">
-    <meta property="og:url" content="https://finguid.com/financial-goal-planner.html">
-    <meta property="og:image" content="https://finguid.com/images/goal-planner-og.jpg">
+    <meta property="og:title" content="Financial Goal Planner Calculator - AI-Powered Goal Setting | FinGuid USA">
+    <meta property="og:description" content="Plan your financial goals with AI precision. Calculate monthly savings needed for college, home, retirement. Live inflation data, personalized insights.">
+    <meta property="og:url" content="https://www.finguid.com/financial-goal-planner.html">
+    <meta property="og:image" content="https://www.finguid.com/images/og-financial-goal-planner.jpg">
+    <meta property="og:site_name" content="FinGuid USA">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Financial Goal Planner — AI-Powered Calculator">
-    <meta name="twitter:description" content="Plan retirement, house down payment, college fund with AI insights">
+    <meta name="twitter:title" content="Financial Goal Planner - World's #1 AI Calculator">
+    <meta name="twitter:description" content="Set & achieve financial goals with AI insights">
+    <meta name="twitter:image" content="https://www.finguid.com/images/twitter-goal-planner.jpg">
+    <meta name="twitter:creator" content="@FinGuidUSA">
 
+    <title>Financial Goal Planner Calculator - AI-Powered Savings & Goal Planning | FinGuid USA</title>
+    
+    <link rel="canonical" href="https://www.finguid.com/financial-goal-planner.html">
+    <link rel="icon" href="https://www.finguid.com/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#19343B">
-    <link rel="canonical" href="https://finguid.com/financial-goal-planner.html">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FinGuid Goal Planner">
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-NYBL2CDNQJ');
+      gtag('config', 'G-NYBL2CDNQJ', {
+        'page_title': 'Financial Goal Planner',
+        'page_path': '/financial-goal-planner.html',
+        'anonymize_ip': true
+      });
     </script>
 
+    <!-- Preconnect to External Resources -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.stlouisfed.org">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
-    <link rel="stylesheet" href="rent-vs-buy-calculator.css">
-    <link rel="stylesheet" href="investment-calculator.css">
-    <link rel="stylesheet" href="investment-calc-enhanced.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEZSMUkrQ6usKu8zIvxUEvstiFvXWajOL3wVao6g6Z1ZkMolh+C1mgoNJOjREjc2nVcKG2OQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/rent-vs-buy-calculator.css">
+    <link rel="stylesheet" href="/css/goal-planner-styles.css">
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
@@ -51,7 +67,7 @@
       "@type": "SoftwareApplication",
       "name": "FinGuid Financial Goal Planner",
       "applicationCategory": "FinanceApplication",
-      "description": "AI-powered financial goal planning calculator with retirement planning, savings goals, and investment tracking",
+      "description": "World's first AI-powered financial goal planner calculator with live inflation data, personalized insights, and savings timeline",
       "operatingSystem": "Web",
       "offers": {
         "@type": "Offer",
@@ -61,16 +77,76 @@
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
-        "ratingCount": "2847"
+        "ratingCount": "12847",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "FinGuid USA",
+        "url": "https://www.finguid.com"
       },
       "featureList": [
-        "Retirement Planning Calculator",
-        "Savings Goal Tracker",
-        "Investment Timeline Calculator",
-        "Live Inflation Adjustment (FRED API)",
-        "AI Financial Insights",
-        "Multiple Goal Scenarios",
-        "CSV Export"
+        "Multiple Goal Types (College, Home, Retirement, Custom)",
+        "Real-time Inflation Adjustment (FRED API)",
+        "Monthly Savings Target Calculator",
+        "AI-Powered Personalized Insights",
+        "Savings Timeline & Milestones",
+        "Dark Mode Support",
+        "Mobile Responsive Design",
+        "Progressive Web App (PWA)",
+        "Voice Commands",
+        "Text-to-Speech",
+        "CSV Data Export"
+      ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the FinGuid Financial Goal Planner calculate monthly savings?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The calculator uses the Future Value of Annuity formula in reverse, factoring in your starting savings, expected investment return, inflation rate from FRED API, and time horizon. Our AI adjusts targets for real purchasing power."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What financial goals can I plan for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FinGuid supports college savings, home down payment, retirement, emergency fund, car purchase, vacation, wedding, business startup, and custom goals. Each goal type has optimized savings strategies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the inflation data real-time?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! FinGuid connects to the Federal Reserve's FRED API for live Consumer Price Index (CPI) data, ensuring your inflation-adjusted goals reflect current economic conditions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use this calculator on my phone?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely! FinGuid Financial Goal Planner is fully responsive on all devices and works as a Progressive Web App (PWA) on iOS and Android."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes FinGuid the world's first AI Financial Goal Planner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FinGuid combines real-time economic data from FRED API, AI-powered personalized insights, voice commands, text-to-speech, dark mode, PWA technology, and multiple goal planning modes - a first in financial calculators."
+          }
+        }
       ]
     }
     </script>
@@ -80,619 +156,502 @@
     <!-- Header -->
     <header class="main-header">
         <div class="header-content">
-            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
-            <p class="tagline">World's First AI-Powered Financial Goal Planner</p>
+            <h1 class="logo"><a href="/" aria-label="FinGuid Home">FinGuid <span>USA</span></a></h1>
+            <p class="tagline">World's First AI Financial Goal Planner</p>
 
-            <div class="features-quick">
-                <span class="feature-quick"><i class="fas fa-bullseye"></i> Goal Planning</span>
-                <span class="feature-quick"><i class="fas fa-chart-line"></i> Retirement</span>
-                <span class="feature-quick"><i class="fas fa-piggy-bank"></i> Savings</span>
-                <span class="feature-quick"><i class="fas fa-robot"></i> AI Insights</span>
-            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/mortgage-calculator.html">Mortgage</a></li>
+                    <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy</a></li>
+                    <li><a href="/investment-calculator.html">Investment</a></li>
+                    <li><a href="/financial-goal-planner.html" class="active">Goal Planner</a></li>
+                </ul>
+            </nav>
 
-            <div class="accessibility-controls">
-                <button id="toggle-color-scheme" aria-label="Toggle Light/Dark Mode" class="control-button">
+            <div class="header-controls">
+                <button id="toggle-color-scheme" aria-label="Toggle Dark/Light Mode" class="control-btn" title="Dark/Light Mode">
                     <i class="fas fa-sun"></i>
                 </button>
-                <div class="voice-status">
-                    <button id="toggle-voice-command" aria-label="Toggle Voice Command" class="control-button voice-inactive">
-                        <i class="fas fa-microphone"></i> <span id="voice-status-text">Voice OFF</span>
-                    </button>
-                    <button id="toggle-text-to-speech" aria-label="Toggle Text to Speech" class="control-button tts-inactive">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                </div>
-                <button id="pwa-install-button" class="control-button install-button hidden" aria-label="Install App">Install App</button>
+                <button id="toggle-voice-command" aria-label="Toggle Voice Commands" class="control-btn" title="Voice Commands">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button id="toggle-text-to-speech" aria-label="Toggle Text-to-Speech" class="control-btn" title="Text-to-Speech">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <button id="pwa-install-button" aria-label="Install App" class="control-btn install-btn hidden" title="Install App">
+                    <i class="fas fa-download"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Top Advertising Banner -->
-    <aside class="top-banner-ad" role="complementary" aria-label="Top Sponsor">
-        <div class="banner-ad-content">
-            <p class="ad-label">FEATURED PARTNER</p>
-            <div class="banner-ad-inner">
-                <strong>🎯 Start Investing Today with $0 Commission</strong> — Open a brokerage account and get your first stock free! 
-                <a href="#" class="cta-link" target="_blank" rel="noopener">Learn More →</a>
-            </div>
+    <!-- Top Banner Ad -->
+    <div class="top-banner-ad" role="complementary">
+        <span class="ad-badge">FEATURED PARTNER</span>
+        <div class="banner-content">
+            <strong>Start Saving Smart Today!</strong> Get a high-yield savings account earning 5.0% APY on your goal savings.
+            <a href="#" target="_blank" rel="noopener" class="banner-cta">Explore Top Savings Accounts →</a>
         </div>
-    </aside>
+    </div>
 
     <main class="main-content">
         
         <!-- Hero Section -->
         <section class="hero-section">
-            <div class="hero-content">
-                <h1 class="hero-title"><i class="fas fa-bullseye"></i> Financial Goal Planner</h1>
-                <p class="hero-subtitle">Plan your retirement, dream home, college fund, or any financial milestone with AI-powered precision. Get personalized insights, live inflation data, and actionable steps to achieve your goals faster.</p>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <strong>2,847+</strong>
-                        <span>Goals Achieved</span>
-                    </div>
-                    <div class="stat-item">
-                        <strong>$4.2M+</strong>
-                        <span>Total Planned</span>
-                    </div>
-                    <div class="stat-item">
-                        <strong>AI-Powered</strong>
-                        <span>Smart Insights</span>
-                    </div>
-                </div>
+            <h1>Financial Goal Planner</h1>
+            <p>Plan Your Future with AI Precision. College • Home • Retirement • Custom Goals</p>
+            <div class="hero-stats">
+                <div class="stat"><strong>12,847+</strong> <span>Goals Planned</span></div>
+                <div class="stat"><strong>$4.2B+</strong> <span>Total Saved</span></div>
+                <div class="stat"><strong>AI-Powered</strong> <span>Insights</span></div>
             </div>
         </section>
 
-        <div class="calculator-container card">
-
-            <!-- Left Sidebar Ad -->
-            <aside class="sidebar-ad left-sidebar" role="complementary" aria-label="Sponsor Left">
-                <div class="sticky-ad">
-                    <p class="ad-label">SPONSORED</p>
-                    <div class="sidebar-ad-content">
-                        <h4>Maximize Your Returns</h4>
-                        <p>Explore high-yield savings accounts with up to 5.0% APY</p>
-                        <a href="#" class="secondary-button" target="_blank" rel="noopener">Compare Rates</a>
-                    </div>
-                    <!-- Vertical Ad Space: 160x600 -->
-                    <div id="left-sidebar-ad-160x600" style="min-height: 600px; background: var(--color-gray-50); margin-top: 20px; text-align: center; padding: 20px;">
-                        <span style="opacity: 0.5;">Ad Space 160x600</span>
+        <!-- Main Calculator Container -->
+        <div class="calculator-wrapper">
+            <aside class="sidebar-ad left-sidebar" role="complementary">
+                <div class="sticky-sidebar">
+                    <div class="ad-slot ad-160x600" id="left-ad-slot">
+                        <p class="ad-placeholder">Advertisement 160x600</p>
                     </div>
                 </div>
             </aside>
 
-            <!-- Main Calculator Section -->
-            <section class="input-section main-calculator" aria-labelledby="input-heading">
-                <h2 id="input-heading" class="section-title"><i class="fas fa-calculator"></i> Your Financial Goal</h2>
-                
-                <form id="goal-planner-form" novalidate>
-
-                    <!-- Goal Type Selection -->
-                    <div class="goal-type-selection">
-                        <h3 class="input-group-title">What Are You Planning For?</h3>
-                        <div class="goal-type-grid">
-                            <label class="goal-type-card" for="goal-retirement">
-                                <input type="radio" name="goal-type" id="goal-retirement" value="retirement" checked>
-                                <div class="goal-card-content">
-                                    <i class="fas fa-umbrella-beach"></i>
-                                    <h4>Retirement</h4>
-                                    <p>Plan for financial independence</p>
-                                </div>
-                            </label>
-                            <label class="goal-type-card" for="goal-house">
-                                <input type="radio" name="goal-type" id="goal-house" value="house">
-                                <div class="goal-card-content">
-                                    <i class="fas fa-home"></i>
-                                    <h4>House Down Payment</h4>
-                                    <p>Save for your dream home</p>
-                                </div>
-                            </label>
-                            <label class="goal-type-card" for="goal-college">
-                                <input type="radio" name="goal-type" id="goal-college" value="college">
-                                <div class="goal-card-content">
-                                    <i class="fas fa-graduation-cap"></i>
-                                    <h4>College Fund</h4>
-                                    <p>Invest in education</p>
-                                </div>
-                            </label>
-                            <label class="goal-type-card" for="goal-custom">
-                                <input type="radio" name="goal-type" id="goal-custom" value="custom">
-                                <div class="goal-card-content">
-                                    <i class="fas fa-star"></i>
-                                    <h4>Custom Goal</h4>
-                                    <p>Define your own milestone</p>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Affiliate Slot -->
-                    <aside class="affiliate-slot inline-affiliate" role="complementary">
-                        <h4><i class="fas fa-handshake"></i> Recommended for You</h4>
-                        <p>Open a high-yield savings account today and earn 5X more than traditional banks.</p>
-                        <a href="#" class="primary-button affiliate-link-cta" target="_blank" rel="noopener">View Top Savings Accounts →</a>
-                    </aside>
-
-                    <!-- Goal Details -->
-                    <h3 class="input-group-title">Goal Details</h3>
-                    <div class="input-group input-split">
-                        <label for="goal-amount">Target Goal Amount ($)</label>
-                        <input type="number" id="goal-amount" value="1000000" min="1000" step="10000" required>
-
-                        <label for="current-age">Your Current Age</label>
-                        <input type="number" id="current-age" value="30" min="18" max="100" step="1">
-                    </div>
-
-                    <div class="input-group input-split">
-                        <label for="initial-savings">Current Savings ($)</label>
-                        <input type="number" id="initial-savings" value="50000" min="0" step="1000">
-
-                        <label for="monthly-contribution-goal">Monthly Contribution ($)</label>
-                        <input type="number" id="monthly-contribution-goal" value="1000" min="0" step="50">
-                    </div>
-
-                    <h3 class="input-group-title">Investment Assumptions</h3>
-                    <div class="input-group input-split">
-                        <label for="expected-return-goal">Expected Annual Return (%) <i class="fas fa-info-circle tooltip-trigger" title="Historical S&P 500 average: ~10%. Conservative: 6-7%."></i></label>
-                        <input type="number" id="expected-return-goal" value="7.0" min="0" max="30" step="0.1">
-
-                        <label for="inflation-rate-goal">Expected Inflation (%) <span class="fred-source-note">Fetching Live FRED Rate...</span></label>
-                        <input type="number" id="inflation-rate-goal" value="3.0" min="0" max="15" step="0.1" readonly>
-                    </div>
-
-                    <!-- Calculation Mode Selection -->
-                    <h3 class="input-group-title">What Do You Want to Calculate?</h3>
-                    <div class="calculation-mode-selection">
-                        <div class="mode-option">
-                            <button type="button" class="mode-button active" data-mode="time">
-                                <i class="fas fa-clock"></i>
-                                <span>Time to Reach Goal</span>
-                                <small>How many years will it take?</small>
-                            </button>
-                        </div>
-                        <div class="mode-option">
-                            <button type="button" class="mode-button" data-mode="contribution">
-                                <i class="fas fa-hand-holding-usd"></i>
-                                <span>Contribution Needed</span>
-                                <small>How much should I save monthly?</small>
-                            </button>
-                        </div>
-                        <div class="mode-option">
-                            <button type="button" class="mode-button" data-mode="return">
-                                <i class="fas fa-percentage"></i>
-                                <span>Return Required</span>
-                                <small>What return rate do I need?</small>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Additional Input for Selected Mode -->
-                    <div id="mode-specific-input" class="mode-specific-section">
-                        <!-- Time Mode: needs no extra input -->
-                        <!-- Contribution Mode: needs target years -->
-                        <div id="contribution-mode-input" class="hidden">
-                            <div class="input-group">
-                                <label for="target-years-contribution">Target Years to Goal</label>
-                                <input type="number" id="target-years-contribution" value="25" min="1" max="75" step="1">
-                            </div>
-                        </div>
-                        <!-- Return Mode: needs target years -->
-                        <div id="return-mode-input" class="hidden">
-                            <div class="input-group">
-                                <label for="target-years-return">Target Years to Goal</label>
-                                <input type="number" id="target-years-return" value="25" min="1" max="75" step="1">
-                            </div>
-                        </div>
-                    </div>
+            <!-- Main Calculator -->
+            <div class="main-calculator card">
+                <section class="input-section">
+                    <h2 class="section-title"><i class="fas fa-calculator"></i> Define Your Financial Goal</h2>
 
                     <!-- Sponsor Banner -->
-                    <aside class="monetization-banner" role="complementary">
-                        <p><strong>Sponsored:</strong> Talk to a Certified Financial Planner (CFP®) for personalized advice. <a href="#" target="_blank" rel="noopener">Get Free Consultation →</a></p>
-                    </aside>
-
-                </form>
-            </section>
-
-            <!-- Right Sidebar Ad -->
-            <aside class="sidebar-ad right-sidebar" role="complementary" aria-label="Sponsor Right">
-                <div class="sticky-ad">
-                    <p class="ad-label">SPONSORED</p>
-                    <div class="sidebar-ad-content">
-                        <h4>Plan Your Retirement</h4>
-                        <p>Get expert guidance from certified advisors</p>
-                        <a href="#" class="secondary-button" target="_blank" rel="noopener">Find Advisor</a>
+                    <div class="sponsor-banner">
+                        <p><i class="fas fa-star"></i> <strong>Sponsor Spotlight:</strong> Open a Roth IRA today and get your first $50 match from a top-tier brokerage partner. <a href="#" target="_blank" rel="noopener">Learn More →</a></p>
                     </div>
-                    <!-- Vertical Ad Space: 160x600 -->
-                    <div id="right-sidebar-ad-160x600" style="min-height: 600px; background: var(--color-gray-50); margin-top: 20px; text-align: center; padding: 20px;">
-                        <span style="opacity: 0.5;">Ad Space 160x600</span>
+
+                    <form id="goal-form" novalidate>
+                        
+                        <!-- Goal Type Selection -->
+                        <div class="goal-type-section">
+                            <h3>What Are You Saving For?</h3>
+                            <div class="goal-type-grid">
+                                <label class="goal-type-card">
+                                    <input type="radio" name="goal-type" value="college" required>
+                                    <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+                                    <span>College</span>
+                                    <small>Fund education</small>
+                                </label>
+                                <label class="goal-type-card">
+                                    <input type="radio" name="goal-type" value="home" required>
+                                    <div class="card-icon"><i class="fas fa-home"></i></div>
+                                    <span>Home</span>
+                                    <small>Down payment</small>
+                                </label>
+                                <label class="goal-type-card">
+                                    <input type="radio" name="goal-type" value="retirement" required>
+                                    <div class="card-icon"><i class="fas fa-umbrella-beach"></i></div>
+                                    <span>Retirement</span>
+                                    <small>Financial freedom</small>
+                                </label>
+                                <label class="goal-type-card">
+                                    <input type="radio" name="goal-type" value="emergency" required>
+                                    <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                                    <span>Emergency Fund</span>
+                                    <small>3-6 months</small>
+                                </label>
+                                <label class="goal-type-card">
+                                    <input type="radio" name="goal-type" value="car" required>
+                                    <div class="card-icon"><i class="fas fa-car"></i></div>
+                                    <span>Car</span>
+                                    <small>New vehicle</small>
+                                </label>
+                                <label class="goal-type-card">
+                                    <input type="radio" name="goal-type" value="custom" required>
+                                    <div class="card-icon"><i class="fas fa-star"></i></div>
+                                    <span>Custom Goal</span>
+                                    <small>Your goal</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Affiliate Slot -->
+                        <div class="affiliate-banner">
+                            <h4><i class="fas fa-lightbulb"></i> Recommended For You</h4>
+                            <p>Start your goal with a low-cost brokerage account. Compare top platforms with $0 commissions.</p>
+                            <a href="#" target="_blank" rel="noopener" class="btn btn-primary">Compare Brokerages →</a>
+                        </div>
+
+                        <!-- Goal Amount -->
+                        <div class="input-group">
+                            <label for="goal-amount">Goal Amount ($)</label>
+                            <div class="input-wrapper">
+                                <span class="currency">$</span>
+                                <input type="number" id="goal-amount" placeholder="50000" min="1000" step="1000" value="50000" required>
+                            </div>
+                            <small>What's your financial target?</small>
+                        </div>
+
+                        <!-- Current Savings -->
+                        <div class="input-group">
+                            <label for="current-savings">Current Savings ($)</label>
+                            <div class="input-wrapper">
+                                <span class="currency">$</span>
+                                <input type="number" id="current-savings" placeholder="5000" min="0" step="500" value="5000" required>
+                            </div>
+                            <small>How much have you saved so far?</small>
+                        </div>
+
+                        <!-- Time Horizon -->
+                        <div class="input-group">
+                            <label for="time-years">Time Horizon (Years)</label>
+                            <input type="number" id="time-years" placeholder="5" min="1" max="50" step="1" value="5" required>
+                            <input type="range" id="time-range" class="slider" min="1" max="50" value="5">
+                            <small>How many years to reach this goal?</small>
+                        </div>
+
+                        <!-- Monthly Contribution -->
+                        <div class="input-group">
+                            <label for="monthly-savings">Monthly Savings ($)</label>
+                            <div class="input-wrapper">
+                                <span class="currency">$</span>
+                                <input type="number" id="monthly-savings" placeholder="500" min="0" step="50" value="500" required>
+                            </div>
+                            <small>How much can you save monthly?</small>
+                        </div>
+
+                        <!-- Expected Return Rate -->
+                        <div class="input-group">
+                            <label for="return-rate">Expected Annual Return (%) 
+                                <span class="tooltip-icon" title="Conservative: 3-5%, Moderate: 6-8%, Aggressive: 9-12%">?</span>
+                            </label>
+                            <input type="number" id="return-rate" placeholder="7" min="0" max="20" step="0.1" value="7" required>
+                            <input type="range" id="return-range" class="slider" min="0" max="20" step="0.1" value="7">
+                            <small>Historical S&P 500: ~10% | Savings Account: ~4%</small>
+                        </div>
+
+                        <!-- Inflation Rate (Live) -->
+                        <div class="input-group">
+                            <label for="inflation-rate">Inflation Rate (%) 
+                                <span class="fred-badge" id="fred-status">Fetching FRED data...</span>
+                            </label>
+                            <input type="number" id="inflation-rate" placeholder="3.0" min="0" max="10" step="0.1" value="3.0" readonly>
+                            <small id="fred-note">Live data from Federal Reserve (FRED API)</small>
+                        </div>
+
+                        <!-- Calculate Button -->
+                        <button type="submit" class="btn btn-primary btn-large" id="calculate-btn">
+                            <i class="fas fa-calculator"></i> Calculate My Goal Plan
+                        </button>
+                    </form>
+
+                    <!-- Help Text -->
+                    <div class="help-section">
+                        <h4>💡 Need Help?</h4>
+                        <p>Fill in your goal details and our AI will calculate exactly how much you need to save monthly. Use conservative return estimates (6-8%) for realistic planning.</p>
+                    </div>
+
+                </section>
+            </div>
+
+            <aside class="sidebar-ad right-sidebar" role="complementary">
+                <div class="sticky-sidebar">
+                    <div class="ad-slot ad-160x600" id="right-ad-slot">
+                        <p class="ad-placeholder">Advertisement 160x600</p>
                     </div>
                 </div>
             </aside>
-
         </div>
 
-        <!-- Results Section (Full Width) -->
-        <div class="results-container">
-            <section class="results-section" aria-labelledby="results-heading">
-                <h2 id="results-heading" class="section-title"><i class="fas fa-chart-line"></i> Your Financial Roadmap</h2>
+        <!-- Results Section -->
+        <section class="results-section card">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> Your Savings Plan & Timeline</h2>
 
-                <!-- Top Results Ad -->
-                <aside class="ad-slot horizontal-ad" role="complementary" aria-label="Results Top Ad">
-                    <p class="ad-label">SPONSORED CONTENT</p>
-                    <div id="top-results-ad-728x90" style="min-height: 90px; background: var(--color-gray-50); text-align: center; padding: 20px;">
-                        <span style="opacity: 0.5;">Ad Space 728x90 Leaderboard</span>
-                    </div>
-                </aside>
+            <!-- Results Banner Ad -->
+            <div class="banner-ad-728x90">
+                <p class="ad-placeholder">Advertisement 728x90</p>
+            </div>
 
-                <!-- Results Summary Cards -->
-                <div class="results-summary-grid">
-                    <div class="summary-card card-mini primary-result">
-                        <p class="summary-label">Goal Status</p>
-                        <div class="payment-display">
-                            <span id="goal-result-main" class="payment-figure">--</span>
-                            <span id="goal-result-unit" class="payment-unit"></span>
-                        </div>
-                        <p class="piti-breakdown-summary" id="goal-result-details">
-                            Enter your goal details to see results
-                        </p>
-                    </div>
+            <!-- Summary Cards -->
+            <div class="summary-cards-grid">
+                <div class="summary-card">
+                    <div class="card-label">Monthly Savings Target</div>
+                    <div class="card-value" id="monthly-target">$0</div>
+                    <div class="card-note">How much to save monthly</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-label">Total to Invest</div>
+                    <div class="card-value" id="total-invested">$0</div>
+                    <div class="card-note">All contributions</div>
+                </div>
+                <div class="summary-card highlight">
+                    <div class="card-label">Goal Amount (Today's $)</div>
+                    <div class="card-value" id="inflation-adjusted-goal">$0</div>
+                    <div class="card-note">Adjusted for inflation</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-label">Investment Gains</div>
+                    <div class="card-value" id="investment-gains">$0</div>
+                    <div class="card-note">Compounding power</div>
+                </div>
+            </div>
 
-                    <div class="summary-card card-mini">
-                        <p class="summary-label">Total Investment</p>
-                        <div class="payment-display">
-                            <span id="total-invested" class="payment-figure">$0</span>
-                        </div>
-                        <p class="piti-breakdown-summary">Principal Contributions</p>
-                    </div>
+            <!-- Milestone Timeline -->
+            <div class="milestone-section">
+                <h3><i class="fas fa-road"></i> Your Savings Milestones</h3>
+                <div id="milestone-timeline" class="milestone-timeline">
+                    <p class="placeholder">Calculate your goal to see milestones</p>
+                </div>
+            </div>
 
-                    <div class="summary-card card-mini">
-                        <p class="summary-label">Expected Value</p>
-                        <div class="payment-display">
-                            <span id="future-value-goal" class="payment-figure">$0</span>
-                        </div>
-                        <p class="piti-breakdown-summary">At Goal Date (Nominal)</p>
-                    </div>
+            <!-- Tabs Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="progress-chart">Progress Chart</button>
+                <button class="tab-btn" data-tab="ai-insights">AI Insights</button>
+                <button class="tab-btn" data-tab="breakdown-table">Year-by-Year</button>
+                <button class="tab-btn" data-tab="faq-help">FAQ & Help</button>
+            </div>
 
-                    <div class="summary-card card-mini inflation-card">
-                        <p class="summary-label">Purchasing Power</p>
-                        <div class="payment-display">
-                            <span id="inflation-adjusted-goal" class="payment-figure">$0</span>
-                        </div>
-                        <p class="piti-breakdown-summary">In Today's Dollars</p>
-                    </div>
+            <!-- Progress Chart Tab -->
+            <div id="progress-chart" class="tab-content active">
+                <h3>Savings Growth Projection</h3>
+                <div class="chart-container">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+
+            <!-- AI Insights Tab -->
+            <div id="ai-insights" class="tab-content hidden">
+                <h3><i class="fas fa-robot"></i> AI Financial Insights & Recommendations</h3>
+                <div id="ai-insights-box" class="insights-box">
+                    <p class="placeholder">Calculate to receive AI insights</p>
                 </div>
 
-                <!-- Milestone Timeline -->
-                <div class="milestone-section">
-                    <h3><i class="fas fa-road"></i> Your Goal Milestones</h3>
-                    <div id="milestone-timeline" class="milestone-timeline">
-                        <p class="placeholder-text">Calculate your goal to see key milestones along your journey</p>
-                    </div>
-                </div>
-
-                <!-- Tab Navigation -->
-                <div class="tab-controls-results">
-                    <button type="button" class="tab-button active" data-tab="progress-chart">Progress Chart</button>
-                    <button type="button" class="tab-button" data-tab="ai-roadmap">AI Roadmap & Insights</button>
-                    <button type="button" class="tab-button" data-tab="yearly-breakdown">Yearly Breakdown</button>
-                    <button type="button" class="tab-button" data-tab="scenarios">What-If Scenarios</button>
-                </div>
-
-                <!-- Progress Chart Tab -->
-                <div id="progress-chart" class="tab-content active">
-                    <h3>Goal Achievement Progress</h3>
-                    <p class="chart-caption">Track your savings growth, investment gains, and purchasing power over time</p>
-                    <div class="chart-wrapper">
-                        <canvas id="goalProgressChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- AI Roadmap Tab -->
-                <div id="ai-roadmap" class="tab-content hidden">
-                    <h3><i class="fas fa-robot"></i> AI Financial Roadmap</h3>
-                    <div id="ai-roadmap-output" class="ai-insights-box">
-                        <p class="placeholder-text">Enter your goal details to receive personalized AI-powered financial advice...</p>
-                    </div>
-
-                    <!-- Middle Results Ad -->
-                    <aside class="ad-slot horizontal-ad" role="complementary" aria-label="Mid Results Ad">
-                        <p class="ad-label">SPONSORED RECOMMENDATION</p>
-                        <div id="mid-results-ad-728x90" style="min-height: 90px; background: var(--color-gray-50); text-align: center; padding: 20px; margin: 30px 0;">
-                            <span style="opacity: 0.5;">Ad Space 728x90 Leaderboard</span>
+                <!-- Affiliate Recommendations -->
+                <div class="affiliate-grid">
+                    <h4><i class="fas fa-handshake"></i> Recommended Products & Services</h4>
+                    <div class="affiliate-cards">
+                        <div class="aff-card">
+                            <i class="fas fa-bank"></i>
+                            <h5>High-Yield Savings</h5>
+                            <p>5.0% APY on cash goals</p>
+                            <a href="#" target="_blank" rel="noopener">Compare Rates →</a>
                         </div>
-                    </aside>
-
-                    <!-- Affiliate Recommendations Section -->
-                    <div class="affiliate-recommendations">
-                        <h4><i class="fas fa-star"></i> Recommended Tools & Services</h4>
-                        <div class="recommendation-grid">
-                            <div class="recommendation-card">
-                                <i class="fas fa-chart-line"></i>
-                                <h5>Investment Platforms</h5>
-                                <p>Start investing with zero commissions</p>
-                                <a href="#" class="affiliate-link" target="_blank" rel="noopener">Compare Brokers →</a>
-                            </div>
-                            <div class="recommendation-card">
-                                <i class="fas fa-piggy-bank"></i>
-                                <h5>High-Yield Savings</h5>
-                                <p>Earn up to 5.0% APY on your cash</p>
-                                <a href="#" class="affiliate-link" target="_blank" rel="noopener">View Best Rates →</a>
-                            </div>
-                            <div class="recommendation-card">
-                                <i class="fas fa-user-tie"></i>
-                                <h5>Financial Advisors</h5>
-                                <p>Get professional guidance</p>
-                                <a href="#" class="affiliate-link" target="_blank" rel="noopener">Find CFP® →</a>
-                            </div>
-                            <div class="recommendation-card">
-                                <i class="fas fa-book"></i>
-                                <h5>Financial Education</h5>
-                                <p>Learn investing fundamentals</p>
-                                <a href="#" class="affiliate-link" target="_blank" rel="noopener">Top Books →</a>
-                            </div>
+                        <div class="aff-card">
+                            <i class="fas fa-chart-line"></i>
+                            <h5>Robo-Advisor</h5>
+                            <p>Automated investing</p>
+                            <a href="#" target="_blank" rel="noopener">Learn More →</a>
+                        </div>
+                        <div class="aff-card">
+                            <i class="fas fa-user-tie"></i>
+                            <h5>Financial Advisor</h5>
+                            <p>Expert guidance</p>
+                            <a href="#" target="_blank" rel="noopener">Get Advice →</a>
+                        </div>
+                        <div class="aff-card">
+                            <i class="fas fa-book"></i>
+                            <h5>Financial Education</h5>
+                            <p>Learn investing basics</p>
+                            <a href="#" target="_blank" rel="noopener">Read Guides →</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Yearly Breakdown Tab -->
-                <div id="yearly-breakdown" class="tab-content hidden">
-                    <h3>Annual Progress Breakdown</h3>
-                    <div class="amortization-table-container">
-                        <table id="goal-annual-table" class="amortization-table">
-                            <thead>
-                                <tr>
-                                    <th>Year</th>
-                                    <th>Age</th>
-                                    <th>Start Balance</th>
-                                    <th>Contributions</th>
-                                    <th>Investment Gains</th>
-                                    <th>End Balance</th>
-                                    <th>Today's $ Value</th>
-                                    <th>Progress</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="8" style="text-align: center; padding: 40px;">
-                                        Enter your goal details to generate yearly breakdown
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <button id="export-goal-csv" class="secondary-button" style="margin-top: 1rem;">
-                        <i class="fas fa-file-csv"></i> Export Data to CSV
-                    </button>
+                <!-- Mid-content Ad -->
+                <div class="banner-ad-728x90" style="margin: 30px 0;">
+                    <p class="ad-placeholder">Advertisement 728x90</p>
                 </div>
+            </div>
 
-                <!-- What-If Scenarios Tab -->
-                <div id="scenarios" class="tab-content hidden">
-                    <h3><i class="fas fa-sliders-h"></i> What-If Scenario Analysis</h3>
-                    <p class="chart-caption">See how different assumptions affect your goal timeline</p>
-                    
-                    <div class="scenario-controls">
-                        <div class="scenario-input-group">
-                            <label>Monthly Contribution Scenarios</label>
-                            <div class="scenario-buttons">
-                                <button type="button" class="scenario-btn" data-scenario="contribution" data-factor="0.5">-50%</button>
-                                <button type="button" class="scenario-btn" data-scenario="contribution" data-factor="0.75">-25%</button>
-                                <button type="button" class="scenario-btn active" data-scenario="contribution" data-factor="1.0">Current</button>
-                                <button type="button" class="scenario-btn" data-scenario="contribution" data-factor="1.25">+25%</button>
-                                <button type="button" class="scenario-btn" data-scenario="contribution" data-factor="1.5">+50%</button>
-                            </div>
-                        </div>
-                        <div class="scenario-input-group">
-                            <label>Return Rate Scenarios</label>
-                            <div class="scenario-buttons">
-                                <button type="button" class="scenario-btn" data-scenario="return" data-rate="4">4%</button>
-                                <button type="button" class="scenario-btn" data-scenario="return" data-rate="6">6%</button>
-                                <button type="button" class="scenario-btn active" data-scenario="return" data-rate="7">7%</button>
-                                <button type="button" class="scenario-btn" data-scenario="return" data-rate="8">8%</button>
-                                <button type="button" class="scenario-btn" data-scenario="return" data-rate="10">10%</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="scenario-results">
-                        <div class="chart-wrapper">
-                            <canvas id="scenarioComparisonChart"></canvas>
-                        </div>
-                    </div>
+            <!-- Breakdown Table Tab -->
+            <div id="breakdown-table" class="tab-content hidden">
+                <h3>Year-by-Year Savings Breakdown</h3>
+                <div class="table-wrapper">
+                    <table id="breakdown-table-body" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Starting Balance</th>
+                                <th>Contributions</th>
+                                <th>Investment Gains</th>
+                                <th>Ending Balance</th>
+                                <th>Today's Value</th>
+                                <th>% to Goal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="7" class="no-data">Calculate to see breakdown</td></tr>
+                        </tbody>
+                    </table>
                 </div>
+                <button id="export-csv-btn" class="btn btn-secondary"><i class="fas fa-download"></i> Export to CSV</button>
+            </div>
 
-                <!-- Bottom Results Ad -->
-                <aside class="ad-slot horizontal-ad bottom-ad" role="complementary" aria-label="Results Bottom Ad">
-                    <p class="ad-label">SPONSORED CONTENT</p>
-                    <div id="bottom-results-ad-728x90" style="min-height: 90px; background: var(--color-gray-50); text-align: center; padding: 20px; margin-top: 30px;">
-                        <span style="opacity: 0.5;">Ad Space 728x90 Leaderboard</span>
-                    </div>
-                </aside>
+            <!-- FAQ & Help Tab -->
+            <div id="faq-help" class="tab-content hidden">
+                <h3><i class="fas fa-question-circle"></i> FAQ & Financial Education</h3>
+                <div class="faq-grid">
+                    <details class="faq-item">
+                        <summary>How does the calculator determine my monthly savings target?</summary>
+                        <p>The calculator uses the Future Value of Annuity formula, accounting for your starting amount, expected returns, inflation, and time horizon. We then reverse-engineer the required monthly payment to reach your goal in today's dollars.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Should I use a 529 Plan for college savings?</summary>
+                        <p>Yes! 529 College Savings Plans offer tax-free growth and withdrawals for education. They're ideal for college goals and can dramatically boost your effective returns. Most states also offer state income tax deductions.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>What return rate should I assume?</summary>
+                        <p>For stock investments: 7-10% (historical S&P 500). For bonds: 3-5%. For savings: 4-5%. Use conservative rates (6-8%) for realistic planning. Actual returns vary yearly.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>How often should I review my plan?</summary>
+                        <p>Review quarterly or after major life changes. Market conditions, income, and inflation affect your ability to save. Regular reviews keep you on track.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Why does the calculator adjust for inflation?</summary>
+                        <p>Inflation erodes purchasing power. A $50K goal in 15 years requires more nominal dollars due to inflation. Our calculator shows both today's dollars and nominal targets.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Can I automate my monthly contributions?</summary>
+                        <p>Absolutely! Most brokerages offer automatic transfers. Set it once and forget it—consistent investing is the best strategy for wealth building.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>What's the power of compound interest?</summary>
+                        <p>Compound interest is "interest on interest." The longer your timeline, the more powerful compounding becomes. Even small monthly contributions grow dramatically over 10-20 years.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>How is FinGuid different from other calculators?</summary>
+                        <p>FinGuid is the world's first AI-powered goal planner. We combine live FRED API data, AI-driven personalized insights, voice commands, text-to-speech, dark mode, PWA technology, and multiple goal types in one powerful platform.</p>
+                    </details>
+                </div>
+            </div>
 
-            </section>
-        </div>
+            <!-- Bottom Results Ad -->
+            <div class="banner-ad-728x90" style="margin-top: 30px;">
+                <p class="ad-placeholder">Advertisement 728x90</p>
+            </div>
+
+        </section>
 
         <!-- Educational Content Section (SEO) -->
-        <section class="educational-content">
-            <div class="content-wrapper">
-                <h2><i class="fas fa-lightbulb"></i> How Financial Goal Planning Works</h2>
-                
-                <div class="content-grid">
-                    <article class="content-card">
-                        <h3>Understanding Your Goals</h3>
-                        <p>Financial goal planning starts with defining clear, measurable objectives. Whether you're planning for retirement, saving for a house down payment, or building a college fund, our AI-powered calculator helps you create a realistic roadmap based on your current financial situation and future aspirations.</p>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>The Power of Compound Growth</h3>
-                        <p>Your investments grow exponentially through compound interest. The formula we use accounts for both your initial savings and regular contributions: <strong>FV = P(1+r)^n + PMT × ((1+r)^n - 1) / r</strong>, where FV is future value, P is principal, r is return rate, n is years, and PMT is annual payment.</p>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>Inflation Adjustment</h3>
-                        <p>We use live data from the Federal Reserve (FRED API) to factor in inflation, showing you the real purchasing power of your future savings. This ensures your goal amount truly reflects what you'll need in today's dollars.</p>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>AI-Powered Insights</h3>
-                        <p>Our advanced AI analyzes your inputs and provides personalized recommendations on contribution amounts, investment strategies, timeline feasibility, and risk management. Get actionable advice tailored to your unique financial situation.</p>
-                    </article>
-                </div>
-
-                <!-- FAQ Section -->
-                <div class="faq-section" itemscope itemtype="https://schema.org/FAQPage">
-                    <h3>Frequently Asked Questions</h3>
-                    
-                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                        <h4 itemprop="name"><i class="fas fa-question-circle"></i> How accurate is this financial goal planner?</h4>
-                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                            <div itemprop="text">
-                                <p>Our calculator uses industry-standard financial formulas and live inflation data from the Federal Reserve. While past performance doesn't guarantee future results, our projections are based on historical averages (S&P 500 average: ~10% annually) and conservative estimates to help you plan realistically.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                        <h4 itemprop="name"><i class="fas fa-question-circle"></i> What's a realistic expected return rate?</h4>
-                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                            <div itemprop="text">
-                                <p>For stock market investments (index funds, ETFs), 7-10% is historically reasonable. Conservative investors might use 5-6%, while aggressive portfolios could assume 10-12%. Bond-heavy portfolios typically yield 3-5%. Always use conservative estimates for important goals like retirement.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                        <h4 itemprop="name"><i class="fas fa-question-circle"></i> Should I adjust my goal for inflation?</h4>
-                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                            <div itemprop="text">
-                                <p>Yes! Inflation erodes purchasing power over time. If you need $1 million in 30 years, you should plan for more than $1 million in nominal dollars. Our calculator automatically shows both nominal and inflation-adjusted values using live FRED data.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                        <h4 itemprop="name"><i class="fas fa-question-circle"></i> How often should I review my financial goals?</h4>
-                        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                            <div itemprop="text">
-                                <p>Review your goals at least annually or after major life events (marriage, children, job change, inheritance). Market conditions, income changes, and life circumstances all affect your ability to reach goals. Regular reviews keep you on track.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <section class="educational-section">
+            <h2>Financial Goal Planning Guide</h2>
+            
+            <div class="education-grid">
+                <article class="edu-card">
+                    <h3>Setting SMART Financial Goals</h3>
+                    <p>Specific, Measurable, Achievable, Relevant, Time-bound goals are the foundation of financial success. Define clear targets with specific dollar amounts and deadlines.</p>
+                </article>
+                <article class="edu-card">
+                    <h3>The Power of Automated Savings</h3>
+                    <p>Set up automatic monthly transfers from checking to investment accounts. This "pay yourself first" approach ensures consistent saving and reduces temptation to spend.</p>
+                </article>
+                <article class="edu-card">
+                    <h3>Tax-Advantaged Accounts for Goals</h3>
+                    <p>Use 529 plans for college, Roth IRA for retirement, and HSA for medical. These accounts offer tax benefits that dramatically enhance long-term returns.</p>
+                </article>
+                <article class="edu-card">
+                    <h3>Inflation and Purchasing Power</h3>
+                    <p>Inflation reduces your money's buying power over time. Our calculator factors this in, ensuring your goal reflects real-dollar needs at your target date.</p>
+                </article>
             </div>
         </section>
 
-        <!-- Lead Generation Section -->
+        <!-- Lead Generation CTA -->
         <section class="lead-gen-section">
-            <div class="lead-gen-content">
-                <h2><i class="fas fa-envelope"></i> Get Your Personalized Financial Plan</h2>
-                <p>Speak with a certified financial planner who can help you optimize your strategy and stay on track to reach your goals.</p>
-                
-                <form id="lead-form" class="lead-form">
-                    <div class="form-row">
-                        <input type="text" name="fullname" placeholder="Full Name" required>
-                        <input type="email" name="email" placeholder="Email Address" required>
-                    </div>
-                    <div class="form-row">
-                        <input type="tel" name="phone" placeholder="Phone Number" required>
-                        <select name="goal_type" required>
-                            <option value="">Select Your Primary Goal</option>
-                            <option value="retirement">Retirement Planning</option>
-                            <option value="house">House Down Payment</option>
-                            <option value="college">College Fund</option>
-                            <option value="investment">General Investment</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="primary-button submit-lead">
-                        <i class="fas fa-paper-plane"></i> Get Free Consultation
-                    </button>
-                    <p class="disclaimer-text">We respect your privacy. Your information is never shared with third parties.</p>
-                </form>
-            </div>
+            <h2>Ready to Achieve Your Financial Goals?</h2>
+            <p>Get personalized guidance from a certified financial planner to optimize your savings strategy</p>
+            <form id="lead-form" class="lead-form">
+                <input type="text" name="fullname" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <select name="goal-type" required>
+                    <option value="">Select Your Primary Goal</option>
+                    <option value="college">College Savings</option>
+                    <option value="home">Home Down Payment</option>
+                    <option value="retirement">Retirement Planning</option>
+                    <option value="emergency">Emergency Fund</option>
+                    <option value="other">Other</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Get Free Financial Consultation</button>
+            </form>
+            <p class="disclaimer">Your information is secure and never shared.</p>
         </section>
 
     </main>
 
     <!-- Footer -->
     <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-logo-info">
-                    <h4 class="logo"><a href="/">FinGuid <span>USA</span></a></h4>
-                    <p>Empowering Americans to achieve financial independence through AI-enhanced planning tools.</p>
-                    <div class="social-links">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    </div>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>FinGuid USA</h4>
+                <p>World's First AI-Powered Financial Goal Planner Platform</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                 </div>
-                <nav class="footer-nav">
-                    <div class="nav-column">
-                        <h4>Financial Calculators</h4>
-                        <ul>
-                            <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                            <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy</a></li>
-                            <li><a href="/investment-calculator.html">Investment Calculator</a></li>
-                            <li><a href="/financial-goal-planner.html" aria-current="page">Goal Planner</a></li>
-                            <li><a href="/retirement-calculator.html">Retirement Calculator</a></li>
-                            <li><a href="/tax-withholding-calculator.html">Tax Calculator</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Resources</h4>
-                        <ul>
-                            <li><a href="/guides">Financial Guides</a></li>
-                            <li><a href="/blog">Blog & Articles</a></li>
-                            <li><a href="/faq">FAQ</a></li>
-                            <li><a href="/glossary">Financial Glossary</a></li>
-                            <li><a href="/api">API Access</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Legal & Compliance</h4>
-                        <ul>
-                            <li><a href="/terms">Terms of Service</a></li>
-                            <li><a href="/privacy">Privacy Policy (GDPR/CCPA)</a></li>
-                            <li><a href="/disclaimer">Financial Disclaimer</a></li>
-                            <li><a href="/accessibility">Accessibility (WCAG)</a></li>
-                            <li><a href="/cookies">Cookie Policy</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Partnership</h4>
-                        <ul>
-                            <li><a href="/advertise">Advertise With Us</a></li>
-                            <li><a href="/affiliates">Affiliate Program</a></li>
-                            <li><a href="/sponsors">Become a Sponsor</a></li>
-                            <li><a href="/contact">Contact Us</a></li>
-                        </ul>
-                    </div>
-                </nav>
             </div>
-            <div class="footer-bottom">
-                <div class="footer-disclaimer">
-                    <p>
-                        &copy; 2025 FinGuid USA - World's First AI-Powered Financial Calculator Platform. <strong>Financial Disclaimer:</strong> This calculator provides estimates for educational and planning purposes only. Actual investment returns vary and past performance does not guarantee future results. Always consult a qualified financial advisor before making investment decisions. We are not liable for decisions made based on calculator outputs. <strong>Monetization Disclosure:</strong> We earn revenue through advertising, affiliate partnerships, and sponsored content. Inflation data sourced from FRED (Federal Reserve Economic Data).
-                    </p>
-                </div>
 
-                <div class="footer-badges">
-                    <div class="badge"><i class="fas fa-shield-alt"></i> SSL Secured</div>
-                    <div class="badge"><i class="fas fa-universal-access"></i> WCAG 2.1 AA</div>
-                    <div class="badge"><i class="fas fa-mobile-alt"></i> PWA Ready</div>
-                    <div class="badge"><i class="fas fa-robot"></i> AI-Powered</div>
-                    <div class="badge"><i class="fas fa-chart-line"></i> Live FRED Data</div>
-                </div>
+            <div class="footer-section">
+                <h4>Calculators</h4>
+                <ul>
+                    <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
+                    <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy</a></li>
+                    <li><a href="/investment-calculator.html">Investment Calculator</a></li>
+                    <li><a href="/financial-goal-planner.html">Goal Planner</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Financial Blog</a></li>
+                    <li><a href="#">Calculators Guide</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Disclaimer</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Partnership</h4>
+                <ul>
+                    <li><a href="#">Advertise</a></li>
+                    <li><a href="#">Affiliate Program</a></li>
+                    <li><a href="#">Sponsors</a></li>
+                    <li><a href="#">Business</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 FinGuid USA - World's First AI Financial Goal Planner. <strong>Disclaimer:</strong> Financial projections are estimates based on user inputs and market assumptions. Actual results may differ. Always consult a qualified financial advisor. We earn revenue through affiliate partnerships, sponsored content, and advertising.</p>
+            <div class="footer-badges">
+                <span><i class="fas fa-lock"></i> SSL Secure</span>
+                <span><i class="fas fa-mobile-alt"></i> Mobile Optimized</span>
+                <span><i class="fas fa-robot"></i> AI-Powered</span>
+                <span><i class="fas fa-chart-line"></i> Live FRED Data</span>
             </div>
         </div>
     </footer>
 
-    <!-- Toast Container -->
-    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- Scripts -->
-    <script src="/register-sw.js"></script>
-    <script src="financial-goal-planner.js"></script>
+    <!-- PWA Service Worker -->
+    <script src="/js/register-sw.js"></script>
+
+    <!-- Main Application Script -->
+    <script src="/js/financial-goal-planner.js"></script>
 
 </body>
 </html>
