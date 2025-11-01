@@ -1,53 +1,48 @@
-/* --- ROOT VARIABLES (LIGHT MODE DEFAULT) --- */
+/* BUSINESS LOAN CALCULATOR - PRODUCTION CSS v1.0 */
+/* BASE: Adapted from car-lease-calculator.css & mortgage-calculator.css */
+
 :root {
-    --color-primary: #0052cc;
-    --color-primary-dark: #003e99;
-    --color-secondary: #f4f5f7;
-    --color-text: #172b4d;
-    --color-text-light: #5e6c84;
-    --color-background: #ffffff;
-    --color-border: #dfe1e6;
-    --color-success: #006644;
-    --color-warning: #ff8b00;
-    --color-danger: #de350b;
-    --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --border-radius: 8px;
+    --primary: #24ACB9; /* FinGuid Teal */
+    --primary-dark: #19343B; /* FinGuid Dark Teal */
+    --accent: #FFC107; /* FinGuid Yellow */
+    --accent-dark: #E69500;
+    --business-blue: #2952A3; /* Specific Business Blue */
+    --text: #1F2121;
+    --text-light: #64748B;
+    --bg: #FFFFFD;
+    --bg-secondary: #F5F7FA;
+    --card: #FFFFFF;
+    --border: #E2E8F0;
+    --error: #EF4444;
+    --success: #10B981;
 }
 
-/* --- DARK MODE VARIABLES --- */
-body.dark-mode {
-    --color-primary: #4c9aff;
-    --color-primary-dark: #80bfff;
-    --color-secondary: #2c2c2e;
-    --color-text: #f2f2f7;
-    --color-text-light: #a1a1a6;
-    --color-background: #1c1c1e;
-    --color-border: #3a3a3c;
-    --color-success: #34c759;
-    --color-warning: #ff9f0a;
-    --color-danger: #ff453a;
+[data-color-scheme="dark"] {
+    --text: #E1E8ED;
+    --text-light: #B8C5D0;
+    --bg: #1F2121;
+    --bg-secondary: #242B36;
+    --card: #181919;
+    --border: #38444D;
 }
 
-/* --- GENERAL & RESET --- */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
+/* === Base & Layout (from car-lease) === */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 html {
-    scroll-behavior: smooth;
     font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: var(--font-family-base);
-    background-color: var(--color-background);
-    color: var(--color-text);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
     line-height: 1.6;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -55,485 +50,576 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 16px;
 }
 
-a {
-    color: var(--color-primary);
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary);
+    color: white;
+    padding: 8px 16px;
     text-decoration: none;
-    transition: color 0.2s;
+    border-radius: 4px;
+    z-index: 9999;
 }
-a:hover {
-    color: var(--color-primary-dark);
-}
+.skip-link:focus { top: 16px; }
 
-img, svg {
-    max-width: 100%;
-    height: auto;
+/* === Header (from car-lease) === */
+.header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-}
-th {
-    background-color: var(--color-secondary);
-    font-weight: 600;
-}
-tbody tr:nth-child(even) {
-    background-color: var(--color-secondary);
-}
-
-/* --- HEADER & FOOTER --- */
-.main-header, .main-footer {
-    background-color: var(--color-secondary);
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--color-border);
-}
-.main-header .container {
+.header-top { padding: 24px 0; }
+.header-top .container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
 }
-.logo {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    text-decoration: none;
-}
-.main-nav ul {
-    list-style: none;
+.logo a {
     display: flex;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--primary);
+    font-size: 1.25rem;
+    font-weight: bold;
 }
-.main-nav a {
+.site-title {
+    font-size: 1.125rem;
     font-weight: 600;
-    color: var(--color-text-light);
+    text-align: center;
+    flex-grow: 1;
 }
-.main-nav a:hover {
-    color: var(--color-text);
-}
-
-.main-footer {
-    border-bottom: none;
-    border-top: 1px solid var(--color-border);
-    margin-top: 3rem;
-    padding: 2rem 0;
+.site-subtitle {
     font-size: 0.875rem;
-    color: var(--color-text-light);
+    color: var(--text-light);
+    margin-top: 4px;
+    text-align: center;
+    width: 100%;
 }
-.footer-content {
+.header-controls {
+    display: flex;
+    gap: 8px;
+}
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.btn-icon:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary);
+}
+.install-button {
+    background-color: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+.install-button.hidden { display: none; }
+
+/* === Sponsor & Breadcrumb (from car-lease) === */
+.sponsor-banner {
+    background: linear-gradient(135deg, var(--business-blue) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
     text-align: center;
 }
-.footer-content .logo {
-    font-size: 1.5rem;
+.sponsor-banner a {
+    padding: 8px 20px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: all 0.2s;
 }
-.footer-content p {
-    margin: 0.5rem 0;
+.sponsor-banner a:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
 }
-.footer-nav {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
+.breadcrumb {
+    background: var(--bg-secondary);
+    padding: 16px 0;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--border);
 }
-.affiliate-disclosure, .fred-branding {
-    font-style: italic;
-    font-size: 0.8rem;
+.breadcrumb a {
+    color: var(--primary);
+    text-decoration: none;
 }
+.breadcrumb span { color: var(--text-light); }
 
-/* --- THEME TOGGLE BUTTON --- */
-.theme-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--color-text);
-    padding: 0.5rem;
-    border-radius: var(--border-radius);
-}
-.theme-toggle:hover {
-    background-color: var(--color-border);
-}
-.theme-toggle svg {
-    width: 24px;
-    height: 24px;
-}
-.theme-toggle .moon { display: none; }
-.theme-toggle .sun { display: block; }
-body.dark-mode .theme-toggle .moon { display: block; }
-body.dark-mode .theme-toggle .sun { display: none; }
-
-/* --- CALCULATOR LAYOUT & FORM --- */
-.main-content {
-    padding: 2rem 0;
-}
-.calculator-layout {
+/* === Main Layout (from car-lease) === */
+.main { padding: 48px 0; }
+.calculator-wrapper {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
 }
-@media (min-width: 992px) {
-    .calculator-layout {
-        grid-template-columns: 2fr 1fr;
-    }
+.inputs-panel,
+.results-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.125rem;
+    margin-bottom: 24px;
+    color: var(--primary);
 }
 
-.calculator-form h1 {
-    font-size: 2.5rem;
-    color: var(--color-text);
-    margin-bottom: 0.5rem;
+/* === Inputs (from car-lease) === */
+.input-section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
 }
-.calculator-form .subtitle {
-    font-size: 1.1rem;
-    color: var(--color-text-light);
-    margin-bottom: 2rem;
+.input-section:last-child { border-bottom: none; }
+.section-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--business-blue);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
+.form-group { margin-bottom: 16px; }
 .form-group label {
     display: block;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 4px;
+    font-size: 0.875rem;
 }
-.form-group input,
-.form-group select {
+.form-group label span {
+    color: var(--primary);
+    cursor: help;
+}
+.form-group input {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    background-color: var(--color-background);
-    color: var(--color-text);
-    font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 4px;
+    font-family: inherit;
+    transition: all 0.2s;
 }
-.form-group input:focus,
-.form-group select:focus {
+.form-group input:focus {
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.3);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.1);
 }
-.form-group .input-icon {
-    position: relative;
-}
-.form-group .input-icon span {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--color-text-light);
-    font-weight: 600;
-}
-.form-group .input-icon input {
-    padding-left: 2.5rem;
-}
-.form-group .rate-info {
-    font-size: 0.8rem;
-    color: var(--color-text-light);
-    margin-top: 0.5rem;
-    display: inline-block;
-}
-
-.ai-fieldset {
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: 1rem 1.5rem;
-    margin-top: 2rem;
-}
-.ai-fieldset legend {
-    font-weight: 600;
-    padding: 0 0.5rem;
-    color: var(--color-primary);
-}
-
-.form-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    margin-top: 2rem;
-}
-.btn {
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.2s, box-shadow 0.2s;
-}
-.btn-primary {
-    background-color: var(--color-primary);
-    color: #fff;
-}
-.btn-primary:hover {
-    background-color: var(--color-primary-dark);
-    box-shadow: var(--shadow-sm);
-}
-.btn-secondary {
-    background-color: var(--color-secondary);
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-}
-.btn-secondary:hover {
-    background-color: var(--color-border);
-}
-.btn-icon {
-    padding: 0.75rem;
-    line-height: 0;
-}
-.btn-icon svg {
-    width: 20px;
-    height: 20px;
-}
-.btn-small {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
-    margin-left: 0.5rem;
-}
-
-/* --- MONETIZATION: AD BLOCKS --- */
-.ad-block {
-    border: 1px dashed var(--color-border);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    text-align: center;
-    background: var(--color-secondary);
-    margin-bottom: 2rem;
-}
-.ad-block small {
+.form-group small {
     display: block;
+    color: var(--text-light);
     font-size: 0.75rem;
-    color: var(--color-text-light);
-    margin-top: 1rem;
+    margin-top: 4px;
 }
-.ad-sidebar h4 {
-    margin-bottom: 1rem;
-}
-.ad-sidebar p {
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
-.partner-link {
-    display: block;
-    background: var(--color-background);
-    padding: 0.75rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 0.5rem;
-    border: 1px solid var(--color-border);
-    text-align: left;
-}
-.partner-link:hover {
-    box-shadow: var(--shadow-sm);
-    border-color: var(--color-primary);
-}
-.partner-link strong {
-    display: block;
-    color: var(--color-text);
-}
-.partner-link span {
-    font-size: 0.9rem;
-    color: var(--color-success);
-}
-.ad-banner {
-    padding: 1rem;
-    margin-top: 2rem;
-}
-.ad-banner strong {
-    font-size: 1.1rem;
-}
-
-/* --- RESULTS SECTION --- */
-.results-section {
-    background-color: var(--color-secondary);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-top: 2rem;
-}
-.results-section h2 {
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 1rem;
-}
-.results-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-}
-@media (min-width: 768px) {
-    .results-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-.results-summary {
+.fred-note { color: var(--accent); font-weight: 600; }
+.form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 16px;
+}
+
+/* === NEW: SBA Tabs === */
+.sba-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.sba-tab-btn {
+    padding: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-light);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.sba-tab-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--text);
+}
+.sba-tab-btn.active {
+    background: var(--business-blue);
+    color: white;
+    border-color: var(--business-blue);
+}
+
+/* === Results (from car-lease) === */
+.ad-slot {
+    background: var(--bg-secondary);
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+.ad-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
 }
 .summary-card {
-    background: var(--color-background);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
+    background: linear-gradient(135deg, var(--business-blue) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 24px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(41, 82, 163, 0.2);
 }
-.summary-card .label {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--color-text-light);
-    margin-bottom: 0.5rem;
+.summary-label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
 }
-.summary-card .value {
-    display: block;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-text);
-}
-.summary-card.total .value {
-    color: var(--color-primary);
-}
-
-/* --- AI INSIGHT PANEL --- */
-.ai-insight-panel {
-    background: var(--color-background);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-}
-.ai-header {
+.payment-amount {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--color-border);
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0;
 }
-.ai-header h3 {
-    color: var(--color-primary);
-}
-.insight-content {
-    padding: 1.5rem;
-}
-.insight-content p {
-    margin-bottom: 1rem;
-}
-.insight-content .insight-title {
-    font-weight: 700;
-    display: block;
-    margin-bottom: 0.5rem;
-}
-/* AI Insight Types */
-.insight-content .insight-success { color: var(--color-success); }
-.insight-content .insight-warning { color: var(--color-warning); }
-.insight-content .insight-danger { color: var(--color-danger); }
+.amount { font-size: 2.5rem; font-weight: bold; }
+.unit { font-size: 1.125rem; opacity: 0.9; }
 
-/* --- AMORTIZATION & CHART --- */
-.amortization-section {
-    margin-top: 3rem;
+/* === Tabs (from car-lease) === */
+.tabs { margin-bottom: 24px; }
+.tab-buttons {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 24px;
+    overflow-x: auto;
 }
-.amortization-section h3 {
-    margin-bottom: 1.5rem;
+.tab-btn {
+    padding: 16px 24px;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: -2px;
+    white-space: nowrap;
 }
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* === Results Grid (from car-lease) === */
+.result-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.125rem;
+    margin: 24px 0 16px 0;
+}
+.lease-title { color: var(--accent-dark); }
+.buy-title { color: var(--business-blue); }
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.result-box {
+    background: var(--bg-secondary);
+    padding: 16px;
+    border-radius: 6px;
+    border-left: 4px solid var(--border);
+    transition: all 0.2s;
+}
+.result-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.result-box.highlight {
+    border-left-color: var(--primary);
+    background: rgba(36, 172, 185, 0.1);
+}
+.result-label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+.result-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+.verdict-box {
+    background: var(--bg-secondary);
+    padding: 24px;
+    border-radius: 8px;
+    border-left: 4px solid var(--border);
+    text-align: center;
+    margin: 24px 0;
+}
+
+/* === Chart & Table === */
 .chart-container {
-    max-width: 400px;
-    margin: 0 auto 2rem auto;
+    position: relative;
+    width: 100%;
+    height: 350px;
 }
 .table-container {
     max-height: 400px;
     overflow-y: auto;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+#amortization-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+#amortization-table th,
+#amortization-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+}
+#amortization-table th {
+    background: var(--bg-secondary);
+    position: sticky;
+    top: 0;
+}
+#amortization-table tbody tr:nth-child(even) {
+    background: var(--bg-secondary);
 }
 
-/* --- SEO CONTENT & FAQ --- */
-.seo-content {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--color-border);
+/* === AI Insights & FAQ (from car-lease) === */
+.insights-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
-.seo-content h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
-.seo-content h3 {
-    font-size: 1.5rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    color: var(--color-primary);
-}
-.seo-content p {
-    margin-bottom: 1.5rem;
-    max-width: 80ch;
+.insight-item {
+    background: var(--bg-secondary);
+    padding: 16px;
+    border-radius: 6px;
+    border-left: 3px solid var(--primary);
 }
 .faq-container details {
-    border-bottom: 1px solid var(--color-border);
-    padding: 1rem 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 12px;
 }
 .faq-container summary {
     font-weight: 600;
+    padding: 16px;
     cursor: pointer;
-    font-size: 1.1rem;
-    list-style: none; /* Hide default marker */
-    position: relative;
-    padding-right: 2rem;
 }
-.faq-container summary::after { /* Custom marker */
-    content: '+';
-    position: absolute;
-    right: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.5rem;
-    color: var(--color-primary);
-}
-.faq-container details[open] summary::after {
-    content: '−';
-}
-.faq-container details[open] p {
-    padding-top: 1rem;
+.faq-container p {
+    padding: 0 16px 16px;
+    color: var(--text-light);
 }
 
-/* --- UTILITY CLASSES --- */
-.hidden {
-    display: none;
+/* === Affiliate & Footer (from car-lease) === */
+.affiliate-box {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+.affiliate-box h3 { margin-bottom: 8px; }
+.affiliate-box p { color: var(--text-light); margin-bottom: 16px; }
+.btn-primary {
+    display: inline-block;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(36, 172, 185, 0.3);
+}
+.footer {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+}
+.footer-sponsor {
+    background: linear-gradient(135deg, rgba(41, 82, 163, 0.1) 0%, rgba(19, 52, 59, 0.1) 100%);
+    padding: 48px 0;
+    border-bottom: 1px solid rgba(41, 82, 163, 0.2);
+}
+.sponsor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+}
+.sponsor-item { text-align: center; }
+.sponsor-item h4 { margin-bottom: 8px; }
+.sponsor-item p { color: var(--text-light); margin-bottom: 16px; font-size: 0.875rem; }
+.sponsor-item a {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.sponsor-item a:hover {
+    background: var(--accent-dark);
+    color: white;
+}
+.footer-nav { padding: 48px 0; border-bottom: 1px solid var(--border); }
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+}
+.footer-col h5 { margin-bottom: 12px; }
+.footer-col p { font-size: 0.875rem; color: var(--text-light); margin-bottom: 8px; }
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 8px; }
+.footer-col a {
+    color: var(--text-light);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 0.875rem;
+}
+.footer-col a:hover { color: var(--primary); }
+.footer-bottom {
+    padding: 24px 0;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    border-top: 1px solid var(--border);
+}
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.footer-social a {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    transition: all 0.2s;
+    margin: 0 !important;
+}
+.footer-social a:hover {
+    transform: scale(1.1);
+    background: var(--primary-dark);
 }
 
-/* --- RESPONSIVE ADJUSTMENTS --- */
+/* === Toast (from car-lease) === */
+.toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.toast {
+    background: var(--card);
+    padding: 16px 24px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-left: 4px solid var(--success);
+}
+.toast.success { border-left-color: var(--success); }
+.toast.error { border-left-color: var(--error); }
+.toast.info { border-left-color: var(--business-blue); }
+
+/* === Tooltip (from car-lease) === */
+.tooltip-box {
+    position: fixed;
+    background: #1a1a1a;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    max-width: 200px;
+    white-space: normal;
+}
+
+/* === Responsive (from car-lease) === */
+@media (max-width: 1024px) {
+    .calculator-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
 @media (max-width: 768px) {
-    .main-header .container {
+    .header-top .container {
         flex-direction: column;
-        gap: 1rem;
+        gap: 16px;
     }
-    .main-nav ul {
-        gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .calculator-form h1 {
-        font-size: 2rem;
-    }
-    .results-grid {
-        grid-template-columns: 1fr;
-    }
-    .results-summary {
-        grid-template-columns: 1fr;
-    }
-    .summary-card .value {
-        font-size: 1.75rem;
-    }
-    .form-actions {
-        flex-wrap: wrap;
-    }
-    .btn-primary {
-        width: 100%;
-    }
-    .footer-nav {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.5rem;
-    }
+    .site-title, .site-subtitle { text-align: center; }
+    .form-row { grid-template-columns: 1fr; }
+    .result-grid { grid-template-columns: 1fr; }
+    .sponsor-grid { grid-template-columns: 1fr; }
+    .tab-btn { font-size: 0.875rem; padding: 12px 16px; }
 }
