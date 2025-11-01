@@ -1,270 +1,355 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en" data-color-scheme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <title>AI Business Loan Calculator | FinGuid | Compare SBA Loans</title>
-    <meta name="description" content="Calculate your business loan payments (SBA, conventional) with FinGuid's free AI-powered calculator. Get dynamic cash flow analysis, ROI insights, and see live interest rates.">
-    <meta name="keywords" content="business loan calculator, sba loan calculator, commercial loan payment, business loan interest rate, sba 7(a) loan, sba 504 loan, cash flow analysis, business loan roi, FinGuid, small business financing usa, american business loans">
-    <link rel="canonical" href="https://www.finguid.com/business-loan-calculator">
+    <title>Business Loan Calculator (SBA, ROI, Cash Flow) | World's First AI Analyzer - FinGuid</title>
     
-    <meta name="theme-color" content="#0052cc">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
-
-    <link rel="stylesheet" href="business-loan-calculator.css">
+    <meta name="description" content="Free AI-powered business loan calculator. Compare SBA 7(a), 504, & Microloans. Analyze ROI, cash flow, and amortization. Get live FRED prime rates for smart entrepreneurial decisions.">
+    
+    <meta name="keywords" content="business loan calculator, SBA loan calculator, commercial loan calculator, business loan payment calculator, ROI calculator, business cash flow analysis, SBA 7a calculator, SBA 504 calculator, business loan amortization, business loan rates, prime rate, FRED business rates, FinGuid, AI calculator, entrepreneurial tools, small business financing, business loan ROI, cash flow projection, startup loan calculator, commercial real estate loan, equipment financing, business line of credit, working capital loan, business loan interest calculator, how to calculate business loan payment, SBA loan requirements, compare business loans, commercial loan calculator, AI business tools, FinTech, financial calculator, business loan apr, loan amortization schedule, monthly business loan payment">
+    
+    <meta name="author" content="FinGuid USA">
+    <meta name.robots content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#19343B">
+    <link rel="canonical" href="https://www.finguid.com/calculators/business-loan-calculator">
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-NYBL2CDNQJ');
+        gtag('config', 'G-NYBL2CDNQJ', {
+            'page_path': '/calculators/business-loan-calculator'
+        });
     </script>
+    
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+    
+    <link rel="stylesheet" href="business-loan-calculator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
-<body>
 
-    <header class="main-header">
-        <div class="container">
-            <a href="/" class="logo" aria-label="FinGuid Home">FinGuid</a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="/mortgage-calculator">Mortgage</a></li>
-                    <li><a href="/rent-vs-buy">Rent vs. Buy</a></li>
-                    <li><a href="/car-lease">Car Lease</a></li>
-                    <li><a href="/business-loan">Business Loan</a></li>
-                </ul>
-            </nav>
-            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light and dark mode">
-                <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 011.06-1.06l1.591 1.591a.75.75 0 11-1.06 1.06l-1.591-1.591zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM17.894 18.894a.75.75 0 011.06 1.06l-1.591 1.591a.75.75 0 11-1.06-1.06l1.591-1.591zM12 21.75a.75.75 0 01-.75-.75v-2.25a.75.75 0 011.5 0v2.25a.75.75 0 01-.75.75zM5.106 17.894a.75.75 0 01-1.06 1.06l-1.591-1.591a.75.75 0 111.06-1.06l1.591 1.591zM2.25 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H3a.75.75 0 01-.75-.75zM6.106 5.106a.75.75 0 01-1.06-1.06l1.591-1.591a.75.75 0 011.06 1.06l-1.591 1.591z"/></svg>
-                <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 004.463-.69a.75.75 0 01.981.98 10.503 10.503 0 01-4.628 3.326A10.5 10.5 0 0112 22.5a10.5 10.5 0 01-10.5-10.5c0-4.306 2.567-8.017 6.33-9.664a.75.75 0 01.819.162z" clip-rule="evenodd" /></svg>
-            </button>
+<body>
+    <a href="#calculator" class="skip-link">Skip to Calculator</a>
+    
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="logo">
+                    <a href="https://www.finguid.com">
+                        <i class="fas fa-calculator"></i>
+                        <span>FinGuid <strong>USA</strong></span>
+                    </a>
+                </div>
+                <h1 class="site-title">Business Loan Calculator</h1>
+                <p class="site-subtitle">AI Cash Flow & SBA Loan Analyzer</p>
+                
+                <div class="header-controls">
+                    <button id="theme-toggle" class="btn-icon" title="Dark Mode" data-tooltip="Toggle dark/light mode">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button id="voice-toggle" class="btn-icon" title="Voice Commands" data-tooltip="Say: calculate, set amount, show insights">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="tts-toggle" class="btn-icon" title="Read Aloud" data-tooltip="Text-to-Speech">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <button id="pwa-install-button" class="btn-icon install-button hidden" title="Install App">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sponsor-banner">
+            <span>📈 Get Pre-Qualified for a Business Line of Credit (Sponsor)</span>
+            <a href="#" onclick="alert('Partner: Business Credit'); return false;">Check Rates →</a>
         </div>
     </header>
-
-    <main class="main-content">
+    
+    <nav class="breadcrumb">
         <div class="container">
-            <div class="calculator-layout">
-                
-                <section class="calculator-form" aria-labelledby="calc-heading">
-                    <h1 id="calc-heading">AI Business Loan Calculator</h1>
-                    <p class="subtitle">Estimate payments and get AI-powered cash flow & ROI insights for your venture.</p>
+            <a href="https://www.finguid.com">Home</a> / 
+            <a href="https://www.finguid.com/calculators">Calculators</a> / 
+            <span>Business Loan Calculator</span>
+        </div>
+    </nav>
+    
+    <main id="calculator" class="main">
+        <div class="container">
+            <div class="calculator-wrapper">
+                <aside class="inputs-panel">
+                    <h2 class="panel-title"><i class="fas fa-briefcase"></i> Loan Inputs</h2>
                     
-                    <form id="loan-form">
+                    <section class="input-section">
+                        <h3 class="section-heading">Loan Details</h3>
                         <div class="form-group">
-                            <label for="loan-amount">Loan Amount</label>
-                            <div class="input-icon">
-                                <span>$</span>
-                                <input type="number" id="loan-amount" placeholder="e.g., 150000" required>
+                            <label for="loan-amount">Loan Amount <span data-tooltip="Total amount you wish to borrow.">ℹ️</span></label>
+                            <input type="number" id="loan-amount" value="100000" min="0" step="1000">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="interest-rate">Interest Rate %</label>
+                                <input type="number" id="interest-rate" value="8.50" min="0" max="50" step="0.01">
+                                <small class="fred-note">⚡ Live Prime Rate</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="loan-term">Loan Term (Years)</label>
+                                <input type="number" id="loan-term" value="5" min="1" max="30" step="1">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="input-section">
+                        <h3 class="section-heading">SBA Loan Type (Optional)</h3>
+                        <small style="display:block; margin-bottom: 16px;">Select a type to pre-fill common rates & terms.</small>
+                        <div class="sba-tabs" role="tablist">
+                            <button class="sba-tab-btn active" data-loan-type="standard" role="tab">Standard</button>
+                            <button class="sba-tab-btn" data-loan-type="sba7a" role="tab">SBA 7(a)</button>
+                            <button class="sba-tab-btn" data-loan-type="sba504" role="tab">SBA 504</button>
+                            <button class="sba-tab-btn" data-loan-type="micro" role="tab">Microloan</button>
+                        </div>
+                    </section>
+                    
+                    <section class="input-section">
+                        <h3 class="section-heading">Business Financials (For AI Insights)</h3>
+                        <div class="form-group">
+                            <label for="monthly-revenue">Est. Monthly Revenue from Loan <span data-tooltip="How much *extra* revenue will this loan generate per month?">ℹ️</span></label>
+                            <input type="number" id="monthly-revenue" value="5000" min="0" step="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="monthly-costs">Est. Monthly Costs from Loan <span data-tooltip="What are the *extra* monthly costs (e.g., materials, staff) to generate this revenue?">ℹ️</span></label>
+                            <input type="number" id="monthly-costs" value="1500" min="0" step="100">
+                        </div>
+                    </section>
+                    
+                    <section class="input-section">
+                        <h3 class="section-heading">Market Assumptions</h3>
+                        <div class="form-group">
+                            <label for="investment-return">Investment Return % (Hurdle Rate) <span data-tooltip="What % return could you get by investing this money elsewhere? (e.g., S&P 500 average)">ℹ️</span></label>
+                            <input type="number" id="investment-return" value="8.0" min="0" max="30" step="0.1">
+                            <small>Used to calculate opportunity cost.</small>
+                        </div>
+                    </section>
+                </aside>
+                
+                <section class="results-panel">
+                    <div class="ad-slot">
+                        <p class="ad-label">ADVERTISEMENT</p>
+                        <div class="ad-placeholder">Sponsor Ad (e.g., QuickBooks, AmEx Business)</div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-label">Estimated Monthly Payment</div>
+                        <div class="payment-amount">
+                            <span class="amount" id="monthly-payment">$0.00</span>
+                            <span class="unit">/month</span>
+                        </div>
+                        <div class="payment-breakdown" id="payment-breakdown">Principal: $0 | Interest: $0</div>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab-buttons" role="tablist">
+                            <button class="tab-btn active" data-tab="comparison" role="tab">
+                                <i class="fas fa-dollar-sign"></i> Payment & ROI
+                            </button>
+                            <button class="tab-btn" data-tab="chart" role="tab">
+                                <i class="fas fa-chart-line"></i> Cash Flow
+                            </button>
+                            <button class="tab-btn" data-tab="insights" role="tab">
+                                <i class="fas fa-brain"></i> AI Insights (30+)
+                            </button>
+                            <button class="tab-btn" data-tab="amortization" role="tab">
+                                <i class="fas fa-table"></i> Amortization
+                            </button>
+                            <button class="tab-btn" data-tab="faq" role="tab">
+                                <i class="fas fa-question-circle"></i> FAQ
+                            </button>
+                        </div>
+                        
+                        <div id="comparison" class="tab-content active" role="tabpanel">
+                            <h3 class="result-title buy-title"><i class="fas fa-file-invoice-dollar"></i> Loan Payment Summary</h3>
+                            <div class="result-grid">
+                                <div class="result-box"><span class="result-label">Monthly Payment</span><span class="result-value" id="summary-monthly">$0</span></div>
+                                <div class="result-box"><span class="result-label">Total Interest</span><span class="result-value" id="summary-interest">$0</span></div>
+                                <div class="result-box highlight"><span class="result-label">Total Cost</span><span class="result-value" id="summary-total">$0</span></div>
+                            </div>
+                            
+                            <h3 class="result-title lease-title"><i class="fas fa-lightbulb"></i> AI Project Analysis (ROI)</h3>
+                            <div class="result-grid">
+                                <div class="result-box"><span class="result-label">Net Monthly Profit</span><span class="result-value" id="summary-profit">$0</span></div>
+                                <div class="result-box highlight"><span class="result-label">Projected ROI</span><span class="result-value" id="summary-roi">0.0%</span></div>
+                                <div class="result-box"><span class="result-label">Payback Period</span><span class="result-value" id="summary-payback">N/A</span></div>
+                            </div>
+                            
+                            <div class="verdict-box" id="verdict-box">
+                                <p id="verdict-text">Enter data...</p>
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="interest-rate">Interest Rate</label>
-                            <div class="input-icon">
-                                <span>%</span>
-                                <input type="number" id="interest-rate" step="0.01" placeholder="e.g., 8.5" required>
+                        <div id="chart" class="tab-content" role="tabpanel">
+                            <p style="text-align: center; color: var(--text-light); margin-bottom: 15px;"><strong>Projected Cumulative Cash Flow (After Loan Payments)</strong></p>
+                            <div class="chart-container">
+                                <canvas id="businessLoanChart"></canvas>
                             </div>
-                            <button type="button" id="fetch-rate" class="btn btn-secondary btn-small">
-                                Get Live Rate
-                            </button>
-                            <small class="rate-info" id="rate-info-display">
-                                Live rates powered by <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED®</a>
-                            </small>
                         </div>
-
-                        <div class="form-group">
-                            <label for="loan-term">Loan Term (Years)</label>
-                            <input type="number" id="loan-term" placeholder="e.g., 10" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="loan-type">Loan Type</label>
-                            <select id="loan-type">
-                                <option value="conventional">Conventional Business Loan</option>
-                                <option value="sba-7a">SBA 7(a) Loan</option>
-                                <option value="sba-504">SBA 504 Loan</option>
-                                <option value="equipment">Equipment Financing</option>
-                                <option value="line-of-credit">Business Line of Credit</option>
-                            </select>
-                        </div>
-
-                        <fieldset class="ai-fieldset">
-                            <legend>Optional: AI Cash Flow Analysis</legend>
-                            <div class="form-group">
-                                <label for="monthly-revenue">Est. Monthly Business Revenue</label>
-                                <div class="input-icon">
-                                    <span>$</span>
-                                    <input type="number" id="monthly-revenue" placeholder="e.g., 50000">
-                                </div>
+                        
+                        <div id="insights" class="tab-content" role="tabpanel">
+                            <h3 style="color: var(--primary); margin-bottom: 20px;"><i class="fas fa-lightbulb"></i> 30+ AI Business Insights</h3>
+                            <div id="ai-insights" class="insights-container" aria-live="polite">
+                                <p style="text-align: center; color: #999;">Enter data for AI analysis...</p>
                             </div>
-                            <div class="form-group">
-                                <label for="monthly-expenses">Est. Monthly Expenses (before loan)</label>
-                                <div class="input-icon">
-                                    <span>$</span>
-                                    <input type="number" id="monthly-expenses" placeholder="e.g., 30000">
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <div class="form-actions">
-                            <button type="submit" id="calculate-btn" class="btn btn-primary">Calculate</button>
-                            <button type="button" id="voice-command" class="btn btn-icon" aria-label="Use voice command">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5a5.25 5.25 0 00-5.25 5.25v6a5.25 5.25 0 0010.5 0v-6A5.25 5.25 0 0012 1.5zM10.5 12.75v-6a1.5 1.5 0 013 0v6a1.5 1.5 0 01-3 0zm-2.625-.75a.75.75 0 00-1.5 0v.75a6.75 6.75 0 006.75 6.75h.75a.75.75 0 000-1.5h-.75a5.25 5.25 0 01-5.25-5.25v-.75zM16.125 12a.75.75 0 00-1.5 0v.75a5.25 5.25 0 01-5.25 5.25h-.75a.75.75 0 000 1.5h.75a6.75 6.75 0 006.75-6.75v-.75z"/></svg>
-                            </button>
-                            <button type="reset" id="clear-btn" class="btn btn-secondary">Clear</button>
                         </div>
-                    </form>
-                </section>
+                        
+                        <div id="amortization" class="tab-content" role="tabpanel">
+                            <h3 style="color: var(--primary); margin-bottom: 20px;"><i class="fas fa-table"></i> Monthly Amortization Schedule</h3>
+                            <div class="table-container">
+                                <table id="amortization-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Month</th>
+                                            <th>Payment</th>
+                                            <th>Principal</th>
+                                            <th>Interest</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-                <aside class="calculator-sidebar">
-                    <div class="ad-block ad-sidebar">
-                        <h4>Sponsored Lenders</h4>
-                        <p>Find the right loan for your business. Compare top lenders.</p>
-                        <a href="/partner-link-1" class="partner-link" target="_blank" rel="noopener sponsored">
-                            <strong>Top SBA Lender</strong>
-                            <span>Rates from 8.50%</span>
-                        </a>
-                        <a href="/partner-link-2" class="partner-link" target="_blank" rel="noopener sponsored">
-                            <strong>Fast Term Loans</strong>
-                            <span>Funding in 24 hours</span>
-                        </a>
-                        <small>Advertisement</small>
+                        <div id="faq" class="tab-content" role="tabpanel">
+                            <h3 style="color: var(--primary); margin-bottom: 20px;"><i class="fas fa-book"></i> Business Loan FAQ</h3>
+                            <div class="faq-container">
+                                <details>
+                                    <summary>What is an SBA 7(a) loan?</summary>
+                                    <p>An SBA 7(a) loan is the most common type of SBA loan. It's flexible and can be used for various business purposes, including working capital, equipment, and real estate. FinGuid's calculator helps model this with typical rates (Prime + spread) and terms (up to 10 years for working capital, 25 for real estate).</p>
+                                </details>
+                                <details>
+                                    <summary>How do I calculate the ROI on a business loan?</summary>
+                                    <p>To calculate ROI (Return on Investment), you divide the net profit from the loan by the total cost of the loan. Our AI analyzer does this for you by taking your estimated new revenue and costs, giving you a clear percentage of your projected return.</p>
+                                </details>
+                                <details>
+                                    <summary>What is the difference between an SBA 504 loan and a 7(a)?</summary>
+                                    <p>A 504 loan is typically used for major fixed assets like real estate or large equipment, with a long-term, fixed-rate. A 7(a) loan is more flexible and commonly used for working capital, inventory, or business acquisition, often with variable rates tied to the Prime Rate.</p>
+                                </details>
+                                <details>
+                                    <summary>What is cash flow analysis?</summary>
+                                    <p>Cash flow analysis is the process of examining your business's incoming revenue versus its outgoing expenses (like your loan payment). Our "Cash Flow" chart projects your cumulative cash position *after* paying your loan each month, helping you see if you'll have enough operating capital.</p>
+                                </details>
+                                <details>
+                                    <summary>What is the current Prime Rate for business loans?</summary>
+                                    <p>The Prime Rate (as published by the Wall Street Journal) is a benchmark used by banks to set rates for business loans. This calculator fetches the live Prime Rate from the Federal Reserve (FRED) to give you the most accurate estimate for variable-rate loans.</p>
+                                </details>
+                                <details>
+                                    <summary>How can this AI calculator help me?</summary>
+                                    <p>Our AI goes beyond a simple payment calculation. It analyzes your inputs to provide actionable insights, such as whether your projected ROI justifies the loan's cost, if you have a potential cash flow shortfall, or if a different loan type (like an SBA loan) might be a better fit. It's like having a virtual CFO.</p>
+                                </details>
+                            </div>
+                        </div>
                     </div>
-                </aside>
-            </div>
-            
-            <div class="ad-block ad-banner">
-                <a href="/affiliate-link-books" target="_blank" rel="noopener sponsored">
-                    <strong>Business Success Toolkit</strong> - Get the #1 accounting software for small businesses.
-                </a>
-                <small>Advertisement</small>
-            </div>
-
-            <section id="results" class="results-section hidden" aria-live="polite">
-                <h2>Your Business Loan Analysis</h2>
-                <div class="results-grid">
                     
-                    <div class="results-summary">
-                        <div class="summary-card">
-                            <span class="label">Monthly Payment</span>
-                            <span class="value" id="monthly-payment">$0.00</span>
-                        </div>
-                        <div class="summary-card">
-                            <span class="label">Total Principal</span>
-                            <span class="value" id="total-principal">$0.00</span>
-                        </div>
-                        <div class="summary-card">
-                            <span class="label">Total Interest</span>
-                            <span class="value" id="total-interest">$0.00</span>
-                        </div>
-                        <div class="summary-card total">
-                            <span class="label">Total Cost of Loan</span>
-                            <span class="value" id="total-cost">$0.00</span>
-                        </div>
+                    <div class="affiliate-box">
+                        <h3>🏦 Compare Top-Tier Business Lenders (Affiliate)</h3>
+                        <p>Get personalized loan offers from our approved partners. Find the best rates for your business.</p>
+                        <a href="#" onclick="alert('Partner: Business Lenders'); return false;" class="btn-primary">Get Quotes →</a>
                     </div>
-
-                    <div class="ai-insight-panel">
-                        <div class="ai-header">
-                            <h3>AI-Powered Insights</h3>
-                            <button id="tts-button" class="btn btn-icon" aria-label="Read results aloud">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.5a.75.75 0 00-.75.75v6a.75.75 0 00.75.75H6.44l4.5 4.5c.944.944 2.56.276 2.56-1.06V4.06zM17.69 9.31a.75.75 0 011.06 0l.884.884a.75.75 0 01-1.06 1.06l-.884-.884a.75.75 0 010-1.06zM19.469 7.531a.75.75 0 011.06 0l.884.884a.75.75 0 01-1.06 1.06l-.884-.884a.75.75 0 010-1.06zM17.69 14.69a.75.75 0 010 1.06l-.884.884a.75.75 0 01-1.06-1.06l.884-.884a.75.75 0 011.06 0zM19.469 16.469a.75.75 0 010 1.06l-.884.884a.75.75 0 01-1.06-1.06l.884-.884a.75.75 0 011.06 0z"/></svg>
-                            </button>
-                        </div>
-                        <div id="ai-insight-content" class="insight-content">
-                            <p>Enter your loan details and optional cash flow to receive AI analysis.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="amortization-section">
-                    <h3>Amortization Schedule</h3>
-                    <div class="chart-container">
-                        <canvas id="loan-chart" aria-label="Pie chart showing principal vs interest"></canvas>
-                    </div>
-                    <div class="table-container">
-                        <table id="amortization-table">
-                            <thead>
-                                <tr>
-                                    <th>Month</th>
-                                    <th>Payment</th>
-                                    <th>Principal</th>
-                                    <th>Interest</th>
-                                    <th>Remaining Balance</th>
-                                </tr>
-                            </thead>
-                            <tbody id="amortization-body">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="seo-content" aria-labelledby="seo-heading">
-                <h2 id="seo-heading">Your Guide to Business Loans in the USA</h2>
-                <p>Understanding business loans is crucial for your entrepreneurial journey. Whether you're a startup seeking seed capital or an established business looking to expand, the right financing can be a game-changer. This calculator helps you decode the numbers, from SBA loans to conventional term loans.</p>
-
-                <article>
-                    <h3>Comparing Loan Types: SBA vs. Conventional</h3>
-                    <p><strong>SBA Loans (7(a) and 504):</strong> Backed by the U.S. Small Business Administration, these loans typically offer lower interest rates and longer repayment terms. A 7(a) loan is versatile (working capital, equipment), while a 504 loan is for fixed assets (real estate, large equipment).</p>
-                    <p><strong>Conventional Business Loans:</strong> Offered by banks and online lenders without a government guarantee. They are often faster to fund but may require stronger credit and a larger down payment. Our calculator helps you compare the monthly cost of each.</p>
-                </article>
-
-                <article>
-                    <h3>What is Cash Flow Analysis?</h3>
-                    <p>Our AI-powered insight tool performs a simple but critical cash flow analysis. By entering your estimated revenue and expenses, you can see your **Debt Service Coverage Ratio (DSCR)**. Lenders use this metric (Net Operating Income / Total Debt Service) to determine if you can afford your payments. A ratio below 1.25x can be a red flag for many lenders.</p>
-                </article>
-
-                <h3>Frequently Asked Questions (FAQ)</h3>
-                <div class="faq-container">
-                    <details>
-                        <summary>What is a good interest rate for a business loan?</summary>
-                        <p>As of late 2025, rates can range from 8% to 13% for SBA loans and conventional bank loans. Online lenders may be higher. Our "Get Live Rate" button fetches the current **Bank Prime Loan Rate** from FRED®, a common benchmark used by banks to set their rates.</p>
-                    </details>
-                    <details>
-                        <summary>How do I calculate ROI on a business loan?</summary>
-                        <p>To calculate ROI (Return on Investment), you must project the **new profit** generated by the loan. The formula is: `(Net Profit from Loan - Total Loan Interest) / Total Loan Interest`. Our AI insight gives you the "Total Interest" figure so you know the profit target you need to beat.</p>
-                    </details>
-                    <details>
-                        <summary>What's the difference between an SBA 7(a) and 504 loan?</summary>
-                        <p>A **7(a) loan** is the most common and flexible, usable for working capital, inventory, or refinancing debt. A **504 loan** provides long-term, fixed-rate financing for major fixed assets like real estate or equipment that promote business growth and job creation.</p>
-                    </details>
-                    <details>
-                        <summary>How much business loan can I afford?</summary>
-                        <p>Lenders look at your **cash flow**. Use the optional fields in our calculator. If your new loan payment consumes more than 30-40% of your net monthly income (revenue minus expenses), you may be over-leveraged. Our AI insight will provide a warning in this scenario.</p>
-                    </details>
-                </div>
-            </section>
+                </section>
+            </div>
         </div>
     </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <a href="/" class="logo">FinGuid</a>
-                <p class="disclaimer">
-                    © 2025 FinGuid. All rights reserved. Our calculators are for estimation purposes only.
-                    Consult a qualified financial professional for advice.
-                </p>
-                <p class="fred-branding">
-                    Economic data provided by <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED, Federal Reserve Bank of St. Louis</a>.
-                </p>
-                <p class="affiliate-disclosure">
-                    **Affiliate Disclosure:** FinGuid may receive compensation from partners when you click on links or apply for products. This does not impact our analysis or opinions.
-                </p>
+    
+    <footer class="footer">
+        <div class="footer-sponsor">
+            <div class="container">
+                <h3 style="text-align: center; margin-bottom: 24px; color: var(--primary);">Our Business Partners (Sponsors)</h3>
+                <div class="sponsor-grid">
+                    <div class="sponsor-item">
+                        <h4>💳 Business Credit Cards</h4>
+                        <p>Compare top rewards and 0% APR intro offers for small businesses. Separate expenses and build business credit.</p>
+                        <a href="#" onclick="alert('Partner: Business Cards'); return false;">Compare Cards →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🧾 Accounting Software</h4>
+                        <p>Manage your cash flow, expenses, and payroll with our recommended accounting software partners. Get 50% off.</p>
+                        <a href="#" onclick="alert('Partner: Accounting'); return false;">See Software →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>📈 Business Formation</h4>
+                        <p>Start your LLC, S-Corp, or C-Corp online. Legal services for entrepreneurs, from incorporation to compliance.</p>
+                        <a href="#" onclick="alert('Partner: Legal'); return false;">Form Your LLC →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🏦 High-Yield Business Checking</h4>
+                        <p>Earn interest on your operating capital. Find the best free, high-yield business checking accounts.</p>
+                        <a href="#" onclick="alert('Partner: Banking'); return false;">View Accounts →</a>
+                    </div>
+                </div>
             </div>
-            <nav class="footer-nav">
-                <a href="/about">About Us</a>
-                <a href="/contact">Contact</a>
-                <a href="/privacy-policy">Privacy Policy</a>
-                <a href="/terms-of-service">Terms of Service</a>
-                <a href="/advertising">Advertise</a>
-            </nav>
+        </div>
+        
+        <div class="footer-nav">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h5>About FinGuid USA</h5>
+                        <p>World's first AI-powered financial calculator platform. Free, unbiased, comprehensive tools for smart financial decisions.</p>
+                        <p><strong>Email:</strong> support@finguid.com</p>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Financial Calculators</h5>
+                        <ul>
+                            <li><a href="/calculators/mortgage">🏠 Mortgage Calculator</a></li>
+                            <li><a href="/calculators/car-lease">🚗 Car Lease Calculator</a></li>
+                            <li><a href="/calculators/rent-vs-buy">🏘️ Rent vs Buy Calculator</a></li>
+                            <li><a href="/calculators/business-loan">📈 Business Loan Calculator</a></li>
+                            <li><a href="/calculators/retirement">👴 Retirement Calculator</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Resources & Learning</h5>
+                        <ul>
+                            <li><a href="/blog">📰 Financial Blog</a></li>
+                            <li><a href="/guides">📖 Complete Guides</a></li>
+                            <li><a href="/guides/sba-loans">SBA Loan Guide</a></li>
+                            <li><a href="/glossary">📚 Financial Glossary</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Company & Legal</h5>
+                        <ul>
+                            <li><a href="/about">About Us</a></li>
+                            <li><a href="/privacy">Privacy Policy</a></li>
+                            <li><a href="/terms">Terms of Service</a></li>
+                            <li><a href="/contact">Contact Us</a></li>
+                            <li><a href="/disclaimer">Disclaimer</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-social">
+                <a href="https://twitter.com/finguid" title="Twitter" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.linkedin.com/company/finguid" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.youtube.com/@finguid" title="YouTube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p>&copy; 2025 FinGuid USA. All Rights Reserved. | AI-Powered Financial Calculators</p>
+            <p style="font-size: 0.75rem; color: #999; margin-top: 12px;">
+                Disclaimer: This calculator is for educational purposes only. Results are estimates. FinGuid monetizes through affiliate partnerships, advertising, and sponsored products. Always consult with a financial advisor.
+            </p>
         </div>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <div id="toast-container" class="toast-container"></div>
     <script src="business-loan-calculator.js"></script>
-</body>
+    <script src="/register-sw.js"></script> </body>
 </html>
