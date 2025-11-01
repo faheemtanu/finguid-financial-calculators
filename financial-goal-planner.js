@@ -1,945 +1,920 @@
 /**
- * ============================================================================
- * FINGUID FINANCIAL GOAL PLANNER - WORLD-CLASS JAVASCRIPT v2.0
- * ============================================================================
- * 
- * FEATURES:
- * ✅ AI-Powered Insights & Personalized Recommendations
- * ✅ Live FRED API - Real-time Inflation Data
- * ✅ Voice Commands & Text-to-Speech
- * ✅ Dark/Light Mode Toggle
- * ✅ PWA Ready - Mobile App Experience
- * ✅ Interactive Chart.js Visualization
- * ✅ Multiple Goal Types (College, Home, Retirement, Emergency, Car, Custom)
- * ✅ Monthly Savings Target Calculation
- * ✅ Milestone Timeline & Progress Tracking
- * ✅ Annual Breakdown Table & CSV Export
- * ✅ SEO Optimized FAQ & Educational Content
- * ✅ Lead Generation & Affiliate Integration
- * ✅ Fully Responsive & Accessible
- * 
- * © 2025 FinGuid USA - World's First AI Financial Calculator Platform
- * ============================================================================
+ * FINANCIAL GOAL PLANNER - World's First AI-Powered Savings Calculator
+ * FinGuid USA - Production v1.1 (S.O.L.I.D. Architecture)
+ *
+ * Features:
+ * - Solves for Monthly Contribution, Final Value, or Time
+ * - Inflation-adjusted goal calculation
+ * - Dynamic projection chart (Chart.js)
+ * - Year-by-year savings schedule
+ * - AI-Powered Insights Engine (Dynamic & Conditional)
+ * - FRED API Integration (CPI for Inflation, 10-Yr Treasury for Return Benchmark)
+ * - Voice Command & Text-to-Speech
+ * - PWA & Dark/Light Mode support
+ * - GA-ID: G-NYBL2CDNQJ
+ * - FRED-API-KEY: 9c6c421f077f2091e8bae4f143ada59a
  */
 
-'use strict';
+// ==========================================================================
+// S: CONFIGURATION MODULE (SRP: Storing static config)
+// ==========================================================================
+const Config = (function() {
+    'use strict';
 
-/* ========== CONFIGURATION ========== */
-const FINGUID_CONFIG = {
-    APP_NAME: 'FinGuid Financial Goal Planner',
-    VERSION: '2.0',
-    DEBUG: false,
-    
-    // FRED API Configuration
-    FRED: {
-        BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
-        API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
-        SERIES_ID: 'CPIAUCSL', // Consumer Price Index - All Urban Consumers
-        FALLBACK_RATE: 3.0,
-        CACHE_KEY: 'finguid_inflation_rate',
-        CACHE_DURATION: 12 * 60 * 60 * 1000 // 12 hours
-    },
-    
-    // Google Analytics
-    GTAG_ID: 'G-NYBL2CDNQJ',
-    
-    // Goal Type Presets
-    GOAL_TYPES: {
-        college: {
-            name: 'College Fund',
-            default_amount: 200000,
-            default_years: 18,
-            description: '4-year public university cost'
+    return {
+        GA_ID: 'G-NYBL2CDNQJ',
+        FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
+        FRED_SERIES_INFLATION: 'CPIAUCSL', // Consumer Price Index
+        FRED_SERIES_RETURN: 'DGS10',      // 10-Year Treasury
+        DOM: {
+            form: 'goal-form',
+            goalSelect: 'goal-name-select',
+            goalCustomGroup: 'goal-name-custom-group',
+            goalCustomInput: 'goal-name-custom',
+            modeSelect: 'calculation-mode',
+            monthlyInputGroup: 'monthly-contribution-group',
+            summaryLabel: 'summary-label',
+            primaryResult: 'primary-result-display',
+            primaryUnit: 'primary-result-unit',
+            projectionSummary: 'projection-summary',
+            totalGoal: 'total-goal',
+            totalContributions: 'total-contributions',
+            totalGrowth: 'total-growth',
+            finalBalance: 'final-balance',
+            projectionCanvas: 'projection-canvas',
+            projectionTableBody: '#projection-table tbody',
+            aiContent: 'ai-insights-content',
+            fredInflationNote: 'fred-inflation-note',
+            fredReturnNote: 'fred-return-note'
         },
-        home: {
-            name: 'Home Down Payment',
-            default_amount: 80000,
-            default_years: 5,
-            description: '20% down payment on $400K home'
-        },
-        retirement: {
-            name: 'Retirement Fund',
-            default_amount: 1000000,
-            default_years: 30,
-            description: 'Comfortable retirement goal'
-        },
-        emergency: {
-            name: 'Emergency Fund',
-            default_amount: 25000,
-            default_years: 1,
-            description: '6 months of expenses'
-        },
-        car: {
-            name: 'Car Purchase',
-            default_amount: 35000,
-            default_years: 3,
-            description: 'New vehicle purchase'
-        },
-        custom: {
-            name: 'Custom Goal',
-            default_amount: 50000,
-            default_years: 5,
-            description: 'Your personal goal'
+        charts: {
+            projection: null
         }
-    }
-};
+    };
+})();
 
-/* ========== GLOBAL STATE ========== */
-let APP_STATE = {
-    goalType: 'college',
-    goalAmount: 200000,
-    currentSavings: 5000,
-    monthlyContribution: 500,
-    timeYears: 18,
-    expectedReturn: 7.0,
-    inflationRate: 3.0,
-    results: null,
-    chart: null,
-    ttsEnabled: false,
-    voiceEnabled: false
-};
+// ==========================================================================
+// S: UTILITY MODULE (SRP: Formatting, Parsing, DOM Helpers)
+// ==========================================================================
+const Utils = (function() {
+    'use strict';
 
-/* ========== UTILITY FUNCTIONS ========== */
-const UTILS = {
-    /**
-     * Format number as US currency
-     */
-    formatCurrency(amount) {
+    function formatCurrency(amount, decimals = 0) {
         if (typeof amount !== 'number' || isNaN(amount)) return '$0';
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(amount);
-    },
-
-    /**
-     * Format number with commas
-     */
-    formatNumber(num, decimals = 0) {
-        if (typeof num !== 'number' || isNaN(num)) return '0';
-        return num.toLocaleString('en-US', {
             minimumFractionDigits: decimals,
             maximumFractionDigits: decimals
-        });
-    },
+        }).format(amount);
+    }
 
-    /**
-     * Format percentage
-     */
-    formatPercent(rate) {
-        return UTILS.formatNumber(rate, 1) + '%';
-    },
-
-    /**
-     * Get DOM element safely
-     */
-    getEl(id) {
-        return document.getElementById(id);
-    },
-
-    /**
-     * Show toast notification
-     */
-    toast(message, type = 'success', duration = 3000) {
-        const container = UTILS.getEl('toast-container');
-        if (!container) return;
-
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
-        
-        container.appendChild(toast);
-        
-        setTimeout(() => toast.remove(), duration);
-
-        // Track in GA
-        if (window.gtag) {
-            gtag('event', 'toast_notification', {
-                message: message,
-                type: type
-            });
+    function parseInput(id, isCurrency = true) {
+        const elem = document.getElementById(id);
+        if (!elem) {
+            console.error(`Element not found: ${id}`);
+            return 0;
         }
-    },
-
-    /**
-     * Debounce function
-     */
-    debounce(func, delay) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), delay);
-        };
-    },
-
-    /**
-     * Parse currency input
-     */
-    parseCurrency(value) {
-        if (typeof value === 'string') {
-            return parseFloat(value.replace(/[$,]/g, '')) || 0;
+        const value = elem.value;
+        if (isCurrency) {
+            const clean = value.replace(/[$,]/g, '').trim();
+            return parseFloat(clean) || 0;
         }
         return parseFloat(value) || 0;
-    },
+    }
 
-    /**
-     * Track GA event
-     */
-    trackEvent(eventName, eventParams = {}) {
-        if (window.gtag) {
-            gtag('event', eventName, eventParams);
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast ${type} show`;
+        toast.setAttribute('role', 'alert');
+        toast.textContent = message;
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    function trackEvent(eventName, eventData = {}) {
+        if (typeof gtag === 'function') {
+            gtag('event', eventName, eventData);
         }
     }
-};
+    
+    function setElementText(id, text) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = text;
+        }
+    }
+    
+    function setElementHTML(id, html) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerHTML = html;
+        }
+    }
+    
+    function setInputValue(id, value) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.value = value;
+        }
+    }
+    
+    function toggleClass(id, className, show) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.toggle(className, show);
+        }
+    }
 
-/* ========== FRED API MODULE ========== */
-const FRED_API = {
-    /**
-     * Fetch latest inflation rate from FRED
-     */
-    async fetchInflationRate() {
+    function exportToCSV(data, filename) {
+        const csvContent = data.map(row => row.join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Expose public methods
+    return {
+        formatCurrency,
+        parseInput,
+        showToast,
+        trackEvent,
+        setElementText,
+        setElementHTML,
+        setInputValue,
+        toggleClass,
+        exportToCSV
+    };
+})();
+
+// ==========================================================================
+// S: FRED API SERVICE (SRP: Fetching external data)
+// ==========================================================================
+const FredService = (function(Config, Utils) {
+    'use strict';
+
+    async function fetchFREDRate(seriesId, inputId, noteId, dataExtractor) {
+        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${Config.FRED_API_KEY}&file_type=json&sort_order=desc&limit=12`;
+
         try {
-            // Check cache first
-            const cached = localStorage.getItem(FINGUID_CONFIG.FRED.CACHE_KEY);
-            if (cached) {
-                const data = JSON.parse(cached);
-                if (Date.now() - data.timestamp < FINGUID_CONFIG.FRED.CACHE_DURATION) {
-                    return data.rate;
-                }
-            }
-
-            const url = new URL(FINGUID_CONFIG.FRED.BASE_URL);
-            url.searchParams.append('series_id', FINGUID_CONFIG.FRED.SERIES_ID);
-            url.searchParams.append('api_key', FINGUID_CONFIG.FRED.API_KEY);
-            url.searchParams.append('file_type', 'json');
-            url.searchParams.append('sort_order', 'desc');
-            url.searchParams.append('limit', '25');
-
             const response = await fetch(url);
-            if (!response.ok) throw new Error(`FRED API error: ${response.status}`);
-
+            if (!response.ok) throw new Error(`FRED API response not ok for ${seriesId}`);
             const data = await response.json();
-            const observations = data.observations
-                .filter(obs => obs.value && obs.value !== '.')
-                .slice(0, 13)
-                .reverse();
-
-            if (observations.length >= 2) {
-                const latest = parseFloat(observations[observations.length - 1].value);
-                const prior = parseFloat(observations[observations.length - 13].value);
-                const rate = Math.max(0, ((latest - prior) / prior) * 100);
-
-                // Cache the rate
-                localStorage.setItem(FINGUID_CONFIG.FRED.CACHE_KEY, JSON.stringify({
-                    rate: rate,
-                    timestamp: Date.now(),
-                    date: observations[observations.length - 1].date
-                }));
-
-                return rate;
-            }
-        } catch (error) {
-            if (FINGUID_CONFIG.DEBUG) console.error('FRED API Error:', error);
-        }
-
-        return FINGUID_CONFIG.FRED.FALLBACK_RATE;
-    },
-
-    /**
-     * Initialize FRED data
-     */
-    async init() {
-        const badge = UTILS.getEl('fred-status');
-        const input = UTILS.getEl('inflation-rate');
-        
-        if (badge) badge.textContent = 'Fetching FRED data...';
-
-        const rate = await this.fetchInflationRate();
-        APP_STATE.inflationRate = rate;
-
-        if (input) input.value = rate.toFixed(1);
-        if (badge) badge.textContent = '✓ Live FRED Data';
-
-        UTILS.trackEvent('fred_api_loaded', { rate: rate });
-    }
-};
-
-/* ========== CALCULATION ENGINE ========== */
-const CALCULATOR = {
-    /**
-     * Calculate monthly savings needed
-     */
-    calculateMonthlySavings() {
-        const state = APP_STATE;
-        const r = state.expectedReturn / 100;
-        const n = state.timeYears;
-        const P = state.currentSavings;
-        const FV = state.goalAmount;
-
-        // Future value of current savings
-        const fvP = P * Math.pow(1 + r, n);
-
-        if (fvP >= FV) {
-            return 0; // Already have enough
-        }
-
-        // Using Future Value of Annuity formula: FV = PMT * [((1+r)^n - 1) / r]
-        // Solve for PMT: PMT = FV / [((1+r)^n - 1) / r]
-        
-        let pmt;
-        if (r > 0) {
-            const annuityFactor = (Math.pow(1 + r, n) - 1) / r;
-            pmt = (FV - fvP) / annuityFactor;
-        } else {
-            pmt = (FV - P) / n;
-        }
-
-        return Math.max(0, pmt / 12); // Convert to monthly
-    },
-
-    /**
-     * Generate annual breakdown
-     */
-    generateBreakdown() {
-        const state = APP_STATE;
-        const monthlyRate = state.expectedReturn / 100 / 12;
-        const monthlyContribution = state.monthlyContribution;
-        const breakdown = [];
-
-        let balance = state.currentSavings;
-        
-        for (let month = 1; month <= state.timeYears * 12; month++) {
-            balance = (balance + monthlyContribution) * (1 + monthlyRate);
             
-            if (month % 12 === 0) {
-                const year = month / 12;
-                const inflationAdjusted = state.goalAmount / Math.pow(1 + state.inflationRate / 100, year);
-                const percentToGoal = (balance / state.goalAmount) * 100;
-                
-                breakdown.push({
-                    year,
-                    balance: Math.round(balance),
-                    investmentGains: Math.round(balance - state.currentSavings - (monthlyContribution * month)),
-                    percentToGoal: Math.min(percentToGoal, 100),
-                    inflationAdjusted: Math.round(inflationAdjusted)
+            const { value, note } = dataExtractor(data.observations);
+            
+            Utils.setInputValue(inputId, value.toFixed(1));
+            Utils.setElementText(noteId, note);
+            
+        } catch (error) {
+            console.error(`FRED Error for ${seriesId}:`, error);
+            Utils.setElementText(noteId, `Using default value.`);
+        }
+    }
+
+    function extractReturnRate(observations) {
+        const latest = observations.find(o => o.value !== ".");
+        const value = parseFloat(latest.value);
+        return { value: value, note: `📈 Live 10-Yr Treasury: ${value.toFixed(2)}% (${latest.date})` };
+    }
+
+    function extractInflationRate(observations) {
+        const latest = observations.find(o => o.value !== ".");
+        const prior = observations[11]; // 12th observation (1 year ago)
+        const latestValue = parseFloat(latest.value);
+        const priorValue = parseFloat(prior.value);
+        const inflation = ((latestValue - priorValue) / priorValue) * 100;
+        return { value: inflation, note: `📊 Live Y/Y Inflation: ${inflation.toFixed(1)}% (${latest.date})` };
+    }
+
+    function initialize() {
+        fetchFREDRate(Config.FRED_SERIES_INFLATION, 'inflation-rate', Config.DOM.fredInflationNote, extractInflationRate);
+        fetchFREDRate(Config.FRED_SERIES_RETURN, 'return-rate', Config.DOM.fredReturnNote, extractReturnRate);
+    }
+    
+    return {
+        initialize
+    };
+})(Config, Utils);
+
+// ==========================================================================
+// S: FINANCIAL SOLVER MODULE (SRP: Core financial math)
+// ==========================================================================
+const FinancialSolver = (function() {
+    'use strict';
+
+    // PMT = (FV * i) / ((1 + i)^n - 1)
+    function solveForMonthly(fv, i, n) {
+        if (i === 0) return fv / n;
+        return (fv * i) / (Math.pow(1 + i, n) - 1);
+    }
+
+    // FV = PV(1+i)^n + PMT[((1+i)^n - 1) / i]
+    function solveForFinalValue(pv, pmt, i, n) {
+        if (i === 0) return pv + (pmt * n);
+        const fv_pv = pv * Math.pow(1 + i, n);
+        const fv_pmt = pmt * (Math.pow(1 + i, n) - 1) / i;
+        return fv_pv + fv_pmt;
+    }
+
+    // n = ln((FV*i + PMT) / (PV*i + PMT)) / ln(1 + i)
+    function solveForTimeline(fv, pv, pmt, i) {
+        if (i === 0) return (fv - pv) / pmt;
+        if (pmt <= 0) return Infinity; // Can't reach goal with no savings
+        if (fv * i + pmt <= 0 || pv * i + pmt <= 0) return Infinity; 
+        
+        try {
+            return Math.log((fv * i + pmt) / (pv * i + pmt)) / Math.log(1 + i);
+        } catch (e) {
+            return Infinity; // Error (e.g., log of negative)
+        }
+    }
+    
+    function generateProjection(pv, pmt, years, rate) {
+        const projection = [];
+        let balance = pv;
+        const n = Math.ceil(years * 12);
+        const i = rate / 12;
+
+        for (let month = 1; month <= n; month++) {
+            balance += pmt + (balance * i); // Compound interest
+            
+            if (month % 12 === 0 || (month === n && n % 12 !== 0)) {
+                const year = Math.ceil(month / 12);
+                projection.push({
+                    year: year,
+                    contribution: pmt * 12,
+                    balance: balance
                 });
             }
         }
-
-        return breakdown;
-    },
-
-    /**
-     * Calculate all results
-     */
-    calculate() {
-        const state = APP_STATE;
-        const monthlySavings = this.calculateMonthlySavings();
-        const breakdown = this.generateBreakdown();
         
-        const totalContributions = state.currentSavings + (monthlySavings * 12 * state.timeYears);
-        const finalBalance = breakdown[breakdown.length - 1]?.balance || 0;
-        const investmentGains = finalBalance - totalContributions;
-        const inflationAdjustedGoal = state.goalAmount / Math.pow(1 + state.inflationRate / 100, state.timeYears);
-
-        state.results = {
-            monthlySavings: Math.round(monthlySavings),
-            totalContributions: Math.round(totalContributions),
-            investmentGains: Math.round(investmentGains),
-            finalBalance: Math.round(finalBalance),
-            inflationAdjustedGoal: Math.round(inflationAdjustedGoal),
-            breakdown: breakdown
-        };
-
-        return state.results;
-    }
-};
-
-/* ========== AI INSIGHTS ENGINE ========== */
-const AI_INSIGHTS = {
-    /**
-     * Generate personalized AI insights
-     */
-    generate() {
-        const state = APP_STATE;
-        const results = state.results;
-        
-        if (!results) return [];
-
-        const insights = [];
-
-        // Insight 1: Feasibility Check
-        if (results.monthlySavings > 5000) {
-            insights.push({
-                type: 'warning',
-                title: 'High Monthly Savings Required',
-                content: `Your goal requires ${UTILS.formatCurrency(results.monthlySavings)}/month. Consider increasing your investment return or extending your timeline.`,
-                action: 'Explore higher-yield investments →',
-                link: '#'
-            });
-        } else if (results.monthlySavings < 100) {
-            insights.push({
-                type: 'success',
-                title: 'Affordable Goal Target',
-                content: `You only need ${UTILS.formatCurrency(results.monthlySavings)}/month to reach your goal. Automate this amount today!`,
-                action: 'Set Up Automatic Transfers →',
-                link: '#'
-            });
-        }
-
-        // Insight 2: Investment Power
-        const gainPercent = (results.investmentGains / results.finalBalance) * 100;
-        if (gainPercent > 50 && state.timeYears > 10) {
-            insights.push({
-                type: 'info',
-                title: 'Compound Growth Working Hard',
-                content: `${UTILS.formatPercent(gainPercent)} of your final balance comes from investment gains! This is the power of long-term investing.`,
-                action: 'Maximize with Index Funds →',
-                link: '#'
-            });
-        }
-
-        // Insight 3: Inflation Impact
-        const inflationImpact = ((state.goalAmount - results.inflationAdjustedGoal) / state.goalAmount) * 100;
-        if (inflationImpact > 20) {
-            insights.push({
-                type: 'warning',
-                title: 'Inflation Will Reduce Purchasing Power',
-                content: `Inflation will erode ${UTILS.formatPercent(inflationImpact)} of your goal's value. Your ${UTILS.formatCurrency(state.goalAmount)} today = ${UTILS.formatCurrency(results.inflationAdjustedGoal)} in purchasing power.`,
-                action: 'Learn About Inflation Protection →',
-                link: '#'
-            });
-        }
-
-        // Insight 4: Goal Type Recommendation
-        if (state.goalType === 'college') {
-            insights.push({
-                type: 'success',
-                title: '529 Plan Recommendation',
-                content: 'Consider a 529 College Savings Plan for tax-free growth. Many states offer income tax deductions on contributions.',
-                action: 'Compare 529 Plans →',
-                link: '#'
-            });
-        } else if (state.goalType === 'home') {
-            insights.push({
-                type: 'success',
-                title: 'First-Time Homebuyer Tip',
-                content: 'Explore first-time homebuyer programs and down payment assistance. Some loans require only 3-5% down.',
-                action: 'First-Time Buyer Programs →',
-                link: '#'
-            });
-        } else if (state.goalType === 'retirement') {
-            insights.push({
-                type: 'success',
-                title: 'Maximize Retirement Accounts',
-                content: 'Prioritize 401(k) and IRA contributions for tax benefits. In 2024, limits are $23,500 (401k) and $7,000 (IRA).',
-                action: 'Retirement Account Guide →',
-                link: '#'
-            });
-        }
-
-        // Insight 5: Risk Assessment
-        if (state.expectedReturn > 12) {
-            insights.push({
-                type: 'warning',
-                title: 'High Return Assumption',
-                content: 'You\'ve assumed a return rate of ' + UTILS.formatPercent(state.expectedReturn) + '. Historically, the S&P 500 averages ~10%. Consider more conservative estimates.',
-                action: 'Understand Asset Allocation →',
-                link: '#'
-            });
-        }
-
-        return insights;
-    },
-
-    /**
-     * Render insights HTML
-     */
-    render(insights) {
-        const box = UTILS.getEl('ai-insights-box');
-        if (!box) return;
-
-        if (!insights || insights.length === 0) {
-            box.innerHTML = '<p class="placeholder">Enter your details to receive AI insights</p>';
-            return;
-        }
-
-        let html = '<div class="insights-list">';
-        
-        insights.forEach(insight => {
-            const iconClass = {
-                success: 'fa-check-circle',
-                warning: 'fa-exclamation-circle',
-                info: 'fa-info-circle'
-            }[insight.type] || 'fa-lightbulb';
-
-            html += `
-                <div class="insight-item insight-${insight.type}">
-                    <div class="insight-title">
-                        <i class="fas ${iconClass}"></i> ${insight.title}
-                    </div>
-                    <p class="insight-text">${insight.content}</p>
-                    <div class="insight-action">
-                        <a href="${insight.link}" target="_blank" rel="noopener">${insight.action}</a>
-                    </div>
-                </div>
-            `;
-        });
-
-        html += '</div>';
-        box.innerHTML = html;
-    }
-};
-
-/* ========== UI UPDATE MODULE ========== */
-const UI = {
-    /**
-     * Update all displays
-     */
-    updateAll() {
-        const results = APP_STATE.results;
-        if (!results) return;
-
-        // Update summary cards
-        UTILS.getEl('monthly-target').textContent = UTILS.formatCurrency(results.monthlySavings);
-        UTILS.getEl('total-invested').textContent = UTILS.formatCurrency(results.totalContributions);
-        UTILS.getEl('inflation-adjusted-goal').textContent = UTILS.formatCurrency(results.inflationAdjustedGoal);
-        UTILS.getEl('investment-gains').textContent = UTILS.formatCurrency(results.investmentGains);
-
-        // Update milestones
-        this.updateMilestones();
-
-        // Update chart
-        CHART_MODULE.update();
-
-        // Update table
-        this.updateTable();
-
-        // Generate and render AI insights
-        const insights = AI_INSIGHTS.generate();
-        AI_INSIGHTS.render(insights);
-    },
-
-    /**
-     * Update milestones
-     */
-    updateMilestones() {
-        const timeline = UTILS.getEl('milestone-timeline');
-        if (!timeline || !APP_STATE.results) return;
-
-        const breakdown = APP_STATE.results.breakdown;
-        const milestones = [
-            { percent: 25, icon: 'flag', label: '25% Complete' },
-            { percent: 50, icon: 'flag-checkered', label: 'Halfway There!' },
-            { percent: 75, icon: 'trophy', label: '75% Complete' },
-            { percent: 100, icon: 'crown', label: 'Goal Reached!' }
-        ];
-
-        let html = '';
-        
-        milestones.forEach(milestone => {
-            const yearData = breakdown.find(d => d.percentToGoal >= milestone.percent);
-            if (yearData) {
-                html += `
-                    <div class="milestone-item">
-                        <div class="milestone-icon"><i class="fas fa-${milestone.icon}"></i></div>
-                        <h4>${milestone.label}</h4>
-                        <p>Year ${yearData.year}: ${UTILS.formatCurrency(yearData.balance)}</p>
-                    </div>
-                `;
+        // Calculate annual growth
+        let lastBalance = pv;
+        for (let item of projection) {
+            let annualContribution = item.contribution;
+            // Adjust contribution for the final partial year
+            if (item.year === projection.length && n % 12 !== 0) {
+                 annualContribution = pmt * (n % 12);
             }
-        });
-
-        timeline.innerHTML = html || '<p class="placeholder">Calculate to see milestones</p>';
-    },
-
-    /**
-     * Update data table
-     */
-    updateTable() {
-        const tbody = UTILS.getEl('breakdown-table-body')?.querySelector('tbody');
-        if (!tbody || !APP_STATE.results) return;
-
-        const breakdown = APP_STATE.results.breakdown;
-        let html = '';
-
-        breakdown.forEach(row => {
-            html += `
-                <tr>
-                    <td>${row.year}</td>
-                    <td>${UTILS.formatCurrency(row.balance - row.investmentGains)}</td>
-                    <td>${UTILS.formatCurrency(APP_STATE.monthlyContribution * 12)}</td>
-                    <td>${UTILS.formatCurrency(row.investmentGains)}</td>
-                    <td>${UTILS.formatCurrency(row.balance)}</td>
-                    <td>${UTILS.formatCurrency(row.inflationAdjusted)}</td>
-                    <td>${UTILS.formatNumber(row.percentToGoal, 1)}%</td>
-                </tr>
-            `;
-        });
-
-        tbody.innerHTML = html || '<tr><td colspan="7" class="no-data">No data</td></tr>';
-    }
-};
-
-/* ========== CHART MODULE ========== */
-const CHART_MODULE = {
-    chart: null,
-
-    /**
-     * Update chart
-     */
-    update() {
-        const canvas = UTILS.getEl('progressChart');
-        if (!canvas || !APP_STATE.results) return;
-
-        const breakdown = APP_STATE.results.breakdown;
-        const isDark = document.documentElement.getAttribute('data-color-scheme') === 'dark';
-
-        const labels = breakdown.map(row => `Year ${row.year}`);
-        const balanceData = breakdown.map(row => row.balance);
-        const goalLine = breakdown.map(() => APP_STATE.goalAmount);
-
-        const ctx = canvas.getContext('2d');
-
-        if (this.chart) {
-            this.chart.destroy();
+            item.growth = item.balance - lastBalance - annualContribution;
+            lastBalance = item.balance;
         }
 
-        this.chart = new Chart(ctx, {
+        return projection;
+    }
+
+    return {
+        solveForMonthly,
+        solveForFinalValue,
+        solveForTimeline,
+        generateProjection
+    };
+})();
+
+// ==========================================================================
+// S: CHART MODULE (SRP: Manages the Chart.js instance)
+// ==========================================================================
+const ChartModule = (function(Config, Utils) {
+    'use strict';
+    
+    function update(canvasId, projection, inputs) {
+        if (projection.length === 0) return;
+
+        const ctx = document.getElementById(canvasId)?.getContext('2d');
+        if (!ctx) return;
+
+        const labels = projection.map(p => `Year ${p.year}`);
+        const balances = projection.map(p => p.balance);
+        
+        // Calculate cumulative contributions for the chart
+        const contributions = [];
+        let runningTotal = inputs.currentSavings;
+        projection.forEach(p => {
+             // Adjust contribution for the final partial year
+            let annualContribution = p.contribution;
+            if (p.year === projection.length && (inputs.timelineYears * 12) % 12 !== 0) {
+                 annualContribution = inputs.monthlyContribution * ((inputs.timelineYears * 12) % 12);
+            }
+            runningTotal += annualContribution;
+            contributions.push(runningTotal);
+        });
+
+        // Calculate cumulative growth for the chart
+        const growth = projection.map((p, index) => p.balance - contributions[index]);
+
+        if (Config.charts.projection) {
+            Config.charts.projection.destroy();
+        }
+
+        Config.charts.projection = new Chart(ctx, {
             type: 'line',
             data: {
-                labels,
+                labels: labels,
                 datasets: [
                     {
-                        label: 'Your Savings Growth',
-                        data: balanceData,
-                        borderColor: '#19343B',
-                        backgroundColor: 'rgba(25, 52, 59, 0.1)',
-                        fill: true,
+                        label: 'Total Balance',
+                        data: balances,
+                        borderColor: 'rgba(36, 172, 185, 1)',
+                        backgroundColor: 'rgba(36, 172, 185, 0.1)',
                         tension: 0.4,
-                        borderWidth: 3
+                        fill: true,
+                        borderWidth: 3,
                     },
                     {
-                        label: 'Goal Target',
-                        data: goalLine,
-                        borderColor: '#f59e0b',
-                        borderDash: [10, 5],
-                        fill: false,
-                        borderWidth: 2,
-                        pointRadius: 0
+                        label: 'Total Contributions',
+                        data: contributions,
+                        borderColor: 'rgba(19, 52, 59, 0.6)',
+                        backgroundColor: 'transparent',
+                        tension: 0.4,
+                        borderDash: [5, 5],
+                    },
+                    {
+                        label: 'Total Growth',
+                        data: growth,
+                        borderColor: 'rgba(16, 185, 129, 0.7)',
+                        backgroundColor: 'transparent',
+                        tension: 0.4,
+                        borderDash: [3, 3],
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
                 plugins: {
-                    legend: {
-                        display: true,
-                        labels: {
-                            color: isDark ? '#f9fafb' : '#111827',
-                            font: { size: 12 }
-                        }
-                    },
+                    legend: { position: 'top' },
                     tooltip: {
-                        backgroundColor: isDark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.9)',
-                        titleColor: isDark ? '#f9fafb' : '#111827',
-                        bodyColor: isDark ? '#f9fafb' : '#111827',
                         callbacks: {
-                            label: ctx => `${ctx.dataset.label}: ${UTILS.formatCurrency(ctx.parsed.y)}`
+                            label: (ctx) => `${ctx.dataset.label}: ${Utils.formatCurrency(ctx.parsed.y, 0)}`
                         }
                     }
                 },
                 scales: {
-                    y: {
-                        ticks: {
-                            color: isDark ? '#d1d5db' : '#6b7280',
-                            callback: value => UTILS.formatCurrency(value / 1000) + 'K'
-                        },
-                        grid: {
-                            color: isDark ? 'rgba(148,163,184,0.1)' : 'rgba(0,0,0,0.1)'
-                        }
-                    },
-                    x: {
-                        ticks: { color: isDark ? '#d1d5db' : '#6b7280' },
-                        grid: { color: isDark ? 'rgba(148,163,184,0.1)' : 'rgba(0,0,0,0.1)' }
-                    }
+                    y: { ticks: { callback: (v) => Utils.formatCurrency(v, 0) } }
                 }
             }
         });
     }
-};
-
-/* ========== THEME MODULE ========== */
-const THEME = {
-    init() {
-        const savedScheme = localStorage.getItem('finguid-theme') || 
-            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
-        document.documentElement.setAttribute('data-color-scheme', savedScheme);
-        this.updateIcon(savedScheme);
-    },
-
-    toggle() {
-        const current = document.documentElement.getAttribute('data-color-scheme');
-        const newScheme = current === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-color-scheme', newScheme);
-        localStorage.setItem('finguid-theme', newScheme);
-        
-        this.updateIcon(newScheme);
-        CHART_MODULE.update();
-
-        UTILS.trackEvent('theme_toggled', { theme: newScheme });
-    },
-
-    updateIcon(scheme) {
-        const btn = UTILS.getEl('toggle-color-scheme');
-        if (btn) {
-            btn.querySelector('i').className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    
+    function resize() {
+        if (Config.charts.projection) {
+            Config.charts.projection.resize();
         }
     }
-};
 
-/* ========== VOICE & TEXT-TO-SPEECH ========== */
-const VOICE_MODULE = {
-    recognition: null,
-    synthesis: window.speechSynthesis,
+    return {
+        update,
+        resize
+    };
+})(Config, Utils);
 
-    init() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognition) {
-            this.recognition = new SpeechRecognition();
+// ==========================================================================
+// S: AI INSIGHTS MODULE (SRP: Generating business logic/advice)
+// ==========================================================================
+const AIInsights = (function(Utils, Solver) {
+    'use strict';
+    
+    function generate(inputs, results, inflatedGoal, projection) {
+        let html = '';
+        const finalBalance = projection.length > 0 ? projection[projection.length - 1].balance : 0;
+
+        // Insight 1: Inflation Impact
+        if (inputs.inflationRate > 0 && inflatedGoal > inputs.goalAmount) {
+            html += `
+                <div class="recommendation-alert medium-priority">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Inflation Alert</strong>
+                </div>
+                <p>Your <strong>${inputs.goalName}</strong> goal of <strong>${Utils.formatCurrency(inputs.goalAmount)}</strong> will likely cost <strong>${Utils.formatCurrency(inflatedGoal)}</strong> in ${inputs.timelineYears} years due to ${inputs.inflationRate.toFixed(1)}% inflation. Our plan is based on this more realistic, higher target.</p>
+            `;
         }
-    },
 
-    toggleVoiceCommand() {
-        if (!this.recognition) {
-            UTILS.toast('Voice commands not supported in this browser', 'error');
+        // Insight 2: Shortfall / On Track / Timeline
+        if (inputs.mode === 'final_value') {
+            if (finalBalance >= inflatedGoal) {
+                html += `
+                    <div class="recommendation-alert low-priority">
+                        <i class="fas fa-check-circle"></i> <strong>You're On Track!</strong>
+                    </div>
+                    <p>Congratulations! By saving <strong>${Utils.formatCurrency(inputs.monthlyContribution)}/mo</strong>, you are projected to have <strong>${Utils.formatCurrency(finalBalance)}</strong>, exceeding your inflated goal of ${Utils.formatCurrency(inflatedGoal)}.</p>
+                `;
+            } else {
+                const i = inputs.returnRate / 12;
+                const n = inputs.timelineYears * 12;
+                const fv_pv = inputs.currentSavings * Math.pow(1 + i, n);
+                const fv_needed = inflatedGoal - fv_pv;
+                const monthlyNeeded = Solver.solveForMonthly(fv_needed, i, n);
+                
+                html += `
+                    <div class="recommendation-alert high-priority">
+                        <i class="fas fa-warning"></i> <strong>Goal Shortfall Warning</strong>
+                    </div>
+                    <p>At your current savings rate, you're projected to have <strong>${Utils.formatCurrency(finalBalance)}</strong>, missing your goal by <strong>${Utils.formatCurrency(inflatedGoal - finalBalance)}</strong>. To get back on track, you would need to save <strong>${Utils.formatCurrency(monthlyNeeded)}/mo</strong>.</p>
+                `;
+            }
+        } else if (inputs.mode === 'timeline') {
+             if (results.value > inputs.timelineYears * 1.5) {
+                 html += `
+                    <div class="recommendation-alert high-priority">
+                        <i class="fas fa-warning"></i> <strong>Timeline Warning</strong>
+                    </div>
+                    <p>At <strong>${Utils.formatCurrency(inputs.monthlyContribution)}/mo</strong>, it will take <strong>${results.value} years</strong> to reach your goal, which is much longer than your ${inputs.timelineYears}-year target. You may need to increase your savings rate.</p>
+                `;
+             } else {
+                 html += `
+                    <div class="recommendation-alert low-priority">
+                        <i class="fas fa-check-circle"></i> <strong>Goal is Achievable!</strong>
+                    </div>
+                    <p>By saving <strong>${Utils.formatCurrency(inputs.monthlyContribution)}/mo</strong>, you are on track to reach your goal in <strong>${results.value} years</strong>, which is within your target timeline.</p>
+                `;
+             }
+        }
+
+        // Insight 3: Risk vs. Timeline
+        if (inputs.timelineYears <= 3 && inputs.returnRate > 0.04) {
+            html += `
+                <div class="recommendation-alert high-priority">
+                    <i class="fas fa-shield-alt"></i> <strong>High-Risk Strategy Alert</strong>
+                </div>
+                <p>A <strong>${(inputs.returnRate * 100).toFixed(1)}%</strong> return for a short <strong>${inputs.timelineYears}-year</strong> goal is an aggressive strategy. Market downturns could cause you to miss your goal. For short-term goals, consider safer options like a <strong>High-Yield Savings Account</strong> or CDs, which protect your principal.</p>
+                <p><i><strong>Sponsor:</strong> Check out our partner's High-Yield Savings account to grow your short-term savings safely.</i></p>
+            `;
+        } else if (inputs.timelineYears > 15 && inputs.returnRate < 0.05) { // 5%
+            html += `
+                <div class="recommendation-alert medium-priority">
+                    <i class="fas fa-chart-line"></i> <strong>Strategy Opportunity</strong>
+                </div>
+                <p>With a long timeline of <strong>${inputs.timelineYears} years</strong>, your plan may be too conservative. A <strong>${(inputs.returnRate * 100).toFixed(1)}%</strong> return might not be keeping up with long-term market averages. Increasing your risk tolerance slightly with a diversified portfolio could help you reach your goal much faster or with smaller contributions.</p>
+            `;
+        }
+        
+        // Insight 4: Power of Starting Savings
+        if (inputs.currentSavings > 0) {
+             const i = inputs.returnRate / 12;
+             const n = inputs.timelineYears * 12;
+             const fv_pv = inputs.currentSavings * Math.pow(1 + i, n);
+             html += `
+                <div class="recommendation-alert low-priority">
+                    <i class="fas fa-rocket"></i> <strong>Head Start!</strong>
+                </div>
+                <p>Your current savings of <strong>${Utils.formatCurrency(inputs.currentSavings)}</strong> is a fantastic start. Left to grow on its own, it's projected to become <strong>${Utils.formatCurrency(fv_pv)}</strong>, accounting for <strong>${((fv_pv / finalBalance) * 100).toFixed(0)}%</strong> of your final balance!</p>
+            `;
+        }
+
+        if (html === '') {
+            html = '<p>Your goal plan is balanced. Adjust your inputs to see more personalized insights!</p>';
+        }
+
+        return html;
+    }
+
+    return {
+        generate
+    };
+})(Utils, FinancialSolver);
+
+// ==========================================================================
+// S: SPEECH & VOICE MODULE (SRP: Handling a11y speech features)
+// ==========================================================================
+const SpeechModule = (function(Utils) {
+    'use strict';
+    
+    let recognition;
+    const synth = window.speechSynthesis;
+    let isListening = false;
+    
+    function speak(text) {
+        if (!synth) {
+            Utils.showToast("Text-to-Speech is not supported in this browser.", "error");
             return;
         }
-
-        APP_STATE.voiceEnabled = !APP_STATE.voiceEnabled;
-        const btn = UTILS.getEl('toggle-voice-command');
-        
-        if (APP_STATE.voiceEnabled) {
-            btn.classList.add('active');
-            this.recognition.start();
-            UTILS.toast('Voice command active', 'success');
-        } else {
-            btn.classList.remove('active');
-            this.recognition.abort();
+        if (synth.speaking) {
+            synth.cancel();
         }
-    },
-
-    toggleTextToSpeech() {
-        APP_STATE.ttsEnabled = !APP_STATE.ttsEnabled;
-        const btn = UTILS.getEl('toggle-text-to-speech');
-        
-        if (APP_STATE.ttsEnabled) {
-            btn.classList.add('active');
-            UTILS.toast('Text-to-Speech enabled', 'success');
-        } else {
-            btn.classList.remove('active');
-            this.synthesis.cancel();
-        }
-    },
-
-    speak(text) {
-        if (!APP_STATE.ttsEnabled || !this.synthesis) return;
-
-        this.synthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.9;
-        this.synthesis.speak(utterance);
+        utterance.lang = 'en-US';
+        synth.speak(utterance);
     }
-};
+    
+    function initialize(onCommandCallback) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            Utils.showToast("Voice commands not supported.", "error");
+            document.getElementById('toggle-voice-command').disabled = true;
+            return;
+        }
+        
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+        
+        const voiceBtn = document.getElementById('toggle-voice-command');
 
-/* ========== EXPORT MODULE ========== */
-const EXPORT = {
-    toCSV() {
-        if (!APP_STATE.results) {
-            UTILS.toast('Calculate first', 'error');
+        recognition.onstart = () => {
+            isListening = true;
+            voiceBtn.classList.replace('voice-inactive', 'voice-active');
+            voiceBtn.title = "Listening... Click to stop.";
+        };
+        
+        recognition.onend = () => {
+            isListening = false;
+            voiceBtn.classList.replace('voice-active', 'voice-inactive');
+            voiceBtn.title = "Enable Voice Control";
+        };
+        
+        recognition.onerror = (event) => {
+            console.error("Speech Recognition Error:", event.error);
+            if (event.error !== 'no-speech') Utils.showToast(`Voice Error: ${event.error}`, "error");
+        };
+        
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript.toLowerCase().trim();
+            onCommandCallback(transcript);
+        };
+    }
+    
+    function toggleListening() {
+        if (!recognition) return;
+        if (isListening) {
+            recognition.stop();
+        } else {
+            try {
+                recognition.start();
+            } catch(e) {
+                console.error("Could not start recognition:", e);
+            }
+        }
+    }
+    
+    return {
+        initialize,
+        toggleListening,
+        speak
+    };
+})(Utils);
+
+// ==========================================================================
+// S: APPLICATION CONTROLLER (SRP: Orchestrating all modules)
+// D: Depends on abstractions (modules), not concrete implementations.
+// ==========================================================================
+const AppController = (function(Config, Utils, Solver, Chart, AI, Fred, Speech) {
+    'use strict';
+    
+    // Application state
+    let state = {
+        inputs: {},
+        results: {},
+        projection: [],
+        inflatedGoal: 0
+    };
+
+    function handleCalculation() {
+        // 1. Get Inputs
+        let goalName = document.getElementById(Config.DOM.goalSelect).value;
+        if (goalName === 'custom') {
+            goalName = document.getElementById(Config.DOM.goalCustomInput).value || "Custom Goal";
+        }
+
+        const inputs = {
+            goalName: goalName,
+            goalAmount: Utils.parseInput('goal-amount'),
+            timelineYears: Utils.parseInput('goal-timeline', false),
+            currentSavings: Utils.parseInput('current-savings'),
+            returnRate: Utils.parseInput('return-rate', false) / 100,
+            inflationRate: Utils.parseInput('inflation-rate', false) / 100,
+            mode: document.getElementById('calculation-mode').value,
+            monthlyContribution: Utils.parseInput('monthly-contribution')
+        };
+        
+        // 2. Core Logic
+        const i = inputs.returnRate / 12; // Monthly interest rate
+        let n = inputs.timelineYears * 12; // Number of months
+        const pv = inputs.currentSavings;
+        
+        const inflatedGoal = inputs.goalAmount * Math.pow(1 + inputs.inflationRate, inputs.timelineYears);
+        
+        let results = {};
+        let projection = [];
+        let finalPmt = inputs.monthlyContribution; // Default
+        let finalYears = inputs.timelineYears;
+
+        switch (inputs.mode) {
+            case 'monthly':
+                const fv_pv = pv * Math.pow(1 + i, n);
+                const fv_needed = inflatedGoal - fv_pv;
+                finalPmt = Solver.solveForMonthly(fv_needed, i, n);
+                if (finalPmt < 0) finalPmt = 0;
+                
+                results = { label: "You Need to Save", value: Utils.formatCurrency(finalPmt), unit: "/mo" };
+                projection = Solver.generateProjection(pv, finalPmt, inputs.timelineYears, inputs.returnRate);
+                break;
+
+            case 'final_value':
+                finalPmt = inputs.monthlyContribution;
+                const finalValue = Solver.solveForFinalValue(pv, finalPmt, i, n);
+                results = { label: "You Will Have", value: Utils.formatCurrency(finalValue), unit: `in ${inputs.timelineYears} yrs` };
+                projection = Solver.generateProjection(pv, finalPmt, inputs.timelineYears, inputs.returnRate);
+                break;
+
+            case 'timeline':
+                finalPmt = inputs.monthlyContribution;
+                n = Solver.solveForTimeline(inflatedGoal, pv, finalPmt, i);
+                finalYears = n / 12;
+                
+                if (n === Infinity || isNaN(n) || n < 0) {
+                    results = { label: "Timeline", value: "N/A", unit: "Goal unreachable" };
+                    Utils.showToast("With these savings, the goal is unreachable.", "error");
+                    finalYears = 0;
+                } else {
+                    results = { label: "It Will Take", value: finalYears.toFixed(1), unit: "years" };
+                }
+                projection = Solver.generateProjection(pv, finalPmt, finalYears, inputs.returnRate);
+                break;
+        }
+        
+        // 3. Update State
+        inputs.monthlyContribution = finalPmt; // Store the calculated or used PMT
+        inputs.timelineYears = finalYears;     // Store the calculated or used Years
+        state = { inputs, results, projection, inflatedGoal };
+        
+        // 4. Update UI (D: Pass data to modules)
+        updateDOM(state);
+
+        Utils.trackEvent('goal_calculation', {
+            goal_mode: inputs.mode,
+            goal_amount: inputs.goalAmount
+        });
+    }
+    
+    function updateDOM(state) {
+        const { inputs, results, projection, inflatedGoal } = state;
+        
+        // Update summary card
+        Utils.setElementText(Config.DOM.summaryLabel, results.label);
+        Utils.setElementText(Config.DOM.primaryResult, results.value);
+        Utils.setElementText(Config.DOM.primaryUnit, results.unit);
+
+        const finalProjection = projection.length > 0 ? projection[projection.length - 1] : { balance: inputs.currentSavings };
+        Utils.setElementText(Config.DOM.projectionSummary, `Goal: ${Utils.formatCurrency(inflatedGoal)} | Final Balance: ${Utils.formatCurrency(finalProjection.balance)}`);
+        
+        // Update details tab
+        const totalContributions = inputs.currentSavings + projection.reduce((acc, p) => {
+             // Adjust contribution for the final partial year
+            let annualContribution = p.contribution;
+            if (p.year === projection.length && (inputs.timelineYears * 12) % 12 !== 0) {
+                 annualContribution = inputs.monthlyContribution * ((inputs.timelineYears * 12) % 12);
+            }
+            return acc + annualContribution;
+        }, 0);
+        
+        const totalGrowth = finalProjection.balance - totalContributions;
+        Utils.setElementText(Config.DOM.totalGoal, Utils.formatCurrency(inflatedGoal));
+        Utils.setElementText(Config.DOM.totalContributions, Utils.formatCurrency(totalContributions));
+        Utils.setElementText(Config.DOM.totalGrowth, Utils.formatCurrency(totalGrowth));
+        Utils.setElementText(Config.DOM.finalBalance, Utils.formatCurrency(finalProjection.balance));
+        
+        // Update Table
+        updateScheduleTable(projection, inputs);
+        
+        // Update Chart
+        Chart.update(Config.DOM.projectionCanvas, projection, inputs);
+        
+        // Update AI Insights
+        const aiHtml = AI.generate(inputs, results, inflatedGoal, projection);
+        Utils.setElementHTML(Config.DOM.aiContent, aiHtml);
+    }
+    
+    function updateScheduleTable(projection, inputs) {
+        const tbody = document.querySelector(Config.DOM.projectionTableBody);
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        projection.forEach(item => {
+            let annualContribution = item.contribution;
+            // Adjust contribution for the final partial year
+            if (item.year === projection.length && (inputs.timelineYears * 12) % 12 !== 0) {
+                 annualContribution = inputs.monthlyContribution * ((inputs.timelineYears * 12) % 12);
+            }
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.year}</td>
+                <td>${Utils.formatCurrency(annualContribution, 0)}</td>
+                <td>${Utils.formatCurrency(item.growth, 0)}</td>
+                <td>${Utils.formatCurrency(item.balance, 0)}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function handleVoiceCommand(command) {
+        console.log("Voice command:", command);
+        let spokenResponse = "";
+
+        try {
+            if (command.includes("calculate") || command.includes("plan my goal")) {
+                document.getElementById(Config.DOM.form).requestSubmit();
+                spokenResponse = "Calculating your goal plan.";
+            } else if (command.includes("what is the result") || command.includes("read the result")) {
+                Speech.speak(`Your result is: ${state.results.label}, ${state.results.value} ${state.results.unit}.`);
+                return;
+            } else if (command.includes("set goal to")) {
+                const amount = command.match(/set goal to.*?([\d,]+)/)?.[1]?.replace(/,/g, '');
+                if (amount) {
+                    Utils.setInputValue('goal-amount', amount);
+                    spokenResponse = `Goal amount set to ${Utils.formatCurrency(parseFloat(amount))}.`;
+                    handleCalculation();
+                }
+            } else if (command.includes("set savings to")) {
+                const amount = command.match(/set savings to.*?([\d,]+)/)?.[1]?.replace(/,/g, '');
+                if (amount) {
+                    Utils.setInputValue('current-savings', amount);
+                    spokenResponse = `Current savings set to ${Utils.formatCurrency(parseFloat(amount))}.`;
+                    handleCalculation();
+                }
+            } else if (command.includes("set time to")) {
+                const time = command.match(/set time to.*?(\d+)/)?.[1];
+                if (time) {
+                    Utils.setInputValue('goal-timeline', time);
+                    spokenResponse = `Timeline set to ${time} years.`;
+                    handleCalculation();
+                }
+            } else if (command.includes("show ai insights")) {
+                showTab('ai-insights');
+                spokenResponse = "Showing AI Insights.";
+            } else if (command.includes("show projection")) {
+                showTab('projection-chart');
+                spokenResponse = "Showing projection chart.";
+            } else {
+                spokenResponse = "Sorry, I didn't understand that. Try 'set goal to 50000' or 'calculate'.";
+            }
+        } catch (e) {
+            console.error("Voice command processing error:", e);
+            spokenResponse = "There was an error processing your command.";
+        }
+        
+        if (spokenResponse) {
+            Speech.speak(spokenResponse);
+        }
+    }
+    
+    function toggleMonthlyInput() {
+        const mode = document.getElementById(Config.DOM.modeSelect).value;
+        Utils.toggleClass(Config.DOM.monthlyInputGroup, 'hidden', mode === 'monthly');
+    }
+
+    function toggleCustomGoalInput() {
+        const mode = document.getElementById(Config.DOM.goalSelect).value;
+        Utils.toggleClass(Config.DOM.goalCustomGroup, 'hidden', mode !== 'custom');
+    }
+    
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('[role="tab"]').forEach(b => b.setAttribute('aria-selected', 'false'));
+        
+        document.getElementById(tabId)?.classList.add('active');
+        document.querySelector(`[data-tab="${tabId}"]`)?.setAttribute('aria-selected', 'true');
+        
+        if (tabId === 'projection-chart') {
+            Chart.resize();
+        }
+        Utils.trackEvent('view_tab', { tab_id: tabId });
+    }
+    
+    function toggleColorScheme() {
+        const html = document.documentElement;
+        const scheme = html.getAttribute('data-color-scheme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-color-scheme', scheme);
+        try { localStorage.setItem('colorScheme', scheme); } catch (e) {}
+        
+        const icon = document.querySelector('#toggle-color-scheme i');
+        icon.className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        
+        Utils.trackEvent('theme_toggle', { theme: scheme });
+        Chart.update(Config.DOM.projectionCanvas, state.projection, state.inputs); // Re-render chart
+    }
+
+    function loadPreferences() {
+        try {
+            const saved = localStorage.getItem('colorScheme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const scheme = saved || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-color-scheme', scheme);
+            
+            const icon = document.querySelector('#toggle-color-scheme i');
+            icon.className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        } catch (e) {}
+    }
+
+    function handleExportCSV() {
+        if (state.projection.length === 0) {
+            Utils.showToast("No data to export. Please calculate first.", "error");
             return;
         }
 
-        let csv = 'Financial Goal Planner - Export\n\n';
-        csv += `Goal Type,${APP_STATE.goalType}\n`;
-        csv += `Goal Amount,${APP_STATE.goalAmount}\n`;
-        csv += `Monthly Savings,${APP_STATE.results.monthlySavings}\n\n`;
+        const csvData = [
+            ['Year', 'Annual Contribution', 'Growth', 'Balance'],
+            ...state.projection.map(p => [
+                p.year,
+                p.contribution.toFixed(2),
+                p.growth.toFixed(2),
+                p.balance.toFixed(2)
+            ])
+        ];
 
-        csv += 'Year,Starting Balance,Annual Contribution,Investment Gains,Ending Balance,Today\'s Value,% to Goal\n';
+        Utils.exportToCSV(csvData, `financial-goal-plan-${Date.now()}.csv`);
+        Utils.showToast("CSV exported successfully!", "success");
+        Utils.trackEvent('export_csv', { goal_name: state.inputs.goalName });
+    }
+    
+    function initialize() {
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🇺🇸 FinGuid Financial Goal Planner v1.1 (S.O.L.I.D.)');
+            
+            loadPreferences();
+            
+            // Setup all event listeners
+            document.getElementById(Config.DOM.form).addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleCalculation();
+            });
+            document.getElementById(Config.DOM.modeSelect).addEventListener('change', toggleMonthlyInput);
+            document.getElementById(Config.DOM.goalSelect).addEventListener('change', toggleCustomGoalInput);
+            
+            document.getElementById('toggle-color-scheme').addEventListener('click', toggleColorScheme);
+            document.querySelectorAll('[data-tab]').forEach(btn => {
+                btn.addEventListener('click', () => showTab(btn.getAttribute('data-tab')));
+            });
 
-        APP_STATE.results.breakdown.forEach(row => {
-            csv += `${row.year},${row.balance - row.investmentGains},${APP_STATE.monthlyContribution * 12},${row.investmentGains},${row.balance},${row.inflationAdjusted},${row.percentToGoal.toFixed(1)}%\n`;
+            // CSV Export
+            document.getElementById('export-csv-button').addEventListener('click', handleExportCSV);
+
+            // Initialize Speech
+            Speech.initialize(handleVoiceCommand);
+            document.getElementById('toggle-voice-command').addEventListener('click', Speech.toggleListening);
+            document.getElementById('toggle-text-to-speech').addEventListener('click', () => {
+                 Speech.speak(`Your result is: ${state.results.label}, ${state.results.value} ${state.results.unit}.`);
+            });
+            
+            // Fetch live data
+            Fred.initialize(); 
+            
+            // Advanced options toggle
+            document.getElementById('toggle-advanced-options').addEventListener('click', () => {
+                const btn = document.getElementById('toggle-advanced-options');
+                const content = document.getElementById('advanced-options-group');
+                const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+                btn.setAttribute('aria-expanded', !isExpanded);
+                content.setAttribute('aria-hidden', isExpanded);
+            });
+
+            // PWA Install
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('pwa-install-button').classList.remove('hidden');
+            });
+
+            document.getElementById('pwa-install-button').addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`User response to install prompt: ${outcome}`);
+                    deferredPrompt = null;
+                    document.getElementById('pwa-install-button').classList.add('hidden');
+                }
+            });
+            
+            // Initial setup
+            toggleMonthlyInput(); 
+            toggleCustomGoalInput();
+            handleCalculation(); // Run initial calculation
+            
+            console.log('✅ Goal Planner Ready!');
         });
-
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `FinGuid-Goal-Plan-${new Date().toISOString().slice(0, 10)}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
-
-        UTILS.trackEvent('csv_exported', { goal_type: APP_STATE.goalType });
-        UTILS.toast('Data exported successfully!', 'success');
-    }
-};
-
-/* ========== EVENT HANDLERS ========== */
-function handleFormSubmit(e) {
-    e.preventDefault();
-
-    // Update state from form
-    APP_STATE.goalType = document.querySelector('input[name="goal-type"]:checked')?.value || 'college';
-    APP_STATE.goalAmount = UTILS.parseCurrency(UTILS.getEl('goal-amount').value);
-    APP_STATE.currentSavings = UTILS.parseCurrency(UTILS.getEl('current-savings').value);
-    APP_STATE.timeYears = parseFloat(UTILS.getEl('time-years').value);
-    APP_STATE.monthlyContribution = UTILS.parseCurrency(UTILS.getEl('monthly-savings').value);
-    APP_STATE.expectedReturn = parseFloat(UTILS.getEl('return-rate').value);
-    APP_STATE.inflationRate = parseFloat(UTILS.getEl('inflation-rate').value);
-
-    // Calculate
-    CALCULATOR.calculate();
-    UI.updateAll();
-
-    // Track
-    UTILS.trackEvent('goal_calculated', {
-        goal_type: APP_STATE.goalType,
-        goal_amount: APP_STATE.goalAmount,
-        years: APP_STATE.timeYears
-    });
-
-    // Voice feedback
-    VOICE_MODULE.speak(`Calculation complete. You need to save ${UTILS.formatCurrency(APP_STATE.results.monthlySavings)} monthly to reach your goal.`);
-
-    UTILS.toast('Goal plan calculated!', 'success');
-    window.scrollTo({ top: document.querySelector('.results-section').offsetTop - 100, behavior: 'smooth' });
-}
-
-function handleTabClick(e) {
-    const tabName = e.target.getAttribute('data-tab');
-    
-    document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-        tab.classList.add('hidden');
-    });
-    
-    document.querySelector(`#${tabName}`).classList.add('active');
-    document.querySelector(`#${tabName}`).classList.remove('hidden');
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    e.target.classList.add('active');
-
-    UTILS.trackEvent('tab_switched', { tab: tabName });
-}
-
-function handleLeadFormSubmit(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target);
-    
-    // Here you would send to your lead management system
-    // Example: CRM, email service, etc.
-    
-    UTILS.toast('Thank you! A financial advisor will contact you soon.', 'success');
-    e.target.reset();
-
-    UTILS.trackEvent('lead_submitted', {
-        goal_type: formData.get('goal-type')
-    });
-}
-
-function handleRangeSync() {
-    const yearInput = UTILS.getEl('time-years');
-    const yearRange = UTILS.getEl('time-range');
-    const returnInput = UTILS.getEl('return-rate');
-    const returnRange = UTILS.getEl('return-range');
-
-    const syncInputs = UTILS.debounce(() => {
-        if (document.activeElement === yearRange) {
-            yearInput.value = yearRange.value;
-        }
-        if (document.activeElement === returnRange) {
-            returnInput.value = returnRange.value;
-        }
-    }, 100);
-
-    yearRange.addEventListener('input', syncInputs);
-    returnRange.addEventListener('input', syncInputs);
-}
-
-/* ========== INITIALIZATION ========== */
-async function initApp() {
-    if (FINGUID_CONFIG.DEBUG) console.log('🎯 FinGuid Goal Planner v' + FINGUID_CONFIG.VERSION + ' initializing...');
-
-    // Initialize theme
-    THEME.init();
-
-    // Initialize voice
-    VOICE_MODULE.init();
-
-    // Fetch FRED data
-    await FRED_API.init();
-
-    // Setup event listeners
-    const form = UTILS.getEl('goal-form');
-    if (form) {
-        form.addEventListener('submit', handleFormSubmit);
     }
 
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', handleTabClick);
-    });
+    return {
+        initialize
+    };
 
-    const leadForm = UTILS.getEl('lead-form');
-    if (leadForm) {
-        leadForm.addEventListener('submit', handleLeadFormSubmit);
-    }
+})(Config, Utils, FinancialSolver, ChartModule, AIInsights, FredService, SpeechModule);
 
-    // Theme toggle
-    const themeBtn = UTILS.getEl('toggle-color-scheme');
-    if (themeBtn) themeBtn.addEventListener('click', () => THEME.toggle());
-
-    // Voice & TTS toggle
-    const voiceBtn = UTILS.getEl('toggle-voice-command');
-    if (voiceBtn) voiceBtn.addEventListener('click', () => VOICE_MODULE.toggleVoiceCommand());
-
-    const ttsBtn = UTILS.getEl('toggle-text-to-speech');
-    if (ttsBtn) ttsBtn.addEventListener('click', () => VOICE_MODULE.toggleTextToSpeech());
-
-    // CSV export
-    const exportBtn = UTILS.getEl('export-csv-btn');
-    if (exportBtn) exportBtn.addEventListener('click', () => EXPORT.toCSV());
-
-    // Range sync
-    handleRangeSync();
-
-    // Track page view
-    UTILS.trackEvent('page_view', {
-        page_title: 'Financial Goal Planner',
-        page_path: '/financial-goal-planner.html'
-    });
-
-    if (FINGUID_CONFIG.DEBUG) console.log('✅ FinGuid Goal Planner ready!');
-}
-
-// Start app when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-} else {
-    initApp();
-}
-
-// Handle window resize for chart
-window.addEventListener('resize', UTILS.debounce(() => {
-    if (APP_STATE.results) {
-        CHART_MODULE.update();
-    }
-}, 250));
+// ==========================================================================
+// START THE APPLICATION
+// ==========================================================================
+AppController.initialize();
