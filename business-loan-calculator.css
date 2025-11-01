@@ -1,6 +1,6 @@
-/* BUSINESS LOAN CALCULATOR - PRODUCTION CSS v1.1 */
+/* BUSINESS LOAN CALCULATOR - PRODUCTION CSS v1.2 */
 /* BASE: Adapted from car-lease-calculator.css & mortgage-calculator.css */
-/* v1.1 UPDATE: Modified header for single-line layout */
+/* v1.2 UPDATE: Matched car-lease colors, more compact header */
 
 :root {
     --primary: #24ACB9; /* FinGuid Teal */
@@ -67,7 +67,7 @@ body {
 }
 .skip-link:focus { top: 16px; }
 
-/* === HEADER (v1.1 - Single Line Update) === */
+/* === HEADER (v1.2 - More Compact) === */
 .header {
     background: var(--card);
     border-bottom: 1px solid var(--border);
@@ -76,15 +76,15 @@ body {
     top: 0;
     z-index: 100;
 }
-.header-top { padding: 12px 0; } /* Reduced padding for compact header */
+.header-top { padding: 8px 0; } /* Reduced padding for compact header */
 
 .header-top .container {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Align items to the start */
-    gap: 16px; /* Reduced gap */
-    flex-wrap: nowrap; /* Force single line */
-    overflow-x: auto; /* Allow horizontal scroll on very small screens */
+    justify-content: flex-start; 
+    gap: 16px; 
+    flex-wrap: nowrap; 
+    overflow-x: auto;
     padding: 0 16px;
 }
 .logo a {
@@ -93,9 +93,9 @@ body {
     gap: 8px;
     text-decoration: none;
     color: var(--primary);
-    font-size: 1.25rem;
+    font-size: 1.125rem; /* Reduced font size */
     font-weight: bold;
-    white-space: nowrap; /* Prevent logo from wrapping */
+    white-space: nowrap; 
 }
 
 /* NEW: Title grouping */
@@ -109,16 +109,16 @@ body {
 }
 
 .site-title {
-    font-size: 1.125rem;
+    font-size: 1rem; /* Reduced font size */
     font-weight: 600;
     color: var(--text);
-    margin: 0; /* Override default margins */
+    margin: 0; 
     white-space: nowrap;
 }
 .site-subtitle {
     font-size: 0.875rem;
     color: var(--text-light);
-    margin: 0; /* Override default margins */
+    margin: 0; 
     white-space: nowrap;
 }
 
@@ -131,13 +131,13 @@ body {
 .header-controls {
     display: flex;
     gap: 8px;
-    flex-shrink: 0; /* Prevent controls from shrinking */
+    flex-shrink: 0; 
 }
 /* === END HEADER UPDATE === */
 
 .btn-icon {
-    width: 40px;
-    height: 40px;
+    width: 36px; /* Reduced size */
+    height: 36px; /* Reduced size */
     border: 1px solid var(--border);
     background: var(--bg);
     color: var(--text);
@@ -161,7 +161,8 @@ body {
 
 /* === Sponsor & Breadcrumb (from car-lease) === */
 .sponsor-banner {
-    background: linear-gradient(135deg, var(--business-blue) 0%, var(--primary-dark) 100%);
+    /* UPDATED: Color changed to match car-lease */
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
     color: white;
     padding: 16px;
     display: flex;
@@ -320,12 +321,13 @@ body {
     margin-bottom: 8px;
 }
 .summary-card {
-    background: linear-gradient(135deg, var(--business-blue) 0%, var(--primary-dark) 100%);
+    /* UPDATED: Color changed to match car-lease */
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
     padding: 24px;
     border-radius: 8px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 12px rgba(41, 82, 163, 0.2);
+    box-shadow: 0 4px 12px rgba(36, 172, 185, 0.2); /* Matched car-lease shadow */
 }
 .summary-label {
     font-size: 0.875rem;
