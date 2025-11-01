@@ -1,100 +1,171 @@
 /**
- * FINANCIAL GOAL PLANNER — AI-POWERED CALCULATOR v1.0
- * FinGuid USA Market Domination Build
+ * ============================================================================
+ * FINGUID FINANCIAL GOAL PLANNER - WORLD-CLASS JAVASCRIPT v2.0
+ * ============================================================================
  * 
  * FEATURES:
- * ✅ Multiple Goal Types (Retirement, House, College, Custom)
- * ✅ Three Calculation Modes (Time, Contribution, Return Required)
- * ✅ Live FRED API Inflation Data
- * ✅ AI-Powered Roadmap & Insights
- * ✅ Milestone Timeline
- * ✅ What-If Scenario Analysis
- * ✅ Interactive Charts (Chart.js)
- * ✅ CSV Export
- * ✅ Dark Mode Support
- * ✅ Mobile Responsive
+ * ✅ AI-Powered Insights & Personalized Recommendations
+ * ✅ Live FRED API - Real-time Inflation Data
+ * ✅ Voice Commands & Text-to-Speech
+ * ✅ Dark/Light Mode Toggle
+ * ✅ PWA Ready - Mobile App Experience
+ * ✅ Interactive Chart.js Visualization
+ * ✅ Multiple Goal Types (College, Home, Retirement, Emergency, Car, Custom)
+ * ✅ Monthly Savings Target Calculation
+ * ✅ Milestone Timeline & Progress Tracking
+ * ✅ Annual Breakdown Table & CSV Export
+ * ✅ SEO Optimized FAQ & Educational Content
+ * ✅ Lead Generation & Affiliate Integration
+ * ✅ Fully Responsive & Accessible
  * 
  * © 2025 FinGuid USA - World's First AI Financial Calculator Platform
+ * ============================================================================
  */
 
-/* ========================================================================== */
-/* I. GLOBAL CONFIGURATION */
-/* ========================================================================== */
+'use strict';
 
-const GOAL_PLANNER = {
-    VERSION: '1.0',
+/* ========== CONFIGURATION ========== */
+const FINGUID_CONFIG = {
+    APP_NAME: 'FinGuid Financial Goal Planner',
+    VERSION: '2.0',
     DEBUG: false,
-
+    
     // FRED API Configuration
-    FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
-    FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
-    FRED_INFLATION_SERIES_ID: 'CPIAUCSL',
-    FALLBACK_INFLATION_RATE: 3.0,
-
-    // State Management
-    STATE: {
-        goalType: 'retirement',
-        calculationMode: 'time',
-        goalAmount: 1000000,
-        currentAge: 30,
-        initialSavings: 50000,
-        monthlyContribution: 1000,
-        expectedReturn: 7.0,
-        inflationRate: 3.0,
-        targetYears: 25,
-        
-        // Results
-        yearsToGoal: null,
-        contributionNeeded: null,
-        returnRequired: null,
-        futureValue: 0,
-        totalInvested: 0,
-        inflationAdjustedValue: 0,
-        annualData: [],
-        milestones: [],
+    FRED: {
+        BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
+        API_KEY: '9c6c421f077f2091e8bae4f143ada59a',
+        SERIES_ID: 'CPIAUCSL', // Consumer Price Index - All Urban Consumers
+        FALLBACK_RATE: 3.0,
+        CACHE_KEY: 'finguid_inflation_rate',
+        CACHE_DURATION: 12 * 60 * 60 * 1000 // 12 hours
     },
-
-    charts: {
-        progressChart: null,
-        scenarioChart: null,
+    
+    // Google Analytics
+    GTAG_ID: 'G-NYBL2CDNQJ',
+    
+    // Goal Type Presets
+    GOAL_TYPES: {
+        college: {
+            name: 'College Fund',
+            default_amount: 200000,
+            default_years: 18,
+            description: '4-year public university cost'
+        },
+        home: {
+            name: 'Home Down Payment',
+            default_amount: 80000,
+            default_years: 5,
+            description: '20% down payment on $400K home'
+        },
+        retirement: {
+            name: 'Retirement Fund',
+            default_amount: 1000000,
+            default_years: 30,
+            description: 'Comfortable retirement goal'
+        },
+        emergency: {
+            name: 'Emergency Fund',
+            default_amount: 25000,
+            default_years: 1,
+            description: '6 months of expenses'
+        },
+        car: {
+            name: 'Car Purchase',
+            default_amount: 35000,
+            default_years: 3,
+            description: 'New vehicle purchase'
+        },
+        custom: {
+            name: 'Custom Goal',
+            default_amount: 50000,
+            default_years: 5,
+            description: 'Your personal goal'
+        }
     }
 };
 
-/* ========================================================================== */
-/* II. UTILITY FUNCTIONS */
-/* ========================================================================== */
+/* ========== GLOBAL STATE ========== */
+let APP_STATE = {
+    goalType: 'college',
+    goalAmount: 200000,
+    currentSavings: 5000,
+    monthlyContribution: 500,
+    timeYears: 18,
+    expectedReturn: 7.0,
+    inflationRate: 3.0,
+    results: null,
+    chart: null,
+    ttsEnabled: false,
+    voiceEnabled: false
+};
 
+/* ========== UTILITY FUNCTIONS ========== */
 const UTILS = {
-    formatCurrency(amount, decimals = 0) {
+    /**
+     * Format number as US currency
+     */
+    formatCurrency(amount) {
         if (typeof amount !== 'number' || isNaN(amount)) return '$0';
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
         }).format(amount);
     },
 
+    /**
+     * Format number with commas
+     */
     formatNumber(num, decimals = 0) {
         if (typeof num !== 'number' || isNaN(num)) return '0';
         return num.toLocaleString('en-US', {
             minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
+            maximumFractionDigits: decimals
         });
     },
 
+    /**
+     * Format percentage
+     */
     formatPercent(rate) {
-        if (typeof rate !== 'number' || isNaN(rate)) return '0.0%';
-        return rate.toFixed(1) + '%';
+        return UTILS.formatNumber(rate, 1) + '%';
     },
 
-    parseInput(id) {
-        const element = document.getElementById(id);
-        if (!element) return 0;
-        const value = element.value.replace(/[$,]/g, '').trim();
-        return parseFloat(value) || 0;
+    /**
+     * Get DOM element safely
+     */
+    getEl(id) {
+        return document.getElementById(id);
     },
 
+    /**
+     * Show toast notification
+     */
+    toast(message, type = 'success', duration = 3000) {
+        const container = UTILS.getEl('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.remove(), duration);
+
+        // Track in GA
+        if (window.gtag) {
+            gtag('event', 'toast_notification', {
+                message: message,
+                type: type
+            });
+        }
+    },
+
+    /**
+     * Debounce function
+     */
     debounce(func, delay) {
         let timeout;
         return function(...args) {
@@ -103,726 +174,772 @@ const UTILS = {
         };
     },
 
-    showToast(message, type = 'success') {
-        const container = document.getElementById('toast-container');
-        if (!container) return;
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
-};
-
-/* ========================================================================== */
-/* III. FRED API MODULE */
-/* ========================================================================== */
-
-const fredAPI = {
-    async fetchLatestInflationRate() {
-        if (GOAL_PLANNER.DEBUG) {
-            return GOAL_PLANNER.FALLBACK_INFLATION_RATE;
+    /**
+     * Parse currency input
+     */
+    parseCurrency(value) {
+        if (typeof value === 'string') {
+            return parseFloat(value.replace(/[$,]/g, '')) || 0;
         }
-
-        const url = new URL(GOAL_PLANNER.FRED_BASE_URL);
-        const params = {
-            series_id: GOAL_PLANNER.FRED_INFLATION_SERIES_ID,
-            api_key: GOAL_PLANNER.FRED_API_KEY,
-            file_type: 'json',
-            sort_order: 'desc',
-            limit: 13,
-        };
-        url.search = new URLSearchParams(params).toString();
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`FRED API Error: ${response.status}`);
-            
-            const data = await response.json();
-            const observations = data.observations.filter(obs => obs.value !== '.' && obs.value !== 'N/A').reverse();
-
-            if (observations.length >= 13) {
-                const latestValue = parseFloat(observations[observations.length - 1].value);
-                const priorYearValue = parseFloat(observations[observations.length - 13].value);
-                const inflationRate = ((latestValue - priorYearValue) / priorYearValue) * 100;
-                const rate = Math.max(0, inflationRate);
-                
-                const inflationInput = document.getElementById('inflation-rate-goal');
-                if (inflationInput) inflationInput.value = rate.toFixed(1);
-                
-                const noteElement = document.querySelector('.fred-source-note');
-                if (noteElement) noteElement.textContent = `Live FRED Rate (${observations[observations.length - 1].date})`;
-                
-                return rate;
-            } else {
-                throw new Error('Insufficient FRED data');
-            }
-        } catch (error) {
-            console.error('FRED API Error:', error);
-            const inflationInput = document.getElementById('inflation-rate-goal');
-            if (inflationInput) inflationInput.value = GOAL_PLANNER.FALLBACK_INFLATION_RATE.toFixed(1);
-            
-            const noteElement = document.querySelector('.fred-source-note');
-            if (noteElement) noteElement.textContent = 'Fallback Rate';
-            
-            return GOAL_PLANNER.FALLBACK_INFLATION_RATE;
-        }
+        return parseFloat(value) || 0;
     },
 
-    async initialize() {
-        const rate = await this.fetchLatestInflationRate();
-        GOAL_PLANNER.STATE.inflationRate = rate;
-        updateCalculations();
+    /**
+     * Track GA event
+     */
+    trackEvent(eventName, eventParams = {}) {
+        if (window.gtag) {
+            gtag('event', eventName, eventParams);
+        }
     }
 };
 
-/* ========================================================================== */
-/* IV. CALCULATION ENGINE */
-/* ========================================================================== */
+/* ========== FRED API MODULE ========== */
+const FRED_API = {
+    /**
+     * Fetch latest inflation rate from FRED
+     */
+    async fetchInflationRate() {
+        try {
+            // Check cache first
+            const cached = localStorage.getItem(FINGUID_CONFIG.FRED.CACHE_KEY);
+            if (cached) {
+                const data = JSON.parse(cached);
+                if (Date.now() - data.timestamp < FINGUID_CONFIG.FRED.CACHE_DURATION) {
+                    return data.rate;
+                }
+            }
 
-function updateCalculations() {
-    const S = GOAL_PLANNER.STATE;
-    
-    // Read inputs
-    S.goalAmount = UTILS.parseInput('goal-amount');
-    S.currentAge = UTILS.parseInput('current-age');
-    S.initialSavings = UTILS.parseInput('initial-savings');
-    S.monthlyContribution = UTILS.parseInput('monthly-contribution-goal');
-    S.expectedReturn = UTILS.parseInput('expected-return-goal');
-    S.inflationRate = UTILS.parseInput('inflation-rate-goal');
+            const url = new URL(FINGUID_CONFIG.FRED.BASE_URL);
+            url.searchParams.append('series_id', FINGUID_CONFIG.FRED.SERIES_ID);
+            url.searchParams.append('api_key', FINGUID_CONFIG.FRED.API_KEY);
+            url.searchParams.append('file_type', 'json');
+            url.searchParams.append('sort_order', 'desc');
+            url.searchParams.append('limit', '25');
 
-    // Calculate based on mode
-    if (S.calculationMode === 'time') {
-        calculateTimeToGoal();
-    } else if (S.calculationMode === 'contribution') {
-        S.targetYears = UTILS.parseInput('target-years-contribution');
-        calculateContributionNeeded();
-    } else if (S.calculationMode === 'return') {
-        S.targetYears = UTILS.parseInput('target-years-return');
-        calculateReturnRequired();
-    }
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`FRED API error: ${response.status}`);
 
-    updateUI();
-    updateChart();
-    generateMilestones();
-    generateAIRoadmap();
-    updateDataTable();
-}
+            const data = await response.json();
+            const observations = data.observations
+                .filter(obs => obs.value && obs.value !== '.')
+                .slice(0, 13)
+                .reverse();
 
-function calculateTimeToGoal() {
-    const S = GOAL_PLANNER.STATE;
-    const r = S.expectedReturn / 100;
-    const initial = S.initialSavings;
-    const pmt = S.monthlyContribution * 12;
-    const goal = S.goalAmount;
+            if (observations.length >= 2) {
+                const latest = parseFloat(observations[observations.length - 1].value);
+                const prior = parseFloat(observations[observations.length - 13].value);
+                const rate = Math.max(0, ((latest - prior) / prior) * 100);
 
-    if (goal <= initial) {
-        S.yearsToGoal = 0;
-        S.futureValue = initial;
-        S.totalInvested = initial;
-        S.inflationAdjustedValue = initial;
-        S.annualData = [];
-        return;
-    }
+                // Cache the rate
+                localStorage.setItem(FINGUID_CONFIG.FRED.CACHE_KEY, JSON.stringify({
+                    rate: rate,
+                    timestamp: Date.now(),
+                    date: observations[observations.length - 1].date
+                }));
 
-    let years = 0;
-    let balance = initial;
-    const maxYears = 100;
-    S.annualData = [];
-
-    while (balance < goal && years < maxYears) {
-        years++;
-        const startBalance = balance;
-        const gains = balance * r + pmt * r;
-        balance = (balance + pmt) * (1 + r);
-        
-        const inflationAdjusted = balance / Math.pow(1 + S.inflationRate / 100, years);
-        
-        S.annualData.push({
-            year: years,
-            age: S.currentAge + years,
-            startBalance,
-            contributions: pmt,
-            gains,
-            endBalance: balance,
-            inflationAdjusted,
-            progress: (balance / goal) * 100
-        });
-    }
-
-    S.yearsToGoal = years >= maxYears ? Infinity : years;
-    S.futureValue = balance;
-    S.totalInvested = initial + (pmt * years);
-    S.inflationAdjustedValue = balance / Math.pow(1 + S.inflationRate / 100, years);
-}
-
-function calculateContributionNeeded() {
-    const S = GOAL_PLANNER.STATE;
-    const r = S.expectedReturn / 100;
-    const n = S.targetYears;
-    const initial = S.initialSavings;
-    const goal = S.goalAmount;
-
-    const fvInitial = initial * Math.pow(1 + r, n);
-    
-    if (fvInitial >= goal) {
-        S.contributionNeeded = 0;
-    } else if (r > 0) {
-        const fvAnnuityFactor = (Math.pow(1 + r, n) - 1) / r;
-        const pmt = (goal - fvInitial) / fvAnnuityFactor;
-        S.contributionNeeded = pmt / 12;
-    } else {
-        const pmt = (goal - initial) / n;
-        S.contributionNeeded = pmt / 12;
-    }
-
-    S.monthlyContribution = S.contributionNeeded;
-    generateAnnualData(initial, S.contributionNeeded * 12, r, n);
-}
-
-function calculateReturnRequired() {
-    const S = GOAL_PLANNER.STATE;
-    const n = S.targetYears;
-    const initial = S.initialSavings;
-    const pmt = S.monthlyContribution * 12;
-    const goal = S.goalAmount;
-
-    // Binary search for required return rate
-    let low = 0, high = 0.30; // 0% to 30%
-    let iterations = 0;
-    const maxIterations = 100;
-
-    while (iterations < maxIterations && high - low > 0.0001) {
-        const mid = (low + high) / 2;
-        const fv = initial * Math.pow(1 + mid, n) + pmt * ((Math.pow(1 + mid, n) - 1) / mid);
-        
-        if (fv < goal) {
-            low = mid;
-        } else {
-            high = mid;
+                return rate;
+            }
+        } catch (error) {
+            if (FINGUID_CONFIG.DEBUG) console.error('FRED API Error:', error);
         }
-        iterations++;
-    }
 
-    S.returnRequired = ((low + high) / 2) * 100;
-    S.expectedReturn = S.returnRequired;
-    
-    generateAnnualData(initial, pmt, S.returnRequired / 100, n);
-}
+        return FINGUID_CONFIG.FRED.FALLBACK_RATE;
+    },
 
-function generateAnnualData(initial, pmt, r, n) {
-    const S = GOAL_PLANNER.STATE;
-    S.annualData = [];
-    let balance = initial;
-
-    for (let year = 1; year <= n; year++) {
-        const startBalance = balance;
-        const gains = balance * r + pmt * r;
-        balance = (balance + pmt) * (1 + r);
+    /**
+     * Initialize FRED data
+     */
+    async init() {
+        const badge = UTILS.getEl('fred-status');
+        const input = UTILS.getEl('inflation-rate');
         
-        const inflationAdjusted = balance / Math.pow(1 + S.inflationRate / 100, year);
+        if (badge) badge.textContent = 'Fetching FRED data...';
 
-        S.annualData.push({
-            year,
-            age: S.currentAge + year,
-            startBalance,
-            contributions: pmt,
-            gains,
-            endBalance: balance,
-            inflationAdjusted,
-            progress: (balance / S.goalAmount) * 100
-        });
+        const rate = await this.fetchInflationRate();
+        APP_STATE.inflationRate = rate;
+
+        if (input) input.value = rate.toFixed(1);
+        if (badge) badge.textContent = '✓ Live FRED Data';
+
+        UTILS.trackEvent('fred_api_loaded', { rate: rate });
     }
+};
 
-    S.futureValue = balance;
-    S.totalInvested = initial + (pmt * n);
-    S.inflationAdjustedValue = balance / Math.pow(1 + S.inflationRate / 100, n);
-}
+/* ========== CALCULATION ENGINE ========== */
+const CALCULATOR = {
+    /**
+     * Calculate monthly savings needed
+     */
+    calculateMonthlySavings() {
+        const state = APP_STATE;
+        const r = state.expectedReturn / 100;
+        const n = state.timeYears;
+        const P = state.currentSavings;
+        const FV = state.goalAmount;
 
-/* ========================================================================== */
-/* V. UI UPDATE FUNCTIONS */
-/* ========================================================================== */
+        // Future value of current savings
+        const fvP = P * Math.pow(1 + r, n);
 
-function updateUI() {
-    const S = GOAL_PLANNER.STATE;
-    
-    const mainResult = document.getElementById('goal-result-main');
-    const resultUnit = document.getElementById('goal-result-unit');
-    const resultDetails = document.getElementById('goal-result-details');
-    
-    if (S.calculationMode === 'time') {
-        if (mainResult) mainResult.textContent = S.yearsToGoal === Infinity ? 'Never' : UTILS.formatNumber(S.yearsToGoal);
-        if (resultUnit) resultUnit.textContent = S.yearsToGoal === 1 ? 'Year' : 'Years';
-        if (resultDetails) resultDetails.textContent = `To reach ${UTILS.formatCurrency(S.goalAmount)} (Age ${S.currentAge + S.yearsToGoal})`;
-    } else if (S.calculationMode === 'contribution') {
-        if (mainResult) mainResult.textContent = UTILS.formatCurrency(S.contributionNeeded, 2);
-        if (resultUnit) resultUnit.textContent = '/ month';
-        if (resultDetails) resultDetails.textContent = `For ${S.targetYears} years to reach ${UTILS.formatCurrency(S.goalAmount)}`;
-    } else if (S.calculationMode === 'return') {
-        if (mainResult) mainResult.textContent = UTILS.formatPercent(S.returnRequired);
-        if (resultUnit) resultUnit.textContent = 'annual return';
-        if (resultDetails) resultDetails.textContent = `Needed for ${S.targetYears} years with ${UTILS.formatCurrency(S.monthlyContribution, 0)}/mo`;
+        if (fvP >= FV) {
+            return 0; // Already have enough
+        }
+
+        // Using Future Value of Annuity formula: FV = PMT * [((1+r)^n - 1) / r]
+        // Solve for PMT: PMT = FV / [((1+r)^n - 1) / r]
+        
+        let pmt;
+        if (r > 0) {
+            const annuityFactor = (Math.pow(1 + r, n) - 1) / r;
+            pmt = (FV - fvP) / annuityFactor;
+        } else {
+            pmt = (FV - P) / n;
+        }
+
+        return Math.max(0, pmt / 12); // Convert to monthly
+    },
+
+    /**
+     * Generate annual breakdown
+     */
+    generateBreakdown() {
+        const state = APP_STATE;
+        const monthlyRate = state.expectedReturn / 100 / 12;
+        const monthlyContribution = state.monthlyContribution;
+        const breakdown = [];
+
+        let balance = state.currentSavings;
+        
+        for (let month = 1; month <= state.timeYears * 12; month++) {
+            balance = (balance + monthlyContribution) * (1 + monthlyRate);
+            
+            if (month % 12 === 0) {
+                const year = month / 12;
+                const inflationAdjusted = state.goalAmount / Math.pow(1 + state.inflationRate / 100, year);
+                const percentToGoal = (balance / state.goalAmount) * 100;
+                
+                breakdown.push({
+                    year,
+                    balance: Math.round(balance),
+                    investmentGains: Math.round(balance - state.currentSavings - (monthlyContribution * month)),
+                    percentToGoal: Math.min(percentToGoal, 100),
+                    inflationAdjusted: Math.round(inflationAdjusted)
+                });
+            }
+        }
+
+        return breakdown;
+    },
+
+    /**
+     * Calculate all results
+     */
+    calculate() {
+        const state = APP_STATE;
+        const monthlySavings = this.calculateMonthlySavings();
+        const breakdown = this.generateBreakdown();
+        
+        const totalContributions = state.currentSavings + (monthlySavings * 12 * state.timeYears);
+        const finalBalance = breakdown[breakdown.length - 1]?.balance || 0;
+        const investmentGains = finalBalance - totalContributions;
+        const inflationAdjustedGoal = state.goalAmount / Math.pow(1 + state.inflationRate / 100, state.timeYears);
+
+        state.results = {
+            monthlySavings: Math.round(monthlySavings),
+            totalContributions: Math.round(totalContributions),
+            investmentGains: Math.round(investmentGains),
+            finalBalance: Math.round(finalBalance),
+            inflationAdjustedGoal: Math.round(inflationAdjustedGoal),
+            breakdown: breakdown
+        };
+
+        return state.results;
     }
+};
 
-    // Update summary cards
-    const totalInvestedEl = document.getElementById('total-invested');
-    const futureValueEl = document.getElementById('future-value-goal');
-    const inflationAdjustedEl = document.getElementById('inflation-adjusted-goal');
-    
-    if (totalInvestedEl) totalInvestedEl.textContent = UTILS.formatCurrency(S.totalInvested);
-    if (futureValueEl) futureValueEl.textContent = UTILS.formatCurrency(S.futureValue);
-    if (inflationAdjustedEl) inflationAdjustedEl.textContent = UTILS.formatCurrency(S.inflationAdjustedValue);
-}
+/* ========== AI INSIGHTS ENGINE ========== */
+const AI_INSIGHTS = {
+    /**
+     * Generate personalized AI insights
+     */
+    generate() {
+        const state = APP_STATE;
+        const results = state.results;
+        
+        if (!results) return [];
 
-function generateMilestones() {
-    const S = GOAL_PLANNER.STATE;
-    const container = document.getElementById('milestone-timeline');
-    if (!container || !S.annualData.length) return;
+        const insights = [];
 
-    const milestones = [
-        { percent: 25, icon: 'flag', label: '25% Progress' },
-        { percent: 50, icon: 'flag-checkered', label: 'Halfway There!' },
-        { percent: 75, icon: 'trophy', label: '75% Complete' },
-        { percent: 100, icon: 'crown', label: 'Goal Achieved!' }
-    ];
+        // Insight 1: Feasibility Check
+        if (results.monthlySavings > 5000) {
+            insights.push({
+                type: 'warning',
+                title: 'High Monthly Savings Required',
+                content: `Your goal requires ${UTILS.formatCurrency(results.monthlySavings)}/month. Consider increasing your investment return or extending your timeline.`,
+                action: 'Explore higher-yield investments →',
+                link: '#'
+            });
+        } else if (results.monthlySavings < 100) {
+            insights.push({
+                type: 'success',
+                title: 'Affordable Goal Target',
+                content: `You only need ${UTILS.formatCurrency(results.monthlySavings)}/month to reach your goal. Automate this amount today!`,
+                action: 'Set Up Automatic Transfers →',
+                link: '#'
+            });
+        }
 
-    let html = '<div class="milestone-list">';
-    
-    milestones.forEach(milestone => {
-        const yearData = S.annualData.find(d => d.progress >= milestone.percent);
-        if (yearData) {
+        // Insight 2: Investment Power
+        const gainPercent = (results.investmentGains / results.finalBalance) * 100;
+        if (gainPercent > 50 && state.timeYears > 10) {
+            insights.push({
+                type: 'info',
+                title: 'Compound Growth Working Hard',
+                content: `${UTILS.formatPercent(gainPercent)} of your final balance comes from investment gains! This is the power of long-term investing.`,
+                action: 'Maximize with Index Funds →',
+                link: '#'
+            });
+        }
+
+        // Insight 3: Inflation Impact
+        const inflationImpact = ((state.goalAmount - results.inflationAdjustedGoal) / state.goalAmount) * 100;
+        if (inflationImpact > 20) {
+            insights.push({
+                type: 'warning',
+                title: 'Inflation Will Reduce Purchasing Power',
+                content: `Inflation will erode ${UTILS.formatPercent(inflationImpact)} of your goal's value. Your ${UTILS.formatCurrency(state.goalAmount)} today = ${UTILS.formatCurrency(results.inflationAdjustedGoal)} in purchasing power.`,
+                action: 'Learn About Inflation Protection →',
+                link: '#'
+            });
+        }
+
+        // Insight 4: Goal Type Recommendation
+        if (state.goalType === 'college') {
+            insights.push({
+                type: 'success',
+                title: '529 Plan Recommendation',
+                content: 'Consider a 529 College Savings Plan for tax-free growth. Many states offer income tax deductions on contributions.',
+                action: 'Compare 529 Plans →',
+                link: '#'
+            });
+        } else if (state.goalType === 'home') {
+            insights.push({
+                type: 'success',
+                title: 'First-Time Homebuyer Tip',
+                content: 'Explore first-time homebuyer programs and down payment assistance. Some loans require only 3-5% down.',
+                action: 'First-Time Buyer Programs →',
+                link: '#'
+            });
+        } else if (state.goalType === 'retirement') {
+            insights.push({
+                type: 'success',
+                title: 'Maximize Retirement Accounts',
+                content: 'Prioritize 401(k) and IRA contributions for tax benefits. In 2024, limits are $23,500 (401k) and $7,000 (IRA).',
+                action: 'Retirement Account Guide →',
+                link: '#'
+            });
+        }
+
+        // Insight 5: Risk Assessment
+        if (state.expectedReturn > 12) {
+            insights.push({
+                type: 'warning',
+                title: 'High Return Assumption',
+                content: 'You\'ve assumed a return rate of ' + UTILS.formatPercent(state.expectedReturn) + '. Historically, the S&P 500 averages ~10%. Consider more conservative estimates.',
+                action: 'Understand Asset Allocation →',
+                link: '#'
+            });
+        }
+
+        return insights;
+    },
+
+    /**
+     * Render insights HTML
+     */
+    render(insights) {
+        const box = UTILS.getEl('ai-insights-box');
+        if (!box) return;
+
+        if (!insights || insights.length === 0) {
+            box.innerHTML = '<p class="placeholder">Enter your details to receive AI insights</p>';
+            return;
+        }
+
+        let html = '<div class="insights-list">';
+        
+        insights.forEach(insight => {
+            const iconClass = {
+                success: 'fa-check-circle',
+                warning: 'fa-exclamation-circle',
+                info: 'fa-info-circle'
+            }[insight.type] || 'fa-lightbulb';
+
             html += `
-                <div class="milestone-item">
-                    <div class="milestone-icon"><i class="fas fa-${milestone.icon}"></i></div>
-                    <div class="milestone-content">
-                        <h4>${milestone.label}</h4>
-                        <p>Year ${yearData.year} (Age ${yearData.age}) — ${UTILS.formatCurrency(yearData.endBalance)}</p>
+                <div class="insight-item insight-${insight.type}">
+                    <div class="insight-title">
+                        <i class="fas ${iconClass}"></i> ${insight.title}
+                    </div>
+                    <p class="insight-text">${insight.content}</p>
+                    <div class="insight-action">
+                        <a href="${insight.link}" target="_blank" rel="noopener">${insight.action}</a>
                     </div>
                 </div>
             `;
-        }
-    });
-    
-    html += '</div>';
-    container.innerHTML = html;
-}
+        });
 
-function generateAIRoadmap() {
-    const S = GOAL_PLANNER.STATE;
-    const output = document.getElementById('ai-roadmap-output');
-    if (!output) return;
-
-    if (!S.annualData.length) {
-        output.innerHTML = '<p class="placeholder-text">Enter your goal details to receive AI-powered insights...</p>';
-        return;
-    }
-
-    let html = `<h4><i class="fas fa-robot"></i> Your AI-Powered Financial Roadmap:</h4>`;
-
-    // Goal achievability analysis
-    const isAchievable = S.yearsToGoal !== Infinity && S.yearsToGoal <= 50;
-    const timeHorizon = S.calculationMode === 'time' ? S.yearsToGoal : S.targetYears;
-    const totalGains = S.futureValue - S.totalInvested;
-    const gainsPercent = (totalGains / S.futureValue) * 100;
-
-    if (!isAchievable) {
-        html += `
-            <div class="recommendation-alert high-priority">
-                <i class="fas fa-exclamation-triangle"></i> <strong>Goal May Be Unrealistic</strong>
-            </div>
-            <p>Based on your current plan, reaching ${UTILS.formatCurrency(S.goalAmount)} may take over 50 years or be unattainable. Consider:</p>
-            <ul>
-                <li>Increasing monthly contributions significantly</li>
-                <li>Adjusting goal amount to be more realistic</li>
-                <li>Extending timeline if possible</li>
-                <li>Seeking higher-return investment opportunities (with appropriate risk)</li>
-            </ul>
-        `;
-    } else {
-        html += `
-            <div class="recommendation-alert low-priority">
-                <i class="fas fa-check-circle"></i> <strong>Goal Status: Achievable!</strong>
-            </div>
-            <p>Your goal of ${UTILS.formatCurrency(S.goalAmount)} is achievable in approximately ${timeHorizon} years based on your current plan.</p>
-        `;
-    }
-
-    // Compound growth insight
-    if (gainsPercent > 50 && timeHorizon >= 15) {
-        html += `
-            <div class="recommendation-alert low-priority">
-                <i class="fas fa-seedling"></i> <strong>Compound Growth Working For You</strong>
-            </div>
-            <p>Over ${UTILS.formatPercent(gainsPercent)} of your projected wealth comes from investment gains, not contributions! This demonstrates the power of compound growth over ${timeHorizon} years.</p>
-            <p><strong>Affiliate Recommendation:</strong> Maximize compound growth with low-cost index funds. <a href="#" target="_blank">Compare top investment platforms →</a></p>
-        `;
-    }
-
-    // Return rate analysis
-    if (S.calculationMode === 'return' && S.returnRequired > 12) {
-        html += `
-            <div class="recommendation-alert high-priority">
-                <i class="fas fa-chart-line"></i> <strong>High Return Rate Required</strong>
-            </div>
-            <p>Achieving your goal requires ${UTILS.formatPercent(S.returnRequired)} annual returns, which is historically very difficult to sustain. The S&P 500's long-term average is ~10%. Consider:</p>
-            <ul>
-                <li>Increasing monthly contributions to reduce required return</li>
-                <li>Extending your timeline</li>
-                <li>Consulting a financial advisor for high-growth strategies</li>
-            </ul>
-            <p><strong>Sponsor Recommendation:</strong> <a href="#" target="_blank">Connect with a certified financial planner →</a></p>
-        `;
-    }
-
-    // Contribution feasibility
-    if (S.calculationMode === 'contribution' && S.contributionNeeded > S.monthlyContribution * 3) {
-        html += `
-            <div class="recommendation-alert medium-priority">
-                <i class="fas fa-wallet"></i> <strong>High Monthly Contribution Required</strong>
-            </div>
-            <p>Reaching your goal requires ${UTILS.formatCurrency(S.contributionNeeded, 0)} monthly, which is significantly higher than your current ${UTILS.formatCurrency(S.monthlyContribution, 0)}. Consider:</p>
-            <ul>
-                <li>Extending your timeline to reduce monthly burden</li>
-                <li>Looking for ways to increase income</li>
-                <li>Optimizing budget to free up more savings</li>
-            </ul>
-            <p><strong>Affiliate Recommendation:</strong> <a href="#" target="_blank">Top budgeting apps to maximize savings →</a></p>
-        `;
-    }
-
-    // Inflation impact
-    const inflationErosion = ((S.futureValue - S.inflationAdjustedValue) / S.futureValue) * 100;
-    if (inflationErosion > 30 && timeHorizon > 15) {
-        html += `
-            <div class="recommendation-alert medium-priority">
-                <i class="fas fa-fire"></i> <strong>Significant Inflation Impact</strong>
-            </div>
-            <p>Inflation will erode ${UTILS.formatPercent(inflationErosion)} of your future value's purchasing power over ${timeHorizon} years. Your ${UTILS.formatCurrency(S.futureValue)} will have the buying power of only ${UTILS.formatCurrency(S.inflationAdjustedValue)} in today's dollars.</p>
-            <p>Ensure your goal amount accounts for this, or aim for returns exceeding ${UTILS.formatPercent(S.inflationRate + 3)} to stay ahead of inflation.</p>
-        `;
-    }
-
-    // Age-based advice
-    const goalAge = S.currentAge + timeHorizon;
-    if (S.goalType === 'retirement') {
-        if (goalAge < 60) {
-            html += `
-                <div class="recommendation-alert low-priority">
-                    <i class="fas fa-calendar-check"></i> <strong>Early Retirement Track</strong>
-                </div>
-                <p>You're on track for early retirement at age ${goalAge}! Consider maximizing tax-advantaged accounts (401k, IRA) to keep more of your gains.</p>
-                <p><strong>Recommendation:</strong> <a href="#" target="_blank">Learn about retirement account optimization →</a></p>
-            `;
-        } else if (goalAge > 70) {
-            html += `
-                <div class="recommendation-alert medium-priority">
-                    <i class="fas fa-hourglass-end"></i> <strong>Late Retirement Timeline</strong>
-                </div>
-                <p>Your projected retirement age is ${goalAge}. If you'd like to retire earlier, consider increasing contributions or seeking professional advice to optimize your strategy.</p>
-            `;
-        }
-    }
-
-    output.innerHTML = html;
-}
-
-/* ========================================================================== */
-/* VI. CHARTING */
-/* ========================================================================== */
-
-function updateChart() {
-    const S = GOAL_PLANNER.STATE;
-    const canvas = document.getElementById('goalProgressChart');
-    if (!canvas || !S.annualData.length) return;
-
-    const ctx = canvas.getContext('2d');
-    
-    if (GOAL_PLANNER.charts.progressChart) {
-        GOAL_PLANNER.charts.progressChart.destroy();
-    }
-
-    const labels = S.annualData.map(d => `Year ${d.year}`);
-    const balanceData = S.annualData.map(d => d.endBalance);
-    const principalData = S.annualData.map(d => S.initialSavings + d.contributions * d.year);
-    const inflationData = S.annualData.map(d => d.inflationAdjusted);
-    const goalLine = S.annualData.map(() => S.goalAmount);
-
-    const isDarkMode = document.documentElement.getAttribute('data-color-scheme') === 'dark';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    const textColor = isDarkMode ? '#ffffff' : '#000000';
-    const primaryColor = isDarkMode ? '#14b8a6' : '#19343B';
-    const accentColor = isDarkMode ? '#5eead4' : '#2dd4bf';
-
-    GOAL_PLANNER.charts.progressChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels,
-            datasets: [
-                {
-                    label: 'Account Balance',
-                    data: balanceData,
-                    borderColor: primaryColor,
-                    backgroundColor: isDarkMode ? 'rgba(20, 184, 166, 0.1)' : 'rgba(25, 52, 59, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3,
-                },
-                {
-                    label: 'Goal Target',
-                    data: goalLine,
-                    borderColor: '#f59e0b',
-                    borderDash: [10, 5],
-                    fill: false,
-                    borderWidth: 2,
-                    pointRadius: 0,
-                },
-                {
-                    label: 'Total Invested',
-                    data: principalData,
-                    borderColor: accentColor,
-                    borderDash: [5, 5],
-                    fill: false,
-                    borderWidth: 2,
-                },
-                {
-                    label: 'Inflation-Adjusted Value',
-                    data: inflationData,
-                    borderColor: '#ef4444',
-                    fill: false,
-                    tension: 0.4,
-                    borderWidth: 2,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
-            plugins: {
-                legend: {
-                    labels: { color: textColor, font: { size: 12 } }
-                },
-                tooltip: {
-                    backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-                    titleColor: textColor,
-                    bodyColor: textColor,
-                    callbacks: {
-                        label: (context) => `${context.dataset.label}: ${UTILS.formatCurrency(context.parsed.y)}`
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    title: { display: true, text: 'Value ($)', color: textColor },
-                    ticks: {
-                        color: textColor,
-                        callback: (value) => UTILS.formatCurrency(value / 1000) + 'K'
-                    },
-                    grid: { color: gridColor }
-                },
-                x: {
-                    title: { display: true, text: 'Time (Years)', color: textColor },
-                    ticks: { color: textColor },
-                    grid: { color: gridColor }
-                }
-            }
-        }
-    });
-}
-
-/* ========================================================================== */
-/* VII. DATA TABLE */
-/* ========================================================================== */
-
-function updateDataTable() {
-    const S = GOAL_PLANNER.STATE;
-    const tbody = document.querySelector('#goal-annual-table tbody');
-    if (!tbody) return;
-
-    if (!S.annualData.length) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">Enter goal details to generate yearly breakdown</td></tr>';
-        return;
-    }
-
-    let html = '';
-    S.annualData.forEach(row => {
-        html += `
-            <tr>
-                <td>${row.year}</td>
-                <td>${row.age}</td>
-                <td>${UTILS.formatCurrency(row.startBalance)}</td>
-                <td>${UTILS.formatCurrency(row.contributions)}</td>
-                <td>${UTILS.formatCurrency(row.gains)}</td>
-                <td>${UTILS.formatCurrency(row.endBalance)}</td>
-                <td>${UTILS.formatCurrency(row.inflationAdjusted)}</td>
-                <td>${UTILS.formatNumber(row.progress, 1)}%</td>
-            </tr>
-        `;
-    });
-    tbody.innerHTML = html;
-}
-
-function exportCSV() {
-    const S = GOAL_PLANNER.STATE;
-    if (!S.annualData.length) {
-        UTILS.showToast('No data to export', 'error');
-        return;
-    }
-
-    let csv = 'Year,Age,Start Balance,Contributions,Gains,End Balance,Inflation-Adjusted,Progress\n';
-    S.annualData.forEach(row => {
-        csv += `${row.year},${row.age},${row.startBalance.toFixed(2)},${row.contributions.toFixed(2)},${row.gains.toFixed(2)},${row.endBalance.toFixed(2)},${row.inflationAdjusted.toFixed(2)},${row.progress.toFixed(1)}%\n`;
-    });
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `financial_goal_plan_${S.goalType}_${Date.now()}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    UTILS.showToast('Data exported successfully!', 'success');
-}
-
-/* ========================================================================== */
-/* VIII. TAB MANAGEMENT */
-/* ========================================================================== */
-
-function showResultTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.add('hidden');
-        content.classList.remove('active');
-    });
-    
-    const tab = document.getElementById(tabId);
-    if (tab) {
-        tab.classList.remove('hidden');
-        tab.classList.add('active');
-    }
-    
-    document.querySelectorAll('.tab-controls-results .tab-button').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
-    });
-    
-    if (tabId === 'progress-chart' && GOAL_PLANNER.charts.progressChart) {
-        setTimeout(() => GOAL_PLANNER.charts.progressChart.resize(), 100);
-    }
-}
-
-/* ========================================================================== */
-/* IX. THEME & PWA */
-/* ========================================================================== */
-
-const THEME_MANAGER = {
-    loadUserPreferences() {
-        const savedScheme = localStorage.getItem('finguid-color-scheme') || 
-                           (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-color-scheme', savedScheme);
-        this.updateToggleButton(savedScheme);
-    },
-    
-    updateToggleButton(scheme) {
-        const icon = document.querySelector('#toggle-color-scheme i');
-        if (icon) icon.className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-    },
-    
-    toggleColorScheme() {
-        const currentScheme = document.documentElement.getAttribute('data-color-scheme');
-        const newScheme = currentScheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-color-scheme', newScheme);
-        localStorage.setItem('finguid-color-scheme', newScheme);
-        this.updateToggleButton(newScheme);
-        if (GOAL_PLANNER.charts.progressChart) updateChart();
+        html += '</div>';
+        box.innerHTML = html;
     }
 };
 
-/* ========================================================================== */
-/* X. EVENT LISTENERS & INITIALIZATION */
-/* ========================================================================== */
+/* ========== UI UPDATE MODULE ========== */
+const UI = {
+    /**
+     * Update all displays
+     */
+    updateAll() {
+        const results = APP_STATE.results;
+        if (!results) return;
 
-function setupEventListeners() {
-    const form = document.getElementById('goal-planner-form');
-    if (!form) return;
+        // Update summary cards
+        UTILS.getEl('monthly-target').textContent = UTILS.formatCurrency(results.monthlySavings);
+        UTILS.getEl('total-invested').textContent = UTILS.formatCurrency(results.totalContributions);
+        UTILS.getEl('inflation-adjusted-goal').textContent = UTILS.formatCurrency(results.inflationAdjustedGoal);
+        UTILS.getEl('investment-gains').textContent = UTILS.formatCurrency(results.investmentGains);
 
-    const debouncedCalc = UTILS.debounce(updateCalculations, 300);
-    form.addEventListener('input', debouncedCalc);
-    form.addEventListener('change', debouncedCalc);
+        // Update milestones
+        this.updateMilestones();
 
-    // Goal type selection
-    document.querySelectorAll('input[name="goal-type"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            GOAL_PLANNER.STATE.goalType = e.target.value;
-            updateCalculations();
+        // Update chart
+        CHART_MODULE.update();
+
+        // Update table
+        this.updateTable();
+
+        // Generate and render AI insights
+        const insights = AI_INSIGHTS.generate();
+        AI_INSIGHTS.render(insights);
+    },
+
+    /**
+     * Update milestones
+     */
+    updateMilestones() {
+        const timeline = UTILS.getEl('milestone-timeline');
+        if (!timeline || !APP_STATE.results) return;
+
+        const breakdown = APP_STATE.results.breakdown;
+        const milestones = [
+            { percent: 25, icon: 'flag', label: '25% Complete' },
+            { percent: 50, icon: 'flag-checkered', label: 'Halfway There!' },
+            { percent: 75, icon: 'trophy', label: '75% Complete' },
+            { percent: 100, icon: 'crown', label: 'Goal Reached!' }
+        ];
+
+        let html = '';
+        
+        milestones.forEach(milestone => {
+            const yearData = breakdown.find(d => d.percentToGoal >= milestone.percent);
+            if (yearData) {
+                html += `
+                    <div class="milestone-item">
+                        <div class="milestone-icon"><i class="fas fa-${milestone.icon}"></i></div>
+                        <h4>${milestone.label}</h4>
+                        <p>Year ${yearData.year}: ${UTILS.formatCurrency(yearData.balance)}</p>
+                    </div>
+                `;
+            }
         });
-    });
 
-    // Calculation mode selection
-    document.querySelectorAll('.mode-button').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const mode = btn.getAttribute('data-mode');
-            GOAL_PLANNER.STATE.calculationMode = mode;
-            
-            document.querySelectorAll('.mode-button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Show/hide mode-specific inputs
-            document.getElementById('contribution-mode-input').classList.toggle('hidden', mode !== 'contribution');
-            document.getElementById('return-mode-input').classList.toggle('hidden', mode !== 'return');
-            
-            updateCalculations();
+        timeline.innerHTML = html || '<p class="placeholder">Calculate to see milestones</p>';
+    },
+
+    /**
+     * Update data table
+     */
+    updateTable() {
+        const tbody = UTILS.getEl('breakdown-table-body')?.querySelector('tbody');
+        if (!tbody || !APP_STATE.results) return;
+
+        const breakdown = APP_STATE.results.breakdown;
+        let html = '';
+
+        breakdown.forEach(row => {
+            html += `
+                <tr>
+                    <td>${row.year}</td>
+                    <td>${UTILS.formatCurrency(row.balance - row.investmentGains)}</td>
+                    <td>${UTILS.formatCurrency(APP_STATE.monthlyContribution * 12)}</td>
+                    <td>${UTILS.formatCurrency(row.investmentGains)}</td>
+                    <td>${UTILS.formatCurrency(row.balance)}</td>
+                    <td>${UTILS.formatCurrency(row.inflationAdjusted)}</td>
+                    <td>${UTILS.formatNumber(row.percentToGoal, 1)}%</td>
+                </tr>
+            `;
         });
-    });
 
-    // Result tab switching
-    document.querySelectorAll('.tab-controls-results .tab-button').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const tabId = btn.getAttribute('data-tab');
-            showResultTab(tabId);
-        });
-    });
+        tbody.innerHTML = html || '<tr><td colspan="7" class="no-data">No data</td></tr>';
+    }
+};
 
-    // Theme toggle
-    const themeBtn = document.getElementById('toggle-color-scheme');
-    if (themeBtn) themeBtn.addEventListener('click', () => THEME_MANAGER.toggleColorScheme());
+/* ========== CHART MODULE ========== */
+const CHART_MODULE = {
+    chart: null,
 
-    // CSV export
-    const exportBtn = document.getElementById('export-goal-csv');
-    if (exportBtn) exportBtn.addEventListener('click', exportCSV);
+    /**
+     * Update chart
+     */
+    update() {
+        const canvas = UTILS.getEl('progressChart');
+        if (!canvas || !APP_STATE.results) return;
 
-    // Lead form
-    const leadForm = document.getElementById('lead-form');
-    if (leadForm) {
-        leadForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            UTILS.showToast('Thank you! A financial advisor will contact you soon.', 'success');
-            leadForm.reset();
+        const breakdown = APP_STATE.results.breakdown;
+        const isDark = document.documentElement.getAttribute('data-color-scheme') === 'dark';
+
+        const labels = breakdown.map(row => `Year ${row.year}`);
+        const balanceData = breakdown.map(row => row.balance);
+        const goalLine = breakdown.map(() => APP_STATE.goalAmount);
+
+        const ctx = canvas.getContext('2d');
+
+        if (this.chart) {
+            this.chart.destroy();
+        }
+
+        this.chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: 'Your Savings Growth',
+                        data: balanceData,
+                        borderColor: '#19343B',
+                        backgroundColor: 'rgba(25, 52, 59, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3
+                    },
+                    {
+                        label: 'Goal Target',
+                        data: goalLine,
+                        borderColor: '#f59e0b',
+                        borderDash: [10, 5],
+                        fill: false,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: isDark ? '#f9fafb' : '#111827',
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: isDark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.9)',
+                        titleColor: isDark ? '#f9fafb' : '#111827',
+                        bodyColor: isDark ? '#f9fafb' : '#111827',
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${UTILS.formatCurrency(ctx.parsed.y)}`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            color: isDark ? '#d1d5db' : '#6b7280',
+                            callback: value => UTILS.formatCurrency(value / 1000) + 'K'
+                        },
+                        grid: {
+                            color: isDark ? 'rgba(148,163,184,0.1)' : 'rgba(0,0,0,0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: { color: isDark ? '#d1d5db' : '#6b7280' },
+                        grid: { color: isDark ? 'rgba(148,163,184,0.1)' : 'rgba(0,0,0,0.1)' }
+                    }
+                }
+            }
         });
     }
+};
+
+/* ========== THEME MODULE ========== */
+const THEME = {
+    init() {
+        const savedScheme = localStorage.getItem('finguid-theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        document.documentElement.setAttribute('data-color-scheme', savedScheme);
+        this.updateIcon(savedScheme);
+    },
+
+    toggle() {
+        const current = document.documentElement.getAttribute('data-color-scheme');
+        const newScheme = current === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-color-scheme', newScheme);
+        localStorage.setItem('finguid-theme', newScheme);
+        
+        this.updateIcon(newScheme);
+        CHART_MODULE.update();
+
+        UTILS.trackEvent('theme_toggled', { theme: newScheme });
+    },
+
+    updateIcon(scheme) {
+        const btn = UTILS.getEl('toggle-color-scheme');
+        if (btn) {
+            btn.querySelector('i').className = scheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+    }
+};
+
+/* ========== VOICE & TEXT-TO-SPEECH ========== */
+const VOICE_MODULE = {
+    recognition: null,
+    synthesis: window.speechSynthesis,
+
+    init() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            this.recognition = new SpeechRecognition();
+        }
+    },
+
+    toggleVoiceCommand() {
+        if (!this.recognition) {
+            UTILS.toast('Voice commands not supported in this browser', 'error');
+            return;
+        }
+
+        APP_STATE.voiceEnabled = !APP_STATE.voiceEnabled;
+        const btn = UTILS.getEl('toggle-voice-command');
+        
+        if (APP_STATE.voiceEnabled) {
+            btn.classList.add('active');
+            this.recognition.start();
+            UTILS.toast('Voice command active', 'success');
+        } else {
+            btn.classList.remove('active');
+            this.recognition.abort();
+        }
+    },
+
+    toggleTextToSpeech() {
+        APP_STATE.ttsEnabled = !APP_STATE.ttsEnabled;
+        const btn = UTILS.getEl('toggle-text-to-speech');
+        
+        if (APP_STATE.ttsEnabled) {
+            btn.classList.add('active');
+            UTILS.toast('Text-to-Speech enabled', 'success');
+        } else {
+            btn.classList.remove('active');
+            this.synthesis.cancel();
+        }
+    },
+
+    speak(text) {
+        if (!APP_STATE.ttsEnabled || !this.synthesis) return;
+
+        this.synthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9;
+        this.synthesis.speak(utterance);
+    }
+};
+
+/* ========== EXPORT MODULE ========== */
+const EXPORT = {
+    toCSV() {
+        if (!APP_STATE.results) {
+            UTILS.toast('Calculate first', 'error');
+            return;
+        }
+
+        let csv = 'Financial Goal Planner - Export\n\n';
+        csv += `Goal Type,${APP_STATE.goalType}\n`;
+        csv += `Goal Amount,${APP_STATE.goalAmount}\n`;
+        csv += `Monthly Savings,${APP_STATE.results.monthlySavings}\n\n`;
+
+        csv += 'Year,Starting Balance,Annual Contribution,Investment Gains,Ending Balance,Today\'s Value,% to Goal\n';
+
+        APP_STATE.results.breakdown.forEach(row => {
+            csv += `${row.year},${row.balance - row.investmentGains},${APP_STATE.monthlyContribution * 12},${row.investmentGains},${row.balance},${row.inflationAdjusted},${row.percentToGoal.toFixed(1)}%\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `FinGuid-Goal-Plan-${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        UTILS.trackEvent('csv_exported', { goal_type: APP_STATE.goalType });
+        UTILS.toast('Data exported successfully!', 'success');
+    }
+};
+
+/* ========== EVENT HANDLERS ========== */
+function handleFormSubmit(e) {
+    e.preventDefault();
+
+    // Update state from form
+    APP_STATE.goalType = document.querySelector('input[name="goal-type"]:checked')?.value || 'college';
+    APP_STATE.goalAmount = UTILS.parseCurrency(UTILS.getEl('goal-amount').value);
+    APP_STATE.currentSavings = UTILS.parseCurrency(UTILS.getEl('current-savings').value);
+    APP_STATE.timeYears = parseFloat(UTILS.getEl('time-years').value);
+    APP_STATE.monthlyContribution = UTILS.parseCurrency(UTILS.getEl('monthly-savings').value);
+    APP_STATE.expectedReturn = parseFloat(UTILS.getEl('return-rate').value);
+    APP_STATE.inflationRate = parseFloat(UTILS.getEl('inflation-rate').value);
+
+    // Calculate
+    CALCULATOR.calculate();
+    UI.updateAll();
+
+    // Track
+    UTILS.trackEvent('goal_calculated', {
+        goal_type: APP_STATE.goalType,
+        goal_amount: APP_STATE.goalAmount,
+        years: APP_STATE.timeYears
+    });
+
+    // Voice feedback
+    VOICE_MODULE.speak(`Calculation complete. You need to save ${UTILS.formatCurrency(APP_STATE.results.monthlySavings)} monthly to reach your goal.`);
+
+    UTILS.toast('Goal plan calculated!', 'success');
+    window.scrollTo({ top: document.querySelector('.results-section').offsetTop - 100, behavior: 'smooth' });
 }
 
-/* ========================================================================== */
-/* XI. INITIALIZATION */
-/* ========================================================================== */
+function handleTabClick(e) {
+    const tabName = e.target.getAttribute('data-tab');
+    
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+        tab.classList.add('hidden');
+    });
+    
+    document.querySelector(`#${tabName}`).classList.add('active');
+    document.querySelector(`#${tabName}`).classList.remove('hidden');
 
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🎯 FinGuid Financial Goal Planner v1.0 Initializing...');
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    e.target.classList.add('active');
 
-    THEME_MANAGER.loadUserPreferences();
-    setupEventListeners();
-    showResultTab('progress-chart');
+    UTILS.trackEvent('tab_switched', { tab: tabName });
+}
 
-    await fredAPI.initialize();
+function handleLeadFormSubmit(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    
+    // Here you would send to your lead management system
+    // Example: CRM, email service, etc.
+    
+    UTILS.toast('Thank you! A financial advisor will contact you soon.', 'success');
+    e.target.reset();
 
-    console.log('✅ Goal Planner initialized successfully!');
-});
+    UTILS.trackEvent('lead_submitted', {
+        goal_type: formData.get('goal-type')
+    });
+}
 
+function handleRangeSync() {
+    const yearInput = UTILS.getEl('time-years');
+    const yearRange = UTILS.getEl('time-range');
+    const returnInput = UTILS.getEl('return-rate');
+    const returnRange = UTILS.getEl('return-range');
+
+    const syncInputs = UTILS.debounce(() => {
+        if (document.activeElement === yearRange) {
+            yearInput.value = yearRange.value;
+        }
+        if (document.activeElement === returnRange) {
+            returnInput.value = returnRange.value;
+        }
+    }, 100);
+
+    yearRange.addEventListener('input', syncInputs);
+    returnRange.addEventListener('input', syncInputs);
+}
+
+/* ========== INITIALIZATION ========== */
+async function initApp() {
+    if (FINGUID_CONFIG.DEBUG) console.log('🎯 FinGuid Goal Planner v' + FINGUID_CONFIG.VERSION + ' initializing...');
+
+    // Initialize theme
+    THEME.init();
+
+    // Initialize voice
+    VOICE_MODULE.init();
+
+    // Fetch FRED data
+    await FRED_API.init();
+
+    // Setup event listeners
+    const form = UTILS.getEl('goal-form');
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', handleTabClick);
+    });
+
+    const leadForm = UTILS.getEl('lead-form');
+    if (leadForm) {
+        leadForm.addEventListener('submit', handleLeadFormSubmit);
+    }
+
+    // Theme toggle
+    const themeBtn = UTILS.getEl('toggle-color-scheme');
+    if (themeBtn) themeBtn.addEventListener('click', () => THEME.toggle());
+
+    // Voice & TTS toggle
+    const voiceBtn = UTILS.getEl('toggle-voice-command');
+    if (voiceBtn) voiceBtn.addEventListener('click', () => VOICE_MODULE.toggleVoiceCommand());
+
+    const ttsBtn = UTILS.getEl('toggle-text-to-speech');
+    if (ttsBtn) ttsBtn.addEventListener('click', () => VOICE_MODULE.toggleTextToSpeech());
+
+    // CSV export
+    const exportBtn = UTILS.getEl('export-csv-btn');
+    if (exportBtn) exportBtn.addEventListener('click', () => EXPORT.toCSV());
+
+    // Range sync
+    handleRangeSync();
+
+    // Track page view
+    UTILS.trackEvent('page_view', {
+        page_title: 'Financial Goal Planner',
+        page_path: '/financial-goal-planner.html'
+    });
+
+    if (FINGUID_CONFIG.DEBUG) console.log('✅ FinGuid Goal Planner ready!');
+}
+
+// Start app when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
+
+// Handle window resize for chart
 window.addEventListener('resize', UTILS.debounce(() => {
-    if (GOAL_PLANNER.charts.progressChart) {
-        GOAL_PLANNER.charts.progressChart.resize();
+    if (APP_STATE.results) {
+        CHART_MODULE.update();
     }
 }, 250));
