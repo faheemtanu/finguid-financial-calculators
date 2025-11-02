@@ -1,5 +1,5 @@
 /**
- * MORTGAGE CALCULATOR - AI PITI & AMORTIZATION ANALYZER v1.0
+ * MORTGAGE CALCULATOR - AI PITI & AMORTIZATION ANALYZER v1.1 (Chart Updated)
  * ✅ FinGuid USA Market Domination Build
  * ✅ World's First AI-Powered Mortgage Calculator (S.O.L.I.D. Architecture)
  * ✅ Dynamic PITI & Amortization Charting (Chart.js)
@@ -15,7 +15,7 @@
 // GLOBAL CONFIGURATION & STATE
 // =====================================
 const APP = {
-    VERSION: '1.0',
+    VERSION: '1.1',
     DEBUG: false,
     FRED_KEY: '9c6c421f077f2091e8bae4f143ada59a',
     FRED_URL: 'https://api.stlouisfed.org/fred/series/observations',
@@ -112,7 +112,7 @@ class CalculationEngine {
 
     calculatePITI(inputs) {
         const loanAmount = inputs.homePrice - inputs.downPayment;
-        const downPaymentPercent = (inputs.downPayment / inputs.homePrice) * 100;
+        const downPaymentPercent = (inputs.homePrice > 0) ? (inputs.downPayment / inputs.homePrice) * 100 : 0;
 
         const monthlyPI = this.calculateMonthlyPayment(loanAmount, inputs.interestRate, inputs.loanTerm);
         const monthlyTax = inputs.propertyTax / 12;
@@ -254,7 +254,7 @@ class UIRenderer {
             fredNote.textContent = '⚡ Using Fallback Rates';
             fredNote.style.color = 'var(--accent-dark)';
         } else {
-            fredNote.textContent = `⚡ Live Rates: ${rate30y}% (30Y) | ${rate15y}% (15Y)`;
+            fredNote.textContent = `⚡ Live Rates: ${rate30y.toFixed(2)}% (30Y) | ${rate15y.toFixed(2)}% (15Y)`;
             fredNote.style.color = 'var(--accent-dark)';
         }
     }
@@ -276,29 +276,48 @@ class UIRenderer {
 }
 
 // =====================================
-// S.R.P: CHART MANAGER
+// S.R.P: CHART MANAGER (UPDATED)
 // =====================================
 class ChartManager {
     
+    /**
+     * UPDATED: Creates PITI + HOA Chart
+     * Now includes HOA fees as seen in mortgage-calculator-pro.zip
+     */
     createPITIChart(data) {
         const ctx = document.getElementById('pitiChart')?.getContext('2d');
         if (!ctx) return;
 
         if (APP.charts.piti) APP.charts.piti.destroy();
         
+        const chartLabels = ['Principal & Interest', 'Property Tax', 'Insurance'];
+        const chartDataValues = [data.principalInterest, data.propertyTax, data.insurance];
+        // Use colors from our CSS variables
+        const chartColors = [
+            'var(--primary-dark)', 
+            'var(--primary)', 
+            'var(--accent-dark)'
+        ];
+
+        if (data.pmi > 0) {
+            chartLabels.push('PMI');
+            chartDataValues.push(data.pmi);
+            chartColors.push('var(--error)');
+        }
+        
+        if (data.hoa > 0) {
+            chartLabels.push('HOA Fees');
+            chartDataValues.push(data.hoa);
+            chartColors.push('var(--text-light)');
+        }
+
         APP.charts.piti = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Principal & Interest', 'Property Tax', 'Insurance', 'PMI', 'HOA'],
+                labels: chartLabels,
                 datasets: [{
-                    data: [
-                        data.principalInterest,
-                        data.propertyTax,
-                        data.insurance,
-                        data.pmi,
-                        data.hoa
-                    ],
-                    backgroundColor: ['#19343B', '#24ACB9', '#FFC107', '#E69500', '#64748B'],
+                    data: chartDataValues,
+                    backgroundColor: chartColors.map(color => getComputedStyle(document.documentElement).getPropertyValue(color.substring(4, color.length - 1)) || color),
                     borderColor: 'var(--card)',
                     borderWidth: 2
                 }]
@@ -307,13 +326,29 @@ class ChartManager {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom' },
-                    tooltip: { callbacks: { label: (c) => `${c.label}: ${UTILS.formatCurrency(c.raw, 2)}` } }
+                    legend: { 
+                        position: 'bottom',
+                        labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text') }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly Payment Breakdown (PITI + HOA)',
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--text')
+                    },
+                    tooltip: {
+                        callbacks: { 
+                            label: (c) => `${c.label}: ${UTILS.formatCurrency(c.raw, 2)}` 
+                        }
+                    }
                 }
             }
         });
     }
 
+    /**
+     * UPDATED: Creates Amortization Chart
+     * Styling is now based on car-lease-calculator.js for a richer visual
+     */
     createAmortizationChart(schedule) {
         const ctx = document.getElementById('amortizationChart')?.getContext('2d');
         if (!ctx) return;
@@ -322,35 +357,66 @@ class ChartManager {
 
         // Sample data by year
         const yearlyData = [];
-        for (let i = 0; i < schedule.length; i += 12) {
-            const yearEnd = schedule[Math.min(i + 11, schedule.length - 1)];
+        const termInYears = Math.ceil(schedule.length / 12);
+
+        for (let year = 1; year <= termInYears; year++) {
+            const yearSchedule = schedule.slice((year - 1) * 12, year * 12);
             yearlyData.push({
-                year: (i / 12) + 1,
-                interest: yearEnd.totalInterest,
-                balance: yearEnd.balance
+                year: year,
+                interest: yearSchedule.reduce((acc, c) => acc + c.interest, 0),
+                principal: yearSchedule.reduce((acc, c) => acc + c.principal, 0),
+                balance: yearSchedule[yearSchedule.length - 1].balance
             });
         }
+        
+        const labels = yearlyData.map(d => `Year ${d.year}`);
+        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary');
+        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+        const balanceColor = 'var(--accent-dark)';
 
         APP.charts.amortization = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: yearlyData.map(d => `Year ${d.year}`),
+                labels: labels,
                 datasets: [
                     {
-                        label: 'Remaining Balance',
-                        data: yearlyData.map(d => d.balance),
-                        borderColor: '#24ACB9',
-                        backgroundColor: 'rgba(36, 172, 185, 0.1)',
+                        label: 'Yearly Interest Paid',
+                        data: yearlyData.map(d => d.interest),
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        borderColor: accentColor,
                         fill: true,
-                        yAxisID: 'y'
+                        tension: 0.3, // Style from car-lease
+                        yAxisID: 'y',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: accentColor,
                     },
                     {
-                        label: 'Total Interest Paid',
-                        data: yearlyData.map(d => d.interest),
-                        borderColor: '#FFC107',
-                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        label: 'Yearly Principal Paid',
+                        data: yearlyData.map(d => d.principal),
+                        backgroundColor: 'rgba(36, 172, 185, 0.1)',
+                        borderColor: primaryColor,
                         fill: true,
-                        yAxisID: 'y1'
+                        tension: 0.3, // Style from car-lease
+                        yAxisID: 'y',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: primaryColor,
+                    },
+                    {
+                        label: 'Loan Balance',
+                        data: yearlyData.map(d => d.balance),
+                        backgroundColor: 'transparent',
+                        borderColor: balanceColor,
+                        fill: false,
+                        tension: 0.3, // Style from car-lease
+                        yAxisID: 'y1',
+                        borderDash: [5, 5],
+                        pointRadius: 6, // Style from car-lease
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: balanceColor,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
                     }
                 ]
             },
@@ -358,8 +424,30 @@ class ChartManager {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: { position: 'left', ticks: { callback: (v) => '$' + (v / 1000) + 'K' } },
-                    y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { callback: (v) => '$' + (v / 1000) + 'K' } }
+                    x: {
+                        ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-light') }
+                    },
+                    y: { 
+                        position: 'left',
+                        stacked: true,
+                        ticks: { color: primaryColor, callback: (v) => '$' + (v / 1000) + 'K' } 
+                    },
+                    y1: { 
+                        position: 'right', 
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: balanceColor, callback: (v) => '$' + (v / 1000) + 'K' } 
+                    }
+                },
+                plugins: {
+                    legend: { 
+                        position: 'bottom',
+                        labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text') }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (c) => `${c.dataset.label}: ${UTILS.formatCurrency(c.raw, 2)}`
+                        }
+                    }
                 }
             }
         });
@@ -374,56 +462,58 @@ class AIInsightsEngine {
     generateInsights(inputs, results, schedule) {
         const container = document.getElementById('ai-insights');
         let html = '';
+        const { homePrice, downPayment, interestRate, loanTerm } = inputs;
+        const { loanAmount, downPaymentPercent, pmi, total } = results;
 
         // 1. PMI Analysis
-        if (results.pmi > 0) {
+        if (pmi > 0) {
             html += `<div class="insight-item" style="border-left-color: var(--error);">
                 <strong>🚨 #1: High Priority: PMI Payment</strong><br>
-                You are paying **${UTILS.formatCurrency(results.pmi, 2)}/month** in PMI. By increasing your down payment to 20% (${UTILS.formatCurrency(inputs.homePrice * 0.2)}), you could save **${UTILS.formatCurrency(results.pmi * 12, 0)}** per year.
+                You are paying **${UTILS.formatCurrency(pmi, 2)}/month** in PMI. By increasing your down payment to 20% (${UTILS.formatCurrency(homePrice * 0.2)}), you could save **${UTILS.formatCurrency(pmi * 12, 0)}** per year.
             </div>`;
         } else {
             html += `<div class="insight-item" style="border-left-color: var(--success);">
                 <strong>✅ #1: Excellent: No PMI!</strong><br>
-                Your **${results.downPaymentPercent.toFixed(1)}%** down payment saves you from paying PMI, reducing your monthly cost and building equity faster.
+                Your **${downPaymentPercent.toFixed(1)}%** down payment saves you from paying PMI, reducing your monthly cost and building equity faster.
             </div>`;
         }
         
         // 2. 15-yr vs 30-yr (Monetization/Affiliate angle)
-        if (inputs.loanTerm === 30) {
+        if (loanTerm === 30) {
             const calc = new CalculationEngine();
             const rate15y = APP.STATE.fredRates.rate15y;
-            const payment15y = calc.calculateMonthlyPayment(results.loanAmount, rate15y, 15);
-            const schedule15y = calc.generateAmortization(results.loanAmount, rate15y, 15);
+            const payment15y = calc.calculateMonthlyPayment(loanAmount, rate15y, 15);
+            const schedule15y = calc.generateAmortization(loanAmount, rate15y, 15);
             const interest30y = schedule[schedule.length-1].totalInterest;
             const interest15y = schedule15y[schedule15y.length-1].totalInterest;
             const interestSaved = interest30y - interest15y;
             
             html += `<div class="insight-item" style="border-left-color: var(--primary);">
                 <strong>💡 #2: 15-Year vs. 30-Year Analysis</strong><br>
-                Switching to a 15-year term at **${rate15y}%** would cost **${UTILS.formatCurrency(payment15y - results.principalInterest, 0)}** more per month, but would save you **${UTILS.formatCurrency(interestSaved, 0)}** in total interest.
+                Switching to a 15-year term at **${rate15y.toFixed(2)}%** would cost **${UTILS.formatCurrency(payment15y - results.principalInterest, 0)}** more per month, but would save you **${UTILS.formatCurrency(interestSaved, 0)}** in total interest.
                 <br><strong>Action:</strong> <a href="#" onclick="alert('Partner: Refinance')">See 15-Year Refinance Rates (Affiliate)</a>
             </div>`;
         }
 
         // 3. Affordability (28/36 Rule)
-        const estIncome = results.total / 0.28; // PITI should be < 28% of Gross Income
-        html += `<div class="insight-item" style="border-left-color: var(--info);">
+        const estIncome = total / 0.28; // PITI should be < 28% of Gross Income
+        html += `<div class="insight-item" style="border-left-color: var(--accent-dark);">
             <strong>💼 #3: Affordability Check (28/36 Rule)</strong><br>
-            To comfortably afford this **${UTILS.formatCurrency(results.total, 0)}** monthly payment, your gross (pre-tax) household income should be at least **${UTILS.formatCurrency(estIncome, 0)}/month** (or ${UTILS.formatCurrency(estIncome * 12, 0)}/year).
+            To comfortably afford this **${UTILS.formatCurrency(total, 0)}** monthly payment, your gross (pre-tax) household income should be at least **${UTILS.formatCurrency(estIncome, 0)}/month** (or ${UTILS.formatCurrency(estIncome * 12, 0)}/year).
         </div>`;
         
         // 4. First Year Interest
         const firstYearInterest = schedule[11].totalInterest;
-        html += `<div class="insight-item" style="border-left-color: var(--accent-dark);">
+        html += `<div class="insight-item">
             <strong>💸 #4: First-Year Interest</strong><br>
             In your first 12 months, you will pay **${UTILS.formatCurrency(firstYearInterest, 0)}** in interest, compared to only **${UTILS.formatCurrency(schedule[11].payment * 12 - firstYearInterest, 0)}** in principal.
         </div>`;
         
         // 5. High-Cost Area (Tax)
         if (results.propertyTax > 400) { // Over $4800/yr
-             html += `<div class="insight-item" style="border-left-color: var(--accent-dark);">
+             html += `<div class="insight-item" style="border-left-color: var(--accent);">
                 <strong>🏠 #5: Tax & Insurance Cost</strong><br>
-                Your estimated taxes & insurance are **${UTILS.formatCurrency(results.propertyTax + results.insurance, 0)}/month**, making up **${((results.propertyTax + results.insurance) / results.total * 100).toFixed(0)}%** of your total payment.
+                Your estimated taxes & insurance are **${UTILS.formatCurrency(results.propertyTax + results.insurance, 0)}/month**, making up **${((results.propertyTax + results.insurance) / total * 100).toFixed(0)}%** of your total payment.
                 <br><strong>Action:</strong> <a href="#" onclick="alert('Partner: Insurance')">Shop Home Insurance Rates (Sponsor)</a>
             </div>`;
         }
@@ -468,8 +558,14 @@ class MortgageCalculatorApp {
         document.getElementById('loan-term').addEventListener('change', () => this.handleTermChange());
 
         // Down payment sync
-        document.getElementById('down-payment').addEventListener('input', () => this.renderer.updateDownPayment('dollar'));
-        document.getElementById('down-payment-percent').addEventListener('input', () => this.renderer.updateDownPayment('percent'));
+        document.getElementById('down-payment').addEventListener('input', () => {
+            this.renderer.updateDownPayment('dollar');
+            debouncedCalc(); // Also trigger calculation
+        });
+        document.getElementById('down-payment-percent').addEventListener('input', () => {
+            this.renderer.updateDownPayment('percent');
+            debouncedCalc(); // Also trigger calculation
+        });
         
         // Controls
         document.getElementById('theme-toggle')?.addEventListener('click', () => this.toggleTheme());
