@@ -20,6 +20,8 @@
     <link rel="canonical" href="https://www.finguid.com/calculators/mortgage">
     <link rel="manifest" href="/manifest.json">
 
+    <link rel="stylesheet" href="mortgage-calculator.css">
+
     <script>
         // PWA Install Detection
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -38,766 +40,8 @@
             document.head.appendChild(link);
         });
     </script>
-
-    <style>
-        :root {
-            --primary: #24ACB9;
-            --primary-dark: #19343B;
-            --accent: #FFC107;
-            --accent-dark: #E69500;
-            --text: #1F2121;
-            --text-light: #64748B;
-            --bg: #FFFFFD;
-            --bg-secondary: #F5F7FA;
-            --card: #FFFFFF;
-            --border: #E2E8F0;
-            --error: #EF4444;
-            --success: #10B981;
-            --info: #3B82F6;
-            --warning: #F59E0B;
-        }
-
-        [data-color-scheme="dark"] {
-            --text: #E1E8ED;
-            --text-light: #B8C5D0;
-            --bg: #1F2121;
-            --bg-secondary: #242B36;
-            --card: #181919;
-            --border: #38444D;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
-
-        body {
-            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            color: var(--text);
-            background: var(--bg);
-            line-height: 1.6;
-            transition: all 0.3s ease;
-        }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-
-        /* ===== HEADER ===== */
-        .header {
-            position: sticky;
-            top: 0;
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex: 1;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 18px;
-        }
-
-        .logo:hover { color: var(--primary-dark); }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .calculator-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .ai-badge {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--accent-dark);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .icon-btn {
-            background: var(--bg-secondary);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .icon-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        #pwa-install-btn {
-            display: none;
-            padding: 8px 12px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        #pwa-install-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.05);
-        }
-
-        /* ===== SPONSOR BANNER ===== */
-        .sponsor-banner {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            font-size: 13px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .sponsor-text {
-            font-weight: 500;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .sponsor-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .sponsor-btn {
-            padding: 8px 12px;
-            background: white;
-            color: var(--primary);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .sponsor-btn:hover {
-            background: var(--accent);
-            color: var(--text);
-            transform: translateY(-2px);
-        }
-
-        .contact-email {
-            color: white;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* ===== MAIN CALCULATOR ===== */
-        .calculator-wrapper {
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 24px;
-            padding: 24px 0;
-            margin-bottom: 40px;
-        }
-
-        @media (max-width: 1024px) {
-            .calculator-wrapper {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-        }
-
-        .inputs-panel, .results-panel {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 24px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .inputs-panel:hover, .results-panel:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-        }
-
-        .panel-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-heading {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 20px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 6px;
-        }
-
-        .form-hint {
-            font-size: 11px;
-            color: var(--text-light);
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        input[type="number"],
-        input[type="text"],
-        input[type="date"],
-        input[type="month"],
-        select {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: var(--bg);
-            color: var(--text);
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        input[type="number"]:focus,
-        input[type="text"]:focus,
-        input[type="date"]:focus,
-        input[type="month"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.1);
-        }
-
-        .input-addon {
-            background: var(--bg-secondary);
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-light);
-            min-width: 50px;
-            text-align: center;
-        }
-
-        .toggle-btn {
-            padding: 6px 10px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-light);
-            transition: all 0.3s ease;
-        }
-
-        .toggle-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .lookup-btn {
-            padding: 10px 12px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .lookup-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .lookup-btn:active {
-            transform: translateY(0);
-        }
-
-        /* ===== RESULTS SECTION ===== */
-        .result-header {
-            margin-bottom: 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 16px;
-        }
-
-        .monthly-payment {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .monthly-unit {
-            font-size: 14px;
-            color: var(--text-light);
-        }
-
-        .payment-breakdown {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            font-size: 12px;
-            margin-top: 12px;
-        }
-
-        .breakdown-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px;
-            background: var(--bg-secondary);
-            border-radius: 6px;
-        }
-
-        .breakdown-label {
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .breakdown-value {
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        .tabs {
-            margin-top: 20px;
-        }
-
-        .tab-buttons {
-            display: flex;
-            gap: 8px;
-            border-bottom: 2px solid var(--border);
-            overflow-x: auto;
-            margin-bottom: 0;
-        }
-
-        .tab-btn {
-            padding: 12px 16px;
-            background: transparent;
-            border: none;
-            color: var(--text-light);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            margin-bottom: -2px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-
-        .tab-btn:hover {
-            color: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-            padding: 16px 0;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        @media (max-width: 640px) {
-            .result-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .result-box {
-            background: var(--bg-secondary);
-            padding: 16px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .result-label {
-            font-size: 12px;
-            color: var(--text-light);
-            font-weight: 500;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .result-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin: 20px 0;
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            padding: 12px;
-        }
-
-        /* ===== AI INSIGHTS ===== */
-        .insights-container {
-            margin-top: 20px;
-        }
-
-        .insights-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .insight-box {
-            background: var(--bg-secondary);
-            border-left: 4px solid var(--info);
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 6px;
-            font-size: 13px;
-            line-height: 1.5;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .insight-box.success { border-left-color: var(--success); }
-        .insight-box.warning { border-left-color: var(--warning); }
-        .insight-box.error { border-left-color: var(--error); }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            background: var(--card);
-            border-top: 1px solid var(--border);
-            padding: 32px 0;
-            margin-top: 40px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        @media (max-width: 1024px) {
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .footer-section h4 {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-        }
-
-        .footer-section a {
-            display: block;
-            font-size: 12px;
-            color: var(--text-light);
-            text-decoration: none;
-            margin-bottom: 8px;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: var(--primary);
-        }
-
-        .compliance-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
-            font-size: 12px;
-        }
-
-        .badge {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 10px;
-            background: var(--bg-secondary);
-            border-radius: 4px;
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        .disclaimer {
-            font-size: 11px;
-            color: var(--text-light);
-            line-height: 1.6;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-light);
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-        }
-
-        /* ===== FAQ ACCORDION ===== */
-        .faq-section {
-            margin: 40px 0;
-        }
-
-        .faq-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .faq-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .faq-item:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        .faq-question {
-            padding: 16px;
-            background: var(--bg-secondary);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-
-        .faq-question:hover {
-            background: var(--card);
-            color: var(--primary);
-        }
-
-        .faq-question.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .faq-icon {
-            font-size: 18px;
-            transition: transform 0.3s ease;
-        }
-
-        .faq-question.active .faq-icon {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            display: none;
-            padding: 16px;
-            background: var(--card);
-            color: var(--text-light);
-            line-height: 1.8;
-            font-size: 14px;
-        }
-
-        .faq-answer.active {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; max-height: 0; }
-            to { opacity: 1; max-height: 500px; }
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-wrap: wrap;
-            }
-
-            .header-title {
-                flex: 1 1 100%;
-                margin-top: 8px;
-            }
-
-            .calculator-wrapper {
-                grid-template-columns: 1fr;
-            }
-
-            .result-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .sponsor-banner {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .sponsor-buttons {
-                flex: 1 1 100%;
-                justify-content: space-between;
-            }
-
-            .tab-buttons {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .payment-breakdown {
-                grid-template-columns: 1fr;
-            }
-
-            .monthly-payment {
-                font-size: 24px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ===== PRINT STYLE ===== */
-        @media print {
-            .header, .sponsor-banner, .header-controls {
-                display: none;
-            }
-
-            .calculator-wrapper {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 <body>
-    <!-- HEADER -->
     <header class="header">
         <div class="container">
             <div class="header-content">
@@ -821,7 +65,6 @@
         </div>
     </header>
 
-    <!-- SPONSOR BANNER -->
     <div class="sponsor-banner">
         <span class="sponsor-text">🎁 Get Pre-Qualified and Receive a $1,000 Lender Credit</span>
         <div class="sponsor-buttons">
@@ -831,10 +74,8 @@
         </div>
     </div>
 
-    <!-- MAIN CALCULATOR -->
     <div class="container">
         <div class="calculator-wrapper">
-            <!-- LEFT PANEL: INPUTS -->
             <div class="inputs-panel">
                 <h2 class="panel-title">📋 Loan Parameters</h2>
 
@@ -938,33 +179,17 @@
                 </div>
             </div>
 
-            <!-- RIGHT PANEL: RESULTS -->
             <div class="results-panel">
                 <h2 class="panel-title">📊 Analysis & Results</h2>
 
-                <div class="result-header">
-                    <div class="monthly-payment" id="monthlyPayment">$0.00</div>
-                    <div class="monthly-unit">Estimated Monthly Payment (PITI + HOA)</div>
-                    <div class="payment-breakdown">
-                        <div class="breakdown-item">
-                            <span class="breakdown-label">P&I:</span>
-                            <span class="breakdown-value" id="piBreakdown">$0</span>
-                        </div>
-                        <div class="breakdown-item">
-                            <span class="breakdown-label">Tax:</span>
-                            <span class="breakdown-value" id="taxBreakdown">$0</span>
-                        </div>
-                        <div class="breakdown-item">
-                            <span class="breakdown-label">Ins:</span>
-                            <span class="breakdown-value" id="insBreakdown">$0</span>
-                        </div>
-                        <div class="breakdown-item">
-                            <span class="breakdown-label">PMI:</span>
-                            <span class="breakdown-value" id="pmiBreakdown">$0</span>
-                        </div>
+                <div class="summary-card">
+                    <div class="summary-label">Estimated Monthly Payment (PITI + HOA)</div>
+                    <div class="payment-amount">
+                        <span class="amount" id="monthly-payment">$0.00</span>
+                        <span class="unit">/month</span>
                     </div>
+                    <div class="payment-breakdown" id="payment-breakdown">P&I: $0 | Tax: $0 | Ins: $0 | PMI: $0 | HOA: $0</div>
                 </div>
-
                 <div class="tabs">
                     <div class="tab-buttons">
                         <button class="tab-btn active" data-tab="analysis">Loan Analysis</button>
@@ -973,7 +198,6 @@
                         <button class="tab-btn" data-tab="insights">AI Insights</button>
                     </div>
 
-                    <!-- ANALYSIS TAB -->
                     <div class="tab-content active" id="analysis">
                         <div class="result-grid">
                             <div class="result-box">
@@ -996,22 +220,25 @@
                                 <div class="result-label">Monthly Principal & Interest</div>
                                 <div class="result-value" id="monthlyPI">$1,475</div>
                             </div>
+                             <div class="result-box">
+                                <div class="result-label">Monthly HOA Fees</div>
+                                <div class="result-value" id="monthlyHOA">$0</div>
+                            </div>
                             <div class="result-box">
                                 <div class="result-label">PMI Status</div>
                                 <div class="result-value" id="pmiStatus">Required</div>
                             </div>
-                            <div class="result-box">
+                            <div class="result-box highlight">
                                 <div class="result-label">Interest Saved (with extra payments)</div>
                                 <div class="result-value" id="interestSaved">$0</div>
                             </div>
-                            <div class="result-box">
+                            <div class="result-box highlight">
                                 <div class="result-label">Payoff Acceleration</div>
                                 <div class="result-value" id="payoffAccel">0 months</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- CHARTS TAB -->
                     <div class="tab-content" id="charts">
                         <div class="chart-container">
                             <canvas id="paymentChart"></canvas>
@@ -1021,7 +248,6 @@
                         </div>
                     </div>
 
-                    <!-- AMORTIZATION TAB -->
                     <div class="tab-content" id="amortization">
                         <div style="overflow-x: auto;">
                             <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
@@ -1043,11 +269,10 @@
                         </div>
                     </div>
 
-                    <!-- INSIGHTS TAB -->
                     <div class="tab-content" id="insights">
                         <div class="insights-container" id="insightsContainer">
                             <div class="insight-box">
-                                <strong>🤖 AI Advisor:</strong> Enter your details to generate personalized insights...
+                                F<strong>🤖 AI Advisor:</strong> Enter your details to generate personalized insights...
                             </div>
                         </div>
                     </div>
@@ -1055,15 +280,12 @@
             </div>
         </div>
 
-        <!-- FAQ SECTION -->
         <section class="faq-section">
             <h2 class="faq-title">❓ Frequently Asked Questions</h2>
             <div class="faq-container" id="faqContainer">
-                <!-- FAQs will be dynamically generated -->
-            </div>
+                </div>
         </section>
 
-        <!-- FOOTER -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-content">
