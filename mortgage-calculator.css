@@ -189,14 +189,6 @@ body {
     transform: translateY(-2px);
 }
 
-.contact-email {
-    color: white;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
 /* ===== MAIN CALCULATOR ===== */
 .calculator-wrapper {
     display: grid;
@@ -544,6 +536,62 @@ select:focus {
 .insight-box.warning { border-left-color: var(--warning); }
 .insight-box.error { border-left-color: var(--error); }
 
+/* ===== NEW PARTNER SECTION STYLES (from car-lease-calculator) ===== */
+.footer-sponsor {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+    padding: 40px;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.sponsor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+}
+
+.sponsor-item {
+    text-align: center;
+    padding: 16px;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    transition: all 0.2s;
+}
+
+.sponsor-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.sponsor-item h4 {
+    margin-bottom: 8px;
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.sponsor-item p {
+    color: var(--text-light);
+    margin-bottom: 12px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.sponsor-item a {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.sponsor-item a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(36, 172, 185, 0.3);
+}
+
 /* ===== FOOTER ===== */
 .footer {
     background: var(--card);
@@ -567,6 +615,10 @@ select:focus {
 
 @media (max-width: 640px) {
     .footer-content {
+        grid-template-columns: 1fr;
+    }
+    /* Added from car lease styles for consistency */
+    .sponsor-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -755,7 +807,7 @@ select:focus {
 
 /* ===== PRINT STYLE ===== */
 @media print {
-    .header, .sponsor-banner, .header-controls {
+    .header, .sponsor-banner, .header-controls, .footer-sponsor {
         display: none;
     }
 
