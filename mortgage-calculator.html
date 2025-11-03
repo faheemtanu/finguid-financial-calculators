@@ -4,381 +4,1123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <title>Mortgage Calculator 2025: AI PITI & Amortization | FinGuid</title>
-    
-    <meta name="description" content="Free AI-powered mortgage calculator from FinGuid. Calculate PITI (Principal, Interest, Taxes, Insurance) with live FRED rates. See your full amortization schedule and get 30+ AI insights.">
-    
-    <meta name="keywords" content="mortgage calculator, piti calculator, home loan calculator, mortgage payment calculator, amortization schedule calculator, mortgage interest calculator, pmi calculator, home affordability calculator, mortgage rates, live fred rates, 30-year mortgage, 15-year mortgage, property tax calculator, home insurance calculator, FinGuid, ai mortgage calculator, seo mortgage tool, usa mortgage, first-time home buyer, refinance calculator, loan amortization, what is piti, principal and interest, mortgage pmi, hoa fees calculator, real estate calculator, house payment calculator">
-    
+
+    <title>AI Mortgage Calculator 2025 | PITI, Rates & Amortization | FinGuid</title>
+
+    <meta name="description" content="World's Best AI-Powered Mortgage Calculator by FinGuid. Calculate PITI (Principal, Interest, Taxes, Insurance) with live FRED rates, ZIP code tax lookup, extra payments, and 100+ AI insights. WCAG 2.1 AA compliant. Mobile-friendly.">
+
+    <meta name="keywords" content="mortgage calculator, PITI calculator, home loan calculator, mortgage payment calculator, amortization calculator, property tax calculator, home insurance calculator, mortgage rates calculator, monthly payment calculator, house affordability calculator, FHA calculator, VA loan calculator, USDA calculator, refinance calculator, extra payment calculator, lump sum payment, principal interest calculator, PMI calculator, HOA fees calculator, first time home buyer, down payment calculator, interest rate calculator, loan term calculator, 30 year mortgage, 15 year mortgage, adjustable rate mortgage, fixed rate mortgage, mortgage rates today, current mortgage rates, FRED API rates, live rates, real estate calculator, home buying calculator, mortgage affordability calculator, debt to income calculator, closing costs calculator, zip code tax lookup, state tax rates, property tax by state, homeowners insurance rates, mortgage insurance, private mortgage insurance, mortgage prepayment, extra principal payment, mortgage payoff calculator, pay off mortgage early, mortgage acceleration, interest savings calculator, loan amortization schedule, amortization table, payment schedule, monthly payment breakdown, principal vs interest, mortgage comparison, mortgage quotes, mortgage lenders, mortgage brokers, pre-approval letter, mortgage pre-qualification, credit score mortgage, down payment assistance, first time homebuyer programs, VA benefits, FHA loans, USDA loans, conventional loans, jumbo loans, government loans, reverse mortgage, mortgage refinancing, cash out refinance, rate and term refinance, streamline refinance, ARM calculator, interest only mortgage, balloon mortgage, bi-weekly mortgage payment, mortgage calculator with taxes and insurance, comprehensive mortgage calculator, detailed amortization calculator">
+
     <meta name="author" content="FinGuid USA">
-    <meta name.robots content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="theme-color" content="#19343B">
-    <link rel="canonical" href="https://www.finguid.com/calculators/mortgage-calculator">
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AI Mortgage Calculator 2025 | Live FRED Rates | FinGuid">
+    <meta property="og:description" content="Free AI mortgage calculator with FRED rates, ZIP code tax lookup, extra payments, and 100+ insights">
+    <link rel="canonical" href="https://www.finguid.com/calculators/mortgage">
+    <link rel="manifest" href="/manifest.json">
+
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-NYBL2CDNQJ', {
-            'page_path': '/calculators/mortgage-calculator'
+        // PWA Install Detection
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window.deferredPrompt = e;
+            const pwaInstall = document.getElementById('pwa-install-btn');
+            if (pwaInstall) pwaInstall.style.display = 'flex';
+        });
+
+        // Preload critical resources
+        document.addEventListener('DOMContentLoaded', () => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'script';
+            link.href = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
+            document.head.appendChild(link);
         });
     </script>
-    
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
-    
-    <link rel="stylesheet" href="mortgage-calculator.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is a PITI mortgage calculator?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A PITI calculator stands for Principal, Interest, Taxes, and Insurance. It's a mortgage calculator that estimates your *total* monthly housing payment, not just the loan payment. This gives you a much more accurate picture of your true homeownership costs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How is PMI calculated?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "PMI (Private Mortgage Insurance) is typically calculated as an annual percentage of your loan amount, divided into 12 monthly payments. This calculator automatically adds PMI if your down payment is less than 20% of the home price, as this is the industry standard."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is an amortization schedule?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "An amortization schedule is a complete table showing every payment over the life of your loan. It breaks down each payment into how much goes toward principal (paying down your loan) and how much goes toward interest (the cost of borrowing)."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Should I choose a 15-year or 30-year mortgage?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A 15-year mortgage has higher monthly payments but builds equity faster and saves you a significant amount in total interest. A 30-year mortgage has lower, more affordable monthly payments but you will pay much more in interest over the life of the loan. Our AI insights can help you compare these tradeoffs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the FRED API rate?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Our calculator uses the FRED (Federal Reserve Economic Data) API to pull the latest average mortgage rates (like the 30-Year Fixed Rate Mortgage Average, MORTGAGE30US). This provides a real-time, accurate rate for your calculations instead of a static guess."
-          }
-        }
-      ]
-    }
-    </script>
-</head>
 
+    <style>
+        :root {
+            --primary: #24ACB9;
+            --primary-dark: #19343B;
+            --accent: #FFC107;
+            --accent-dark: #E69500;
+            --text: #1F2121;
+            --text-light: #64748B;
+            --bg: #FFFFFD;
+            --bg-secondary: #F5F7FA;
+            --card: #FFFFFF;
+            --border: #E2E8F0;
+            --error: #EF4444;
+            --success: #10B981;
+            --info: #3B82F6;
+            --warning: #F59E0B;
+        }
+
+        [data-color-scheme="dark"] {
+            --text: #E1E8ED;
+            --text-light: #B8C5D0;
+            --bg: #1F2121;
+            --bg-secondary: #242B36;
+            --card: #181919;
+            --border: #38444D;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .logo:hover { color: var(--primary-dark); }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .calculator-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .ai-badge {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-dark);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: var(--bg-secondary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        #pwa-install-btn {
+            display: none;
+            padding: 8px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        #pwa-install-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* ===== SPONSOR BANNER ===== */
+        .sponsor-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-text {
+            font-weight: 500;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .sponsor-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .sponsor-btn {
+            padding: 8px 12px;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sponsor-btn:hover {
+            background: var(--accent);
+            color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .contact-email {
+            color: white;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ===== MAIN CALCULATOR ===== */
+        .calculator-wrapper {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            padding: 24px 0;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .calculator-wrapper {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+
+        .inputs-panel, .results-panel {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .inputs-panel:hover, .results-panel:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-heading {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="date"],
+        input[type="month"],
+        select {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="month"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.1);
+        }
+
+        .input-addon {
+            background: var(--bg-secondary);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .toggle-btn {
+            padding: 6px 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .lookup-btn {
+            padding: 10px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .lookup-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .lookup-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== RESULTS SECTION ===== */
+        .result-header {
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        .monthly-payment {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .monthly-unit {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .payment-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+        }
+
+        .breakdown-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .breakdown-value {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .tabs {
+            margin-top: 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+            margin-bottom: 0;
+        }
+
+        .tab-btn {
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 16px 0;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-box {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .result-label {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        /* ===== AI INSIGHTS ===== */
+        .insights-container {
+            margin-top: 20px;
+        }
+
+        .insights-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .insight-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--info);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .insight-box.success { border-left-color: var(--success); }
+        .insight-box.warning { border-left-color: var(--warning); }
+        .insight-box.error { border-left-color: var(--error); }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-section h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            display: block;
+            font-size: 12px;
+            color: var(--text-light);
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .compliance-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 10px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .disclaimer {
+            font-size: 11px;
+            color: var(--text-light);
+            line-height: 1.6;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-light);
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ===== FAQ ACCORDION ===== */
+        .faq-section {
+            margin: 40px 0;
+        }
+
+        .faq-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .faq-question {
+            padding: 16px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--card);
+            color: var(--primary);
+        }
+
+        .faq-question.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .faq-icon {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 16px;
+            background: var(--card);
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .faq-answer.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 500px; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            .header-title {
+                flex: 1 1 100%;
+                margin-top: 8px;
+            }
+
+            .calculator-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sponsor-banner {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .sponsor-buttons {
+                flex: 1 1 100%;
+                justify-content: space-between;
+            }
+
+            .tab-buttons {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .payment-breakdown {
+                grid-template-columns: 1fr;
+            }
+
+            .monthly-payment {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== PRINT STYLE ===== */
+        @media print {
+            .header, .sponsor-banner, .header-controls {
+                display: none;
+            }
+
+            .calculator-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
 <body>
-    <a href="#calculator" class="skip-link">Skip to Calculator</a>
-    
+    <!-- HEADER -->
     <header class="header">
-        <div class="header-top">
-            <div class="container">
-                <div class="logo">
-                    <a href="https://www.finguid.com">
-                        <i class="fas fa-calculator"></i>
-                        <span>FinGuid <strong>USA</strong></span>
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="https://www.finguid.com/" class="logo">
+                        <span>💰</span>
+                        <span>FinGuid USA</span>
                     </a>
+                    <div class="header-title">
+                        <span class="calculator-title">Home Loan Pro - Mortgage Calculator</span>
+                        <span class="ai-badge">🤖 AI Powered</span>
+                    </div>
                 </div>
-                <h1 class="site-title">Mortgage Calculator</h1>
-                <p class="site-subtitle">AI PITI & Amortization Analyzer</p>
-                
                 <div class="header-controls">
-                    <button id="theme-toggle" class="btn-icon" title="Dark Mode" data-tooltip="Toggle dark/light mode">
-                        <i class="fas fa-sun"></i>
-                    </button>
-                    <button id="voice-toggle" class="btn-icon" title="Voice Commands" data-tooltip="Say: calculate, set home price, show insights">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                    <button id="tts-toggle" class="btn-icon" title="Read Aloud" data-tooltip="Text-to-Speech">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                    <button id="pwa-install-button" class="btn-icon install-button hidden" title="Install App">
-                        <i class="fas fa-download"></i>
-                    </button>
+                    <button id="pwa-install-btn" aria-label="Install App">📱 Install</button>
+                    <button class="icon-btn" id="darkModeToggle" aria-label="Toggle dark mode" title="Dark mode">🌙</button>
+                    <button class="icon-btn" id="voiceToggle" aria-label="Voice control" title="Voice commands">🎤</button>
+                    <button class="icon-btn" id="ttsToggle" aria-label="Text to speech" title="Read results">🔊</button>
                 </div>
             </div>
-        </div>
-        
-        <div class="sponsor-banner">
-            <span>🎁 Get Pre-Qualified and Receive a **$1,000 Lender Credit** (Sponsor)</span>
-            <a href="#" onclick="alert('Partner: Mortgage Lender'); return false;" class="sponsor-btn">Check Eligibility →</a>
         </div>
     </header>
-    
-    <nav class="breadcrumb">
-        <div class="container">
-            <a href="https://www.finguid.com">Home</a> / 
-            <a href="https://www.finguid.com/calculators">Calculators</a> / 
-            <span>Mortgage Calculator</span>
+
+    <!-- SPONSOR BANNER -->
+    <div class="sponsor-banner">
+        <span class="sponsor-text">🎁 Get Pre-Qualified and Receive a $1,000 Lender Credit</span>
+        <div class="sponsor-buttons">
+            <button class="sponsor-btn" onclick="alert('View our partner lenders')">View Partners →</button>
+            <button class="sponsor-btn" onclick="alert('Lender sign-up form')">Become a Partner →</button>
+            <span class="contact-email">📧 contactus@finguid.com</span>
         </div>
-    </nav>
-    
-    <main id="calculator" class="main">
-        <div class="container">
-            <div class="calculator-wrapper">
-                <aside class="inputs-panel">
-                    <h2 class="panel-title"><i class="fas fa-home"></i> Loan Inputs</h2>
-                    
-                    <section class="input-section">
-                        <h3 class="section-heading">Home & Loan Details</h3>
-                        <div class="form-group">
-                            <label for="home-price">Home Price <span data-tooltip="The full purchase price of the home.">ℹ️</span></label>
-                            <input type="number" id="home-price" class="form-control" value="350000" min="0" step="1000">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="down-payment">Down Payment ($)</label>
-                                <input type="number" id="down-payment" class="form-control" value="70000" min="0" step="500">
-                            </div>
-                            <div class="form-group">
-                                <label for="down-payment-percent">Down Payment (%)</label>
-                                <input type="number" id="down-payment-percent" class="form-control" value="20" min="0" max="100" step="1">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="loan-term">Loan Term</label>
-                                <select id="loan-term" class="form-control">
-                                    <option value="30" selected>30-Year Fixed</option>
-                                    <option value="20">20-Year Fixed</option>
-                                    <option value="15">15-Year Fixed</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="interest-rate">Interest Rate %</label>
-                                <input type="number" id="interest-rate" class="form-control" value="6.75" min="0" max="30" step="0.01">
-                                <small class="fred-note">⚡ Live FRED Rate</small>
-                            </div>
-                        </div>
-                    </section>
-                    
-                    <section class="input-section">
-                        <h3 class="section-heading">Taxes, Insurance & Fees</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="property-tax">Property Tax (Annual)</label>
-                                <input type="number" id="property-tax" class="form-control" value="4000" min="0" step="100">
-                            </div>
-                            <div class="form-group">
-                                <label for="home-insurance">Insurance (Annual)</label>
-                                <input type="number" id="home-insurance" class="form-control" value="1200" min="0" step="100">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="pmi-rate">PMI Rate (Annual %)</label>
-                                <input type="number" id="pmi-rate" class="form-control" value="0.5" min="0" max="3" step="0.01">
-                                <small>Applies if down payment < 20%</small>
-                            </div>
-                             <div class="form-group">
-                                <label for="hoa-fee">HOA Fee (Monthly)</label>
-                                <input type="number" id="hoa-fee" class="form-control" value="0" min="0" step="10">
-                            </div>
-                        </div>
-                    </section>
-                </aside>
-                
-                <section class="results-panel">
-                    
-                    <div class="ad-slot">
-                        <p class="ad-label">ADVERTISEMENT</p>
-                        <div class="ad-placeholder">Sponsor Ad (e.g., Rocket Mortgage, Zillow)</div>
+    </div>
+
+    <!-- MAIN CALCULATOR -->
+    <div class="container">
+        <div class="calculator-wrapper">
+            <!-- LEFT PANEL: INPUTS -->
+            <div class="inputs-panel">
+                <h2 class="panel-title">📋 Loan Parameters</h2>
+
+                <div class="section-heading">Home Purchase</div>
+                <div class="form-group">
+                    <label class="form-label">Home Purchase Price <span class="form-hint">($)</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-addon">$</span>
+                        <input type="number" id="homePrice" value="350000" min="10000" step="5000" aria-label="Home price">
                     </div>
-                    
-                    <div class="summary-card">
-                        <div class="summary-label">Estimated Monthly Payment (PITI + HOA)</div>
-                        <div class="payment-amount">
-                            <span class="amount" id="monthly-payment">$0.00</span>
-                            <span class="unit">/month</span>
-                        </div>
-                        <div class="payment-breakdown" id="payment-breakdown">P&I: $0 | Tax: $0 | Ins: $0 | PMI: $0 | HOA: $0</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Down Payment
+                        <button class="toggle-btn active" data-type="dollar">$</button>
+                        <button class="toggle-btn" data-type="percent">%</button>
+                    </label>
+                    <div class="input-wrapper">
+                        <span class="input-addon" id="dpAddon">$</span>
+                        <input type="number" id="downPayment" value="70000" min="0" step="5000" aria-label="Down payment">
                     </div>
-                    
-                    <div class="tabs">
-                        <div class="tab-buttons" role="tablist">
-                            <button class="tab-btn active" data-tab="summary" role="tab">
-                                <i class="fas fa-chart-pie"></i> PITI Summary
-                            </button>
-                            <button class="tab-btn" data-tab="chart" role="tab">
-                                <i class="fas fa-chart-line"></i> Amortization
-                            </button>
-                            <button class="tab-btn" data-tab="insights" role="tab">
-                                <i class="fas fa-brain"></i> AI Insights (30+)
-                            </button>
-                            <button class="tab-btn" data-tab="faq" role="tab">
-                                <i class="fas fa-question-circle"></i> FAQ
-                            </button>
-                        </div>
-                        
-                        <div id="summary" class="tab-content active" role="tabpanel">
-                            <h3 class="result-title buy-title"><i class="fas fa-wallet"></i> Monthly Payment Breakdown</h3>
-                            <div class="chart-container" style="height: 300px; margin-bottom: 24px;">
-                                <canvas id="pitiChart"></canvas>
-                            </div>
-                            
-                            <h3 class="result-title lease-title"><i class="fas fa-file-invoice-dollar"></i> Loan Summary</h3>
-                            <div class="result-grid">
-                                <div class="result-box"><span class="result-label">Principal & Interest</span><span class="result-value" id="summary-pi">$0</span></div>
-                                <div class="result-box"><span class="result-label">Property Tax</span><span class="result-value" id="summary-tax">$0</span></div>
-                                <div class="result-box"><span class="result-label">Insurance</span><span class="result-value" id="summary-ins">$0</span></div>
-                                <div class="result-box"><span class="result-label">PMI</span><span class="result-value" id="summary-pmi">$0</span></div>
-                                <div class="result-box"><span class="result-label">HOA</span><span class="result-value" id="summary-hoa">$0</span></div>
-                                <div class="result-box highlight"><span class="result-label">Total Monthly</span><span class="result-value" id="summary-total">$0</span></div>
-                            </div>
-                        </div>
-                        
-                        <div id="chart" class="tab-content" role="tabpanel">
-                            <h3 class="result-title buy-title"><i class="fas fa-chart-line"></i> Principal vs. Interest Over Time</h3>
-                            <div class="chart-container" style="height: 350px;">
-                                <canvas id="amortizationChart"></canvas>
-                            </div>
-                             <h3 class="result-title lease-title" style="margin-top: 24px;"><i class="fas fa-table"></i> Full Amortization Schedule</h3>
-                             <div class="table-container">
-                                <table id="amortization-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Month</th>
-                                            <th>Payment</th>
-                                            <th>Principal</th>
-                                            <th>Interest</th>
-                                            <th>Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
-                        <div id="insights" class="tab-content" role="tabpanel">
-                            <h3 style="color: var(--primary); margin-bottom: 20px;"><i class="fas fa-lightbulb"></i> 30+ AI Mortgage Insights</h3>
-                            <div id="ai-insights" class="insights-container" aria-live="polite">
-                                <p style="text-align: center; color: var(--text-light);">Enter data for personalized AI analysis...</p>
-                            </div>
-                        </div>
-                        
-                        <div id="faq" class="tab-content" role="tabpanel">
-                            <h3 style="color: var(--primary); margin-bottom: 20px;"><i class="fas fa-book"></i> Mortgage FAQ</h3>
-                            <div class="faq-container">
-                                <details><summary>What is a PITI mortgage calculator?</summary><p>A PITI calculator stands for Principal, Interest, Taxes, and Insurance. It's a mortgage calculator that estimates your *total* monthly housing payment, not just the loan payment. This gives you a much more accurate picture of your true homeownership costs.</p></details>
-                                <details><summary>How is PMI calculated?</summary><p>PMI (Private Mortgage Insurance) is an extra fee, typically 0.5% to 1% of your loan amount annually, required if your down payment is less than 20%. Our calculator automatically adds this to your PITI payment if needed.</p></details>
-                                <details><summary>What is an amortization schedule?</summary><p>An amortization schedule is a complete table showing every payment over the life of your loan. It breaks down each payment into how much goes toward principal (paying down your loan) and how much goes toward interest (the cost of borrowing). You can see this in our 'Amortization' tab.</p></details>
-                                <details><summary>How much house can I afford?</summary><p>Use our home affordability calculator. As a rule of thumb, many lenders use the 28/36 rule: your housing payment (PITI) should be no more than 28% of your gross monthly income, and all your debt payments no more than 36%.</p></details>
-                                <details><summary>What is the live FRED rate?</summary><p>Our calculator uses the FRED (Federal Reserve Economic Data) API to pull the latest average mortgage rates (like the 30-Year Fixed Rate Mortgage Average, MORTGAGE30US). This provides a real-time, accurate rate for your calculations.</p></details>
-                                <details><summary>15-year vs. 30-year mortgage: Which is better?</summary><p>A 15-year mortgage has higher monthly payments but builds equity faster and saves you a significant amount in total interest. A 30-year mortgage has lower, more affordable monthly payments but you will pay much more in interest over the life of the loan. Our AI insights can help you compare these tradeoffs.</p></details>
-                                </div>
-                        </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Interest Rate <span class="form-hint">(%)</span></label>
+                    <div class="input-wrapper">
+                        <input type="number" id="interestRate" value="6.50" min="0" max="12" step="0.01" aria-label="Interest rate">
+                        <button class="lookup-btn" onclick="app.getFredRate()">Get Live Rate</button>
                     </div>
-                    
-                    <div class="affiliate-box">
-                        <h3>🏦 Compare Today's Top Mortgage Lenders (Affiliate)</h3>
-                        <p>Get personalized pre-qualified rates from our partners in minutes. See if you can beat your current rate!</p>
-                        <a href="#" onclick="alert('Partner: Mortgage Lenders'); return false;" class="btn-primary">Get Quotes →</a>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Loan Term <span class="form-hint">(Years)</span></label>
+                        <select id="loanTerm" aria-label="Loan term">
+                            <option value="15">15 Years</option>
+                            <option value="20">20 Years</option>
+                            <option value="30" selected>30 Years</option>
+                        </select>
                     </div>
-                    
-                </section>
+                    <div class="form-group">
+                        <label class="form-label">Custom Term <span class="form-hint">(Years)</span></label>
+                        <input type="number" id="customTerm" placeholder="or custom" min="1" max="50" aria-label="Custom loan term">
+                    </div>
+                </div>
+
+                <div class="section-heading">Taxes, Insurance & Fees</div>
+                <div class="form-group">
+                    <label class="form-label">ZIP Code <span class="form-hint">(for tax lookup)</span></label>
+                    <div class="input-wrapper">
+                        <input type="text" id="zipCode" placeholder="e.g., 90210" maxlength="5" aria-label="ZIP code">
+                        <button class="lookup-btn" onclick="app.lookupZipCode()">Lookup</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Property Tax (Annual) <span class="form-hint">($)</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-addon">$</span>
+                        <input type="number" id="propertyTax" value="4000" min="0" step="100" aria-label="Property tax">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Home Insurance (Annual) <span class="form-hint">($)</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-addon">$</span>
+                        <input type="number" id="homeInsurance" value="1200" min="0" step="50" aria-label="Home insurance">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">HOA Fees (Monthly) <span class="form-hint">($)</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-addon">$</span>
+                        <input type="number" id="hoaFees" value="0" min="0" step="50" aria-label="HOA fees">
+                    </div>
+                </div>
+
+                <div class="section-heading">Extra Payments</div>
+                <div class="form-group">
+                    <label class="form-label">Extra Monthly Payment <span class="form-hint">($)</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-addon">$</span>
+                        <input type="number" id="extraMonthly" value="0" min="0" step="50" aria-label="Extra monthly payment">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Extra One-Time Payment <span class="form-hint">($)</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-addon">$</span>
+                        <input type="number" id="extraOneTime" value="0" min="0" step="100" aria-label="Extra one-time payment">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Payment Date <span class="form-hint">(Month/Year)</span></label>
+                    <input type="month" id="extraPaymentDate" aria-label="Extra payment date">
+                </div>
             </div>
-        </div>
-    </main>
-    
-    <footer class="footer">
-        <div class="footer-sponsor">
-            <div class="container">
-                <h3 style="text-align: center; margin-bottom: 24px; color: var(--primary);">Our Home Buying Partners (Sponsors)</h3>
-                <div class="sponsor-grid">
-                    <div class="sponsor-item">
-                        <h4>🏦 Mortgage Lenders</h4>
-                        <p>Compare pre-qualified rates from our top-rated lending partners. Find the best 15-year and 30-year fixed rates.</p>
-                        <a href="#" onclick="alert('Partner: Lenders'); return false;">Compare Lenders →</a>
+
+            <!-- RIGHT PANEL: RESULTS -->
+            <div class="results-panel">
+                <h2 class="panel-title">📊 Analysis & Results</h2>
+
+                <div class="result-header">
+                    <div class="monthly-payment" id="monthlyPayment">$0.00</div>
+                    <div class="monthly-unit">Estimated Monthly Payment (PITI + HOA)</div>
+                    <div class="payment-breakdown">
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">P&I:</span>
+                            <span class="breakdown-value" id="piBreakdown">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Tax:</span>
+                            <span class="breakdown-value" id="taxBreakdown">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Ins:</span>
+                            <span class="breakdown-value" id="insBreakdown">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">PMI:</span>
+                            <span class="breakdown-value" id="pmiBreakdown">$0</span>
+                        </div>
                     </div>
-                    <div class="sponsor-item">
-                        <h4>🛡️ Home Insurance</h4>
-                        <p>Get competitive quotes for homeowners insurance in your state. Bundle and save on auto and home.</p>
-                        <a href="#" onclick="alert('Partner: Insurance'); return false;">Get Insurance Quotes →</a>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="analysis">Loan Analysis</button>
+                        <button class="tab-btn" data-tab="charts">Charts</button>
+                        <button class="tab-btn" data-tab="amortization">Amortization</button>
+                        <button class="tab-btn" data-tab="insights">AI Insights</button>
                     </div>
-                    <div class="sponsor-item">
-                        <h4>💳 Credit Repair</h4>
-                        <p>A better credit score means a lower rate. Connect with partners who can help improve your score.</p>
-                        <a href="#" onclick="alert('Partner: Credit'); return false;">Check Your Score →</a>
+
+                    <!-- ANALYSIS TAB -->
+                    <div class="tab-content active" id="analysis">
+                        <div class="result-grid">
+                            <div class="result-box">
+                                <div class="result-label">Loan Amount</div>
+                                <div class="result-value" id="loanAmount">$280,000</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-label">Total Interest Paid</div>
+                                <div class="result-value" id="totalInterest">$259,105</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-label">Total PITI Payments</div>
+                                <div class="result-value" id="totalPayments">$663,105</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-label">LTV Ratio</div>
+                                <div class="result-value" id="ltv">80%</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-label">Monthly Principal & Interest</div>
+                                <div class="result-value" id="monthlyPI">$1,475</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-label">PMI Status</div>
+                                <div class="result-value" id="pmiStatus">Required</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-label">Interest Saved (with extra payments)</div>
+                                <div class="result-value" id="interestSaved">$0</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-label">Payoff Acceleration</div>
+                                <div class="result-value" id="payoffAccel">0 months</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="sponsor-item">
-                        <h4>🏠 Real Estate Agents</h4>
-                        <p>Find a top-rated real estate agent in your local area. Get a cash-back rebate at closing (where available).</p>
-                        <a href="#" onclick="alert('Partner: Agents'); return false;">Find an Agent →</a>
+
+                    <!-- CHARTS TAB -->
+                    <div class="tab-content" id="charts">
+                        <div class="chart-container">
+                            <canvas id="paymentChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="amortizationChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- AMORTIZATION TAB -->
+                    <div class="tab-content" id="amortization">
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border);">
+                                        <th style="padding: 8px; text-align: left; font-weight: 600;">Payment #</th>
+                                        <th style="padding: 8px; text-align: right; font-weight: 600;">Payment</th>
+                                        <th style="padding: 8px; text-align: right; font-weight: 600;">Principal</th>
+                                        <th style="padding: 8px; text-align: right; font-weight: 600;">Interest</th>
+                                        <th style="padding: 8px; text-align: right; font-weight: 600;">Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="amortizationTable">
+                                    <tr style="border-bottom: 1px solid var(--border);">
+                                        <td colspan="5" style="padding: 12px; text-align: center; color: var(--text-light);">Generating schedule...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- INSIGHTS TAB -->
+                    <div class="tab-content" id="insights">
+                        <div class="insights-container" id="insightsContainer">
+                            <div class="insight-box">
+                                <strong>🤖 AI Advisor:</strong> Enter your details to generate personalized insights...
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="footer-nav">
+
+        <!-- FAQ SECTION -->
+        <section class="faq-section">
+            <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+            <div class="faq-container" id="faqContainer">
+                <!-- FAQs will be dynamically generated -->
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
             <div class="container">
-                <div class="footer-grid">
-                    <div class="footer-col">
-                        <h5>About FinGuid USA</h5>
-                        <p>World's first AI-powered financial calculator platform. Free, unbiased, comprehensive tools for smart financial decisions.</p>
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>About Mortgage Calculator</h4>
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="#features">Features</a>
+                        <a href="#faq">FAQ</a>
+                        <a href="#contact">Contact Us</a>
                     </div>
-                    <div class="footer-col">
-                        <h5>Financial Calculators</h5>
-                        <ul>
-                            <li><a href="/calculators/mortgage">🏠 Mortgage Calculator</a></li>
-                            <li><a href="/calculators/car-lease">🚗 Car Lease Calculator</a></li>
-                            <li><a href="/calculators/rent-vs-buy">🏘️ Rent vs Buy Calculator</a></li>
-                            <li><a href="/calculators/business-loan">📈 Business Loan Calculator</a></li>
-                            <li><a href="/calculators/retirement">👴 Retirement Calculator</a></li>
-                        </ul>
+                    <div class="footer-section">
+                        <h4>Learn More</h4>
+                        <a href="#piti">What is PITI?</a>
+                        <a href="#amortization">Amortization Guide</a>
+                        <a href="#rates">Current Rates</a>
+                        <a href="#blog">Blog</a>
                     </div>
-                    <div class="footer-col">
-                        <h5>Resources & Learning</h5>
-                        <ul>
-                            <li><a href="/blog">📰 Financial Blog</a></li>
-                            <li><a href="/guides/mortgage">Mortgage Guides</a></li>
-                            <li><a href="/glossary">Financial Glossary</a></li>
-                        </ul>
+                    <div class="footer-section">
+                        <h4>Resources</h4>
+                        <a href="#calculators">Other Calculators</a>
+                        <a href="#tools">Financial Tools</a>
+                        <a href="#education">Education</a>
+                        <a href="#glossary">Glossary</a>
                     </div>
-                    <div class="footer-col">
-                        <h5>Company & Legal</h5>
-                        <ul>
-                            <li><a href="/about">About Us</a></li>
-                            <li><a href="/privacy">Privacy Policy</a></li>
-                            <li><a href="/terms">Terms of Service</a></li>
-                            <li><a href="/contact">Contact Us</a></li>
-                            <li><a href="/disclaimer">Disclaimer</a></li>
-                        </ul>
+                    <div class="footer-section">
+                        <h4>Legal</h4>
+                        <a href="#privacy">Privacy Policy</a>
+                        <a href="#terms">Terms of Service</a>
+                        <a href="#disclaimer">Disclaimer</a>
+                        <a href="#affiliate">Affiliate Disclosure</a>
                     </div>
                 </div>
+
+                <div class="compliance-badges">
+                    <span class="badge">🔒 SSL Secured</span>
+                    <span class="badge">✅ GDPR Compliant</span>
+                    <span class="badge">✅ CCPA Compliant</span>
+                    <span class="badge">✅ FTC Compliant</span>
+                    <span class="badge">♿ WCAG 2.1 AA</span>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>Educational & Informational Only:</strong> This mortgage calculator is for educational and informational purposes only. It is NOT financial advice. Actual mortgage rates, terms, and payments may vary significantly based on credit score, debt-to-income ratio, location, loan type, down payment percentage, credit history, employment status, and many other factors. Lenders may impose additional requirements or restrictions. Always consult with a qualified mortgage professional, financial advisor, or lender before making any borrowing decisions.
+                    <br><br>
+                    <strong>Affiliate Disclosure:</strong> FinGuid participates in affiliate programs with lending partners. When you click on partner links or apply for mortgage products through this calculator, FinGuid may receive compensation. This does not affect your rates or terms. We only recommend products we believe provide value to users.
+                    <br><br>
+                    <strong>Data Accuracy:</strong> Mortgage rates are provided via FRED API and updated regularly. However, we make no guarantees about accuracy, completeness, or timeliness. Always verify rates directly with lenders before applying.
+                </div>
+
+                <div class="footer-bottom">
+                    © 2025 FinGuid USA. All Rights Reserved. | AI-Powered Financial Tools for Americans
+                </div>
             </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <div class="footer-social">
-                <a href="https://twitter.com/finguid" title="Twitter" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.linkedin.com/company/finguid" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://www.youtube.com/@finguid" title="YouTube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
-            </div>
-            <p>&copy; 2025 FinGuid USA. All Rights Reserved. | AI-Powered Financial Calculators</p>
-            <p style="font-size: 0.75rem; color: #999; margin-top: 12px;">
-                **Monetization Disclaimer:** FinGuid is a free platform that earns income *only* from advertising, sponsored products, and affiliate partnerships. This is how we fund our tools. We only recommend products we believe in.
-            </p>
-        </div>
-    </footer>
-    
-    <div id="toast-container" class="toast-container"></div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="mortgage-calculator.js"></script>
-    <script src="/register-sw.js"></script> </body>
+</body>
 </html>
