@@ -145,11 +145,11 @@ body {
     transform: scale(1.05);
 }
 
-/* ===== SPONSOR BANNER ===== */
+/* ===== SPONSOR BANNER (MODIFIED) ===== */
 .sponsor-banner {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%); /* Matched car lease color */
     color: white;
-    padding: 12px 16px;
+    padding: 16px; /* Matched car lease padding */
     display: flex;
     justify-content: space-between;
     align-items: center;
