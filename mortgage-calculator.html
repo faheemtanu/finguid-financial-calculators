@@ -8,6 +8,7 @@
     <title>AI Mortgage Calculator 2025 | PITI, Rates & Amortization | FinGuid</title>
 
     <meta name="description" content="World's Best AI-Powered Mortgage Calculator by FinGuid. Calculate PITI (Principal, Interest, Taxes, Insurance) with live FRED rates, ZIP code tax lookup, extra payments, and 100+ AI insights. WCAG 2.1 AA compliant. Mobile-friendly.">
+
     <meta name="keywords" content="mortgage calculator, PITI calculator, home loan calculator, mortgage payment calculator, amortization calculator, property tax calculator, home insurance calculator, mortgage rates calculator, monthly payment calculator, house affordability calculator, FHA calculator, VA loan calculator, USDA calculator, refinance calculator, extra payment calculator, lump sum payment, principal interest calculator, PMI calculator, HOA fees calculator, first time home buyer, down payment calculator, interest rate calculator, loan term calculator, 30 year mortgage, 15 year mortgage, adjustable rate mortgage, fixed rate mortgage, mortgage rates today, current mortgage rates, FRED API rates, live rates, real estate calculator, home buying calculator, mortgage affordability calculator, debt to income calculator, closing costs calculator, zip code tax lookup, state tax rates, property tax by state, homeowners insurance rates, mortgage insurance, private mortgage insurance, mortgage prepayment, extra principal payment, mortgage payoff calculator, pay off mortgage early, mortgage acceleration, interest savings calculator, loan amortization schedule, amortization table, payment schedule, monthly payment breakdown, principal vs interest, mortgage comparison, mortgage quotes, mortgage lenders, mortgage brokers, pre-approval letter, mortgage pre-qualification, credit score mortgage, down payment assistance, first time homebuyer programs, VA benefits, FHA loans, USDA loans, conventional loans, jumbo loans, government loans, reverse mortgage, mortgage refinancing, cash out refinance, rate and term refinance, streamline refinance, ARM calculator, interest only mortgage, balloon mortgage, bi-weekly mortgage payment, mortgage calculator with taxes and insurance, comprehensive mortgage calculator, detailed amortization calculator">
 
     <meta name="author" content="FinGuid USA">
@@ -20,8 +21,6 @@
     <link rel="manifest" href="/manifest.json">
 
     <link rel="stylesheet" href="mortgage-calculator.css">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
         // PWA Install Detection
@@ -43,44 +42,40 @@
     </script>
 </head>
 <body>
-    <a href="#calculator" class="skip-link">Skip to Calculator</a>
-
     <header class="header">
-        <div class="header-top">
-            <div class="container">
-                <div class="logo">
-                    <a href="https://www.finguid.com">
-                        <i class="fas fa-calculator"></i>
-                        <span>FinGuid <strong>USA</strong></span>
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="https://www.finguid.com/" class="logo">
+                        <span>💰</span>
+                        <span>FinGuid USA</span>
                     </a>
+                    <div class="header-title">
+                        <span class="calculator-title">Home Loan Pro - Mortgage Calculator</span>
+                        <span class="ai-badge">🤖 AI Powered</span>
+                    </div>
                 </div>
-                <h1 class="site-title">Mortgage Calculator</h1>
-                <p class="site-subtitle">AI PITI & Amortization Analyzer</p>
-                
                 <div class="header-controls">
-                    <button id="darkModeToggle" class="btn-icon" title="Dark Mode" data-tooltip="Toggle dark/light mode">
-                        <i class="fas fa-sun"></i>
-                    </button>
-                    <button id="voiceToggle" class="btn-icon" title="Voice Commands" data-tooltip="Say: calculate, set home price, show insights">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                    <button id="ttsToggle" class="btn-icon" title="Read Aloud" data-tooltip="Text-to-Speech">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                    <button id="pwa-install-btn" class="btn-icon install-button" title="Install App" aria-label="Install App">
-                        <i class="fas fa-download"></i>
-                    </button>
+                    <button id="pwa-install-btn" aria-label="Install App">📱 Install</button>
+                    <button class="icon-btn" id="darkModeToggle" aria-label="Toggle dark mode" title="Dark mode">🌙</button>
+                    <button class="icon-btn" id="voiceToggle" aria-label="Voice control" title="Voice commands">🎤</button>
+                    <button class="icon-btn" id="ttsToggle" aria-label="Text to speech" title="Read results">🔊</button>
                 </div>
             </div>
         </div>
-        
-        <div class="sponsor-banner">
-            <span>🎁 Get Pre-Qualified and Receive a **$1,000 Lender Credit** (Sponsor)</span>
-            <a href="#" onclick="alert('Partner: Mortgage Lender'); return false;" class="sponsor-btn">Check Eligibility →</a>
-        </div>
     </header>
+
+    <div class="sponsor-banner">
+        <span class="sponsor-text">🎁 Get Pre-Qualified and Receive a $1,000 Lender Credit</span>
+        <div class="sponsor-buttons">
+            <button class="sponsor-btn" onclick="alert('View our partner lenders')">View Partners →</button>
+            <button class="sponsor-btn" onclick="alert('Lender sign-up form')">Become a Partner →</button>
+            <span class="contact-email">📧 contactus@finguid.com</span>
+        </div>
+    </div>
+
     <div class="container">
-        <div class="calculator-wrapper" id="calculator">
+        <div class="calculator-wrapper">
             <div class="inputs-panel">
                 <h2 class="panel-title">📋 Loan Parameters</h2>
 
@@ -225,7 +220,7 @@
                                 <div class="result-label">Monthly Principal & Interest</div>
                                 <div class="result-value" id="monthlyPI">$1,475</div>
                             </div>
-                            <div class="result-box">
+                             <div class="result-box">
                                 <div class="result-label">Monthly HOA Fees</div>
                                 <div class="result-value" id="monthlyHOA">$0</div>
                             </div>
@@ -277,7 +272,7 @@
                     <div class="tab-content" id="insights">
                         <div class="insights-container" id="insightsContainer">
                             <div class="insight-box">
-                                <strong>🤖 AI Advisor:</strong> Enter your details to generate personalized insights...
+                                F<strong>🤖 AI Advisor:</strong> Enter your details to generate personalized insights...
                             </div>
                         </div>
                     </div>
@@ -336,7 +331,7 @@
                     <strong>Educational & Informational Only:</strong> This mortgage calculator is for educational and informational purposes only. It is NOT financial advice. Actual mortgage rates, terms, and payments may vary significantly based on credit score, debt-to-income ratio, location, loan type, down payment percentage, credit history, employment status, and many other factors. Lenders may impose additional requirements or restrictions. Always consult with a qualified mortgage professional, financial advisor, or lender before making any borrowing decisions.
                     <br><br>
                     <strong>Affiliate Disclosure:</strong> FinGuid participates in affiliate programs with lending partners. When you click on partner links or apply for mortgage products through this calculator, FinGuid may receive compensation. This does not affect your rates or terms. We only recommend products we believe provide value to users.
-                    <br><tr>
+                    <br><br>
                     <strong>Data Accuracy:</strong> Mortgage rates are provided via FRED API and updated regularly. However, we make no guarantees about accuracy, completeness, or timeliness. Always verify rates directly with lenders before applying.
                 </div>
 
