@@ -1,9 +1,12 @@
-/* === START: Styles from mortgage-calculator (1).css === */
+/* === START: Global Variables & Dark Mode (for all device friendly) === */
 :root {
-    --primary: #24ACB9;
-    --primary-dark: #19343B;
-    --accent: #FFC107;
+    /* FinGuid Primary Brand Colors (Teal/Dark Blue) */
+    --primary: #24ACB9; /* Main Teal */
+    --primary-dark: #19343B; /* Dark Blue */
+    --accent: #FFC107; /* Yellow Accent */
     --accent-dark: #E69500;
+    
+    /* General UI Colors */
     --text: #1F2121;
     --text-light: #64748B;
     --bg: #FFFFFD;
@@ -12,8 +15,11 @@
     --border: #E2E8F0;
     --error: #EF4444;
     --success: #10B981;
+    --warning: #F59E0B; /* For LTV warnings */
+    --info: #3B82F6; /* For general info */
 }
 
+/* Dark Mode (Fully functional for user preference) */
 [data-color-scheme="dark"] {
     --text: #E1E8ED;
     --text-light: #B8C5D0;
@@ -22,7 +28,7 @@
     --card: #181919;
     --border: #38444D;
 }
-/* === END: Styles from mortgage-calculator (1).css === */
+/* === END: Global Variables & Dark Mode === */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -73,13 +79,10 @@ body {
     font-size: 18px;
 }
 
-.logo:hover { color: var(--primary-dark); }
-
 .header-title {
     display: flex;
     align-items: center;
     gap: 12px;
-    flex: 1;
 }
 
 .calculator-title {
@@ -92,13 +95,16 @@ body {
     display: inline-block;
     font-size: 12px;
     font-weight: 600;
-    color: var(--accent-dark);
+    color: white;
+    background-color: var(--primary-dark);
+    padding: 4px 8px;
+    border-radius: 4px;
     animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(36, 172, 185, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(36, 172, 185, 0); }
 }
 
 .header-controls {
@@ -119,7 +125,6 @@ body {
     justify-content: center;
     color: var(--text);
     transition: all 0.3s ease;
-    position: relative;
 }
 
 .icon-btn:hover {
@@ -128,7 +133,7 @@ body {
 }
 
 #pwa-install-btn {
-    display: none;
+    display: none; /* Controlled by JS until install prompt is detected */
     padding: 8px 12px;
     background: var(--primary);
     color: white;
@@ -140,16 +145,12 @@ body {
     transition: all 0.3s ease;
 }
 
-#pwa-install-btn:hover {
-    background: var(--primary-dark);
-    transform: scale(1.05);
-}
-
-/* ===== SPONSOR BANNER (MODIFIED) ===== */
+/* ===== SPONSOR BANNER (Affiliate Marketing/Advertising) ===== */
 .sponsor-banner {
-    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%); /* Matched car lease color */
+    /* MATCHED CAR LEASE COLOR GRADIENT */
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
     color: white;
-    padding: 16px; /* Matched car lease padding */
+    padding: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -173,7 +174,7 @@ body {
 .sponsor-btn {
     padding: 8px 12px;
     background: white;
-    color: var(--primary);
+    color: #6366F1; /* Color pulled from gradient start for contrast */
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -189,10 +190,10 @@ body {
     transform: translateY(-2px);
 }
 
-/* ===== MAIN CALCULATOR ===== */
+/* ===== MAIN CALCULATOR LAYOUT (Mobile Friendly) ===== */
 .calculator-wrapper {
     display: grid;
-    grid-template-columns: 400px 1fr;
+    grid-template-columns: 400px 1fr; /* Two-column layout */
     gap: 24px;
     padding: 24px 0;
     margin-bottom: 40px;
@@ -200,7 +201,7 @@ body {
 
 @media (max-width: 1024px) {
     .calculator-wrapper {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Single column on tablets/mobile */
         gap: 16px;
     }
 }
@@ -211,10 +212,6 @@ body {
     padding: 24px;
     border: 1px solid var(--border);
     transition: all 0.3s ease;
-}
-
-.inputs-panel:hover, .results-panel:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
 .panel-title {
@@ -239,8 +236,18 @@ body {
     border-bottom: 2px solid var(--border);
 }
 
+/* Form Styling */
 .form-group {
     margin-bottom: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-group.half {
+    flex: 1;
 }
 
 .form-label {
@@ -267,97 +274,104 @@ body {
 
 input[type="number"],
 input[type="text"],
-input[type="date"],
 input[type="month"],
 select {
     flex: 1;
     padding: 10px 12px;
     border: 1px solid var(--border);
     border-radius: 6px;
-    background: var(--bg);
+    background: var(--bg-secondary);
     color: var(--text);
-    font-size: 14px;
-    transition: all 0.3s ease;
+    font-size: 16px;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
 }
 
-input[type="number"]:focus,
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-select:focus {
+input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.1);
+    box-shadow: 0 0 0 2px rgba(36, 172, 185, 0.2);
 }
 
 .input-addon {
-    background: var(--bg-secondary);
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
+    position: absolute;
+    left: 12px;
     color: var(--text-light);
-    min-width: 50px;
-    text-align: center;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.input-wrapper input[type="number"] {
+    padding-left: 28px;
 }
 
 .toggle-btn {
-    padding: 6px 10px;
     background: var(--bg-secondary);
     border: 1px solid var(--border);
+    padding: 4px 8px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 11px;
     font-weight: 600;
     color: var(--text-light);
-    transition: all 0.3s ease;
+    transition: all 0.2s;
 }
 
 .toggle-btn.active {
     background: var(--primary);
-    color: white;
     border-color: var(--primary);
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    color: white;
 }
 
 .lookup-btn {
-    padding: 10px 12px;
-    background: var(--primary);
+    padding: 8px 12px;
+    background: var(--primary-dark);
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     transition: all 0.3s ease;
     white-space: nowrap;
 }
 
 .lookup-btn:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
+    opacity: 0.9;
 }
 
-.lookup-btn:active {
-    transform: translateY(0);
+.calculate-btn {
+    margin-top: 10px;
+    padding: 12px 15px;
+    background: var(--accent);
+    color: var(--primary-dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    transition: background 0.2s, transform 0.2s;
 }
 
-/* ===== RESULTS SECTION ===== */
+.calculate-btn:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+}
 
-/* === START: Styles from mortgage-calculator (1).css === */
+.full-width {
+    width: 100%;
+}
+
+/* ===== RESULTS PANEL ===== */
 .summary-card {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white;
-    padding: 16px; /* Reduced height */
+    text-align: center;
+    padding: 20px;
     border-radius: 8px;
     margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
     box-shadow: 0 4px 12px rgba(36, 172, 185, 0.2);
-    text-align: center;
 }
 
 .summary-label {
@@ -377,7 +391,7 @@ select:focus {
 }
 
 .amount {
-    font-size: 2rem; /* Reduced size */
+    font-size: 2.5rem;
     font-weight: bold;
 }
 
@@ -391,10 +405,7 @@ select:focus {
     opacity: 0.8;
 }
 
-.tabs {
-    margin-bottom: 24px;
-}
-
+/* Tabs */
 .tab-buttons {
     display: flex;
     gap: 4px;
@@ -404,7 +415,7 @@ select:focus {
 }
 
 .tab-btn {
-    padding: 16px 24px;
+    padding: 12px 18px;
     border: none;
     background: transparent;
     color: var(--text-light);
@@ -413,9 +424,6 @@ select:focus {
     font-weight: 600;
     border-bottom: 3px solid transparent;
     transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
     margin-bottom: -2px;
     white-space: nowrap;
 }
@@ -431,116 +439,131 @@ select:focus {
 
 .tab-content {
     display: none;
-    padding: 8px; /* Lighter padding for content */
-    animation: fadeIn 0.3s ease;
+    padding: 8px 0;
 }
 
 .tab-content.active {
     display: block;
 }
 
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Fit more items */
-    gap: 16px;
-    margin-bottom: 24px;
+.tab-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 15px;
 }
 
-@media (max-width: 640px) {
-    .result-grid {
-        grid-template-columns: 1fr;
-    }
+.summary-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.result-box {
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.detail-item.total {
+    font-weight: 700;
+    color: var(--primary-dark);
+    border-bottom: 2px solid var(--primary);
+}
+
+.detail-item.success span:last-child {
+    color: var(--success);
+}
+
+/* Amortization Table */
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.amortization-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: right;
+}
+
+.amortization-table th, .amortization-table td {
+    padding: 10px 12px;
+}
+
+.amortization-table th {
     background: var(--bg-secondary);
-    padding: 16px;
-    border-radius: 6px;
-    border-left: 4px solid var(--border);
-    transition: all 0.2s;
-}
-
-.result-box:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.result-box.highlight {
-    border-left-color: var(--primary);
-    background: rgba(36, 172, 185, 0.1);
-}
-
-.result-label {
-    display: block;
-    font-size: 0.875rem;
-    color: var(--text-light);
+    color: var(--primary-dark);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    text-align: right;
 }
 
-.result-value {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: bold;
-}
-/* === END: Styles from mortgage-calculator (1).css === */
-
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+.amortization-table tbody tr:nth-child(even) {
+    background: var(--bg-secondary);
 }
 
+.amortization-table th:first-child, .amortization-table td:first-child {
+    text-align: left;
+}
+
+.table-note {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 10px;
+    text-align: right;
+}
+
+/* Charts */
 .chart-container {
     position: relative;
     height: 300px;
-    margin: 20px 0;
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    padding: 12px;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
-/* ===== AI INSIGHTS ===== */
+/* AI Insights */
 .insights-container {
-    margin-top: 20px;
-}
-
-.insights-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 12px;
     display: flex;
-    align-items: center;
-    gap: 6px;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .insight-box {
-    background: var(--bg-secondary);
-    border-left: 4px solid var(--info);
-    padding: 12px;
-    margin-bottom: 8px;
+    padding: 12px 16px;
+    border-left: 5px solid;
     border-radius: 6px;
-    font-size: 13px;
-    line-height: 1.5;
-    animation: slideIn 0.3s ease;
+    background: var(--bg-secondary);
+    font-size: 14px;
+    color: var(--text);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
+.insight-box strong {
+    font-weight: 700;
+    color: var(--primary-dark);
 }
 
 .insight-box.success { border-left-color: var(--success); }
 .insight-box.warning { border-left-color: var(--warning); }
 .insight-box.error { border-left-color: var(--error); }
+.insight-box.info { border-left-color: var(--info); }
 
-/* ===== NEW PARTNER SECTION STYLES (from car-lease-calculator) ===== */
+/* Partner Section Styles (FTC/Affiliate Marketing) */
 .footer-sponsor {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(36, 172, 185, 0.05) 0%, rgba(25, 52, 59, 0.05) 100%);
     padding: 40px;
-    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(36, 172, 185, 0.1);
+    border-radius: 12px;
+    margin-top: 20px;
 }
 
 .sponsor-grid {
@@ -551,163 +574,59 @@ select:focus {
 
 .sponsor-item {
     text-align: center;
-    padding: 16px;
+    padding: 20px;
     border-radius: 8px;
-    background: var(--bg-secondary);
+    background: var(--card);
+    border: 1px solid var(--border);
     transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .sponsor-item:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 
 .sponsor-item h4 {
     margin-bottom: 8px;
-    color: var(--primary);
-    font-size: 1rem;
+    color: var(--primary-dark);
+    font-size: 1.1rem;
 }
 
 .sponsor-item p {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
     color: var(--text-light);
-    margin-bottom: 12px;
-    font-size: 0.875rem;
-    line-height: 1.5;
 }
 
 .sponsor-item a {
     display: inline-block;
-    padding: 8px 20px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white;
-    text-decoration: none;
+    background: var(--accent);
+    color: var(--primary-dark);
+    padding: 8px 15px;
     border-radius: 4px;
+    text-decoration: none;
     font-weight: 600;
-    font-size: 0.875rem;
-    transition: all 0.2s;
+    font-size: 0.9rem;
+    transition: background 0.2s;
 }
 
 .sponsor-item a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(36, 172, 185, 0.3);
+    background: var(--accent-dark);
 }
 
-/* ===== FOOTER ===== */
-.footer {
-    background: var(--card);
-    border-top: 1px solid var(--border);
-    padding: 32px 0;
-    margin-top: 40px;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    margin-bottom: 32px;
-}
-
-@media (max-width: 1024px) {
-    .footer-content {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 640px) {
-    .footer-content {
-        grid-template-columns: 1fr;
-    }
-    /* Added from car lease styles for consistency */
-    .sponsor-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.footer-section h4 {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-}
-
-.footer-section a {
-    display: block;
-    font-size: 12px;
-    color: var(--text-light);
-    text-decoration: none;
-    margin-bottom: 8px;
-    transition: color 0.3s ease;
-}
-
-.footer-section a:hover {
-    color: var(--primary);
-}
-
-.compliance-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 20px;
-    font-size: 12px;
-}
-
-.badge {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
-    background: var(--bg-secondary);
-    border-radius: 4px;
-    font-weight: 600;
-    color: var(--text-light);
-}
-
-.disclaimer {
-    font-size: 11px;
-    color: var(--text-light);
-    line-height: 1.6;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-}
-
-.footer-bottom {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-light);
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-}
-
-/* ===== FAQ ACCORDION ===== */
-.faq-section {
-    margin: 40px 0;
-}
-
-.faq-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 20px;
-    text-align: center;
-}
-
+/* SEO/FAQ Styles */
 .faq-container {
-    max-width: 900px;
-    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 50px;
 }
 
 .faq-item {
-    margin-bottom: 12px;
     border: 1px solid var(--border);
     border-radius: 8px;
     overflow: hidden;
+    margin-bottom: 10px;
     transition: all 0.3s ease;
-}
-
-.faq-item:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .faq-question {
@@ -718,13 +637,7 @@ select:focus {
     justify-content: space-between;
     align-items: center;
     font-weight: 600;
-    color: var(--text);
     transition: all 0.3s ease;
-}
-
-.faq-question:hover {
-    background: var(--card);
-    color: var(--primary);
 }
 
 .faq-question.active {
@@ -752,15 +665,31 @@ select:focus {
 
 .faq-answer.active {
     display: block;
-    animation: slideDown 0.3s ease;
+    /* Removed animation for simplicity/perf, use for production */
+    /* animation: slideDown 0.3s ease; */
 }
 
-@keyframes slideDown {
-    from { opacity: 0; max-height: 0; }
-    to { opacity: 1; max-height: 500px; }
+/* Footer Compliance & Branding */
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.6;
 }
 
-/* ===== RESPONSIVE ===== */
+.footer-note {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 11px;
+}
+
+/* ===== RESPONSIVE (Mobile First) ===== */
 @media (max-width: 768px) {
     .header-content {
         flex-wrap: wrap;
@@ -775,6 +704,11 @@ select:focus {
         grid-template-columns: 1fr;
     }
 
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
     .sponsor-banner {
         flex-direction: column;
         gap: 12px;
@@ -786,32 +720,6 @@ select:focus {
     }
 
     .tab-buttons {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-    }
-}
-
-@media (max-width: 480px) {
-    .payment-breakdown {
-        font-size: 0.75rem; /* Smaller breakdown text */
-    }
-
-    .amount {
-        font-size: 2rem;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ===== PRINT STYLE ===== */
-@media print {
-    .header, .sponsor-banner, .header-controls, .footer-sponsor {
-        display: none;
-    }
-
-    .calculator-wrapper {
-        grid-template-columns: 1fr;
+        flex-wrap: wrap;
     }
 }
