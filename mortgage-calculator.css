@@ -236,7 +236,15 @@ body {
     color: var(--text);
     margin-bottom: 6px;
 }
-.form-label .form-hint { font-size: 11px; color: var(--text-light); }
+
+/* ===== NEW: Style for automated FRED update text ===== */
+.fred-update-info {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 6px;
+    text-align: right;
+}
+/* ===== END: New Style ===== */
 
 /* ===== NEW: Tooltip Styles (from Car Lease) ===== */
 .tooltip {
@@ -345,7 +353,7 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-/* ===== FRED BRANDING ===== */
+/* ===== FRED BRANDING (Button styles preserved in case you add other buttons) ===== */
 .lookup-btn {
     padding: 10px 12px;
     background: var(--primary); /* Default button uses new brand color */
@@ -456,7 +464,7 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
     background: rgba(255, 193, 7, 0.1);
 }
 
-/* --- IMPROVEMENT: Made result labels/values more visible --- */
+/* --- IMPROVEMENT: Made result labels/values more visible (Preserved) --- */
 .result-label { 
     display: block; 
     font-size: 0.9rem; /* Increased from 0.875rem */
