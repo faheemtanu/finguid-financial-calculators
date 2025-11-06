@@ -2,16 +2,16 @@
  * ========================================================================
  * HOME LOAN PRO - WORLD'S BEST AI-POWERED MORTGAGE CALCULATOR
  * ========================================================================
- * Version: 6.4 - PRODUCTION READY (AI Insights Bug Fix)
+ * Version: 6.5 - PRODUCTION READY (TTS Toggle Fix)
  * Built with: SOLID Principles, WCAG 2.1 AA, PWA Compatible
  *
  * IMPROVEMENTS:
- * --- FIX: The main calculator now correctly calculates 'firstYearInterest' 
- * and 'baselineTotalInterest' and adds them to the results.
- * --- FIX: The AI Insight Engine now correctly receives and uses this data, 
- * unlocking all AI insights and improving 15-vs-30-year accuracy.
- * --- FIX: Added a guard clause for 0 payment scenarios to prevent errors.
- * --- PRESERVED: Automated FRED rate, all FAQs, layout, monetization, etc.
+ * --- FIX: Implemented a true toggle state for the Text-to-Speech (TTS) button.
+ * --- FIX: Clicking 'ttsToggle' now adds/removes an '.active' class.
+ * --- FIX: When 'ttsToggle' is turned off, it now cancels any active speech.
+ * --- FIX: When 'ttsToggle' is on, new calculations will be spoken automatically.
+ * --- FIX: Voice recognition button ('voiceToggle') also uses '.active' class.
+ * --- PRESERVED: All other logic, including automated FRED rate and AI insights.
  * ========================================================================
  */
 
@@ -310,7 +310,6 @@ class MortgageCalculator {
             totalInterest: totalInterest,
             actualPayments: schedule.length,
             totalPrincipal: totalPrincipal
-            // Note: We don't return the full schedule here to save memory
         };
     }
 
@@ -324,7 +323,7 @@ class MortgageCalculator {
         
         this.results.interestSaved = baselineTotalInterest - actualTotalInterest;
         this.results.payoffAccel = baselinePayments - actualPayments; // in months
-        // --- FIX 1: Save baselineTotalInterest for the AI engine to use ---
+        // --- FIX: Save baselineTotalInterest for the AI engine to use ---
         this.results.baselineTotalInterest = baselineTotalInterest;
 
         const totalTax = (this.results.monthlyTax * actualPayments);
@@ -334,8 +333,7 @@ class MortgageCalculator {
         
         this.results.totalPayments = this.results.loanAmount + actualTotalInterest + totalTax + totalIns + totalPMI + totalHOA;
     
-        // --- FIX 2: Add missing First Year Interest calculation ---
-        // This uses `this.amortizationSchedule` which was set by `generateAmortizationSchedule()`
+        // --- FIX: Add missing First Year Interest calculation ---
         let firstYearInterest = 0;
         let firstYearPrincipal = 0;
         const yearSlice = this.amortizationSchedule.slice(0, 12);
@@ -363,7 +361,7 @@ class AIInsightEngine {
     
     generateInsights() {
         const insights = [];
-        // --- FIX 3: Destructure new baselineTotalInterest value ---
+        // --- FIX: Destructure new baselineTotalInterest value ---
         const { monthlyPayment, pmiRequired, monthlyPMI, interestSaved, payoffAccel, ltv, loanAmount, homePrice, monthlyPI, monthlyTax, monthlyInsurance, firstYearInterest, firstYearPrincipal, baselineTotalInterest } = this.results;
         const { extraMonthly, extraOneTime, interestRate, hoaFees, loanTerm } = this.inputs;
         const fmtd = UIManager.formatCurrency; // Helper
@@ -489,7 +487,7 @@ class AIInsightEngine {
             const term15 = 15 * 12;
             const rate15 = (parseFloat(interestRate) - 0.5) / 100 / 12; // 15-yr is usually lower
             const payment15 = MortgageCalculator.calculatePayment(loanAmount, rate15, term15);
-            // --- FIX 4: Use baselineTotalInterest for a true comparison ---
+            // --- FIX: Use baselineTotalInterest for a true comparison ---
             const totalInterest30 = baselineTotalInterest; 
             const totalInterest15 = (payment15 * term15) - loanAmount;
             const interestSaved = totalInterest30 - totalInterest15;
@@ -514,7 +512,7 @@ class AIInsightEngine {
         
         // --- IMPROVEMENT: Insight 8 (Escrow Ratio) ---
         const escrow = monthlyTax + monthlyInsurance;
-        // --- FIX 5: Add guard clause `monthlyPayment > 0` to prevent NaN/Infinity ---
+        // --- FIX: Add guard clause `monthlyPayment > 0` to prevent NaN/Infinity ---
         const escrowPercent = (monthlyPayment > 0) ? (escrow / monthlyPayment) * 100 : 0;
         if (escrowPercent > 33) {
              insights.push({
@@ -944,7 +942,8 @@ const app = {
     lastSchedule: null,
     lastYearlyData: [], // NEW: Store yearly data for summary
     state: {
-        amortizationView: 'monthly' // 'monthly' or 'yearly'
+        amortizationView: 'monthly', // 'monthly' or 'yearly'
+        isTtsEnabled: false // --- FIX: Add state for TTS toggle
     },
 
     async init() {
@@ -956,7 +955,7 @@ const app = {
         this.initTooltips(); // Initialize tooltips
         ChartManager.registerPlugins(); // --- IMPROVEMENT: Register chart plugins
         await this.loadInitialRate(); // --- IMPROVEMENT: This now runs automatically
-        this.calculate(); // Run initial calculation
+        // this.calculate(); // --- REMOVED: calculate() is now called by loadInitialRate()
     },
 
     setupEventListeners() {
@@ -1061,6 +1060,11 @@ const app = {
             const aiEngine = new AIInsightEngine(results, inputs);
             const insights = aiEngine.generateInsights();
             UIManager.updateInsights(insights);
+
+            // --- FIX: Automatically speak results if TTS is toggled on ---
+            if (this.state.isTtsEnabled) {
+                this.speakResults();
+            }
 
             // Update charts
             this.activateTab(document.querySelector('.tab-btn.active').getAttribute('data-tab'));
@@ -1282,9 +1286,22 @@ const app = {
             const recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.lang = 'en-US';
-            recognition.onstart = () => { voiceBtn.style.backgroundColor = 'var(--error)'; voiceBtn.textContent = '..'; };
-            recognition.onend = () => { voiceBtn.style.backgroundColor = ''; voiceBtn.textContent = '🎤'; };
-            recognition.onerror = (event) => { console.error('Voice recognition error', event.error); voiceBtn.style.backgroundColor = ''; voiceBtn.textContent = '🎤'; };
+            
+            // --- FIX: Use .active class for visual state ---
+            recognition.onstart = () => { 
+                voiceBtn.classList.add('active'); 
+                voiceBtn.textContent = '..'; 
+            };
+            recognition.onend = () => { 
+                voiceBtn.classList.remove('active'); 
+                voiceBtn.textContent = '🎤'; 
+            };
+            recognition.onerror = (event) => { 
+                console.error('Voice recognition error', event.error); 
+                voiceBtn.classList.remove('active'); 
+                voiceBtn.textContent = '🎤'; 
+            };
+
             recognition.onresult = (event) => {
                 const command = event.results[0][0].transcript.toLowerCase();
                 if (command.includes('calculate')) this.calculate();
@@ -1297,11 +1314,29 @@ const app = {
         }
         
         const ttsBtn = document.getElementById('ttsToggle');
-        ttsBtn.addEventListener('click', () => this.speakResults());
+        // --- FIX: Implement full toggle functionality ---
+        ttsBtn.addEventListener('click', () => {
+            // Toggle the state
+            this.state.isTtsEnabled = !this.state.isTtsEnabled;
+
+            if (this.state.isTtsEnabled) {
+                // Now ON
+                ttsBtn.classList.add('active'); // Add visual feedback
+                this.speakResults(); // Speak current results
+            } else {
+                // Now OFF
+                ttsBtn.classList.remove('active'); // Remove visual feedback
+                if ('speechSynthesis' in window && speechSynthesis.speaking) {
+                    speechSynthesis.cancel(); // Stop any current speech
+                }
+            }
+        });
     },
 
     speakResults() {
         if ('speechSynthesis' in window && this.lastResults) {
+            // --- FIX: Always cancel previous speech before starting new ---
+            speechSynthesis.cancel();
             const text = `Your estimated monthly payment is ${UIManager.formatCurrency(this.lastResults.monthlyPayment, 2)}.`;
             const utterance = new SpeechSynthesisUtterance(text);
             speechSynthesis.speak(utterance);
@@ -1310,6 +1345,8 @@ const app = {
     
     speakInsights() {
          if ('speechSynthesis' in window) {
+            // --- FIX: Always cancel previous speech before starting new ---
+            speechSynthesis.cancel();
             const insightsContainer = document.getElementById('insightsContainer');
             const firstInsight = insightsContainer.querySelector('.insight-box');
             if(firstInsight) {
@@ -1329,9 +1366,9 @@ const app = {
             item.innerHTML = `
                 <div class="faq-question" role="button" aria-expanded="false">
                     <span>${faq.q}</span>
-                    <span class="faq-icon">▼</span>
+                    <span class.faq-icon">▼</span>
                 </div>
-                <div class.faq-answer" role="region" style="display: none;">${faq.a}</div>
+                <div class="faq-answer" role="region" style="display: none;">${faq.a}</div>
             `;
             const question = item.querySelector('.faq-question');
             const answer = item.querySelector('.faq-answer');
