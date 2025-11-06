@@ -1,7 +1,7 @@
 /* === START: Global Variables (Brand Color Match) === */
 :root {
-    --primary: #6366F1; /* New Primary: FinGuid Indigo (Matches Car Lease Banner) */
-    --primary-dark: #4F46E5; /* Darker Indigo */
+    --primary: #24ACB9; /* Teal (Matches FinGuid Image & Car Lease CSS) */
+    --primary-dark: #19343B; /* Dark Teal (Matches Car Lease CSS) */
     --accent: #FFC107;
     --accent-dark: #E69500;
     --text: #1F2121;
@@ -187,7 +187,7 @@ body {
 .sponsor-btn {
     padding: 8px 12px;
     background: white;
-    color: var(--primary); /* Uses new primary brand color */
+    color: #6366F1; /* Color from the gradient for consistency */
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -301,7 +301,7 @@ input[type="month"]:focus,
 select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); /* Updated focus color */
+    box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.1); /* Updated focus color */
 }
 
 .input-addon {
@@ -377,7 +377,7 @@ select:focus {
     padding: 16px;
     border-radius: 8px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); /* Updated shadow */
+    box-shadow: 0 4px 12px rgba(36, 172, 185, 0.2); /* Updated shadow */
     text-align: center;
 }
 
@@ -493,7 +493,7 @@ select:focus {
 
 .result-box.highlight {
     border-left-color: var(--primary); /* Uses new primary brand color */
-    background: rgba(99, 102, 241, 0.1); /* Updated highlight */
+    background: rgba(36, 172, 185, 0.1); /* Updated highlight */
 }
 
 .result-label {
@@ -538,299 +538,3 @@ select:focus {
 
 @keyframes slideIn {
     from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-.insight-box.success { border-left-color: var(--success); }
-.insight-box.warning { border-left-color: var(--accent-dark); }
-.insight-box.error { border-left-color: var(--error); }
-
-
-/* ===== PARTNER SECTION (Preserved) ===== */
-.footer-sponsor {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%); /* Updated gradient */
-    padding: 40px;
-    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
-    border-radius: 12px;
-}
-
-.sponsor-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 24px;
-}
-
-.sponsor-item {
-    text-align: center;
-    padding: 16px;
-    border-radius: 8px;
-    background: var(--card); /* Updated from bg-secondary for more contrast */
-    transition: all 0.2s;
-}
-
-.sponsor-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.sponsor-item h4 {
-    margin-bottom: 8px;
-    color: var(--primary); /* Uses new primary brand color */
-    font-size: 1rem;
-}
-
-.sponsor-item p {
-    color: var(--text-light);
-    margin-bottom: 12px;
-    font-size: 0.875rem;
-    line-height: 1.5;
-}
-
-.sponsor-item a {
-    display: inline-block;
-    padding: 8px 20px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); /* Updated gradient */
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 0.875rem;
-    transition: all 0.2s;
-}
-
-.sponsor-item a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); /* Updated shadow */
-}
-
-/* ===== FOOTER (Preserved) ===== */
-.footer {
-    background: var(--card);
-    border-top: 1px solid var(--border);
-    padding: 32px 0;
-    margin-top: 40px;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    margin-bottom: 32px;
-}
-
-@media (max-width: 1024px) {
-    .footer-content {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-.footer-section h4 {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-}
-
-.footer-section a {
-    display: block;
-    font-size: 12px;
-    color: var(--text-light);
-    text-decoration: none;
-    margin-bottom: 8px;
-    transition: color 0.3s ease;
-}
-
-.footer-section a:hover {
-    color: var(--primary);
-}
-
-.compliance-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 20px;
-    font-size: 12px;
-}
-
-.badge {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
-    background: var(--bg-secondary);
-    border-radius: 4px;
-    font-weight: 600;
-    color: var(--text-light);
-}
-
-.disclaimer {
-    font-size: 11px;
-    color: var(--text-light);
-    line-height: 1.6;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-}
-
-.footer-bottom {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-light);
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-}
-
-/* ===== FAQ ACCORDION (Preserved) ===== */
-.faq-section {
-    margin: 40px 0;
-}
-
-.faq-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.faq-container {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.faq-item {
-    margin-bottom: 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.faq-item:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.faq-question {
-    padding: 16px;
-    background: var(--bg-secondary);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-    color: var(--text);
-    transition: all 0.3s ease;
-}
-
-.faq-question:hover {
-    background: var(--card);
-    color: var(--primary);
-}
-
-.faq-question.active {
-    background: var(--primary); /* Uses new primary brand color */
-    color: white;
-}
-
-.faq-icon {
-    font-size: 18px;
-    transition: transform 0.3s ease;
-}
-
-.faq-question.active .faq-icon {
-    transform: rotate(180deg);
-}
-
-.faq-answer {
-    display: none;
-    padding: 16px;
-    background: var(--card);
-    color: var(--text-light);
-    line-height: 1.8;
-    font-size: 14px;
-}
-
-.faq-answer.active {
-    display: block;
-    animation: slideDown 0.3s ease;
-}
-
-@keyframes slideDown {
-    from { opacity: 0; max-height: 0; }
-    to { opacity: 1; max-height: 500px; }
-}
-
-/* ===== RESPONSIVE (Updated for new header) ===== */
-@media (max-width: 768px) {
-    /* The new header is scrollable by default, so no flex-wrap is needed */
-    .header-features {
-        /* Hide features on medium screens to avoid clutter */
-        display: none; 
-    }
-
-    .calculator-wrapper {
-        grid-template-columns: 1fr;
-    }
-
-    .sponsor-banner {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .sponsor-buttons {
-        flex: 1 1 100%;
-        justify-content: space-between;
-    }
-
-    .tab-buttons {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-    }
-    .footer-content {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .calculator-title {
-        /* Hide title on very small screens to make room for controls */
-        display: none; 
-    }
-    
-    .header-features {
-        display: none; /* Also hidden here */
-    }
-
-    .payment-breakdown {
-        font-size: 0.75rem;
-    }
-
-    .amount {
-        font-size: 2rem;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    .footer-content {
-        grid-template-columns: 1fr;
-    }
-    .sponsor-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ===== PRINT STYLE (Preserved) ===== */
-@media print {
-    .header, .sponsor-banner, .header-controls, .footer-sponsor, .faq-section, .footer {
-        display: none;
-    }
-    .calculator-wrapper {
-        grid-template-columns: 1fr;
-    }
-    .inputs-panel, .results-panel {
-        box-shadow: none;
-        border: 1px solid #ccc;
-    }
-}
