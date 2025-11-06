@@ -82,7 +82,7 @@ body {
     margin-left: 16px;
 }
 
-/* Improved Animated Features */
+/* === IMPROVED: Animated Features === */
 .header-features {
     display: flex;
     align-items: center;
@@ -98,17 +98,28 @@ body {
     font-size: 12px;
     font-weight: 600;
     color: var(--text-light);
-    animation: pulse-text 2.5s infinite ease-in-out;
+    animation: pulse-color-text 2.5s infinite ease-in-out;
 }
 .header-feature-item:nth-child(1) { animation-delay: 0s; }
 .header-feature-item:nth-child(2) { animation-delay: 0.2s; }
 .header-feature-item:nth-child(3) { animation-delay: 0.4s; }
 .header-feature-item:nth-child(4) { animation-delay: 0.6s; }
 
-@keyframes pulse-text {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.02); }
+/* New animation for better visibility */
+@keyframes pulse-color-text {
+    0%, 100% {
+        opacity: 0.8;
+        color: var(--text-light);
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        color: var(--primary); /* Pulses to brand color */
+        transform: scale(1.03);
+    }
 }
+/* === END: Improved Animated Features === */
+
 
 /* Header Controls */
 .header-controls {
@@ -229,14 +240,36 @@ body {
 
 /* ===== NEW: Tooltip Styles (from Car Lease) ===== */
 .tooltip {
-    font-size: 12px;
-    color: var(--primary);
     font-weight: bold;
     cursor: help;
     margin-left: 4px;
     position: relative;
-    display: inline-block;
+    display: inline-flex; /* Use flex to align icon */
+    align-items: center;
+    color: var(--text-light); /* Make hint text match */
 }
+
+/* IMPROVED: Tooltip icon */
+.tooltip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--text-light);
+    color: var(--card);
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 14px;
+    margin-left: 5px;
+    transition: all 0.2s ease;
+}
+.tooltip:hover .tooltip-icon {
+    background: var(--primary);
+}
+
 
 .tooltip-box {
     position: fixed;
@@ -257,7 +290,14 @@ body {
 /* ===== END: Tooltip Styles ===== */
 
 
-.input-wrapper { position: relative; display: flex; align-items: center; gap: 8px; }
+.input-wrapper { 
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    /* IMPROVED: Fix for % input overflow */
+    min-width: 0; 
+}
 
 input[type="number"], input[type="text"], input[type="date"], input[type="month"], select {
     flex: 1;
@@ -268,6 +308,9 @@ input[type="number"], input[type="text"], input[type="date"], input[type="month"
     color: var(--text);
     font-size: 14px;
     transition: all 0.3s ease;
+    /* IMPROVED: Fix for % input overflow */
+    min-width: 0;
+    width: 100%; /* Ensure it takes available space */
 }
 
 input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, input[type="month"]:focus, select:focus {
@@ -398,9 +441,29 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
 .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; }
 .result-box { background: var(--bg-secondary); padding: 16px; border-radius: 6px; border-left: 4px solid var(--border); transition: all 0.2s; }
 .result-box:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-.result-box.highlight { border-left-color: var(--primary); background: rgba(36, 172, 185, 0.1); }
+
+/* IMPROVED: Result card visibility */
+.result-box.highlight { 
+    border-left-color: var(--primary); 
+    background: rgba(36, 172, 185, 0.1); 
+}
+.result-box.success {
+    border-left-color: var(--success);
+    background: rgba(16, 185, 129, 0.1);
+}
+.result-box.accent {
+    border-left-color: var(--accent-dark);
+    background: rgba(255, 193, 7, 0.1);
+}
+
 .result-label { display: block; font-size: 0.875rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-.result-value { display: block; font-size: 1.25rem; font-weight: bold; }
+.result-value { 
+    display: block; 
+    font-size: 1.3rem; /* Larger for visibility */
+    font-weight: 700; /* Bolder */
+    color: var(--text); /* Darker text */
+}
+/* END: Improved result cards */
 
 .chart-container {
     position: relative;
@@ -410,6 +473,34 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
     border-radius: 8px;
     padding: 12px;
 }
+
+/* === NEW: Chart Summary Controls (for chart.jpg) === */
+.chart-summary-controls {
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.chart-summary-controls label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+#slider-year-label {
+    display: inline-block;
+    font-weight: 700;
+    color: var(--primary);
+    min-width: 20px;
+}
+.year-slider {
+    width: 100%;
+    cursor: pointer;
+}
+/* === END: Chart Summary Controls === */
+
 
 /* ===== NEW: Amortization Controls & Table Styles ===== */
 .amortization-controls {
@@ -581,7 +672,7 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
 
 /* ===== PRINT STYLE (Preserved) ===== */
 @media print {
-    .header, .sponsor-banner, .header-controls, .footer-sponsor, .faq-section, .footer, .ad-slot, .amortization-controls {
+    .header, .sponsor-banner, .header-controls, .footer-sponsor, .faq-section, .footer, .ad-slot, .amortization-controls, .chart-summary-controls {
         display: none;
     }
     .calculator-wrapper { grid-template-columns: 1fr; }
