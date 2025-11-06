@@ -741,7 +741,7 @@ const app = {
     },
 
     async getFredRate() {
-        const btn = document.querySelector('.lookup-btn');
+        const btn = document.querySelector('.fred-btn');
         btn.textContent = 'Fetching...';
         btn.disabled = true;
         const rate = await FREDManager.getRate();
@@ -850,6 +850,18 @@ const app = {
                 alert('Voice control is not supported in your browser.');
             });
         }
+        
+        // TTS Button Logic
+        const ttsBtn = document.getElementById('ttsToggle');
+        ttsBtn.addEventListener('click', () => {
+            if ('speechSynthesis' in window && this.lastResults) {
+                const text = `Your estimated monthly payment is ${UIManager.formatCurrency(this.lastResults.monthlyPayment, 2)}.`;
+                const utterance = new SpeechSynthesisUtterance(text);
+                speechSynthesis.speak(utterance);
+            } else {
+                 alert('Text-to-speech is not supported or no results to read.');
+            }
+        });
     },
 
     speakResults() {
