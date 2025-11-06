@@ -342,7 +342,7 @@ select:focus {
 /* ===== FRED BRANDING ===== */
 .lookup-btn {
     padding: 10px 12px;
-    background: var(--fred-color); /* FRED Branding: Use FRED color */
+    background: var(--primary); /* Default button uses new brand color */
     color: white;
     border: none;
     border-radius: 6px;
@@ -354,15 +354,16 @@ select:focus {
 }
 
 .lookup-btn:hover {
-    background: #7D1418; /* Darker FRED red */
+    background: var(--primary-dark); /* Darker brand color */
     transform: translateY(-2px);
 }
 
-.lookup-btn.zip {
-    background: var(--primary); /* Regular buttons use brand color */
+.lookup-btn.fred-btn {
+    background: var(--fred-color); /* FRED Branding: Use FRED color */
 }
-.lookup-btn.zip:hover {
-    background: var(--primary-dark);
+
+.lookup-btn.fred-btn:hover {
+    background: #7D1418; /* Darker FRED red */
 }
 
 .lookup-btn:active {
