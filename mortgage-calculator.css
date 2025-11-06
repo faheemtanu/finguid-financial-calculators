@@ -146,6 +146,13 @@ body {
 
 .icon-btn:hover { background: var(--primary); color: white; }
 
+/* --- NEW STYLE FOR ACTIVE TOGGLES --- */
+.icon-btn.active {
+    background: var(--primary);
+    color: white;
+}
+/* --- END NEW STYLE --- */
+
 #pwa-install-btn {
     display: none;
     padding: 8px 12px;
