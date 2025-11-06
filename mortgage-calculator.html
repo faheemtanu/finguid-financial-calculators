@@ -89,27 +89,32 @@
 
                 <div class="section-heading">Home Purchase</div>
                 <div class="form-group">
-                    <label class="form-label">Home Purchase Price <span class="form-hint">($)</span></label>
+                    <label class="form-label" for="homePrice">Home Purchase Price <span class="tooltip" data-tooltip="The full purchase price of the home.">(i)</span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
                         <input type="number" id="homePrice" value="350000" min="10000" step="5000" aria-label="Home price">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">
-                        Down Payment
-                        <button class="toggle-btn active" data-type="dollar">$</button>
-                        <button class="toggle-btn" data-type="percent">%</button>
-                    </label>
-                    <div class="input-wrapper">
-                        <span class="input-addon" id="dpAddon">$</span>
-                        <input type="number" id="downPayment" value="70000" min="0" step="5000" aria-label="Down payment">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="downPaymentAmount">Down Payment <span class="tooltip" data-tooltip="The initial amount paid upfront.">$ (i)</span></label>
+                        <div class="input-wrapper">
+                            <span class="input-addon">$</span>
+                            <input type="number" id="downPaymentAmount" value="70000" min="0" step="1000" aria-label="Down payment amount in dollars">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="downPaymentPercent">Down Payment <span class="tooltip" data-tooltip="The percentage of the home price paid upfront.">% (i)</span></label>
+                        <div class="input-wrapper">
+                             <input type="number" id="downPaymentPercent" value="20" min="0" max="100" step="1" aria-label="Down payment percentage">
+                             <span class="input-addon">%</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Interest Rate <span class="form-hint">(%)</span></label>
+                    <label class="form-label" for="interestRate">Interest Rate <span class="tooltip" data-tooltip="The annual interest rate (APR) for the loan.">% (i)</span></label>
                     <div class="input-wrapper">
                         <input type="number" id="interestRate" value="6.50" min="0" max="12" step="0.01" aria-label="Interest rate">
                         <button class="lookup-btn fred-btn" onclick="app.getFredRate()">Get Live Rate</button>
@@ -118,7 +123,7 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Loan Term <span class="form-hint">(Years)</span></label>
+                        <label class="form-label" for="loanTerm">Loan Term <span class="tooltip" data-tooltip="The length of the loan in years.">(i)</span></label>
                         <select id="loanTerm" aria-label="Loan term">
                             <option value="15">15 Years</option>
                             <option value="20">20 Years</option>
@@ -126,14 +131,14 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Custom Term <span class="form-hint">(Years)</span></label>
+                        <label class="form-label" for="customTerm">Custom Term <span class="tooltip" data-tooltip="Enter a custom loan term in years.">(i)</span></label>
                         <input type="number" id="customTerm" placeholder="or custom" min="1" max="50" aria-label="Custom loan term">
                     </div>
                 </div>
 
                 <div class="section-heading">Taxes, Insurance & Fees</div>
                 <div class="form-group">
-                    <label class="form-label">ZIP Code <span class="form-hint">(for tax lookup)</span></label>
+                    <label class="form-label" for="zipCode">ZIP Code <span class="tooltip" data-tooltip="Used to estimate state and local property taxes.">(i)</span></label>
                     <div class="input-wrapper">
                         <input type="text" id="zipCode" placeholder="e.g., 90210" maxlength="5" aria-label="ZIP code">
                         <button class="lookup-btn" onclick="app.lookupZipCode()">Lookup</button>
@@ -141,7 +146,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Property Tax (Annual) <span class="form-hint">($)</span></label>
+                    <label class="form-label" for="propertyTax">Property Tax (Annual) <span class="tooltip" data-tooltip="Estimated annual property tax.">$ (i)</span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
                         <input type="number" id="propertyTax" value="4000" min="0" step="100" aria-label="Property tax">
@@ -149,7 +154,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Home Insurance (Annual) <span class="form-hint">($)</span></label>
+                    <label class="form-label" for="homeInsurance">Home Insurance (Annual) <span class="tooltip" data-tooltip="Estimated annual homeowners insurance.">$ (i)</span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
                         <input type="number" id="homeInsurance" value="1200" min="0" step="50" aria-label="Home insurance">
@@ -157,7 +162,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">HOA Fees (Monthly) <span class="form-hint">($)</span></label>
+                    <label class="form-label" for="hoaFees">HOA Fees (Monthly) <span class="tooltip" data-tooltip="Monthly Homeowners Association fees, if any.">$ (i)</span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
                         <input type="number" id="hoaFees" value="0" min="0" step="50" aria-label="HOA fees">
@@ -166,7 +171,7 @@
 
                 <div class="section-heading">Extra Payments</div>
                 <div class="form-group">
-                    <label class="form-label">Extra Monthly Payment <span class="form-hint">($)</span></label>
+                    <label class="form-label" for="extraMonthly">Extra Monthly Payment <span class="tooltip" data-tooltip="Additional amount paid monthly to reduce principal.">$ (i)</span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
                         <input type="number" id="extraMonthly" value="0" min="0" step="50" aria-label="Extra monthly payment">
@@ -174,7 +179,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Extra One-Time Payment <span class="form-hint">($)</span></label>
+                    <label class="form-label" for="extraOneTime">Extra One-Time Payment <span class="tooltip" data-tooltip="A single lump-sum payment applied to principal.">$ (i)</span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
                         <input type="number" id="extraOneTime" value="0" min="0" step="100" aria-label="Extra one-time payment">
@@ -182,13 +187,20 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Payment Date <span class="form-hint">(Month/Year)</span></label>
+                    <label class="form-label" for="extraPaymentDate">Payment Date <span class="tooltip" data-tooltip="Date for the one-time payment.">(i)</span></label>
                     <input type="month" id="extraPaymentDate" aria-label="Extra payment date">
                 </div>
             </div>
 
             <div class="results-panel">
                 <h2 class="panel-title">📊 Analysis & Results</h2>
+
+                <div class="ad-slot">
+                    <p class="ad-label">ADVERTISEMENT</p>
+                    <div class="ad-placeholder">
+                        <p>Compare Top Mortgage Lenders</p>
+                    </div>
+                </div>
 
                 <div class="summary-card">
                     <div class="summary-label">Estimated Monthly Payment (PITI + HOA)</div>
@@ -198,15 +210,22 @@
                     </div>
                     <div class="payment-breakdown" id="payment-breakdown">P&I: $0 | Tax: $0 | Ins: $0 | PMI: $0 | HOA: $0</div>
                 </div>
+                
                 <div class="tabs">
                     <div class="tab-buttons">
                         <button class="tab-btn active" data-tab="analysis">Loan Analysis</button>
-                        <button class="tab-btn" data-tab="charts">Charts</button>
+                        <button class="tab-btn" data-tab="charts">Mortgage Over Time</button>
                         <button class="tab-btn" data-tab="amortization">Amortization</button>
                         <button class="tab-btn" data-tab="insights">AI Insights</button>
                     </div>
 
                     <div class="tab-content active" id="analysis">
+                        <h3 class="results-heading">Monthly Payment Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="paymentBreakdownChart"></canvas>
+                        </div>
+                        
+                        <h3 class="results-heading">Loan Summary</h3>
                         <div class="result-grid">
                             <div class="result-box">
                                 <div class="result-label">Loan Amount</div>
@@ -225,11 +244,11 @@
                                 <div class="result-value" id="ltv">80%</div>
                             </div>
                             <div class="result-box">
-                                <div class="result-label">Monthly Principal & Interest</div>
+                                <div class="result-label">Monthly P&I</div>
                                 <div class="result-value" id="monthlyPI">$1,475</div>
                             </div>
                              <div class="result-box">
-                                <div class="result-label">Monthly HOA Fees</div>
+                                <div class="result-label">Monthly HOA</div>
                                 <div class="result-value" id="monthlyHOA">$0</div>
                             </div>
                             <div class="result-box">
@@ -237,7 +256,7 @@
                                 <div class="result-value" id="pmiStatus">Required</div>
                             </div>
                             <div class="result-box highlight">
-                                <div class="result-label">Interest Saved (with extra payments)</div>
+                                <div class="result-label">Interest Saved</div>
                                 <div class="result-value" id="interestSaved">$0</div>
                             </div>
                             <div class="result-box highlight">
@@ -248,36 +267,29 @@
                     </div>
 
                     <div class="tab-content" id="charts">
+                        <h3 class="results-heading">Mortgage Balance Over Time</h3>
                         <div class="chart-container">
-                            <canvas id="paymentChart"></canvas>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="amortizationChart"></canvas>
+                            <canvas id="mortgageOverTimeChart"></canvas>
                         </div>
                     </div>
 
                     <div class="tab-content" id="amortization">
-                        <div style="overflow-x: auto;">
-                            <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
-                                <thead>
-                                    <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border);">
-                                        <th style="padding: 8px; text-align: left; font-weight: 600;">Payment #</th>
-                                        <th style="padding: 8px; text-align: right; font-weight: 600;">Payment</th>
-                                        <th style="padding: 8px; text-align: right; font-weight: 600;">Principal</th>
-                                        <th style="padding: 8px; text-align: right; font-weight: 600;">Interest</th>
-                                        <th style="padding: 8px; text-align: right; font-weight: 600;">Balance</th>
-                                    </tr>
-                                </thead>
+                        <div class="amortization-controls">
+                            <button id="amortToggle" class="btn-secondary">Show Yearly</button>
+                            <button id="exportCsv" class="btn-secondary">Export as CSV</button>
+                        </div>
+                        <div class="table-scroll-wrapper">
+                            <table class="amortization-table">
+                                <thead id="amortizationThead">
+                                    </thead>
                                 <tbody id="amortizationTable">
-                                    <tr style="border-bottom: 1px solid var(--border);">
-                                        <td colspan="5" style="padding: 12px; text-align: center; color: var(--text-light);">Generating schedule...</td>
-                                    </tr>
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
                     </div>
 
                     <div class="tab-content" id="insights">
+                         <h3 class="results-heading">🤖 AI-Powered Insights</h3>
                         <div class="insights-container" id="insightsContainer">
                             <div class="insight-box">
                                 <strong>🤖 AI Advisor:</strong> Enter your details to generate personalized insights...
@@ -368,6 +380,7 @@
                     <br><br>
                     <strong>Affiliate Disclosure:</strong> FinGuid participates in affiliate programs with lending partners. When you click on partner links or apply for mortgage products through this calculator, FinGuid may receive compensation. This does not affect your rates or terms. We only recommend products we believe provide value to users.
                     <br><br>
+    
                     <strong>Data Accuracy:</strong> Mortgage rates are provided via FRED API and updated regularly. However, we make no guarantees about accuracy, completeness, or timeliness. Always verify rates directly with lenders before applying.
                 </div>
 
