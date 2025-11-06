@@ -146,7 +146,7 @@ body {
 
 .icon-btn:hover { background: var(--primary); color: white; }
 
-/* --- NEW STYLE FOR ACTIVE TOGGLES --- */
+/* --- STYLE FOR ACTIVE TOGGLES (from previous fix) --- */
 .icon-btn.active {
     background: var(--primary);
     color: white;
@@ -245,13 +245,63 @@ body {
 }
 
 /* ===== NEW: Style for automated FRED update text ===== */
-.fred-update-info {
+.fred-rates-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+#fred-last-updated {
     font-size: 11px;
     color: var(--text-light);
-    margin-top: 6px;
-    text-align: right;
+    text-align: left;
 }
-/* ===== END: New Style ===== */
+.fred-branding {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 600;
+}
+.fred-branding a {
+    color: var(--text-light);
+    text-decoration: none;
+}
+.fred-branding a:hover {
+    color: var(--primary);
+}
+
+.live-rates-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.rate-btn {
+    flex-grow: 1;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-secondary);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.rate-btn:hover {
+    background: var(--card);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.rate-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+.rate-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+/* ===== END: New Styles ===== */
 
 /* ===== NEW: Tooltip Styles (from Car Lease) ===== */
 .tooltip {
