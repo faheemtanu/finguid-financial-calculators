@@ -2,7 +2,7 @@
  * ========================================================================
  * HOME LOAN PRO - WORLD'S BEST AI-POWERED MORTGAGE CALCULATOR
  * ========================================================================
- * Version: 6.0 - PRODUCTION READY (Feature Expansion)
+ * Version: 6.1 - PRODUCTION READY (AI/SEO/UX Expansion)
  * Built with: SOLID Principles, WCAG 2.1 AA, PWA Compatible
  * New Features:
  * - Synced Down Payment ($/%)
@@ -12,13 +12,20 @@
  * - Amortization Table Toggle (Monthly/Yearly)
  * - Amortization Export to CSV
  * - Ad/Sponsor Slots
+ *
+ * IMPROVEMENTS:
+ * - Automatic daily FRED rate loading with "Last Updated" timestamp.
+ * - Significantly expanded AI Insights engine.
+ * - Significantly expanded SEO-driven FAQ list.
+ * - Interactive yearly summary added to 'Mortgage Over Time' chart.
+ * - Visual/CSS class updates for new features.
  * ========================================================================
  */
 
 // ===== APP STATE & CONSTANTS (KEEP THIS ID CONFIDENCAL) =====
 const FRED_API_KEY = '9c6c421f077f2091e8bae4f143ada59a';
 const FRED_URL = 'https://api.stlouisfed.org/fred/series/observations';
-const FRED_SERIES = 'MORTGAGE30US';
+const FRED_SERIES = 'MORTGAGE30US'; // 30-Year Fixed Rate Mortgage
 
 const STATE_TAX_RATES = {
     AL: 0.41, AK: 1.19, AZ: 0.62, AR: 0.61, CA: 0.76, CO: 0.51, CT: 2.14,
@@ -36,20 +43,59 @@ const ZIP_TO_STATE = {
     "33101": "FL", "33102": "FL", "85001": "AZ", "85002": "AZ", "98101": "WA"
 };
 
-// FAQs for SEO / Ranking (Preserved)
+// ===== NEW: EXPANDED FAQs for SEO / Ranking =====
 const FAQs = [
     {
-        q: "How does a mortgage calculator work?",
-        a: "A mortgage calculator uses the mortgage payment formula to compute monthly payments based on loan amount, interest rate, and term. It then adds property taxes, insurance, PMI, and HOA fees to show your complete PITI payment."
+        q: "What is a mortgage calculator and how does it work?",
+        a: "A mortgage calculator is an AI-powered tool that estimates your monthly home loan payment. It uses the loan amount (home price minus down payment), interest rate, and loan term to calculate the principal and interest (P&I). It then adds estimated property taxes, homeowners insurance, and PMI (if applicable) to show your full PITI payment."
     },
     {
-        q: "What is PITI?",
-        a: "PITI stands for Principal, Interest, Taxes, and Insurance. It represents all four major components of your monthly mortgage payment: the loan payment (P&I) plus escrow for taxes and insurance."
+        q: "What is PITI in a mortgage payment?",
+        a: "PITI stands for **Principal, Interest, Taxes, and Insurance**. These are the four main components of your monthly mortgage payment. Principal reduces your loan balance, Interest is the cost of borrowing, and Taxes & Insurance are typically held in an escrow account by your lender and paid on your behalf."
     },
-    // ... (All other FAQs are preserved) ...
     {
-        q: "What's the difference between fixed and ARM?",
-        a: "Fixed-rate mortgages have the same rate for the entire loan term. ARM (Adjustable-Rate Mortgages) have lower initial rates that adjust periodically based on market rates."
+        q: "How much house can I afford in 2025?",
+        a: "A common rule of thumb is the **28/36 rule**. Lenders prefer your total housing payment (PITI + HOA) to be at or below **28%** of your gross monthly income. Your total debt payments (including mortgage, car loans, credit cards) should be at or below **36%** of your gross monthly income. Use this AI calculator to find your PITI, then compare it to your income."
+    },
+    {
+        q: "What is a good mortgage rate today?",
+        a: "Mortgage rates change daily. This calculator provides the latest available 30-year fixed rate from the FRED API. A 'good' rate depends on your credit score, down payment, loan type, and the current market. Rates below the national average are generally considered very good. Contact our partners to see what rate you qualify for."
+    },
+    {
+        q: "How does my down payment affect my mortgage?",
+        a: "A larger down payment reduces your loan amount, which lowers your monthly P&I payment. If you pay **20% or more**, you also avoid **PMI (Private Mortgage Insurance)**, which further reduces your monthly cost. This calculator's AI insights will show you the impact of your down payment."
+    },
+    {
+        q: "What is PMI (Private Mortgage Insurance)?",
+        a: "PMI is insurance that protects the lender in case you default on your loan. It is typically required on conventional loans if your down payment is less than 20%. Our calculator automatically estimates PMI if your LTV (Loan-to-Value) ratio is above 80%."
+    },
+    {
+        q: "Should I choose a 15-year or 30-year mortgage?",
+        a: "A **30-year** mortgage offers a lower monthly payment, making it more affordable. A **15-year** mortgage has a higher monthly payment but typically a lower interest rate. You will pay off the loan in half the time and save a significant amount in total interest. Our AI insights will show you the exact interest savings."
+    },
+    {
+        q: "What is an amortization schedule?",
+        a: "An amortization schedule (or table) is a complete breakdown of every payment over the life of your loan. It shows how much of each payment goes toward principal and how much goes toward interest. Use the 'Amortization' tab to see your full schedule, either monthly or yearly."
+    },
+    {
+        q: "How do extra payments help pay off a mortgage early?",
+        a: "When you make an extra payment, 100% of that money goes directly to your **principal balance** (not interest). This reduces the loan balance, meaning you pay less interest on the next payment, and every payment after. This 'accelerates' your payoff and can save you thousands. See your 'Interest Saved' in the Loan Summary."
+    },
+    {
+        q: "What are FHA, VA, and USDA loans?",
+        a: "These are government-backed loans. **FHA loans** are popular with first-time buyers due to low down payment requirements. **VA loans** are for eligible veterans and service members, often requiring no down payment. **USDA loans** are for rural and suburban homebuyers and also offer 0% down options."
+    },
+    {
+        q: "What are closing costs?",
+        a: "Closing costs are fees paid at the end of the home-buying process. They typically range from 2% to 5% of the home's purchase price and include appraisal fees, title insurance, attorney fees, and more. This calculator focuses on your ongoing PITI payment; be sure to budget separately for closing costs."
+    },
+    {
+        q: "What is the difference between a fixed-rate and adjustable-rate mortgage (ARM)?",
+        a: "A **fixed-rate** mortgage has the same interest rate for the entire loan term (e.g., 30 years). Your P&I payment never changes. An **ARM** has a lower 'introductory' rate for a set period (e.g., 5 or 7 years), after which the rate adjusts based on the market. ARMs can be risky if rates rise."
+    },
+    {
+        q: "How do I get pre-approved for a mortgage?",
+        a: "To get pre-approved, you'll provide a lender with your financial information (income, assets, debts) and they will check your credit. If you qualify, they'll give you a pre-approval letter stating how much you can borrow. This shows sellers you are a serious buyer. You can start the process by 'Viewing Partners' on our site."
     }
 ];
 
@@ -225,37 +271,108 @@ class MortgageCalculator {
     }
 }
 
-// ===== AI INSIGHTS ENGINE (Preserved) =====
+// ===== NEW: EXPANDED AI INSIGHTS ENGINE =====
 class AIInsightEngine {
     constructor(results, inputs) {
         this.results = results;
         this.inputs = inputs;
     }
+    
     generateInsights() {
-        // (Existing robust AI logic is preserved)
         const insights = [];
-        if (this.results.monthlyPayment) {
-            insights.push({
-                title: "💰 Monthly Payment Affordability",
-                text: `Your estimated monthly payment is $${this.results.monthlyPayment.toFixed(2)}. Aim for payments under 28% of your gross monthly income.`,
-                type: this.results.monthlyPayment > 2500 ? 'warning' : 'success'
-            });
-        }
-        if (this.results.pmiRequired) {
+        const { monthlyPayment, pmiRequired, monthlyPMI, interestSaved, payoffAccel, ltv, loanAmount, homePrice } = this.results;
+        const { extraMonthly, extraOneTime, interestRate, hoaFees } = this.inputs;
+
+        if (!monthlyPayment || monthlyPayment <= 0) {
              insights.push({
-                title: "🏠 PMI Elimination Timeline",
-                text: `You're paying $${this.results.monthlyPMI.toFixed(2)}/mo for PMI. Pay down to 20% equity to remove it.`,
+                title: "🤖 AI Advisor",
+                text: `Enter your loan details to generate personalized insights and see your affordability.`,
+                type: 'info'
+            });
+            return insights;
+        }
+
+        // Insight 1: Affordability (General)
+        insights.push({
+            title: "💰 Monthly Payment Affordability",
+            text: `Your estimated PITI + HOA payment is $${monthlyPayment.toFixed(2)}. As a guideline, lenders often want this to be under 28% of your gross monthly income.`,
+            type: monthlyPayment > 3000 ? 'warning' : 'success'
+        });
+
+        // Insight 2: PMI Warning
+        if (pmiRequired) {
+             insights.push({
+                title: "🏠 PMI Required",
+                text: `Your LTV is ${ltv.toFixed(1)}%, which is over 80%. You'll pay an estimated $${monthlyPMI.toFixed(2)}/mo for PMI. AI suggests increasing your down payment to 20% ($${(homePrice * 0.2).toFixed(0)}) to eliminate this cost.`,
                 type: 'warning'
             });
-        }
-         if (this.results.interestSaved > 0) {
-            insights.push({
-                title: "💵 Extra Payment Impact",
-                text: `Your extra payments will save $${this.results.interestSaved.toFixed(0)} in interest and you'll pay off your loan ${this.results.payoffAccel} months earlier.`,
+        } else if (ltv <= 80 && ltv > 0) {
+             insights.push({
+                title: "✅ No PMI Required",
+                text: `Great job! Your LTV is ${ltv.toFixed(1)}%, so you avoid paying for Private Mortgage Insurance (PMI). This saves you money every month.`,
                 type: 'success'
             });
         }
-        // ... (etc. all other insights preserved) ...
+        
+        // Insight 3: Extra Payment Impact
+        if (interestSaved > 0) {
+            insights.push({
+                title: "💵 Extra Payment Impact",
+                text: `Your extra payments will save $${UIManager.formatCurrency(interestSaved, 0)} in interest and you'll pay off your loan ${payoffAccel} months earlier. This is a powerful wealth-building strategy.`,
+                type: 'success'
+            });
+        } else if (extraMonthly <= 0 && extraOneTime <= 0) {
+             insights.push({
+                title: "💡 AI Payoff Tip",
+                text: `Consider adding an extra monthly payment. Even $100/mo can shave years off your loan and save you thousands in interest. Try adding a value to the 'Extra Monthly Payment' field to see the impact.`,
+                type: 'info'
+            });
+        }
+
+        // Insight 4: High Interest Rate
+        if (interestRate >= 7.5) {
+             insights.push({
+                title: "📈 High Interest Rate",
+                text: `Your interest rate of ${interestRate}% is high. This significantly increases your total interest paid. AI suggests checking your credit score and comparing quotes from our partners to find a more competitive rate.`,
+                type: 'warning'
+            });
+        }
+
+        // Insight 5: Escrow (Taxes & Insurance)
+        const escrow = this.results.monthlyTax + this.results.monthlyInsurance;
+        if (escrow > this.results.monthlyPI * 0.5 && this.results.monthlyPI > 0) {
+             insights.push({
+                title: "📊 High Escrow Costs",
+                text: `Your monthly taxes and insurance ($${escrow.toFixed(2)}) are more than 50% of your principal and interest payment. While property taxes are fixed, remember to shop around for homeowners insurance annually to save money.`,
+                type: 'info'
+            });
+        }
+        
+        // Insight 6: HOA Fee
+        if (hoaFees > 0) {
+             insights.push({
+                title: "🏢 HOA Fee",
+                text: `Your $${parseFloat(hoaFees).toFixed(2)}/mo HOA fee adds to your total housing cost. Remember this payment does not build equity and can increase over time. Factor this in when comparing properties.`,
+                type: 'info'
+            });
+        }
+        
+        // Insight 7: 15-year vs 30-year
+        const term = this.inputs.loanTerm;
+        if (term == 15) {
+             insights.push({
+                title: "🚀 15-Year Loan",
+                text: `You've selected a 15-year term. While your payment is higher, you are on the fast track to building equity and will pay significantly less total interest. This is one of the fastest ways to own your home outright.`,
+                type: 'success'
+            });
+        } else if (term == 30 && interestSaved <= 0) {
+             insights.push({
+                title: "⚖️ 30-Year Loan",
+                text: `The 30-year loan offers the lowest, most affordable monthly payment. To save on interest, consider making extra principal payments or explore bi-weekly payment options with your lender.`,
+                type: 'info'
+            });
+        }
+
         return insights;
     }
 }
@@ -283,21 +400,47 @@ class ZipCodeManager {
     }
 }
 
-// ===== FRED API MANAGER (Preserved) =====
+// ===== NEW: IMPROVED FRED API MANAGER =====
 class FREDManager {
     static async getRate() {
         try {
+            // Use local storage to cache the rate daily
+            const cache = localStorage.getItem('fredRateCache');
+            const now = new Date();
+            // 4:45 PM ET is 20:45 UTC (or 21:45 UTC during EDT)
+            // We can simplify by just checking the date. FRED data is daily, not hourly.
+            // If we have a cache and the date is today, use it.
+            
+            if (cache) {
+                const { date, rate, lastFetch } = JSON.parse(cache);
+                const lastFetchDate = new Date(lastFetch);
+                if (lastFetchDate.toDateString() === now.toDateString()) {
+                    console.log('Using cached FRED rate');
+                    return { rate, date }; // Use cache if fetched today
+                }
+            }
+            
+            console.log('Fetching new FRED rate');
             const url = `${FRED_URL}?series_id=${FRED_SERIES}&api_key=${FRED_API_KEY}&file_type=json&sort_order=desc&limit=1`;
             const response = await fetch(url);
             if (!response.ok) throw new Error(`FRED API request failed: ${response.status}`);
             const data = await response.json();
+            
             if (data.observations && data.observations.length > 0) {
                 const rate = parseFloat(data.observations[0].value);
-                if(isNaN(rate)) return 6.50; // Fallback
-                return rate;
+                const date = data.observations[0].date;
+                if(isNaN(rate)) return { rate: 6.50, date: null }; // Fallback
+                
+                // Save to cache
+                const newCache = { rate, date, lastFetch: now.toISOString() };
+                localStorage.setItem('fredRateCache', JSON.stringify(newCache));
+                
+                return { rate, date };
             }
-        } catch (error) { console.error('FRED API error:', error); }
-        return 6.50; // Fallback rate
+        } catch (error) { 
+            console.error('FRED API error:', error); 
+        }
+        return { rate: 6.50, date: null }; // Fallback rate
     }
 }
 
@@ -312,7 +455,7 @@ class UIManager {
             maximumFractionDigits: decimals
         }).format(value);
     }
-    static formatPercent(value) { return (value).toFixed(2) + '%'; }
+    static formatPercent(value) { return (value).toFixed(1) + '%'; } // Use 1 decimal for LTV
 
     static updateResults(results) {
          document.getElementById('monthly-payment').textContent = this.formatCurrency(results.monthlyPayment, 2);
@@ -327,6 +470,11 @@ class UIManager {
          document.getElementById('pmiStatus').textContent = results.pmiRequired ? 'Required' : 'Not Required';
          document.getElementById('interestSaved').textContent = this.formatCurrency(results.interestSaved);
          document.getElementById('payoffAccel').textContent = `${results.payoffAccel} months`;
+         
+         // IMPROVED: Show/Hide result cards based on value
+         document.getElementById('pmiStatusBox').className = results.pmiRequired ? 'result-box accent' : 'result-box';
+         document.getElementById('interestSavedBox').style.display = results.interestSaved > 0 ? 'block' : 'none';
+         document.getElementById('payoffAccelBox').style.display = results.payoffAccel > 0 ? 'block' : 'none';
     }
 
     static updateAmortizationTable(schedule, view = 'monthly') {
@@ -456,14 +604,21 @@ class ChartManager {
                     data: allZero ? [1] : data, 
                     backgroundColor: allZero ? ['#E2E8F0'] : ['#24ACB9', '#FFC107', '#10B981', '#EF4444', '#3B82F6'], // Brand colors
                     borderColor: 'var(--card)',
-                    borderWidth: 2
+                    borderWidth: 3, // Thicker border
+                    hoverOffset: 10 // Pops out on hover
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom', labels: { color: 'var(--text-light)' } },
+                    legend: { 
+                        position: 'bottom', 
+                        labels: { 
+                            color: 'var(--text-light)', 
+                            font: { size: 13 } // Clearer labels
+                        } 
+                    },
                     tooltip: {
                          callbacks: {
                             label: function(context) {
@@ -488,19 +643,27 @@ class ChartManager {
 
         const years = Math.ceil(schedule.length / 12);
         const yearlyLabels = [];
-        const yearlyInterest = [];
-        const yearlyPrincipal = [];
-        const yearlyBalance = [];
+        const yearlyData = []; // Store full data for summary
         
         for (let y = 0; y < years; y++) {
             const yearSlice = schedule.slice(y * 12, (y + 1) * 12);
             if(yearSlice.length === 0) continue;
             
+            const yearInterest = yearSlice.reduce((acc, row) => acc + row.interest, 0);
+            const yearPrincipal = yearSlice.reduce((acc, row) => acc + row.principal + row.extra, 0);
+            const yearBalance = yearSlice[yearSlice.length - 1].balance;
+
             yearlyLabels.push(`Year ${y + 1}`);
-            yearlyInterest.push(yearSlice.reduce((acc, row) => acc + row.interest, 0));
-            yearlyPrincipal.push(yearSlice.reduce((acc, row) => acc + row.principal + row.extra, 0));
-            yearlyBalance.push(yearSlice[yearSlice.length - 1].balance);
+            yearlyData.push({
+                label: `Year ${y + 1}`,
+                interest: yearInterest,
+                principal: yearPrincipal,
+                balance: yearBalance
+            });
         }
+        
+        // Pass data to app controller for summary
+        app.lastYearlyData = yearlyData;
 
         this.charts.mortgageOverTime = new Chart(ctx, {
             type: 'line',
@@ -509,30 +672,34 @@ class ChartManager {
                 datasets: [
                     {
                         label: 'Yearly Interest Paid',
-                        data: yearlyInterest,
+                        data: yearlyData.map(d => d.interest),
                         backgroundColor: 'rgba(36, 172, 185, 0.2)', // Brand Primary (Teal)
                         borderColor: 'rgba(36, 172, 185, 1)',
                         fill: 'start',
-                        type: 'bar' // Use bar for area-like fill
+                        type: 'bar', // Use bar for area-like fill
+                        order: 2
                     },
                     {
                         label: 'Yearly Principal Paid',
-                        data: yearlyPrincipal,
+                        data: yearlyData.map(d => d.principal),
                         backgroundColor: 'rgba(25, 52, 59, 0.2)', // Brand Dark
                         borderColor: 'rgba(25, 52, 59, 1)',
                         fill: 'start',
-                        type: 'bar' // Use bar for area-like fill
+                        type: 'bar', // Use bar for area-like fill
+                        order: 3
                     },
                      {
                         label: 'Loan Balance',
-                        data: yearlyBalance,
-                        borderColor: 'rgba(255, 193, 7, 1)', // Accent
+                        data: yearlyData.map(d => d.balance),
+                        borderColor: 'rgba(230, 149, 0, 1)', // Accent Dark
                         backgroundColor: 'transparent',
                         borderWidth: 3,
                         borderDash: [5, 5],
-                        pointBackgroundColor: 'rgba(255, 193, 7, 1)',
+                        pointBackgroundColor: 'rgba(230, 149, 0, 1)',
                         fill: false,
-                        type: 'line'
+                        type: 'line',
+                        order: 1,
+                        yAxisID: 'y1' // Assign to secondary axis
                     }
                 ]
             },
@@ -540,12 +707,25 @@ class ChartManager {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { stacked: true, ticks: { color: 'var(--text-light)' }, grid: { display: false } },
-                    y: { 
-                        stacked: false, // Set to false to allow line chart to overlay
-                        beginAtZero: true, 
+                    x: { 
+                        stacked: true, 
                         ticks: { color: 'var(--text-light)' }, 
-                        grid: { color: 'var(--border)' } 
+                        grid: { display: false } 
+                    },
+                    y: { // Primary axis (P&I)
+                        stacked: true, 
+                        beginAtZero: true, 
+                        ticks: { color: 'var(--text-light)', callback: (val) => `$${val/1000}k` }, 
+                        grid: { color: 'var(--border)' },
+                        position: 'left',
+                        title: { display: true, text: 'Yearly P&I Paid ($)', color: 'var(--text-light)' }
+                    },
+                    y1: { // Secondary axis (Balance)
+                        beginAtZero: false,
+                        position: 'right',
+                        ticks: { color: 'var(--text-light)', callback: (val) => `$${val/1000}k` },
+                        grid: { display: false }, // Hide grid for this axis
+                        title: { display: true, text: 'Remaining Loan Balance ($)', color: 'var(--text-light)' }
                     }
                 },
                 plugins: {
@@ -564,6 +744,12 @@ class ChartManager {
                 }
             }
         });
+        
+        // NEW: Update slider and summary
+        const slider = document.getElementById('year-slider');
+        slider.max = yearlyLabels.length || 1;
+        slider.value = 1;
+        app.updateChartSummary(1);
     }
 }
 
@@ -572,6 +758,7 @@ const app = {
     calculateDebounce: null,
     lastResults: null,
     lastSchedule: null,
+    lastYearlyData: [], // NEW: Store yearly data for summary
     state: {
         amortizationView: 'monthly' // 'monthly' or 'yearly'
     },
@@ -583,6 +770,7 @@ const app = {
         this.setupVoiceControls();
         this.setupFAQ();
         this.initTooltips(); // Initialize tooltips
+        await this.loadInitialRate(); // NEW: Load rate on init
         this.calculate(); // Run initial calculation
     },
 
@@ -615,6 +803,9 @@ const app = {
         // --- NEW: Amortization Controls ---
         document.getElementById('amortToggle').addEventListener('click', () => this.toggleAmortizationView());
         document.getElementById('exportCsv').addEventListener('click', () => this.exportAmortizationToCsv());
+        
+        // --- NEW: Chart Summary Slider ---
+        document.getElementById('year-slider').addEventListener('input', (e) => this.updateChartSummary(e.target.value));
     },
 
     activateTab(tab) {
@@ -662,6 +853,7 @@ const app = {
             downPayment: document.getElementById('downPaymentAmount').value, 
             interestRate: document.getElementById('interestRate').value,
             loanTerm: document.getElementById('loanTerm').value,
+            customTerm: document.getElementById('customTerm').value, // Need this for AI
             propertyTax: document.getElementById('propertyTax').value,
             homeInsurance: document.getElementById('homeInsurance').value,
             hoaFees: document.getElementById('hoaFees').value,
@@ -682,7 +874,6 @@ const app = {
             UIManager.updateAmortizationTable(this.lastSchedule, this.state.amortizationView);
 
             const aiEngine = new AIInsightEngine(results, inputs);
-            aiEngine.amortizationSchedule = calculator.amortizationSchedule;
             const insights = aiEngine.generateInsights();
             UIManager.updateInsights(insights);
 
@@ -690,13 +881,26 @@ const app = {
             this.activateTab(document.querySelector('.tab-btn.active').getAttribute('data-tab'));
         }
     },
+    
+    // --- NEW: Chart Summary Update Logic ---
+    updateChartSummary(year) {
+        const yearIndex = parseInt(year) - 1;
+        if (!this.lastYearlyData || !this.lastYearlyData[yearIndex]) return;
+
+        const data = this.lastYearlyData[yearIndex];
+
+        document.getElementById('slider-year-label').textContent = year;
+        document.getElementById('summary-principal-paid').textContent = UIManager.formatCurrency(data.principal, 2);
+        document.getElementById('summary-interest-paid').textContent = UIManager.formatCurrency(data.interest, 2);
+        document.getElementById('summary-remaining-balance').textContent = UIManager.formatCurrency(data.balance, 2);
+    },
 
     // --- NEW: Tooltip Logic ---
     initTooltips() {
         let tooltipBox = null;
         document.querySelectorAll('.tooltip').forEach(el => {
             el.addEventListener('mouseenter', (e) => {
-                const text = e.target.getAttribute('data-tooltip');
+                const text = e.currentTarget.getAttribute('data-tooltip');
                 if (!text) return;
                 
                 tooltipBox = document.createElement('div');
@@ -704,9 +908,21 @@ const app = {
                 tooltipBox.textContent = text;
                 document.body.appendChild(tooltipBox);
 
-                const rect = e.target.getBoundingClientRect();
-                tooltipBox.style.left = `${rect.left + rect.width / 2 - tooltipBox.offsetWidth / 2}px`;
-                tooltipBox.style.top = `${rect.top - tooltipBox.offsetHeight - 5}px`;
+                const rect = e.currentTarget.getBoundingClientRect();
+                
+                // Position above the icon
+                let top = rect.top - tooltipBox.offsetHeight - 5;
+                let left = rect.left + rect.width / 2 - tooltipBox.offsetWidth / 2;
+
+                // Adjust if off-screen
+                if (top < 0) { top = rect.bottom + 5; }
+                if (left < 0) { left = 5; }
+                if (left + tooltipBox.offsetWidth > window.innerWidth) {
+                    left = window.innerWidth - tooltipBox.offsetWidth - 5;
+                }
+
+                tooltipBox.style.left = `${left}px`;
+                tooltipBox.style.top = `${top}px`;
                 tooltipBox.style.display = 'block';
                 setTimeout(() => { tooltipBox.style.opacity = '1'; }, 10);
             });
@@ -714,8 +930,10 @@ const app = {
                 if (tooltipBox) {
                     tooltipBox.style.opacity = '0';
                     setTimeout(() => {
-                        tooltipBox.remove();
-                        tooltipBox = null;
+                        if (tooltipBox) {
+                            tooltipBox.remove();
+                            tooltipBox = null;
+                        }
                     }, 200);
                 }
             });
@@ -794,15 +1012,53 @@ const app = {
         document.body.removeChild(link);
     },
 
-    // --- All other app methods (getFredRate, lookupZipCode, setupDarkMode, setupPWA, setupVoiceControls, setupFAQ) are preserved exactly as they were ---
+    // --- IMPROVED: FRED Rate Functions ---
+    async loadInitialRate() {
+        const btn = document.querySelector('.fred-btn');
+        btn.textContent = 'Loading...';
+        btn.disabled = true;
+        
+        const { rate, date } = await FREDManager.getRate();
+        
+        document.getElementById('interestRate').value = rate.toFixed(2);
+        
+        // Update last updated text
+        const updatedEl = document.getElementById('fred-last-updated');
+        if (date) {
+            updatedEl.textContent = `Rate as of: ${date}`;
+        } else {
+            updatedEl.textContent = 'Using fallback rate';
+        }
+
+        btn.textContent = 'Get Live Rate';
+        btn.disabled = false;
+        // Do not call calculate() here, init will call it.
+    },
     
-    async getFredRate() {
+    async getFredRate(isButtonClick = false) {
         const btn = document.querySelector('.fred-btn');
         btn.textContent = 'Fetching...';
         btn.disabled = true;
-        const rate = await FREDManager.getRate();
+
+        // Force a fetch by clearing cache if it's a manual click
+        if (isButtonClick) {
+            localStorage.removeItem('fredRateCache');
+        }
+
+        const { rate, date } = await FREDManager.getRate();
         document.getElementById('interestRate').value = rate.toFixed(2);
-        alert(`📈 Current 30-year rate: ${rate.toFixed(2)}% (Source: FRED)`);
+        
+        if (isButtonClick) {
+            alert(`📈 Latest 30-year rate: ${rate.toFixed(2)}% (Source: FRED, as of ${date})`);
+        }
+        
+        const updatedEl = document.getElementById('fred-last-updated');
+        if (date) {
+            updatedEl.textContent = `Rate as of: ${date}`;
+        } else {
+            updatedEl.textContent = 'Using fallback rate';
+        }
+
         btn.textContent = 'Get Live Rate';
         btn.disabled = false;
         this.debouncedCalculate();
@@ -918,11 +1174,15 @@ const app = {
             const answer = item.querySelector('.faq-answer');
             question.addEventListener('click', () => {
                 const isActive = question.classList.contains('active');
+                // Close all others
                 document.querySelectorAll('.faq-question').forEach(q => q.classList.remove('active'));
-                document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+                document.querySelectorAll('.faq-answer').forEach(a => { a.style.display = 'none'; });
+                document.querySelectorAll('.faq-icon').forEach(i => { i.style.transform = 'rotate(0deg)'; });
+
                 if (!isActive) {
                     question.classList.add('active');
                     answer.style.display = 'block';
+                    question.querySelector('.faq-icon').style.transform = 'rotate(180deg)';
                 }
             });
             container.appendChild(item);
