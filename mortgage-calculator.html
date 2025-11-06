@@ -121,11 +121,19 @@
                         <input type="number" id="interestRate" value="6.50" min="0" max="12" step="0.01" aria-label="Interest rate">
                         <span class="input-addon">%</span>
                     </div>
-                    <div class="fred-update-info" id="fred-last-updated">
-                        Loading live rate...
+                    
+                    <div class="fred-rates-header">
+                        <span id="fred-last-updated">Loading live rates...</span>
+                        <span class="fred-branding">
+                            Data via <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED®</a>
+                        </span>
+                    </div>
+                    <div class="live-rates-container">
+                        <button class="rate-btn" id="rate-btn-30yr" disabled>30-Yr Fixed: ...</button>
+                        <button class="rate-btn" id="rate-btn-15yr" disabled>15-Yr Fixed: ...</button>
+                        <button class="rate-btn" id="rate-btn-10yr" disabled>10-Yr Treasury: ...</button>
                     </div>
                 </div>
-
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="loanTerm">Loan Term <span class="tooltip" data-tooltip="The length of the loan in years."><i class="tooltip-icon">i</i></span></label>
@@ -405,8 +413,8 @@
                     <strong>Affiliate Disclosure:</strong> FinGuid participates in affiliate programs with lending partners. When you click on partner links or apply for mortgage products through this calculator, FinGuid may receive compensation. This does not affect your rates or terms. We only recommend products we believe provide value to users.
                     <br><br>
     
-                    <strong>Data Accuracy:</strong> Mortgage rates are provided via FRED API and updated regularly. However, we make no guarantees about accuracy, completeness, or timeliness. Always verify rates directly with lenders before applying. <strong>FRED®</strong> data is provided by the Federal Reserve Bank of St. Louis.
-                </div>
+                    <strong>Data Accuracy:</strong> Mortgage rates (MORTGAGE30US, MORTGAGE15US) provided by Freddie Mac. Treasury rates (DGS10) provided by the U.S. Treasury. All data delivered via FRED® API from the Federal Reserve Bank of St. Louis. Rates are updated regularly but we make no guarantees about accuracy. Always verify rates directly with lenders.
+                    </div>
 
                 <div class="footer-bottom">
                     © 2025 FinGuid USA. All Rights Reserved. | AI-Powered Financial Tools for Americans
