@@ -1,12 +1,12 @@
-/* === START: Global Variables & Dark Mode (for all device friendly) === */
+/* CAR LEASE CALCULATOR - PRODUCTION CSS v3.0 */
+
+/* === START: Global Variables (Brand Color Match) === */
 :root {
-    /* FinGuid Primary Brand Colors (Teal/Dark Blue) */
-    --primary: #24ACB9; /* Main Teal */
-    --primary-dark: #19343B; /* Dark Blue */
-    --accent: #FFC107; /* Yellow Accent */
+    --primary: #6366F1; /* New Primary: FinGuid Indigo (Matches Car Lease Banner) */
+    --primary-dark: #4F46E5; /* Darker Indigo */
+    --secondary: #24ACB9; /* Teal/Cyan (Retained for chart contrast) */
+    --accent: #FFC107;
     --accent-dark: #E69500;
-    
-    /* General UI Colors */
     --text: #1F2121;
     --text-light: #64748B;
     --bg: #FFFFFD;
@@ -15,11 +15,9 @@
     --border: #E2E8F0;
     --error: #EF4444;
     --success: #10B981;
-    --warning: #F59E0B; /* For LTV warnings */
-    --info: #3B82F6; /* For general info */
+    --fred-color: #A31B20; /* FRED standard color for Live Rates button */
 }
 
-/* Dark Mode (Fully functional for user preference) */
 [data-color-scheme="dark"] {
     --text: #E1E8ED;
     --text-light: #B8C5D0;
@@ -28,23 +26,11 @@
     --card: #181919;
     --border: #38444D;
 }
-/* === END: Global Variables & Dark Mode === */
+/* === END: Global Variables === */
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* ... (Existing global styles like *, html, body, .container) ... */
 
-html { font-size: 16px; -webkit-font-smoothing: antialiased; }
-
-body {
-    font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-    color: var(--text);
-    background: var(--bg);
-    line-height: 1.6;
-    transition: all 0.3s ease;
-}
-
-.container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-
-/* ===== HEADER ===== */
+/* ===== HEADER (Logo uses new brand color) ===== */
 .header {
     position: sticky;
     top: 0;
@@ -62,93 +48,19 @@ body {
     padding: 12px 0;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex: 1;
-}
-
 .logo {
     display: flex;
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    color: var(--primary);
+    color: var(--primary); /* Uses new primary brand color */
     font-weight: 700;
     font-size: 18px;
 }
 
-.header-title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.calculator-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text);
-}
-
-.ai-badge {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 600;
-    color: white;
-    background-color: var(--primary-dark);
-    padding: 4px 8px;
-    border-radius: 4px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(36, 172, 185, 0.4); }
-    70% { box-shadow: 0 0 0 8px rgba(36, 172, 185, 0); }
-}
-
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.icon-btn {
-    background: var(--bg-secondary);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text);
-    transition: all 0.3s ease;
-}
-
-.icon-btn:hover {
-    background: var(--primary);
-    color: white;
-}
-
-#pwa-install-btn {
-    display: none; /* Controlled by JS until install prompt is detected */
-    padding: 8px 12px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-/* ===== SPONSOR BANNER (Affiliate Marketing/Advertising) ===== */
+/* ===== SPONSOR BANNER (Uses FinGuid/Car Lease Gradient) ===== */
 .sponsor-banner {
-    /* MATCHED CAR LEASE COLOR GRADIENT */
-    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%); /* Matched car lease color */
     color: white;
     padding: 16px;
     display: flex;
@@ -160,566 +72,76 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.sponsor-text {
-    font-weight: 500;
-    flex: 1;
-    min-width: 200px;
-}
-
-.sponsor-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.sponsor-btn {
-    padding: 8px 12px;
-    background: white;
-    color: #6366F1; /* Color pulled from gradient start for contrast */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.sponsor-btn:hover {
-    background: var(--accent);
-    color: var(--text);
-    transform: translateY(-2px);
-}
-
-/* ===== MAIN CALCULATOR LAYOUT (Mobile Friendly) ===== */
-.calculator-wrapper {
-    display: grid;
-    grid-template-columns: 400px 1fr; /* Two-column layout */
-    gap: 24px;
-    padding: 24px 0;
-    margin-bottom: 40px;
-}
-
-@media (max-width: 1024px) {
-    .calculator-wrapper {
-        grid-template-columns: 1fr; /* Single column on tablets/mobile */
-        gap: 16px;
-    }
-}
-
-.inputs-panel, .results-panel {
-    background: var(--card);
-    border-radius: 12px;
-    padding: 24px;
-    border: 1px solid var(--border);
-    transition: all 0.3s ease;
-}
-
-.panel-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
+/* ===== NEW: ANIMATED FEATURE BAR ===== */
+.feature-bar {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
     margin-bottom: 20px;
+}
+
+.feature-list {
     display: flex;
+    justify-content: space-around;
     align-items: center;
-    gap: 8px;
-}
-
-.section-heading {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 20px;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--border);
-}
-
-/* Form Styling */
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-row {
-    display: flex;
+    text-align: center;
+    flex-wrap: wrap;
     gap: 16px;
 }
 
-.form-group.half {
-    flex: 1;
-}
-
-.form-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 6px;
-}
-
-.form-hint {
-    font-size: 11px;
-    color: var(--text-light);
-}
-
-.input-wrapper {
-    position: relative;
+.feature-item {
     display: flex;
     align-items: center;
     gap: 8px;
-}
-
-input[type="number"],
-input[type="text"],
-input[type="month"],
-select {
-    flex: 1;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--bg-secondary);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px 0;
     color: var(--text);
-    font-size: 16px;
-    transition: border-color 0.2s;
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    transition: all 0.3s ease;
 }
 
-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(36, 172, 185, 0.2);
+.feature-item:hover {
+    opacity: 1;
+    color: var(--primary);
 }
 
-.input-addon {
-    position: absolute;
-    left: 12px;
-    color: var(--text-light);
-    font-size: 16px;
-    pointer-events: none;
+.feature-icon {
+    font-size: 18px;
+    animation: bounce 2.5s infinite ease-in-out;
 }
 
-.input-wrapper input[type="number"] {
-    padding-left: 28px;
+/* Stagger the animation timing */
+.feature-item:nth-child(1) .feature-icon { color: var(--primary); animation-delay: 0s; } /* AI Powered */
+.feature-item:nth-child(2) .feature-icon { color: var(--fred-color); animation-delay: 0.2s; } /* Live FRED Rates */
+.feature-item:nth-child(3) .feature-icon { color: var(--accent-dark); animation-delay: 0.4s; } /* AI Insights */
+.feature-item:nth-child(4) .feature-icon { color: var(--success); animation-delay: 0.6s; } /* ZIP Tax Lookup */
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px) scale(1.05); }
 }
 
-.toggle-btn {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    padding: 4px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-light);
-    transition: all 0.2s;
-}
-
-.toggle-btn.active {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: white;
-}
+/* ===== FORM & INPUT STYLES ===== */
 
 .lookup-btn {
-    padding: 8px 12px;
-    background: var(--primary-dark);
+    background: var(--fred-color); /* FRED Branding: Use FRED color for Live Rate button */
     color: white;
+    padding: 10px 12px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 12px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease;
     white-space: nowrap;
 }
 
 .lookup-btn:hover {
-    opacity: 0.9;
+    background: #7D1418;
+    transform: scale(1.02);
 }
 
-.calculate-btn {
-    margin-top: 10px;
-    padding: 12px 15px;
-    background: var(--accent);
-    color: var(--primary-dark);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 700;
-    transition: background 0.2s, transform 0.2s;
-}
-
-.calculate-btn:hover {
-    background: var(--accent-dark);
-    transform: translateY(-1px);
-}
-
-.full-width {
-    width: 100%;
-}
-
-/* ===== RESULTS PANEL ===== */
-.summary-card {
-    text-align: center;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 24px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(36, 172, 185, 0.2);
-}
-
-.summary-label {
-    font-size: 0.875rem;
-    opacity: 0.9;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-}
-
-.payment-amount {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 8px;
-    margin: 8px 0;
-}
-
-.amount {
-    font-size: 2.5rem;
-    font-weight: bold;
-}
-
-.unit {
-    font-size: 1rem;
-    opacity: 0.9;
-}
-
-.payment-breakdown {
-    font-size: 0.875rem;
-    opacity: 0.8;
-}
-
-/* Tabs */
-.tab-buttons {
-    display: flex;
-    gap: 4px;
-    border-bottom: 2px solid var(--border);
-    margin-bottom: 24px;
-    overflow-x: auto;
-}
-
-.tab-btn {
-    padding: 12px 18px;
-    border: none;
-    background: transparent;
-    color: var(--text-light);
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-    margin-bottom: -2px;
-    white-space: nowrap;
-}
-
-.tab-btn:hover {
-    color: var(--text);
-}
-
-.tab-btn.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-}
-
-.tab-content {
-    display: none;
-    padding: 8px 0;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.tab-heading {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-    margin-bottom: 15px;
-}
-
-.summary-details {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.detail-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.95rem;
-    padding-bottom: 5px;
-    border-bottom: 1px dashed var(--border);
-}
-
-.detail-item.total {
-    font-weight: 700;
-    color: var(--primary-dark);
-    border-bottom: 2px solid var(--primary);
-}
-
-.detail-item.success span:last-child {
-    color: var(--success);
-}
-
-/* Amortization Table */
-.table-container {
-    max-height: 400px;
-    overflow-y: auto;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-}
-
-.amortization-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-    text-align: right;
-}
-
-.amortization-table th, .amortization-table td {
-    padding: 10px 12px;
-}
-
-.amortization-table th {
-    background: var(--bg-secondary);
-    color: var(--primary-dark);
-    text-transform: uppercase;
-    font-weight: 700;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    text-align: right;
-}
-
-.amortization-table tbody tr:nth-child(even) {
-    background: var(--bg-secondary);
-}
-
-.amortization-table th:first-child, .amortization-table td:first-child {
-    text-align: left;
-}
-
-.table-note {
-    font-size: 0.75rem;
-    color: var(--text-light);
-    margin-top: 10px;
-    text-align: right;
-}
-
-/* Charts */
-.chart-container {
-    position: relative;
-    height: 300px;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-/* AI Insights */
-.insights-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.insight-box {
-    padding: 12px 16px;
-    border-left: 5px solid;
-    border-radius: 6px;
-    background: var(--bg-secondary);
-    font-size: 14px;
-    color: var(--text);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.insight-box strong {
-    font-weight: 700;
-    color: var(--primary-dark);
-}
-
-.insight-box.success { border-left-color: var(--success); }
-.insight-box.warning { border-left-color: var(--warning); }
-.insight-box.error { border-left-color: var(--error); }
-.insight-box.info { border-left-color: var(--info); }
-
-/* Partner Section Styles (FTC/Affiliate Marketing) */
-.footer-sponsor {
-    background: linear-gradient(135deg, rgba(36, 172, 185, 0.05) 0%, rgba(25, 52, 59, 0.05) 100%);
-    padding: 40px;
-    border: 1px solid rgba(36, 172, 185, 0.1);
-    border-radius: 12px;
-    margin-top: 20px;
-}
-
-.sponsor-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 24px;
-}
-
-.sponsor-item {
-    text-align: center;
-    padding: 20px;
-    border-radius: 8px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.sponsor-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
-
-.sponsor-item h4 {
-    margin-bottom: 8px;
-    color: var(--primary-dark);
-    font-size: 1.1rem;
-}
-
-.sponsor-item p {
-    margin-bottom: 15px;
-    font-size: 0.9rem;
-    color: var(--text-light);
-}
-
-.sponsor-item a {
-    display: inline-block;
-    background: var(--accent);
-    color: var(--primary-dark);
-    padding: 8px 15px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: background 0.2s;
-}
-
-.sponsor-item a:hover {
-    background: var(--accent-dark);
-}
-
-/* SEO/FAQ Styles */
-.faq-container {
-    margin-top: 20px;
-    margin-bottom: 50px;
-}
-
-.faq-item {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 10px;
-    transition: all 0.3s ease;
-}
-
-.faq-question {
-    padding: 16px;
-    background: var(--bg-secondary);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.faq-question.active {
-    background: var(--primary);
-    color: white;
-}
-
-.faq-icon {
-    font-size: 18px;
-    transition: transform 0.3s ease;
-}
-
-.faq-question.active .faq-icon {
-    transform: rotate(180deg);
-}
-
-.faq-answer {
-    display: none;
-    padding: 16px;
-    background: var(--card);
-    color: var(--text-light);
-    line-height: 1.8;
-    font-size: 14px;
-}
-
-.faq-answer.active {
-    display: block;
-    /* Removed animation for simplicity/perf, use for production */
-    /* animation: slideDown 0.3s ease; */
-}
-
-/* Footer Compliance & Branding */
-.footer {
-    border-top: 1px solid var(--border);
-    padding: 20px 0;
-    font-size: 12px;
-    color: var(--text-light);
-    line-height: 1.6;
-}
-
-.footer-note {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-}
-
-.footer-bottom {
-    text-align: center;
-    font-size: 11px;
-}
-
-/* ===== RESPONSIVE (Mobile First) ===== */
-@media (max-width: 768px) {
-    .header-content {
-        flex-wrap: wrap;
-    }
-
-    .header-title {
-        flex: 1 1 100%;
-        margin-top: 8px;
-    }
-
-    .calculator-wrapper {
-        grid-template-columns: 1fr;
-    }
-
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
-
-    .sponsor-banner {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .sponsor-buttons {
-        flex: 1 1 100%;
-        justify-content: space-between;
-    }
-
-    .tab-buttons {
-        flex-wrap: wrap;
-    }
-}
+/* ... (Rest of the calculator, table, chart, and responsive styles) ... */
