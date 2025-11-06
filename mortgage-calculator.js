@@ -2,7 +2,7 @@
  * ========================================================================
  * HOME LOAN PRO - WORLD'S BEST AI-POWERED MORTGAGE CALCULATOR
  * ========================================================================
- * Version: 5.1 - PRODUCTION READY (Preserved Logic)
+ * Version: 5.1 - PRODUCTION READY (Merged Features)
  * Built with: SOLID Principles, WCAG 2.1 AA, PWA Compatible
  * Features: Real-time calculations, FRED API, ZIP tax lookup, 50+ AI insights
  * ========================================================================
@@ -536,7 +536,7 @@ class ChartManager {
                 labels: ['P&I', 'Tax', 'Insurance', 'PMI', 'HOA'],
                 datasets: [{
                     data: allZero ? [1] : data, // Show a placeholder if all are zero
-                    backgroundColor: allZero ? ['#E2E8F0'] : ['#6366F1', '#FFC107', '#10B981', '#EF4444', '#3B82F6'], // Brand colors
+                    backgroundColor: allZero ? ['#E2E8F0'] : ['#24ACB9', '#FFC107', '#10B981', '#EF4444', '#3B82F6'], // Brand colors
                     borderColor: 'var(--card)',
                     borderWidth: 2
                 }]
@@ -607,7 +607,7 @@ class ChartManager {
                     {
                         label: 'Principal Paid',
                         data: yearlyPrincipal,
-                        backgroundColor: 'rgba(99, 102, 241, 0.7)', // Brand Primary
+                        backgroundColor: 'rgba(36, 172, 185, 0.7)', // Brand Primary
                     },
                     {
                         label: 'Interest Paid',
