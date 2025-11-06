@@ -8,12 +8,11 @@
     <title>AI Mortgage Calculator 2025 | PITI, Rates & Amortization | FinGuid</title>
 
     <meta name="description" content="World's Best AI-Powered Mortgage Calculator by FinGuid. Calculate PITI (Principal, Interest, Taxes, Insurance) with live FRED rates, ZIP code tax lookup, extra payments, and 100+ AI insights. WCAG 2.1 AA compliant. Mobile-friendly.">
-    <meta name="keywords" content="mortgage calculator, PITI calculator, home loan calculator, mortgage payment calculator, amortization calculator, property tax calculator, home insurance calculator, mortgage rates calculator, monthly payment calculator, house affordability calculator, FHA calculator, VA loan calculator, USDA calculator, refinance calculator, extra payment calculator, lump sum payment, principal interest calculator, PMI calculator, HOA fees calculator, first time home buyer, down payment calculator, interest rate calculator, loan term calculator, 30 year mortgage, 15 year mortgage, adjustable rate mortgage, fixed rate mortgage, mortgage rates today, current mortgage rates, FRED API rates, live rates, real estate calculator, home buying calculator, mortgage affordability calculator, debt to income calculator, closing costs calculator, zip code tax lookup, state tax rates, property tax by state, homeowners insurance rates, mortgage insurance, private mortgage insurance, mortgage prepayment, extra principal payment, mortgage payoff calculator, pay off mortgage early, mortgage acceleration, interest savings calculator, loan amortization schedule, amortization table, payment schedule, monthly payment breakdown, principal vs interest, mortgage comparison, mortgage quotes, mortgage lenders, mortgage brokers, pre-approval letter, mortgage pre-qualification, credit score mortgage, down payment assistance, first time homebuyer programs, VA benefits, FHA loans, USDA loans, conventional loans, jumbo loans, government loans, reverse mortgage, mortgage refinancing, cash out refinance, rate and term refinance, streamline refinance, ARM calculator, interest only mortgage, balloon mortgage, bi-weekly mortgage payment, mortgage calculator with taxes and insurance, comprehensive mortgage calculator, detailed amortization calculator, DTI calculator, escrow calculator, home equity calculator">
-    
+    <meta name="keywords" content="mortgage calculator, PITI calculator, home loan calculator, mortgage payment calculator, amortization calculator, property tax calculator, home insurance calculator, mortgage rates calculator, monthly payment calculator, house affordability calculator, FHA calculator, VA loan calculator, USDA calculator, refinance calculator, extra payment calculator, lump sum payment, principal interest calculator, PMI calculator, HOA fees calculator, first time home buyer, down payment calculator, interest rate calculator, loan term calculator, 30 year mortgage, 15 year mortgage, adjustable rate mortgage, fixed rate mortgage, mortgage rates today, current mortgage rates, FRED API rates, live rates, real estate calculator, home buying calculator, mortgage affordability calculator, debt to income calculator, closing costs calculator, zip code tax lookup, state tax rates, property tax by state, homeowners insurance rates, mortgage insurance, private mortgage insurance, mortgage prepayment, extra principal payment, mortgage payoff calculator, pay off mortgage early, mortgage acceleration, interest savings calculator, loan amortization schedule, amortization table, payment schedule, monthly payment breakdown, principal vs interest, mortgage comparison, mortgage quotes, mortgage lenders, mortgage brokers, pre-approval letter, mortgage pre-qualification, credit score mortgage, down payment assistance, first time homebuyer programs, VA benefits, FHA loans, USDA loans, conventional loans, jumbo loans, government loans, reverse mortgage, mortgage refinancing, cash out refinance, rate and term refinance, streamline refinance, ARM calculator, interest only mortgage, balloon mortgage, bi-weekly mortgage payment, mortgage calculator with taxes and insurance, comprehensive mortgage calculator, detailed amortization calculator">
+
     <meta name="author" content="FinGuid USA">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="theme-color" content="#24ACB9"> 
-    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#24ACB9"> <meta property="og:type" content="website">
     <meta property="og:title" content="AI Mortgage Calculator 2025 | Live FRED Rates | FinGuid">
     <meta property="og:description" content="Free AI mortgage calculator with FRED rates, ZIP code tax lookup, extra payments, and 100+ insights">
     <link rel="canonical" href="https://www.finguid.com/calculators/mortgage">
@@ -93,59 +92,50 @@
                     <label class="form-label" for="homePrice">Home Purchase Price <span class="tooltip" data-tooltip="The full purchase price of the home."><i class="tooltip-icon">i</i></span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
-                        <input type="number" id="homePrice" value="350000" min="0" step="1000" aria-label="Home price">
+                        <input type="number" id="homePrice" value="350000" min="10000" step="5000" aria-label="Home price">
                     </div>
                 </div>
 
-                <div class="form-group form-row">
-                    <div class="form-group-half">
-                        <label class="form-label" for="downPaymentAmount">Down Payment <span class="tooltip" data-tooltip="The cash you pay upfront. Affects PMI and loan amount."><i class="tooltip-icon">i</i></span></label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="downPaymentAmount">Down Payment <span class="tooltip" data-tooltip="The initial amount paid upfront.">$ <i class="tooltip-icon">i</i></span></label>
                         <div class="input-wrapper">
                             <span class="input-addon">$</span>
-                            <input type="number" id="downPaymentAmount" value="70000" min="0" step="1000" oninput="app.syncDownPayment(this.value, 'amount')" aria-label="Down payment amount">
+                            <input type="number" id="downPaymentAmount" value="70000" min="0" step="1000" aria-label="Down payment amount in dollars">
                         </div>
                     </div>
-                    <div class="form-group-half">
-                        <label class="form-label" for="downPaymentPercent">Percentage (%)</label>
+                    <div class="form-group">
+                        <label class="form-label" for="downPaymentPercent">Down Payment <span class="tooltip" data-tooltip="The percentage of the home price paid upfront.">% <i class="tooltip-icon">i</i></span></label>
                         <div class="input-wrapper">
-                            <input type="number" id="downPaymentPercent" value="20" min="0" max="100" step="0.1" oninput="app.syncDownPayment(this.value, 'percent')" aria-label="Down payment percentage">
-                            <span class="input-addon">%</span>
+                             <input type="number" id="downPaymentPercent" value="20" min="0" max="100" step="1" aria-label="Down payment percentage">
+                             <span class="input-addon">%</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="section-heading">Loan Details</div>
-
                 <div class="form-group">
-                    <label class="form-label" for="interestRate">Interest Rate (30-Year Fixed) <span class="tooltip" data-tooltip="The annual interest rate. Click 'Use Live Rate' to fetch the latest FRED rate."><i class="tooltip-icon">i</i></span></label>
+                    <label class="form-label" for="interestRate">
+                        Interest Rate %
+                        <span class="form-hint" id="fred-last-updated">Loading rate...</span>
+                    </label>
                     <div class="input-wrapper">
-                        <input type="number" id="interestRate" value="6.5" min="0" step="0.01" aria-label="Interest rate">
-                        <span class="input-addon">%</span>
-                        <button class="fred-btn" onclick="app.loadFredRate()" aria-label="Use live FRED rate" id="fredRateBtn">
-                            <span id="fredRateValue">Live Rate</span>
-                            <span class="fred-logo">FRED®</span>
-                        </button>
+                        <input type="number" id="interestRate" value="6.50" min="0" max="12" step="0.01" aria-label="Interest rate">
+                        <button class="lookup-btn fred-btn" onclick="app.getFredRate(true)">Get Live Rate</button>
                     </div>
-                    <div class="rate-update-info" id="rateUpdateInfo">Last Update: N/A</div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="loanTerm">Loan Term <span class="tooltip" data-tooltip="The length of the mortgage (e.g., 30 years)."><i class="tooltip-icon">i</i></span></label>
-                    <div class="select-wrapper">
-                        <select id="loanTerm" onchange="app.debouncedCalculate()" aria-label="Loan term">
-                            <option value="30">30 Years</option>
-                            <option value="20">20 Years</option>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="loanTerm">Loan Term <span class="tooltip" data-tooltip="The length of the loan in years."><i class="tooltip-icon">i</i></span></label>
+                        <select id="loanTerm" aria-label="Loan term">
                             <option value="15">15 Years</option>
-                            <option value="10">10 Years</option>
-                            <option value="custom">Other (Months)</option>
+                            <option value="20">20 Years</option>
+                            <option value="30" selected>30 Years</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="form-group" id="customTermGroup" style="display: none;">
-                    <label class="form-label" for="customTerm">Custom Term (Months)</label>
-                    <div class="input-wrapper">
-                        <input type="number" id="customTerm" value="360" min="12" step="12" aria-label="Custom loan term in months">
+                    <div class="form-group">
+                        <label class="form-label" for="customTerm">Custom Term <span class="tooltip" data-tooltip="Enter a custom loan term in years."><i class="tooltip-icon">i</i></span></label>
+                        <input type="number" id="customTerm" placeholder="or custom" min="1" max="50" aria-label="Custom loan term">
                     </div>
                 </div>
 
@@ -157,6 +147,7 @@
                         <button class="lookup-btn" onclick="app.lookupZipCode()">Lookup</button>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-label" for="propertyTax">Property Tax (Annual) <span class="tooltip" data-tooltip="Estimated annual property tax.">$ <i class="tooltip-icon">i</i></span></label>
                     <div class="input-wrapper">
@@ -164,6 +155,7 @@
                         <input type="number" id="propertyTax" value="4000" min="0" step="100" aria-label="Property tax">
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-label" for="homeInsurance">Home Insurance (Annual) <span class="tooltip" data-tooltip="Estimated annual homeowners insurance.">$ <i class="tooltip-icon">i</i></span></label>
                     <div class="input-wrapper">
@@ -171,99 +163,109 @@
                         <input type="number" id="homeInsurance" value="1200" min="0" step="50" aria-label="Home insurance">
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <label class="form-label" for="hoaFees">Monthly HOA Fees <span class="tooltip" data-tooltip="Optional Homeowners Association fees.">$ <i class="tooltip-icon">i</i></span></label>
+                    <label class="form-label" for="hoaFees">HOA Fees (Monthly) <span class="tooltip" data-tooltip="Monthly Homeowners Association fees, if any.">$ <i class="tooltip-icon">i</i></span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
-                        <input type="number" id="hoaFees" value="0" min="0" step="10" aria-label="Monthly HOA fees">
+                        <input type="number" id="hoaFees" value="0" min="0" step="50" aria-label="HOA fees">
                     </div>
                 </div>
 
-                <div class="section-heading">Extra Payments (Optional)</div>
+                <div class="section-heading">Extra Payments</div>
                 <div class="form-group">
-                    <label class="form-label" for="extraMonthly">Extra Monthly Principal</label>
+                    <label class="form-label" for="extraMonthly">Extra Monthly Payment <span class="tooltip" data-tooltip="Additional amount paid monthly to reduce principal.">$ <i class="tooltip-icon">i</i></span></label>
                     <div class="input-wrapper">
                         <span class="input-addon">$</span>
-                        <input type="number" id="extraMonthly" value="0" min="0" step="50" aria-label="Extra monthly principal payment">
+                        <input type="number" id="extraMonthly" value="0" min="0" step="50" aria-label="Extra monthly payment">
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="extraOneTime">Extra One-Time Principal</label>
-                    <div class="input-wrapper">
-                        <span class="input-addon">$</span>
-                        <input type="number" id="extraOneTime" value="0" min="0" step="100" aria-label="Extra one-time principal payment">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="extraPaymentDate">Date of One-Time Payment</label>
-                    <input type="month" id="extraPaymentDate" value="2025-01" aria-label="Month and year of one-time payment">
                 </div>
 
-                <div class="calculate-action">
-                    <button id="calculateBtn" onclick="app.calculate()">Calculate My Mortgage</button>
-                    <span class="ssl-badge">🔒 SSL Secured ✅ GDPR Compliant ✅ CCPA Compliant ✅ FTC Compliant</span>
+                <div class="form-group">
+                    <label class="form-label" for="extraOneTime">Extra One-Time Payment <span class="tooltip" data-tooltip="A single lump-sum payment applied to principal.">$ <i class="tooltip-icon">i</i></span></label>
+                    <div class="input-wrapper">
+                        <span class="input-addon">$</span>
+                        <input type="number" id="extraOneTime" value="0" min="0" step="100" aria-label="Extra one-time payment">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="extraPaymentDate">Payment Date <span class="tooltip" data-tooltip="Date for the one-time payment."><i class="tooltip-icon">i</i></span></label>
+                    <input type="month" id="extraPaymentDate" aria-label="Extra payment date">
                 </div>
             </div>
 
-
             <div class="results-panel">
-                <h2 class="panel-title">📊 Your Financial Analysis</h2>
+                <h2 class="panel-title">📊 Analysis & Results</h2>
 
+                <div class="ad-slot">
+                    <p class="ad-label">ADVERTISEMENT</p>
+                    <div class="ad-placeholder">
+                        <p>Compare Top Mortgage Lenders</p>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-label">Estimated Monthly Payment (PITI + HOA)</div>
+                    <div class="payment-amount">
+                        <span class="amount" id="monthly-payment">$0.00</span>
+                        <span class="unit">/month</span>
+                    </div>
+                    <div class="payment-breakdown" id="payment-breakdown">P&I: $0 | Tax: $0 | Ins: $0 | PMI: $0 | HOA: $0</div>
+                </div>
+                
                 <div class="tabs">
                     <div class="tab-buttons">
-                        <button class="tab-btn active" data-tab="summary">Summary</button>
-                        <button class="tab-btn" data-tab="charts">Charts</button>
+                        <button class="tab-btn active" data-tab="analysis">Loan Analysis</button>
+                        <button class="tab-btn" data-tab="charts">Mortgage Over Time</button>
                         <button class="tab-btn" data-tab="amortization">Amortization</button>
-                        <button class="tab-btn" data-tab="ai-insights">AI Insights</button>
+                        <button class="tab-btn" data-tab="insights">AI Insights</button>
                     </div>
 
-                    <div class="tab-content active" id="summary">
-                        <div class="summary-card">
-                            <div class="summary-label">Estimated Monthly Payment (PITI+HOA)</div>
-                            <div class="payment-amount">
-                                <span class="amount" id="monthlyPayment">$0.00</span>
-                                <span class="unit">/ month</span>
-                            </div>
-                            <div class="payment-breakdown">
-                                P&I: <span id="monthlyPI">$0</span> + Tax: <span id="monthlyTax">$0</span> + Insurance: <span id="monthlyInsurance">$0</span> + PMI: <span id="monthlyPMI">$0</span> + HOA: <span id="monthlyHOA">$0</span>
-                            </div>
+                    <div class="tab-content active" id="analysis">
+                        <h3 class="results-heading">Monthly Payment Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="paymentBreakdownChart"></canvas>
                         </div>
-
-                        <div class="summary-key-metrics-grid">
-                            <div class="key-metric-card primary">
-                                <div class="metric-label">Total Loan Amount</div>
-                                <div class="metric-value" id="loanAmount">$0</div>
+                        
+                        <h3 class="results-heading">Loan Summary</h3>
+                        <div class="result-grid">
+                            <div class="result-box">
+                                <div class="result-label">Loan Amount</div>
+                                <div class="result-value" id="loanAmount">$280,000</div>
                             </div>
-                            <div class="key-metric-card neutral">
-                                <div class="metric-label">PMI Status / Cost</div>
-                                <div class="metric-value" id="pmiStatus">$0/mo</div>
+                            <div class="result-box">
+                                <div class="result-label">Total Interest Paid</div>
+                                <div class="result-value" id="totalInterest">$259,105</div>
                             </div>
-                            <div class="key-metric-card primary-dark-bg">
-                                <div class="metric-label">Total Interest Paid</div>
-                                <div class="metric-value" id="totalInterest">$0</div>
+                            <div class="result-box">
+                                <div class="result-label">Total PITI Payments</div>
+                                <div class="result-value" id="totalPayments">$663,105</div>
                             </div>
-                            <div class="key-metric-card success">
-                                <div class="metric-label">Interest Saved (w/ extra pay)</div>
-                                <div class="metric-value" id="interestSaved">$0</div>
+                            <div class="result-box">
+                                <div class="result-label">LTV Ratio</div>
+                                <div class="result-value" id="ltv">80%</div>
                             </div>
-                            <div class="key-metric-card info">
-                                <div class="metric-label">Payoff Time Acceleration</div>
-                                <div class="metric-value" id="payoffAccel">0 months</div>
+                            <div class="result-box">
+                                <div class="result-label">Monthly P&I</div>
+                                <div class="result-value" id="monthlyPI">$1,475</div>
                             </div>
-                            <div class="key-metric-card neutral">
-                                <div class="metric-label">LTV Ratio</div>
-                                <div class="metric-value" id="ltv">0%</div>
+                             <div class="result-box">
+                                <div class="result-label">Monthly HOA</div>
+                                <div class="result-value" id="monthlyHOA">$0</div>
                             </div>
-                        </div>
-
-                        <h3 class="results-heading">Monthly Payment Breakdown (PITI+HOA)</h3>
-                        <div class="chart-container-small">
-                            <canvas id="paymentBreakdownChart"></canvas> 
-                        </div>
-
-                        <div class="ad-slot ad-slot-m">
-                            <span class="ad-label">Sponsored Product Slot</span>
-                            <a href="#affiliate-link" target="_blank">Get Pre-Approved in 3 Minutes →</a>
+                            <div class="result-box" id="pmiStatusBox">
+                                <div class="result-label">PMI Status</div>
+                                <div class="result-value" id="pmiStatus">Required</div>
+                            </div>
+                            <div class="result-box success" id="interestSavedBox">
+                                <div class="result-label">Interest Saved</div>
+                                <div class="result-value" id="interestSaved">$0</div>
+                            </div>
+                            <div class="result-box success" id="payoffAccelBox">
+                                <div class="result-label">Payoff Acceleration</div>
+                                <div class="result-value" id="payoffAccel">0 months</div>
+                            </div>
                         </div>
                     </div>
 
@@ -272,83 +274,136 @@
                         <div class="chart-container">
                             <canvas id="mortgageOverTimeChart"></canvas>
                         </div>
+                        
                         <div class="chart-summary-controls">
                             <label for="year-slider">View Details for Year: <span id="slider-year-label">1</span></label>
-                            <input type="range" id="year-slider" class="year-slider" min="1" max="30" value="1">
-                            <div class="chart-summary" id="chart-summary">
-                                </div>
+                            <input type="range" id="year-slider" min="1" max="30" value="1" class="year-slider" aria-label="Select year to view summary">
                         </div>
-                    </div>
+                        <div class="result-grid" id="chart-year-summary">
+                            <div class="result-box">
+                                <div class="result-label">Principal Paid This Year</div>
+                                <div class="result-value" id="summary-principal-paid">$0</div>
+                            </div>
+                            <div class="result-box accent">
+                                <div class="result-label">Interest Paid This Year</div>
+                                <div class="result-value" id="summary-interest-paid">$0</div>
+                            </div>
+                            <div class="result-box highlight">
+                                <div class="result-label">Remaining Balance</div>
+                                <div class="result-value" id="summary-remaining-balance">$0</div>
+                            </div>
+                        </div>
+                        </div>
 
                     <div class="tab-content" id="amortization">
-                        <h3 class="results-heading">Full Amortization Schedule</h3>
                         <div class="amortization-controls">
-                            <button id="toggleAmortView" class="btn-secondary">View Yearly</button>
-                            <button id="exportCsvBtn" class="btn-secondary">Export to CSV</button>
+                            <button id="amortToggle" class="btn-secondary">Show Yearly</button>
+                            <button id="exportCsv" class="btn-secondary">Export as CSV</button>
                         </div>
                         <div class="table-scroll-wrapper">
                             <table class="amortization-table">
-                                <thead>
+                                <thead id="amortizationThead">
                                     </thead>
-                                <tbody>
-                                    <tr><td colspan="6" class="placeholder-row">Run calculation to see schedule.</td></tr>
-                                </tbody>
+                                <tbody id="amortizationTable">
+                                    </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <div class="tab-content" id="ai-insights">
-                        <h3 class="results-heading">🧠 AI-Powered Financial Advice</h3>
-                        <p class="ai-intro">FinGuid's AI engine analyzes your inputs to provide personalized, dynamic advice and insights to help you make informed financial decisions with 100% accuracy.</p>
-                        <div class="ai-insights-container">
-                            <div class="insight info">
-                                <div class="insight-title">Enter inputs and calculate to view AI Insights.</div>
+                    <div class="tab-content" id="insights">
+                         <h3 class="results-heading">🤖 AI-Powered Insights</h3>
+                        <div class="insights-container" id="insightsContainer">
+                            <div class="insight-box">
+                                <strong>🤖 AI Advisor:</strong> Enter your details to generate personalized insights...
                             </div>
                         </div>
-                        <div class="ad-slot ad-slot-m">
-                            <span class="ad-label">Exclusive AI-Matched Lender Offer</span>
-                            <a href="#affiliate-link" target="_blank">See Your Pre-Approved Rate Now →</a>
-                        </div>
                     </div>
-
                 </div>
             </div>
-        </div> 
-        
-        <div class="main-seo-content">
-            <h1 class="seo-h1">Mortgage Calculator with Live FRED Rates & AI Insights for Americans</h1>
-            <p class="seo-summary">The World's Best AI-Powered Mortgage Calculator by FinGuid helps you calculate your PITI (Principal, Interest, Taxes, Insurance) payment with **live FRED rates**, ZIP code tax lookup, and over 100 dynamic AI insights. Our tool is designed to be **SEO friendly**, **mobile-ready**, and compliant with **WCAG 2.1 AA** standards for all Americans to take informed financial decisions.</p>
-
-            <section id="faq-section" class="faq-section">
-                <h2 class="section-title">🗝️ Top Mortgage Questions & AI Answers (FAQs)</h2>
-                <div class="faq-container">
-                    </div>
-            </section>
         </div>
 
+        <section class="footer-sponsor" id="our-partners" style="margin-top: 40px; border-radius: 12px;">
+            <div class="container">
+                <h3 style="text-align: center; margin-bottom: 24px; color: var(--primary); font-size: 24px; font-weight: 700;">Our Partners</h3>
+                <div class="sponsor-grid">
+                    <div class="sponsor-item">
+                        <h4>💳 Mortgage Pre-Approval</h4>
+                        <p>Compare rates from top lenders. Get pre-approved in minutes. Save thousands on your home loan.</p>
+                        <a href="#affiliate-link-1" onclick="alert('Partner: Mortgage Lender'); return false;">Get Quotes →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🛡️ Home Insurance Quotes</h4>
+                        <p>Compare insurance rates from major providers. Save up to 40% on coverage. Get instant quotes.</p>
+                        <a href="#affiliate-link-2" onclick="alert('Partner: Insurance'); return false;">Compare Rates →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🏠 Home Equity (HELOC)</h4>
+                        <p>Access your home's equity. Get quotes for HELOCs or cash-out refinancing. Informed decisions.</p>
+                        <a href="#affiliate-link-3" onclick="alert('Partner: HELOC'); return false;">Check Rates →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🔧 Home Services</h4>
+                        <p>Affordable plans for home warranties, repairs, and moving services. Protect your investment.</p>
+                        <a href="#affiliate-link-4" onclick="alert('Partner: Services'); return false;">View Plans →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="faq-section">
+            <h2 class="faq-title">❓ Frequently Asked Questions</h2>
+            <div class="faq-container" id="faqContainer">
+                </div>
+        </section>
 
-        <section id="our-partners" class="partner-section">
-            <h2 class="section-title">🤝 Our Trusted Lending Partners & Sponsors</h2>
-            <p class="sponsor-intro">Our mission is supported by affiliate marketing and sponsored products. These industry-leading lenders offer exclusive rates to FinGuid users.</p>
-            </section>
-    </div>
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>About Mortgage Calculator</h4>
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="#features">Features</a>
+                        <a href="#faq">FAQ</a>
+                        <a href="#contact">Contact Us</a>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Learn More</h4>
+                        <a href="#piti">What is PITI?</a>
+                        <a href="#amortization">Amortization Guide</a>
+                        <a href="#rates">Current Rates</a>
+                        <a href="#blog">Blog</a>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Resources</h4>
+                        <a href="#calculators">Other Calculators</a>
+                        <a href="#tools">Financial Tools</a>
+                        <a href="#education">Education</a>
+                        <a href="#glossary">Glossary</a>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Legal</h4>
+                        <a href="#privacy">Privacy Policy</a>
+                        <a href="#terms">Terms of Service</a>
+                        <a href="#disclaimer">Disclaimer</a>
+                        <a href="#affiliate">Affiliate Disclosure</a>
+                    </div>
+                </div>
 
-    <footer>
-        <div class="container">
-            <div class="disclaimer">
-                <h4 class="disclaimer-title">Important Disclosures & Compliance</h4>
-                <div class="disclaimer-content">
-                    <p>
-                        <strong>Compliance:</strong> This tool is ♿ **WCAG 2.1 AA** compliant, ✅ **GDPR Compliant**, ✅ **CCPA Compliant**, and ✅ **FTC Compliant**. All calculations are for informational purposes only. It is NOT financial advice. Actual mortgage rates, terms, and payments may vary significantly based on credit score, debt-to-income ratio, location, loan type, down payment percentage, credit history, employment status, and many other factors. Lenders may impose additional requirements or restrictions. Always consult with a qualified mortgage professional, financial advisor, or lender before making any borrowing decisions.
-                    </p>
-                    <br>
-                    <p>
-                        <strong>Affiliate Disclosure:</strong> FinGuid participates in affiliate programs with lending partners. When you click on partner links or apply for mortgage products through this calculator, FinGuid may receive compensation. This does not affect your rates or terms. We only recommend products we believe provide value to users.
-                    </p>
-                    <br>
-                    <p>
-                        <strong>Data Accuracy:</strong> Mortgage rates are provided via FRED API and updated regularly. However, we make no guarantees about accuracy, completeness, or timeliness. Always verify rates directly with lenders before applying. **FRED®** data is provided by the Federal Reserve Bank of St. Louis.
-                    </p>
+                <div class="compliance-badges">
+                    <span class="badge">🔒 SSL Secured</span>
+                    <span class="badge">✅ GDPR Compliant</span>
+                    <span class="badge">✅ CCPA Compliant</span>
+                    <span class="badge">✅ FTC Compliant</span>
+                    <span class="badge">♿ WCAG 2.1 AA</span>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>Educational & Informational Only:</strong> This mortgage calculator is for educational and informational purposes only. It is NOT financial advice. Actual mortgage rates, terms, and payments may vary significantly based on credit score, debt-to-income ratio, location, loan type, down payment percentage, credit history, employment status, and many other factors. Lenders may impose additional requirements or restrictions. Always consult with a qualified mortgage professional, financial advisor, or lender before making any borrowing decisions.
+                    <br><br>
+                    <strong>Affiliate Disclosure:</strong> FinGuid participates in affiliate programs with lending partners. When you click on partner links or apply for mortgage products through this calculator, FinGuid may receive compensation. This does not affect your rates or terms. We only recommend products we believe provide value to users.
+                    <br><br>
+    
+                    <strong>Data Accuracy:</strong> Mortgage rates are provided via FRED API and updated regularly. However, we make no guarantees about accuracy, completeness, or timeliness. Always verify rates directly with lenders before applying. <strong>FRED®</strong> data is provided by the Federal Reserve Bank of St. Louis.
                 </div>
 
                 <div class="footer-bottom">
@@ -359,6 +414,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.1.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <script src="mortgage-calculator.js"></script>
 </body>
 </html>
