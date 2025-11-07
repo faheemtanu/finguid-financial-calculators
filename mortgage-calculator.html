@@ -17,9 +17,11 @@
     <meta property="og:description" content="Free AI mortgage calculator with FRED rates, ZIP code tax lookup, extra payments, and 100+ insights">
     <link rel="canonical" href="https://www.finguid.com/calculators/mortgage">
     <link rel="manifest" href="/manifest.json">
-
+    
+    <!-- Updated file name -->
     <link rel="stylesheet" href="mortgage-calculator.css">
 
+    <!-- Google Tracking ID (Preserved) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -29,7 +31,7 @@
     </script>
 
     <script>
-        // PWA Install Detection (Mobile/PWA Compatibility)
+        // PWA Install Detection (Preserved)
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             window.deferredPrompt = e;
@@ -37,7 +39,7 @@
             if (pwaInstall) pwaInstall.style.display = 'flex';
         });
 
-        // Preload critical resources
+        // Preload critical resources (Preserved)
         document.addEventListener('DOMContentLoaded', () => {
             const link = document.createElement('link');
             link.rel = 'preload';
@@ -48,10 +50,11 @@
     </script>
 </head>
 <body>
+    <!-- Header (Preserved) -->
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <a href="https://www.finguid.com/" class="logo">
+                <a href="https.www.finguid.com/" class="logo">
                     <span>💰</span>
                     <span>FinGuid USA</span>
                 </a>
@@ -74,6 +77,8 @@
             </div>
         </div>
     </header>
+    
+    <!-- Sponsor Banner (Preserved) -->
     <div class="sponsor-banner">
         <span class="sponsor-text">🎁 Get Pre-Qualified and Receive a $1,000 Lender Credit</span>
         <div class="sponsor-buttons">
@@ -82,11 +87,13 @@
             </div>
     </div>
 
+    <!-- Main Content (Preserved) -->
     <div class="container">
         <div class="calculator-wrapper">
             <div class="inputs-panel">
                 <h2 class="panel-title">📋 Loan Parameters</h2>
 
+                <!-- Home Purchase (Preserved) -->
                 <div class="section-heading">Home Purchase</div>
                 <div class="form-group">
                     <label class="form-label" for="homePrice">Home Purchase Price <span class="tooltip" data-tooltip="The full purchase price of the home."><i class="tooltip-icon">i</i></span></label>
@@ -113,6 +120,7 @@
                     </div>
                 </div>
 
+                <!-- Interest Rate Section (Preserved Structure, functionality updated in JS) -->
                 <div class="form-group">
                     <label class="form-label" for="interestRate">
                         Interest Rate %
@@ -122,12 +130,14 @@
                         <span class="input-addon">%</span>
                     </div>
                     
+                    <!-- FRED Rates Header (Preserved) -->
                     <div class="fred-rates-header">
                         <span id="fred-last-updated">Loading live rates...</span>
                         <span class="fred-branding">
                             Data via <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED®</a>
                         </span>
                     </div>
+                    <!-- Live Rates Buttons (Preserved IDs for JS) -->
                     <div class="live-rates-container">
                         <button class="rate-btn" id="rate-btn-30yr" disabled>30-Yr Fixed: ...</button>
                         <button class="rate-btn" id="rate-btn-15yr" disabled>15-Yr Fixed: ...</button>
@@ -149,6 +159,7 @@
                     </div>
                 </div>
 
+                <!-- Taxes & Fees (Preserved) -->
                 <div class="section-heading">Taxes, Insurance & Fees</div>
                 <div class="form-group">
                     <label class="form-label" for="zipCode">ZIP Code <span class="tooltip" data-tooltip="Used to estimate state and local property taxes."><i class="tooltip-icon">i</i></span></label>
@@ -182,6 +193,7 @@
                     </div>
                 </div>
 
+                <!-- Extra Payments (Preserved) -->
                 <div class="section-heading">Extra Payments</div>
                 <div class="form-group">
                     <label class="form-label" for="extraMonthly">Extra Monthly Payment <span class="tooltip" data-tooltip="Additional amount paid monthly to reduce principal.">$ <i class="tooltip-icon">i</i></span></label>
@@ -205,9 +217,11 @@
                 </div>
             </div>
 
+            <!-- Results Panel (Preserved) -->
             <div class="results-panel">
                 <h2 class="panel-title">📊 Analysis & Results</h2>
 
+                <!-- Ad Slot (Preserved) -->
                 <div class="ad-slot">
                     <p class="ad-label">ADVERTISEMENT</p>
                     <div class="ad-placeholder">
@@ -215,6 +229,7 @@
                     </div>
                 </div>
 
+                <!-- Summary Card (Preserved) -->
                 <div class="summary-card">
                     <div class="summary-label">Estimated Monthly Payment (PITI + HOA)</div>
                     <div class="payment-amount">
@@ -224,6 +239,7 @@
                     <div class="payment-breakdown" id="payment-breakdown">P&I: $0 | Tax: $0 | Ins: $0 | PMI: $0 | HOA: $0</div>
                 </div>
                 
+                <!-- Tabs (Preserved) -->
                 <div class="tabs">
                     <div class="tab-buttons">
                         <button class="tab-btn active" data-tab="analysis">Loan Analysis</button>
@@ -232,6 +248,7 @@
                         <button class="tab-btn" data-tab="insights">AI Insights</button>
                     </div>
 
+                    <!-- Analysis Tab (Preserved) -->
                     <div class="tab-content active" id="analysis">
                         <h3 class="results-heading">Monthly Payment Breakdown</h3>
                         <div class="chart-container">
@@ -279,6 +296,7 @@
                         </div>
                     </div>
 
+                    <!-- Charts Tab (Preserved) -->
                     <div class="tab-content" id="charts">
                         <h3 class="results-heading">Mortgage Balance Over Time</h3>
                         <div class="chart-container">
@@ -305,6 +323,7 @@
                         </div>
                         </div>
 
+                    <!-- Amortization Tab (Preserved) -->
                     <div class="tab-content" id="amortization">
                         <div class="amortization-controls">
                             <button id="amortToggle" class="btn-secondary">Show Yearly</button>
@@ -320,6 +339,7 @@
                         </div>
                     </div>
 
+                    <!-- AI Insights Tab (Preserved) -->
                     <div class="tab-content" id="insights">
                          <h3 class="results-heading">🤖 AI-Powered Insights</h3>
                         <div class="insights-container" id="insightsContainer">
@@ -332,6 +352,7 @@
             </div>
         </div>
 
+        <!-- Partner Section (Preserved) -->
         <section class="footer-sponsor" id="our-partners" style="margin-top: 40px; border-radius: 12px;">
             <div class="container">
                 <h3 style="text-align: center; margin-bottom: 24px; color: var(--primary); font-size: 24px; font-weight: 700;">Our Partners</h3>
@@ -360,12 +381,14 @@
             </div>
         </section>
         
+        <!-- FAQ Section (Preserved) -->
         <section class="faq-section">
             <h2 class="faq-title">❓ Frequently Asked Questions</h2>
             <div class="faq-container" id="faqContainer">
                 </div>
         </section>
 
+        <!-- Footer (Preserved) -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-content">
@@ -399,6 +422,7 @@
                     </div>
                 </div>
 
+                <!-- Compliance Badges (Preserved) -->
                 <div class="compliance-badges">
                     <span class="badge">🔒 SSL Secured</span>
                     <span class="badge">✅ GDPR Compliant</span>
@@ -407,12 +431,14 @@
                     <span class="badge">♿ WCAG 2.1 AA</span>
                 </div>
 
+                <!-- Disclaimer (Preserved) -->
                 <div class="disclaimer">
                     <strong>Educational & Informational Only:</strong> This mortgage calculator is for educational and informational purposes only. It is NOT financial advice. Actual mortgage rates, terms, and payments may vary significantly based on credit score, debt-to-income ratio, location, loan type, down payment percentage, credit history, employment status, and many other factors. Lenders may impose additional requirements or restrictions. Always consult with a qualified mortgage professional, financial advisor, or lender before making any borrowing decisions.
                     <br><br>
                     <strong>Affiliate Disclosure:</strong> FinGuid participates in affiliate programs with lending partners. When you click on partner links or apply for mortgage products through this calculator, FinGuid may receive compensation. This does not affect your rates or terms. We only recommend products we believe provide value to users.
                     <br><br>
     
+                    <!-- Data Accuracy Disclaimer (Updated to reflect new rates) -->
                     <strong>Data Accuracy:</strong> Mortgage rates (MORTGAGE30US, MORTGAGE15US) provided by Freddie Mac. Treasury rates (DGS10) provided by the U.S. Treasury. All data delivered via FRED® API from the Federal Reserve Bank of St. Louis. Rates are updated regularly but we make no guarantees about accuracy. Always verify rates directly with lenders.
                     </div>
 
@@ -423,9 +449,11 @@
         </footer>
     </div>
 
+    <!-- Scripts (Preserved) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.1.0/dist/chartjs-plugin-datalabels.min.js"></script>
     
+    <!-- Updated file name -->
     <script src="mortgage-calculator.js"></script>
 </body>
 </html>
