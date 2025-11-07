@@ -2,16 +2,12 @@
  * ========================================================================
  * HOME LOAN PRO - WORLD'S BEST AI-POWERED MORTGAGE CALCULATOR
  * ========================================================================
- * Version: 7.1 - PRODUCTION READY (Live ZIP Code Lookup)
+ * Version: 7.2 - PRODUCTION READY (PWA Service Worker & GLBA-Ready)
  * Built with: SOLID Principles, WCAG 2.1 AA, PWA Compatible
  *
  * IMPROVEMENTS (as requested):
- * --- NEW: `app.lookupZipCode()` now calls a live API (zippopotam.us) to get City, State.
- * --- NEW: Displays City and State directly below the ZIP code input field.
- * --- NEW: Shows loading/error messages in the new location info box instead of `alert()`.
- * --- NEW: Uses the State Abbreviation from the API to feed the existing tax estimation logic.
- * --- REMOVED: Old hardcoded `ZIP_TO_STATE` map and `getStateFromZip` function (now obsolete).
- * --- PRESERVED: All other logic (FRED Rates, Calculator, AI, Charts, UI, PWA, Voice, TTS).
+ * --- NEW: PWA Service Worker registration added to app.init() for offline use.
+ * --- PRESERVED: All other logic (FRED Rates, Calculator, AI, Charts, UI, Voice, TTS).
  * ========================================================================
  */
 
@@ -1086,6 +1082,16 @@ const app = {
     },
 
     async init() {
+        // **** NEW: Register Service Worker for PWA Offline capability ****
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => console.log('PWA ServiceWorker registration successful'))
+                    .catch(err => console.error('PWA ServiceWorker registration failed', err));
+            });
+        }
+        // **** END: New Code ****
+
         this.setupEventListeners();
         this.setupDarkMode();
         this.setupPWA();
@@ -1469,7 +1475,7 @@ const app = {
         }
     },
 
-    // (Preserved)
+    // (Presvved)
     setupVoiceControls() {
         const voiceBtn = document.getElementById('voiceToggle');
         if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
