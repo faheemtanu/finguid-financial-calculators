@@ -2,18 +2,16 @@
  * ========================================================================
  * HOME LOAN PRO - WORLD'S BEST AI-POWERED MORTGAGE CALCULATOR
  * ========================================================================
- * Version: 7.0 - PRODUCTION READY (Live FRED Rates Implementation)
+ * Version: 7.1 - PRODUCTION READY (Live ZIP Code Lookup)
  * Built with: SOLID Principles, WCAG 2.1 AA, PWA Compatible
  *
  * IMPROVEMENTS (as requested):
- * --- NEW: Fetches 3 FRED rates: MORTGAGE30US, MORTGAGE15US, DGS10.
- * --- NEW: Smart Caching - Rates update daily after 4:45 PM ET.
- * --- NEW: Timezone-aware logic ensures updates happen correctly.
- * --- NEW: Displays a "Last Updated" timestamp for the rates.
- * --- NEW: Rate buttons (30-Yr, 15-Yr, 10-Yr) are now functional.
- * --- NEW: Clicking a rate button applies the rate to the input field.
- * --- NEW: Graceful error handling and fallback rates if API fails.
- * --- PRESERVED: All other logic (Calculator, AI, Charts, UI, PWA, Voice, TTS).
+ * --- NEW: `app.lookupZipCode()` now calls a live API (zippopotam.us) to get City, State.
+ * --- NEW: Displays City and State directly below the ZIP code input field.
+ * --- NEW: Shows loading/error messages in the new location info box instead of `alert()`.
+ * --- NEW: Uses the State Abbreviation from the API to feed the existing tax estimation logic.
+ * --- REMOVED: Old hardcoded `ZIP_TO_STATE` map and `getStateFromZip` function (now obsolete).
+ * --- PRESERVED: All other logic (FRED Rates, Calculator, AI, Charts, UI, PWA, Voice, TTS).
  * ========================================================================
  */
 
@@ -32,7 +30,7 @@ const FALLBACK_RATES = {
     dates: { rate30: null, rate15: null, rate10: null },
 };
 
-// (All other constants like STATE_TAX_RATES, ZIP_TO_STATE, FAQs are preserved)
+// (All other constants like STATE_TAX_RATES, FAQs are preserved)
 const STATE_TAX_RATES = {
     AL: 0.41, AK: 1.19, AZ: 0.62, AR: 0.61, CA: 0.76, CO: 0.51, CT: 2.14,
     DE: 0.57, FL: 0.91, GA: 0.92, HI: 0.28, ID: 0.69, IL: 2.27, IN: 0.85,
@@ -43,11 +41,7 @@ const STATE_TAX_RATES = {
     TX: 1.80, UT: 0.58, VT: 1.90, VA: 0.82, WA: 0.94, WV: 0.58, WI: 1.85, WY: 0.61
 };
 
-const ZIP_TO_STATE = {
-    "90001": "CA", "90210": "CA", "10001": "NY", "10002": "NY", "10003": "NY",
-    "60601": "IL", "60602": "IL", "77001": "TX", "77002": "TX", "75001": "TX",
-    "33101": "FL", "33102": "FL", "85001": "AZ", "85002": "AZ", "98101": "WA"
-};
+// ===== REMOVED: ZIP_TO_STATE constant is no longer needed, using live API =====
 
 // ===== NEW: EXPANDED FAQs for SEO / Ranking (Preserved) =====
 const FAQs = [
@@ -85,7 +79,7 @@ const FAQs = [
     },
     {
         q: "How do extra payments help pay off a mortgage early?",
-        a: "When you make an extra payment, 100% of that money goes directly to your **principal balance** (not interest). This reduces the loan balance, meaning you pay less interest on the next payment, and every payment after. This 'accelerates' your payoff and can save you thousands. See your 'Interest Saved' in the Loan Summary."
+        a: "When you make an extra payment, 100% of that money goes directly to your **principal balance** (not interest). This reduces your loan balance, meaning you pay less interest on the next payment, and every payment after. This 'accelerates' your payoff and can save you thousands. See your 'Interest Saved' in the Loan Summary."
     },
     {
         q: "What are FHA, VA, and USDA loans?",
@@ -534,30 +528,49 @@ class AIInsightEngine {
     }
 }
 
-// ===== ZIP CODE MANAGER (Preserved) =====
+// ===== ZIP CODE MANAGER (Modified) =====
 class ZipCodeManager {
-    static getStateFromZip(zip) {
-        const prefix = zip.substring(0, 3);
-        const stateMap = { "900": "CA", "902": "CA", "100": "NY", "606": "IL", "770": "TX", "750": "TX", "331": "FL", "850": "AZ", "981": "WA" };
-        for (const key in stateMap) {
-            if (zip.startsWith(key)) return stateMap[key];
+    
+    // --- NEW: Fetches location data from a free ZIP API ---
+    static async lookupZipInfo(zip) {
+        try {
+            const response = await fetch(`https://api.zippopotam.us/us/${zip}`);
+            if (!response.ok) {
+                if (response.status === 404) return { error: 'Invalid ZIP code.' };
+                throw new Error('ZIP API request failed');
+            }
+            const data = await response.json();
+            if (!data || !data.places || data.places.length === 0) {
+                return { error: 'Invalid ZIP code data.' };
+            }
+            const place = data.places[0];
+            return {
+                city: place['place name'],
+                state: place['state'],
+                stateAbbr: place['state abbreviation'],
+                error: null
+            };
+        } catch (error) {
+            console.error('ZIP lookup error:', error);
+            return { error: 'Could not fetch location. Check connection.' };
         }
-        return ZIP_TO_STATE[zip] || null;
     }
+
     static getTaxRateByState(state) {
         return STATE_TAX_RATES[state] || 0.85; // Default national average
     }
-    static estimateTaxAndInsurance(homePrice, zip) {
-        const state = this.getStateFromZip(zip);
-        if (!state) return null;
-        const taxRate = this.getTaxRateByState(state);
+
+    // --- MODIFIED: Now takes stateAbbr from the API, not zip ---
+    static estimateTaxAndInsurance(homePrice, stateAbbr) {
+        if (!stateAbbr) return null;
+        const taxRate = this.getTaxRateByState(stateAbbr); // Uses the existing STATE_TAX_RATES constant
         const annualTax = (homePrice * taxRate) / 100;
         const annualInsurance = homePrice * 0.0035; // ~0.35% of home value
-        return { annualTax, annualInsurance, state };
+        return { annualTax, annualInsurance, state: stateAbbr };
     }
 }
 
-// ===== NEW: IMPROVED FRED API MANAGER =====
+// ===== NEW: IMPROVED FRED API MANAGER (Preserved) =====
 class FREDManager {
     
     /**
@@ -1116,7 +1129,7 @@ const app = {
         // Chart Summary Slider (Preserved)
         document.getElementById('year-slider').addEventListener('input', (e) => this.updateChartSummary(e.target.value));
 
-        // --- NEW: Live Rate Button Listeners ---
+        // Live Rate Button Listeners (Preserved)
         document.getElementById('rate-btn-30yr').addEventListener('click', () => 
             this.applyRate(this.state.liveRates.rate30, 'rate-btn-30yr'));
             
@@ -1127,21 +1140,18 @@ const app = {
             this.applyRate(this.state.liveRates.rate10, 'rate-btn-10yr'));
     },
 
-    // --- NEW: Function to apply live rate from button click ---
+    // (Preserved)
     applyRate(rate, btnId) {
         if (!rate) return;
         
-        // Set input value and trigger calculation
         document.getElementById('interestRate').value = rate.toFixed(2);
-        
-        // Update active button state
         document.querySelectorAll('.rate-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(btnId).classList.add('active');
         
-        // Recalculate
         this.calculate();
     },
 
+    // (Preserved)
     activateTab(tab) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -1156,6 +1166,7 @@ const app = {
         }
     },
     
+    // (Preserved)
     syncDownPayment(source, value) {
         const price = parseFloat(document.getElementById('homePrice').value) || 0;
         const amountEl = document.getElementById('downPaymentAmount');
@@ -1173,11 +1184,13 @@ const app = {
         this.debouncedCalculate();
     },
 
+    // (Preserved)
     debouncedCalculate() {
         clearTimeout(this.calculateDebounce);
         this.calculateDebounce = setTimeout(() => this.calculate(), 250);
     },
 
+    // (Preserved)
     async calculate() {
         const inputs = {
             homePrice: document.getElementById('homePrice').value,
@@ -1215,6 +1228,7 @@ const app = {
         }
     },
     
+    // (Preserved)
     updateChartSummary(year) {
         const yearIndex = parseInt(year) - 1;
         if (!this.lastYearlyData || !this.lastYearlyData[yearIndex]) return;
@@ -1227,6 +1241,7 @@ const app = {
         document.getElementById('summary-remaining-balance').textContent = UIManager.formatCurrency(data.balance, 2);
     },
 
+    // (Preserved)
     initTooltips() {
         let tooltipBox = null;
         document.querySelectorAll('.tooltip').forEach(el => {
@@ -1269,6 +1284,7 @@ const app = {
         });
     },
 
+    // (Preserved)
     toggleAmortizationView() {
         const btn = document.getElementById('amortToggle');
         if (this.state.amortizationView === 'monthly') {
@@ -1281,6 +1297,7 @@ const app = {
         UIManager.updateAmortizationTable(this.lastSchedule, this.state.amortizationView);
     },
 
+    // (Preserved)
     exportAmortizationToCsv() {
         if (!this.lastSchedule || this.lastSchedule.length === 0) return;
 
@@ -1339,7 +1356,7 @@ const app = {
         document.body.removeChild(link);
     },
 
-    // --- UPDATED: Load all 3 rates and update UI ---
+    // (Preserved)
     async loadInitialRates() {
         const updatedEl = document.getElementById('fred-last-updated');
         const rateEl = document.getElementById('interestRate');
@@ -1351,68 +1368,79 @@ const app = {
         try {
             const { rates, lastUpdatedTimestamp } = await FREDManager.getRates();
             
-            // Store rates in state
             this.state.liveRates = rates;
 
-            // Update timestamp
             updatedEl.textContent = lastUpdatedTimestamp;
             updatedEl.style.color = "var(--text-light)";
 
-            // Update button text
             btn30.textContent = `30-Yr Fixed: ${rates.rate30.toFixed(2)}%`;
             btn15.textContent = `15-Yr Fixed: ${rates.rate15.toFixed(2)}%`;
             btn10.textContent = `10-Yr Treasury: ${rates.rate10.toFixed(2)}%`;
             
-            // Enable buttons
             btn30.disabled = false;
             btn15.disabled = false;
             btn10.disabled = false;
             
-            // Set default rate in input field to the live 30-yr rate
             rateEl.value = rates.rate30.toFixed(2);
-            
-            // Set 30-yr button to active
             btn30.classList.add('active');
 
         } catch (error) {
             console.error("Error loading initial rates:", error);
             updatedEl.textContent = 'Error loading rates. Using fallbacks.';
             updatedEl.style.color = "var(--error)";
-            // Use fallback rates to populate buttons
             this.state.liveRates = FALLBACK_RATES.rates;
             btn30.textContent = `30-Yr Fixed: ${this.state.liveRates.rate30.toFixed(2)}%`;
             btn15.textContent = `15-Yr Fixed: ${this.state.liveRates.rate15.toFixed(2)}%`;
             btn10.textContent = `10-Yr Treasury: ${this.state.liveRates.rate10.toFixed(2)}%`;
         }
         
-        // We must re-calculate after the rate is loaded
         this.calculate(); // Use calculate() instead of debounced for instant load
     },
 
-    lookupZipCode() {
-        const zip = document.getElementById('zipCode').value;
+    // --- REPLACED: This function now uses the live API ---
+    async lookupZipCode() {
+        const zipEl = document.getElementById('zipCode');
+        const zip = zipEl.value;
         const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
-        if (zip.length === 5 && homePrice > 0) {
-            const estimate = ZipCodeManager.estimateTaxAndInsurance(homePrice, zip);
+        const locationInfoEl = document.getElementById('zip-location-info');
+
+        if (homePrice <= 0) {
+            // Show alert as this is a blocker
+            alert('Please enter a Home Purchase Price first.');
+            return;
+        }
+        if (!zip || zip.length !== 5 || !/^\d{5}$/.test(zip)) {
+            locationInfoEl.textContent = 'Please enter a valid 5-digit ZIP code.';
+            locationInfoEl.className = 'location-info error';
+            return;
+        }
+
+        locationInfoEl.textContent = 'Looking up location...';
+        locationInfoEl.className = 'location-info'; // Default/info style
+
+        const info = await ZipCodeManager.lookupZipInfo(zip);
+
+        if (info.error) {
+            locationInfoEl.textContent = info.error;
+            locationInfoEl.className = 'location-info error';
+        } else {
+            // Success: Display Area (City), State
+            locationInfoEl.textContent = `${info.city}, ${info.state}`;
+            locationInfoEl.className = 'location-info success';
+
+            // Now, use the stateAbbr to estimate taxes
+            const estimate = ZipCodeManager.estimateTaxAndInsurance(homePrice, info.stateAbbr);
+            
             if (estimate) {
                 document.getElementById('propertyTax').value = Math.round(estimate.annualTax);
                 document.getElementById('homeInsurance').value = Math.round(estimate.annualInsurance);
-                // Replaced alert() with a console log for a cleaner user experience
-                console.log(`Tax & insurance estimated for ${estimate.state}`);
+                // We found data, so recalculate
                 this.debouncedCalculate();
-            } else {
-                 console.warn('ZIP code not found in our database. Please enter manually.');
-                 // alert('❌ ZIP code not found in our database. Please enter manually.');
             }
-        } else if (homePrice <= 0) {
-             console.warn('Please enter a Home Purchase Price first.');
-             // alert('Please enter a Home Purchase Price first.');
-        } else {
-             console.warn('Please enter a valid 5-digit ZIP code.');
-             // alert('Please enter a valid 5-digit ZIP code.');
         }
     },
 
+    // (Preserved)
     setupDarkMode() {
         const toggle = document.getElementById('darkModeToggle');
         const scheme = localStorage.getItem('colorScheme') || 'light';
@@ -1426,6 +1454,7 @@ const app = {
         });
     },
 
+    // (Preserved)
     setupPWA() {
         const pwaBtn = document.getElementById('pwa-install-btn');
         if (pwaBtn) {
@@ -1440,6 +1469,7 @@ const app = {
         }
     },
 
+    // (Preserved)
     setupVoiceControls() {
         const voiceBtn = document.getElementById('voiceToggle');
         if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
@@ -1491,6 +1521,7 @@ const app = {
         });
     },
 
+    // (Preserved)
     speakResults() {
         if ('speechSynthesis' in window && this.lastResults) {
             speechSynthesis.cancel();
@@ -1500,6 +1531,7 @@ const app = {
         }
     },
     
+    // (Preserved)
     speakInsights() {
          if ('speechSynthesis' in window) {
             speechSynthesis.cancel();
@@ -1513,6 +1545,7 @@ const app = {
         }
     },
 
+    // (Preserved)
     setupFAQ() {
         const container = document.getElementById('faqContainer');
         if(!container) return;
