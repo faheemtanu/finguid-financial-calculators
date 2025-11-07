@@ -721,6 +721,33 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
 .faq-answer.active { display: block; animation: slideDown 0.3s ease; }
 @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
 
+/* ===== NEW: Styles for ZIP Code Location Info ===== */
+.location-info {
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    display: none; /* Hidden by default, shown by JS */
+}
+.location-info.success {
+    color: var(--success);
+    background-color: rgba(16, 185, 129, 0.1);
+    display: block;
+}
+.location-info.error {
+    color: var(--error);
+    background-color: rgba(239, 68, 68, 0.1);
+    display: block;
+}
+.location-info:not(.success):not(.error) {
+    color: var(--text-light);
+    background-color: var(--bg-secondary);
+    display: block;
+}
+/* ===== END: New Styles ===== */
+
+
 /* ===== RESPONSIVE (Updated for new header) ===== */
 @media (max-width: 1024px) {
     .calculator-wrapper { grid-template-columns: 1fr; }
