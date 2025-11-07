@@ -20,11 +20,28 @@
     
     <link rel="stylesheet" href="mortgage-calculator.css">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      
+      // Set default consent to 'denied'. This stops all tracking/cookies.
+      gtag('consent', 'default', {
+          'analytics_storage': 'denied',
+          'ad_storage': 'denied',
+          'ad_user_data': 'denied',
+          'ad_personalization': 'denied',
+          'personalization_storage': 'denied'
+      });
+
+      // Asynchronously load the gtag script *after* setting default consent
+      (function(id) {
+          var f = document.getElementsByTagName('script')[0];
+          var j = document.createElement('script'); j.async = true; j.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+          f.parentNode.insertBefore(j, f);
+      })('G-NYBL2CDNQJ'); // Your GA ID
+      
+      // Configure the ID
       gtag('config', 'G-NYBL2CDNQJ');
     </script>
 
@@ -48,6 +65,21 @@
     </script>
 </head>
 <body>
+
+    <div id="cookie-consent-banner" class="cookie-banner-hidden">
+        <div class="container">
+            <div class="cookie-banner-content">
+                <p class="cookie-banner-text">
+                    This website uses cookies (including Google Analytics) to improve user experience, analyze traffic, and support affiliate marketing. By clicking "Accept All," you consent to our use of cookies.
+                    <a href="#privacy" class="cookie-banner-link">Privacy Policy</a>
+                </p>
+                <div class="cookie-banner-actions">
+                    <button class="cookie-btn-secondary" id="cookie-decline">Decline</button>
+                    <button class="cookie-btn-primary" id="cookie-accept">Accept All</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <header class="header">
         <div class="container">
             <div class="header-content">
@@ -398,6 +430,7 @@
                         <a href="#terms">Terms of Service</a>
                         <a href="#disclaimer">Disclaimer</a>
                         <a href="#affiliate">Affiliate Disclosure</a>
+                        <a href="#" id="ccpa-dns-link">Do Not Sell My Personal Information</a>
                     </div>
                 </div>
 
