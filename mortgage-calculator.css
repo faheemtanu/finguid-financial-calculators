@@ -748,6 +748,90 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
 /* ===== END: New Styles ===== */
 
 
+/* ===== NEW: Cookie Consent Banner (GDPR/CCPA/FTC) ===== */
+#cookie-consent-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    z-index: 2000; /* Above header (1000) */
+    padding: 16px 0;
+    transform: translateY(100%); /* Start hidden */
+    transition: transform 0.5s ease-in-out;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+}
+/* This class is removed by JS to show the banner */
+.cookie-banner-hidden {
+    display: none;
+}
+/* This style is set by JS to animate in */
+#cookie-consent-banner.animate-in {
+    transform: translateY(0);
+}
+
+.cookie-banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.cookie-banner-text {
+    font-size: 13px;
+    color: var(--text-light);
+    flex: 1;
+    min-width: 300px;
+    line-height: 1.5;
+}
+
+.cookie-banner-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+.cookie-banner-link:hover {
+    text-decoration: underline;
+}
+
+.cookie-banner-actions {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.cookie-btn-primary, .cookie-btn-secondary {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.cookie-btn-primary {
+    background: var(--primary);
+    color: white;
+}
+.cookie-btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.cookie-btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+.cookie-btn-secondary:hover {
+    background: var(--border);
+}
+/* ===== END: Cookie Consent Banner ===== */
+
+
 /* ===== RESPONSIVE (Updated for new header) ===== */
 @media (max-width: 1024px) {
     .calculator-wrapper { grid-template-columns: 1fr; }
@@ -759,6 +843,7 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
     .sponsor-banner { flex-direction: column; gap: 12px; }
     .sponsor-buttons { flex: 1 1 100%; justify-content: space-between; }
     .tab-buttons { flex-wrap: nowrap; overflow-x: auto; }
+    .cookie-banner-content { flex-direction: column; } /* Cookie banner on mobile */
 }
 
 @media (max-width: 480px) {
@@ -773,7 +858,7 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
 
 /* ===== PRINT STYLE (Preserved) ===== */
 @media print {
-    .header, .sponsor-banner, .header-controls, .footer-sponsor, .faq-section, .footer, .ad-slot, .amortization-controls, .chart-summary-controls {
+    .header, .sponsor-banner, .header-controls, .footer-sponsor, .faq-section, .footer, .ad-slot, .amortization-controls, .chart-summary-controls, #cookie-consent-banner {
         display: none;
     }
     .calculator-wrapper { grid-template-columns: 1fr; }
