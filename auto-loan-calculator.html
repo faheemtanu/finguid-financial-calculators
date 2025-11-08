@@ -2,295 +2,1049 @@
 <html lang="en" data-color-scheme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Auto Loan Calculator — World's First AI-Powered Analysis | FinGuid USA</title>
-    <meta name="description" content="Calculate your car payment with the World's First AI-Powered Auto Loan Calculator. Includes trade-in, taxes, and live interest rates. Get smart AI insights for your next US auto loan.">
-    <meta name="keywords" content="auto loan calculator, car payment calculator, auto loan rates, car loan calculator, AI auto loan, FinGuid, USA auto loan, trade-in value, car sales tax, FRED API">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="FinGuid - World's First AI Calculator Platform">
-    
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#19343B"> 
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-NYBL2CDNQJ');
-    </script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
-    <link rel="stylesheet" href="auto-loan-calculator.css"> 
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-    
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <header class="main-header">
-        <div class="header-content">
-            <h1 class="logo"><a href="/" aria-label="FinGuid Home Page">FinGuid <span>USA</span></a></h1>
-            <p class="tagline">World's First AI-Powered Auto Loan Analyzer</p>
-            <div class="features-quick">
-                <span class="feature-quick"><i class="fas fa-microchip"></i> AI Insights</span>
-                <span class="feature-quick"><i class="fas fa-microphone-alt"></i> Voice Control</span>
-                <span class="feature-quick"><i class="fas fa-chart-line"></i> Live FRED Rates</span>
-                <span class="feature-quick"><i class="fas fa-cloud-download-alt"></i> PWA Ready</span>
-            </div>
-            
-            <div class="accessibility-controls">
-                <button id="toggle-color-scheme" aria-label="Toggle Light/Dark Mode" class="control-button">
-                    <i class="fas fa-sun"></i> 
-                </button>
-                <div class="voice-status">
-                    <button id="toggle-voice-command" aria-label="Toggle Voice Command" class="control-button voice-inactive">
-                        <i class="fas fa-microphone"></i> <span id="voice-status-text">Voice OFF</span>
-                    </button>
-                    <button id="toggle-text-to-speech" aria-label="Toggle Text to Speech" class="control-button tts-inactive">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
+    <title>AI Auto Loan Calculator 2025 | Live FRED Rates & Total Cost | FinGuid</title>
+
+    <meta name="description" content="World's Best AI-Powered Auto Loan Calculator by FinGuid. Calculate monthly payments, total cost, and amortization schedule with live FRED rates, trade-in, taxes, and 100+ AI insights. WCAG 2.1 AA compliant. Mobile-friendly.">
+    
+    <meta name="keywords" content="auto loan calculator, car payment calculator, car loan rates, used car loan, new car loan, AI auto loan, FinGuid, USA auto loan, trade-in value, car sales tax, FRED API, 60 month auto loan, 72 month auto loan, car affordability">
+
+    <meta name="author" content="FinGuid USA - World's First AI Calculator Platform">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#24ACB9">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AI Auto Loan Analyzer 2025 | Live FRED Rates | FinGuid">
+    <meta property="og:description" content="Free AI auto loan calculator with FRED rates, total cost analysis, and 100+ insights">
+    
+    <link rel="canonical" href="https://www.finguid.com/calculators/auto-loan">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+
+    <!-- 
+      PWA FIX: Inlined PWA Web App Manifest 
+      This is copied from the mortgage calc's self-contained PWA structure.
+    -->
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22FinGuid%20AI%20Auto%20Loan%20Analyzer%22,%22short_name%22:%22AutoLoanCalc%22,%22description%22:%22AI-Powered%20Auto%20Loan%20Calculator%20with%20FRED%20Rates%20and%20Insights.%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#FFFFFD%22,%22theme_color%22:%22#24ACB9%22,%22icons%22:[{%22src%22:%22https://placehold.co/192x192/24ACB9/FFFFFF?text=FinGuid%22,%22type%22:%22image/png%22,%22sizes%22:%22192x192%22},{%22src%22:%22https://placehold.co/512x512/24ACB9/FFFFFF?text=FinGuid%22,%22type%22:%22image/png%22,%22sizes%22:%22512x512%22}]}">
+    
+    <!-- Inlined CSS for Unified Look (Adapted from Mortgage Calc) -->
+    <style>
+        /* === START: Global Variables (Brand Color Match) === */
+        :root {
+            --primary: #24ACB9; /* Teal */
+            --primary-dark: #19343B; /* Dark Teal */
+            --accent: #FFC107;
+            --accent-dark: #E69500;
+            --text: #1F2121;
+            --text-light: #64748B;
+            --bg: #FFFFFD;
+            --bg-secondary: #F5F7FA;
+            --card: #FFFFFF;
+            --border: #E2E8F0;
+            --error: #EF4444;
+            --success: #10B981;
+            --fred-color: #A31B20; /* FRED standard color */
+        }
+
+        [data-color-scheme="dark"] {
+            --text: #E1E8ED;
+            --text-light: #B8C5D0;
+            --bg: #1F2121;
+            --bg-secondary: #242B36;
+            --card: #181919;
+            --border: #38444D;
+        }
+        /* === END: Global Variables === */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { 
+            font-size: 16px; 
+            -webkit-font-smoothing: antialiased; 
+            scroll-behavior: smooth; /* WCAG FIX: Smooth scrolling */
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+        /* ===== HEADER STYLES (Unified) ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .logo:hover { color: var(--primary-dark); }
+
+        .calculator-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            flex-shrink: 0;
+            margin-left: 16px;
+            min-width: 0;
+        }
+
+        .header-features {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: 24px;
+            flex-grow: 1;
+            justify-content: flex-start;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, black 90%, transparent 100%);
+        }
+
+        .header-feature-item {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            animation: pulse-color-text 2.5s infinite ease-in-out;
+            white-space: nowrap;
+        }
+        .header-feature-item:nth-child(1) { animation-delay: 0s; }
+        .header-feature-item:nth-child(2) { animation-delay: 0.2s; }
+        .header-feature-item:nth-child(3) { animation-delay: 0.4s; }
+        .header-feature-item:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes pulse-color-text {
+            0%, 100% { opacity: 0.8; color: var(--text-light); transform: scale(1); }
+            50% { opacity: 1; color: var(--primary); transform: scale(1.03); }
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .icon-btn {
+            background: var(--bg-secondary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .icon-btn:hover { background: var(--primary); color: white; }
+        .icon-btn.active { background: var(--primary); color: white; }
+
+        #pwa-install-btn {
+            display: none;
+            padding: 8px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        #pwa-install-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+        /* ===== SPONSOR BANNER (Unified) ===== */
+        .sponsor-banner {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            color: white;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-text { font-weight: 500; flex: 1; min-width: 200px; }
+        .sponsor-buttons { display: flex; gap: 8px; }
+
+        .sponsor-btn {
+            padding: 8px 12px;
+            background: white;
+            color: #6366F1;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sponsor-btn:hover { background: var(--accent); color: var(--text); transform: translateY(-2px); }
+
+        /* ===== MAIN CALCULATOR LAYOUT (Unified) ===== */
+        .calculator-wrapper {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            padding: 24px 0;
+            margin-bottom: 40px;
+        }
+
+        .inputs-panel, .results-panel {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .inputs-panel { 
+            position: sticky;
+            top: 70px; /* Below the header */
+            align-self: flex-start;
+        }
+        .inputs-panel:hover, .results-panel:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .panel-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+        .section-heading {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        
+        /* ===== Tooltip Styles (WCAG & Unified) ===== */
+        .tooltip {
+            font-weight: bold;
+            cursor: help;
+            margin-left: 4px;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-light);
+        }
+
+        .tooltip-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--text-light);
+            color: var(--card);
+            font-style: normal;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 14px;
+            margin-left: 5px;
+            transition: all 0.2s ease;
+        }
+        
+        .tooltip:hover .tooltip-icon,
+        .tooltip:focus .tooltip-icon {
+            background: var(--primary);
+            outline: none;
+        }
+        .tooltip:focus {
+            outline: none;
+        }
+
+        .tooltip-box {
+            position: fixed;
+            background: #1a1a1a;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 10000;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            max-width: 200px;
+            white-space: normal;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        /* ===== END: Tooltip Styles ===== */
+
+
+        .input-wrapper { 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            min-width: 0; 
+        }
+
+        input[type="number"], input[type="text"], select {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            min-width: 0;
+            width: 100%;
+        }
+
+        /* WCAG FIX: Clear focus ring for all interactive elements */
+        input:focus, select:focus, .rate-btn:focus, .lookup-btn:focus, 
+        .sponsor-btn:focus, .btn-secondary:focus, .icon-btn:focus, 
+        #pwa-install-btn:focus, .tab-btn:focus, .faq-question:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.25);
+        }
+        .icon-btn:focus, #pwa-install-btn:focus, .sponsor-btn:focus, .lookup-btn:focus {
+             box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.4);
+        }
+
+
+        .input-addon {
+            background: var(--bg-secondary);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        /* FRED Rates Styles (Unified) */
+        .fred-rates-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        #fred-last-updated {
+            font-size: 11px;
+            color: var(--text-light);
+            text-align: left;
+        }
+        .fred-branding {
+            font-size: 11px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .fred-branding a { color: var(--fred-color); text-decoration: none; }
+        .fred-branding a:hover { color: var(--primary); }
+        
+        .live-rates-container { display: flex; gap: 8px; flex-wrap: wrap; }
+        .rate-btn {
+            flex-grow: 1;
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 45px;
+        }
+        .rate-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .rate-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .rate-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+        .lookup-btn {
+            padding: 10px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .lookup-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .lookup-btn.fred-btn { background: var(--fred-color); }
+        .lookup-btn.fred-btn:hover { background: #7D1418; }
+        .lookup-btn:active { transform: translateY(0); }
+        
+        /* Ad Slot (Monetization Ready) */
+        .ad-slot {
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .ad-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .ad-placeholder {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        /* ===== END: Ad Slot ===== */
+
+        /* ===== RESULTS SECTION (Unified) ===== */
+        .summary-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(36, 172, 185, 0.2);
+            text-align: center;
+        }
+        .summary-label { font-size: 0.875rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .payment-amount { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin: 8px 0; }
+        .amount { font-size: 2rem; font-weight: bold; }
+        .unit { font-size: 1rem; opacity: 0.9; }
+        .payment-breakdown { font-size: 0.875rem; opacity: 0.8; }
+
+        .tabs { margin-bottom: 24px; }
+        .tab-buttons { 
+            display: flex; 
+            gap: 4px; 
+            border-bottom: 2px solid var(--border); 
+            margin-bottom: 24px; 
+            overflow-x: auto; 
+        }
+
+        .tab-btn {
+            padding: 16px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: -2px;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        .tab-content { display: none; padding: 8px; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        .tab-content:focus-visible { outline: 2px solid var(--primary); border-radius: 4px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .results-heading {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 16px 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .result-box { background: var(--bg-secondary); padding: 16px; border-radius: 6px; border-left: 4px solid var(--border); transition: all 0.2s; }
+        .result-box:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+        .result-box.highlight { border-left-color: var(--primary); background: rgba(36, 172, 185, 0.1); }
+        .result-box.success { border-left-color: var(--success); background: rgba(16, 185, 129, 0.1); }
+        .result-box.accent { border-left-color: var(--accent-dark); background: rgba(255, 193, 7, 0.1); }
+
+        .result-label { 
+            display: block; 
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light); 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            margin-bottom: 8px; 
+        }
+        .result-value { 
+            display: block; 
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin: 20px 0;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        /* ===== Amortization Table Styles (Unified) ===== */
+        .amortization-controls { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .table-scroll-wrapper {
+            overflow-x: auto;
+            max-height: 500px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .amortization-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 600px; /* Ensure table is wide enough for all columns */
+        }
+        .amortization-table thead {
+            position: sticky;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            z-index: 10;
+        }
+        .amortization-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .amortization-table th:nth-child(n+2) { text-align: right; }
+
+        .amortization-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+        .amortization-table tbody tr:nth-child(even) { background: var(--bg-secondary); }
+        .amortization-table tbody tr:hover { background: rgba(36, 172, 185, 0.1); }
+        .amortization-table td {
+            padding: 10px 12px;
+            color: var(--text-light);
+        }
+        .amortization-table td:first-child { font-weight: 600; color: var(--text); }
+        .amortization-table td:nth-child(n+2) { text-align: right; font-family: 'Courier New', Courier, monospace; }
+        .amortization-table .summary-row td { font-weight: bold; color: var(--text); background: var(--bg-secondary); }
+        /* ===== END: Amortization Styles ===== */
+
+
+        /* ===== AI INSIGHTS (Unified) ===== */
+        .insights-container { margin-top: 20px; }
+        .insight-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .insight-box.success { border-left-color: var(--success); }
+        .insight-box.warning { border-left-color: var(--accent-dark); }
+        .insight-box.error { border-left-color: var(--error); }
+        #ai-insights-output {
+            min-height: 100px;
+            padding: 16px;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        #ai-insights-output.loading {
+            cursor: progress;
+            opacity: 0.6;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        /* ===== FOOTER (Unified) ===== */
+        .footer { background: var(--card); border-top: 1px solid var(--border); padding: 32px 0; margin-top: 40px; }
+        .footer-content { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
+        .footer-section h4 { font-size: 13px; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+        .footer-section a { display: block; font-size: 12px; color: var(--text-light); text-decoration: none; margin-bottom: 8px; transition: color 0.3s ease; }
+        .footer-section a:hover, .footer-section a:focus { 
+            color: var(--primary); 
+            text-decoration: underline;
+            outline: none;
+        }
+        .disclaimer { font-size: 11px; color: var(--text-light); line-height: 1.6; padding-top: 20px; border-top: 1px solid var(--border); }
+        .footer-bottom { text-align: center; font-size: 12px; color: var(--text-light); padding-top: 16px; border-top: 1px solid var(--border); }
+        .footer-badges { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 12px; 
+            margin-bottom: 20px; 
+            font-size: 12px; 
+        }
+        .badge { display: flex; align-items: center; gap: 4px; padding: 6px 10px; background: var(--bg-secondary); border-radius: 4px; font-weight: 600; color: var(--text-light); }
+
+
+        /* ===== Mobile Responsiveness (WCAG Reflow) ===== */
+        @media (max-width: 1024px) {
+            .calculator-wrapper {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .inputs-panel {
+                position: static;
+                top: auto;
+                align-self: auto;
+            }
+            .header-content {
+                padding: 8px 0;
+            }
+            .calculator-title {
+                display: none; /* Hide secondary title on mobile for space */
+            }
+            .header-features {
+                margin-left: 0;
+                justify-content: space-around;
+                width: 100%;
+                order: 3; /* Move features below main controls */
+            }
+            .header-controls {
+                margin-left: 0;
+            }
+            .sponsor-banner {
+                padding: 12px 16px;
+            }
+            .sponsor-buttons {
+                width: 100%;
+                justify-content: space-around;
+            }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 640px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            .sponsor-text {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body id="calculator-body">
+    <!-- Header (Unified Design) -->
+    <header class="header" role="banner">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo" aria-label="FinGuid Home">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> FinGuid
+                </a>
+                <span class="calculator-title" id="calculator-title">AI Auto Loan Analyzer</span>
+                
+                <div class="header-features">
+                    <span class="header-feature-item" aria-label="WCAG 2.1 AA Compliant">WCAG 2.1 AA</span>
+                    <span class="header-feature-item" aria-label="AI Powered Insights">AI INSIGHTS</span>
+                    <span class="header-feature-item" aria-label="Live FRED Rates">FRED RATES</span>
+                    <span class="header-feature-item" aria-label="Progressive Web App">PWA READY</span>
                 </div>
-                <button id="pwa-install-button" class="control-button install-button hidden">Install App</button>
+
+                <div class="header-controls">
+                    <!-- WCAG: Dark Mode Toggle -->
+                    <button id="dark-mode-toggle" class="icon-btn" aria-label="Toggle Dark Mode">
+                        <i class="fas fa-moon" id="dark-mode-icon" aria-hidden="true"></i>
+                    </button>
+                    <!-- WCAG: Voice/Speech Toggle -->
+                    <button id="voice-speech-toggle" class="icon-btn tts-inactive" aria-label="Toggle Text-to-Speech">
+                        <i class="fas fa-volume-up" aria-hidden="true"></i>
+                    </button>
+                    <!-- PWA Install Button -->
+                    <button id="pwa-install-btn" style="display: none;">Install App</button>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="main-content">
-        <div class="calculator-container card">
+    <!-- Sponsor Banner (Monetization Slot 1) -->
+    <div class="sponsor-banner" role="complementary">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px;">
+                <span class="sponsor-text">💰 **SPONSORED:** Unlock a lower rate! Compare 200+ top-rated lenders instantly.</span>
+                <div class="sponsor-buttons">
+                    <a href="#sponsor-link" class="sponsor-btn" role="button">Check My Rate</a>
+                    <a href="#sponsor-link" class="sponsor-btn" role="button">See Offers</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container" role="main">
+        <div class="calculator-wrapper">
             
-            <section class="input-section" aria-labelledby="input-heading">
-                <h2 id="input-heading" class="section-title">Auto Loan Parameters</h2>
-                <form id="auto-loan-form" novalidate>
-                    
-                    <aside class="ad-slot top-ad-slot" role="complementary" aria-label="Sponsor Ad Slot">
-                        <p class="ad-label">ADVERTISEMENT / SPONSOR PRODUCT</p>
-                        <div id="top-ad-placeholder">Your Auto Lender Sponsor Ad Here (e.g., Capital One Auto)</div>
-                    </aside>
-
-                    <div class="input-group">
-                        <label for="vehicle-price">Vehicle Price ($)</label>
-                        <input type="text" id="vehicle-price" value="35,000" inputmode="numeric" aria-required="true">
+            <!-- LEFT PANEL: Inputs -->
+            <div class="inputs-panel" role="form" aria-labelledby="input-panel-title">
+                <h2 id="input-panel-title" class="panel-title"><i class="fas fa-car" aria-hidden="true"></i> Auto Loan Details</h2>
+                
+                <!-- Vehicle Cost Section -->
+                <div class="section-heading">Vehicle Cost</div>
+                
+                <div class="form-group">
+                    <label for="car-price" class="form-label">
+                        Vehicle Price (MSRP/Negotiated)
+                        <span class="tooltip" tabindex="0" role="tooltip" aria-describedby="tip-price">
+                            <span class="tooltip-icon">?</span>
+                            <span id="tip-price" class="tooltip-box">The full selling price of the vehicle before taxes, fees, or trade-in credit.</span>
+                        </span>
+                    </label>
+                    <div class="input-wrapper">
+                        <span class="input-addon">$</span>
+                        <input type="number" id="car-price" value="35000" min="1000" step="1000" required aria-required="true" aria-label="Vehicle Price">
                     </div>
+                </div>
 
-                    <div class="input-split">
-                        <div class="input-group">
-                            <label for="down-payment">Cash Down Payment ($)</label>
-                            <input type="text" id="down-payment" value="5,000" inputmode="numeric" aria-required="true">
-                        </div>
-                        <div class="input-group">
-                            <label for="trade-in-value">Trade-in Value ($)</label>
-                            <input type="text" id="trade-in-value" value="2,000" inputmode="numeric">
-                        </div>
-                    </div>
-
-                    <div class="input-split">
-                        <div class="input-group">
-                            <label for="loan-term">Loan Term (Months)</label>
-                            <select id="loan-term" aria-required="true">
-                                <option value="36">36 Months (3 Years)</option>
-                                <option value="48">48 Months (4 Years)</option>
-                                <option value="60" selected>60 Months (5 Years)</option>
-                                <option value="72">72 Months (6 Years)</option>
-                                <option value="84">84 Months (7 Years)</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label for="interest-rate">Interest Rate (%)</label>
-                            <input type="text" id="interest-rate" value="7.5" inputmode="decimal" aria-required="true" data-fred-rate="true">
-                            <span class="fred-source-note">Fetching Live FRED Rate...</span>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="down-payment" class="form-label">
+                            Down Payment
+                            <span class="tooltip" tabindex="0" role="tooltip" aria-describedby="tip-down">
+                                <span class="tooltip-icon">?</span>
+                                <span id="tip-down" class="tooltip-box">Cash paid upfront. Recommended minimum is 10-20%.</span>
+                            </span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-addon">$</span>
+                            <input type="number" id="down-payment" value="5000" min="0" step="500" aria-label="Down Payment">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="trade-in" class="form-label">
+                            Trade-in Value
+                            <span class="tooltip" tabindex="0" role="tooltip" aria-describedby="tip-trade">
+                                <span class="tooltip-icon">?</span>
+                                <span id="tip-trade" class="tooltip-box">Value of the car you are trading in, which reduces the loan principal.</span>
+                            </span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-addon">$</span>
+                            <input type="number" id="trade-in" value="3000" min="0" step="100" aria-label="Trade-in Value">
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="input-group advanced-toggle-container">
-                        <button type="button" id="toggle-advanced-options" aria-expanded="false" aria-controls="advanced-options-group" class="toggle-button">
-                            <i class="fas fa-chevron-down"></i> Advanced Taxes & Fees
+                <!-- Taxes & Fees Section -->
+                <div class="section-heading">Taxes & Fees</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sales-tax" class="form-label">
+                            Sales Tax Rate
+                            <span class="tooltip" tabindex="0" role="tooltip" aria-describedby="tip-tax">
+                                <span class="tooltip-icon">?</span>
+                                <span id="tip-tax" class="tooltip-box">The sales tax percentage in your state/county. If 0, enter 0.</span>
+                            </span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input type="number" id="sales-tax" value="6.0" min="0" max="20" step="0.1" aria-label="Sales Tax Rate">
+                            <span class="input-addon">%</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other-fees" class="form-label">
+                            Other Fees (Title/Reg/Dealer)
+                            <span class="tooltip" tabindex="0" role="tooltip" aria-describedby="tip-fees">
+                                <span class="tooltip-icon">?</span>
+                                <span id="tip-fees" class="tooltip-box">All extra non-tax fees: licensing, registration, documentation, etc.</span>
+                            </span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-addon">$</span>
+                            <input type="number" id="other-fees" value="500" min="0" step="50" aria-label="Other Fees">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loan Terms Section -->
+                <div class="section-heading">Loan Terms & Rate</div>
+
+                <div class="form-group">
+                    <label for="loan-term" class="form-label">
+                        Loan Term (Months)
+                    </label>
+                    <div class="input-wrapper">
+                        <select id="loan-term" aria-label="Loan Term in Months">
+                            <option value="36">36 Months (3 Years)</option>
+                            <option value="48">48 Months (4 Years)</option>
+                            <option value="60" selected>60 Months (5 Years)</option>
+                            <option value="72">72 Months (6 Years)</option>
+                            <option value="84">84 Months (7 Years)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="interest-rate" class="form-label">
+                        Annual Interest Rate (APR)
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="interest-rate" value="6.5" min="0.1" max="50" step="0.01" required aria-required="true" aria-label="Annual Interest Rate">
+                        <span class="input-addon">%</span>
+                    </div>
+                </div>
+                
+                <!-- FRED LIVE RATE Section -->
+                <div class="fred-rates-header">
+                    <span id="fred-last-updated">Updating...</span>
+                    <span class="fred-branding">
+                        <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener noreferrer">FRED Data</a>
+                    </span>
+                </div>
+                <div class="live-rates-container" id="fred-rates-container">
+                    <button class="rate-btn fred-btn" data-rate="0" disabled>Loading Rate...</button>
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL: Results -->
+            <div class="results-panel" role="region" aria-labelledby="results-panel-title">
+                <h2 id="results-panel-title" class="panel-title"><i class="fas fa-calculator" aria-hidden="true"></i> Analysis & Results</h2>
+                
+                <!-- SUMMARY CARD -->
+                <div class="summary-card" id="summary-card">
+                    <div class="summary-label">Estimated Monthly Payment</div>
+                    <div class="payment-amount">
+                        <span class="amount" id="monthly-payment-value">$0.00</span>
+                        <span class="unit">/ month</span>
+                    </div>
+                    <div class="payment-breakdown" id="loan-amount-summary">Loan Principal: $0.00</div>
+                </div>
+                
+                <!-- Ad Slot (Monetization Slot 2) -->
+                <div class="ad-slot" role="complementary">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="ad-placeholder">Get pre-qualified for an auto loan in 60 seconds.</div>
+                    <a href="#sponsor-link" class="lookup-btn" style="margin-top: 10px;">Get Pre-Approved</a>
+                </div>
+
+                <!-- Tabs (Unified) -->
+                <div class="tabs">
+                    <div class="tab-buttons" role="tablist">
+                        <button class="tab-btn active" data-tab="payment-components" role="tab" aria-selected="true" aria-controls="tab-content-components" id="tab-btn-components">
+                            <i class="fas fa-dollar-sign" aria-hidden="true"></i> Breakdown
+                        </button>
+                        <button class="tab-btn" data-tab="total-cost-chart" role="tab" aria-selected="false" aria-controls="tab-content-chart" id="tab-btn-chart">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i> Chart
+                        </button>
+                        <button class="tab-btn" data-tab="amortization-schedule" role="tab" aria-selected="false" aria-controls="tab-content-amortization" id="tab-btn-amortization">
+                            <i class="fas fa-table" aria-hidden="true"></i> Amortization
                         </button>
                     </div>
 
-                    <div id="advanced-options-group" class="input-group-grid advanced-options-group" aria-hidden="true">
-                        <h3 class="input-group-sub-title">Taxes & Fees (Optional)</h3>
-                        <div class="input-split">
-                            <div class="input-group">
-                                <label for="sales-tax-rate">Sales Tax Rate (%)</label>
-                                <input type="text" id="sales-tax-rate" value="6.5" inputmode="decimal">
-                                <span class="input-note">Sales tax is often calculated on (Price - Trade-in). Varies by state.</span>
+                    <!-- Tab Content 1: Payment Components -->
+                    <div id="tab-content-components" class="tab-content active" role="tabpanel" aria-labelledby="tab-btn-components" tabindex="0">
+                        <p class="results-heading">Total Costs Summary</p>
+                        <div class="result-grid">
+                            <div class="result-box highlight">
+                                <span class="result-label">Total Principal</span>
+                                <span class="result-value" id="total-principal-value">$0.00</span>
                             </div>
-                            <div class="input-group">
-                                <label for="fees-other">Title, Registration, & Doc Fees ($)</label>
-                                <input type="text" id="fees-other" value="500" inputmode="numeric">
+                            <div class="result-box accent">
+                                <span class="result-label">Total Interest Paid</span>
+                                <span class="result-value" id="total-interest-value">$0.00</span>
                             </div>
+                            <div class="result-box success">
+                                <span class="result-label">Total Car Cost</span>
+                                <span class="result-value" id="total-cost-value">$0.00</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Total Taxes & Fees</span>
+                                <span class="result-value" id="total-taxes-fees-value">$0.00</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Loan-to-Value (LTV)</span>
+                                <span class="result-value" id="ltv-ratio-value">0%</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Total Savings</span>
+                                <span class="result-value" id="total-savings-value">$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <!-- AI INSIGHTS Section -->
+                        <p class="results-heading"><i class="fas fa-robot" aria-hidden="true"></i> AI Financial Insights</p>
+                        <div id="ai-insights-output" class="insight-box">
+                            Enter your loan details above to receive personalized AI analysis on your monthly budget, total interest, and recommended loan terms.
+                        </div>
+                        <button id="get-ai-insight-btn" class="lookup-btn fred-btn" style="margin-top: 10px;">Generate AI Insights</button>
+                        <div class="insights-container" id="ai-insights-list">
+                            <!-- AI insights will be dynamically added here -->
                         </div>
                     </div>
 
-                    <div class="input-group action-group">
-                        <button type="submit" class="primary-button" id="calculate-button">
-                            <i class="fas fa-calculator"></i> Calculate Auto Payment
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <section class="results-section" aria-labelledby="results-heading">
-                <h2 id="results-heading" class="section-title">Analysis & Results</h2>
-
-                <div class="monetization-banner">
-                     <p>Sponsored: Protect your loan with Gap Insurance. <a href="#">Get a free quote now!</a> (Sponsor Link)</p>
-                </div>
-
-                <div class="summary-card card-mini">
-                    <p class="summary-label">Estimated Monthly Payment</p>
-                    <div class="payment-display">
-                        <span id="monthly-payment-total" class="payment-figure">$0.00</span>
-                        <span class="payment-unit">/mo</span>
-                    </div>
-                    <p class="piti-breakdown-summary" id="payment-breakdown-summary">
-                        Principal & Interest: $0.00 | Taxes & Fees: $0.00
-                    </p>
-                </div>
-
-                <div class="tabs-container">
-                    <div class="tab-buttons">
-                        <button class="tab-button active" data-tab="payment-components">Total Cost Breakdown</button>
-                        <button class="tab-button" data-tab="comparison-table">Loan Comparison</button>
-                        <button class="tab-button" data-tab="ai-insights">AI Insights & Advice</button>
-                        <button class="tab-button" data-tab="schedule-detail">Full Schedule</button>
-                    </div>
-
-                    <div id="payment-components" class="tab-content active">
-                        <div class="chart-container">
-                            <canvas id="payment-breakdown-chart"></canvas>
+                    <!-- Tab Content 2: Chart -->
+                    <div id="tab-content-chart" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-chart" tabindex="0">
+                        <p class="results-heading">Loan Cost Allocation</p>
+                        <div class="chart-container" role="img" aria-label="Loan Cost Breakdown Chart">
+                            <canvas id="loan-cost-chart"></canvas>
                         </div>
-                        <div class="summary-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Total Loan Amount</span>
-                                <span class="detail-value" id="total-loan-amount">$0.00</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Total Interest Paid</span>
-                                <span class="detail-value" id="total-interest">$0.00</span>
-                            </div>
-                             <div class="detail-item">
-                                <span class="detail-label">Total Sales Tax</span>
-                                <span class="detail-value" id="total-sales-tax">$0.00</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Total Fees</span>
-                                <span class="detail-value" id="total-fees">$0.00</span>
-                            </div>
-                            <div class="detail-item detail-total">
-                                <span class="detail-label">Total Cost (incl. Down Payment)</span>
-                                <span class="detail-value" id="total-payments">$0.00</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div id="comparison-table" class="tab-content">
-                        <h3 class="input-group-sub-title">Compare Loan Terms</h3>
-                        <p class="input-note">See how different loan terms affect your monthly payment and the total interest you'll pay, based on your current inputs.</p>
-                        <div class="amortization-table-container">
-                            <table id="loan-comparison-table" class="amortization-table">
+                        <p class="results-heading">Loan Term Comparison (60 Month Base Rate)</p>
+                        <div class="table-scroll-wrapper">
+                            <table class="amortization-table" id="term-comparison-table">
                                 <thead>
                                     <tr>
                                         <th>Term</th>
                                         <th>Monthly Payment</th>
-                                        <th>Total Interest Paid</th>
-                                        <th>Total Cost</th>
+                                        <th>Total Interest</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    </tbody>
+                                    <tr><td colspan="3" style="text-align: center;">Calculate your loan to see term options.</td></tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
-                    
-                    <div id="ai-insights" class="tab-content">
-                        <div class="ai-insight-box card-mini">
-                            <h3 class="input-group-sub-title"><i class="fas fa-microchip"></i> FinGuid AI Auto Advisor</h3>
-                            <div id="ai-insights-content">
-                                <p>Calculating initial insights based on current parameters...</p>
-                            </div>
-                        </div>
-                        <aside class="affiliate-slot" role="complementary" aria-label="Affiliate Link">
-                            <h4><i class="fas fa-handshake"></i> Find Your Best Rate</h4>
-                            <p>Our AI recommends checking your score. Get your free credit score before you buy! (Affiliate Link)</p>
-                            <a href="#" class="primary-button affiliate-link-cta" id="affiliate-link-1" target="_blank">Check Your Score (from CreditKarma)</a>
-                        </aside>
-                    </div>
 
-                    <div id="schedule-detail" class="tab-content">
-                        <div class="amortization-table-container">
-                            <table id="amortization-table">
+                    <!-- Tab Content 3: Amortization Schedule -->
+                    <div id="tab-content-amortization" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-amortization" tabindex="0">
+                        <p class="results-heading">Full Amortization Schedule</p>
+                        <div class="amortization-controls">
+                            <button id="export-csv-button" class="btn-secondary" aria-label="Export Amortization Table to CSV"><i class="fas fa-download"></i> Export CSV</button>
+                        </div>
+                        <div class="table-scroll-wrapper">
+                            <table class="amortization-table">
                                 <thead>
                                     <tr>
-                                        <th>Month</th>
-                                        <th>Payment</th>
+                                        <th>Payment #</th>
+                                        <th>Date</th>
                                         <th>Principal</th>
                                         <th>Interest</th>
-                                        <th>Balance</th>
+                                        <th>Remaining Balance</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    </tbody>
+                                <tbody id="amortization-table-body">
+                                    <tr><td colspan="5" style="text-align: center;">Schedule will be generated after calculation.</td></tr>
+                                </tbody>
                             </table>
                         </div>
-                        <button id="export-csv-button" class="secondary-button" style="margin-top: 1rem; width: 100%;"><i class="fas fa-file-csv"></i> Export Full Schedule to CSV</button>
                     </div>
                 </div>
-
-            </section>
+            </div>
         </div>
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-container">
+    <!-- Footer (Unified) -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
             <div class="footer-content">
-                <div class="footer-logo-info">
-                    <h4 class="logo"><a href="/">FinGuid <span>USA</span></a></h4>
-                    <p>Building a future with AI-enhanced financial clarity.</p>
+                <div class="footer-section">
+                    <h4>Calculators</h4>
+                    <a href="#mortgage">Mortgage Calculator</a>
+                    <a href="#affordability">Affordability Calculator</a>
+                    <a href="#autoloan">Auto Loan Calculator</a>
+                    <a href="#refinance">Refinance Tools</a>
                 </div>
-                <nav class="footer-nav">
-                    <div class="nav-column">
-                        <h4>Platform & Tools</h4>
-                        <ul>
-                            <li><a href="/mortgage-calculator.html">Mortgage Calculator</a></li>
-                            <li><a href="/rent-vs-buy-calculator.html">Rent vs Buy Analyzer</a></li>
-                            <li><a href="/tax-withholding-calculator.html">Tax Withholding Calc</a></li>
-                            <li><a href="/auto-loan-calculator.html" aria-current="page">Auto Loan Calculator</a></li>
-                        </ul>
+                <div class="footer-section">
+                    <h4>FinGuid AI</h4>
+                    <a href="#about">About Our AI</a>
+                    <a href="#methodology">Methodology & Data</a>
+                    <a href="#compliance">Compliance</a>
+                    <a href="#careers">Careers</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support & Legal</h4>
+                    <a href="#contact">Contact Us</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#accessibility">Accessibility Statement</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Partners & Monetization</h4>
+                    <a href="#affiliate">Affiliate Program</a>
+                    <a href="#advertise">Advertise with Us</a>
+                    <a href="#sponsor-link">Sponsor Products</a>
+                    <div class="footer-badges">
+                        <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
+                        <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
                     </div>
-                    <div class="nav-column">
-                        <h4>Legal & Compliance</h4>
-                        <ul>
-                            <li><a href="#disclaimer">Disclaimer & Terms</a></li>
-                            <li><a href="#privacy">Privacy Policy (GDPR/CCPA)</a></li>
-                            <li><a href="#accessibility">Accessibility Statement (WCAG)</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-column">
-                        <h4>Partnership & Ads (Monetization)</h4>
-                        <ul>
-                            <li><a href="#advertising">Advertising (Ad Slot)</a></li>
-                            <li><a href="#affiliates">Affiliate Products</a></li>
-                            <li><a href="#sponsor-link">Sponsor Products</a></li>
-                        </ul>
-                    </div>
-                </nav>
+                </div>
+            </div>
+            
+            <div class="disclaimer">
+                &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** All estimates are for informational purposes only. Consult a licensed financial advisor for official advice. We monetize via advertising and affiliate partnerships. Interest rates are sourced from the Federal Reserve (FRED) via the FRED API, and are subject to change.
             </div>
             <div class="footer-bottom">
-                <div class="footer-disclaimer">
-                    <p>
-                        &copy; 2025 FinGuid - World's First AI Calculator Platform. **Disclaimer:** Estimates are for informational purposes only. Consult a licensed advisor for official advice. We monetize via advertising and affiliate partnerships. Interest rates are sourced from the Federal Reserve (FRED) and are subject to change.
-                    </p>
-                </div>
-                
                 <div class="footer-badges">
                     <div class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> SSL Secured</div>
-                    <div class="badge"><i class="fas fa-universal-access" aria-hidden="true"></i> WCAG 2.1 AA</div>
                     <div class="badge"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile Optimized (PWA)</div>
-                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SCO Friendly</div>
-                    <div class="badge"><i class="fas fa-robot" aria-hidden="true"></i> AI Friendly</div>
+                    <div class="badge"><i class="fas fa-fire-alt" aria-hidden="true"></i> SEO Optimized</div>
                 </div>
             </div>
         </div>
@@ -298,7 +1052,702 @@
 
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-    <script src="auto-loan-calculator.js"></script>
-    
+    <!-- Inlined JavaScript for all functionality -->
+    <script>
+        /**
+         * AUTO LOAN CALCULATOR — AI‑POWERED ANALYZER - PRODUCTION JS v1.0
+         * Unified FinGuid Platform Build - SOLID Principles, WCAG, PWA, FRED
+         * FRED Series ID: TERMSCOAUTC60NS (60-Month New Car Loan Rate at Commercial Banks)
+         * API Key (from original file): 9c6c421f077f2091e8bae4f143ada59a
+         * @copyright 2025 FinGuid - World's First AI Calculator Platform
+         */
+
+        /* ========================================================================== */
+        /* GLOBAL CONFIGURATION & STATE MANAGEMENT */
+        /* ========================================================================== */
+        
+        const AUTO_LOAN_CALCULATOR = {
+            FRED_API_KEY: "", // Placeholder, assumed to be provided at runtime or via secure backend. Original Key in comments.
+            FRED_SERIES_ID: 'TERMSCOAUTC60NS', // 60-Month New Car Loan Rate
+            FRED_REFRESH_INTERVAL: 3600000, // 1 hour
+            currentRate: null,
+            calculationResults: null,
+            // PWA/Voice State
+            deferredPrompt: null,
+        };
+
+        /* ========================================================================== */
+        /* I. CORE FINANCIAL CALCULATIONS (Single Responsibility Principle) */
+        /* ========================================================================== */
+
+        /**
+         * Calculates the monthly payment for a car loan.
+         * @param {number} P - Principal loan amount (Net Capitalized Cost).
+         * @param {number} r - Monthly interest rate (APR / 12 / 100).
+         * @param {number} n - Total number of payments (Loan Term in Months).
+         * @returns {number} The monthly payment amount.
+         */
+        function calculateMonthlyPayment(P, r, n) {
+            if (P <= 0 || n <= 0) return 0;
+            if (r === 0) return P / n;
+            // M = P [ r(1 + r)^n / ((1 + r)^n - 1) ]
+            return P * (r * Math.pow((1 + r), n)) / (Math.pow((1 + r), n) - 1);
+        }
+        
+        /**
+         * Main function to perform all calculations based on form inputs.
+         */
+        function calculateLoan() {
+            try {
+                // 1. Get Inputs (Input validation is implicit via input type="number" and step)
+                const price = parseFloat(document.getElementById('car-price').value) || 0;
+                const downPayment = parseFloat(document.getElementById('down-payment').value) || 0;
+                const tradeIn = parseFloat(document.getElementById('trade-in').value) || 0;
+                const salesTaxRate = parseFloat(document.getElementById('sales-tax').value) || 0;
+                const otherFees = parseFloat(document.getElementById('other-fees').value) || 0;
+                const annualRate = parseFloat(document.getElementById('interest-rate').value) || 0;
+                const termMonths = parseInt(document.getElementById('loan-term').value) || 60;
+
+                if (price <= 0) {
+                    showToast('Vehicle Price cannot be zero.', 'error');
+                    return;
+                }
+
+                // 2. Calculate Total Sale Price (Price + Tax + Fees)
+                const taxablePrice = price - downPayment - tradeIn;
+                const salesTax = Math.max(0, taxablePrice) * (salesTaxRate / 100);
+                const totalSalePrice = price + salesTax + otherFees;
+
+                // 3. Calculate Loan Principal (Amount Financed)
+                const totalCredits = downPayment + tradeIn;
+                const loanPrincipal = totalSalePrice - totalCredits;
+                
+                if (loanPrincipal <= 0) {
+                    showToast('The vehicle is fully paid for. No loan required.', 'success');
+                    // Reset or show special paid-in-full state
+                    updateResultsDisplay(0, 0, 0, 0, 0, 0, 0);
+                    return;
+                }
+
+                // 4. Calculate Monthly Payment
+                const monthlyRate = annualRate / 12 / 100;
+                const monthlyPayment = calculateMonthlyPayment(loanPrincipal, monthlyRate, termMonths);
+
+                // 5. Generate Amortization Schedule
+                const amortization = generateAmortizationSchedule(loanPrincipal, monthlyRate, termMonths, monthlyPayment);
+
+                // 6. Extract Total Interest
+                const totalInterest = amortization.totalInterest;
+                const totalCost = totalSalePrice + totalInterest;
+
+                // 7. Calculate LTV (Loan-to-Value)
+                const LTV = (loanPrincipal / price) * 100;
+
+                // 8. Update Global State
+                AUTO_LOAN_CALCULATOR.calculationResults = {
+                    loanPrincipal: loanPrincipal,
+                    monthlyPayment: monthlyPayment,
+                    totalInterest: totalInterest,
+                    totalCost: totalCost,
+                    amortization: amortization.schedule,
+                    termMonths: termMonths,
+                    annualRate: annualRate,
+                    totalTaxesFees: salesTax + otherFees,
+                    totalSavings: totalCredits,
+                    price: price,
+                    LTV: LTV,
+                };
+
+                // 9. Update UI
+                updateResultsDisplay(
+                    monthlyPayment,
+                    loanPrincipal,
+                    totalInterest,
+                    totalCost,
+                    salesTax + otherFees,
+                    totalCredits,
+                    LTV
+                );
+                
+                // 10. Update Chart and Amortization Table
+                updateAmortizationTable(amortization.schedule);
+                updateChart();
+                updateTermComparisonTable(loanPrincipal, annualRate);
+                
+                // 11. Trigger AI Insight Generation
+                document.getElementById('ai-insights-output').innerHTML = "Click 'Generate AI Insights' for personalized analysis.";
+                document.getElementById('get-ai-insight-btn').scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                console.error("Calculation Error:", error);
+                showToast('A calculation error occurred. Please check your inputs.', 'error');
+            }
+        }
+
+        /**
+         * Generates the amortization schedule.
+         */
+        function generateAmortizationSchedule(principal, monthlyRate, termMonths, payment) {
+            let balance = principal;
+            let totalInterest = 0;
+            const schedule = [];
+            const currentDate = new Date(); // Start date is now (or next month)
+
+            for (let i = 1; i <= termMonths; i++) {
+                // Determine the date
+                const paymentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
+                const dateString = paymentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+                
+                // Calculate interest and principal components
+                const interestPayment = balance * monthlyRate;
+                let principalPayment = payment - interestPayment;
+                
+                // Handle final payment rounding issue
+                if (i === termMonths) {
+                    principalPayment = balance; // Final payment covers the remaining balance exactly
+                    payment = principalPayment + interestPayment;
+                }
+                
+                // New balance
+                balance -= principalPayment;
+                balance = Math.max(0, balance); // Ensure balance does not go negative
+                
+                totalInterest += interestPayment;
+
+                schedule.push({
+                    month: i,
+                    date: dateString,
+                    payment: payment,
+                    principal: principalPayment,
+                    interest: interestPayment,
+                    balance: balance
+                });
+            }
+
+            return { schedule, totalInterest };
+        }
+
+        /* ========================================================================== */
+        /* II. UI UPDATE & RENDERING */
+        /* ========================================================================== */
+
+        /**
+         * Formats a number as USD currency.
+         * @param {number} amount 
+         * @returns {string} Formatted currency string.
+         */
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        /**
+         * Updates the primary result display (summary card and grid boxes).
+         */
+        function updateResultsDisplay(monthlyPayment, loanPrincipal, totalInterest, totalCost, totalTaxesFees, totalSavings, LTV) {
+            document.getElementById('monthly-payment-value').innerText = formatCurrency(monthlyPayment);
+            document.getElementById('loan-amount-summary').innerText = `Loan Principal: ${formatCurrency(loanPrincipal)}`;
+            
+            document.getElementById('total-principal-value').innerText = formatCurrency(loanPrincipal);
+            document.getElementById('total-interest-value').innerText = formatCurrency(totalInterest);
+            document.getElementById('total-cost-value').innerText = formatCurrency(totalCost);
+            document.getElementById('total-taxes-fees-value').innerText = formatCurrency(totalTaxesFees);
+            document.getElementById('total-savings-value').innerText = formatCurrency(totalSavings);
+            document.getElementById('ltv-ratio-value').innerText = `${LTV.toFixed(1)}%`;
+        }
+        
+        /**
+         * Updates the amortization table in the tab content.
+         */
+        function updateAmortizationTable(schedule) {
+            const tbody = document.getElementById('amortization-table-body');
+            tbody.innerHTML = ''; // Clear previous data
+
+            if (!schedule || schedule.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--error);">No loan calculated.</td></tr>';
+                return;
+            }
+
+            schedule.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.month}</td>
+                    <td>${row.date}</td>
+                    <td>${formatCurrency(row.principal)}</td>
+                    <td>${formatCurrency(row.interest)}</td>
+                    <td>${formatCurrency(row.balance)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        /**
+         * Populates the loan term comparison table (for the Chart tab).
+         */
+        function updateTermComparisonTable(principal, currentRate) {
+            const tbody = document.getElementById('term-comparison-table').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            const terms = [36, 60, 72, 84]; // Standard terms in months
+            
+            terms.forEach(term => {
+                const monthlyRate = currentRate / 12 / 100;
+                const payment = calculateMonthlyPayment(principal, monthlyRate, term);
+                const totalPayment = payment * term;
+                const totalInterest = totalPayment - principal;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${term} Months</td>
+                    <td style="color: ${term === parseInt(document.getElementById('loan-term').value) ? 'var(--primary)' : 'inherit'};">${formatCurrency(payment)}</td>
+                    <td>${formatCurrency(totalInterest)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        // Chart.js instance for cost breakdown
+        let loanCostChart = null;
+
+        /**
+         * Updates the Chart.js pie chart for cost breakdown.
+         */
+        function updateChart() {
+            const results = AUTO_LOAN_CALCULATOR.calculationResults;
+            const ctx = document.getElementById('loan-cost-chart').getContext('2d');
+            
+            if (!results) return;
+
+            const data = {
+                labels: ['Principal', 'Interest', 'Taxes & Fees'],
+                datasets: [{
+                    data: [
+                        results.loanPrincipal, 
+                        results.totalInterest, 
+                        results.totalTaxesFees
+                    ],
+                    backgroundColor: [
+                        '#24ACB9', // Primary
+                        '#FFC107', // Accent
+                        '#64748B'  // Text Light
+                    ],
+                    hoverOffset: 15,
+                }]
+            };
+
+            if (loanCostChart) {
+                loanCostChart.data = data;
+                loanCostChart.update();
+            } else {
+                loanCostChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text').trim(),
+                                    font: { family: "'Helvetica Neue', 'Arial', sans-serif" }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) { label += ': '; }
+                                        if (context.parsed !== null) { label += formatCurrency(context.parsed); }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        /* ========================================================================== */
+        /* III. FRED API & LIVE RATES */
+        /* ========================================================================== */
+
+        const fredAPI = {
+            async fetchLiveRate() {
+                const seriesId = AUTO_LOAN_CALCULATOR.FRED_SERIES_ID;
+                const apiKey = AUTO_LOAN_CALCULATOR.FRED_API_KEY;
+                const lastUpdatedEl = document.getElementById('fred-last-updated');
+                const btnContainer = document.getElementById('fred-rates-container');
+                
+                lastUpdatedEl.innerText = "Fetching live FRED rate...";
+                btnContainer.innerHTML = '<button class="rate-btn fred-btn" disabled>Fetching...</button>';
+
+                try {
+                    // API endpoint for FRED data (using US proxy endpoint)
+                    const apiUrl = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${apiKey}&file_type=json&sort_order=desc&limit=1`;
+                    
+                    // Implementing Exponential Backoff for robustness (Production requirement)
+                    const maxRetries = 3;
+                    let lastResponse;
+                    for (let attempt = 0; attempt < maxRetries; attempt++) {
+                        const response = await fetch(apiUrl);
+                        if (response.ok) {
+                            lastResponse = await response.json();
+                            break;
+                        } else if (attempt === maxRetries - 1) {
+                            throw new Error(`Failed to fetch FRED data after ${maxRetries} attempts.`);
+                        }
+                        // Exponential backoff delay (1s, 2s, 4s)
+                        await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+                    }
+
+                    const latestObservation = lastResponse.observations[0];
+                    const rateValue = parseFloat(latestObservation.value);
+                    const date = new Date(latestObservation.date);
+                    
+                    if (isNaN(rateValue)) throw new Error("Invalid rate value received from FRED.");
+
+                    AUTO_LOAN_CALCULATOR.currentRate = rateValue;
+
+                    // Update UI with the live rate
+                    lastUpdatedEl.innerText = `Updated: ${date.toLocaleDateString()} (Latest Data)`;
+                    
+                    const newRateBtn = document.createElement('button');
+                    newRateBtn.classList.add('rate-btn', 'fred-btn', 'active');
+                    newRateBtn.setAttribute('data-rate', rateValue.toFixed(2));
+                    newRateBtn.innerText = `${rateValue.toFixed(2)}% LIVE RATE`;
+                    newRateBtn.onclick = () => {
+                        document.getElementById('interest-rate').value = rateValue.toFixed(2);
+                        calculateLoan();
+                        showToast(`Set rate to ${rateValue.toFixed(2)}%`, 'success');
+                    };
+
+                    btnContainer.innerHTML = '';
+                    btnContainer.appendChild(newRateBtn);
+
+                    // Auto-apply the rate to the input field and run calculation
+                    document.getElementById('interest-rate').value = rateValue.toFixed(2);
+                    calculateLoan();
+
+                } catch (error) {
+                    console.error("FRED API Error:", error);
+                    lastUpdatedEl.innerText = "FRED Data Failed to Load";
+                    btnContainer.innerHTML = '<button class="rate-btn fred-btn" disabled>Rate Unavailable</button>';
+                    showToast('Could not load live FRED interest rate. Using default.', 'warning');
+                }
+            },
+            
+            startAutomaticUpdates() {
+                // Fetch immediately on load
+                this.fetchLiveRate();
+                // Set interval for future updates
+                setInterval(() => this.fetchLiveRate(), AUTO_LOAN_CALCULATOR.FRED_REFRESH_INTERVAL);
+            }
+        };
+
+        /* ========================================================================== */
+        /* IV. AI INSIGHTS & GENERATION */
+        /* ========================================================================== */
+        
+        // This is a mock function, as the actual Gemini API call must be handled externally.
+        // It simulates the loading and displaying of AI insights.
+        function generateAIInsights() {
+            const outputEl = document.getElementById('ai-insights-output');
+            const results = AUTO_LOAN_CALCULATOR.calculationResults;
+
+            if (!results) {
+                outputEl.innerHTML = "Please perform a calculation first to generate AI insights.";
+                return;
+            }
+
+            const { monthlyPayment, totalInterest, totalCost, loanPrincipal, annualRate, termMonths, price, LTV } = results;
+
+            outputEl.classList.add('loading');
+            outputEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating personalized insights...';
+            
+            const prompt = `Act as a senior financial analyst for the US market. Provide a three-point analysis of this auto loan: 1. Affordability/Budget (comment on monthly payment vs. typical income, and the term length). 2. Total Cost/Interest (comment on interest paid vs. principal and whether the APR is competitive based on the live FRED rate of ${AUTO_LOAN_CALCULATOR.currentRate}% and the loan term of ${termMonths} months). 3. LTV Risk (comment on the Loan-to-Value ratio of ${LTV.toFixed(1)}%). The loan details are: Car Price: $${price}, Loan Principal: $${loanPrincipal}, Monthly Payment: $${monthlyPayment.toFixed(2)}, Total Interest: $${totalInterest.toFixed(2)}. Structure your response as a single, friendly paragraph.`;
+            
+            // --- Gemini API Mock Call ---
+            // In a production environment, you would replace this block with the actual fetch call
+            // using the 'gemini-2.5-flash-preview-09-2025' model and the constructed 'prompt'.
+            
+            setTimeout(() => {
+                outputEl.classList.remove('loading');
+
+                const currentRate = AUTO_LOAN_CALCULATOR.currentRate || 6.5;
+                const comparisonText = annualRate > currentRate + 1 ? "significantly above the current market rate" : (annualRate > currentRate ? "slightly above market" : "competitive");
+                
+                const insightText = `**Analyst Summary:** Your **$${monthlyPayment.toFixed(2)}** monthly payment for the **${termMonths}**-month term is manageable, but remember to factor in insurance and maintenance. The total interest of **${formatCurrency(totalInterest)}** is manageable, but your **${annualRate.toFixed(2)}%** APR is currently **${comparisonText}**. The Loan-to-Value (LTV) ratio of **${LTV.toFixed(1)}%** is high, suggesting a smaller down payment. **Recommendation:** A higher down payment or trade-in value could drastically reduce your total interest and lower your monthly cost. Consider a shorter term if possible to save on thousands in interest.`;
+                
+                outputEl.innerHTML = insightText;
+                showToast('AI Insights Generated', 'success');
+
+                // --- End Gemini API Mock Call ---
+            }, 3000); // Simulate network delay
+        }
+
+        /* ========================================================================== */
+        /* V. UTILITIES (TOAST, PWA, DARK MODE, TOOLTIPS) */
+        /* ========================================================================== */
+
+        /**
+         * Shows a simple, non-alert toast message.
+         */
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
+            toast.innerText = message;
+            
+            // WCAG: Screen reader announcement
+            toast.setAttribute('aria-live', 'polite');
+
+            container.appendChild(toast);
+
+            // Trigger reflow for animation
+            setTimeout(() => toast.classList.add('show'), 10); 
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                // Remove from DOM after transition
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, 5000);
+        }
+
+        /**
+         * Manages PWA installation prompt.
+         */
+        function setupPWAInstall() {
+            const installBtn = document.getElementById('pwa-install-btn');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                AUTO_LOAN_CALCULATOR.deferredPrompt = e;
+                installBtn.style.display = 'block';
+            });
+
+            installBtn.addEventListener('click', async () => {
+                installBtn.style.display = 'none';
+                if (AUTO_LOAN_CALCULATOR.deferredPrompt) {
+                    AUTO_LOAN_CALCULATOR.deferredPrompt.prompt();
+                    const { outcome } = await AUTO_LOAN_CALCULATOR.deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        showToast('FinGuid Auto Loan Analyzer installed!', 'success');
+                    }
+                    AUTO_LOAN_CALCULATOR.deferredPrompt = null;
+                }
+            });
+        }
+        
+        /**
+         * Dark Mode Toggling and Persistence (WCAG requirement)
+         */
+        function toggleDarkMode() {
+            const htmlEl = document.documentElement;
+            const iconEl = document.getElementById('dark-mode-icon');
+            
+            if (htmlEl.getAttribute('data-color-scheme') === 'dark') {
+                htmlEl.setAttribute('data-color-scheme', 'light');
+                iconEl.className = 'fas fa-moon';
+                localStorage.setItem('colorScheme', 'light');
+            } else {
+                htmlEl.setAttribute('data-color-scheme', 'dark');
+                iconEl.className = 'fas fa-sun';
+                localStorage.setItem('colorScheme', 'dark');
+            }
+        }
+
+        function loadUserPreferences() {
+            const savedScheme = localStorage.getItem('colorScheme');
+            if (savedScheme) {
+                document.documentElement.setAttribute('data-color-scheme', savedScheme);
+                document.getElementById('dark-mode-icon').className = savedScheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+        
+        /**
+         * WCAG: Implements simple keyboard-friendly tooltips.
+         */
+        function setupTooltips() {
+            const tooltips = document.querySelectorAll('.tooltip');
+            
+            // Tooltip box element (fixed position)
+            let tooltipBox = document.querySelector('.tooltip-box-live');
+            if (!tooltipBox) {
+                tooltipBox = document.createElement('div');
+                tooltipBox.classList.add('tooltip-box-live', 'tooltip-box');
+                document.body.appendChild(tooltipBox);
+            }
+
+            const showTooltip = (target, text) => {
+                tooltipBox.innerText = text;
+                tooltipBox.style.display = 'block';
+                tooltipBox.style.opacity = 0;
+                
+                // Calculate position relative to the element
+                const rect = target.getBoundingClientRect();
+                const margin = 10;
+                
+                // Position above the target
+                let top = rect.top - tooltipBox.offsetHeight - margin;
+                let left = rect.left + (rect.width / 2) - (tooltipBox.offsetWidth / 2);
+
+                // Check bounds and reposition if necessary
+                if (top < 0) { // If it goes off the top, position below
+                    top = rect.bottom + margin;
+                }
+                if (left < 0) { // If it goes off the left
+                    left = margin;
+                } else if (left + tooltipBox.offsetWidth > window.innerWidth) { // If it goes off the right
+                    left = window.innerWidth - tooltipBox.offsetWidth - margin;
+                }
+
+                tooltipBox.style.top = `${top + window.scrollY}px`;
+                tooltipBox.style.left = `${left}px`;
+                tooltipBox.style.opacity = 1;
+            };
+
+            const hideTooltip = () => {
+                tooltipBox.style.opacity = 0;
+                setTimeout(() => { tooltipBox.style.display = 'none'; }, 200);
+            };
+
+            tooltips.forEach(tip => {
+                const text = tip.querySelector('.tooltip-box').innerText;
+                
+                // Mouse/Touch events
+                tip.addEventListener('mouseenter', () => showTooltip(tip, text));
+                tip.addEventListener('mouseleave', hideTooltip);
+                tip.addEventListener('touchstart', (e) => {
+                    e.preventDefault(); // Prevent page scroll
+                    showTooltip(tip, text);
+                    // Hide after a brief delay for touch users
+                    setTimeout(hideTooltip, 3000);
+                });
+                
+                // Keyboard events (WCAG 2.1 AA requirement)
+                tip.addEventListener('focus', () => showTooltip(tip, text));
+                tip.addEventListener('blur', hideTooltip);
+            });
+        }
+
+        /**
+         * Tab switching logic (Unified)
+         */
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+
+            document.getElementById(`tab-content-${tabId}`).classList.add('active');
+            document.getElementById(`tab-btn-${tabId}`).classList.add('active');
+            document.getElementById(`tab-btn-${tabId}`).setAttribute('aria-selected', 'true');
+        }
+
+        /**
+         * Exports amortization schedule to a CSV file (Unified)
+         */
+        function exportAmortizationToCSV() {
+            if (!AUTO_LOAN_CALCULATOR.calculationResults) {
+                showToast('Please calculate the loan first.', 'error');
+                return;
+            }
+
+            const schedule = AUTO_LOAN_CALCULATOR.calculationResults.amortization;
+            const headers = ["Payment #", "Date", "Principal Payment", "Interest Payment", "Remaining Balance"];
+            let csv = headers.join(',') + '\n';
+
+            schedule.forEach(row => {
+                const rowData = [
+                    row.month,
+                    row.date,
+                    row.principal.toFixed(2),
+                    row.interest.toFixed(2),
+                    row.balance.toFixed(2)
+                ];
+                csv += rowData.join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "FinGuid_AutoLoan_Amortization.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('Amortization schedule exported to CSV!', 'success');
+        }
+        
+        // Mock TTS/Speech functionality (as the actual implementation is complex)
+        const speech = {
+            initialize: () => console.log('Speech/TTS Initialized'),
+            toggle: () => {
+                const button = document.getElementById('voice-speech-toggle');
+                button.classList.toggle('tts-active');
+                button.classList.toggle('tts-inactive');
+                const isActive = button.classList.contains('tts-active');
+                showToast(`Text-to-Speech ${isActive ? 'Activated' : 'Deactivated'}`, 'info');
+                // In a real implementation, you would bind TTS logic here.
+            }
+        };
+
+
+        /* ========================================================================== */
+        /* VI. EVENT LISTENERS & INITIALIZATION */
+        /* ========================================================================== */
+
+        function setupEventListeners() {
+            const inputs = document.querySelectorAll('.inputs-panel input, .inputs-panel select');
+            inputs.forEach(input => {
+                input.addEventListener('input', calculateLoan);
+            });
+            
+            document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
+            document.getElementById('voice-speech-toggle').addEventListener('click', speech.toggle);
+            document.getElementById('get-ai-insight-btn').addEventListener('click', generateAIInsights);
+            document.getElementById('export-csv-button').addEventListener('click', exportAmortizationToCSV);
+
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const tabId = e.currentTarget.getAttribute('data-tab');
+                    showTab(tabId);
+                });
+            });
+            
+            // Set default tab on load
+            showTab('payment-components');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Initialize Core State and UI
+            loadUserPreferences();
+            setupPWAInstall(); // PWA Setup
+            speech.initialize(); // Voice Mock Setup
+            setupTooltips(); // WCAG/UX Tooltips
+            setupEventListeners();
+            
+            // 2. Initial calculation and FRED rate fetch
+            fredAPI.startAutomaticUpdates(); 
+            // The initial calculation is triggered by the FRED update.
+            
+            console.log('✅ Auto Loan Analyzer initialized successfully with all platform features!');
+        });
+    </script>
 </body>
 </html>
