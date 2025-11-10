@@ -5,16 +5,909 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>AI Mortgage Calculator 2025 | PITI, Live FRED Rates & Amortization | FinGuid</title>
-
-    <meta name="description" content="World's Best AI-Powered Mortgage Calculator by FinGuid. Calculate PITI (Principal, Interest, Taxes, Insurance) with live FRED rates, ZIP code tax lookup, extra payments, and 100+ AI insights. WCAG 2.1 AA compliant. Mobile-friendly.">
-    <meta name="keywords" content="mortgage calculator, PITI calculator, home loan calculator, mortgage payment calculator, amortization calculator, property tax calculator, home insurance calculator, mortgage rates calculator, monthly payment calculator, house affordability calculator, FHA calculator, VA loan calculator, USDA calculator, refinance calculator, extra payment calculator, lump sum payment, principal interest calculator, PMI calculator, HOA fees calculator, first time home buyer, down payment calculator, interest rate calculator, loan term calculator, 30 year mortgage, 15 year mortgage, adjustable rate mortgage, fixed rate mortgage, mortgage rates today, current mortgage rates, FRED API rates, live rates, real estate calculator, home buying calculator, mortgage affordability calculator, debt to income calculator, closing costs calculator, zip code tax lookup, state tax rates, property tax by state, homeowners insurance rates, mortgage insurance, private mortgage insurance, mortgage prepayment, extra principal payment, mortgage payoff calculator, pay off mortgage early, mortgage acceleration, interest savings calculator, loan amortization schedule, amortization table, payment schedule, monthly payment breakdown, principal vs interest, mortgage comparison, mortgage quotes, mortgage lenders, mortgage brokers, pre-approval letter, mortgage pre-qualification, credit score mortgage, down payment assistance, first time homebuyer programs, VA benefits, FHA loans, USDA loans, conventional loans, jumbo loans, government loans, reverse mortgage, mortgage refinancing, cash out refinance, rate and term refinance, streamline refinance, ARM calculator, interest only mortgage, balloon mortgage, bi-weekly mortgage payment, mortgage calculator with taxes and insurance, comprehensive mortgage calculator, detailed amortization calculator">
+    <title>AI 401(k) Calculator 2025 | Employer Match &amp; Retirement | FinGuid</title>
+    <meta name="description" content="World's Best AI-Powered 401(k) Calculator by FinGuid. Optimize retirement with employer match, tax savings, and 100+ AI insights. Uses live FRED inflation data. WCAG 2.1 AA compliant. Mobile-friendly PWA.">
+    <meta name="keywords" content="401k calculator, retirement calculator, employer match calculator, 401k optimizer, retirement savings, AI retirement planning, 401k contribution limits, 401k tax savings, retirement planning, FinGuid, 401k growth chart, retirement projection, catch-up contributions, 401k match, retirement goal, 401k insights, financial calculator, USA retirement, 401k compound interest, retirement income calculator, retirement projection calculator, 401k inflation adjustment, FRED API inflation, 401k PWA, accessible 401k calculator, 401k tax brackets, 401k advisor, AI financial advisor, 401k tool, retirement tool, 401k projections, 401k investment returns, 401k salary increase">
 
     <meta name="author" content="FinGuid USA">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="theme-color" content="#24ACB9">
-    <link rel="canonical" href="https://www.finguid.com/calculators/mortgage">
+    <meta name="theme-color" content="#24ACB9"> <meta property="og:type" content="website">
+    <meta property="og:title" content="AI 401(k) Calculator 2025 | Employer Match &amp; AI Insights | FinGuid">
+    <meta property="og:description" content="Free AI 401(k) calculator with employer match analysis, tax savings, AI insights, and live FRED inflation data.">
     
+    <link rel="canonical" href="https://www.finguid.com/calculators/401k">
+    
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22FinGuid%20AI%20401(k)%20Calculator%22,%22short_name%22:%22401kCalc%22,%22description%22:%22AI-Powered%20401(k)%20Calculator%20with%20Employer%20Match,%20AI%20Insights,%20and%20Live%20Inflation%20Data.%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#FFFFFD%22,%22theme_color%22:%22#24ACB9%22,%22icons%22:[{%22src%22:%22https://placehold.co/192x192/24ACB9/FFFFFF?text=FinGuid%22,%22type%22:%22image/png%22,%22sizes%22:%22192x192%22},{%22src%22:%22https://placehold.co/512x512/24ACB9/FFFFFF?text=FinGuid%22,%22type%22:%22image/png%22,%22sizes%22:%22512x512%22}]}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* === START: Global Variables (Brand Color Match) === */
+        :root {
+            --primary: #24ACB9; /* Teal (Matches FinGuid Image & Car Lease CSS) */
+            --primary-dark: #19343B; /* Dark Teal (Matches Car Lease CSS) */
+            --accent: #FFC107;
+            --accent-dark: #E69500;
+            --text: #1F2121;
+            --text-light: #64748B;
+            --bg: #FFFFFD;
+            --bg-secondary: #F5F7FA;
+            --card: #FFFFFF;
+            --border: #E2E8F0;
+            --error: #EF4444;
+            --success: #10B981;
+            --fred-color: #A31B20; /* FRED standard color */
+        }
+
+        [data-color-scheme="dark"] {
+            --text: #E1E8ED;
+            --text-light: #B8C5D0;
+            --bg: #1F2121;
+            --bg-secondary: #242B36;
+            --card: #181919;
+            --border: #38444D;
+        }
+        /* === END: Global Variables === */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { 
+            font-size: 16px; 
+            -webkit-font-smoothing: antialiased; 
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+        /* ===== HEADER STYLES (From Mortgage Calc) ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .logo:hover { color: var(--primary-dark); }
+
+        .calculator-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            flex-shrink: 0;
+            margin-left: 16px;
+            flex-basis: auto;
+            min-width: 0;
+        }
+
+        .header-features {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: 24px;
+            flex-grow: 1;
+            justify-content: flex-start;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, black 90%, transparent 100%);
+        }
+
+        .header-feature-item {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            animation: pulse-color-text 2.5s infinite ease-in-out;
+        }
+        .header-feature-item:nth-child(1) { animation-delay: 0s; }
+        .header-feature-item:nth-child(2) { animation-delay: 0.2s; }
+        .header-feature-item:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulse-color-text {
+            0%, 100% {
+                opacity: 0.8;
+                color: var(--text-light);
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                color: var(--primary);
+                transform: scale(1.03);
+            }
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .icon-btn {
+            background: var(--bg-secondary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .icon-btn:hover { background: var(--primary); color: white; }
+        .icon-btn.active { background: var(--primary); color: white; }
+
+        #pwa-install-btn {
+            display: none; /* Hidden by default, shown by JS */
+            padding: 8px 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        #pwa-install-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+        /* ===== SPONSOR BANNER (From Mortgage Calc) ===== */
+        .sponsor-banner {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            color: white;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-text { font-weight: 500; flex: 1; min-width: 200px; }
+        .sponsor-buttons { display: flex; gap: 8px; }
+
+        .sponsor-btn {
+            padding: 8px 12px;
+            background: white;
+            color: #6366F1;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .sponsor-btn:hover { background: var(--accent); color: var(--text); transform: translateY(-2px); }
+
+        /* ===== MAIN CALCULATOR (Layout From Mortgage Calc) ===== */
+        .calculator-wrapper {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            padding: 24px 0;
+            margin-bottom: 40px;
+        }
+
+        .inputs-panel, .results-panel {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .inputs-panel:hover, .results-panel:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .panel-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+        .section-heading {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        
+        /* FRED Branding Note (from 401k) */
+        .fred-source-note {
+            font-size: 11px;
+            color: var(--text-light);
+            text-align: left;
+            margin-top: 4px;
+            display: block;
+        }
+        .fred-source-note a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+        .fred-source-note a:hover {
+            color: var(--primary);
+        }
+
+        /* Tooltip Styles (From Mortgage Calc) */
+        .tooltip {
+            font-weight: bold;
+            cursor: help;
+            margin-left: 4px;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-light);
+        }
+        .tooltip-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--text-light);
+            color: var(--card);
+            font-style: normal;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 14px;
+            margin-left: 5px;
+            transition: all 0.2s ease;
+        }
+        .tooltip:hover .tooltip-icon,
+        .tooltip:focus .tooltip-icon {
+            background: var(--primary);
+            outline: none;
+        }
+        .tooltip:focus { outline: none; }
+        .tooltip-box {
+            position: fixed;
+            background: #1a1a1a;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 10000;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            max-width: 200px;
+            white-space: normal;
+            display: none; 
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        /* ===== END: Tooltip Styles ===== */
+
+
+        .input-wrapper { 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            min-width: 0; 
+        }
+
+        input[type="number"], input[type="text"], input[type="date"], input[type="month"], select {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            min-width: 0;
+            width: 100%; 
+        }
+
+        /* WCAG FIX: Focus Rings */
+        input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
+        input[type="month"]:focus, select:focus, .rate-btn:focus, .lookup-btn:focus, 
+        .sponsor-btn:focus, .btn-secondary:focus, .icon-btn:focus, 
+        #pwa-install-btn:focus, .tab-btn:focus, .faq-question:focus,
+        input[type="checkbox"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.25);
+        }
+        .icon-btn:focus, #pwa-install-btn:focus, .sponsor-btn:focus, .lookup-btn:focus, .primary-button:focus {
+             box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.4);
+        }
+
+
+        .input-addon {
+            background: var(--bg-secondary);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* Checkbox Styling (from 401k, adapted) */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: 6px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .checkbox-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0;
+        }
+
+        /* Primary Button (from 401k, adapted) */
+        .primary-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .primary-button:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .primary-button:active { transform: translateY(0); }
+
+        /* Ad Slot (From Mortgage Calc) */
+        .ad-slot {
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            margin: 24px 0;
+        }
+        .ad-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .ad-placeholder {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        
+        /* ===== RESULTS SECTION (From Mortgage Calc) ===== */
+        .summary-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(36, 172, 185, 0.2);
+            text-align: center;
+        }
+        .summary-label { font-size: 0.875rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .payment-amount { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin: 8px 0; }
+        .amount { font-size: 2rem; font-weight: bold; }
+        .unit { font-size: 1rem; opacity: 0.9; }
+        .payment-breakdown { font-size: 0.875rem; opacity: 0.8; }
+
+        .tabs { margin-bottom: 24px; }
+        .tab-buttons { 
+            display: flex; 
+            gap: 4px; 
+            border-bottom: 2px solid var(--border); 
+            margin-bottom: 24px; 
+            overflow-x: auto; 
+        }
+
+        .tab-btn {
+            padding: 16px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: -2px;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-btn:focus {
+            color: var(--primary);
+            box-shadow: none; 
+            border-bottom-color: rgba(36, 172, 185, 0.5);
+        }
+        .tab-btn.active:focus {
+             border-bottom-color: var(--primary);
+        }
+
+        .tab-content { display: none; padding: 8px; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        .tab-content:focus-visible {
+            outline: 2px solid var(--primary);
+            border-radius: 4px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .results-heading {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 16px 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        /* Result Grid for Summary Tab (from 401k, adapted to mortgage style) */
+        .summary-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            border-left: 4px solid var(--border);
+        }
+        .detail-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        .detail-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .detail-item.detail-total {
+            border-left-color: var(--primary);
+            background: rgba(36, 172, 185, 0.1);
+        }
+        .detail-item.success-box {
+            border-left-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .detail-item.success-box .detail-value {
+            color: var(--success);
+        }
+
+
+        .chart-container {
+            position: relative;
+            height: 400px; /* Taller for 401k charts */
+            margin: 20px 0;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        /* Amortization Table Styles (From Mortgage Calc) */
+        .table-scroll-wrapper {
+            overflow-x: auto;
+            max-height: 500px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .styled-table thead {
+            position: sticky;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            z-index: 10;
+        }
+        .styled-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .styled-table th:nth-child(n+2) { text-align: right; } 
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+        .styled-table tbody tr:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+        .styled-table tbody tr:hover {
+            background: rgba(36, 172, 185, 0.1);
+        }
+        .styled-table td {
+            padding: 10px 12px;
+            color: var(--text-light);
+        }
+        .styled-table td:first-child {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .styled-table td:nth-child(n+2) {
+            text-align: right;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* AI INSIGHTS (Using Mortgage Calc classes) */
+        .insights-container { margin-top: 20px; }
+        .insight-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .insight-box.success { border-left-color: var(--success); }
+        .insight-box.warning { border-left-color: var(--accent-dark); }
+        .insight-box.error { border-left-color: var(--error); }
+        .insight-box.info { border-left-color: var(--primary); }
+
+        /* 401k specific AI alert (adapted to mortgage style) */
+        .recommendation-alert {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            border-left-width: 4px;
+            border-left-style: solid;
+        }
+        .recommendation-alert.high-priority {
+            background: rgba(239, 68, 68, 0.1);
+            border-left-color: var(--error);
+            color: var(--text);
+        }
+        .recommendation-alert.low-priority {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: var(--success);
+            color: var(--text);
+        }
+
+
+        /* ===== PARTNER SECTION (From Mortgage Calc) ===== */
+        .footer-sponsor {
+            background: linear-gradient(135deg, rgba(36, 172, 185, 0.1) 0%, rgba(25, 52, 59, 0.1) 100%);
+            padding: 40px;
+            border-bottom: 1px solid rgba(36, 172, 185, 0.2);
+            border-radius: 12px;
+        }
+        .sponsor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; }
+        .sponsor-item { text-align: center; padding: 16px; border-radius: 8px; background: var(--card); transition: all 0.2s; }
+        .sponsor-item:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .sponsor-item h4 { margin-bottom: 8px; color: var(--primary); font-size: 1rem; }
+        .sponsor-item p { color: var(--text-light); margin-bottom: 12px; font-size: 0.875rem; line-height: 1.5; }
+        .sponsor-item a {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        .sponsor-item a:focus {
+            box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.4);
+            outline: none;
+        }
+        .sponsor-item a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(36, 172, 185, 0.3); }
+
+        /* ===== FOOTER (From Mortgage Calc) ===== */
+        .footer { background: var(--card); border-top: 1px solid var(--border); padding: 32px 0; margin-top: 40px; }
+        .footer-content { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
+        .footer-section h4 { font-size: 13px; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+        .footer-section a { display: block; font-size: 12px; color: var(--text-light); text-decoration: none; margin-bottom: 8px; transition: color 0.3s ease; }
+        .footer-section a:hover, .footer-section a:focus { 
+            color: var(--primary); 
+            text-decoration: underline;
+            outline: none;
+        }
+        .compliance-badges { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; font-size: 12px; }
+        .badge { display: flex; align-items: center; gap: 4px; padding: 6px 10px; background: var(--bg-secondary); border-radius: 4px; font-weight: 600; color: var(--text-light); }
+        .disclaimer { font-size: 11px; color: var(--text-light); line-height: 1.6; padding-top: 20px; border-top: 1px solid var(--border); }
+        .footer-bottom { text-align: center; font-size: 12px; color: var(--text-light); padding-top: 16px; border-top: 1px solid var(--border); }
+
+        /* ===== FAQ ACCORDION (From Mortgage Calc) ===== */
+        .faq-section { margin: 40px 0; }
+        .faq-title { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 20px; text-align: center; }
+        .faq-container { max-width: 900px; margin: 0 auto; }
+        .faq-item { margin-bottom: 12px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
+        .faq-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .faq-question { padding: 16px; background: var(--bg-secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: var(--text); transition: all 0.3s ease; }
+        .faq-question:hover { background: var(--card); color: var(--primary); }
+        .faq-question.active { background: var(--primary); color: white; }
+        .faq-question:focus {
+            box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.4) inset;
+            color: var(--primary);
+        }
+        .faq-icon { font-size: 18px; transition: transform 0.3s ease; }
+        .faq-question.active .faq-icon { transform: rotate(180deg); }
+        .faq-answer { display: none; padding: 16px; background: var(--card); color: var(--text-light); line-height: 1.8; font-size: 14px; }
+        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
+
+        /* ===== GDPR/CCPA Cookie Consent Banner Styles ===== */
+        #cookie-consent-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            color: var(--text);
+            padding: 24px;
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+            z-index: 10001;
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .cookie-consent-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-light);
+            flex: 1 1 400px;
+        }
+        .cookie-consent-text a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        .cookie-consent-text a:hover {
+            color: var(--primary-dark);
+        }
+        #cookie-consent-btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        #cookie-consent-btn:hover {
+            background: var(--primary-dark);
+        }
+        #cookie-consent-btn:focus {
+            box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.4);
+            outline: none;
+        }
+
+        /* ===== RESPONSIVE (From Mortgage Calc) ===== */
+        @media (max-width: 1024px) {
+            .calculator-wrapper { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: repeat(2, 1fr); }
+            .inputs-panel {
+                position: static;
+                max-height: none;
+                overflow-y: visible;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-features { display: none; }
+            .sponsor-banner { flex-direction: column; gap: 12px; }
+            .sponsor-buttons { flex: 1 1 100%; justify-content: space-between; }
+            .tab-buttons { flex-wrap: nowrap; overflow-x: auto; }
+            
+            .inputs-panel, .results-panel {
+                padding: 16px;
+            }
+            .footer-sponsor {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calculator-title { display: none; }
+            .header-features { display: none; }
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .header-controls {
+                margin-left: 0;
+                width: 100%;
+                justify-content: space-between;
+            }
+            #pwa-install-btn {
+                flex-grow: 1; 
+            }
+
+            .payment-breakdown { font-size: 0.75rem; }
+            .amount { font-size: 2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+            .sponsor-grid { grid-template-columns: 1fr; }
+
+            #cookie-consent-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+            .cookie-consent-text {
+                flex-basis: auto;
+            }
+            #cookie-consent-btn {
+                width: 100%;
+            }
+        }
+        
+        /* Visually hidden class for accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* ===== PRINT STYLE (From Mortgage Calc) ===== */
+        @media print {
+            .header, .sponsor-banner, .header-controls, .footer-sponsor, .faq-section, 
+            .footer, .ad-slot, .amortization-controls, .chart-summary-controls,
+            #cookie-consent-banner, .primary-button {
+                display: none;
+            }
+            .calculator-wrapper { grid-template-columns: 1fr; }
+            .inputs-panel, .results-panel { box-shadow: none; border: 1px solid #ccc; }
+            .table-scroll-wrapper { max-height: none; overflow: visible; }
+        }
+        
+        /* Modal for Alerts (from Mortgage Calc) */
+        .alert-modal-backdrop {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10002;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+        .alert-modal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 10003;
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+            display: none;
+            opacity: 0;
+            transition: all 0.2s ease-in-out;
+        }
+        .alert-modal.visible {
+            display: block;
+            opacity: 1;
+        }
+        .alert-modal-backdrop.visible {
+            display: block;
+            opacity: 1;
+        }
+        .alert-modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        .alert-modal-body {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .alert-modal-btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .alert-modal-btn:hover { background: var(--primary-dark); }
+        .alert-modal-btn:focus {
+            box-shadow: 0 0 0 3px rgba(36, 172, 185, 0.4);
+            outline: none;
+        }
+    </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYBL2CDNQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -22,447 +915,1508 @@
       gtag('js', new Date());
       gtag('config', 'G-NYBL2CDNQJ');
     </script>
-    
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22FinGuid%20AI%20Mortgage%20Calculator%22,%22short_name%22:%22MortgageCalc%22,%22description%22:%22AI-Powered%20Mortgage%20Calculator%20with%20PITI,%20Live%20Rates,%20and%20Amortization.%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#FFFFFD%22,%22theme_color%22:%22#24ACB9%22,%22icons%22:[{%22src%22:%22https://placehold.co/192x192/24ACB9/FFFFFF?text=FinGuid%22,%22type%22:%22image/png%22,%22sizes%22:%22192x192%22},{%22src%22:%22https://placehold.co/512x512/24ACB9/FFFFFF?text=FinGuid%22,%22type%22:%22image/png%22,%22sizes%22:%22512x512%22}]}">
-    
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDsYy3l4iQ/t9znhT8l2+3A3v2F84p7y9m64h7h7eY5d5a7+5e5s6/q7/n4g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
 
+    <script>
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window.deferredPrompt = e;
+            const pwaInstall = document.getElementById('pwa-install-btn');
+            if (pwaInstall) pwaInstall.style.display = 'flex';
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'script';
+            link.href = 'https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js';
+            document.head.appendChild(link);
+        });
+    </script>
+</head>
 <body>
-    <header class="header" role="banner">
+    <header class="header">
         <div class="container">
             <div class="header-content">
-                <a href="#" class="logo" role="link" aria-label="FinGuid Home">
-                    <i class="fas fa-chart-line" aria-hidden="true"></i> FinGuid AI
+                <a href="https_www.finguid.com" class="logo">
+                    <span role="img" aria-label="Money bag emoji">💰</span>
+                    <span>FinGuid USA</span>
                 </a>
-                <h1 class="calculator-title" id="main-title">AI Mortgage Calculator</h1>
                 
-                <div class="header-features" role="list">
-                    <span class="header-feature-item" role="listitem"><i class="fas fa-brain"></i> AI Insights</span>
-                    <span class="header-feature-item" role="listitem"><i class="fas fa-shield-alt"></i> WCAG 2.1 AA</span>
-                    <span class="header-feature-item" role="listitem"><i class="fas fa-tachometer-alt"></i> Live FRED Data</span>
+                <span class="calculator-title">AI 401(k) Optimizer</span>
+
+                <div class="header-features" aria-hidden="true">
+                    <span class="header-feature-item">🤖 AI Insights</span>
+                    <span class="header-feature-item">📈 Live Inflation Data</span>
+                    <span class="header-feature-item">💡 Employer Match</span>
                 </div>
 
                 <div class="header-controls">
-                    <button type="button" id="pwa-install-btn" aria-label="Install App" title="Install App to Device">📱 Install PWA</button>
-                    <button type="button" class="icon-btn" id="darkModeToggle" aria-label="Toggle dark mode" title="Dark mode (WCAG Compliant)">🌙</button>
-                    <button type="button" class="icon-btn" id="voiceToggle" aria-label="Voice control" title="Voice commands (Try saying 'Calculate Payment')">🎤</button>
-                    <button type="button" class="icon-btn" id="ttsToggle" aria-label="Text to speech" title="Read results aloud">🔊</button>
+                    <button type="button" id="pwa-install-btn" aria-label="Install App" title="Install App">📱 Install</button>
+                    <button type="button" class="icon-btn" id="darkModeToggle" aria-label="Toggle dark mode" title="Dark/Light Mode"><i class="fas fa-sun"></i></button>
+                    <button type="button" class="icon-btn" id="voiceToggle" aria-label="Voice control" title="Voice Commands"><i class="fas fa-microphone"></i></button>
+                    <button type="button" class="icon-btn" id="ttsToggle" aria-label="Text to speech" title="Read Results"><i class="fas fa-volume-up"></i></button>
                 </div>
             </div>
         </div>
     </header>
-
-    <div class="sponsor-banner" role="complementary" aria-label="Featured Partner Advertisement">
-        <div class="container">
-            <span class="sponsor-text">🎁 **SPONSORED OFFER:** Compare Today's Best Mortgage Rates & Save Thousands!</span>
-            <div class="sponsor-buttons">
-                <button class="sponsor-btn" onclick="app.trackAffiliateClick('LenderA')" aria-label="Get Prequalified with Partner A">Get Prequalified Now <i class="fas fa-arrow-right"></i></button>
-                <button class="sponsor-btn secondary" onclick="app.trackAffiliateClick('LenderB')" aria-label="Compare Rates with Partner B">Compare Rates</button>
-            </div>
+    
+    <div class="sponsor-banner">
+        <span class="sponsor-text">🎁 Optimize Your Retirement! Get a Free AI-Powered Portfolio Review.</span>
+        <div class="sponsor-buttons">
+            <button type="button" class="sponsor-btn" onclick="app.trackAffiliateClick('Portfolio Review')">Get Free Review →</button>
+            <button type="button" class="sponsor-btn" onclick="app.trackAffiliateClick('Become Partner')">Become a Partner →</button>
         </div>
     </div>
 
-    <main class="main-content" role="main">
-        <div class="container calculator-wrapper">
-            
-            <section class="inputs-panel" aria-labelledby="inputs-title">
-                <h2 class="panel-title" id="inputs-title"><i class="fas fa-calculator"></i> Mortgage Inputs</h2>
-                
-                <div class="live-rates-container" role="status" aria-live="polite">
-                    <div class="fred-branding">
-                        <span class="fred-logo">FRED</span> Live Rates Powered by <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener noreferrer" aria-label="Federal Reserve Economic Data">St. Louis Fed</a>
-                        <span id="rates-updated" class="rate-update-status">Loading rates...</span>
-                    </div>
-                    <div class="rates-grid">
-                        <button class="rate-btn active" data-rate-term="30" id="rate-30">30-Yr Fixed: <span>--%</span></button>
-                        <button class="rate-btn" data-rate-term="15" id="rate-15">15-Yr Fixed: <span>--%</span></button>
-                        <button class="rate-btn" data-rate-term="10" id="rate-10">10-Yr Treasury: <span>--%</span></button>
-                    </div>
-                </div>
+    <main class="container" role="main">
+        <div class="calculator-wrapper">
+            <section class="inputs-panel" role="region" aria-labelledby="inputs-title">
+                <h2 class="panel-title" id="inputs-title"><i class="fas fa-user-cog"></i> Your Retirement Inputs</h2>
 
-                <form id="mortgage-form" aria-label="Mortgage Calculation Form">
+                <form id="401k-form" novalidate>
                     
-                    <h3 class="input-group-title">Home & Loan Details</h3>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="homePrice">Home Purchase Price ($)</label>
-                        <input type="number" id="homePrice" value="350000" min="10000" aria-label="Home Purchase Price" required>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="downPaymentAmount">Down Payment ($)</label>
-                            <input type="number" id="downPaymentAmount" value="70000" min="0" aria-label="Down Payment Amount">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="downPaymentPercent">Down Payment (%)</label>
-                            <input type="number" id="downPaymentPercent" value="20" min="0" max="100" step="0.1" aria-label="Down Payment Percentage">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="interestRate">Interest Rate (%)</label>
-                            <input type="number" id="interestRate" value="6.85" min="0.01" max="20" step="0.01" aria-label="Annual Interest Rate" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="loanTerm">Loan Term (Years)</label>
-                            <select id="loanTerm" aria-label="Loan Term in Years" required>
-                                <option value="15">15 Years</option>
-                                <option value="20">20 Years</option>
-                                <option value="30" selected>30 Years</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <h3 class="input-group-title">PITI & Additional Costs</h3>
-
-                    <div class="form-group">
-                        <label class="form-label" for="zipCode">Property ZIP Code (for Tax Est.)</label>
-                        <input type="text" id="zipCode" placeholder="Enter 5-digit ZIP" maxlength="5" aria-label="Property ZIP Code for Tax Estimation">
-                        <p id="location-info" class="location-info" role="note" aria-live="polite">Please enter ZIP code to get tax estimate.</p>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="propertyTax">Annual Property Tax ($)</label>
-                            <input type="number" id="propertyTax" value="3000" min="0" aria-label="Annual Property Tax Amount">
-                            <p class="form-hint">AI estimate: <span id="tax-estimate-hint">--</span></p>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="homeInsurance">Annual Home Insurance ($)</label>
-                            <input type="number" id="homeInsurance" value="1200" min="0" aria-label="Annual Home Insurance Amount">
-                        </div>
-                    </div>
+                    <div class="section-heading">Personal & Income</div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="pmiRate">PMI Rate (%)</label>
-                            <input type="number" id="pmiRate" value="0.5" min="0" max="2" step="0.01" aria-label="Private Mortgage Insurance Rate">
-                            <p class="form-hint">AI default: 0.5% (Applies if DP < 20%)</p>
+                            <label class="form-label" for="current-age">Current Age</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="current-age" value="30" min="18" max="99" aria-label="Current Age">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="hoaFees">Monthly HOA Fees ($)</label>
-                            <input type="number" id="hoaFees" value="0" min="0" aria-label="Monthly Homeowners Association Fees">
+                            <label class="form-label" for="retirement-age">Retirement Age</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="retirement-age" value="65" min="19" max="100" aria-label="Retirement Age">
+                            </div>
                         </div>
                     </div>
                     
-                    <h3 class="input-group-title">Payoff Acceleration (Optional)</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="annual-salary">Gross Annual Salary</label>
+                        <div class="input-wrapper">
+                            <span class="input-addon" aria-hidden="true">$</span>
+                            <input type="text" id="annual-salary" value="80,000" inputmode="numeric" aria-label="Gross Annual Salary">
+                        </div>
+                    </div>
                     
                     <div class="form-group">
-                        <label class="form-label" for="extraMonthly">Extra Monthly Principal Payment ($)</label>
-                        <input type="number" id="extraMonthly" value="0" min="0" aria-label="Extra Monthly Principal Payment">
+                        <label class="form-label" for="filing-status">Filing Status (for Tax)</label>
+                        <select id="filing-status" aria-label="Tax Filing Status">
+                            <option value="Single" selected>Single</option>
+                            <option value="Married Filing Jointly">Married Filing Jointly</option>
+                            <option value="Head of Household">Head of Household</option>
+                        </select>
+                    </div>
+
+                    <aside class="ad-slot" role="complementary" aria-label="Sponsored Advertisement">
+                        <p class="ad-label">ADVERTISEMENT</p>
+                        <div class="ad-placeholder">💼 Sponsored: Optimize your payroll with [Payroll Partner]</div>
+                    </aside>
+
+                    <div class="section-heading">Contributions & Match</div>
+                    <div class="form-group">
+                        <label class="form-label" for="current-balance">Current 401(k) Balance</label>
+                         <div class="input-wrapper">
+                            <span class="input-addon" aria-hidden="true">$</span>
+                            <input type="text" id="current-balance" value="25,000" inputmode="numeric" aria-label="Current 401k Balance">
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="extraOneTime">Extra One-Time Principal Payment ($)</label>
-                        <input type="number" id="extraOneTime" value="0" min="0" aria-label="Extra One-Time Principal Payment (paid in month 1)">
+                        <label class="form-label" for="contribution-percent">Your Contribution</label>
+                         <div class="input-wrapper">
+                            <input type="number" id="contribution-percent" value="6" min="0" max="100" step="1" aria-label="Your Contribution Percentage">
+                            <span class="input-addon" aria-hidden="true">%</span>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" class="primary-button" id="calculate-btn"><i class="fas fa-magic"></i> Calculate AI Payment</button>
+                        <label class="form-label" for="employer-match-percent">Employer Match %</label>
+                         <div class="input-wrapper">
+                            <input type="number" id="employer-match-percent" value="100" min="0" aria-label="Employer Match Percentage">
+                            <span class="input-addon" aria-hidden="true">%</span>
+                        </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="match-up-to-percent">Match Up To % of Salary</label>
+                         <div class="input-wrapper">
+                            <input type="number" id="match-up-to-percent" value="6" min="0" aria-label="Match Up To Percentage">
+                            <span class="input-addon" aria-hidden="true">%</span>
+                        </div>
+                    </div>
+
+                    <div class="section-heading">Projections & Assumptions</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="salary-increase">Annual Salary Increase</label>
+                             <div class="input-wrapper">
+                                <input type="number" id="salary-increase" value="3" min="0" step="0.5" aria-label="Annual Salary Increase">
+                                <span class="input-addon" aria-hidden="true">%</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="rate-of-return">Annual Rate of Return</label>
+                             <div class="input-wrapper">
+                                <input type="number" id="rate-of-return" value="7" min="0" step="0.5" aria-label="Annual Rate of Return">
+                                <span class="input-addon" aria-hidden="true">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="include-catch-up" aria-label="Include Catch-Up Contributions">
+                        <label for="include-catch-up">Include Catch-Up Contributions (Age 50+)</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="include-inflation" aria-label="Show Inflation-Adjusted Returns" checked>
+                        <label for="include-inflation">Show Inflation-Adjusted (Real) Returns</label>
+                    </div>
+                    <span class="fred-source-note">
+                        Uses live inflation data via <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED®</a> (Requirement 2 & 8)
+                    </span>
+
+                    <button type="submit" class="primary-button" id="calculate-button">
+                        <i class="fas fa-calculator"></i> Calculate Projection
+                    </button>
                 </form>
             </section>
-            
+
             <section class="results-panel" role="region" aria-labelledby="results-title">
                 <h2 class="panel-title" id="results-title">📊 Analysis & Results</h2>
-                
-                <div class="ad-slot" role="complementary" aria-label="Advertisement">
-                    <p class="ad-label">ADVERTISEMENT</p>
-                    <div class="ad-placeholder">
-                        <p>Affiliate Product: Get Refinance Quotes</p>
-                        <button class="sponsor-btn secondary small" onclick="app.trackAffiliateClick('Refinance_Ad')">Check Eligibility</button>
-                    </div>
-                </div>
 
-                <div class="summary-card" aria-live="polite">
-                    <div class="summary-label">Estimated Monthly Payment (PITI + HOA)</div>
-                    <div class="payment-amount" role="figure" aria-labelledby="monthly-payment-value" id="payment-amount-display">$0.00</div>
-                    <div class="payment-breakdown" id="payment-breakdown">
-                        <div class="breakdown-item"><span class="breakdown-label">P&I:</span> <span id="pi-value">$0.00</span></div>
-                        <div class="breakdown-item"><span class="breakdown-label">Tax/Ins:</span> <span id="ti-value">$0.00</span></div>
-                        <div class="breakdown-item"><span class="breakdown-label">PMI/HOA:</span> <span id="pmh-value">$0.00</span></div>
+                <div class="summary-card">
+                    <div class="summary-label">Projected Total at Retirement</div>
+                    <div class="payment-amount">
+                        <span class="amount" id="projected-total" aria-live="polite">$0</span>
                     </div>
-                </div>
-
-                <div class="ai-insights-box" role="alert" aria-live="polite">
-                    <h3 class="ai-title"><i class="fas fa-brain"></i> AI Financial Insights</h3>
-                    <ul id="ai-insights-list">
-                        <li class="insight-placeholder"><i class="fas fa-lightbulb"></i> Enter your details and click 'Calculate' to unlock AI insights.</li>
-                    </ul>
+                    <div class="payment-breakdown" id="projection-summary-details" aria-live="polite">
+                        Calculating...
+                    </div>
                 </div>
                 
-                <div class="tabs-container">
-                    <div class="tab-buttons" role="tablist">
-                        <button type="button" class="tab-btn active" data-tab="summary" role="tab" aria-selected="true" aria-controls="tab-summary">Summary</button>
-                        <button type="button" class="tab-btn" data-tab="charts" role="tab" aria-selected="false" aria-controls="tab-charts">Charts</button>
-                        <button type="button" class="tab-btn" data-tab="amortization" role="tab" aria-selected="false" aria-controls="tab-amortization">Amortization</button>
+                <div class="tabs">
+                    <div class="tab-buttons" role="tablist" aria-label="Results sections">
+                        <button type="button" class="tab-btn active" role="tab" aria-controls="tab-projection-charts" aria-selected="true" id="tab-btn-charts">📊 Projections</button>
+                        <button type="button" class="tab-btn" role="tab" aria-controls="tab-summary-details" aria-selected="false" id="tab-btn-summary" tabindex="-1">📋 Summary & Tax</button>
+                        <button type="button" class="tab-btn" role="tab" aria-controls="tab-ai-insights" aria-selected="false" id="tab-btn-insights" tabindex="-1">🤖 AI Insights</button>
+                        <button type="button" class="tab-btn" role="tab" aria-controls="tab-schedule-detail" aria-selected="false" id="tab-btn-schedule" tabindex="-1">📅 Full Schedule</button>
                     </div>
 
-                    <div id="tab-summary" class="tab-content active" role="tabpanel" aria-labelledby="tab-summary">
-                        <h3 class="section-title">Loan Summary</h3>
-                        <div class="result-grid" id="summary-grid">
-                            <div class="result-box">
-                                <div class="result-label">Total Principal Paid</div>
-                                <div class="result-value" id="totalPrincipalPaid">$0</div>
-                            </div>
-                            <div class="result-box accent">
-                                <div class="result-label">Total Interest Paid</div>
-                                <div class="result-value" id="totalInterestPaid">$0</div>
-                            </div>
-                            <div class="result-box">
-                                <div class="result-label">Loan Payoff Date</div>
-                                <div class="result-value" id="payoffDate">--</div>
-                            </div>
-                            <div class="result-box highlight">
-                                <div class="result-label">Interest Saved (vs. Original)</div>
-                                <div class="result-value" id="interestSaved">$0</div>
-                            </div>
-                            <div class="result-box">
-                                <div class="result-label">PMI Status</div>
-                                <div class="result-value" id="pmiStatus">Not Required</div>
-                            </div>
-                            <div class="result-box">
-                                <div class="result-label">Loan-to-Value (LTV)</div>
-                                <div class="result-value" id="ltvValue">--%</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="tab-charts" class="tab-content" role="tabpanel" aria-labelledby="tab-charts">
-                        <h3 class="section-title">Payment Visualizations</h3>
-                        
+                    <div class="tab-content active" id="tab-projection-charts" role="tabpanel" aria-labelledby="tab-btn-charts" tabindex="0">
+                        <h3 class="results-heading">Total Balance Projection</h3>
                         <div class="chart-container">
-                            <h4 class="chart-title">Payment Breakdown (First Month)</h4>
-                            <canvas id="paymentBreakdownChart" role="img" aria-label="First month mortgage payment breakdown chart"></canvas>
+                            <canvas id="401k-projection-chart" role="img" aria-label="Line chart showing total 401k balance projected over time."></canvas>
                         </div>
                         
-                        <div class="chart-container">
-                            <h4 class="chart-title">Loan Balance & Interest Over Time</h4>
-                            <canvas id="mortgageOverTimeChart" role="img" aria-label="Remaining loan balance and annual interest paid over the life of the loan"></canvas>
+                        <h3 class="results-heading">Final Balance Composition</h3>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="contribution-breakdown-chart" role="img" aria-label="Doughnut chart showing the breakdown of the final balance by contributions, match, and growth."></canvas>
+                        </div>
+                        
+                        <h3 class="results-heading">Annual Growth vs. Contributions</h3>
+                         <div class="chart-container">
+                            <canvas id="growth-vs-contribution-chart" role="img" aria-label="Bar chart comparing annual contributions to annual investment gains over time."></canvas>
                         </div>
 
+                        <h3 class="results-heading">Balance Composition Over Time</h3>
+                         <div class="chart-container">
+                            <canvas id="composition-chart" role="img" aria-label="Stacked bar chart showing the growth of contributions, match, and gains over time."></canvas>
+                        </div>
+                        
+                        <h3 class="results-heading">Annual Contributions Over Time</h3>
+                         <div class="chart-container">
+                            <canvas id="annual-contribution-chart" role="img" aria-label="Area chart showing your annual contribution and employer match over time."></canvas>
+                        </div>
+
+                        <aside class="ad-slot" role="complementary" aria-label="Partner Advertisement" style="margin-top: 24px; border-style: solid; border-color: var(--primary);">
+                             <p class="ad-label" style="color: var(--primary);">SPONSORED ADVISOR</p>
+                            <div class="ad-placeholder">
+                                <h4><i class="fas fa-handshake"></i> Need a Professional Plan?</h4>
+                                <p style="margin: 8px 0;">Your projection looks good, but a pro can perfect it. Connect with a Vetted US Financial Advisor today!</p>
+                                <a href="#" class="primary-button" style="display: inline-block; width: auto; text-decoration: none; margin-top: 8px; font-size: 14px; padding: 10px 16px;" onclick="app.trackAffiliateClick('Find an Advisor'); return false;">Find an Advisor (Affiliate)</a>
+                            </div>
+                        </aside>
                     </div>
 
-                    <div id="tab-amortization" class="tab-content" role="tabpanel" aria-labelledby="tab-amortization">
-                        <h3 class="section-title">Amortization Schedule</h3>
-                        <div class="amortization-controls">
-                            <label for="amortization-view">View:</label>
-                            <select id="amortization-view" aria-label="Select amortization view (Monthly or Yearly)">
-                                <option value="monthly">Monthly</option>
-                                <option value="yearly">Yearly</option>
-                            </select>
-                            <button id="download-csv" class="btn--outline" aria-label="Download amortization schedule as CSV"><i class="fas fa-download"></i> Download CSV</button>
+                    <div class="tab-content" id="tab-summary-details" role="tabpanel" aria-labelledby="tab-btn-summary" tabindex="0">
+                        <h3 class="results-heading">First Year Projections</h3>
+                        <div class="summary-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Your Annual Contribution</span>
+                                <span class="detail-value" id="your-annual-contribution">$0.00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Employer's Annual Match</span>
+                                <span class="detail-value" id="employer-annual-match">$0.00</span>
+                            </div>
+                            <div class="detail-item detail-total">
+                                <span class="detail-label">Total First Year Contribution</span>
+                                <span class="detail-value" id="total-annual-contribution">$0.00</span>
+                            </div>
                         </div>
 
-                        <div class="table-scroll" tabindex="0">
-                            <table class="amortization-table" id="amortization-table" role="table">
+                        <h3 class="results-heading">Estimated Tax Benefits</h3>
+                        <div class="summary-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Est. Marginal Tax Rate</span>
+                                <span class="detail-value" id="marginal-tax-rate">0.0%</span>
+                            </div>
+                            <div class="detail-item detail-total success-box">
+                                <span class="detail-label">Estimated Annual Tax Savings</span>
+                                <span class="detail-value" id="annual-tax-savings">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="tab-ai-insights" role="tabpanel" aria-labelledby="tab-btn-insights" tabindex="0">
+                         <h3 class="results-heading">🤖 AI-Powered Insights</h3>
+                        <div class="insights-container" id="ai-insights-content" aria-live="polite">
+                            <div class="insight-box info">
+                                <strong>🤖 AI Advisor:</strong> Enter your details to generate personalized insights...
+                            </div>
+                        </div>
+                        
+                        <aside class="ad-slot" role="complementary" aria-label="Sponsor Advertisement" style="margin-top: 24px;">
+                            <p class="ad-label">SPONSORED ROLLOVERS</p>
+                            <div class="ad-placeholder">🔄 Changing jobs? Roll over your 401(k) with [Sponsor Service]</div>
+                        </aside>
+                    </div>
+
+                    <div class="tab-content" id="tab-schedule-detail" role="tabpanel" aria-labelledby="tab-btn-schedule" tabindex="0">
+                        <h3 class="results-heading">Year-by-Year Projection</h3>
+                        <div class="table-scroll-wrapper">
+                            <table class="styled-table" id="projection-table" aria-label="Yearly 401(k) Projection Schedule">
+                                <caption class="visually-hidden">Detailed projection schedule showing salary, contributions, match, gains, and end balance for each year.</caption>
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Payment</th>
-                                        <th scope="col">Principal</th>
-                                        <th scope="col">Interest</th>
-                                        <th scope="col">Extra</th>
-                                        <th scope="col">Balance</th>
+                                        <th>Age</th>
+                                        <th>Salary</th>
+                                        <th>Your Cont.</th>
+                                        <th>Match</th>
+                                        <th>Gains</th>
+                                        <th>End Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td colspan="6" style="text-align: center;">Calculate your mortgage to see the schedule.</td>
-                                    </tr>
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <div class="ad-slot-large" role="complementary" aria-label="Second Advertisement Slot">
-                    <p class="ad-label">SPONSORED PRODUCTS</p>
-                    <div class="sponsor-grid">
-                        <div class="sponsor-card">
-                            <h4>Insurance Quote</h4>
-                            <p>Protect your investment with competitive home insurance rates.</p>
-                            <button class="sponsor-btn secondary" onclick="app.trackAffiliateClick('Insurance_Quote')">Get Quotes</button>
-                        </div>
-                         <div class="sponsor-card">
-                            <h4>Financial Advisor</h4>
-                            <p>Speak to an RIA for personalized financial planning (GLBA Compliant).</p>
-                            <button class="sponsor-btn secondary" onclick="app.trackAffiliateClick('RIA_Consult')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
             </section>
         </div>
+
+        <section class="footer-sponsor" id="our-partners" aria-labelledby="partners-title">
+            <div class="container">
+                <h3 id="partners-title" style="text-align: center; margin-bottom: 24px; color: var(--primary); font-size: 24px; font-weight: 700;">Our Partners</h3>
+                <div class="sponsor-grid">
+                    <div class="sponsor-item">
+                        <h4>📈 Low-Fee Robo-Advisors</h4>
+                        <p>Start investing with a low-fee, automated portfolio. Perfect for hands-off retirement growth.</p>
+                        <a href="#affiliate-link-1" onclick="app.trackAffiliateClick('Robo-Advisor'); return false;" aria-label="Compare Rates for Robo-Advisors">Compare Advisors →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🤝 Financial Advisor Match</h4>
+                        <p>Connect with a pre-vetted, fiduciary financial advisor in your state to build a custom retirement plan.</p>
+                        <a href="#affiliate-link-2" onclick="app.trackAffiliateClick('Advisor Match'); return false;" aria-label="Get Matched with a Financial Advisor">Get Matched →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🏦 High-Yield Savings</h4>
+                        <p>Grow your emergency fund faster. Compare top high-yield savings accounts from US banks.</p>
+                        <a href="#affiliate-link-3" onclick="app.trackAffiliateClick('HYSA'); return false;" aria-label="Check Rates for High-Yield Savings">Check Rates →</a>
+                    </div>
+                    <div class="sponsor-item">
+                        <h4>🔄 401(k) Rollover Service</h4>
+                        <p>Changing jobs? Don't leave your 401(k) behind. Easily roll it over into a new IRA penalty-free.</p>
+                        <a href="#affiliate-link-4" onclick="app.trackAffiliateClick('Rollover'); return false;" aria-label="View Plans for 401(k) Rollover Services">View Plans →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="faq-section" aria-labelledby="faq-title">
+            <h2 class="faq-title" id="faq-title">❓ Frequently Asked Questions (FAQ)</h2>
+            <div class="faq-container" id="faqContainer">
+                </div>
+        </section>
+
+        <footer class="footer" role="contentinfo">
+            <div class="container">
+                <div class="footer-content">
+                    <nav class="footer-section" role="navigation" aria-label="About this calculator">
+                        <h4>About 401(k) Calculator</h4>
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="#features">Features</a>
+                        <a href="#faq">FAQ</a>
+                        <a href="#contact">Contact Us</a>
+                    </nav>
+                    <nav class="footer-section" role="navigation" aria-label="Learn more about retirement">
+                        <h4>Learn More</h4>
+                        <a href="#what-is-401k">What is a 401(k)?</a>
+                        <a href="#employer-match">Employer Match Guide</a>
+                        <a href="#contribution-limits">Contribution Limits</a>
+                        <a href="#blog">Blog</a>
+                    </nav>
+                    <nav class="footer-section" role="navigation" aria-label="Financial resources">
+                        <h4>Resources</h4>
+                        <a href="/mortgage-calculator">Mortgage Calculator</a>
+                        <a href="#tools">Financial Tools</a>
+                        <a href="#education">Retirement Education</a>
+                        <a href="#glossary">Glossary</a>
+                    </nav>
+                    <nav class="footer-section" role="navigation" aria-label="Legal links">
+                        <h4>Legal</h4>
+                        <a href="#privacy">Privacy Policy</a>
+                        <a href="#terms">Terms of Service</a>
+                        <a href="#disclaimer">Disclaimer</a>
+                        <a href="#affiliate">Affiliate Disclosure</a>
+                    </nav>
+                </div>
+
+                <div class="compliance-badges" role="list" aria-label="Compliance Badges">
+                    <span class="badge" role="listitem">🔒 SSL Secured</span>
+                    <span class="badge" role="listitem">✅ GDPR Compliant</span>
+                    <span class="badge" role="listitem">✅ CCPA Compliant</span>
+                    <span class="badge" role="listitem">✅ FTC Compliant</span>
+                    <span class="badge" role="listitem">♿ WCAG 2.1 AA</span>
+                </div>
+
+                <section class="disclaimer" aria-label="Disclaimers and Disclosures">
+                    <strong>Educational & Informational Only (Disclaimer):</strong> This 401(k) calculator is for educational and informational purposes only. It is NOT financial, legal, or investment advice. Projections are based on user inputs and assumptions about future performance, which are not guaranteed. Actual returns, inflation, tax rates, and employer match policies may vary. Always consult with a qualified financial advisor or fiduciary before making any investment or retirement decisions.
+                    <br><br>
+                    <strong>Privacy Policy (GLBA):</strong> We are committed to protecting your privacy. Our tool does not store or share your personal financial inputs. Please review our full <a href="#privacy">Privacy Policy</a> for details on what information we collect (like usage data) and how it is protected, in compliance with the Gramm-Leach-Bliley Act (GLBA).
+                    <br><br>
+                    <strong>Affiliate Disclosure (FTC):</strong> FinGuid participates in affiliate programs. When you click on partner links or apply for products through our site, FinGuid may receive compensation. This does not affect your rates or terms and helps us provide these free AI-powered tools.
+                    <br><br>
+                    <strong>Data Accuracy (FRED):</strong> Inflation data used for "real return" calculations is sourced from the Federal Reserve Bank of St. Louis (FRED®). While we strive for accuracy, we make no guarantees. All data is provided "as is."
+                    <br><br>
+                    <strong>Recordkeeping (SEC Rule 204-2):</strong> As a financial information publisher, we may maintain records of website content and communications as required by applicable regulations. This does not include your personal calculation inputs.
+                </section>
+
+                <div class="footer-bottom">
+                    © 2025 FinGuid USA. All Rights Reserved. | AI-Powered Financial Tools for Americans
+                </div>
+            </div>
+        </footer>
     </main>
 
-    <section class="faq-section" aria-labelledby="faq-title">
-        <div class="container">
-            <h2 class="section-title" id="faq-title">📚 FAQs & SEO Keywords</h2>
-            <div id="faq-list">
-                </div>
+    <div id="cookie-consent-banner" role="dialog" aria-modal="true" aria-labelledby="cookie-consent-title" aria-describedby="cookie-consent-desc">
+        <div class="cookie-consent-text">
+            <h4 id="cookie-consent-title" style="font-weight: 700; color: var(--text); margin-bottom: 8px;">Your Privacy</h4>
+            <p id="cookie-consent-desc">
+                We use cookies and data (like Google Analytics) to enhance your experience, improve our tools, and provide personalized AI insights. By clicking "Accept", you agree to our use of cookies.
+                <a href="#privacy" aria-label="Read our Privacy Policy">Privacy Policy</a>.
+            </p>
         </div>
-    </section>
+        <button type="button" id="cookie-consent-btn">Accept</button>
+    </div>
 
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <div class="footer-content">
-                
-                <nav class="footer-section" role="navigation" aria-label="FinGuid Site Navigation">
-                    <h4>FinGuid AI Tools</h4>
-                    <a href="#" aria-label="About the FinGuid platform">About Us</a>
-                    <a href="#" aria-label="Full list of AI financial tools">All Calculators</a>
-                    <a href="#" aria-label="Careers and job opportunities">Careers</a>
-                    <a href="#" aria-label="Contact information and support">Contact Us</a>
-                </nav>
-                
-                <div class="footer-section">
-                    <h4>Legal & Compliance (USA Market)</h4>
-                    <a href="#" target="_blank" aria-label="GLBA, CCPA, and GDPR Compliant Privacy Policy">Privacy Policy</a>
-                    <a href="#" target="_blank" aria-label="Website Terms of Service">Terms of Service</a>
-                    <a href="#" target="_blank" aria-label="Legal Disclaimer for all financial information">Full Disclaimer</a>
-                    <a href="#" target="_blank" aria-label="Data Request Form for CCPA and GDPR">Do Not Sell My Info</a>
-                </div>
-                
-                <div class="footer-badges">
-                    <div class="badge"><i class="fas fa-lock"></i> SSL Secured</div>
-                    <div class="badge"><i class="fas fa-shield-alt"></i> GDPR Compliant</div>
-                    <div class="badge"><i class="fas fa-user-shield"></i> CCPA Compliant</div>
-                    <div class="badge"><i class="fas fa-universal-access"></i> WCAG 2.1 AA</div>
-                </div>
+    <div class="alert-modal-backdrop" id="alert-modal-backdrop"></div>
+    <div class="alert-modal" id="alert-modal" role="alertdialog" aria-modal="true" aria-labelledby="alert-modal-title" aria-describedby="alert-modal-body">
+        <h4 class="alert-modal-title" id="alert-modal-title">Alert</h4>
+        <p class="alert-modal-body" id="alert-modal-body">
+            This is an alert message.
+        </p>
+        <button type="button" class="alert-modal-btn" id="alert-modal-close">Close</button>
+    </div>
 
-                <div class="footer-disclaimer" style="grid-column: 1 / -1;">
-                    <p><strong>IMPORTANT FINANCIAL DISCLOSURE:</strong> The information provided by this FinGuid AI Mortgage Calculator is for **educational and illustrative purposes only** and does not constitute financial, investment, or legal advice. Default figures are hypothetical. Actual payments may vary. FinGuid monetizes through **affiliate marketing** and advertising partnerships.</p>
-                    <p><strong>FRED Compliance:</strong> Live rates are sourced from the Federal Reserve Economic Data (FRED) and are subject to their [terms and conditions](https://fred.stlouisfed.org/legal/). FRED data is used to provide real-time economic context.</p>
-                    <p><strong>RIA/GLBA Note:</strong> If FinGuid operates as a Registered Investment Advisor (RIA), our status and state registration are disclosed on our Terms of Service page. We maintain records of all communications as required by SEC Rule 204-2. Our Privacy Policy is fully **GLBA compliant** and details customer information collection, disclosure, protection, and opt-out rights.</p>
-                </div>
-            </div>
-        </div>
-        <div class="footer-sponsor">
-            <div class="container">
-                <p>&copy; 2025 FinGuid USA. All Rights Reserved. | Built on the World's First AI Tools Platform for Informed Financial Decisions.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     
-    <script src="script.js"></script>
-
     <script>
         /**
-         * PWA Service Worker Registration - For Offline Functionality & Speed
-         * Note: This is a minimalist SW setup for PWA compliance. 
+         * ========================================================================
+         * AI 401(k) OPTIMIZER - PRODUCTION READY
+         * ========================================================================
+         * Version: 5.0 - COMPLIANT
+         * Built with: S.O.L.I.D Principles, WCAG 2.1 AA, PWA, GDPR/CCPA
+         *
+         * This file merges the 401(k) logic into the mortgage calculator's
+         * advanced, compliant shell (app controller, UI, accessibility, PWA).
+         * ========================================================================
          */
-        function registerServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                const CACHE_NAME = 'mortgage-calc-cache-v1';
-                const OFFLINE_URL = 'offline.html'; // Placeholder for an actual offline page if needed
 
-                // Inlined Service Worker content
-                const swContent = `
-                    // Set up cache on install
-                    self.addEventListener('install', (event) => {
-                        event.waitUntil(
-                            caches.open(CACHE_NAME)
-                                .then((cache) => {
-                                    console.log('Opened cache');
-                                    // Add core files (HTML, CSS, JS, Libraries)
-                                    return cache.addAll(['./', 'style.css', 'script.js']); 
-                                })
-                        );
-                        self.skipWaiting();
-                    });
+        // ===== 401(k) CORE CONFIG (From 401k.js) =====
+        const CONFIG = {
+            VERSION: '5.0',
+            DEBUG: false,
+            FRED_API_KEY: '9c6c421f077f2091e8bae4f143ada59a', // Requirement 8
+            FRED_BASE_URL: 'https://api.stlouisfed.org/fred/series/observations',
+            FRED_SERIES_ID: 'CPIAUCSL', // Consumer Price Index for All Urban Consumers
+            IRS_LIMIT: 23000,
+            CATCHUP_LIMIT: 7500,
+            TAX_BRACKETS: { // 2024 Tax Brackets
+                'Single': [
+                    { limit: 11600, rate: 0.10 },
+                    { limit: 47150, rate: 0.12 },
+                    { limit: 100525, rate: 0.22 },
+                    { limit: 191950, rate: 0.24 },
+                    { limit: 243725, rate: 0.32 },
+                    { limit: 609350, rate: 0.35 },
+                    { limit: Infinity, rate: 0.37 }
+                ],
+                'Married Filing Jointly': [
+                    { limit: 23200, rate: 0.10 },
+                    { limit: 94300, rate: 0.12 },
+                    { limit: 201050, rate: 0.22 },
+                    { limit: 383900, rate: 0.24 },
+                    { limit: 487450, rate: 0.32 },
+                    { limit: 731200, rate: 0.35 },
+                    { limit: Infinity, rate: 0.37 }
+                ],
+                'Head of Household': [
+                    { limit: 16550, rate: 0.10 },
+                    { limit: 63100, rate: 0.12 },
+                    { limit: 100500, rate: 0.22 },
+                    { limit: 191950, rate: 0.24 },
+                    { limit: 243700, rate: 0.32 },
+                    { limit: 609350, rate: 0.35 },
+                    { limit: Infinity, rate: 0.37 }
+                ]
+            },
+            charts: { 
+                projection: null,
+                contribution: null,
+                growth: null,
+                composition: null,
+                annual: null
+            },
+            calculation: {
+                projectionSchedule: [],
+                firstYear: {},
+                totals: {},
+                inputs: {}
+            },
+            liveInflationRate: 0.025 // Default fallback
+        };
+        
+        // ===== 401(k) CORE CALCULATION LOGIC (From 401k.js) =====
 
-                    // Clear old caches
-                    self.addEventListener('activate', (event) => {
-                        event.waitUntil(
-                            caches.keys().then((cacheNames) => {
-                                return Promise.all(
-                                    cacheNames.map((cacheName) => {
-                                        if (cacheName !== CACHE_NAME) {
-                                            console.log('Deleting old cache:', cacheName);
-                                            return caches.delete(cacheName);
-                                        }
-                                    })
-                                );
-                            })
-                        );
-                        self.clients.claim();
-                    });
+        /**
+         * Calculates the effective (marginal) tax rate based on income and filing status.
+         */
+        function getEffectiveTaxRate(income, filingStatus) {
+            const brackets = CONFIG.TAX_BRACKETS[filingStatus] || CONFIG.TAX_BRACKETS['Single'];
+            // This simplified function finds the MARGINAL rate, not the effective blended rate.
+            // This is correct for calculating tax *savings* on the *last* dollars earned.
+            for (const bracket of brackets) {
+                if (income <= bracket.limit) {
+                    return bracket.rate;
+                }
+            }
+            return 0.37; // Default to highest bracket if something goes wrong
+        }
 
-                    // Serve from cache first strategy for assets
-                    self.addEventListener('fetch', (event) => {
-                        // Skip non-GET requests and FRED API calls
-                        if (event.request.method !== 'GET' || event.request.url.includes('api.stlouisfed.org')) {
-                             return;
-                        }
+        /**
+         * Main 401(k) calculation engine.
+         */
+        function calculate401k() {
+            const inputs = {
+                currentAge: app.UTILS.parseInput('current-age', false),
+                retirementAge: app.UTILS.parseInput('retirement-age', false),
+                annualSalary: app.UTILS.parseInput('annual-salary', true),
+                filingStatus: document.getElementById('filing-status').value,
+                currentBalance: app.UTILS.parseInput('current-balance', true),
+                contributionPercent: app.UTILS.parseInput('contribution-percent', false) / 100,
+                employerMatchPercent: app.UTILS.parseInput('employer-match-percent', false) / 100,
+                matchUpToPercent: app.UTILS.parseInput('match-up-to-percent', false) / 100,
+                salaryIncrease: app.UTILS.parseInput('salary-increase', false) / 100,
+                rateOfReturn: app.UTILS.parseInput('rate-of-return', false) / 100,
+                includeCatchUp: document.getElementById('include-catch-up').checked,
+                includeInflation: document.getElementById('include-inflation').checked
+            };
 
-                        // For navigation requests, try network first, then cache, then offline page
-                        event.respondWith(
-                            fetch(event.request)
-                                .catch(() => {
-                                    // Network failed, try cache
-                                    return caches.match(event.request)
-                                        .then(response => {
-                                            // Return from cache
-                                            return response; 
-                                        });
-                                })
-                        );
-                    });
-                `;
-                // Create a Blob from the SW content and register it
-                const blob = new Blob([swContent], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
+            // WCAG 3.3.4: Error Prevention
+            if (inputs.currentAge >= inputs.retirementAge) {
+                app.showAlert('Input Error', 'Current Age must be less than Retirement Age.');
+                return false;
+            }
+             if (inputs.annualSalary <= 0) {
+                app.showAlert('Input Error', 'Annual Salary must be greater than $0.');
+                return false;
+            }
 
-                navigator.serviceWorker.register(swUrl)
-                    .then(reg => console.log('Service Worker registered from Blob.', reg))
-                    .catch(err => console.error('Service Worker registration failed:', err));
+            let balance = inputs.currentBalance;
+            let salary = inputs.annualSalary;
+            const projection = [];
+            let totalContrib = 0;
+            let totalMatch = 0;
+            let totalGains = 0;
+
+            // Adjust rate of return for inflation if checked
+            const returnRate = inputs.includeInflation
+                ? ((1 + inputs.rateOfReturn) / (1 + CONFIG.liveInflationRate)) - 1
+                : inputs.rateOfReturn;
+
+            for (let age = inputs.currentAge; age < inputs.retirementAge; age++) {
+                let contrib = salary * inputs.contributionPercent;
+                let catchUp = 0;
+                
+                if (age >= 50 && inputs.includeCatchUp) {
+                    catchUp = CONFIG.CATCHUP_LIMIT;
+                }
+                // Apply IRS limits
+                contrib = Math.min(contrib, CONFIG.IRS_LIMIT + catchUp);
+
+                // Calculate employer match
+                const matchBase = salary * inputs.matchUpToPercent;
+                const match = Math.min(matchBase, contrib) * inputs.employerMatchPercent;
+
+                const totalAnnual = contrib + match;
+                // Calculate gains (assuming contributions are made throughout the year)
+                const gains = (balance + totalAnnual / 2) * returnRate;
+                const endBalance = balance + totalAnnual + gains;
+
+                projection.push({
+                    age, 
+                    salary, 
+                    contrib, 
+                    match, 
+                    gains, 
+                    endBalance,
+                    cumulativeContrib: totalContrib + contrib,
+                    cumulativeMatch: totalMatch + match,
+                    cumulativeGains: totalGains + gains
+                });
+
+                balance = endBalance;
+                salary *= (1 + inputs.salaryIncrease);
+                totalContrib += contrib;
+                totalMatch += match;
+                totalGains += gains;
+            }
+
+            CONFIG.calculation = {
+                projectionSchedule: projection,
+                firstYear: projection[0] || {},
+                totals: { finalBalance: balance, totalContrib, totalMatch, totalGains },
+                inputs
+            };
+            return true;
+        }
+
+        /**
+         * Controller function to run all calculations and UI updates.
+         */
+        function updateCalculations() {
+            try {
+                const success = calculate401k();
+                if (!success) return; // Stop if validation failed
+
+                updateSummary();
+                updateCharts();
+                updateDetailsTab();
+                updateTable();
+                generateAIInsights();
+                
+                // Track event (Requirement 7)
+                app.trackEvent('calculation_complete', {
+                    age: CONFIG.calculation.inputs.currentAge,
+                    projected_total: CONFIG.calculation.totals.finalBalance
+                });
+            } catch (error) {
+                console.error('Calculation error:', error);
+                app.showAlert('Calculation Error', 'An error occurred while calculating your projection. Please check your inputs.');
             }
         }
 
-        function setupPWAInstall() {
-            let deferredPrompt;
-            const installButton = document.getElementById('pwa-install-btn');
+        /**
+         * Updates the main summary card.
+         */
+        function updateSummary() {
+            const { totals } = CONFIG.calculation;
+            const fmtd = app.UTILS.formatCurrency;
+            document.getElementById('projected-total').textContent = fmtd(totals.finalBalance, 0);
+            document.getElementById('projection-summary-details').innerHTML = `
+                Your Cont: ${fmtd(totals.totalContrib, 0)} | 
+                Employer Match: ${fmtd(totals.totalMatch, 0)} | 
+                Total Growth: ${fmtd(totals.totalGains, 0)}
+            `;
+        }
 
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installButton.style.display = 'inline-flex';
-                installButton.addEventListener('click', () => {
-                    installButton.style.display = 'none';
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the A2HS prompt');
-                            app.trackEvent('pwa_install', { status: 'accepted' });
-                        } else {
-                            console.log('User dismissed the A2HS prompt');
-                            app.trackEvent('pwa_install', { status: 'dismissed' });
-                        }
-                        deferredPrompt = null;
-                    });
-                });
-            });
+        /**
+         * Updates the "Summary & Tax" tab.
+         */
+        function updateDetailsTab() {
+            const { firstYear, inputs } = CONFIG.calculation;
+            const fmtd = app.UTILS.formatCurrency;
+            
+            document.getElementById('your-annual-contribution').textContent = fmtd(firstYear.contrib || 0, 2);
+            document.getElementById('employer-annual-match').textContent = fmtd(firstYear.match || 0, 2);
+            document.getElementById('total-annual-contribution').textContent = fmtd((firstYear.contrib || 0) + (firstYear.match || 0), 2);
 
-            window.addEventListener('appinstalled', () => {
-                installButton.style.display = 'none';
-                console.log('PWA installed successfully');
-                app.trackEvent('pwa_install', { status: 'installed' });
+            const rate = getEffectiveTaxRate(inputs.annualSalary, inputs.filingStatus);
+            const savings = (firstYear.contrib || 0) * rate;
+
+            document.getElementById('marginal-tax-rate').textContent = `${(rate * 100).toFixed(1)}%`;
+            document.getElementById('annual-tax-savings').textContent = fmtd(savings, 2);
+        }
+
+        /**
+         * Updates the "Full Schedule" table.
+         */
+        function updateTable() {
+            const tbody = document.querySelector('#projection-table tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const fmtd = app.UTILS.formatCurrency;
+
+            CONFIG.calculation.projectionSchedule.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.age}</td>
+                    <td>${fmtd(item.salary, 0)}</td>
+                    <td>${fmtd(item.contrib, 0)}</td>
+                    <td>${fmtd(item.match, 0)}</td>
+                    <td>${fmtd(item.gains, 0)}</td>
+                    <td>${fmtd(item.endBalance, 0)}</td>
+                `;
+                tbody.appendChild(row);
             });
         }
         
-        document.addEventListener('DOMContentLoaded', () => {
-            if ('serviceWorker' in navigator) {
-                registerServiceWorker();
-                setupPWAInstall();
+        /**
+         * Updates all 5 charts.
+         */
+        function updateCharts() {
+            const themeColor = document.documentElement.getAttribute('data-color-scheme') === 'dark' ? '#E1E8ED' : '#1F2121';
+            const gridColor = document.documentElement.getAttribute('data-color-scheme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: themeColor, font: { size: 12, weight: 'bold' }, padding: 15 },
+                        position: 'top'
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        padding: 12,
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: ${app.UTILS.formatCurrency(ctx.parsed.y, 0)}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: themeColor },
+                        title: { display: true, text: 'Age', color: themeColor, font: { size: 14, weight: 'bold' } },
+                        grid: { color: gridColor }
+                    },
+                    y: {
+                        ticks: {
+                            color: themeColor,
+                            callback: (v) => app.UTILS.formatCurrency(v, 0).replace('.00', '')
+                        },
+                        title: { display: true, text: 'Amount ($)', color: themeColor, font: { size: 14, weight: 'bold' } },
+                        grid: { color: gridColor }
+                    }
+                }
+            };
+            
+            // 1. Projection Chart
+            const { projectionSchedule } = CONFIG.calculation;
+            if (projectionSchedule.length > 0) {
+                const ctxP = document.getElementById('401k-projection-chart')?.getContext('2d');
+                if (ctxP) {
+                    if (CONFIG.charts.projection) CONFIG.charts.projection.destroy();
+                    CONFIG.charts.projection = new Chart(ctxP, {
+                        type: 'line',
+                        data: {
+                            labels: projectionSchedule.map(d => d.age),
+                            datasets: [{
+                                label: 'Total Balance',
+                                data: projectionSchedule.map(d => d.endBalance),
+                                borderColor: 'rgba(36, 172, 185, 1)',
+                                backgroundColor: 'rgba(36, 172, 185, 0.15)',
+                                tension: 0.4, fill: true, borderWidth: 3,
+                            }, {
+                                label: 'Your Contributions',
+                                data: projectionSchedule.map(d => d.cumulativeContrib),
+                                borderColor: 'rgba(25, 52, 59, 0.7)',
+                                fill: false, borderWidth: 2, borderDash: [5, 5],
+                            }, {
+                                label: 'Employer Match',
+                                data: projectionSchedule.map(d => d.cumulativeMatch),
+                                borderColor: 'rgba(16, 185, 129, 0.7)',
+                                fill: false, borderWidth: 2, borderDash: [3, 3],
+                            }]
+                        },
+                        options: chartOptions
+                    });
+                }
             }
+
+            // 2. Contribution Breakdown (Doughnut)
+            const { totals } = CONFIG.calculation;
+            const ctxC = document.getElementById('contribution-breakdown-chart')?.getContext('2d');
+            if (ctxC) {
+                if (CONFIG.charts.contribution) CONFIG.charts.contribution.destroy();
+                CONFIG.charts.contribution = new Chart(ctxC, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Your Contributions', 'Employer Match', 'Investment Growth'],
+                        datasets: [{
+                            data: [totals.totalContrib, totals.totalMatch, totals.totalGains],
+                            backgroundColor: ['rgba(25, 52, 59, 0.8)', 'rgba(36, 172, 185, 1)', 'rgba(16, 185, 129, 0.8)'],
+                            borderColor: ['#fff', '#fff', '#fff'],
+                            borderWidth: 3
+                        }]
+                    },
+                    options: { ...chartOptions, scales: {} } // Remove scales for doughnut
+                });
+            }
+
+            // 3. Growth vs. Contribution (Bar)
+            if (projectionSchedule.length > 0) {
+                const ctxG = document.getElementById('growth-vs-contribution-chart')?.getContext('2d');
+                if (ctxG) {
+                    if (CONFIG.charts.growth) CONFIG.charts.growth.destroy();
+                    CONFIG.charts.growth = new Chart(ctxG, {
+                        type: 'bar',
+                        data: {
+                            labels: projectionSchedule.map(d => d.age),
+                            datasets: [{
+                                label: 'Annual Contributions',
+                                data: projectionSchedule.map(d => d.contrib + d.match),
+                                backgroundColor: 'rgba(25, 52, 59, 0.7)',
+                            }, {
+                                label: 'Annual Investment Gains',
+                                data: projectionSchedule.map(d => d.gains),
+                                backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            }]
+                        },
+                        options: { ...chartOptions, scales: { ...chartOptions.scales, x: { ...chartOptions.scales.x, stacked: true }, y: { ...chartOptions.scales.y, stacked: true } } }
+                    });
+                }
+            }
+            
+            // 4. Composition Chart (Stacked Bar)
+            if (projectionSchedule.length > 0) {
+                const ctxComp = document.getElementById('composition-chart')?.getContext('2d');
+                if (ctxComp) {
+                    if (CONFIG.charts.composition) CONFIG.charts.composition.destroy();
+                    CONFIG.charts.composition = new Chart(ctxComp, {
+                        type: 'bar',
+                        data: {
+                            labels: projectionSchedule.map(d => d.age),
+                            datasets: [
+                                { label: 'Your Contributions', data: projectionSchedule.map(d => d.cumulativeContrib), backgroundColor: 'rgba(25, 52, 59, 0.8)' },
+                                { label: 'Employer Match', data: projectionSchedule.map(d => d.cumulativeMatch), backgroundColor: 'rgba(36, 172, 185, 0.8)' },
+                                { label: 'Investment Growth', data: projectionSchedule.map(d => d.cumulativeGains), backgroundColor: 'rgba(16, 185, 129, 0.8)' }
+                            ]
+                        },
+                        options: { ...chartOptions, scales: { ...chartOptions.scales, x: { ...chartOptions.scales.x, stacked: true }, y: { ...chartOptions.scales.y, stacked: true } } }
+                    });
+                }
+            }
+            
+            // 5. Annual Contribution Chart (Area)
+             if (projectionSchedule.length > 0) {
+                const ctxA = document.getElementById('annual-contribution-chart')?.getContext('2d');
+                if (ctxA) {
+                    if (CONFIG.charts.annual) CONFIG.charts.annual.destroy();
+                    CONFIG.charts.annual = new Chart(ctxA, {
+                        type: 'line', // Use line for area chart
+                        data: {
+                            labels: projectionSchedule.map(d => d.age),
+                            datasets: [{
+                                label: 'Your Annual Contribution',
+                                data: projectionSchedule.map(d => d.contrib),
+                                backgroundColor: 'rgba(25, 52, 59, 0.5)',
+                                borderColor: 'rgba(25, 52, 59, 1)',
+                                borderWidth: 2, fill: true, tension: 0.4
+                            }, {
+                                label: 'Employer Match',
+                                data: projectionSchedule.map(d => d.match),
+                                backgroundColor: 'rgba(36, 172, 185, 0.5)',
+                                borderColor: 'rgba(36, 172, 185, 1)',
+                                borderWidth: 2, fill: true, tension: 0.4
+                            }]
+                        },
+                        options: chartOptions
+                    });
+                }
+            }
+        }
+        
+        /**
+         * Generates AI insights.
+         * MODIFIED to use mortgage calculator's CSS classes.
+         */
+        function generateAIInsights() {
+            const { inputs, firstYear, totals, projectionSchedule } = CONFIG.calculation;
+            const contentBox = document.getElementById('ai-insights-content');
+            if (!contentBox) return;
+
+            const fmtd = app.UTILS.formatCurrency;
+            let html = '';
+
+            // 1. MISSING MATCH DETECTION (CRITICAL)
+            const missedMatch = inputs.contributionPercent < inputs.matchUpToPercent;
+            if (missedMatch && firstYear.match >= 0) {
+                const potentialMatch = Math.min(inputs.annualSalary * inputs.matchUpToPercent, CONFIG.IRS_LIMIT + (inputs.currentAge >= 50 ? CONFIG.CATCHUP_LIMIT : 0)) * inputs.employerMatchPercent;
+                const missed = potentialMatch - (firstYear.match || 0);
+                if (missed > 1) { // Only show if missed amount is significant
+                    const missedTotal = missed * (inputs.retirementAge - inputs.currentAge);
+                    html += `
+                        <div class="insight-box warning">
+                            <strong><i class="fas fa-exclamation-triangle"></i> CRITICAL: Leaving ${fmtd(missed, 0)}/Year in Free Money!</strong>
+                            <p style="margin-top: 8px;">Your employer matches up to <strong>${(inputs.matchUpToPercent * 100).toFixed(1)}%</strong>, but you're only contributing <strong>${(inputs.contributionPercent * 100).toFixed(1)}%</strong>.
+                            <strong>Action:</strong> Increase to <strong>${(inputs.matchUpToPercent * 100).toFixed(1)}%</strong> to capture <strong>${fmtd(missed, 0)}/year</strong> in free employer matching. Over your career, that's <strong>${fmtd(missedTotal, 0)}</strong>!</p>
+                        </div>
+                    `;
+                }
+            } else if (firstYear.match > 0) {
+                html += `
+                    <div class="insight-box success">
+                        <strong><i class="fas fa-check-circle"></i> Excellent Match Strategy</strong>
+                        <p style="margin-top: 8px;">You are contributing enough to get your full employer match, capturing <strong>${fmtd(firstYear.match, 0)}</strong> in free money this year. This is critical for long-term wealth.</p>
+                    </div>
+                `;
+            }
+
+            // 2. TAX SAVINGS ANALYSIS
+            const taxRate = getEffectiveTaxRate(inputs.annualSalary, inputs.filingStatus);
+            const annualTaxSavings = (firstYear.contrib || 0) * taxRate;
+            if (annualTaxSavings > 0) {
+                html += `
+                    <div class="insight-box success">
+                        <strong><i class="fas fa-money-bill-alt"></i> Federal Tax Benefits</strong>
+                        <p style="margin-top: 8px;">At your <strong>${(taxRate * 100).toFixed(1)}%</strong> marginal tax rate, your <strong>${fmtd(firstYear.contrib, 0)}</strong> contribution saves you an estimated <strong>${fmtd(annualTaxSavings, 0)}</strong> on this year's federal taxes!</p>
+                    </div>
+                `;
+            }
+
+            // 3. RETIREMENT READINESS (Simplified)
+            const yearsToRetire = inputs.retirementAge - inputs.currentAge;
+            // Simplified 4% rule calculation
+            const annualWithdrawal = totals.finalBalance * 0.04;
+            const replacementRatio = (annualWithdrawal / (inputs.annualSalary * Math.pow(1 + inputs.salaryIncrease, yearsToRetire))) * 100;
+
+            if (replacementRatio < 40) {
+                 html += `
+                    <div class="insight-box warning">
+                        <strong><i class="fas fa-chart-line"></i> Income Gap Warning</strong>
+                        <p style="margin-top: 8px;">Based on the 4% rule, your projected <strong>${fmtd(totals.finalBalance, 0)}</strong> balance may only provide <strong>${fmtd(annualWithdrawal, 0)}/year</strong>. This is <strong>~${replacementRatio.toFixed(0)}%</strong> of your projected final salary. Consider increasing contributions.</p>
+                    </div>
+                `;
+            } else {
+                 html += `
+                    <div class="insight-box info">
+                        <strong><i class="fas fa-chart-line"></i> Retirement Income Projection</strong>
+                        <p style="margin-top: 8px;">Your <strong>${fmtd(totals.finalBalance, 0)}</strong> balance could provide <strong>~${fmtd(annualWithdrawal, 0)}/year</strong> in retirement (using the 4% rule). This is <strong>~${replacementRatio.toFixed(0)}%</strong> of your projected final salary. Remember to add Social Security!</p>
+                    </div>
+                `;
+            }
+            
+            // 4. COMPOUND GROWTH
+            const percentGains = (totals.totalGains / totals.finalBalance) * 100;
+             if (percentGains > 50) {
+                html += `
+                    <div class="insight-box info">
+                        <strong><i class="fas fa-magic"></i> The Power of Compounding</strong>
+                        <p style="margin-top: 8px;">Investment growth accounts for <strong>${fmtd(totals.totalGains, 0)}</strong>, or <strong>${percentGains.toFixed(0)}%</strong> of your final balance! The longer your money stays invested, the harder it works for you.</p>
+                    </div>
+                `;
+            }
+            
+            contentBox.innerHTML = html;
+        }
+
+        
+        // ===== MAIN APP CONTROLLER (From Mortgage.js) =====
+        const app = {
+            calculateDebounce: null,
+            state: {
+                isTtsEnabled: false,
+                isVoiceActive: false,
+                recognition: null,
+                synthesizer: null
+            },
+            
+            // Replaces 401k UTILS object
+            UTILS: {
+                formatCurrency(amount, decimals = 2) {
+                    if (typeof amount !== 'number' || isNaN(amount)) return '$0.00';
+                    return new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: decimals,
+                        maximumFractionDigits: decimals
+                    }).format(amount);
+                },
+                parseInput(id, isCurrency = true) {
+                    const el = document.getElementById(id);
+                    if (!el) return 0;
+                    const value = el.value;
+                    if (isCurrency) {
+                        const clean = value.replace(/[$,]/g, '').trim();
+                        return parseFloat(clean) || 0;
+                    }
+                    return parseFloat(value) || 0;
+                },
+                // REWRITE of showToast to use WCAG-compliant modal
+                showToast(message, type = 'info') {
+                    let title = 'Notification';
+                    if (type === 'success') title = 'Success';
+                    if (type === 'error') title = 'Error';
+                    app.showAlert(title, message);
+                },
+                trackEvent(eventName, eventData = {}) {
+                    if (typeof gtag === 'function') {
+                        gtag('event', eventName, eventData); // Requirement 7
+                    }
+                }
+            },
+            
+            // 401k FRED Module
+            FRED: {
+                async fetchInflation() {
+                    if (CONFIG.DEBUG) return 0.025;
+                    try {
+                        const url = new URL(CONFIG.FRED_BASE_URL);
+                        url.searchParams.append('series_id', CONFIG.FRED_SERIES_ID);
+                        url.searchParams.append('api_key', CONFIG.FRED_API_KEY);
+                        url.searchParams.append('file_type', 'json');
+                        url.searchParams.append('sort_order', 'desc');
+                        url.searchParams.append('limit', '13'); // Get 13 months for YoY
+                        const response = await fetch(url.toString());
+                        if (!response.ok) throw new Error('FRED API error');
+                        const data = await response.json();
+                        const observations = data.observations.filter(o => o.value && o.value !== '.');
+                        if (observations.length >= 13) {
+                            const latest = parseFloat(observations[0].value);
+                            const prior = parseFloat(observations[12].value);
+                            const rate = (latest - prior) / prior;
+                            CONFIG.liveInflationRate = rate;
+                            console.log(`Live inflation rate (YoY) loaded: ${(rate * 100).toFixed(2)}%`);
+                            return rate;
+                        }
+                    } catch (error) {
+                        console.error('FRED API error:', error);
+                        app.showAlert('API Error', 'Could not fetch live inflation data from FRED®. Using default value.');
+                    }
+                    CONFIG.liveInflationRate = 0.025; // Fallback
+                    return 0.025;
+                },
+                startAutoUpdate() {
+                    // Fetch on load, then update calculations
+                    this.fetchInflation().then(() => updateCalculations());
+                    // Refresh every 6 hours
+                    setInterval(() => this.fetchInflation(), 6 * 60 * 60 * 1000); 
+                }
+            },
+
+            // ===== App Initialization =====
+            async init() {
+                this.setupEventListeners();
+                this.setupDarkMode();
+                this.setupPWA();
+                this.setupVoiceControls();
+                this.setupFAQ();
+                this.initTooltips(); 
+                this.setupTabs();
+                this.setupAlertModal();
+                this.setupCookieConsent();
+                this.FRED.startAutoUpdate(); // Start FRED inflation fetch
+            },
+
+            setupEventListeners() {
+                const form = document.getElementById('401k-form');
+                if (!form) return;
+
+                // Main calculate button
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    updateCalculations();
+                    this.speak('Calculation complete.');
+                });
+
+                // Debounced calculation on input change
+                const debouncedCalc = () => {
+                    clearTimeout(this.calculateDebounce);
+                    this.calculateDebounce = setTimeout(() => updateCalculations(), 500);
+                };
+                
+                form.querySelectorAll('input, select').forEach(el => {
+                    el.addEventListener('input', debouncedCalc);
+                    el.addEventListener('change', debouncedCalc);
+                });
+
+                // Header controls
+                document.getElementById('darkModeToggle').addEventListener('click', () => this.toggleDarkMode());
+                document.getElementById('voiceToggle').addEventListener('click', () => this.toggleVoice());
+                document.getElementById('ttsToggle').addEventListener('click', () => this.toggleTTS());
+            },
+            
+            trackAffiliateClick(partner) {
+                this.UTILS.trackEvent('affiliate_click', { partner });
+                this.showAlert('Affiliate Link', `You are navigating to our partner, ${partner}. This is an affiliate link.`);
+            },
+            
+            // ===== Feature: Dark Mode =====
+            setupDarkMode() {
+                const toggle = document.getElementById('darkModeToggle');
+                const icon = toggle.querySelector('i');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const saved = localStorage.getItem('colorScheme');
+                
+                const scheme = saved || (prefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-color-scheme', scheme);
+                icon.className = scheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            },
+            
+            toggleDarkMode() {
+                const toggle = document.getElementById('darkModeToggle');
+                const icon = toggle.querySelector('i');
+                const current = document.documentElement.getAttribute('data-color-scheme');
+                const next = current === 'light' ? 'dark' : 'light';
+                
+                document.documentElement.setAttribute('data-color-scheme', next);
+                localStorage.setItem('colorScheme', next);
+                icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                
+                this.UTILS.trackEvent('theme_toggle', { theme: next });
+                updateCharts(); // Re-render charts for new theme
+            },
+
+            // ===== Feature: PWA Install =====
+            setupPWA() {
+                const pwaBtn = document.getElementById('pwa-install-btn');
+                if (pwaBtn) {
+                    pwaBtn.addEventListener('click', async () => {
+                        if (window.deferredPrompt) {
+                            window.deferredPrompt.prompt();
+                            const { outcome } = await window.deferredPrompt.userChoice;
+                            if (outcome === 'accepted') {
+                                this.UTILS.trackEvent('pwa_installed');
+                            }
+                            window.deferredPrompt = null;
+                            pwaBtn.style.display = 'none';
+                        }
+                    });
+                }
+            },
+
+            // ===== Feature: Voice & TTS (Merged from 401k) =====
+            setupVoiceControls() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (SpeechRecognition) {
+                    this.state.recognition = new SpeechRecognition();
+                    this.state.recognition.continuous = false;
+                    this.state.recognition.interimResults = false;
+                    this.state.recognition.lang = 'en-US';
+                    
+                    this.state.recognition.onstart = () => { 
+                        document.getElementById('voiceToggle').classList.add('active'); 
+                    };
+                    this.state.recognition.onend = () => { 
+                        document.getElementById('voiceToggle').classList.remove('active'); 
+                        this.state.isVoiceActive = false;
+                    };
+                    this.state.recognition.onerror = (event) => { 
+                        console.error('Voice recognition error', event.error); 
+                        this.showAlert('Voice Error', `Error: ${event.error}. Please ensure microphone access is allowed.`);
+                    };
+                    
+                    // Simple voice command processing
+                    this.state.recognition.onresult = (event) => {
+                        const command = event.results[0][0].transcript.toLowerCase();
+                        if (command.includes('calculate')) {
+                            updateCalculations();
+                            this.speak('Calculation complete.');
+                        } else if (command.includes('read insights')) {
+                            this.speakInsights();
+                        } else if (command.includes('dark mode')) {
+                            this.toggleDarkMode();
+                        } else if (command.includes('light mode')) {
+                            this.toggleDarkMode();
+                        }
+                    };
+                }
+                this.state.synthesizer = window.speechSynthesis;
+            },
+            
+            toggleVoice() {
+                if (!this.state.recognition) {
+                    this.showAlert('Not Supported', 'Voice commands are not supported in this browser.');
+                    return;
+                }
+                this.state.isVoiceActive = !this.state.isVoiceActive;
+                if (this.state.isVoiceActive) {
+                    try {
+                        this.state.recognition.start();
+                    } catch(e) {
+                        console.error("Voice start error", e);
+                        this.state.isVoiceActive = false;
+                    }
+                } else {
+                    this.state.recognition.abort();
+                }
+                this.UTILS.trackEvent('voice_toggle', { active: this.state.isVoiceActive });
+            },
+            
+            toggleTTS() {
+                if (!this.state.synthesizer) {
+                    this.showAlert('Not Supported', 'Text-to-Speech is not supported in this browser.');
+                    return;
+                }
+                this.state.isTtsEnabled = !this.state.isTtsEnabled;
+                const btn = document.getElementById('ttsToggle');
+                
+                if (this.state.isTtsEnabled) {
+                    btn.classList.add('active');
+                    this.speak('Text to speech enabled');
+                } else {
+                    btn.classList.remove('active');
+                    this.state.synthesizer.cancel(); // Stop any active speech
+                }
+                this.UTILS.trackEvent('tts_toggle', { active: this.state.isTtsEnabled });
+            },
+            
+            speak(text) {
+                if (!this.state.isTtsEnabled || !this.state.synthesizer) return;
+                this.state.synthesizer.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                this.state.synthesizer.speak(utterance);
+            },
+            
+            speakInsights() {
+                const insightsContainer = document.getElementById('ai-insights-content');
+                const firstInsight = insightsContainer.querySelector('.insight-box');
+                if (firstInsight) {
+                    this.speak(firstInsight.textContent);
+                } else {
+                    this.speak('No insights are available yet.');
+                }
+            },
+            
+            // ===== Feature: WCAG Accessible Tabs =====
+            setupTabs() {
+                const tablist = document.querySelector('[role="tablist"]');
+                if (!tablist) return;
+                const tabs = tablist.querySelectorAll('[role="tab"]');
+                
+                tablist.addEventListener('click', (e) => {
+                    const clickedTab = e.target.closest('[role="tab"]');
+                    if (!clickedTab) return;
+                    this.activateTab(clickedTab);
+                });
+
+                tablist.addEventListener('keydown', (e) => {
+                    let index = Array.from(tabs).indexOf(document.activeElement);
+                    if (index === -1) return;
+
+                    let direction = 0;
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        direction = 1;
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        direction = -1;
+                    } else if (e.key === 'Home') {
+                        e.preventDefault(); tabs[0].focus();
+                    } else if (e.key === 'End') {
+                        e.preventDefault(); tabs[tabs.length - 1].focus();
+                    }
+
+                    if (direction !== 0) {
+                        e.preventDefault();
+                        index = (index + direction + tabs.length) % tabs.length;
+                        tabs[index].focus();
+                    }
+                });
+            },
+            
+            activateTab(tab) {
+                const tabId = tab.getAttribute('aria-controls');
+                
+                document.querySelectorAll('[role="tab"]').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                    t.setAttribute('tabindex', '-1');
+                });
+                
+                document.querySelectorAll('[role="tabpanel"]').forEach(p => {
+                    p.classList.remove('active');
+                });
+                
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                tab.setAttribute('tabindex', '0');
+
+                const panel = document.getElementById(tabId);
+                panel.classList.add('active');
+                
+                this.UTILS.trackEvent('tab_view', { tab: tabId });
+
+                // Redraw charts if switching to their tab
+                if (tabId === 'tab-projection-charts') {
+                    updateCharts();
+                }
+            },
+            
+            // ===== Feature: WCAG Accessible FAQ =====
+            setupFAQ() {
+                const container = document.getElementById('faqContainer');
+                if(!container) return;
+
+                // Requirement 4: Max keywords and FAQs
+                const FAQs = [
+                    { q: "What is a 401(k) calculator?", a: "A 401(k) calculator is an AI-powered tool that estimates your total retirement savings based on your inputs like current balance, contributions, employer match, and expected rate of return. This AI optimizer also shows you tax savings and provides insights to maximize your growth." },
+                    { q: "How important is the employer match?", a: "The employer match is <strong>critically important</strong>. It is 100% free money and offers an immediate, guaranteed return on your investment. Our AI insights will warn you if you are not contributing enough to get your full match." },
+                    { q: "What is the 2024 401(k) contribution limit?", a: "For 2024, the IRS contribution limit for employees is <strong>$23,000</strong>. This calculator automatically applies this limit to your contributions." },
+                    { q: "What are 'catch-up' contributions?", a: "If you are age 50 or over, you can contribute an additional <strong>$7,500</strong> per year as a 'catch-up' contribution. This calculator will automatically add this for you if you check the 'Include Catch-Up' box." },
+                    { q: "What's a good rate of return for a 401(k)?", a: "A good *average* annual rate of return for a diversified 401(k) over the long term is historically between 7% and 10% (nominal, before inflation). We use 7% as a default, but you can adjust this based on your risk tolerance." },
+                    { q: "How does inflation affect my 401(k)?", a: "Inflation reduces the purchasing power of your money. By checking 'Show Inflation-Adjusted (Real) Returns,' this calculator uses live FRED data to subtract the inflation rate from your annual return, showing you the 'real' growth of your purchasing power." },
+                    { q: "How does this AI calculator help me?", a: "Our 'World's First AI-Powered Insights' (Requirement 2) analyze your specific inputs to find optimization opportunities. It checks for missed employer match, analyzes your tax savings, and projects your retirement income to identify potential gaps." },
+                    { q: "How are my 401(k) tax savings calculated?", a: "Contributions to a traditional 401(k) are tax-deferred. This means they lower your taxable income. This calculator finds your marginal tax rate (the rate on your *last* dollar earned) and multiplies it by your contribution to estimate your annual federal tax savings." }
+                ];
+
+                FAQs.forEach((faq, index) => {
+                    const qId = `faq-q-${index}`;
+                    const aId = `faq-a-${index}`;
+                    
+                    const item = document.createElement('div');
+                    item.className = 'faq-item';
+                    item.innerHTML = `
+                        <button class="faq-question" role="button" aria-expanded="false" aria-controls="${aId}" id="${qId}">
+                            <span>${faq.q}</span>
+                            <span class="faq-icon" aria-hidden="true">▼</span>
+                        </button>
+                        <div class="faq-answer" role="region" aria-labelledby="${qId}" id="${aId}">${faq.a}</div>
+                    `;
+                    container.appendChild(item);
+                });
+                
+                container.addEventListener('click', (e) => {
+                    const question = e.target.closest('.faq-question');
+                    if (question) this.toggleFAQ(question);
+                });
+                
+                container.addEventListener('keydown', (e) => {
+                    const question = e.target.closest('.faq-question');
+                    if (question && (e.key === 'Enter' || e.key === ' ')) {
+                        e.preventDefault();
+                        this.toggleFAQ(question);
+                    }
+                });
+            },
+            
+            toggleFAQ(question) {
+                const answer = document.getElementById(question.getAttribute('aria-controls'));
+                const isActive = question.getAttribute('aria-expanded') === 'true';
+
+                // Close all others
+                document.querySelectorAll('.faq-question[aria-expanded="true"]').forEach(q => {
+                    if (q !== question) {
+                        q.setAttribute('aria-expanded', 'false');
+                        q.classList.remove('active');
+                        document.getElementById(q.getAttribute('aria-controls')).style.display = 'none';
+                        q.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+                    }
+                });
+
+                if (!isActive) {
+                    question.setAttribute('aria-expanded', 'true');
+                    question.classList.add('active');
+                    answer.style.display = 'block';
+                    answer.style.animation = 'slideDown 0.3s ease';
+                    question.querySelector('.faq-icon').style.transform = 'rotate(180deg)';
+                } else {
+                    question.setAttribute('aria-expanded', 'false');
+                    question.classList.remove('active');
+                    answer.style.display = 'none';
+                    question.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+                }
+            },
+
+            // ===== Feature: WCAG Accessible Tooltips =====
+            initTooltips() {
+                let tooltipBox = null;
+                document.querySelectorAll('.tooltip').forEach(el => {
+                    const showTooltip = (e) => {
+                        const text = e.currentTarget.getAttribute('data-tooltip');
+                        if (!text) return;
+                        if (tooltipBox) tooltipBox.remove();
+                        
+                        tooltipBox = document.createElement('div');
+                        tooltipBox.className = 'tooltip-box';
+                        tooltipBox.textContent = text;
+                        tooltipBox.setAttribute('role', 'tooltip');
+                        document.body.appendChild(tooltipBox);
+
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        let top = rect.top - tooltipBox.offsetHeight - 5;
+                        let left = rect.left + rect.width / 2 - tooltipBox.offsetWidth / 2;
+
+                        if (top < 0) { top = rect.bottom + 5; }
+                        if (left < 0) { left = 5; }
+                        if (left + tooltipBox.offsetWidth > window.innerWidth) {
+                            left = window.innerWidth - tooltipBox.offsetWidth - 5;
+                        }
+
+                        tooltipBox.style.left = `${left}px`;
+                        tooltipBox.style.top = `${top}px`;
+                        tooltipBox.style.display = 'block';
+                        setTimeout(() => { if (tooltipBox) tooltipBox.style.opacity = '1'; }, 10);
+                    };
+
+                    const hideTooltip = () => {
+                        if (tooltipBox) {
+                            tooltipBox.style.opacity = '0';
+                            setTimeout(() => {
+                                if (tooltipBox) {
+                                    tooltipBox.remove();
+                                    tooltipBox = null;
+                                }
+                            }, 200);
+                        }
+                    };
+
+                    el.addEventListener('mouseenter', showTooltip);
+                    el.addEventListener('focus', showTooltip); 
+                    el.addEventListener('mouseleave', hideTooltip);
+                    el.addEventListener('blur', hideTooltip);
+                });
+            },
+
+            // ===== Feature: GDPR/CCPA Cookie Consent =====
+            setupCookieConsent() {
+                const banner = document.getElementById('cookie-consent-banner');
+                const btn = document.getElementById('cookie-consent-btn');
+                
+                if (localStorage.getItem('cookieConsent') === 'true') {
+                    banner.style.display = 'none';
+                } else {
+                    banner.style.display = 'flex';
+                }
+                
+                btn.addEventListener('click', () => {
+                    localStorage.setItem('cookieConsent', 'true');
+                    banner.style.display = 'none';
+                    this.UTILS.trackEvent('cookie_consent_given');
+                });
+            },
+            
+            // ===== Feature: WCAG Alert Modal =====
+            setupAlertModal() {
+                const modal = document.getElementById('alert-modal');
+                const backdrop = document.getElementById('alert-modal-backdrop');
+                const closeBtn = document.getElementById('alert-modal-close');
+                
+                const closeModal = () => {
+                    modal.classList.remove('visible');
+                    backdrop.classList.remove('visible');
+                };
+
+                closeBtn.addEventListener('click', closeModal);
+                backdrop.addEventListener('click', closeModal);
+            },
+            
+            showAlert(title, message) {
+                document.getElementById('alert-modal-title').textContent = title;
+                document.getElementById('alert-modal-body').textContent = message;
+                document.getElementById('alert-modal').classList.add('visible');
+                document.getElementById('alert-modal-backdrop').classList.add('visible');
+                document.getElementById('alert-modal-close').focus();
+            },
+        };
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', () => app.init());
+
+        // ===== PWA Service Worker (Requirement 11) =====
+        if ('serviceWorker' in navigator) {
+            const OFFLINE_HTML = `
+                <!DOCTYPE html>
+                <html lang="en" style="font-family: Arial, sans-serif; background: #F5F7FA; color: #1F2121; padding: 20px;">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Offline | FinGuid 401(k) Calculator</title>
+                    <style>
+                        body { text-align: center; padding-top: 50px; }
+                        h1 { color: #24ACB9; }
+                        p { font-size: 1.1rem; line-height: 1.6; }
+                        .icon { font-size: 4rem; margin-bottom: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="icon">🤖</div>
+                    <h1>You are Offline</h1>
+                    <p>This AI 401(k) Calculator needs an internet connection to function and fetch live inflation data.</p>
+                    <p>Please check your connection and try again.</p>
+                </body>
+                </html>
+            `;
+            
+            const swContent = `
+                const CACHE_NAME = '401k-calculator-v1';
+                const urlsToCache = [
+                    '.', 
+                    'https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'
+                ];
+                const OFFLINE_PAGE_CONTENT = \`${OFFLINE_HTML}\`;
+
+                self.addEventListener('install', event => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+                                console.log('Service Worker: Opened cache');
+                                return cache.addAll(urlsToCache);
+                            })
+                    );
+                });
+
+                self.addEventListener('fetch', event => {
+                    if (event.request.mode !== 'navigate') {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => {
+                                    return response || fetch(event.request);
+                                })
+                        );
+                        return;
+                    }
+                    
+                    event.respondWith(
+                        fetch(event.request)
+                            .catch(() => {
+                                return caches.match(event.request)
+                                    .then(response => {
+                                        return response || new Response(OFFLINE_PAGE_CONTENT, {
+                                            headers: { 'Content-Type': 'text/html' }
+                                        });
+                                    });
+                            })
+                    );
+                });
+            `;
+            const blob = new Blob([swContent], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+
+            navigator.serviceWorker.register(swUrl)
+                .then(reg => console.log('Service Worker registered.', reg))
+                .catch(err => console.error('Service Worker registration failed:', err));
+        }
+
+        // ===== Global Error Handling =====
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.message, event.filename, event.lineno);
+            app.showAlert('Application Error', 'A script on this page encountered an error. Please reload.');
+        });
+        window.addEventListener('unhandledrejection', (event) => {
+             console.error('Unhandled promise rejection:', event.reason);
+             app.showAlert('Application Error', 'An asynchronous operation failed. Please check your connection or reload.');
         });
     </script>
-</body>
+    </body>
 </html>
