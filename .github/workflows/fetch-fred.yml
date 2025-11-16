@@ -1,0 +1,72 @@
+name: Fetch FRED Data
+
+on:
+  schedule:
+    # Run daily at 12:00 PM UTC (5:30 PM IST / 7:00 AM EST)
+    - cron: '0 12 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  fetch-fred-data:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: 📦 Install dependencies
+        run: |
+          pip install requests
+      
+      - name: 🌐 Fetch FRED data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          python3 scripts/fetch_fred_data.py
+      
+      - name: 📊 Check for changes
+        id: check_changes
+        run: |
+          if [ -f data/rates.json ]; then
+            git add data/rates.json
+            if git diff --staged --quiet; then
+              echo "changed=false" >> $GITHUB_OUTPUT
+              echo "No changes detected"
+            else
+              echo "changed=true" >> $GITHUB_OUTPUT
+              echo "Changes detected"
+            fi
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "File not found"
+          fi
+      
+      - name: 💾 Commit and push
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "🤖 Auto-update FRED data - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          git push
+      
+      - name: 📝 Report
+        if: always()
+        run: |
+          echo "✅ Workflow execution completed"
+          echo "📅 Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          if [ -f data/rates.json ]; then
+            echo "📁 File: data/rates.json"
+            echo "📊 Size: $(du -h data/rates.json | cut -f1)"
+          fi
