@@ -1,0 +1,28 @@
+{
+  "name": "finguid-fred-integration",
+  "version": "1.0.0",
+  "description": "FRED economic data integration for finguid.com financial calculators",
+  "main": "scripts/fetch-rates.js",
+  "scripts": {
+    "fetch": "node scripts/fetch-rates.js",
+    "test": "node scripts/fetch-rates.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/faheemtanu/finguid-financial-calculators.git"
+  },
+  "keywords": [
+    "FRED",
+    "economic-data",
+    "mortgage-rates",
+    "financial-calculators",
+    "API"
+  ],
+  "author": "Faheem",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
