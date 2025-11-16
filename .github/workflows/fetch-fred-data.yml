@@ -1,0 +1,63 @@
+name: Fetch FRED Data Daily
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  
+  workflow_dispatch:
+
+jobs:
+  fetch-and-update:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: 🌐 Fetch FRED data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          node scripts/fetch-rates.js
+      
+      - name: 📊 Check for data changes
+        id: check_changes
+        run: |
+          if [ -f data/rates.json ]; then
+            git add data/rates.json
+            if git diff --staged --quiet; then
+              echo "changed=false" >> $GITHUB_OUTPUT
+            else
+              echo "changed=true" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: 💾 Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "🤖 Auto-update FRED economic data - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          git push
+      
+      - name: ✅ Success Summary
+        if: success()
+        run: |
+          echo "✅ FRED data fetch completed successfully!"
+          echo "📊 Data file: data/rates.json"
+          if [ -f data/rates.json ]; then
+            echo "📁 File size: $(du -h data/rates.json | cut -f1)"
+          fi
