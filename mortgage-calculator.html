@@ -1098,7 +1098,10 @@
                     <div class="fred-rates-header">
                         <span id="fred-last-updated">Loading live rates...</span>
                         <span class="fred-branding">
+                            <!-- REMOVED FRED BRANDING
                             Data via <a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED®</a>
+                            -->
+                             Rates provided by FinGuid
                         </span>
                     </div>
                     <div class="live-rates-container">
@@ -1576,13 +1579,11 @@
          */
 
         // ===== APP STATE & CONSTANTS (Preserved) =====
-        const FRED_API_KEY = '9c6c421f077f2091e8bae4f143ada59a';
-        const FRED_URL = 'https://api.stlouisfed.org/fred/series/observations';
-        const FRED_SERIES_IDS = {
-            rate30: 'MORTGAGE30US', // 30-Year Fixed
-            rate15: 'MORTGAGE15US', // 15-Year Fixed
-            rate10: 'DGS10'           // 10-Year Treasury
-        };
+        
+        // --- EDIT: Removed FRED API Constants ---
+        // const FRED_API_KEY = '...';
+        // const FRED_URL = '...';
+        // const FRED_SERIES_IDS = { ... };
 
         // Fallback rates in case API fails (Preserved)
         const FALLBACK_RATES = {
@@ -2230,30 +2231,11 @@
                 }).format(now) + " ET";
             }
 
-            /**
-             * Fetches a single FRED series.
-             */
-            static async fetchFredSeries(seriesId) {
-                try {
-                    const url = `${FRED_URL}?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&sort_order=desc&limit=1`;
-                    const response = await fetch(url);
-                    if (!response.ok) throw new Error(`FRED API request failed for ${seriesId}: ${response.status}`);
-                    const data = await response.json();
-                    
-                    if (data.observations && data.observations.length > 0) {
-                        const rate = parseFloat(data.observations[0].value);
-                        const date = data.observations[0].date;
-                        if (isNaN(rate)) return { rate: null, date: null }; // Handle '.' or invalid values
-                        return { rate, date };
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
-                return { rate: null, date: null }; // Fallback for this series
-            }
-
+            // --- EDIT: Removed fetchFredSeries ---
+            
             /**
              * Main function to get all 3 rates, using cache if valid.
+             * --- EDIT: Modified to fetch from ./data/rates.json ---
              */
             static async getRates() {
                 const cacheStr = localStorage.getItem('fredRatesCache');
@@ -2270,40 +2252,54 @@
                     };
                 }
 
-                console.log('Fetching new FRED rates');
+                // --- FIX: Changed path from /data/rates.json to ./data/rates.json ---
+                console.log('Fetching new FRED rates from ./data/rates.json');
                 
-                // Fetch all 3 series concurrently
-                const [data30, data15, data10] = await Promise.all([
-                    this.fetchFredSeries(FRED_SERIES_IDS.rate30),
-                    this.fetchFredSeries(FRED_SERIES_IDS.rate15),
-                    this.fetchFredSeries(FRED_SERIES_IDS.rate10)
-                ]);
+                try {
+                    // This is the new logic. Fetch ONE file.
+                    // The path is now relative.
+                    const response = await fetch('./data/rates.json');
+                    if (!response.ok) throw new Error('Failed to fetch ./data/rates.json');
+                    
+                    // Assuming /data/rates.json contains: { rates: {...}, dates: {...} }
+                    const data = await response.json(); 
+                    
+                    if (!data.rates || !data.dates) {
+                        throw new Error('Invalid ./data/rates.json format');
+                    }
 
-                const newRates = {
-                    rate30: data30.rate || FALLBACK_RATES.rates.rate30,
-                    rate15: data15.rate || FALLBACK_RATES.rates.rate15,
-                    rate10: data10.rate || FALLBACK_RATES.rates.rate10,
-                };
+                    const newRates = data.rates;
+                    const newDates = data.dates;
 
-                const newDates = {
-                    date30: data30.date || null,
-                    date15: data15.date || null,
-                    date10: data10.date || null,
-                };
+                    const newCache = {
+                        rates: newRates,
+                        dates: newDates,
+                        lastFetch: now.toISOString() // Use current time as lastFetch
+                    };
+                    
+                    localStorage.setItem('fredRatesCache', JSON.stringify(newCache));
 
-                const newCache = {
-                    rates: newRates,
-                    dates: newDates,
-                    lastFetch: now.toISOString()
-                };
+                    return {
+                        ...newCache,
+                        isCache: false,
+                        lastUpdatedTimestamp: `Live Rates updated: ${this.formatTimestamp(now)}`
+                    };
 
-                localStorage.setItem('fredRatesCache', JSON.stringify(newCache));
-
-                return {
-                    ...newCache,
-                    isCache: false,
-                    lastUpdatedTimestamp: `Live Rates updated: ${this.formatTimestamp(now)}`
-                };
+                } catch (error) {
+                    console.error('Error fetching ./data/rates.json (using fallbacks):', error);
+                    // Fallback to the old FALLBACK_RATES
+                    const fallbackCache = {
+                        rates: FALLBACK_RATES.rates,
+                        dates: FALLBACK_RATES.dates,
+                        lastFetch: now.toISOString()
+                    };
+                    // Don't cache the fallback
+                    return {
+                         ...fallbackCache,
+                        isCache: false,
+                        lastUpdatedTimestamp: `Error loading rates. Using fallbacks.`
+                    };
+                }
             }
         }
 
@@ -3305,97 +3301,10 @@
     <!-- END: Inlined JavaScript -->
 
     <!-- 
-      NEW: PWA Service Worker for Offline Use
-      PWA FIX: This service worker is now more robust. It caches the app
-      shell and provides a full OFFLINE FALLBACK PAGE if a network
-      request fails, ensuring 100% PWA compliance.
+      FIX: Removed the Service Worker registration script.
+      The entire <script> block related to 'serviceWorker'
+      was removed to prevent the 'blob:' protocol error.
     -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            
-            // --- PWA FIX: Full offline page content ---
-            const OFFLINE_HTML = `
-                <!DOCTYPE html>
-                <html lang="en" style="font-family: Arial, sans-serif; background: #F5F7FA; color: #1F2121; padding: 20px;">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Offline | FinGuid Mortgage Calculator</title>
-                    <style>
-                        body { text-align: center; padding-top: 50px; }
-                        h1 { color: #24ACB9; }
-                        p { font-size: 1.1rem; line-height: 1.6; }
-                        .icon { font-size: 4rem; margin-bottom: 20px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="icon">🤖</div>
-                    <h1>You are Offline</h1>
-                    <p>This AI Mortgage Calculator needs an internet connection to function and fetch live rates.</p>
-                    <p>Please check your connection and try again.</p>
-                </body>
-                </html>
-            `;
-            
-            const swContent = `
-                const CACHE_NAME = 'mortgage-calculator-v2';
-                const urlsToCache = [
-                    '.', // Caches the main HTML file (index.html)
-                    'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js',
-                    'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.1.0/dist/chartjs-plugin-datalabels.min.js'
-                ];
-                
-                // --- PWA FIX: Store the offline page string ---
-                const OFFLINE_PAGE_CONTENT = \`${OFFLINE_HTML}\`;
-
-                self.addEventListener('install', event => {
-                    event.waitUntil(
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                console.log('Service Worker: Opened cache');
-                                return cache.addAll(urlsToCache);
-                            })
-                    );
-                });
-
-                self.addEventListener('fetch', event => {
-                    // We only want to handle navigation requests (HTML pages)
-                    if (event.request.mode !== 'navigate') {
-                        // For non-HTML requests (like scripts, images), use cache-first
-                        event.respondWith(
-                            caches.match(event.request)
-                                .then(response => {
-                                    return response || fetch(event.request);
-                                })
-                        );
-                        return;
-                    }
-                    
-                    // For navigation requests, try network first, then cache, then offline page
-                    event.respondWith(
-                        fetch(event.request)
-                            .catch(() => {
-                                // Network failed, try cache
-                                return caches.match(event.request)
-                                    .then(response => {
-                                        // Return from cache or show offline page
-                                        return response || new Response(OFFLINE_PAGE_CONTENT, {
-                                            headers: { 'Content-Type': 'text/html' }
-                                        });
-                                    });
-                            })
-                    );
-                });
-            `;
-            // Create a Blob from the SW content and register it
-            const blob = new Blob([swContent], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(blob);
-
-            navigator.serviceWorker.register(swUrl)
-                .then(reg => console.log('Service Worker registered from Blob.', reg))
-                .catch(err => console.error('Service Worker registration failed:', err));
-        }
-    </script>
 
 </body>
 </html>
