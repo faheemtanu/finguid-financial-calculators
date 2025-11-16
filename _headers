@@ -1,0 +1,29 @@
+# Netlify Headers - FRED Data Caching & Security
+
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Access-Control-Allow-Origin: https://finguid.com
+  Cache-Control: public, max-age=0, must-revalidate
+
+/data/rates.json
+  Cache-Control: public, max-age=0, must-revalidate
+  Netlify-CDN-Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400
+  Content-Type: application/json
+  Access-Control-Allow-Origin: *
+
+/js/*.js
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+  Netlify-CDN-Cache-Control: public, s-maxage=31536000, immutable
+
+/css/*.css
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+  Netlify-CDN-Cache-Control: public, s-maxage=31536000, immutable
+
+/calculators/*
+  Cache-Control: public, max-age=0, must-revalidate
+  Netlify-CDN-Cache-Control: public, s-maxage=300, stale-while-revalidate=3600
